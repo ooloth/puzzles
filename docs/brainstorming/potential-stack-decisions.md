@@ -1,0 +1,12 @@
+01-use-rust-and-datastar-as-web-stack.md
+02-use-axum-as-backend-server.md
+03-use-hypertext-for-html-templating.md
+04-use-tailwind-or-vanilla-css-for-styling.md
+05-use-sqlite-as-data-store.md
+06-use-sqlx-for-db-interactions.md
+07-use-litestream-for-sqlite-backups.md
+08-use-cloudflare-r2-for-object-storage.md
+09-use-hetzner-cloud-arm-for-hosting.md
+10-use-docker-compose-or-coolify-for-deployments.md
+11-use-caddy-for-internet-exposure.md
+12-store-state-on-server-not-client.md

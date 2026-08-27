@@ -10,7 +10,8 @@
 
 - Small, genuinely public v1 within a few months.
 - Open to the internet; expect to be found by a few people, not many.
-- Puzzle content can be upstream-sourced at launch. In-house puzzle generation is a valued v2+ expansion, not a launch requirement.
+- Whether launch content is sourced from others or fully self-generated is genuinely undecided, not just "sourcing clears the minimum bar." Sourcing might get real feedback faster; self-generating everything before launch is also on the table. Decide this later, once UI work is further along — not now.
+- UI/solving-experience work comes before generator work regardless of which way that decision goes.
 
 ## Priority order
 

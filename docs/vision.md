@@ -37,7 +37,3 @@
 - Dislike Kubernetes-grade complexity.
 - Fine with lightweight scripting, especially if GitOps-automatable.
 
-## Prior art
-
-- `docs/brainstorming/potential-stack-decisions.md` lists stack conclusions from an earlier brainstorming pass (Rust+Datastar, Axum, hypertext, SQLite, Litestream, R2, Hetzner, Docker/Coolify, Caddy, server-side state).
-- Treat as disregarded input, not settled decisions — decisions are being rebuilt from this vision on up.

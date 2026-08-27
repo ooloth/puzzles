@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/app",
+    "crates/generator",
+    "crates/player",
+    "crates/storage",
+    "crates/sudoku",
+]
+
+[workspace.package]
+edition = "2024"

@@ -1,0 +1,8 @@
+[package]
+name = "generator"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+storage = { path = "../storage" }
+sudoku = { path = "../sudoku" }

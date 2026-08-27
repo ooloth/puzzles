@@ -25,3 +25,7 @@ Status: Decided
 ## Rejected
 
 - **Actix-web**: faster in raw benchmarks, but no real benefit for this workload and weaker Datastar-ecosystem precedent.
+
+## Reference implementation
+
+- [Axum + SQLite/sqlx + Datastar tutorial](https://hamy.xyz/blog/2026-03_datastar-rust-todo) (March 2026) — a close sibling of this stack, not an exact match: it uses Maud for templating, not hypertext (`docs/decisions/06-use-hypertext-for-html-templating.md`). Useful for the Axum/sqlx/Datastar wiring; don't expect hypertext syntax from it.

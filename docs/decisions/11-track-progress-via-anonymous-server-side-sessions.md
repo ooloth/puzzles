@@ -11,9 +11,9 @@ Status: Decided (v1 shape only — schema/column-level design still to come)
 ## Decision
 
 - Anonymous sessions: an opaque random ID set in a long-lived, HTTP-only cookie on first visit. No signup, no login for v1.
-- A `sessions` table (id, created_at) as a stable anchor for the session ID — mainly so a future "claim this session with an account" upgrade path has somewhere to attach without restructuring anything.
-- Per-puzzle progress rows key off the session ID and store the actual in-progress grid state, not a separate completed/not-completed flag. Completion is derived by comparing stored state to the puzzle's solution when needed, rather than kept as a second, independently-updated field.
-- Session identity uses an opaque ID plus a SQLite lookup, not a self-contained signed/stateless token — a DB lookup is already required for progress anyway, so a signing/verification layer would add nothing.
+- A stable per-session anchor exists server-side, mainly so a future "claim this session with an account" upgrade path has somewhere to attach without restructuring anything — the exact schema/column shape is a separate, later decision.
+- Progress is tracked per session per puzzle by storing the actual in-progress state, not a separate completed/not-completed flag. Completion is derived by comparing stored state to the puzzle's solution when needed, rather than kept as a second, independently-updated field.
+- Session identity uses an opaque ID plus a server-side lookup, not a self-contained signed/stateless token — a lookup is already required for progress anyway, so a signing/verification layer would add nothing.
 
 ## Rationale
 

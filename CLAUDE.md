@@ -7,9 +7,13 @@ The vision and full stack/architecture/ops decision trail are now recorded in th
 ## Key docs
 
 - `docs/vision.md` — why this project exists, priorities, and engineering style
+- `docs/context/` — standing facts about who uses this app, where/how, and the engineering constraints that follow from that
+- `docs/invariants/` — what must always be true or the system is broken
 - `docs/decisions/` — one ADR per file, numbered; the reasoning behind every stack/architecture/ops decision made so far
 - `docs/failure-modes/` — known risks and how they're mitigated
 - `docs/architecture/` — request-flow and generation-pipeline diagrams (not yet populated)
+
+Groom `docs/context/` and `docs/invariants/` in small passes as work proceeds, rather than treating them as write-once.
 
 Priorities:
 

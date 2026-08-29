@@ -1,6 +1,11 @@
 # Separate puzzle generation from serving
 
-Status: Decided (process shape only — generation itself is not yet built, per `docs/vision.md`; internal workspace/crate organization is a separate, later decision)
+> This ADR is being re-evaluated as part of a pivot from a server-first to a local-first
+> architecture to support better offline UX. It may not reflect current thinking and should not be
+> treated as guidance. See `docs/brainstorming/` (especially
+> `ruthless-rearchitecture-for-mobile-first-offline-ux.md`) for the reasoning behind that pivot.
+
+Status: Re-evaluating
 
 ## Context
 

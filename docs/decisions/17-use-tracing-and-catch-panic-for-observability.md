@@ -1,6 +1,11 @@
 # Use tracing + TraceLayer + CatchPanicLayer for logging and panic handling
 
-Status: Decided
+> This ADR is being re-evaluated as part of a pivot from a server-first to a local-first
+> architecture to support better offline UX. It may not reflect current thinking and should not be
+> treated as guidance. See `docs/brainstorming/` (especially
+> `ruthless-rearchitecture-for-mobile-first-offline-ux.md`) for the reasoning behind that pivot.
+
+Status: Re-evaluating
 
 ## Context
 

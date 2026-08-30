@@ -8,7 +8,8 @@ status: stub
 # Architecture
 
 Where things live, what talks to what. Deliberately thin — the code describes itself, and
-prose about structure rots faster than anyone updates it. A diagram and a table, never an essay.
+prose about structure rots faster than anyone updates it. A diagram and a short list, never
+an essay.
 
 _Nothing built yet._
 
@@ -16,8 +17,7 @@ _Nothing built yet._
 
 ## Where things live
 
-| Path | Holds | Depends on |
-|---|---|---|
+- `path/to/thing` — what it holds. Depends on: <what it reaches for>.
 
 ## What talks to what
 

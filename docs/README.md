@@ -24,7 +24,7 @@ An ADR citing neither a constraint nor a user need was made on vibes.
 | changing a core algorithm         | guarantees, verification         | guarantees                                      |
 | leaving something half-done       | —                                | unfinished                                      |
 | being surprised                   | —                                | gotchas                                         |
-| failing to decide                 | undecided                        | undecided                                       |
+| failing to decide                 | questions                        | questions                                       |
 
 ## Conventions
 

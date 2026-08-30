@@ -1,32 +1,48 @@
 ---
 updated: 2026-08-30
-update_when: a migration starts, advances, or completes; something becomes knowingly broken
+update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
-status: stub
+status: active
 ---
 
 # Unfinished
 
-Where the codebase is knowingly in a half-state: migrations in flight, two patterns
-coexisting, things temporarily broken.
+Where the codebase would mislead you right now: migrations part-way through, two patterns
+coexisting, a path that looks live but isn't.
 
 **Highest-consequence file in `docs/`.** An agent that misses it sees two patterns, picks
 the dead one, and confidently spreads it.
 
-Every entry carries an expiry. Past it, the entry gets updated or deleted — never left
-implying a state that's no longer true. An empty file is the goal state.
+Each entry answers one question: *what will look true that isn't, and what should I do
+instead today.* Nothing here tracks progress or schedules — how far along the work is, and
+when it'll finish, don't change what you should do right now.
 
-Durable quirks with no end date → [gotchas.md](gotchas.md).
+Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-_Nothing in flight._
+### The 23 ADRs in `docs/@legacy/decisions/` are not authoritative
+
+**You'll see** ADR-01 through ADR-23 recording real, detailed reasoning — Datastar, Rust,
+SQLite, Axum, Fly.io, Litestream, Sentry, Tailwind, anonymous server-side sessions, launch
+order. They read as settled. `docs/decisions/` is empty by contrast, which makes the legacy
+folder look like the real record.
+
+**Actually** all of them predate a first-principles re-evaluation of this project's
+environment and constraints, and several files in `docs/brainstorming/` argue directly
+against them — Bun and Vite instead of Rust, a VPS instead of Fly, event sourcing instead of
+mutation. None has been confirmed against the current foundation, including the ones an
+earlier pass judged likely to survive.
+
+**So** don't cite a legacy ADR as settled reasoning and don't build on one. Treat the stack
+as undecided. Decisions made now go in [`docs/decisions/`](decisions/) under the current
+template.
 
 <!-- Template:
 
-### <What's half-done>
+### <What you'll run into that looks contradictory>
 
-Since: YYYY-MM-DD · Expires: YYYY-MM-DD
-Old way: <pattern, and where it still lives>
-New way: <pattern, and where it applies>
-New code should: <one-line instruction>
-Done when: <observable finish line>
+**You'll see** <the misleading thing — two patterns, a dead path, a step that no longer works>
+
+**Actually** <which one is current, which is dead, and why both are still here>
+
+**So** <what to do today>
 -->

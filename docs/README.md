@@ -31,6 +31,7 @@ An ADR citing neither a constraint nor a user need was made on vibes.
 - Every file's frontmatter carries `update_when`. **This table wins** if they disagree.
 - `decays: fast` means the content describes now and expires. Verify before trusting.
 - Docs are for what can't be executed. If it can be a type, a lint rule, or a test — make it that, and link to it from here.
+- Before treating any entry as finished, ask what a sharp reader with none of this context would immediately push back on — and check the entry already answers it
 
 ## Not part of this structure
 

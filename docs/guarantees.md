@@ -42,4 +42,4 @@ promises are real.
 ---
 
 Cross-device resume, a latency threshold for "immediately", and how any of these would be
-verified are all open — see [undecided.md](undecided.md).
+verified are all open — see [undecided/](undecided/).

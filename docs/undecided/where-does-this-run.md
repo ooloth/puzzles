@@ -1,0 +1,18 @@
+---
+opened: 2026-08-30
+status: open
+---
+
+# Where does this run?
+
+**Why it matters** Previously settled and now reopened. If the client owns state, the
+persistent-local-disk requirement that disqualified several platforms may no longer apply,
+which puts them back in contention.
+
+**Gates** [how much downtime is acceptable](how-much-downtime-is-acceptable.md),
+[what the acceptable running cost is](what-is-the-acceptable-running-cost.md), backup and
+recovery approach.
+
+**Settled by** [where puzzle state lives](does-puzzle-state-live-on-the-client-or-the-server.md)
+and [what the server stores](what-does-the-server-store-if-anything.md). Don't decide this one
+first — it was decided first last time.

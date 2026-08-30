@@ -80,6 +80,6 @@ Scale sits below all of these and isn't designed for yet.
 
 This ranking is incomplete on purpose. Where correctness and latency conflict — a fast local
 answer that a fuller check would contradict — nothing here settles it. That question, and the
-other unresolved tradeoffs, are in [undecided.md](undecided.md).
+other unresolved tradeoffs, are in [undecided/](undecided/).
 
 Not for per-decision analysis — that goes in an ADR.

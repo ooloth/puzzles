@@ -69,4 +69,4 @@ True behind any proxy, not one vendor's.
 | AGPL-3.0's network-use clause generally requires releasing a hosted service's complete source to any user of that service. At least one prominent sudoku library is AGPL-3.0 | Audit dependencies for **network** copyleft, not only distribution copyleft. AGPL is disqualifying for anything linked into a hosted service |
 | **Individual puzzle grids are not copyrightable** — the merger doctrine and the idea/expression dichotomy treat a valid unique-solution arrangement as a functional fact. A publisher's *curated collection*, including its ordering and presentation, can carry compilation copyright | Individual grids may be used or hand-crafted freely from any source. A publisher's collection may not be reproduced wholesale |
 
-Privacy and data-protection obligations are unresearched. See [undecided.md](undecided.md).
+Privacy and data-protection obligations are unresearched. See [undecided/](undecided/).

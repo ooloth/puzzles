@@ -36,4 +36,3 @@
 - Genuinely undecided — want tradeoffs laid out before committing.
 - Dislike Kubernetes-grade complexity.
 - Fine with lightweight scripting, especially if GitOps-automatable.
-

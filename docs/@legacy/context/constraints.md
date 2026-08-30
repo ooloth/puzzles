@@ -104,7 +104,7 @@ tracking-prevention documentation directly (not inferred):
   Reported storage quota is ~1GB with 200MB-increment prompts, though Apple
   doesn't officially document the exact figure.
 - **The one confirmed mitigation:** WebKit's own documentation states the
-  first-party domain of a home-screen-installed web app is *exempt* from
+  first-party domain of a home-screen-installed web app is _exempt_ from
   the 7-day cap entirely, with its storage isolated from regular Safari
   browsing.
 - **Unconfirmed:** whether `navigator.storage.persist()` does anything on

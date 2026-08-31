@@ -20,6 +20,8 @@ first — it was decided first last time.
 
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
 
+[What load should the server handle?](what-load-should-the-server-handle.md).
+
 ## Blocks
 
 [how much downtime is acceptable](how-much-downtime-is-acceptable.md),

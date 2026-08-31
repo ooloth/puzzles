@@ -18,6 +18,8 @@ language removes duplication that otherwise has to be kept in sync by hand.
 
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 
+[What load should the server handle?](what-load-should-the-server-handle.md).
+
 ## Blocks
 
 [how the codebase is laid out](how-is-the-codebase-laid-out.md).
@@ -37,6 +39,8 @@ Ported from the legacy documentation review, 2026-08-30.
 Findings drawn from legacy ADR-01 (render with server-driven hypermedia).
 
 Options and findings ported from legacy ADR-02 (use Rust for the backend).
+
+Finding drawn from legacy ADR-05 (use Axum with the official Datastar SDK).
 
 ## Options
 
@@ -87,3 +91,10 @@ the old reasoning.
 
 The language was "reopened for reconsideration rather than inherited", so the previous choice was
 deliberate rather than drift.
+
+Legacy ADR-05 chose a web framework partly on the grounds that a rival's 10-15% raw throughput
+advantage "doesn't matter for an I/O-bound, low-traffic, SSE-heavy workload". That may be true,
+but low-traffic was never quantified and the claim can't be checked — see
+[what load should the server handle](what-load-should-the-server-handle.md). It is not evidence
+that benchmarks are irrelevant here; it is evidence that nobody has worked out which ones would
+apply.

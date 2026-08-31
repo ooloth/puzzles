@@ -24,6 +24,8 @@ N/A — nothing needs to be answered first.
 [where this runs](where-does-this-run.md),
 [snapshot or event log](is-puzzle-state-a-snapshot-or-an-event-log.md).
 
+[What load should the server handle?](what-load-should-the-server-handle.md).
+
 ## What would settle it
 
 Possibly already settled by `problem.md` and `constraints.md` as written. Worth confirming

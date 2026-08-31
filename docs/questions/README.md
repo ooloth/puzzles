@@ -187,6 +187,9 @@ These gate nearly everything else. The first is the critical path to anything on
 - [Where does this run?](where-does-this-run.md)
   Reopened. If the client owns state, previously-disqualified platforms come back into play.
 
+- [What load should the server handle?](what-load-should-the-server-handle.md)
+  The number every performance argument so far has been made without.
+
 - [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
   Whether cost is a ceiling that rules platforms out, or a preference that doesn't.
 

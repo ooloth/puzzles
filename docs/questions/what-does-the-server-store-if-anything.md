@@ -17,6 +17,8 @@ barely matters — or that there is nothing to store beyond a sync record.
 
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
 
+[What load should the server handle?](what-load-should-the-server-handle.md).
+
 ## Blocks
 
 [where this runs](where-does-this-run.md).

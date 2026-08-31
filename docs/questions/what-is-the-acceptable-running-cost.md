@@ -16,6 +16,8 @@ differently under a traffic spike.
 
 [Where does this run](where-does-this-run.md).
 
+[What load should the server handle?](what-load-should-the-server-handle.md).
+
 ## Blocks
 
 [where this runs](where-does-this-run.md).

@@ -100,80 +100,127 @@ of a rule already in force, competing with the real one for whoever finds it fir
 ...
 -->
 
-## Which question to answer next
+## What blocks what
 
-Readiness is not importance, and this folder does not sort itself. A question is ready when
-everything it derives from has been answered **and** the alternatives at each of those levels
-were actually scanned rather than assumed. The second half is the one that gets skipped, and
-skipping it is what produces decisions that have to be reopened.
+The picture below is the main thing this file maintains. It is generated from the **Blocked by**
+section of every question, so it is only as true as those are — when you add or answer a
+question, update it here too.
 
-Questions fall into four levels. Work downward. An answer at one level is an input to the next,
-and an answer taken out of order does not stay visible as an answer — it survives as an
-assumption nobody remembers making, in a file nobody thinks to question.
+Indentation is dependency: a question sits under whatever must be answered before it. `n ↓` is
+how many questions in total sit below it, directly or not. `← also` names other parents not
+drawn on this branch, and `└→` points at a question already drawn elsewhere.
 
-**Premises.** The choices nothing else in this repo justifies, and which everything else is
-derived from: what we promise, to whom, and on what platform. These read like givens, which is
-precisely why they escape examination. The promises in [../guarantees/](../guarantees/) are
-choices; so is delivering this over the web at all. Answering anything below while a premise is
-still unexamined risks building a correct derivation from an unchosen starting point.
+```
+PREMISES — not filed as questions. Everything below inherits them.
+════════════════════════════════════════════════════════════════════════════════
+  ?  is this delivered over the web at all?      every storage fact assumes yes
+  ?  is offline play a promise, how absolute?    ADR-0002 is derived from it
+  ?  what does durability promise, and to whom?  ADR-0003 is derived from it
+════════════════════════════════════════════════════════════════════════════════
 
-**Scope.** What is in and out. Scope decides which mechanisms have to exist at all, so a scope
-answer often *deletes* a lower question rather than informing it — which is why answering the
-lower one first is wasted work rather than early work.
+ANSWERABLE NOW — nothing blocks these
 
-**Representation.** How the data is shaped, once scope has established what data there is.
+how expensive is puzzle generation?                                       14 ↓
+ ├─ one puzzle a day, or unlimited play?                                   8 ↓
+ │   ├─ cross-device resume in v1?                                         6 ↓
+ │   │   ├─ are there user accounts?      ← also paid tier, privacy        1 ↓
+ │   │   │   └─ how does a 2nd device recognise the same person?
+ │   │   ├─ what happens to a losing write?   ← also snapshot-or-log
+ │   │   └─ where does this run?   ← also server store, load, install      2 ↓
+ │   │       ├─ how much downtime is acceptable?
+ │   │       └─ what is the acceptable running cost?   ← also load
+ │   └─ is there a paid tier?             ← also privacy                   2 ↓
+ │       └→ are there user accounts
+ ├─ generated ahead of time, or on demand?                                 4 ↓
+ │   └─ what does the server store, if anything?      ← also load          3 ↓
+ │       └→ where does this run
+ └─ does v1 ship generated or seeded puzzles?                              2 ↓
+     └─ what makes a puzzle a joy to solve?                                1 ↓
+         └─ is difficulty graded, and does a grade promise anything?
 
-**Mechanism.** What implements it. Nearly everything here is cheap to reverse compared to the
-levels above, which is the reason to decide it last despite it being the most inviting to decide
-first.
+what wins when battery and durability conflict?                            6 ↓
+ └─ how much unsynced work is acceptable?                                  5 ↓
+     ├─ how would we verify progress is never lost?
+     └─ is home-screen install required?   ← also Safari window            3 ↓
+         └→ where does this run
 
-Two rules fall out of that, and both have already been needed here.
+is Safari's storage window still seven days?                               4 ↓
+ └→ is home-screen install required
 
-**Scope precedes mechanism.** When two questions each look like they need the other first, the
-edge points from the decision about *what to promise* toward the decision about *how to deliver
-it*. A mechanism chosen before its purpose tends to acquire one. Four pairs pointed both ways
-until this was applied to them.
+what load should the server handle?                                        4 ↓
+ ├→ what does the server store, if anything?
+ ├→ where does this run?
+ └─ what is the acceptable running cost?
 
-**A cycle usually means a question above both of them is missing.** If two questions still deadlock
-after the rule above, the useful move is not to break the tie but to ask what they are both
-derived from that nobody has written down. Cross-device resume and user accounts appeared to
-depend on each other until it became clear that neither had a settled answer to what durability
-actually promises — a premise sitting above both, and unfiled.
+do privacy regulations apply?                                              3 ↓
+ ├→ is there a paid tier?
+ └→ are there user accounts?
 
-## Why the order matters
+is undo in scope, and how far back?                                        2 ↓
+ └─ is puzzle state a snapshot or an event log?                            1 ↓
+     └→ what happens to a losing write when syncing?
 
-This is not procedure for its own sake. Four decisions in this repo were made or nearly made out
-of order, and all four were caught by accident rather than by process:
+which component framework?                                                 2 ↓
+ ├─ how is the app styled?
+ └─ how is the codebase laid out?
 
-- [ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
-  specifies how two divergent copies of a board are merged, while
-  [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — whether
-  copies ever diverge — is still open. Mechanism before scope; if that scope answer is no, most
-  of the record is moot.
-- [ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) rejected its
-  alternatives on reasoning that later research contradicted. The conclusion may still be right,
-  but the rejected options were never genuinely scanned.
-- [ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) stated
-  a client storage mechanism as settled fact when nothing had decided it, inside an argument
-  that did not need it to be true.
-- Whether this is delivered over the web at all has never been examined, though every fact in
-  [../constraints.md](../constraints.md) about browser storage eviction assumes it, and choosing
-  otherwise would delete most of them.
+what interactions must the grid support?                                   2 ↓
+ ├─ is accessibility in scope for v1?
+ └─ what latency budget makes "immediately" checkable?
 
-The pattern is the same in each: work proceeded from a premise that was inherited rather than
-chosen, and the error stayed invisible because the reasoning built on top of it was sound. Good
-reasoning from an unexamined starting point is the failure mode this ordering exists to catch,
-and it does not announce itself.
+what provides the build and dev server?                                    1 ↓
+ └─ how does the app itself stay available offline?
 
-The cost of the ordering is that the interesting questions are rarely the ready ones. The
-durability and sync questions here are the most engaging in the folder and among the least
-ready, and being drawn to them is not evidence that they are next.
+BLOCKS NOTHING — answer when it matters, never to unblock something else
+ · are hints in scope?
+ · does craft enjoyment ever outrank user experience?
+ · how does Android evict stored data?
+ · how long must offline play survive?
+ · how long until a stalled connection surfaces as an error?
+ · how would we learn a player lost progress?
+ · what are the real network conditions on transit routes?
+ · what do existing puzzle apps do about offline play?
+ · what wins when correctness and latency conflict?
+ · which games come after sudoku and star battle?
+```
 
-**The premises are the gap right now.** The levels below are well represented in the list; the
-level above them is not. Questions about which platform this is delivered on, and about whether
-the offline and durability promises are the right promises, are not yet filed as questions — they
-are currently visible only as assumptions inside `../guarantees/` and the decision records. Filing
-them is the first thing worth doing to this folder.
+## Reading the graph
+
+**The premise row is the live gap.** Three choices everything else derives from are not filed as
+questions at all — they exist only as assumptions inside [../guarantees/](../guarantees/) and the
+decision records. Answering anything below an unexamined premise risks a correct derivation from
+an unchosen starting point, which is the one error that stays invisible because the reasoning on
+top of it is sound.
+
+**Generation cost is the largest lever in the folder and one of the cheapest to settle.** It is
+a measurement, it is unblocked, and fourteen questions sit under it — the whole daily-rhythm,
+durability, identity and hosting chain hangs off whether generating a puzzle is cheap. Nothing
+else here comes close.
+
+**Depth is not importance.** The two client-build spines are shallow, which says only that few
+questions wait on them, not that they matter less. They are also the only spines that reach code.
+
+**Interesting is not ready.** The durability and sync questions are the most engaging here and
+sit five and six levels deep. Being drawn to them is not evidence they are next.
+
+**When two questions look like they need each other**, the edge points from what to promise
+toward how to deliver it — scope precedes mechanism, and a mechanism chosen before its purpose
+tends to acquire one. Four pairs pointed both ways until that was applied. If a pair still
+deadlocks after it, the useful move is not to break the tie but to look for a question above both
+that nobody has written down: cross-device resume and user accounts deadlocked until it became
+clear neither had a settled answer to what durability promises — a premise, and unfiled.
+
+**Why any of this is enforced.** Four decisions in this repo were made or nearly made out of
+order, and all four were caught by accident rather than by process:
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+specifies how divergent copies of a board merge while
+[whether copies ever diverge](is-cross-device-resume-in-scope-for-v1.md) is still open;
+[ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) rejected its
+alternatives on reasoning later research contradicted;
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) stated a
+client storage mechanism as settled when nothing had decided it; and delivering this over the web
+has never been examined, though every fact in [../constraints.md](../constraints.md) about storage
+eviction assumes it.
 
 ## The list
 

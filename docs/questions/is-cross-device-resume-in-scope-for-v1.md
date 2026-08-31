@@ -29,10 +29,12 @@ this question turns on.
 
 Two things, and the first is research rather than judgement.
 
-[What resets Safari's seven-day storage clock?](what-resets-safaris-seven-day-storage-clock.md)
-decides whether a returning player ever loses local data in practice. If any visit resets it and
-players return weekly, eviction almost never fires and the local-only branch is far stronger than
-it looks. If the clock is stricter, the durability promise cannot be kept on-device.
+[Is Safari's storage window still seven days?](is-safaris-storage-window-still-seven-days.md)
+decides whether a returning player ever loses local data in practice. What resets the clock is
+now known — any interaction with the page does, so active play holds it open indefinitely — so
+the answer turns entirely on the length of the gap a lapsed player can take. At seven days
+the durability promise cannot be kept on-device; at thirty, the local-only branch is far stronger
+than it looks.
 
 The rest is a product call: whether progress following a player is part of what this is, or a
 convenience that can wait.
@@ -116,12 +118,30 @@ interruption by any ordinary reading. So the durability promise as written may a
 what cross-device resume requires — in which case the expensive machinery is not optional and
 this question is only about whether to also get transfer, which by then is nearly free.
 
-**There are exactly two ways to keep that promise.** A server copy with durable identity, or
-preventing eviction by requiring home-screen installation, which is the one confirmed exemption —
-see [is home-screen install required for durability?](is-home-screen-install-required-for-durability.md).
+**There are exactly two ways to keep that promise, and the cheap one is worse than it looked.**
+A server copy with durable identity, or preventing eviction by requiring home-screen
+installation, which is the one confirmed exemption — see
+[is home-screen install required for durability?](is-home-screen-install-required-for-durability.md).
 The second is cheaper to build and puts friction on an audience `../problem.md` describes as
 having no assumed technical sophistication, and it only works for players who accept the prompt.
 Those are the alternatives; there is no third.
+
+Two later findings weakened the second one specifically. **Installing starts an empty store** —
+tab and installed storage are separate — so prompting a player who has already been playing
+destroys the progress the prompt was meant to protect, unless something carries it across, and
+the only place to carry it through is the server copy this branch was avoiding. And **install
+does not address the failure that actually dominates**: writes rejected because WebKit killed
+the network process under memory pressure, which install has no bearing on. Both are recorded in
+[../constraints.md](../constraints.md). The install-only branch is therefore narrower than the
+straight comparison above suggests: it protects new players who install immediately, against one
+of two failure modes.
+
+**A local-only answer does not avoid the hard part of the write path.** The dominant storage
+failure is not eviction and not quota; it is ordinary rejected writes whose error names
+misidentify their own cause. Careful write handling — no swallowed rejections, no branching on
+the error, no immediate retry against a dead connection — is required under every option here,
+including the one where nothing is ever sent anywhere. That work does not count as a cost of
+saying yes, which slightly narrows the gap between the branches.
 
 **The expensive part is identity, not sync.** Sync between one writer's devices is a push on
 change and a pull on open. What costs is durable identity: signup, recovery, deletion, support.

@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-08-31
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -23,6 +23,11 @@ somebody establishes it.
 Nothing here depends on a technology we haven't chosen. Facts that would only apply under a
 particular stack arrive with the ADR that adopts it, and leave when it's superseded.
 
+Most of what follows is deliberate design and changes slowly. A few entries are vendor
+*defects* we have to build around. Those say so in their provenance, because they may be fixed
+and stop being true — but a defect is a constraint while it lasts, and discovering one late
+costs exactly what discovering a design late costs.
+
 ---
 
 ## Browsers — client-side storage is not durable
@@ -34,7 +39,23 @@ API — regardless of how much quota is unused.
 > So we must never treat client-side persistence as durable storage. Progress needs a path
 > that survives a wipe.
 
-*Verified — WebKit's tracking-prevention documentation, checked 2026-08-29.*
+*Verified — WebKit's tracking-prevention documentation, checked 2026-08-29. The seven-day figure
+may now be conservative: WebKit's source carries a longer default with seven reserved as a
+penalty for a narrower case, but the change was never announced and the reading is
+[contested](questions/is-safaris-storage-window-still-seven-days.md). Seven remains the number
+to plan against.*
+
+**What resets that clock is a deliberate act, not a page view.** A tap or click, a keystroke the
+page handles, an autofill, and an authentication all count. Scrolling, viewing, timers firing,
+and the app writing to storage do not. The window is also counted in days the browser was
+actually used rather than days on the calendar.
+
+> So an actively playing player is never at risk — solving a puzzle is a continuous stream of
+> qualifying interactions. The entire exposure is the gap between sessions, which makes eviction
+> a property of the lapsed player rather than of the app, and means no amount of background
+> activity can hold the clock open on their behalf.
+
+*Verified — WebKit's tracking-prevention documentation, checked 2026-08-31.*
 
 **That wipe covers non-cookie website data only — cookies are a separate mechanism.** WebKit's
 own wording is that "all of website.example's non-cookie website data is deleted". Cookies set by
@@ -71,14 +92,39 @@ regular Safari. This is the only confirmed mitigation.
 
 *Verified — WebKit's tracking-prevention documentation, checked 2026-08-29.*
 
-**Whether `navigator.storage.persist()` does anything on Safari is unknown.** It appears
-nowhere in WebKit's tracking-prevention documentation despite being the commonly recommended
-API for exactly this.
+**That isolation runs both ways: an installed app starts with an empty store.** Home-screen and
+tab storage are separate, so nothing saved or cached while playing in Safari carries across when
+the same player installs.
 
-> So we must not count it as a mitigation on iOS, and must treat a `true` return as unreliable.
+> So installing is a reset rather than an upgrade. Progress already made has to be carried over
+> deliberately, or it is lost at the exact moment the player does the thing we asked them to do
+> to keep it safe. Any promise that the app opens with no network also starts holding only on
+> the installed app's *second* launch.
 
-*Verified as an absence — the API is not mentioned in the documentation. Whether it works
-anyway is [an open question](questions/does-storage-persist-do-anything-on-ios-safari.md).*
+*Verified — a direct consequence of the storage isolation above.*
+
+**Since Safari 26 any site can be installed, and the player can decline the isolated store.**
+The installability requirements are gone — no manifest is needed — but the Add to Home Screen
+sheet now offers an "Open as Web App" toggle, and turning it off leaves the site in ordinary
+Safari with ordinary Safari's eviction.
+
+> So install is easier to reach and less safe to infer. Whether a given player is actually
+> protected has to be tested at runtime, never assumed from having shown them the prompt.
+
+*Verified — WebKit Features in Safari 26.0, checked 2026-08-31.*
+
+**`navigator.storage.persist()` is a membership test, not a request.** WebKit grants it only to
+origins already exempt from tracking prevention — app-bound domains, domains managed by an MDM
+profile, and the domain of a home-screen-installed web app. There is no prompt and no engagement
+threshold. In an ordinary Safari tab it returns `false` unconditionally.
+
+> So calling it buys nothing that installing did not already buy, and the widely repeated advice
+> to call it and branch on the result is wrong here. Its useful half is the other one:
+> `navigator.storage.persisted()` is the best runtime test for whether we are in the protected
+> store, because it reports the same membership that governs deletion. That makes it a better
+> signal than `display-mode: standalone`, which only reports how the page was launched.
+
+*Verified — WebKit trunk, `NetworkStorageManager::persistOrigin`, read 2026-08-31.*
 
 **Chrome evicts whole origins, least-recently-used first**, when it is over its overall
 storage limit. An origin may use up to roughly 60% of disk, much less in Incognito.
@@ -94,6 +140,58 @@ storage limit. An origin may use up to roughly 60% of disk, much less in Incogni
 > numbers.
 
 *Verified as a gap — [an open question](questions/how-does-android-evict-stored-data.md).*
+
+---
+
+## Browsers — the store also fails for ordinary reasons
+
+The facts above are about storage being *taken away* by policy. These are about it failing while
+it is still there, which turns out to be the more common case.
+
+**A write can fail for reasons that have nothing to do with quota, and the error misidentifies
+its own cause.** One published production dataset recorded 3.36 million storage-write failures
+across four weeks in 52 distinct error types. The largest single category was WebKit reporting
+the connection to the database server lost — the network process being killed under memory
+pressure, which is the ordinary lifecycle of a backgrounded mobile app, not an exceptional
+event. Firefox raised a quota error 865,703 times at an average of zero percent quota used.
+
+> So we must not branch recovery on the error's name, and must never treat a rejected write as a
+> condition that will resolve itself. A swallowed rejection here is silent data loss, and this is
+> the ordinary way that loss happens rather than an exotic one. Retrying immediately against a
+> dead connection is also useless: in the same dataset, 97.5% of affected sessions exhausted
+> every retry.
+
+*Verified — Expensify's published telemetry, checked 2026-08-31.*
+
+**IndexedDB is unavailable entirely under Lockdown Mode**, and Apple's own description of the
+feature does not mention it.
+
+> So the storage layer has to detect its own absence and degrade rather than assume a database
+> it can always open. Some players get no persistence at all, and finding that out by crashing
+> is the wrong way to find it out.
+
+*Verified — WebKit's Safari 17 feature announcement.*
+
+**`navigator.storage.estimate()` reports a fabricated quota on iOS**, derived from a fixed
+volume capacity rather than the device's real disk, as an anti-fingerprinting measure. Every
+iPhone reports roughly the same number regardless of how much space it has.
+
+> So we must build no quota management and must never show the figure to anyone. Running out of
+> space is not the failure worth designing against here.
+
+*Verified — WebKit trunk, `WebsiteDataStoreCocoa.mm`, read 2026-08-31.*
+
+**Letting IndexedDB generate a key currently triggers a WebKit defect.** On iOS 26 the first
+write after a cold start fails when the store relies on the browser to mint the key; a WebKit
+engineer attributes it to exactly that. The bug was closed once and has been reopened.
+
+> So keys must be assigned by us rather than by the store. Doing this from the first line costs
+> nothing; adopting it later costs a migration of every player's data, which is why it is
+> recorded here despite being a defect.
+
+*Verified — WebKit bug 229178, reopened, checked 2026-08-31. This is a defect rather than a
+design, so it may be fixed and stop being true. The mitigation is worth taking regardless,
+because it is free and the failure it avoids is a lost first write.*
 
 ---
 
@@ -152,6 +250,17 @@ OS memory purge, none of which guarantee a page-lifecycle event fires.
 
 *Reasoned — well-established browser behaviour on mobile, not checked against a specification
 here.*
+
+**iOS runs no background execution for web apps at all** — Background Sync, Periodic Background
+Sync and Background Fetch are all absent, with no partial substitute.
+
+> So there is no moment to flush pending work other than while the app is on screen, and nothing
+> can be deferred to "later" in any sense the platform will honour. Combined with the missing
+> session-end hook above, the last chance to persist or upload is whatever we manage on
+> `visibilitychange` — which has to be fire-and-forget rather than a request we wait on, because
+> nothing guarantees we are still running to see the response.
+
+*Verified — WebKit implements none of the three, checked 2026-08-31.*
 
 ---
 

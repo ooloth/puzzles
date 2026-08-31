@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-08-31
 update_when: a question opens, or one gets settled
 decays: fast
 status: active
@@ -248,21 +248,15 @@ Cheap to answer, currently blocking or distorting real decisions. These resolve 
   An entire platform's durability behaviour, unresearched while we assume an iOS-heavy
   audience on no evidence.
 
-- [What resets Safari's seven-day storage clock?](what-resets-safaris-seven-day-storage-clock.md)
-  Whether a regular player is ever actually at risk, which decides how much the eviction
-  problem deserves.
-
-- [Does `storage.persist()` do anything on iOS Safari?](does-storage-persist-do-anything-on-ios-safari.md)
-  Whether a second mitigation exists, or whether calling it is false reassurance.
+- [Is Safari's storage window still seven days?](is-safaris-storage-window-still-seven-days.md)
+  What counts as interaction is now known. Whether the window is still seven days is not, and
+  the difference decides how exposed a lapsed player really is.
 
 - [What are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md)
   Whether the offline design is sized to reality or to a specification's classification thresholds.
 
 - [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md)
   The modal tunnel failure, which retry logic built around thrown errors never sees.
-
-- [Does background sync fire reliably on iOS?](does-background-sync-fire-reliably-on-ios.md)
-  Whether progress can sync without the player reopening the app.
 
 - [What do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
   Whether offline is a differentiator or table stakes. No competitor research exists at all.

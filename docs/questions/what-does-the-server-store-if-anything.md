@@ -82,3 +82,9 @@ missing option is listed above; note that it wasn't rejected, it was never raise
 when that storage is gone is decided by the backup mechanism, not discovered during the incident —
 continuous replication and a periodic copy differ by exactly that amount. It is one more cost on
 the side of the server holding state, and it disappears entirely if it holds nothing.
+
+**The smallest useful server is smaller than "a database".** Storing one opaque blob per
+anonymous token — written on change, read on open — keeps the durability promise without accounts,
+sessions, or any understanding of what a puzzle is. That is the middle option in this question's
+list, and it is what most of the durability argument actually needs. See the layer decomposition in
+[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md).

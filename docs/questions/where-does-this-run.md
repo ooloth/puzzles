@@ -142,3 +142,11 @@ ceiling, which mattered only because generation was assumed to be compute-heavy 
 conditions that would trigger it — generation outgrowing the compute ceiling, steal proving
 persistent, a genuinely multi-app future — rather than choosing a cheap option and leaving the
 exit undefined.
+
+**Topology decides whether cheap recovery is possible at all.** A server-set cookie is the only
+identifier that survives Safari's storage wipe without asking the player for anything, and Safari
+withdraws that exemption when the cookie-setting server does not look genuinely first-party — a
+CNAME to elsewhere, or an IP whose first half differs from the site's. Static hosting with an API
+on another provider is the shape most likely to fail, silently. So this question has to be settled
+with the recovery mechanism in mind rather than after it, which makes it costlier to reverse than
+its price comparisons suggest.

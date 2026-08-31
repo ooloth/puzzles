@@ -65,3 +65,9 @@ accounts, which is the same fix that would be built anyway. Nothing is foreclose
 
 That argument is contingent on [is there a paid tier?](is-there-a-paid-tier.md) staying answered
 no. The moment something is worth gating, abuse resistance stops being free to defer.
+
+**Accounts are Layer 2 of three, and most durability arguments are about Layer 1.** An anonymous
+server copy keyed to a cookie keeps the same-device durability promise with no signup at all;
+accounts extend it across devices and carry a subscription. Deferring them is cheap as long as the
+anonymous layer exists to attach to later — see
+[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md).

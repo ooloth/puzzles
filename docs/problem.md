@@ -31,8 +31,24 @@ solving, a player makes a discrete input every one to three seconds.
 
 The audience is deliberately small: a genuinely public v1 found by a few people, not many.
 
-The second stakeholder is the solo maintainer. This is a craft project, built to be
-well-made over about a year, and it has to stay maintainable by one person.
+The second stakeholder is the solo maintainer, and there are three distinct reasons this exists.
+They pull in different directions often enough to be worth keeping separate.
+
+**A polished interface.** An opportunity to build something visually and interactively excellent,
+which day work does not provide. This is the source of the priority given to the solving
+experience below.
+
+**Puzzles generated here, seen each morning.** Not a supply mechanism — the point is opening the
+app to a puzzle this project made. That makes the generator part of the reward rather than
+infrastructure supporting it, and it indicates a daily rhythm rather than an unlimited catalogue.
+
+**A demonstrable internet-facing full-stack system.** The maintainer wants a public demonstration
+of his ability to build, deploy and operate an internet-facing full-stack app.
+
+That third purpose needs a guard, because it can justify almost anything. **Would this component
+still be worth building if its demonstration value were zero?** Where the answer is yes, being
+able to point at it is a bonus. Where it is no, it is scope wearing an architecture costume, and
+recognising which one it is at the time is much easier than unpicking it later.
 
 ## What success looks like
 
@@ -49,6 +65,9 @@ A player can:
 And every puzzle served has exactly one solution, reachable by logic alone.
 
 A small, genuinely public v1 within a few months.
+
+For the maintainer: an interface worth being proud of, a puzzle waiting each morning that this
+project generated, and a system whose operation is worth describing to someone hiring for it.
 
 ## Not this
 

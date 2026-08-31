@@ -141,15 +141,62 @@ their phone and opens the app on their laptop must not be asked to pay again. So
 "no" is a decision about v1 scope rather than about the app's permanent shape, and the machinery
 arrives later either way.
 
-**Engagement frequency decides how much of this is real.** If the product is a daily puzzle,
-players return often, the seven-day clock rarely expires, and local-only storage is far safer than
-it sounds. If play is sporadic, gaps of a week are ordinary and eviction becomes routine. That is
-why this question is blocked by
-[one puzzle a day or unlimited play](is-there-one-puzzle-a-day-or-unlimited-play.md) — the product
-model changes the durability risk by an order of magnitude.
+**Engagement frequency changes who is exposed, not whether anyone is.** A daily release creates
+the *opportunity* for daily play; it does not produce it. Whether the seven-day clock fires depends
+on retention, which is unknown and which a small new audience is unlikely to have much of. Even
+committed players take holidays, get busy, or lose a week.
+
+And the exposure inverts in the worst possible way. **The daily model protects the players who need
+protection least.** Someone playing every morning was never at risk; someone who lapses for eight
+days and comes back is the one who loses their board — and they are simultaneously the most
+valuable recovery case, because finding their progress gone confirms the decision to drift away.
+
+Durability is a property of the tail, not the median, so a favourable shift in the distribution of
+gaps is worth something and settles nothing.
 
 **Saying no is cheap to reverse, but only with one precaution.** Adding sync later to an app that
 never had identity means existing players either abandon their progress or go through a claim
 flow that has to be built anyway. Minting a stable identifier on first visit — even with no server
 and nothing to claim — makes the later migration a lookup rather than a rescue. That is the fourth
 option above, and it costs almost nothing today.
+
+**Three layers, usually discussed as one, with completely different costs.** Separating them
+dissolves most of this question.
+
+*Layer 0 — local only.* Progress in the browser, no server. What a static build gives you.
+
+*Layer 1 — an anonymous server copy.* The server mints an opaque token, sets it as an `HttpOnly`
+cookie, and stores a blob against it. No signup, no email, no sessions beyond the cookie, no
+password anything. One endpoint to write and one to read.
+
+*Layer 2 — durable identity.* Accounts, magic links, passkeys or codes. Signup, recovery,
+deletion, support, and an email provider.
+
+**Almost everything meant by "accounts are needed for durability" is Layer 1, and Layer 1 is not
+accounts.** The durability promise as written is scoped to the same device, and Layer 1 keeps it
+without any of Layer 2's cost. Layer 2 extends it to other devices, which is a promise nobody has
+made yet.
+
+**Layer 2 is additive rather than migratory, provided Layer 1 exists.** The anonymous token is
+the claimable anchor: adding accounts later becomes "attach this account to the token you already
+hold" rather than a rescue operation for stranded players. Skipping Layer 1 is what makes Layer 2
+expensive later, not deferring Layer 2 itself.
+
+**The thing that must be decided early is neither of them.** Layer 1 only works if Safari judges
+the cookie-setting server genuinely first-party — see [../constraints.md](../constraints.md). A
+static host with its API on another provider is exactly the shape that fails, and it fails
+silently. Adding accounts later is cheap; moving hosting later because the recovery mechanism does
+not work is not. By the sizing rule in [../decisions/](../decisions/) — how expensive is this to
+reverse — topology is the costly one and belongs early, Layer 1 is small and keeps a promise
+already made, and Layer 2 waits.
+
+**One argument does pull Layer 2 earlier, and it is commercial rather than technical.** A free
+account exists partly to capture an address, which is the only channel for telling existing
+players about anything paid. If accounts arrive at the same moment as a paid tier, the players
+accumulated before it — the ones most likely to buy — cannot be reached. That argues for identity
+shipping some months ahead of monetisation rather than alongside it.
+
+**Privacy obligations do not wait for Layer 2 entirely.** An opaque token that singles out an
+individual is likely personal data under GDPR even with no name attached, so Layer 1 does not
+escape [do privacy regulations apply?](do-privacy-regulations-apply.md) — it only makes the answer
+smaller.

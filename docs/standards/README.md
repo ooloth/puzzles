@@ -63,6 +63,7 @@ cargo-culted or ignored.
 
 ## Files
 
+- [decisions.md](decisions.md) — which decision is made and when; the order they depend on
 - [documentation.md](documentation.md) — files under `docs/`, `README.md` at any level, `CLAUDE.md`
 
 Add a file once a theme has real content. Keep this list in step with the directory.

@@ -15,8 +15,7 @@ nobody has asked, write that question and work it instead; a decision recorded a
 foundations reads as reasoned for months and has already had to be undone four times here.
 
 **Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full.** They
-answer more than the open questions imply, and treating "I know that file exists" as having read
-it has repeatedly cost this project work.
+answer more than the open questions imply.
 
 ## Current priorities
 

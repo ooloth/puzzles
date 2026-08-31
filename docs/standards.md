@@ -15,7 +15,7 @@ How we work here. Graded, because not all rules deserve equal force:
 
 Every entry carries a rationale. A rule you can't argue with gets cargo-culted or ignored.
 
-Conventions for *writing* tests live here. How to *prove a change works* against the real
+Conventions for _writing_ tests live here. How to _prove a change works_ against the real
 system lives in [verification.md](verification.md).
 
 ## Documentation
@@ -35,18 +35,12 @@ never need alignment, and produce diffs that touch only what changed. Grep also 
 them better — `rg -A1 'Enforced by' docs/guarantees.md` is a usable query against
 paragraphs, and a mangled mess against table rows.
 
-Exception: a **lookup table whose every cell is a word or two** — short enough that it
-will never wrap at any reasonable width. `CLAUDE.md`'s docs index and the routing table
-in [README.md](README.md) qualify. The moment a cell wants a sentence, it isn't one of
-these any more.
+Exception: a **lookup table whose rows wouldn't wrap at 100 columns**. If any row would wrap,
+it shouldn't be a table. `CLAUDE.md`'s docs index and the lookup in [README.md](README.md)
+qualify at two columns with concise content in each.
 
 Scope: documentation we maintain. `@legacy/` and `brainstorming/` are archival and are left
 as they were written.
-
-**Consider** whether a table would be scanned *down* a column before reaching for one
-elsewhere. That's the only thing a table does that a list can't, and it's rarer than it
-feels — `guarantees.md` looked like the strongest case for it in this repo and still read
-better as prose.
 
 <!-- Template:
 

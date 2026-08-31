@@ -46,11 +46,6 @@ research backlog, and everything resolving into a decision is a choice waiting t
 The body's **Resolves into** section names the specific destination and why; the frontmatter
 is the category, so it can be queried.
 
-When two questions each look like they need the other first, the edge points from the decision
-about *what to promise* to the decision about *how to deliver it*. Scope precedes mechanism, and a
-mechanism chosen before its purpose tends to acquire one. Four pairs pointed both ways until that
-rule was applied to them.
-
 The first six are stable and short. **Why it matters** is what's blocked or what gets
 expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency:
 what must be answered first, and what this unblocks. **What would settle it** is the evidence,
@@ -105,13 +100,92 @@ of a rule already in force, competing with the real one for whoever finds it fir
 ...
 -->
 
+## Which question to answer next
+
+Readiness is not importance, and this folder does not sort itself. A question is ready when
+everything it derives from has been answered **and** the alternatives at each of those levels
+were actually scanned rather than assumed. The second half is the one that gets skipped, and
+skipping it is what produces decisions that have to be reopened.
+
+Questions fall into four levels. Work downward. An answer at one level is an input to the next,
+and an answer taken out of order does not stay visible as an answer — it survives as an
+assumption nobody remembers making, in a file nobody thinks to question.
+
+**Premises.** The choices nothing else in this repo justifies, and which everything else is
+derived from: what we promise, to whom, and on what platform. These read like givens, which is
+precisely why they escape examination. The promises in [../guarantees/](../guarantees/) are
+choices; so is delivering this over the web at all. Answering anything below while a premise is
+still unexamined risks building a correct derivation from an unchosen starting point.
+
+**Scope.** What is in and out. Scope decides which mechanisms have to exist at all, so a scope
+answer often *deletes* a lower question rather than informing it — which is why answering the
+lower one first is wasted work rather than early work.
+
+**Representation.** How the data is shaped, once scope has established what data there is.
+
+**Mechanism.** What implements it. Nearly everything here is cheap to reverse compared to the
+levels above, which is the reason to decide it last despite it being the most inviting to decide
+first.
+
+Two rules fall out of that, and both have already been needed here.
+
+**Scope precedes mechanism.** When two questions each look like they need the other first, the
+edge points from the decision about *what to promise* toward the decision about *how to deliver
+it*. A mechanism chosen before its purpose tends to acquire one. Four pairs pointed both ways
+until this was applied to them.
+
+**A cycle usually means a question above both of them is missing.** If two questions still deadlock
+after the rule above, the useful move is not to break the tie but to ask what they are both
+derived from that nobody has written down. Cross-device resume and user accounts appeared to
+depend on each other until it became clear that neither had a settled answer to what durability
+actually promises — a premise sitting above both, and unfiled.
+
+## Why the order matters
+
+This is not procedure for its own sake. Four decisions in this repo were made or nearly made out
+of order, and all four were caught by accident rather than by process:
+
+- [ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+  specifies how two divergent copies of a board are merged, while
+  [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — whether
+  copies ever diverge — is still open. Mechanism before scope; if that scope answer is no, most
+  of the record is moot.
+- [ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) rejected its
+  alternatives on reasoning that later research contradicted. The conclusion may still be right,
+  but the rejected options were never genuinely scanned.
+- [ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) stated
+  a client storage mechanism as settled fact when nothing had decided it, inside an argument
+  that did not need it to be true.
+- Whether this is delivered over the web at all has never been examined, though every fact in
+  [../constraints.md](../constraints.md) about browser storage eviction assumes it, and choosing
+  otherwise would delete most of them.
+
+The pattern is the same in each: work proceeded from a premise that was inherited rather than
+chosen, and the error stayed invisible because the reasoning built on top of it was sound. Good
+reasoning from an unexamined starting point is the failure mode this ordering exists to catch,
+and it does not announce itself.
+
+The cost of the ordering is that the interesting questions are rarely the ready ones. The
+durability and sync questions here are the most engaging in the folder and among the least
+ready, and being drawn to them is not evidence that they are next.
+
+**The premises are the gap right now.** The levels below are well represented in the list; the
+level above them is not. Questions about which platform this is delivered on, and about whether
+the offline and durability promises are the right promises, are not yet filed as questions — they
+are currently visible only as assumptions inside `../guarantees/` and the decision records. Filing
+them is the first thing worth doing to this folder.
+
 ## The list
+
+Grouped by subject, so a question can be found by what it is about. That is a different job from
+deciding what to work on, which the section above is for — subject groupings say nothing about
+readiness, and several of the questions listed first are among the least ready.
 
 ---
 
 ## Architecture
 
-These gate nearly everything else. The first is the critical path to anything on screen.
+Mechanism questions, mostly. Engaging, and downstream of nearly everything else in this file.
 
 - [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
   Whether history is kept or only the current board. Decides how undo and reconciliation work.

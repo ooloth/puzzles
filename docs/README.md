@@ -12,19 +12,20 @@ Full context: [problem.md](problem.md).
 
 ## What's in here
 
-| Path                            | What you'll find                        |
-| ------------------------------- | --------------------------------------- |
-| [decisions/](decisions/)        | Choices already made, and why           |
-| [guarantees/](guarantees/)      | Promises to players we must never break |
-| [questions/](questions/)        | Open questions, one per file            |
-| [standards/](standards/)        | What correct work looks like here       |
-| [architecture](architecture.md) | Where code lives and what calls what    |
-| [constraints](constraints.md)   | Limits from browsers, networks and law  |
-| [glossary](glossary.md)         | Domain terms and their code names       |
-| [gotchas](gotchas.md)           | Non-obvious traps in this codebase      |
-| [problem](problem.md)           | Who this is for and what success means  |
-| [unfinished](unfinished.md)     | Code that's mid-change or misleading    |
-| [verification](verification.md) | How to run the system and check changes |
+| Path                             | What you'll find                        |
+| -------------------------------- | --------------------------------------- |
+| [decisions/](decisions/)         | Choices already made, and why           |
+| [failure-modes/](failure-modes/) | Ways it can fail, and whether we'd know |
+| [guarantees/](guarantees/)       | Promises to players we must never break |
+| [questions/](questions/)         | Open questions, one per file            |
+| [standards/](standards/)         | What correct work looks like here       |
+| [architecture](architecture.md)  | Where code lives and what calls what    |
+| [constraints](constraints.md)    | Limits from browsers, networks and law  |
+| [glossary](glossary.md)          | Domain terms and their code names       |
+| [gotchas](gotchas.md)            | Non-obvious traps in this codebase      |
+| [problem](problem.md)            | Who this is for and what success means  |
+| [unfinished](unfinished.md)      | Code that's mid-change or misleading    |
+| [verification](verification.md)  | How to run the system and check changes |
 
 ## Where a new fact goes
 

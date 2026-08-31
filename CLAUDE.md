@@ -23,6 +23,7 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | Path                   | What you'll find                        |
 | ---------------------- | --------------------------------------- |
 | `docs/decisions/`      | Choices already made, and why           |
+| `docs/failure-modes/`  | Ways it can fail, and whether we'd know |
 | `docs/guarantees/`     | Promises to players we must never break |
 | `docs/questions/`      | Open questions, one per file            |
 | `docs/standards/`      | What correct work looks like here       |

@@ -15,6 +15,10 @@ Nothing here is enforced yet, because there is no application code yet. As the s
 built, the enforcement line under each promise is what tells you which of these have become
 real. `rg -B6 'Asserted only' docs/guarantees/` lists everything still unbacked.
 
+Each promise here states what it costs when it breaks. *How* it breaks is
+[../failure-modes/](../failure-modes/) — the two are halves of one picture, and a guarantee whose
+failure modes are unexamined is a promise nobody has tried to break.
+
 ## Every guarantee names what enforces it, and says so plainly where nothing does
 
 An unenforced guarantee is a wish. Recording the absence turns this folder into a backlog

@@ -84,3 +84,9 @@ The CPU-bound expectation appears in more than one legacy ADR, but not independe
 repeats ADR-02's premise rather than establishing it, and the compute-ceiling concern in the
 hosting decision leans on the same assumption again. Several ADRs agreeing is not corroboration
 when they all inherited the claim from one place.
+
+Another unmeasured expectation, from the same family: building a sudoku generator in-house was
+described as "a small, contained effort" because the algorithm is well understood, while star
+battle was said to lack a single known algorithm. The asymmetry is plausible and neither half was
+measured — and difficulty grading plus symmetric clue removal, both named as things a generator
+should do, are exactly the parts that are not simple backtracking.

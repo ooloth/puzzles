@@ -205,6 +205,10 @@ These gate nearly everything else. The first is the critical path to anything on
 - [What latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md)
   Making the most important guarantee testable instead of rhetorical.
 
+- [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+  Every offline discussion so far has been about data. If the shell isn't cached, there is
+  nothing to play.
+
 - [How long must offline play survive?](how-long-must-offline-play-survive.md)
   Minutes, a flight, or a night. Decides how much content is cached ahead of time.
 

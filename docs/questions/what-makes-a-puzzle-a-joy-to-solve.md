@@ -38,10 +38,16 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Finding drawn from legacy ADR-22 (seed sudoku puzzles statically).
+
 ## Options
 
 ...
 
 ## Findings
 
-...
+One concrete component, from a library evaluation that rejected a candidate partly for lacking
+it: **symmetric clue removal.** Where the given cells sit in a symmetric pattern rather than
+scattered, the puzzle reads as composed rather than generated. It is an aesthetic property with
+no bearing on solvability, which makes it exactly the kind of thing a generator optimising only
+for uniqueness will never produce — and exactly the kind of thing this question exists to find.

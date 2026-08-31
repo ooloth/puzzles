@@ -52,6 +52,12 @@ attach without restructuring what came before. Defers the work without foreclosi
 
 ## Findings
 
+**This may not be a separate question.** Every identity mechanism catalogued in
+[how does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
+answers both at once — whether a player signs up falls out of which mechanism is chosen, rather
+than being decided first and constraining it. Worth resolving whether these merge before either
+is answered, since keeping both invites answering the same thing twice and differently.
+
 Deferring accounts was previously judged to cost nothing later, and the reasoning holds
 independently of that decision: without accounts there is no abuse resistance — an identifier
 anchored in browser storage can be discarded and reissued at will — but the fix for that is

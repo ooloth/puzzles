@@ -69,14 +69,39 @@ can claim it rather than starting from zero. Costs almost nothing now and preser
 
 ## Findings
 
-**Eviction recovery and cross-device resume are the same feature.** This is the finding that
-reframes the question. Restoring a player's work after their browser clears it requires two
-things: a copy somewhere else, and a way to know the copy is theirs. Moving work to a second
-device requires exactly the same two. And the identifier cannot live in the storage that got
-cleared, so both need identity the browser cannot delete — something the player holds, or an
-account. **There is no cheaper machinery for recovery than for transfer**, which means "no
-cross-device resume" also means "no recovery from eviction" unless something else prevents
-eviction entirely.
+**Recovery is cheaper than transfer, but only by one specific mechanism.** Both need a copy
+elsewhere and a way to know it is the right player's. What separates them is that recovery can use
+an identifier the *browser* still holds, while transfer needs one the *player* holds.
+
+Safari's seven-day wipe deletes non-cookie website data, and a server-set `HttpOnly` cookie is not
+covered by it — see [../constraints.md](../constraints.md). So an anonymous session cookie can
+outlive the progress it points at: local data is wiped, the cookie survives, the server returns
+the last synced state, and the player never learns anything happened. No account, no code, no
+signup, no support burden.
+
+This is the cheapest recovery available and it is invisible to the player, which is the strongest
+argument for storing anything server-side at all — independent of second devices.
+
+**Three things break it, and they are worth stating plainly.** The exemption depends on
+deployment topology: since Safari 16.4 a server-set cookie is capped back to seven days if the
+setting server looks third-party by CNAME or by IP, which is exactly the shape of a static host
+with its API elsewhere. It must be set by the server, never by JavaScript, and the two are
+indistinguishable at the point of reading. And it survives a storage wipe but not a deliberate
+cookie clear, a private window, or a browser reinstall.
+
+**A new device is never helped by it.** A second browser has no cookie, so there is nothing to
+present and nothing to recover. This is the gap that separates recovery from transfer, and no
+amount of anonymous-session machinery closes it — transfer requires something the player carries
+between browsers, which means an account or a code they can retype.
+
+**Anonymous recovery also fails in a way account-based recovery does not.** If the cookie is
+capped or cleared, an account holder signs in again and their work returns. An anonymous holder
+has no route back: the row exists on the server, keyed to a token nobody can produce. Same data,
+same server, permanently unreachable.
+
+**And it accumulates orphans.** Progress keyed to tokens nobody will present again piles up
+indefinitely, which needs a retention policy and raises a privacy question with no easy answer:
+data about people who cannot be identified also cannot be deleted on request.
 
 **Which puts an existing promise in question.**
 [../guarantees/durability.md](../guarantees/durability.md) says in-progress work is never lost,

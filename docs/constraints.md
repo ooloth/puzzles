@@ -36,6 +36,33 @@ API — regardless of how much quota is unused.
 
 *Verified — WebKit's tracking-prevention documentation, checked 2026-08-29.*
 
+**That wipe covers non-cookie website data only — cookies are a separate mechanism.** WebKit's
+own wording is that "all of website.example's non-cookie website data is deleted". Cookies set by
+JavaScript through `document.cookie` are separately capped at roughly 7 days. Cookies set by the
+server in a `Set-Cookie` header, which JavaScript cannot write, follow their declared lifetime up
+to a 400-day ceiling.
+
+> So a server-set `HttpOnly` cookie can outlive the local data it points at, which makes it usable
+> as a recovery key: local progress is wiped, the cookie survives, the server hands the state back.
+> A cookie written by JavaScript cannot do this, and the difference is invisible in the code that
+> reads it.
+
+*Verified — WebKit's Intelligent Tracking Prevention 2.3 announcement, checked 2026-08-31.*
+
+**That exemption is lost if Safari judges the server setting the cookie not to be genuinely
+first-party.** Since Safari 16.4 the 7-day cap applies to server-set cookies in two cases: the
+setting server sits behind a CNAME resolving to a third-party host, or its A/AAAA record resolves
+to an IP address whose first half does not match the first half of the IP serving the site.
+
+> So the recovery mechanism above depends on deployment topology, not just on code. Serving the
+> app from one provider and setting cookies from another — a static host with an API elsewhere —
+> is the shape most likely to fail the IP test, and it fails silently: the cookie simply expires
+> in seven days alongside the storage it was meant to outlive.
+
+*Verified — WebKit's CNAME cloaking and bounce tracking defence post, plus Safari 16.4 behaviour
+widely reported in 2023 and absent from Apple's release notes. The exact IP-matching rule is
+described by third parties rather than by Apple.*
+
 **A home-screen-installed web app is exempt from that 7-day cap**, with storage isolated from
 regular Safari. This is the only confirmed mitigation.
 

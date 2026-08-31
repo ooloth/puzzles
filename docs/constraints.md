@@ -128,6 +128,21 @@ here.*
 
 ---
 
+## How the app gets used
+
+**A player makes a discrete input every one to three seconds while actively solving** — select a
+cell, enter a digit, toggle a note, undo. Sessions run minutes, are interrupted often, and resume
+anywhere from seconds to days later.
+
+> So this is the figure any estimate of write volume or request rate starts from. It is the only
+> quantity about player behaviour we have, and it multiplies by whatever the architecture decides
+> an input costs.
+
+*Reasoned — an expectation drawn from the intended audience and the way the game is played, not a
+measurement of anyone.*
+
+---
+
 ## Devices
 
 **A several-year-old mid-range phone has a multi-core CPU and multiple GB of RAM**, while a

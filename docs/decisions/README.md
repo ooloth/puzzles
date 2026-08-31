@@ -13,8 +13,6 @@ One file per decision: `NNNN-kebab-title.md`, numbered in the order made.
 **Append-only** — a decision that changes is _superseded_ by a new one, never edited.
 The record of what we believed at the time is the entire point.
 
-_No decisions recorded yet._
-
 ## Before you decide
 
 A template captures a decision; it doesn't improve one. A coin toss written up in this

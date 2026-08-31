@@ -75,53 +75,70 @@ things. Everything the previous design assumed, and the only option the previous
 
 Only the third of those needs a long-lived process with a disk. The first is any static host or
 CDN. The second is compatible with serverless platforms, which the previous reasoning excluded
-outright. The third has the candidates that were actually researched:
+outright. The third has the candidates that were actually researched, named below with the
+figures they were researched with — all from 2026, none carrying a source, all needing re-checking
+before they decide anything.
 
-*A managed micro-VM platform.* TLS, health-checked restarts and built-in metrics without running
-them yourself; cheapest configuration found. Shared-CPU tiers carry a real steal risk, and per-app
-billing does not amortise across apps.
+*Fly.io.* Managed micro-VMs. TLS, health-checked restarts and free Prometheus/Grafana without
+running any of it yourself. An optimised configuration — one `shared-cpu-1x`, 256MB, shared IPv4,
+scheduled volume snapshots disabled — was costed at roughly $2.40-3/month, the cheapest viable
+option found. Against it: shared-CPU steal, per-app billing that does not amortise, and volume
+snapshots billed with compounding retention.
 
-*A bare VPS.* More compute headroom, simpler tooling, fixed predictable cost. Full operational
-ownership — patching, TLS, monitoring.
+*Hetzner.* A bare VPS, roughly $4.59/month for 2 vCPU and 4GB. More compute headroom, simpler
+tooling, fixed predictable cost. Full operational ownership — patching, TLS, monitoring — with no
+managed offset. Previously kept as the named upgrade path rather than the starting choice.
 
-*An always-free cloud tier.* Cheap on paper; roughly three to four dollars a month once an
-external IPv4 address is counted, locked to three US regions, with a tighter compute ceiling and
-real console complexity.
+*Google Compute Engine e2-micro, "Always Free".* Roughly $3-4/month once its external IPv4 fee is
+counted, so not free. Locked to three US regions, with a tighter compute ceiling and real GCP
+console complexity.
 
-*A mainstream cloud VPS.* Around five times the cost of a budget provider for equivalent specs,
-with no capability gap relevant here.
+*DigitalOcean or Linode.* Roughly $24/month for specs equivalent to Hetzner's — around five times
+the cost with no capability gap relevant here.
+
+*Google Cloud Run, or Cloudflare Workers with D1.* Excluded previously for architectural
+mismatch rather than price. Back in contention if the server needs less than a database.
+
+*Coolify on a VPS.* Adds a second control plane to maintain; pays off only with a genuinely
+multi-app future.
 
 ## Findings
 
-SQLite on a local disk is what disqualified the serverless platforms considered previously —
-they offer no persistent filesystem, so a database file has nowhere to live. That disqualification
-is contingent on a data-store choice nobody has made: see
-[what does the server store](what-does-the-server-store-if-anything.md). If the server turns out
-to need less than a database, the platforms ruled out on this basis come back into contention
-before pricing is even discussed.
-
 **The option set that was researched contained only one of the three tiers above.** Every
-candidate previously weighed was a place to run a long-lived process with a disk attached, because
-a local database file was treated as a fixed requirement. It was not rejected on its merits that a
-server might be unnecessary — the possibility was never raised. This is the third time that shape
-has appeared, after a data store question that compared two relational databases and never
-considered less than a database.
+candidate weighed was a place to run a long-lived process with a disk attached, because a local
+database file was treated as a fixed requirement. That a server might be unnecessary was not
+rejected on its merits — it was never raised. This is the third time that shape has appeared,
+after a data store question that compared two relational databases and never considered less than
+a database.
+
+**SQLite on a local disk is what disqualified the serverless platforms**, since they offer no
+persistent filesystem for a database file to live on. That disqualification is contingent on a
+data-store choice nobody has made — see
+[what does the server store](what-does-the-server-store-if-anything.md). If the server needs less
+than a database, those platforms return before pricing is discussed.
+
+**Structural platform facts, which survive re-checking.** Fly volumes are single-attach without
+LiteFS, so two processes sharing one file must sit on one machine — which is what coupled the web
+app and the generator in the previous design. Cloud Run has an ephemeral filesystem and a hard
+sixty-minute request timeout. Cloudflare Workers with D1 has no persistent process and no real
+SQLite file. Fly's per-app billing scales roughly linearly per deployable with no bundling
+discount across apps.
+
+**Figures and reputational claims, which do not.** Every price above dates from 2026 research
+with no links recorded. The claim that Fly's `shared-cpu-1x` tier suffers sustained CPU steal —
+described as 70% or worse on some hosts, with a free destroy-and-reclone as the first remedy and
+`performance-1x` a 3-10x cost jump — is sourced to unnamed community reports. Useful as
+orientation about what to look into; not evidence.
 
 **Backups cover data loss, not downtime.** One machine with one volume has zero hardware-failure
-redundancy, and that holds for a bare VPS exactly as much as for a managed platform. Having
-backups is not having availability — see
+redundancy, and that holds for a bare VPS exactly as much as for a managed platform. See
 [how much downtime is acceptable](how-much-downtime-is-acceptable.md).
 
-**Vendor facts from the previous research, with the confidence they deserve.** Volumes on the
-managed platform are single-attach, so two processes sharing one file must sit on one machine —
-which is what coupled them. One serverless platform has an ephemeral filesystem and a hard
-sixty-minute request timeout; another has no persistent process and no real database file. Per-app
-billing scales linearly with no bundling discount. Those are structural and durable.
-
-The numbers are not. Pricing figures date from 2026 and carry no links, and the claim that shared
-CPU tiers suffer sustained steal is sourced to unnamed community reports. Both are usable as
-orientation and neither as evidence; re-check before any of them decides anything.
-
-The rejection of the always-free tier leaned partly on needing compute headroom for generation,
-which rests on an unmeasured premise — see
+**One rejection rests on an unmeasured premise.** GCE was set aside partly for a tighter compute
+ceiling, which mattered only because generation was assumed to be compute-heavy — see
 [how expensive is puzzle generation](how-expensive-is-puzzle-generation.md).
+
+**A practice worth keeping from the previous decision.** It named its upgrade path and the
+conditions that would trigger it — generation outgrowing the compute ceiling, steal proving
+persistent, a genuinely multi-app future — rather than choosing a cheap option and leaving the
+exit undefined.

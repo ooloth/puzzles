@@ -19,23 +19,7 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-### The ADRs in `docs/@legacy/decisions/` are not authoritative
-
-**You'll see** numbered ADRs recording real, detailed reasoning — Datastar, Rust, SQLite,
-Fly.io, Litestream, Sentry, Tailwind, anonymous server-side sessions, launch order. They read as
-settled. They are being migrated into `docs/questions/` and deleted one at a time, so the folder
-shrinks; what remains is no more authoritative than what has gone. `docs/decisions/` is empty by contrast, which makes the legacy
-folder look like the real record.
-
-**Actually** all of them predate a first-principles re-evaluation of this project's
-environment and constraints, and several files in `docs/brainstorming/` argue directly
-against them — Bun and Vite instead of Rust, a VPS instead of Fly, event sourcing instead of
-mutation. None has been confirmed against the current foundation, including the ones an
-earlier pass judged likely to survive.
-
-**So** don't cite a legacy ADR as settled reasoning and don't build on one. Treat the stack
-as undecided. Decisions made now go in [`docs/decisions/`](decisions/) under the current
-template.
+_Nothing in flight._
 
 <!-- Template:
 

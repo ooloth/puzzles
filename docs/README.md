@@ -49,5 +49,4 @@ real once something checks it.
 
 ## Not part of this structure
 
-- [`@legacy/`](@legacy/) — the previous docs layout, kept for reference. Not authoritative.
 - [`brainstorming/`](brainstorming/) — unfiltered thinking. Nothing here is decided.

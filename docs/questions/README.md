@@ -92,7 +92,7 @@ These gate nearly everything else. The first is the critical path to anything on
 ## Durability and identity
 
 - [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
-  The sharpest contradiction inherited from the old docs, and currently why `guarantees.md`
+  The sharpest contradiction inherited from the old docs, and currently why `guarantees/`
   promises only same-device resume.
 
 - [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)

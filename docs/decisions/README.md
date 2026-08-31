@@ -45,7 +45,7 @@ be stated as a cost of adopting Y — never smuggled in as a merit of X.
 ## Cite, don't restate
 
 Every **Forced by** must reference specific entries in [constraints.md](../constraints.md),
-[problem.md](../problem.md) or [guarantees.md](../guarantees.md) — not repeat their content.
+[problem.md](../problem.md) or [guarantees/](../guarantees/) — not repeat their content.
 Those files are the standing input; ADRs are downstream of them, never the reverse. If the
 reasoning depends on a fact that isn't written down yet, **add it there first, then cite it.**
 
@@ -81,7 +81,7 @@ date: YYYY-MM-DD
 
 ## Also update
 - [ ] constraints.md — givens this decision imports
-- [ ] guarantees.md — promises this decision commits us to
+- [ ] guarantees/ — promises this decision commits us to
 -->
 
 ## Guidance

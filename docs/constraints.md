@@ -8,7 +8,7 @@ status: active
 # Constraints
 
 Facts we don't control. Not choices (→ [decisions/](decisions/)), not promises
-(→ [guarantees.md](guarantees.md)). Everything here is **outside this repo** — vendor,
+(→ [guarantees/](guarantees/)). Everything here is **outside this repo** — vendor,
 protocol, regulator. Traps *inside* the repo go in [gotchas.md](gotchas.md).
 
 Every fact carries its implication. A fact alone is inert: the bug is never *not knowing*

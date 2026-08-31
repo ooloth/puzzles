@@ -16,7 +16,7 @@ true"), without being rephrased for each.
 
 Only **Must** holds unconditionally. **Should** allows a stated exception and **Consider** is
 a judgment call, so nothing here is an invariant — things that are true without exception, or
-the system is broken, belong in [../guarantees.md](../guarantees.md).
+the system is broken, belong in [../guarantees/](../guarantees/).
 
 ## Tiers
 

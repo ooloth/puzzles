@@ -23,13 +23,13 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | Path                   | What you'll find                        |
 | ---------------------- | --------------------------------------- |
 | `docs/decisions/`      | Choices already made, and why           |
+| `docs/guarantees/`     | Promises to players we must never break |
 | `docs/questions/`      | Open questions, one per file            |
 | `docs/standards/`      | What correct work looks like here       |
 | `docs/architecture.md` | Where code lives and what calls what    |
 | `docs/constraints.md`  | Limits from browsers, networks and law  |
 | `docs/glossary.md`     | Domain terms and their code names       |
 | `docs/gotchas.md`      | Non-obvious traps in this codebase      |
-| `docs/guarantees.md`   | Promises to players we must never break |
 | `docs/problem.md`      | Who this is for and what success means  |
 | `docs/unfinished.md`   | Code that's mid-change or misleading    |
 | `docs/verification.md` | How to run the system and check changes |

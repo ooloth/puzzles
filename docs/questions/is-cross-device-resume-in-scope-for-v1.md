@@ -8,7 +8,7 @@ status: open
 **Why it matters** Desktop use by the same person at a different time is described as
 expected, but the previous design explicitly accepted losing everything on a device switch.
 Both positions are in the record. This is the sharpest contradiction inherited from the old
-documents, and `guarantees.md` currently promises only same-device resume because of it.
+documents, and `guarantees/` currently promises only same-device resume because of it.
 
 **Gates** [are there user accounts](are-there-user-accounts.md),
 [how a second device recognises the same person](how-does-a-second-device-recognise-the-same-person.md),

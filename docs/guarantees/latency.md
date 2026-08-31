@@ -1,0 +1,32 @@
+---
+updated: 2026-08-30
+update_when: a promise about response time is made, or a budget is agreed
+decays: slow
+status: active
+---
+
+# Latency
+
+How quickly the app answers something the player did. What the app *costs* the device while
+doing it — battery, memory, bundle size — is [performance.md](performance.md).
+
+## Input registers without waiting for the network
+
+Tapping a cell, entering a digit, and toggling a note all reach the screen from local state.
+No player action's visible result depends on a round trip completing.
+
+This is deliberately structural rather than a duration, because it can be checked today:
+does the path from input to paint touch the network. A millisecond budget is a second,
+additional promise that doesn't exist yet.
+
+**Enforced by** Nothing. Asserted only.
+
+**If violated** On a weak link, connection setup alone runs to several seconds before
+anything happens — which is what a frozen board actually is. Worse, a late correction
+invalidates reasoning the player has already built two moves on top of.
+
+**Bearing on this** [What latency budget makes "immediately" checkable?](../questions/what-latency-budget-makes-immediately-checkable.md)
+would add the duration promise this one deliberately omits.
+[Does puzzle state live on the client or the server?](../questions/does-puzzle-state-live-on-the-client-or-the-server.md)
+decides whether this promise is achievable at all — a server-owned architecture fails it by
+construction.

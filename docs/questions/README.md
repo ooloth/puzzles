@@ -150,6 +150,9 @@ These gate nearly everything else. The first is the critical path to anything on
 - [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
   How much shared abstraction is worth building before a second game exists to generalise from.
 
+- [How is the app styled?](how-is-the-app-styled.md)
+  Where a consistent design scale comes from, for a bespoke interface with no designer.
+
 - [What interactions must the grid support?](what-interactions-must-the-grid-support.md)
   Drag-select, keyboard navigation and live highlighting were asserted as requirements by the
   previous architecture with nothing corroborating them.

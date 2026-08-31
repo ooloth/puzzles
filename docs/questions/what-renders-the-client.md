@@ -19,6 +19,8 @@ Sets the build tooling, the testing approach, and the speed of the inner develop
 
 build tooling, [how the codebase is laid out](how-is-the-codebase-laid-out.md).
 
+[How is the app styled?](how-is-the-app-styled.md).
+
 ## What would settle it
 
 ...
@@ -34,6 +36,8 @@ Ported from the legacy documentation review, 2026-08-30.
 Options ported from legacy ADR-01 (render with server-driven hypermedia).
 
 Criteria drawn from legacy ADR-06 (use hypertext for HTML templating).
+
+Finding drawn from legacy ADR-08 (invest in dev feedback loop tooling).
 
 ## Options
 
@@ -56,3 +60,15 @@ Two properties are worth testing each option against, and both hold whichever on
 are standards rather than inputs to the choice: whether the approach escapes output by default,
 and whether it validates markup when the code is built rather than when a page is served. Both
 are in the portable standards described in [../standards/README.md](../standards/README.md).
+
+**The options differ on inner-loop speed by a category, not a margin, and this is measurable.**
+A server-rendered approach with no client bundle has no hot-swap path: every change means
+recompile, restart and reload, and the ceiling is a fast restart rather than an instant update. A
+client application with a dev server updates a running page without losing its state. The previous
+reasoning accepted that ceiling explicitly while investing in tooling to get as close to it as
+possible.
+
+Since this loop is paid on every iteration, it is worth measuring rather than assuming: build the
+same trivial change both ways and time save-to-visible-result. That number belongs in the
+comparison alongside everything else, and it is one of the few that can be established before
+committing to either.

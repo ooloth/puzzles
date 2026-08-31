@@ -37,6 +37,8 @@ Ported from the legacy documentation review, 2026-08-30.
 
 Options and findings ported from legacy ADR-03 (use SQLite as the data store).
 
+Finding drawn from legacy ADR-13 (back up SQLite with Litestream).
+
 ## Options
 
 *SQLite as a file beside the app.* No database process to run, patch or monitor, and trivial
@@ -75,3 +77,8 @@ can't be evaluated yet.
 ADR-03 compared two relational databases and nothing else. Both assume the server holds
 meaningful relational data, which was true under server-owned state and may not be now. The
 missing option is listed above; note that it wasn't rejected, it was never raised.
+
+**Anything stored server-side brings a recovery point with it.** How much recent work disappears
+when that storage is gone is decided by the backup mechanism, not discovered during the incident —
+continuous replication and a periodic copy differ by exactly that amount. It is one more cost on
+the side of the server holding state, and it disappears entirely if it holds nothing.

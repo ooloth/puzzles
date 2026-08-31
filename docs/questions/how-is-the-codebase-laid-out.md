@@ -33,10 +33,17 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Finding drawn from legacy ADR-04 (separate puzzle generation from serving).
+
 ## Options
 
 ...
 
 ## Findings
 
-...
+Legacy ADR-04 deliberately separated two decisions that are easy to conflate: it settled the
+process-level relationship between generation and serving while explicitly refusing to prescribe
+module organisation, on the grounds that it "deserves its own dedicated discussion rather than
+being decided as a side detail here". Worth preserving as a precedent — process topology and
+module layout are separable, and letting the second ride along inside the first is how layout
+decisions get made without anyone noticing.

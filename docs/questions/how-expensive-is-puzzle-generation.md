@@ -79,3 +79,8 @@ generation argument never addressed. It is ambiguous in a way worth resolving: v
 player's entry against the rules is roughly 27 checks on a 9×9 grid and trivial, but if
 "validation" means the solver behind hints or difficulty grading, the cost is a different order
 entirely. The ADR doesn't say which it meant.
+
+The CPU-bound expectation appears in more than one legacy ADR, but not independently. ADR-04
+repeats ADR-02's premise rather than establishing it, and the compute-ceiling concern in the
+hosting decision leans on the same assumption again. Several ADRs agreeing is not corroboration
+when they all inherited the claim from one place.

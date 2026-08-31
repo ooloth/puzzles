@@ -1,27 +1,136 @@
 ---
 updated: 2026-08-31
-update_when: a question opens, or one gets settled
+update_when: a decision is made, or the order changes
 decays: fast
 status: active
 ---
 
 # Questions
 
-Every consequential question this project still has to answer. A question belongs here if
-getting it wrong would be expensive to undo, or if it gates other decisions. That rule is
-what keeps this folder from filling with trivia.
+The sibling of [../decisions/](../decisions/): the decisions not yet made, in the order they
+should be made.
 
-A long list is healthy. This is the inventory of what's genuinely open — not a backlog to
-feel bad about, and not a queue that needs draining. Questions that aren't ready to be worked
-are still worth recording: keeping one here costs nothing, and rediscovering it later costs
-real time.
+A directory listing of this folder is the full inventory — every filename asks its question
+plainly, so there is no index here and nothing to keep in step. What this file holds is the
+**order**, because that is the part a listing cannot show and the part that is expensive to get
+wrong.
 
-**One question per file.** The filename asks the question as plainly as it can, so a directory
-listing reads as the list of what's open. Each file carries `opened` and `status`.
+Nothing is installed yet. The list below is how that gets fixed without any of it being chosen by
+reflex: each stack decision has the foundational calls it rests on placed ahead of it, so no tool
+is picked before the thing it is supposed to serve is known.
 
-Most questions leave by becoming a decision in [../decisions/](../decisions/), and `status`
-records which one, so a missing question can be told apart from an abandoned one. Some resolve
-into a fact rather than a choice — those say so, and land in `../constraints.md`.
+## The order
+
+Work it top to bottom. Indented entries are the questions that genuinely block the decision above
+them — not everything related to it, only what makes the difference between a derivation and a
+preference. Where a decision has no indented entries, nothing is stopping it today.
+
+1. **Which package manager.**
+   [which-package-manager.md](which-package-manager.md) — no prerequisites, reversible in an
+   afternoon, and the one decision that turns an empty repository into a project.
+
+2. **How much the app helps a player solve.**
+   [how-much-does-the-app-help-you-solve.md](how-much-does-the-app-help-you-solve.md) — assistive
+   or austere. A taste call rather than a derivation, so nothing blocks it. It decides what state
+   exists in a cell and whether the client needs the puzzle rules at all, which is why
+   [ADR-0005](../decisions/0005-one-implementation-of-the-puzzle-rules.md) and
+   [ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) are
+   currently unsupported at their root.
+
+3. **How long in-progress work must survive, and on which devices.**
+   [how-long-must-in-progress-work-survive.md](how-long-must-in-progress-work-survive.md) — the
+   promise in [../guarantees/durability.md](../guarantees/durability.md) written with a bound.
+   Also nothing blocks it, and everything about servers and storage descends from it.
+
+4. **Which component framework.**
+   [which-component-framework.md](which-component-framework.md) — researched and shortlisted;
+   what it waits on is knowing what the interface has to do.
+   1. Decision 2 above.
+   2. [what-interactions-must-the-grid-support.md](what-interactions-must-the-grid-support.md)
+
+5. **What builds and serves the client.**
+   [what-provides-the-build-and-dev-server.md](what-provides-the-build-and-dev-server.md) —
+   researched, and narrowed on grounds that hold regardless of framework.
+   1. Decision 4 above, weakly.
+
+6. **How the frontend is organised.**
+   [how-is-the-app-styled.md](how-is-the-app-styled.md) and
+   [how-is-the-codebase-laid-out.md](how-is-the-codebase-laid-out.md) — the remaining frontend
+   installs, paired because both are downstream of the same thing and neither blocks anything.
+   1. Decision 4 above.
+
+7. **What runs the tests.**
+   [what-runs-the-tests.md](what-runs-the-tests.md) — a real choice rather than a formality: the
+   runner has to measure branch coverage on a pure module and drive a rendered grid, and the
+   obvious candidates differ on both.
+   1. Decision 5 above.
+
+8. **Whether a server exists at all.**
+   [what-must-be-true-off-device.md](what-must-be-true-off-device.md) — the most-assumed decision
+   in the repo. [ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+   already describes how a server behaves without anything establishing there is one.
+   1. Decision 3 above.
+   2. [is-there-a-paid-tier.md](is-there-a-paid-tier.md) — the one thing a device cannot be
+      trusted to hold, since entitlement enforced on the player's hardware is not enforced.
+
+9. **Which client storage mechanism.**
+   [which-client-storage-mechanism.md](which-client-storage-mechanism.md) — the only stack choice
+   with no clean migration path, so it is the one worth slowing down for.
+   1. Decisions 2 and 3 above, which give shape and lifetime.
+   2. [what-can-a-player-do-with-no-network.md](what-can-a-player-do-with-no-network.md) — one
+      board or a browsable archive, which is orders of magnitude of volume.
+   3. [is-undo-in-scope-and-how-far-back.md](is-undo-in-scope-and-how-far-back.md) and
+      [is-puzzle-state-a-snapshot-or-an-event-log.md](is-puzzle-state-a-snapshot-or-an-event-log.md)
+
+10. **How the app itself stays available offline.**
+    [how-does-the-app-itself-stay-available-offline.md](how-does-the-app-itself-stay-available-offline.md)
+    — the service worker and its tooling. Every option here has a maintenance problem, so the
+    choice is which one to own rather than which to avoid.
+    1. Decision 5 above, because the list of files to precache is a build output.
+    2. Decision 9's second prerequisite, which decides how much content is cached.
+
+11. **What runs the server, and which database if any.**
+    [what-runs-the-server-if-there-is-one.md](what-runs-the-server-if-there-is-one.md) and
+    [which-database-if-any.md](which-database-if-any.md) — paired because each constrains the
+    other's hosting. The database may be close to a non-decision: ADR-0003 keeps the server from
+    reading inside what it stores, and a store that never reads a value has one job.
+    1. Decision 8 above.
+    2. [what-must-we-know-about-how-the-app-is-used.md](what-must-we-know-about-how-the-app-is-used.md)
+       — queryable or opaque, which is most of what "which database" means.
+
+12. **Where it deploys.**
+    [where-does-this-run.md](where-does-this-run.md) — deliberately late; it was decided first
+    last time and the record says so. One trap: recovery after storage eviction depends on the
+    app and its API being hosted so that a server-set cookie is judged first-party — see
+    [../constraints.md](../constraints.md) — and a static host with its API elsewhere fails that
+    silently.
+    1. Decisions 8 and 11 above.
+
+13. **What runs the checks on every change.**
+    [what-runs-the-checks-on-every-change.md](what-runs-the-checks-on-every-change.md) — what
+    fills the [../verification.md](../verification.md) stub, and what makes any standard in
+    [../standards/](../standards/) enforced rather than intended.
+    1. Decision 7 above.
+
+Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any of them.
+Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided
+by choices made in areas that look unrelated.
+
+Everything else in this folder is real and is not next. It will be, in its turn.
+
+## Already settled, never written down as a decision
+
+From [../problem.md](../problem.md) or from conversation. **Treat these as fixed.** Each has been
+re-derived at least once by someone reasoning from the decision records alone, and each should
+become a record of its own.
+
+- Phone-first, played in transit; desktop secondary, by the same person at another time.
+- Single-player and unranked. Never social.
+- Puzzles are generated by this project rather than licensed.
+- The solving experience outranks puzzle supply, which sets the work order: interface first.
+- Two devices editing one board at once is permanently out of scope.
+- A paid tier is uncommitted, and the option must not be foreclosed.
+- Delivered over the web.
 
 ## What goes in a question file
 
@@ -40,25 +149,24 @@ rg -A2 '## Blocked by' docs/questions/ | rg -B2 'N/A'
 Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, or
 `problem`. That last one partitions the folder: `rg -l 'resolves_into: constraint'` is the
 research backlog, and everything resolving into a decision is a choice waiting to be made.
-The body's **Resolves into** section names the specific destination and why; the frontmatter
-is the category, so it can be queried.
 
-The first six are stable and short. **Why it matters** is what's blocked or what gets
-expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency:
-what must be answered first, and what this unblocks. **What would settle it** is the evidence,
-measurement, or event that would end the question — not another question, which is what
-*blocked by* is for. **Resolves into** names where the answer lands when it isn't a decision,
-which is how research questions differ from choices. **Source** records where the question
-came from, so provenance survives the deletion of whatever raised it.
+The first six sections are stable and short. **Why it matters** is what's blocked or what gets
+expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency.
+**What would settle it** is the evidence, measurement, or event that would end the question — not
+another question, which is what *blocked by* is for. **Resolves into** names where the answer
+lands. **Source** records where the question came from, so provenance survives the deletion of
+whatever raised it.
 
 The last two grow. **Options** holds each candidate answer with its strongest case and its
-cost. **Findings** holds what we've learned so far, each with where it came from — partial
-answers, sources checked, dead ends. A finding graduates to `../constraints.md` once it's
-confirmed; until then it lives here.
+cost. **Findings** holds what we've learned so far, each with where it came from. A finding
+graduates to `../constraints.md` once it's confirmed; until then it lives here.
 
 A finding may record what a standard *implies for these options*; it may not restate the
 standard itself. The first shifts a decision and belongs here. The second is a weaker local copy
 of a rule already in force, competing with the real one for whoever finds it first.
+
+**One question per file**, and the filename asks the question as plainly as it can, so a directory
+listing reads as the list of what is open.
 
 <!-- Template:
 
@@ -96,225 +204,3 @@ of a rule already in force, competing with the real one for whoever finds it fir
 
 ...
 -->
-
-## Already agreed, never written down as a decision
-
-Settled in [../problem.md](../problem.md) or in conversation, load-bearing, and absent from
-[../decisions/](../decisions/). **Treat these as fixed, not as open.** Every one has been
-re-derived at least once by somebody who reasoned from the decision records without reading the
-problem statement, and each should become a record of its own.
-
-- Phone-first, played in transit; desktop secondary, by the same person at a different time.
-- Single-player and unranked. Never social, never competitive.
-- Puzzles are generated by this project rather than licensed.
-- The solving experience outranks puzzle supply, which also sets the work order: interface
-  before generator.
-- Two devices editing the same board at once is out of scope permanently, so conflict resolution
-  never has to be CRDT-grade.
-- A paid tier is uncommitted, and the option must not be foreclosed.
-- Delivered over the web — implied by the maintainer purpose of a demonstrable internet-facing
-  system, and by a public v1 found by a few people rather than an installed base.
-
-## What we are trying to decide
-
-This is the shopping list. Each heading is a decision we eventually have to make; beneath it, in
-order, are the questions that have to be answered first for that decision to be a derivation
-rather than a preference.
-
-**Work a list top to bottom.** A question further down answered before the ones above it will
-produce an answer that is arbitrary and does not look arbitrary — which is the failure this file
-exists to prevent, and which has already happened here three times.
-
-Each question is listed once, under whichever decision most needs it. Where it also bears on
-another, the link says so.
-
-### Which component framework, and what builds it
-
-Both are researched. Neither should be recorded until the interface has a brief, because a
-framework chosen for an unspecified interface is chosen on familiarity.
-
-1. [How much does the app help you solve?](how-much-does-the-app-help-you-solve.md) — assistive or
-   austere. The root of everything the interface does, and unasked until now.
-2. [What interactions must the grid support?](what-interactions-must-the-grid-support.md)
-3. [Are hints in scope?](are-hints-in-scope.md)
-4. [Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md)
-5. [What latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md)
-6. [Which component framework?](which-component-framework.md) — shortlisted to React, Preact and
-   Svelte; see its findings before reopening any of them.
-7. [What provides the build and dev server?](what-provides-the-build-and-dev-server.md) — narrowed
-   to Vite for capability reasons that hold regardless of framework.
-8. [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
-   — downstream of the build, because the precache list is a build output.
-9. [How is the app styled?](how-is-the-app-styled.md)
-10. [How is the codebase laid out?](how-is-the-codebase-laid-out.md)
-11. [What runs the tests?](what-runs-the-tests.md) — downstream of the build, and researched.
-12. [Which package manager?](which-package-manager.md) — answerable today; recorded so it is
-    chosen rather than typed.
-13. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — what fills
-    the [../verification.md](../verification.md) stub.
-
-### Which client storage mechanism
-
-Nothing has chosen between IndexedDB, `localStorage`, OPFS, SQLite over WebAssembly and the Cache
-API — though [ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md)
-refers to one as if something had. The choice follows from volume, shape and lifetime, in that
-order, and all three are open.
-
-1. [How much does the app help you solve?](how-much-does-the-app-help-you-solve.md) — decides what
-   state exists per cell. Listed above; it is the first input here too.
-2. [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md)
-3. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
-4. [What can a player do with no network?](what-can-a-player-do-with-no-network.md) — one board or
-   a browsable archive. Orders of magnitude, and the reason no storage argument made so far is
-   safe.
-5. [How long must offline play survive?](how-long-must-offline-play-survive.md) — the same subject
-   along the time axis.
-6. [How long must in-progress work survive?](how-long-must-in-progress-work-survive.md) — also the
-   first input to the server list below.
-7. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
-8. [Is Safari's storage window still seven days?](is-safaris-storage-window-still-seven-days.md)
-   and [how does Android evict stored data?](how-does-android-evict-stored-data.md) — platform
-   ceilings that bound what any answer above can promise.
-9. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) —
-   the decision itself. `localStorage`, IndexedDB, the Cache API, OPFS or SQLite over
-   WebAssembly, and the one stack choice with no clean migration path.
-
-### Whether a server exists, and which database if it does
-
-The most-assumed decision in the repo.
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
-already specifies how a server validates and merges, and nothing establishes that there is one.
-
-1. [How long must in-progress work survive?](how-long-must-in-progress-work-survive.md)
-2. [What must be true off the device?](what-must-be-true-off-device.md) — the question that
-   decides whether a server exists at all. If nothing survives its test, this is a static site.
-3. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
-   — decides queryable versus opaque, which is most of what "which database" means.
-4. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
-5. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
-6. [What does the server store, if anything?](what-does-the-server-store-if-anything.md)
-7. [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
-8. [How would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md)
-   and [how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md)
-   — both unanswerable while question 3 is open.
-9. [Which database, if any?](which-database-if-any.md) — the decision itself, and possibly a
-   non-decision: ADR-0003 already keeps the server from reading inside what it stores.
-10. [What runs the server, if there is one?](what-runs-the-server-if-there-is-one.md) — small,
-    and worth recording so it is not settled by whichever tutorial came first.
-
-### Where it runs
-
-Deliberately late. It was decided first last time, and the record says so.
-
-1. Whether a server exists — the list above.
-2. [What load should the server handle?](what-load-should-the-server-handle.md)
-3. [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
-4. [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
-5. [Where does this run?](where-does-this-run.md)
-
-**One trap here, and it closes a door silently.** Recovery after storage eviction depends on a
-server-set cookie being judged first-party, which depends on how the app and its API are hosted
-relative to each other — see [../constraints.md](../constraints.md). A static host with its API
-elsewhere is exactly the shape that fails, and it fails without any error.
-
-### Whether a player is ever identified, and how
-
-1. [What must be true off the device?](what-must-be-true-off-device.md) — identity only has to
-   exist if something off-device must be attributed to someone.
-2. [Is there a paid tier?](is-there-a-paid-tier.md) — the one candidate that cannot degrade
-   gracefully, since entitlement enforced on the device is not enforced.
-3. [Do privacy regulations apply?](do-privacy-regulations-apply.md)
-4. [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — a
-   roadmap question now, not a scope one: `../problem.md` places progress following the player in
-   the product vision, and leaves the release open.
-5. [Are there user accounts?](are-there-user-accounts.md)
-6. [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
-7. [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
-
-### Cutting across all of them
-
-[Which doors must stay open?](which-doors-must-stay-open.md) is not on any list because it
-belongs to all of them. Deferring a decision is only safe while the deferred thing stays cheap to
-add, and whether it does is decided by choices being made now in areas that look unrelated. Read
-it before recording anything above.
-
-### Already decided, with an open question underneath
-
-[ADR-0005](../decisions/0005-one-implementation-of-the-puzzle-rules.md) and
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) rest on the
-client needing the puzzle rules in order to tell a player their move conflicts. Whether it does is
-[how much does the app help you solve?](how-much-does-the-app-help-you-solve.md), which was asked
-after both were recorded. An austere app needs completion detection and little else, which
-weakens the forcing. Neither record is necessarily wrong; both are currently unsupported at their
-root.
-
-## Not on any of those paths
-
-Real questions that no stack decision waits on. Answer them when they matter, never to unblock
-something else.
-
-**The puzzles.** The generator's own foundations. Nothing on the stack lists waits on them, and
-`../problem.md` puts the interface first, so they run as a parallel track rather than a blocked one.
-
-- [What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)
-- [Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
-- [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
-- [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md)
-- [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
-
-**The tiebreakers.** `../problem.md`'s ranking is incomplete on purpose; these are the gaps it
-names itself.
-
-- [What wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md)
-- [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
-- [Does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md)
-
-**Facts to go and get.**
-
-- [What are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md)
-- [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md)
-- [What do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
-
-**How this repo maintains itself.** Both raised after a process failure rather than in the
-abstract.
-
-- [Why did `unfinished.md` go stale?](why-did-unfinished-md-go-stale.md)
-- [Why was `problem.md` not read before prioritising?](why-was-problem-md-not-read-before-prioritising.md)
-
-## Grooming this list
-
-Drawing it once is worth little. Maintaining it is what makes each decision easier than the one
-before rather than harder.
-
-**Before working any question, find which list it is on and check what sits above it.** If an
-earlier item is unanswered, the answer to this one will be arbitrary and will not look arbitrary.
-The price of answering out of order is not a wasted afternoon; it is a decision that reads as
-reasoned for months.
-
-**When a question turns out to be a fragment of a larger one, file the parent.** Three questions
-here — what interactions the grid supports, whether undo is in scope, whether hints are in
-scope — each ask a piece of what solving actually feels like, and answering them separately is
-how a foundation gets decided by accident. Finding more of these is normal, not a defect.
-
-**Anything agreed in conversation goes into the first section immediately**, or becomes a decision
-record, which is better. Everything there was re-derived at least once because it lived only in a
-chat log or in the middle of `../problem.md`. This is the most expensive habit visible in this
-repo's history, and it is the one this file exists to break.
-
-**When two questions deadlock**, the edge points from what to promise toward how to deliver it:
-scope precedes mechanism, and a mechanism chosen before its purpose tends to acquire one. Four
-pairs pointed both ways until that was applied. If a pair still deadlocks afterwards, stop trying
-to break the tie and look for a parent nobody wrote down — cross-device resume and user accounts
-deadlocked precisely until it became clear that neither had a settled answer to how long work must
-survive.
-
-**The evidence that this is needed here.** Three decision records were made or nearly made out of
-order, and every one was caught by accident rather than by process.
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
-specifies how a server merges divergent boards, while whether a server exists sits unanswered
-below it. [ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) rejected its
-alternatives on reasoning that later research contradicted.
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) named a
-client storage mechanism as settled when nothing had chosen one. And the agreements in the first
-section were never recorded at all — which is how a question `../problem.md` already answers came
-to be analysed at length as though it were open.

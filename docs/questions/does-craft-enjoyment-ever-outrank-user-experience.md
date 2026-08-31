@@ -33,10 +33,16 @@ any future decision where the enjoyable option and the better option differ.
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Finding drawn from legacy ADR-01 (render with server-driven hypermedia).
+
 ## Options
 
 ...
 
 ## Findings
 
-...
+Legacy ADR-01 answered a version of this question, and chose craft. It accepted writing grid
+interaction in an unfamiliar expression DSL rather than the maintainer's stronger TypeScript,
+calling it "a deliberate investment, made with eyes open". The interface was priority one at the
+time, so the trade was made at the highest-stakes surface in the product rather than a peripheral
+one.

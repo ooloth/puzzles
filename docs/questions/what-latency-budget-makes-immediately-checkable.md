@@ -14,7 +14,7 @@ paint — on a named reference device rather than on whatever the developer hold
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
+[What interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
 ## Blocks
 

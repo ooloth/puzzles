@@ -13,7 +13,7 @@ screen-reader design questions, and retrofitting them is expensive. Silence is n
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
+[What interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
 ## Blocks
 
@@ -31,10 +31,14 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Finding drawn from legacy ADR-01 (render with server-driven hypermedia).
+
 ## Options
 
 ...
 
 ## Findings
 
-...
+Keyboard navigation was already treated as a grid requirement in legacy ADR-01, well before
+accessibility was raised as a question here. Whether it was meant as an accessibility concern or
+as a power-user convenience isn't recorded.

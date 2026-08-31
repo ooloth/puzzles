@@ -32,6 +32,8 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Findings drawn from legacy ADR-01 (render with server-driven hypermedia).
+
 ## Options
 
 One language everywhere, or a compiled language for generation.
@@ -48,3 +50,8 @@ its seed and testable without a running system. It also sharpens this question, 
 module is portable, and one language means the solver and the validator are the same
 implementation of the rules rather than two copies that must agree. Two languages means
 maintaining that agreement by hand, forever, with no compiler checking it.
+
+The maintainer has strong TypeScript and React experience and only moderate Rust experience
+(legacy ADR-01). Later brainstorming records enthusiasm for "easy mode Rust" alongside that.
+Both are in the record and they are not the same claim — one is about capability, the other
+about enjoyment.

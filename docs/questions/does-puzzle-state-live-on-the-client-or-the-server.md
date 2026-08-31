@@ -37,6 +37,8 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Findings drawn from legacy ADR-01 (render with server-driven hypermedia).
+
 ## Options
 
 *Client-first, server as sync target.* Satisfies both guarantees by construction. Costs a
@@ -53,3 +55,17 @@ I/O, and randomness only from an explicit seed. Pure logic runs anywhere, so it 
 constrain this choice by itself, but it does remove one argument commonly made for server
 ownership: keeping the rules in a single trusted place. A pure module is a single trusted place
 regardless of where it executes.
+
+Legacy ADR-01 argued that a hypermedia framework's local signals can do zero-round-trip drag and
+keyboard interaction without giving up server-owned state — that "instant feel" and "server-owned
+state" are not actually in conflict. That claim is about interaction *latency*, and the offline
+argument against server-owned state is about state *persistence*. Both can hold at once: local
+signals could make a drag feel instant while the board still can't be played in a tunnel. This
+question has to answer the persistence half on its own terms rather than treating the latency
+argument as settling it.
+
+Both of ADR-01's rejections rested on preference rather than evidence. Hybrid islands were
+rejected partly for breaking a "no custom JS" goal, and a client-heavy application for abandoning
+"the server-owned-state philosophy the project wants from v1". Neither is a constraint, and the
+pivot reverses that philosophy — so the option now favoured was never evaluated on its merits,
+only excluded by a premise that has since been dropped.

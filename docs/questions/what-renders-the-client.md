@@ -12,8 +12,8 @@ Sets the build tooling, the testing approach, and the speed of the inner develop
 
 ## Blocked by
 
-[where puzzle state lives](does-puzzle-state-live-on-the-client-or-the-server.md). Don't decide
-this one first.
+[Does puzzle state live on the client or the server?](does-puzzle-state-live-on-the-client-or-the-server.md),
+[What interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
 ## Blocks
 
@@ -31,9 +31,22 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Options ported from legacy ADR-01 (render with server-driven hypermedia).
+
 ## Options
 
-...
+*Pure server-driven hypermedia.* One rendering paradigm for the whole app, with no second UI
+model to maintain beside it. Costs writing grid interaction in an expression DSL rather than in
+the maintainer's stronger TypeScript, on a smaller-community tool with less prior art to lean on
+when debugging fiddly interactions.
+
+*Hybrid islands* — server-rendered pages with a hand-written TypeScript component for the grid
+alone. Puts the maintainer's strongest skill at the highest-stakes surface. Costs a second UI
+paradigm to maintain, and was previously rejected partly for breaking a "no custom JS" goal that
+was itself a preference rather than a requirement.
+
+*Client-heavy application with a data API.* Previously rejected for abandoning a
+server-owned-state philosophy the project no longer holds.
 
 ## Findings
 

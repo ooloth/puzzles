@@ -76,3 +76,7 @@ interaction, not the mean request rate, so tail latency is the figure that maps 
 experience. Under a batched-sync design the server's job is durable writes in bursts, where
 contention and durability matter more than requests per second. Deciding what to measure is
 downstream of the architecture, not of a benchmark table.
+
+The same unquantified-scale pattern shows up in the progress model: recomputing whether a puzzle
+is complete on every read was judged "fine at this project's scale", with the scale never stated.
+The conclusion is probably right and is unverifiable as written.

@@ -59,6 +59,10 @@ cost. **Findings** holds what we've learned so far, each with where it came from
 answers, sources checked, dead ends. A finding graduates to `../constraints.md` once it's
 confirmed; until then it lives here.
 
+A finding may record what a standard *implies for these options*; it may not restate the
+standard itself. The first shifts a decision and belongs here. The second is a weaker local copy
+of a rule already in force, competing with the real one for whoever finds it first.
+
 <!-- Template:
 
 # <The question, asked in plain words?>

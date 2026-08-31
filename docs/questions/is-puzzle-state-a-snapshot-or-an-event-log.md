@@ -31,7 +31,7 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Ported from the legacy documentation review, 2026-08-30.
+Finding drawn from legacy ADR-11 (track progress via anonymous server-side sessions).
 
 ## Options
 
@@ -43,4 +43,13 @@ is more moving parts to build and keep correct.
 
 ## Findings
 
-...
+The two options start from opposite defaults on derived state. An event log makes every visible
+value — the current board, whether a puzzle is complete, how many cells remain — derived by
+construction, because the log holds moves rather than conclusions. A snapshot stores the board
+directly, and every additional value kept beside it is a second thing that can disagree with the
+first.
+
+That matters because deriving rather than storing is the default the portable standards prefer,
+and denormalisation is the case that has to be argued. An event log satisfies it without effort;
+a snapshot satisfies it as long as nothing accumulates around it, which is a discipline rather
+than a property. See [../standards/README.md](../standards/README.md) for where those live.

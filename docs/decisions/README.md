@@ -50,9 +50,15 @@ be stated as a cost of adopting Y — never smuggled in as a merit of X.
 ## Cite, don't restate
 
 Every **Forced by** must reference specific entries in [constraints.md](../constraints.md),
-[problem.md](../problem.md) or [guarantees/](../guarantees/) — not repeat their content.
-Those files are the standing input; ADRs are downstream of them, never the reverse. If the
-reasoning depends on a fact that isn't written down yet, **add it there first, then cite it.**
+[problem.md](../problem.md), [guarantees/](../guarantees/) or [standards/](../standards/) — not
+repeat their content. Those are the standing inputs; ADRs are downstream of them, never the
+reverse. If the reasoning depends on a fact that isn't written down yet, **add it there first,
+then cite it.**
+
+Standards belong on that list because they can decide a question, not only shape how the answer
+is built — an option that satisfies a standard by construction is preferable to one that
+satisfies it only if nobody slips. Their scope lines describe when a file is being edited, so
+nothing pulls them into view while a decision is still being made. Go and look.
 
 An ADR citing nothing was made on vibes.
 

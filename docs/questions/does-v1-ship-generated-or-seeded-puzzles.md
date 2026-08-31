@@ -13,8 +13,7 @@ set needs its own validation, because nothing generated it.
 
 ## Blocked by
 
-[Is there one puzzle a day, or unlimited play](is-there-one-puzzle-a-day-or-unlimited-play.md),
-[What makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md).
+[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 
 ## Blocks
 

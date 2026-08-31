@@ -13,7 +13,7 @@ exists, whether streaks make sense, and whether "today" needs timezone handling.
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
+[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 
 ## Blocks
 

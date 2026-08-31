@@ -15,6 +15,8 @@ barely matters — or that there is nothing to store beyond a sync record.
 
 [where puzzle state lives](does-puzzle-state-live-on-the-client-or-the-server.md).
 
+[Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
+
 ## Blocks
 
 [where this runs](where-does-this-run.md).

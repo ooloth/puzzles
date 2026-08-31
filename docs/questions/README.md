@@ -158,6 +158,9 @@ These gate nearly everything else. The first is the critical path to anything on
 - [What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)
   The generator's actual target. Uniqueness and logical solvability are the floor, not the goal.
 
+- [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+  Whether generation ever sits on a path a player is waiting on. Assumed, never decided.
+
 - [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
   Whether the generator is on the launch path, and who validates a seed set if it isn't.
 
@@ -219,6 +222,9 @@ These gate nearly everything else. The first is the critical path to anything on
 
 Cheap to answer, currently blocking or distorting real decisions. These resolve into
 `../constraints.md` rather than into a decision.
+
+- [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md)
+  A claim that it's cheap was carrying the language argument and was never measured.
 
 - [How does Android evict stored data?](how-does-android-evict-stored-data.md)
   An entire platform's durability behaviour, unresearched while we assume an iOS-heavy

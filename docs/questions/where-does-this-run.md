@@ -18,6 +18,8 @@ contention.
 [what the server stores](what-does-the-server-store-if-anything.md). Don't decide this one
 first — it was decided first last time.
 
+[Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
+
 ## Blocks
 
 [how much downtime is acceptable](how-much-downtime-is-acceptable.md),

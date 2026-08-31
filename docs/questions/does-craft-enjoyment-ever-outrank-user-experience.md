@@ -18,7 +18,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[what runs the server and in what language](what-runs-the-server-and-in-what-language.md), and
+[what languages this project uses and in what language](what-languages-does-this-project-use.md), and
 any future decision where the enjoyable option and the better option differ.
 
 ## What would settle it

@@ -13,7 +13,7 @@ packages. Premature splitting costs more than it saves at this size.
 
 ## Blocked by
 
-[what runs the server](what-runs-the-server-and-in-what-language.md) and
+[what languages this project uses](what-languages-does-this-project-use.md) and
 [which component framework](which-component-framework.md) — the number of runtimes involved mostly
 decides this.
 

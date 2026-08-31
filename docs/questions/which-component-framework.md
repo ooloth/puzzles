@@ -17,7 +17,9 @@ records as its own biggest risk. The measurement below exists to catch that.
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
+[What languages does this project use?](what-languages-does-this-project-use.md) — the candidate
+set is entirely different depending on the answer, and shortlisting before it is settled means
+assuming it.
 
 ## Blocks
 

@@ -2,6 +2,7 @@
 number: 0004
 status: accepted
 date: 2026-08-31
+amended: 2026-08-31
 ---
 
 # 0004 — A component framework renders the client
@@ -31,10 +32,14 @@ The client is built with a component framework and a dev server providing hot re
 This decides the *class*, not the member. Which framework is a separate question, and so is what
 provides the build and dev server, because the two are less coupled than they look.
 
+**It also does not decide a language.** A browser runs JavaScript and WebAssembly, which is
+forced; everything above that is a choice. Component frameworks with build steps and dev servers
+exist for several languages that compile to either, so nothing here narrows that.
+
 ## Rejected
 
-- **No framework — TypeScript with web components or plain DOM.** Attractive for having nothing to
-  keep up with and nothing leaking into the merge logic. Rejected because the state-to-DOM binding
+- **No framework — web components or plain DOM.** Attractive for having nothing to keep up with
+  and nothing leaking into the merge logic. Rejected because the state-to-DOM binding
   is real, ongoing work with no upside for an interface this stateful, and getting it subtly wrong
   is how a merge produces a board that renders differently from what is stored. It also forgoes
   the dev server, which is the thing most worth having here.
@@ -44,10 +49,10 @@ provides the build and dev server, because the two are less coupled than they lo
 
 ## Risk
 
-**This is the decision most likely to be familiarity wearing a reason's clothes.** Existing
-TypeScript and React strength is a legitimate input — as a *cost of adopting something else*,
-never as a merit of the familiar thing — but it is also exactly what would make a weak argument
-feel obvious. The measurement named in the follow-up question exists to catch that, and it should
+**This is the decision most likely to be familiarity wearing a reason's clothes.** The
+maintainer's existing strength in one ecosystem is a legitimate input — as a *cost of adopting
+something else*, never as a merit of the familiar thing — but it is also exactly what would make a
+weak argument feel obvious. The measurement named in the follow-up question exists to catch that, and it should
 actually be run rather than assumed.
 
 **A dependency whose lifecycle is not ours**, on a project meant to last years. Mitigated by

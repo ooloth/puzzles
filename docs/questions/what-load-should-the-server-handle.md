@@ -24,7 +24,7 @@ that distinction concrete instead of rhetorical.
 
 ## Blocks
 
-[What runs the server, and in what language?](what-runs-the-server-and-in-what-language.md),
+[What languages does this project use?](what-languages-does-this-project-use.md),
 [What does the server store, if anything?](what-does-the-server-store-if-anything.md),
 [Where does this run?](where-does-this-run.md),
 [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md).

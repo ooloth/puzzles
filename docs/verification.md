@@ -13,7 +13,7 @@ For each capability: how to run it, what to look at, what correct looks like. If
 can't be observed end to end, **say so here** and name the nearest available signal —
 a recorded gap is a gap someone can close.
 
-Test conventions go in [standards.md](standards.md).
+Test conventions go in [standards/](standards/).
 
 _Nothing runnable yet._
 

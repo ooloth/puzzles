@@ -1,0 +1,81 @@
+---
+opened: 2026-08-31
+status: open
+resolves_into: decision
+---
+
+# Which database, if any?
+
+## Why it matters
+
+It is the decision most likely to be made by reflex. Reaching for Postgres is what one does, and
+for this application it may well be several times more machinery than anything requires — the
+server, if it exists at all, may only ever need to put bytes under a key and hand them back.
+
+It also constrains hosting. A database with a file on disk needs a host that has one; a managed
+service does not, but bills monthly and adds a network hop. That choice interacts with the cookie
+topology trap recorded in [../constraints.md](../constraints.md), which is a door that closes
+silently.
+
+## Blocked by
+
+[What must be true off the device?](what-must-be-true-off-device.md) — if the answer is nothing,
+there is no database, and this question closes rather than resolves.
+
+Then [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which decides whether stored data has to be *queryable* or can stay opaque. That single
+distinction is most of what separates the options below.
+
+Then [what does the server store, if anything?](what-does-the-server-store-if-anything.md) and
+[what load should the server handle?](what-load-should-the-server-handle.md).
+
+## Blocks
+
+[Where does this run?](where-does-this-run.md), since a database with a local file rules out
+several hosts outright.
+
+## What would settle it
+
+Writing down the actual access patterns — every read and every write the server performs, with
+the key it does it by — and seeing what the smallest thing that serves them is. If every entry is
+"get blob by key" and "put blob by key", that is the answer, and it is not a relational database.
+
+## Resolves into
+
+A decision record in [../decisions/](../decisions/).
+
+## Source
+
+Raised 2026-08-31, working backward from the stack to find which product truths a database choice
+actually rests on. The chain runs five deep and had a gap at every level.
+
+## Options
+
+*None.* A static site. Puzzles ship as files; progress lives on the device; nothing is stored
+centrally. Cheapest by a wide margin and genuinely possible — see the question this is blocked by.
+
+*A key-value store.* Progress as an opaque blob under an opaque token. Serves durability and
+recovery and nothing else. Cannot answer any question about aggregate usage.
+
+*SQLite on the server.* One file, no service, real queries when they are wanted. Needs a host with
+persistent disk, and backups become a thing that has to be designed rather than bought.
+
+*A managed relational database.* Postgres or similar. Everything, forever, for a monthly fee and
+an extra network hop. The right answer if per-player queryable data turns out to be required, and
+considerable overhead if it does not.
+
+## Findings
+
+**[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md) has
+already made this decision small.** The server checks that a payload is a well-formed board and
+never interprets its contents. A store that never reads inside the value needs to do exactly one
+thing, which every option above does equally well. Unless the usage question above reverses it,
+this is close to a non-decision — which is worth knowing before spending a week on it.
+
+**The client's data representation does not constrain this.** Snapshot or event log, the server
+holds whichever one it is handed. The two questions look coupled and are not, and the thing that
+decouples them is ADR-0003.
+
+**Analytics is the only input that would change the answer.** If nothing per-player ever needs
+querying, the blob store wins on every axis. If it does, the blob store cannot be extended into
+one and the choice has to be made up front.

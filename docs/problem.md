@@ -52,6 +52,11 @@ recognising which one it is at the time is much easier than unpicking it later.
 
 ## What success looks like
 
+The product this is aiming at, not a release plan. Which parts arrive first, and in which order,
+is a roadmap question settled in [decisions/](decisions/). What belongs here is the direction
+those decisions should not quietly close off — so a feature described below arriving later than
+another is normal, and a decision that makes one of them expensive to add is not.
+
 A player can:
 
 1. Tap a cell, enter a digit, or toggle a note and see it register immediately — on any
@@ -62,6 +67,11 @@ A player can:
    prompt.
 5. Never see a loading, reconnecting, or error state during normal play.
 
+And progress follows them — the board left on a phone is waiting on a laptop later, with nothing
+to sign into and nothing to reconcile. This is the part of the vision least tied to a date: what
+matters now is that nothing built early makes it expensive to add, which is
+[which doors must stay open?](questions/which-doors-must-stay-open.md).
+
 And every puzzle served has exactly one solution, reachable by logic alone.
 
 A small, genuinely public v1 within a few months.
@@ -71,8 +81,9 @@ project generated, and a system whose operation is worth describing to someone h
 
 ## Not this
 
-- **Two devices editing the same puzzle at once.** Switching devices between sessions is in
-  scope; simultaneous editing is not, so CRDT-grade conflict resolution isn't needed.
+- **Two devices editing the same puzzle at once.** Picking a puzzle up on another device is part
+  of the vision above; two devices editing the same board simultaneously is not, and never
+  becomes so. CRDT-grade conflict resolution is therefore not needed at any point.
 - **Leaderboard integrity or anti-cheat.** Nothing is ranked, and cheating only spoils the game
   for the cheater. This holds while nothing is worth gaining by cheating; a paid tier is
   uncommitted but deliberately not ruled out, so the exclusion is conditional rather than

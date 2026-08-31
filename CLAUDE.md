@@ -1,22 +1,40 @@
-This will evolve eventually into a web app, serving logic puzzles (think grid-filling games like sudoku, star battle, etc).
+This will evolve eventually into a web app, serving logic puzzles (think grid-filling games like
+sudoku, star battle, etc).
 
-So, two overall concerns: a delightful UI / app for solving puzzles; and a clever pipeline generating puzzles that are a joy to solve. The site will eventually have users whose progress must be reliably saved and restored.
+So, two overall concerns: a delightful UI / app for solving puzzles; and a clever pipeline
+generating puzzles that are a joy to solve. The site will eventually have users whose progress
+must be reliably saved and restored.
 
-The vision and full stack/architecture/ops decision trail are now recorded in the docs below. Current focus: codebase layout, then starting implementation.
+The stack is being reconsidered from first principles. Nothing about it is settled:
+`docs/questions/` tracks what's still open, and `docs/decisions/` is empty until those are answered.
+
+## Current priorities
+
+1. Make good decisions about overall scaffold, including tech stack and feedback loops
+2. Establish great documentation patterns, with useful docs referenced in lookup tables in the
+   right places
+3. Choose the simplest stack that can robustly achieve the project's UX goals without unnecessarily
+   complicating maintenance for a solo maintainer
 
 ## Key docs
 
-- `docs/vision.md` — why this project exists, priorities, and engineering style
-- `docs/context/` — standing facts about who uses this app, where/how, and the engineering constraints that follow from that
-- `docs/invariants/` — what must always be true or the system is broken
-- `docs/decisions/` — one ADR per file, numbered; the reasoning behind every stack/architecture/ops decision made so far
-- `docs/failure-modes/` — known risks and how they're mitigated
-- `docs/architecture/` — request-flow and generation-pipeline diagrams (not yet populated)
+Index and conventions: `docs/README.md`. Keep this table in step with the one there.
 
-Groom `docs/context/` and `docs/invariants/` in small passes as work proceeds, rather than treating them as write-once.
+| Path                   | What you'll find                        |
+| ---------------------- | --------------------------------------- |
+| `docs/decisions/`      | Choices already made, and why           |
+| `docs/questions/`      | Open questions, one per file            |
+| `docs/architecture.md` | Where code lives and what calls what    |
+| `docs/constraints.md`  | Limits from browsers, networks and law  |
+| `docs/glossary.md`     | Domain terms and their code names       |
+| `docs/gotchas.md`      | Non-obvious traps in this codebase      |
+| `docs/guarantees.md`   | Promises to players we must never break |
+| `docs/problem.md`      | Who this is for and what success means  |
+| `docs/standards.md`    | Coding and documentation conventions    |
+| `docs/unfinished.md`   | Code that's mid-change or misleading    |
+| `docs/verification.md` | How to run the system and check changes |
 
-Priorities:
+Read `docs/unfinished.md` before extending any existing pattern — it records where the codebase
+would currently mislead you.
 
-1. Make good decisions about overall scaffold, including tech stack and feedback loops
-2. Establish great documentation patterns, with useful docs referenced in lookup tables in the right places
-3. Choose the simplest stack that can robustly achieve the project's goals without unnecessarily complicating maintenance for a solo maintainer
+`docs/@legacy/` and `docs/brainstorming/` are archival. Nothing in either is authoritative.

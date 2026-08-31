@@ -1,18 +1,7 @@
 # Start here
 
-<one line: what this repo is>. Full context: [problem.md](problem.md).
-
-## The three kinds of truth
-
-- **[constraints.md](constraints.md)** — true whether we like it or not.
-  Test: would the *environment* break us?
-- **[decisions/](decisions/)** — we chose it, reversible at a cost.
-  Test: could we decide differently?
-- **[guarantees.md](guarantees.md)** — we uphold it.
-  Test: would violating it be *our* bug?
-
-Chain: **constraint → forces → decision → promises → guarantee → enforced by → test.**
-An ADR citing neither a constraint nor a user need was made on vibes.
+A web app for solving grid logic puzzles, paired with its own generation pipeline.
+Full context: [problem.md](problem.md).
 
 ## What's in here
 
@@ -29,6 +18,17 @@ An ADR citing neither a constraint nor a user need was made on vibes.
 | [standards](standards.md)       | Coding and documentation conventions    |
 | [unfinished](unfinished.md)     | Code that's mid-change or misleading    |
 | [verification](verification.md) | How to run the system and check changes |
+
+## Where a new fact goes
+
+Three of these are easy to confuse:
+
+- Can't change it → [constraints](constraints.md)
+- Chose it, could choose otherwise → [decisions/](decisions/)
+- Promised it, and breaking it is our bug → [guarantees](guarantees.md)
+
+A constraint forces a decision; a decision commits us to a guarantee; a guarantee is only
+real once something checks it.
 
 ## Conventions
 

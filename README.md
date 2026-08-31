@@ -1,7 +1,12 @@
 # puzzles
 
-A web app for solving logic puzzles — grid-filling games like Sudoku and Star Battle — eventually paired with our own puzzle-generation pipeline.
+A web app for solving logic puzzles — grid-filling games like Sudoku and Star Battle — eventually
+paired with a custom puzzle-generation pipeline.
 
-Currently pivoting from Rust and [Datastar](https://data-star.dev), where the server renders HTML directly and pushes updates over server-sent events with no client-side JavaScript framework or build step, to a local-first Bun and Vite/React approach to achieve better offline UX. 
+An earlier plan had intended to use Rust and [Datastar](https://data-star.dev), with the server
+rendering HTML directly and pushing updates over server-sent events with no client-side JavaScript
+framework or build step. That approach is being reconsidered from first principles, largely to
+provide better offline behaviour on mobile. The stack is currently undecided.
 
-See `docs/vision.md` for the project's goals and `docs/decisions/` for the reasoning behind its stack and architecture.
+See `docs/problem.md` for what this is trying to be, `docs/questions/` for what's still being
+pondered, and `docs/README.md` for the rest of the documentation.

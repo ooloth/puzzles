@@ -39,8 +39,11 @@ Exception: a **lookup table whose rows wouldn't wrap at 100 columns**. If any ro
 it shouldn't be a table. `CLAUDE.md`'s docs index and the lookup in [README.md](README.md)
 qualify at two columns with concise content in each.
 
-Scope: documentation we maintain. `@legacy/` and `brainstorming/` are archival and are left
-as they were written.
+**Must** update `CLAUDE.md`'s docs table and [README.md](README.md)'s together.
+
+Why: they are the same lookup, deliberately duplicated so an agent has the map in context
+without needing a file read. Adding or removing a doc means editing both, or one of them
+starts pointing at something that isn't there.
 
 <!-- Template:
 

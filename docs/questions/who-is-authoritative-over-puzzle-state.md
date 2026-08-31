@@ -1,6 +1,6 @@
 ---
 opened: 2026-08-30
-status: open
+status: answered by ADR-0002 and ADR-0003
 resolves_into: decision
 ---
 
@@ -71,6 +71,16 @@ and a player's moves can be undone. Buys the ability to enforce rather than mere
 validation the client cannot bypass, entitlement checks, generation on demand.
 
 ## Findings
+
+**Both halves are now decided.**
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+records that no party arbitrates: the merge is deterministic, so agreement comes from the rule
+rather than from an authority, and the server validates what it is handed without deciding whose
+play was right. What remains here is the reasoning that led there, kept for whoever revisits it.
+
+**The location half is decided too.** [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md)
+records that the client holds and mutates state, forced by the offline and instant-input promises.
+What remains open here is only authority — who wins when two copies disagree.
 
 **The original framing asked a question the guarantees had already answered.** Input registering
 without waiting for the network, and play continuing through minutes of no connectivity, both

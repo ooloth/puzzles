@@ -41,4 +41,13 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-...
+**There may be no losing write.**
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+settles that merges are deterministic and per cell, which means two devices that edited different
+cells both keep their work — the union is the answer, and nothing is discarded. A write is only
+lost where both devices changed the *same* cell, and then only the older one, which is a single
+value rather than a session.
+
+What remains open is narrower than the title suggests: whether losing one cell's value silently is
+acceptable, or whether that case deserves surfacing somehow — bearing in mind that
+[offline.md](../guarantees/offline.md) forbids asking the player to choose.

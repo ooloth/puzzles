@@ -1,12 +1,12 @@
-This will evolve eventually into a web app, serving logic puzzles (think grid-filling games like
-sudoku, star battle, etc).
+# Puzzles
 
-So, two overall concerns: a delightful UI / app for solving puzzles; and a clever pipeline
-generating puzzles that are a joy to solve. The site will eventually have users whose progress
-must be reliably saved and restored.
+This will evolve eventually into an app serving logic puzzles (think grid-filling games like
+sudoku, star battle, etc) plus a pipeline for generating them. The site will eventually have
+users whose progress must be reliably saved and restored.
 
-The stack is being reconsidered from first principles and nothing about it is settled. Nothing is
-installed yet, and that is deliberate rather than neglected.
+The stack and codebase layout is currently being decided, which is why nothing is installed yet.
+
+## Decisions
 
 **Before any technical decision, read `docs/questions/README.md`.** It is the ordered queue of
 decisions still to be made, each naming what it derives from. Make the next one whose inputs are
@@ -17,13 +17,8 @@ foundations reads as reasoned for months and has already had to be undone four t
 **Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full.** They
 answer more than the open questions imply.
 
-## Current priorities
-
-1. Make good decisions about overall scaffold, including tech stack and feedback loops
-2. Establish great documentation patterns, with useful docs referenced in lookup tables in the
-   right places
-3. Choose the simplest stack that can robustly achieve the project's UX goals without unnecessarily
-   complicating maintenance for a solo maintainer
+See `docs/standards/decisions.md` for instructions regarding building from foundational
+decisions upwards.
 
 ## Key docs
 

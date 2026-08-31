@@ -10,7 +10,7 @@ resolves_into: decision
 
 This is the question that decides whether a server exists, and it has never been asked directly.
 Every discussion so far has started from a server being assumed and argued about what it should
-do — [ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+do — [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
 specifies how it validates and merges without anything establishing that it is there.
 
 A browser can hold a puzzle, a player's progress, and the rules. What it cannot do is hold

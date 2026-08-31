@@ -8,7 +8,7 @@ resolves_into: decision
 
 ## Why it matters
 
-[ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) rests primarily on the
+[What renders the client?](what-renders-the-client.md) rests primarily on the
 inner loop being fast, and this is the component that delivers it. If the loop is slow, the
 decision's main justification is not met by whatever implements it.
 
@@ -40,12 +40,12 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Split out of the rendering question by ADR-0004.
+Split out of the rendering question.
 
 ## Options
 
-The TypeScript toolchains, per
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) — Vite and
+The TypeScript toolchains, if
+[the language question](which-language-do-the-deployables-share.md) resolves that way — Vite and
 Bun being the obvious two, with a framework's own tooling a third where it has one.
 
 Narrowed by the research below to Vite. Bun remains a live option for the parts of the toolchain

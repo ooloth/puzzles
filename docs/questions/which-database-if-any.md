@@ -66,15 +66,15 @@ considerable overhead if it does not.
 
 ## Findings
 
-**[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md) has
-already made this decision small.** The server checks that a payload is a well-formed board and
+**[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) would
+make this decision small.** Under its leading option the server checks that a payload is a well-formed board and
 never interprets its contents. A store that never reads inside the value needs to do exactly one
 thing, which every option above does equally well. Unless the usage question above reverses it,
 this is close to a non-decision — which is worth knowing before spending a week on it.
 
 **The client's data representation does not constrain this.** Snapshot or event log, the server
 holds whichever one it is handed. The two questions look coupled and are not, and the thing that
-decouples them is ADR-0003.
+decouples them is the server never reading inside what it holds.
 
 **Analytics is the only input that would change the answer.** If nothing per-player ever needs
 querying, the blob store wins on every axis. If it does, the blob store cannot be extended into

@@ -8,18 +8,19 @@ resolves_into: decision
 
 ## Why it matters
 
-[ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md) settled that one is
-used; this picks it. It is the dependency the interface is written against for the life of the
+[What renders the client?](what-renders-the-client.md) proposes a component framework; this
+picks which one, and only matters if that resolves that way. It is the dependency the interface is written against for the life of the
 project, and the interface is where nearly all the work happens.
 
-It is also the decision most exposed to familiarity masquerading as reasoning, which ADR-0004
+It is also the decision most exposed to familiarity masquerading as reasoning, which the rendering question
 records as its own biggest risk. The measurement below exists to catch that.
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) settled the
-language, so the candidate set is the TypeScript component frameworks.
+[What renders the client?](what-renders-the-client.md), which decides whether a component
+framework is used at all, and
+[which language do the deployables share?](which-language-do-the-deployables-share.md), which
+decides whether the candidate set is the TypeScript field.
 
 ## Blocks
 
@@ -36,7 +37,7 @@ three things that can actually be observed rather than argued about.
 
 **What the state layer looks like** when board state, local persistence and a deterministic merge
 have to stay pure and testable without a browser — per
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md). An
+[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md). An
 approach that makes it hard to keep that logic out of components is disqualifying regardless of
 how the grid feels to use.
 
@@ -49,13 +50,13 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Split out of the rendering question by ADR-0004, which decided the class and deliberately left the
-member open.
+Split out of the rendering question, which proposed the class and deliberately left the member
+open.
 
 ## Options
 
-The TypeScript field, per
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md). React,
+The TypeScript field, if
+[the language question](which-language-do-the-deployables-share.md) resolves that way. React,
 Svelte, Solid, Vue and Preact were the plausible candidates.
 
 Narrowed by the research below to **React, Preact and Svelte**. Solid and Vue are out on their
@@ -155,5 +156,4 @@ entirely. Meanwhile the closest surface analogue, the Cracking the Cryptic sudok
 no framework and no bundler at all. Those are not in conflict: the recurring shape is a framework
 for the shell with a purpose-built state layer and direct rendering for the board. It is worth
 weighing against
-[ADR-0004](../decisions/0004-a-component-framework-renders-the-client.md), which assumes the
-framework renders everything.
+[what renders the client?](what-renders-the-client.md), which is where that option belongs.

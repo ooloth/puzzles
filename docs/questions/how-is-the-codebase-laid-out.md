@@ -13,8 +13,9 @@ packages. Premature splitting costs more than it saves at this size.
 
 ## Blocked by
 
-[Which component framework?](which-component-framework.md). The language is settled by
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md); what remains is how many packages the framework and the shared
+[Which component framework?](which-component-framework.md). Also
+[which language do the deployables share?](which-language-do-the-deployables-share.md), after
+which what remains is how many packages the framework and the shared
 rules module make sensible.
 
 ## Blocks

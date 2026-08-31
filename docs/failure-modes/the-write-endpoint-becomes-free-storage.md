@@ -37,6 +37,6 @@ means noticing late.
 Size limits per object and per token, rate limits per token and per address, tokens issued by the
 server rather than chosen by the client, and validation that the payload is a board for a puzzle
 that exists — which
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+[what the server does with puzzle state](../questions/what-does-the-server-do-with-puzzle-state.md)
 already requires and which does most of the work here. Alerting on storage growth turns a late
 signal into an early one.

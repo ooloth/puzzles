@@ -18,7 +18,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md), and
+[which language the deployables share](which-language-do-the-deployables-share.md), and
 any future decision where the enjoyable option and the better option differ.
 
 ## What would settle it

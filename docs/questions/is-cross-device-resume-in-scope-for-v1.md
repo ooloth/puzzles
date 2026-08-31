@@ -72,7 +72,7 @@ can claim it rather than starting from zero. Costs almost nothing now and preser
 
 **A "no" here makes most of the sync design vacuous.** Divergence requires two writers. With one
 device ever writing a board, the deterministic merge in
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md) never
+[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) never
 runs, per-cell timestamps never matter, and clock skew cannot invert anything. All of that
 machinery exists to serve this answer being yes — which is worth knowing before costing it.
 

@@ -24,7 +24,7 @@ that distinction concrete instead of rhetorical.
 
 ## Blocks
 
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md),
+[which language the deployables share](which-language-do-the-deployables-share.md),
 [What does the server store, if anything?](what-does-the-server-store-if-anything.md),
 [Where does this run?](where-does-this-run.md),
 [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md).

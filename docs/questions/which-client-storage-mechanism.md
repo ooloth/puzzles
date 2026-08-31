@@ -13,7 +13,7 @@ kept or broken, and it is the one stack choice with no clean migration path: cha
 means moving every existing player's data with code that has to run in their browser, once,
 correctly, with no way to retry from the server if a server does not exist.
 
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) refers to
+[Which language do the deployables share?](which-language-do-the-deployables-share.md) refers to
 IndexedDB as though this had been decided. It has not.
 
 ## Blocked by
@@ -47,7 +47,7 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised 2026-08-31, after ADR-0006 was found asserting an answer that no question had asked.
+Raised 2026-08-31, after the language record was found asserting an answer no question had asked.
 
 ## Options
 

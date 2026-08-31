@@ -24,7 +24,7 @@ the server made the bad one authoritative by being the thing everything else tru
 
 The server copy exists precisely to be recovered from, which is what turns an ordinary client bug
 into permanent data loss. A local-only design would have confined the damage to one device.
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+[what the server does with puzzle state](../questions/what-does-the-server-do-with-puzzle-state.md)
 requires validation for exactly this reason, but validation is only as good as the checks written,
 and a board can be well-formed while being wrong.
 
@@ -37,7 +37,8 @@ reporting it, and is most likely to describe it as the app losing their progress
 
 ## What reduces it
 
-Validation at the write boundary, which ADR-0003 requires. Keeping a bounded history of previous
+Validation at the write boundary, proposed in
+[what the server does with puzzle state](../questions/what-does-the-server-do-with-puzzle-state.md). Keeping a bounded history of previous
 states rather than overwriting in place, so a bad write can be stepped back from. And checking
 the position against the rules of the game once that is affordable — currently deferred, with the
-trigger recorded in ADR-0003.
+trigger recorded in that question.

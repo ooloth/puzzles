@@ -19,7 +19,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md),
+[which language the deployables share](which-language-do-the-deployables-share.md),
 [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md),
 [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md),
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).

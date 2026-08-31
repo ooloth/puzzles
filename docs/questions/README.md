@@ -21,96 +21,85 @@ is picked before the thing it is supposed to serve is known.
 
 ## The order
 
-Work it top to bottom. Indented entries are the questions that genuinely block the decision above
-them — not everything related to it, only what makes the difference between a derivation and a
-preference. Where a decision has no indented entries, nothing is stopping it today.
+Work it top to bottom. Each entry names what it derives from, so the order is checkable rather
+than asserted — if an entry's inputs are all above it and answered, it is ready, and if they are
+not, working it produces an answer that is arbitrary and will not look arbitrary.
 
-1. **Which package manager.**
-   [which-package-manager.md](which-package-manager.md) — no prerequisites, reversible in an
-   afternoon, and the one decision that turns an empty repository into a project.
+Ordering is by derivation only. Nothing here is placed because it is quick, cheap or unblocking;
+that is why the package manager is nineteenth rather than first.
 
-2. **How much the app helps a player solve.**
-   [how-much-does-the-app-help-you-solve.md](how-much-does-the-app-help-you-solve.md) — assistive
-   or austere. A taste call rather than a derivation, so nothing blocks it. It decides what state
-   exists in a cell and whether the client needs the puzzle rules at all, which is why
-   [ADR-0005](../decisions/0005-one-implementation-of-the-puzzle-rules.md) and
-   [ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) are
-   currently unsupported at their root.
+**The three roots.** Nothing derives these, and almost everything derives from them.
 
-3. **How long in-progress work must survive, and on which devices.**
-   [how-long-must-in-progress-work-survive.md](how-long-must-in-progress-work-survive.md) — the
-   promise in [../guarantees/durability.md](../guarantees/durability.md) written with a bound.
-   Also nothing blocks it, and everything about servers and storage descends from it.
+1. **[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md)**
+   The web is the harder platform for an app promising offline play and durable work — nearly
+   every entry in [../constraints.md](../constraints.md) is the price of choosing it. Never
+   argued, only inferred.
 
-4. **Which component framework.**
-   [which-component-framework.md](which-component-framework.md) — researched and shortlisted;
-   what it waits on is knowing what the interface has to do.
-   1. Decision 2 above.
-   2. [what-interactions-must-the-grid-support.md](what-interactions-must-the-grid-support.md)
+2. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
+   [../guarantees/durability.md](../guarantees/durability.md) with a bound and a device scope.
+   Written without either, it has been read as anything.
 
-5. **What builds and serves the client.**
-   [what-provides-the-build-and-dev-server.md](what-provides-the-build-and-dev-server.md) —
-   researched, and narrowed on grounds that hold regardless of framework.
-   1. Decision 4 above, weakly.
+3. **[What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)**
+   Including what the maintainer wants to learn from historical play — an argument for a server
+   and a queryable store that survives whatever 2 answers.
 
-6. **How the frontend is organised.**
-   [how-is-the-app-styled.md](how-is-the-app-styled.md) and
-   [how-is-the-codebase-laid-out.md](how-is-the-codebase-laid-out.md) — the remaining frontend
-   installs, paired because both are downstream of the same thing and neither blocks anything.
-   1. Decision 4 above.
+**Then, in this order.**
 
-7. **What runs the tests.**
-   [what-runs-the-tests.md](what-runs-the-tests.md) — a real choice rather than a formality: the
-   runner has to measure branch coverage on a pure module and drive a rendered grid, and the
-   obvious candidates differ on both.
-   1. Decision 5 above.
+4. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from 1.
+   Implied by ADR-0002 plus the offline guarantee, recorded nowhere. Rules meta-frameworks in or
+   out.
 
-8. **Whether a server exists at all.**
-   [what-must-be-true-off-device.md](what-must-be-true-off-device.md) — the most-assumed decision
-   in the repo. [ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
-   already describes how a server behaves without anything establishing there is one.
-   1. Decision 3 above.
-   2. [is-there-a-paid-tier.md](is-there-a-paid-tier.md) — the one thing a device cannot be
-      trusted to hold, since entitlement enforced on the player's hardware is not enforced.
+5. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
+   — from 1. Its whole force is that one language must serve a browser and a batch process.
 
-9. **Which client storage mechanism.**
-   [which-client-storage-mechanism.md](which-client-storage-mechanism.md) — the only stack choice
-   with no clean migration path, so it is the one worth slowing down for.
-   1. Decisions 2 and 3 above, which give shape and lifetime.
-   2. [what-can-a-player-do-with-no-network.md](what-can-a-player-do-with-no-network.md) — one
-      board or a browsable archive, which is orders of magnitude of volume.
-   3. [is-undo-in-scope-and-how-far-back.md](is-undo-in-scope-and-how-far-back.md) and
-      [is-puzzle-state-a-snapshot-or-an-event-log.md](is-puzzle-state-a-snapshot-or-an-event-log.md)
+6. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
+   from 1 and 5. One TypeScript codebase everywhere is a web-shaped answer.
 
-10. **How the app itself stays available offline.**
-    [how-does-the-app-itself-stay-available-offline.md](how-does-the-app-itself-stay-available-offline.md)
-    — the service worker and its tooling. Every option here has a maintenance problem, so the
-    choice is which one to own rather than which to avoid.
-    1. Decision 5 above, because the list of files to precache is a build output.
-    2. Decision 9's second prerequisite, which decides how much content is cached.
+7. **[What renders the client?](what-renders-the-client.md)** — from 4 and 6. Framework, minimal
+   library, or neither; the class, not the member.
 
-11. **What runs the server, and which database if any.**
-    [what-runs-the-server-if-there-is-one.md](what-runs-the-server-if-there-is-one.md) and
-    [which-database-if-any.md](which-database-if-any.md) — paired because each constrains the
-    other's hosting. The database may be close to a non-decision: ADR-0003 keeps the server from
-    reading inside what it stores, and a store that never reads a value has one job.
-    1. Decision 8 above.
-    2. [what-must-we-know-about-how-the-app-is-used.md](what-must-we-know-about-how-the-app-is-used.md)
-       — queryable or opaque, which is most of what "which database" means.
+8. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from 2 and 3, and from
+   [is there a paid tier?](is-there-a-paid-tier.md), since entitlement is the one thing a device
+   cannot be trusted to hold.
 
-12. **Where it deploys.**
-    [where-does-this-run.md](where-does-this-run.md) — deliberately late; it was decided first
-    last time and the record says so. One trap: recovery after storage eviction depends on the
-    app and its API being hosted so that a server-set cookie is judged first-party — see
-    [../constraints.md](../constraints.md) — and a static host with its API elsewhere fails that
-    silently.
-    1. Decisions 8 and 11 above.
+9. **[What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)**
+   — from 8.
 
-13. **What runs the checks on every change.**
-    [what-runs-the-checks-on-every-change.md](what-runs-the-checks-on-every-change.md) — what
-    fills the [../verification.md](../verification.md) stub, and what makes any standard in
-    [../standards/](../standards/) enforced rather than intended.
-    1. Decision 7 above.
+10. **[Which component framework?](which-component-framework.md)** — from 6 and 7. Researched;
+    shortlisted to React, Preact and Svelte.
+
+11. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from 2 and 8, plus
+    [what a player can do with no network](what-can-a-player-do-with-no-network.md) for volume and
+    [snapshot or event log](is-puzzle-state-a-snapshot-or-an-event-log.md) with
+    [undo depth](is-undo-in-scope-and-how-far-back.md) for shape. The only stack choice with no
+    clean migration path.
+
+12. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from 10.
+    Researched.
+
+13. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from 8.
+
+14. **[Which database, if any?](which-database-if-any.md)** — from 8 and 3. Possibly a
+    non-decision, if the server never reads inside what it holds.
+
+15. **[Where does it deploy?](where-does-this-run.md)** — from 8, 13 and 14. Late on purpose; it
+    was decided first last time. One trap: silent recovery after eviction depends on the app and
+    its API being hosted so a server-set cookie is judged first-party — see
+    [../constraints.md](../constraints.md).
+
+16. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
+    — from 12, since the precache list is a build output.
+
+17. **[What runs the tests?](what-runs-the-tests.md)** — from 12.
+
+18. **[How is it styled](how-is-the-app-styled.md) and
+    [laid out](how-is-the-codebase-laid-out.md)?** — from 10.
+
+19. **[Which package manager?](which-package-manager.md)** — from 12 and 13. Last because it is
+    derived from both runtimes, not first because it is easy.
+
+20. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
+    17. Fills the [../verification.md](../verification.md) stub.
 
 Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any of them.
 Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided
@@ -130,7 +119,9 @@ become a record of its own.
 - The solving experience outranks puzzle supply, which sets the work order: interface first.
 - Two devices editing one board at once is permanently out of scope.
 - A paid tier is uncommitted, and the option must not be foreclosed.
-- Delivered over the web.
+
+Delivered over the web *used* to be on this list. It was an inference from a maintainer purpose
+rather than an argument, and it is now question 1.
 
 ## What goes in a question file
 

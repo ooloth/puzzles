@@ -23,7 +23,7 @@ which is worse than disagreeing.
 ## Why here specifically
 
 The merge is deliberately deterministic and unsupervised, per
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md), so
+[what the server does with puzzle state](../questions/what-does-the-server-do-with-puzzle-state.md), so
 nothing is watching for an implausible ordering. And because
 [offline.md](../guarantees/offline.md) forbids ever asking the player to choose, there is no path
 by which a suspicious merge surfaces for a human to look at.

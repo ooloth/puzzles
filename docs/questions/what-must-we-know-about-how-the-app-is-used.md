@@ -14,6 +14,14 @@ blob is satisfied by almost anything. "How many players finished today's puzzle"
 progress last week", "where do people abandon a grid" are questions a blob store cannot answer at
 all.
 
+There is a second reader here besides the running system: the maintainer. Wanting to look at
+historical play — which puzzles people finish, where they stall, whether a difficulty grade
+predicts anything — is a reason for both a server and a queryable store that has nothing to do
+with durability and survives whatever
+[how long work must survive](how-long-must-in-progress-work-survive.md) answers. It is the one
+input that can make [which database, if any?](which-database-if-any.md) a real decision rather
+than a formality, so it belongs among the roots rather than downstream of them.
+
 It also decides whether several promises are checkable.
 [../guarantees/durability.md](../guarantees/durability.md) says work is never lost and is
 currently enforced by nothing; whether that is being kept is a usage question, and
@@ -66,6 +74,11 @@ write, a lost board, a slow input. Still mostly opaque storage, plus a small str
 
 *Product analytics.* Completion, abandonment, difficulty response. The only option that needs
 queryable per-player data, and the only one that materially changes the database question.
+
+*Historical play, kept for the maintainer to look at.* Distinct from the above: not a dashboard
+that has to answer questions quickly, but a record complete enough to interrogate later. Cheaper
+than analytics in machinery and more expensive in retention and privacy, since it means keeping
+per-player detail indefinitely rather than aggregating it away.
 
 ## Findings
 

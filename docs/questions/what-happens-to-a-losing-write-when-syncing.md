@@ -17,7 +17,8 @@ currently appear in our own documents.
 [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — a losing
 write requires two writers, so with one device this never arises. Also
 [is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md), and
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md), which settles that no party arbitrates.
+[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md), whose
+leading option is that no party arbitrates.
 
 ## Blocks
 
@@ -42,7 +43,7 @@ Ported from the legacy documentation review, 2026-08-30.
 ## Findings
 
 **There may be no losing write.**
-[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md)
+[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
 settles that merges are deterministic and per cell, which means two devices that edited different
 cells both keep their work — the union is the answer, and nothing is discarded. A write is only
 lost where both devices changed the *same* cell, and then only the older one, which is a single

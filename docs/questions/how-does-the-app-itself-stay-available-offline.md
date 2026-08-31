@@ -19,7 +19,7 @@ player might start next are another.
 
 ## Blocked by
 
-[Does puzzle state live on the client or the server?](does-puzzle-state-live-on-the-client-or-the-server.md)
+[Does puzzle state live on the client or the server?](who-is-authoritative-over-puzzle-state.md)
 — a design that needs the network for every interaction has nothing to cache.
 
 ## Blocks

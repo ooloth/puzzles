@@ -15,7 +15,7 @@ tier appears.
 
 ## Blocked by
 
-[Are there user accounts](are-there-user-accounts.md).
+N/A — nothing needs to be answered first.
 
 ## Blocks
 

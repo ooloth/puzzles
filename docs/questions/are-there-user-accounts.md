@@ -13,13 +13,13 @@ without one.
 
 ## Blocked by
 
-[Do privacy regulations apply](do-privacy-regulations-apply.md),
-[Is cross-device resume in scope for v1](is-cross-device-resume-in-scope-for-v1.md),
-[Is there a paid tier](is-there-a-paid-tier.md).
+[Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md),
+[Is there a paid tier?](is-there-a-paid-tier.md),
+[Do privacy regulations apply?](do-privacy-regulations-apply.md) — each decides something
+accounts would have to serve, and a mechanism chosen before its purpose tends to acquire one.
 
 ## Blocks
 
-[is cross-device resume in scope](is-cross-device-resume-in-scope-for-v1.md),
 [is there a paid tier](is-there-a-paid-tier.md),
 [do privacy regulations apply](do-privacy-regulations-apply.md).
 

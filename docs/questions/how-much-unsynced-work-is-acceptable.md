@@ -18,7 +18,6 @@ of how little data moves.
 
 ## Blocks
 
-[what wins when battery and durability conflict](what-wins-when-battery-and-durability-conflict.md),
 [how we would verify progress is never lost](how-would-we-verify-progress-is-never-lost.md).
 
 ## What would settle it

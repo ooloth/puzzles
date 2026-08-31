@@ -15,7 +15,8 @@ currently promises only same-device resume because of it.
 
 ## Blocked by
 
-[Are there user accounts](are-there-user-accounts.md).
+N/A — nothing needs to be answered first. This is a decision about what to promise a player, and
+the mechanisms that would deliver it are downstream of the promise rather than inputs to it.
 
 ## Blocks
 

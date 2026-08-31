@@ -14,7 +14,7 @@ contention.
 
 ## Blocked by
 
-[where puzzle state lives](does-puzzle-state-live-on-the-client-or-the-server.md) and
+[where puzzle state lives](who-is-authoritative-over-puzzle-state.md) and
 [what the server stores](what-does-the-server-store-if-anything.md). Don't decide this one
 first — it was decided first last time.
 

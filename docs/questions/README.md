@@ -46,6 +46,11 @@ research backlog, and everything resolving into a decision is a choice waiting t
 The body's **Resolves into** section names the specific destination and why; the frontmatter
 is the category, so it can be queried.
 
+When two questions each look like they need the other first, the edge points from the decision
+about *what to promise* to the decision about *how to deliver it*. Scope precedes mechanism, and a
+mechanism chosen before its purpose tends to acquire one. Four pairs pointed both ways until that
+rule was applied to them.
+
 The first six are stable and short. **Why it matters** is what's blocked or what gets
 expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency:
 what must be answered first, and what this unblocks. **What would settle it** is the evidence,
@@ -108,9 +113,9 @@ of a rule already in force, competing with the real one for whoever finds it fir
 
 These gate nearly everything else. The first is the critical path to anything on screen.
 
-- [Does puzzle state live on the client or the server?](does-puzzle-state-live-on-the-client-or-the-server.md)
-  Whether the app can act without a network round trip — which is what the offline and
-  instant-feedback guarantees both require.
+- [Who is authoritative over puzzle state?](who-is-authoritative-over-puzzle-state.md)
+  Not where state lives — the guarantees already settle that — but who wins when two copies
+  disagree, and whether anything ever needs enforcing rather than storing.
 
 - [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
   Whether history is kept or only the current board. Decides how undo and reconciliation work.

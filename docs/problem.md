@@ -54,8 +54,10 @@ A small, genuinely public v1 within a few months.
 
 - **Two devices editing the same puzzle at once.** Switching devices between sessions is in
   scope; simultaneous editing is not, so CRDT-grade conflict resolution isn't needed.
-- **Leaderboard integrity or anti-cheat.** Nothing is ranked or money-involved. Cheating
-  only spoils the game for the cheater.
+- **Leaderboard integrity or anti-cheat.** Nothing is ranked, and cheating only spoils the game
+  for the cheater. This holds while nothing is worth gaining by cheating; a paid tier is
+  uncommitted but deliberately not ruled out, so the exclusion is conditional rather than
+  permanent.
 - **Enterprise scale** — or designing for scale at all, yet.
 - **Infrastructure added because it might be needed someday** rather than because it's
   needed now. No Kubernetes-grade complexity.

@@ -14,7 +14,7 @@ are written down; neither yields.
 
 ## Blocked by
 
-[How much unsynced work is acceptable](how-much-unsynced-work-is-acceptable.md).
+N/A — nothing needs to be answered first.
 
 ## Blocks
 

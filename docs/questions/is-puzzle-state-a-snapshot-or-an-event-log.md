@@ -13,13 +13,12 @@ to be reconciled.
 
 ## Blocked by
 
-[Does puzzle state live on the client or the server](does-puzzle-state-live-on-the-client-or-the-server.md),
+[Does puzzle state live on the client or the server](who-is-authoritative-over-puzzle-state.md),
 [Is undo in scope, and how far back](is-undo-in-scope-and-how-far-back.md).
 
 ## Blocks
 
-[what happens to a losing write](what-happens-to-a-losing-write-when-syncing.md),
-[is undo in scope](is-undo-in-scope-and-how-far-back.md).
+[what happens to a losing write](what-happens-to-a-losing-write-when-syncing.md).
 
 ## What would settle it
 

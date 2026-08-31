@@ -12,7 +12,7 @@ Sets the build tooling, the testing approach, and the speed of the inner develop
 
 ## Blocked by
 
-[Does puzzle state live on the client or the server?](does-puzzle-state-live-on-the-client-or-the-server.md),
+[Does puzzle state live on the client or the server?](who-is-authoritative-over-puzzle-state.md),
 [What interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
 ## Blocks

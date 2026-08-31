@@ -19,7 +19,7 @@ that distinction concrete instead of rhetorical.
 
 ## Blocked by
 
-[Does puzzle state live on the client or the server?](does-puzzle-state-live-on-the-client-or-the-server.md)
+[Does puzzle state live on the client or the server?](who-is-authoritative-over-puzzle-state.md)
 — the architecture decides whether one player input becomes one request or none.
 
 ## Blocks

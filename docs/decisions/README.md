@@ -39,6 +39,11 @@ Spending equal effort on both is the real waste.
 5. **Write down what would change your mind — before deciding.** Pre-committing to the
    disconfirming evidence blocks motivated reasoning, and it's what fills in **Revisit when**.
 
+**Decide one thing at a time.** A decision about how processes relate is not a decision about
+how modules are organised, and a decision about where something runs is not a decision about
+what it stores. Letting the second ride along inside the first is how a choice gets made
+without anyone noticing it was made, and without it ever being argued.
+
 **Familiarity is not a reason.** "I already know X" is a legitimate cost input, but it has to
 be stated as a cost of adopting Y — never smuggled in as a merit of X.
 

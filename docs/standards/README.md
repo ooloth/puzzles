@@ -14,11 +14,30 @@ deliberate: the same sentence then serves whoever is writing something ("produce
 reviewing it ("check whether this holds"), or auditing the codebase ("find where this isn't
 true"), without being rephrased for each.
 
+## Standards that reach beyond this repo
+
+Most of what governs code here isn't in this folder. A portable set of engineering standards —
+correctness, code structure, readability, testing, security, error handling, type design, and
+per-language conventions — lives at
+<https://github.com/ooloth/dotfiles/tree/main/tools/agents/config/standards> and uses the same
+tiers and phrasing rules described below.
+
+**This folder holds only what that set can't.** A rule true of any codebase belongs upstream; a
+rule that names this project's domain, files, or conventions belongs here. When something written
+here turns out to be portable, it moves. That keeps the two from drifting into weaker and stronger
+copies of the same idea, where whichever one a reader finds first wins.
+
+An agent working in this repo is expected to load the relevant portable files before designing,
+writing, or reviewing code — behaviour defined by
+<https://github.com/ooloth/dotfiles/blob/main/tools/agents/config/skills/uphold-standards/SKILL.md>.
+Anyone working without that skill should read the portable standards directly, because this
+folder on its own understates the rules actually in force.
+
+## Tiers
+
 Only **Must** holds unconditionally. **Should** allows a stated exception and **Consider** is
 a judgment call, so nothing here is an invariant — things that are true without exception, or
 the system is broken, belong in [../guarantees/](../guarantees/).
-
-## Tiers
 
 **Must** — no exceptions. A violation is always wrong. Work never produces one, and a review
 flags one immediately whatever the context.

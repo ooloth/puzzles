@@ -37,4 +37,7 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 Proactively read and update these files as you go. Be sure to read `docs/unfinished.md` before
 extending any existing pattern — it records where the codebase might currently mislead you.
 
+Code here is also governed by a portable set of engineering standards kept outside the repo; see
+`docs/standards/README.md` for what they cover and where they live.
+
 `docs/@legacy/` and `docs/brainstorming/` are archival. Nothing in either is authoritative.

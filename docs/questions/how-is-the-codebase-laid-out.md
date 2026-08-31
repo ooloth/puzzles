@@ -31,19 +31,31 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Ported from the legacy documentation review, 2026-08-30.
-
-Finding drawn from legacy ADR-04 (separate puzzle generation from serving).
+Options ported from legacy ADR-23 (organize by domain concept, not technical layer).
 
 ## Options
 
-...
+*By domain concept.* Folders named for what the code is about — a player and their progress, one
+game's rules, storage — so a name answers "where would I find X" without the reader knowing which
+technical layer a concept lives in.
+
+*By technical layer.* One `routes/`, `views/`, `models/` spanning every game.
+
+Within domain organisation, a second choice: one shared module holding every game's rules, or a
+module per game. A shared module keeps the tree smaller, but editing one game recompiles the
+others and nothing but convention stops one game reaching into another's internals.
 
 ## Findings
 
-Legacy ADR-04 deliberately separated two decisions that are easy to conflate: it settled the
-process-level relationship between generation and serving while explicitly refusing to prescribe
-module organisation, on the grounds that it "deserves its own dedicated discussion rather than
-being decided as a side detail here". Worth preserving as a precedent — process topology and
-module layout are separable, and letting the second ride along inside the first is how layout
-decisions get made without anyone noticing.
+The number of consumers of a game's rules changes with the architecture, and that is what decides
+whether a common interface across games is worth having. A server-rendered design had two — a web
+binary and a generator — which was too few to justify one. A local-first design has three,
+generator, client and possibly a server, across two runtimes. Three consumers across a runtime
+boundary is the pressure that actually produces a shared interface, so the answer here follows
+from [does puzzle state live on the client or the server](does-puzzle-state-live-on-the-client-or-the-server.md)
+more than from taste.
+
+The structural criteria this answer has to satisfy — where a package boundary is earned, when
+repetition is acceptable, and domain logic staying free of I/O — hold whichever option wins, so
+they aren't inputs to the choice. They live in the portable standards described in
+[../standards/README.md](../standards/README.md).

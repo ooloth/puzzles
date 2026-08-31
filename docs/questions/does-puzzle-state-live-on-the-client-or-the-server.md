@@ -24,5 +24,11 @@ real client application and a sync mechanism to build and maintain.
 required for every state change. That fails the offline guarantee by construction — and it's
 a property of the whole category, not of any particular framework.
 
+**Bearing on this** Puzzle logic — generating, solving, validating — should be pure and
+deterministic: no clock, no I/O, and randomness only from an explicit seed. Pure logic runs
+anywhere, so it doesn't constrain this choice by itself, but it does remove one argument
+commonly made for server ownership: keeping the rules in a single trusted place. A pure module
+is a single trusted place regardless of where it executes.
+
 **Settled by** Possibly already settled by `problem.md` and `constraints.md` as written.
 Worth confirming deliberately rather than assuming it fell out.

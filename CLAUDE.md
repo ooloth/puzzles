@@ -34,7 +34,7 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | `docs/unfinished.md`   | Code that's mid-change or misleading    |
 | `docs/verification.md` | How to run the system and check changes |
 
-Read `docs/unfinished.md` before extending any existing pattern — it records where the codebase
-would currently mislead you.
+Proactively read and update these files as you go. Be sure to read `docs/unfinished.md` before
+extending any existing pattern — it records where the codebase might currently mislead you.
 
 `docs/@legacy/` and `docs/brainstorming/` are archival. Nothing in either is authoritative.

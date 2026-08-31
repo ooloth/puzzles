@@ -19,7 +19,22 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-_Nothing in flight._
+### The stack is mid-decision, and looks more settled than it is
+
+**You'll see** a repository with no code in it, a `constraints.md` full of browser specifics, and
+question files citing detailed research into React, Preact, Svelte, Vite and Bun. It reads as
+though the stack is broadly agreed and nobody has got round to typing the install command.
+
+**Actually** [decisions/](decisions/) holds two records and neither is about the stack. The
+platform, the language, what renders the client, what holds a player's work and whether a server
+exists are all proposed and none is chosen. The research inside the question files is homework
+for decisions still to be made, not the conclusions of decisions already made — a shortlist is
+not a choice.
+
+**So** install nothing yet, and work [questions/README.md](questions/README.md) in the order it
+gives. Each entry names what it derives from, so the order is checkable rather than asserted. If
+you are about to reach for a tool that is not the next entry in that order, that is the signal to
+stop and find the decision above it.
 
 <!-- Template:
 

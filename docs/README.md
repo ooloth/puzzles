@@ -17,15 +17,35 @@ Full context: [problem.md](problem.md).
 | [decisions/](decisions/)         | Choices already made, and why           |
 | [failure-modes/](failure-modes/) | Ways it can fail, and whether we'd know |
 | [guarantees/](guarantees/)       | Promises to players we must never break |
-| [questions/](questions/)         | Open questions, one per file            |
+| [questions/](questions/)         | Decisions not yet made, in order        |
 | [standards/](standards/)         | What correct work looks like here       |
 | [architecture](architecture.md)  | Where code lives and what calls what    |
 | [constraints](constraints.md)    | Limits from browsers, networks and law  |
 | [glossary](glossary.md)          | Domain terms and their code names       |
 | [gotchas](gotchas.md)            | Non-obvious traps in this codebase      |
 | [problem](problem.md)            | Who this is for and what success means  |
-| [unfinished](unfinished.md)      | Code that's mid-change or misleading    |
+| [unfinished](unfinished.md)      | What's mid-change and would mislead you |
 | [verification](verification.md)  | How to run the system and check changes |
+
+## Read these two first
+
+[problem.md](problem.md) and [guarantees/](guarantees/) are the inputs everything else is derived
+from. Read both in full before deciding anything, before ranking what to work on, and before
+concluding a question is open — several already have answers there. Knowing the files exist is not
+the same as having read them, and the difference has cost this project real work.
+
+## Decisions and questions are one system
+
+[questions/](questions/) and [decisions/](decisions/) hold the same set of choices at two stages.
+A question is a decision not yet made; a decision is a question answered. What matters is that
+they are worked **in order**: [questions/README.md](questions/README.md) holds that order, with
+each entry naming what it derives from.
+
+A decision recorded before the things it derives from are settled does not stay visible as a
+guess. It becomes an assumption nobody remembers making, and it keeps looking right because the
+reasoning built on top of it is sound. When a question turns out to rest on something nobody
+asked, the move is to write that question and work it — never to answer the one in front of you
+and hope.
 
 ## Where a new fact goes
 

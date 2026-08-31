@@ -15,6 +15,23 @@ The record of what we believed at the time is the entire point.
 
 ## Before you decide
 
+**Find this decision in [../questions/README.md](../questions/README.md) and check what sits above
+it.** That file is this one's sibling: the same decisions, before they are made, in the order they
+have to be made. Each entry names what it derives from. If anything it derives from is unanswered,
+the record you are about to write will be arbitrary — and it will not read as arbitrary, which is
+the whole cost. Write the missing question instead, and work that.
+
+If the decision is not in that order at all, add it there first. A decision nobody could see
+coming is one nobody checked the prerequisites of.
+
+Four records had to be demoted back to questions on 2026-08-31 for want of this check.
+
+The same applies in reverse. When a record here turns out to rest on something unsettled, the
+entry in [../unfinished.md](../unfinished.md) is written in the same edit that discovers it —
+before the fix is scheduled, and whether or not it is ever scheduled. That file is what protects a
+reader in the window between finding a record unsound and repairing it, and it only works if
+writing to it is bound to this moment rather than to somebody remembering.
+
 A template captures a decision; it doesn't improve one. A coin toss written up in this
 format is worse than a scrappy one — the format lends it authority it didn't earn.
 

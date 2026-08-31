@@ -38,10 +38,17 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
+Finding drawn from legacy ADR-03 (use SQLite as the data store).
+
 ## Options
 
 ...
 
 ## Findings
 
-...
+SQLite on a local disk is what disqualified the serverless platforms considered previously —
+they offer no persistent filesystem, so a database file has nowhere to live. That disqualification
+is contingent on a data-store choice nobody has made: see
+[what does the server store](what-does-the-server-store-if-anything.md). If the server turns out
+to need less than a database, the platforms ruled out on this basis come back into contention
+before pricing is even discussed.

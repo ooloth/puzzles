@@ -19,7 +19,6 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[What renders the client?](what-renders-the-client.md),
 [What latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md),
 [Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md).
 

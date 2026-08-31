@@ -15,7 +15,7 @@ can be changed without touching markup.
 
 ## Blocked by
 
-[What renders the client?](what-renders-the-client.md) — a rendering approach that ships a build
+[Which component framework?](which-component-framework.md) — a rendering approach that ships a build
 pipeline anyway changes what a styling toolchain costs.
 
 ## Blocks

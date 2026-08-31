@@ -119,8 +119,13 @@ These gate nearly everything else. The first is the critical path to anything on
 - [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
   Whether "progress is never lost" survives contact with a strategy that discards writes.
 
-- [What renders the client?](what-renders-the-client.md)
-  Build tooling, testing approach, and the speed of the inner development loop.
+- [Which component framework?](which-component-framework.md)
+  The dependency the interface is written against for years, and the choice most exposed to
+  familiarity masquerading as reasoning.
+
+- [What provides the build and dev server?](what-provides-the-build-and-dev-server.md)
+  The component that delivers the inner loop ADR-0004 was decided for.
+
 
 - [What runs the server, and in what language?](what-runs-the-server-and-in-what-language.md)
   Whether one maintainer carries one toolchain or two. Performance is not a live argument here.

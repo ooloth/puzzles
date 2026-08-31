@@ -52,7 +52,7 @@ whether a common interface across games is worth having. A server-rendered desig
 binary and a generator — which was too few to justify one. A local-first design has three,
 generator, client and possibly a server, across two runtimes. Three consumers across a runtime
 boundary is the pressure that actually produces a shared interface, so the answer here follows
-from [who is authoritative over puzzle state](who-is-authoritative-over-puzzle-state.md)
+from [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) and the runtimes it implies
 more than from taste.
 
 The structural criteria this answer has to satisfy — where a package boundary is earned, when

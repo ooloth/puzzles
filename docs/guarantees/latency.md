@@ -27,6 +27,6 @@ invalidates reasoning the player has already built two moves on top of.
 
 **Bearing on this** [What latency budget makes "immediately" checkable?](../questions/what-latency-budget-makes-immediately-checkable.md)
 would add the duration promise this one deliberately omits.
-[Does puzzle state live on the client or the server?](../questions/who-is-authoritative-over-puzzle-state.md)
-decides whether this promise is achievable at all — a server-owned architecture fails it by
-construction.
+[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) settled that the client holds
+and mutates state, which is what makes this promise achievable at all — a server-owned
+architecture fails it by construction.

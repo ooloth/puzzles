@@ -14,7 +14,7 @@ language removes duplication that otherwise has to be kept in sync by hand.
 
 ## Blocked by
 
-[where puzzle state lives](who-is-authoritative-over-puzzle-state.md).
+the client holding state, settled by [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md).
 
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 

@@ -24,7 +24,6 @@ this question turns on.
 [Are there user accounts?](are-there-user-accounts.md),
 [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md),
 [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md),
-[Who is authoritative over puzzle state?](who-is-authoritative-over-puzzle-state.md).
 
 ## What would settle it
 
@@ -68,6 +67,12 @@ first visit and stored server-side against nothing in particular, so that a late
 can claim it rather than starting from zero. Costs almost nothing now and preserves the option.
 
 ## Findings
+
+**A "no" here makes most of the sync design vacuous.** Divergence requires two writers. With one
+device ever writing a board, the deterministic merge in
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md) never
+runs, per-cell timestamps never matter, and clock skew cannot invert anything. All of that
+machinery exists to serve this answer being yes — which is worth knowing before costing it.
 
 **Recovery is cheaper than transfer, but only by one specific mechanism.** Both need a copy
 elsewhere and a way to know it is the right player's. What separates them is that recovery can use

@@ -17,7 +17,7 @@ currently appear in our own documents.
 [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — a losing
 write requires two writers, so with one device this never arises. Also
 [is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md), and
-[who is authoritative over puzzle state?](who-is-authoritative-over-puzzle-state.md).
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md), which settles that no party arbitrates.
 
 ## Blocks
 

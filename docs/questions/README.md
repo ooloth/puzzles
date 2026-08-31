@@ -113,10 +113,6 @@ of a rule already in force, competing with the real one for whoever finds it fir
 
 These gate nearly everything else. The first is the critical path to anything on screen.
 
-- [Who is authoritative over puzzle state?](who-is-authoritative-over-puzzle-state.md)
-  Not where state lives — the guarantees already settle that — but who wins when two copies
-  disagree, and whether anything ever needs enforcing rather than storing.
-
 - [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
   Whether history is kept or only the current board. Decides how undo and reconciliation work.
 

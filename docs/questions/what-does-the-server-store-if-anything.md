@@ -13,7 +13,7 @@ barely matters — or that there is nothing to store beyond a sync record.
 
 ## Blocked by
 
-[where puzzle state lives](who-is-authoritative-over-puzzle-state.md).
+the client holding state, settled by [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md).
 
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
 

@@ -2,6 +2,7 @@
 number: 0003
 status: accepted
 date: 2026-08-31
+amended: 2026-08-31
 ---
 
 # 0003 — The server validates puzzle state but does not arbitrate it
@@ -30,6 +31,23 @@ per cell, so no party has to be the one that decides.
 values in range, for a puzzle that exists, from someone entitled to write to that key, within
 sane size and rate limits.
 
+**Ordering is not arbitration.** The server may assign an arrival order to writes, and doing so
+does not violate any of the above: sequencing when something showed up is not deciding whose play
+was right. It is also the only way to escape depending on device clocks agreeing. It carries the
+opposite error — a device offline all day arrives last while having written first — so it is a
+trade rather than a fix, and which error is preferable is an implementation choice rather than a
+decision here.
+
+**Per-cell timestamps record when the cell changed, not when the board was written.** This is a
+required property, not a detail. If a device writes a whole board stamped with one fresh time,
+cells it never touched arrive looking newer than genuine edits made elsewhere, and untouched
+cells silently clobber real changes. Merging changes makes this impossible by construction;
+merging whole states makes it a discipline that can be got wrong invisibly.
+
+**The merge belongs in a pure, portable module**, alongside the puzzle rules and for the same
+reason: it has to run identically on every client and possibly on the server, and it should
+outlive whatever transport and storage are chosen around it.
+
 The distinction is that the server checks whether the payload is *a board it should be holding*,
 never whether the player's *play* was correct. It does not replay moves and has no opinion about
 whether a move was legal.
@@ -51,6 +69,16 @@ nothing to do with the digits in today's grid.
   being *deterministic*, not from it being *central*. This would make the server load-bearing for
   a case that resolves without it, and would put reconciliation out of reach whenever the server
   is unreachable, which is the condition the app is built for.
+
+  Cultured Code reached the same conclusion for Things Cloud from an unrelated direction. They
+  abandoned server-side merging because "it requires that all merging and conflict resolution be
+  done on the server — and this turns out to be really slow", with disk operations dominating and
+  sharding the only escape, which would have made it an expensive service. They took a
+  version-control-inspired design instead, with a full local database on every device. Their
+  merge core then survived a complete rewrite fourteen years later, from Python on App Engine to
+  Swift, while the implementation around it was replaced entirely. Two unrelated arguments —
+  ours from promises, theirs from cost — arriving at the same architecture, and a core that
+  outlived its transport by more than a decade.
 - **The server stores whatever it is given.** The position this decision started from, and wrong.
   A client bug that writes a corrupt board would have that corruption stored faithfully, made
   canonical, and propagated to every device that syncs — with the player's local copy having been
@@ -89,8 +117,9 @@ while the catalogue is public; an information leak once an archive is gated.
 
 - [x] Nothing new in `constraints.md`
 - [x] Nothing new in `guarantees/` — this is derived from two existing promises
-- [ ] `failure-modes/` — the silent merge inversion and the corrupt-board propagation are both
-      chains worth recording once that folder starts filling
+- [x] `failure-modes/` — [a cell edit overwritten by an older one](../failure-modes/a-cell-edit-is-overwritten-by-an-older-one.md),
+      [a corrupt board becoming canonical](../failure-modes/a-corrupt-board-becomes-the-canonical-one.md),
+      and [the write endpoint as free storage](../failure-modes/the-write-endpoint-becomes-free-storage.md)
 
 Deliberately not decided here: whether a server exists at all, what it stores it in, or how sync
 is triggered.

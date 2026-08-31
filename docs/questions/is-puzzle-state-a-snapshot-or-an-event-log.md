@@ -13,7 +13,7 @@ to be reconciled.
 
 ## Blocked by
 
-[Does puzzle state live on the client or the server](who-is-authoritative-over-puzzle-state.md),
+[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md),
 [Is undo in scope, and how far back](is-undo-in-scope-and-how-far-back.md).
 
 ## Blocks

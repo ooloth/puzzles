@@ -2,6 +2,7 @@
 number: 0002
 status: accepted
 date: 2026-08-31
+amended: 2026-08-31
 ---
 
 # 0002 — The client holds and mutates puzzle state
@@ -34,6 +35,16 @@ without waiting on anything remote. The rules needed to validate a move run on t
   cannot be rescued by choosing a better framework.
 - **The client caches but defers mutation to the server.** Reads work offline, writes do not, which
   fails the first promise for exactly the case it exists to cover: a player mid-puzzle underground.
+
+One argument for server-owned state deserves an answer, because it is true. A hypermedia
+framework's local signals can handle transient interaction — a drag in progress, a hover, a
+keyboard selection — entirely on the device, with no round trip. Interaction under that
+arrangement really can feel instant.
+
+It does not follow that the app works offline. A signal can change what is on screen, but
+committing a move still requires the server. So hypermedia can deliver low latency and cannot
+deliver offline play, and this decision rests on the second. The latency argument is correct and
+does not apply.
 
 ## Risk
 

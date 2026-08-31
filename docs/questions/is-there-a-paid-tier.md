@@ -58,6 +58,6 @@ files alongside the app cannot be withheld from anyone who already has the app.
 **So the archive is where the cost sits, not the gameplay.** Gating decides who may receive a
 past puzzle. It has no bearing on who is authoritative over the board a player is filling in
 right now — see
-[who is authoritative over puzzle state?](who-is-authoritative-over-puzzle-state.md). Those are
+[ADR-0003](../decisions/0003-the-server-validates-puzzle-state-but-does-not-arbitrate-it.md), which keeps the server out of gameplay entirely. Those are
 separate objects and separate authorities, and conflating them would import a server into
 gameplay to solve a content-delivery problem.

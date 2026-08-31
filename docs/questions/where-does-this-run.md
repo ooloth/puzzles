@@ -14,7 +14,7 @@ contention.
 
 ## Blocked by
 
-[where puzzle state lives](who-is-authoritative-over-puzzle-state.md) and
+the client holding state, settled by [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md), and
 [what the server stores](what-does-the-server-store-if-anything.md). Don't decide this one
 first — it was decided first last time.
 

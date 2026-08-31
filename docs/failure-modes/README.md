@@ -27,8 +27,6 @@ first.
 This folder should grow. Every incident adds one, and so does every design discussion that ends
 with "wait, what happens if…".
 
-_No failure modes recorded yet._
-
 ## What goes in an entry
 
 One file per failure mode, named for what breaks — so a directory listing reads as a list of ways
@@ -62,4 +60,16 @@ it usually matters more than the failure itself.>
 
 ## The list
 
-_Empty._ Add entries as they are identified; group them here by the guarantee they threaten.
+### Threatening durability
+
+- [A player's progress vanishes after a week away](a-players-progress-vanishes-after-a-week-away.md)
+  — storage eviction, with no error and no report. The only signal is someone not coming back.
+- [A corrupt board becomes the canonical one](a-corrupt-board-becomes-the-canonical-one.md)
+  — a client bug propagated by the copy that exists to be recovered from.
+- [A cell edit is overwritten by an older one](a-cell-edit-is-overwritten-by-an-older-one.md)
+  — clock skew inverting a merge, after which both devices agree on the wrong answer.
+
+### Threatening availability and cost
+
+- [The write endpoint becomes free storage for strangers](the-write-endpoint-becomes-free-storage.md)
+  — open by construction, because there is no account to check.

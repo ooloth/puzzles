@@ -52,11 +52,9 @@ a property of the whole category, not of any particular framework.
 
 ## Findings
 
-Puzzle logic — generating, solving, validating — should be pure and deterministic: no clock, no
-I/O, and randomness only from an explicit seed. Pure logic runs anywhere, so it doesn't
-constrain this choice by itself, but it does remove one argument commonly made for server
-ownership: keeping the rules in a single trusted place. A pure module is a single trusted place
-regardless of where it executes.
+Pure puzzle logic runs anywhere, which removes one argument commonly made for server ownership:
+keeping the rules in a single trusted place. A pure module is a single trusted place regardless
+of where it executes, so that argument doesn't distinguish the options.
 
 Legacy ADR-01 argued that a hypermedia framework's local signals can do zero-round-trip drag and
 keyboard interaction without giving up server-owned state — that "instant feel" and "server-owned

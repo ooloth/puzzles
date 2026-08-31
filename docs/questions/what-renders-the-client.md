@@ -52,18 +52,7 @@ server-owned-state philosophy the project no longer holds.
 
 ## Findings
 
-Two criteria survive from legacy ADR-06, which chose between Rust templating libraries. Both
-generalise to any rendering approach.
-
-**Escaping is the default, not something opted into.** ADR-06 treated escape-by-default as a
-baseline both finalists had to clear. That is the right shape for a security property: the
-failure mode becomes "someone deliberately opted out" rather than "someone forgot". It applies
-as much to choosing between typed markup and template strings as it did between two macros.
-
-**Markup is validated when the code is built, not when a page is served.** ADR-06 preferred the
-library that checks element and attribute names at compile time, so a mistyped tag is a build
-error rather than a silently malformed page.
-
-A weaker third: template files kept separate from the code that fills them duplicate structure
-across both, which is why a template-file library was ruled out early. It generalises, but less
-sharply than the other two.
+Two properties are worth testing each option against, and both hold whichever one wins, so they
+are standards rather than inputs to the choice: whether the approach escapes output by default,
+and whether it validates markup when the code is built rather than when a page is served. Both
+are in the portable standards described in [../standards/README.md](../standards/README.md).

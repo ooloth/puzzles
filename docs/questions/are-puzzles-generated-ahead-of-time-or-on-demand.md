@@ -54,7 +54,7 @@ a store both processes can reach, and some structure existing before any generat
 
 *Ahead of time, as a background task inside the server.* Nothing extra to deploy or schedule.
 Puts batch work in the same process as request handling, and makes generation impossible to
-exercise without booting the server. This is the arrangement legacy ADR-04 specifically rejected.
+exercise without booting the server.
 
 *On demand, in the request path.* No pool to maintain and no supply question. Generation's worst
 case — not its average — becomes a player's wait.

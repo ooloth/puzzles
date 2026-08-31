@@ -56,15 +56,12 @@ fluency, and two implementations of the rules unless the client runs it too.
 
 ## Findings
 
-Puzzle logic — generating, solving, validating — should be pure and deterministic: no clock, no
-I/O, and randomness only from an explicit seed. That's what makes a puzzle reproducible from
-its seed and testable without a running system. It also sharpens this question, because a pure
-module is portable, and one language means the solver and the validator are the same
-implementation of the rules rather than two copies that must agree. Two languages means
+A pure puzzle module is portable, so one language means the solver and the validator are the
+same implementation of the rules rather than two copies that must agree. Two languages means
 maintaining that agreement by hand, forever, with no compiler checking it.
 
-The maintainer has strong TypeScript and React experience and only moderate Rust experience
-(legacy ADR-01). Later brainstorming records enthusiasm for "easy mode Rust" alongside that.
+The maintainer has strong TypeScript and React experience and only moderate Rust experience.
+Alongside that, enthusiasm for "easy mode Rust" is also on record.
 Both are in the record and they are not the same claim — one is about capability, the other
 about enjoyment.
 

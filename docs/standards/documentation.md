@@ -17,6 +17,13 @@ Same paths, same descriptions. The duplication is deliberate — `CLAUDE.md` is 
 session, so an agent has the map without spending a read on it — which makes adding or removing
 a document two edits. Otherwise one copy starts pointing at something that isn't there.
 
+**Where a folder's README indexes its contents, the index lists exactly the files present.**
+`questions/`, `guarantees/` and `standards/` are read through their indexes, and the index
+carries a line of significance the filename can't. A file missing from it is invisible to
+anyone who reads the index instead of the directory; an entry pointing at a deleted file costs
+a read to discover. Bulk additions are where this drifts, so it's checked after one. Folders
+whose contents are self-ordering — numbered decision records — don't need an index at all.
+
 **Every file under `docs/` carries `updated`, `update_when` and `decays` in its frontmatter.**
 `update_when` names the event that obligates a change, which is what makes a stale document
 someone's responsibility rather than nobody's. `decays` tells a reader how hard to verify before

@@ -24,8 +24,79 @@ records which one, so a missing question can be told apart from an abandoned one
 into a fact rather than a choice — those say so, and land in `../constraints.md`.
 
 Each entry below is followed by its significance: what the question is really about, which is
-usually not what its title says. Dependencies live in the question files themselves, under
-**Gates** and **Settled by**.
+usually not what its title says. Dependencies live in the question files themselves.
+
+## What goes in a question file
+
+Eight sections, in a fixed order. **Every section stays**, with `...` where nothing has been
+recorded yet — the empty ones are the reminder of what hasn't been thought about.
+
+`...` and `N/A` mean different things. `...` means nobody has looked. `N/A` means someone
+looked and there is nothing — no blockers, or no options because the question resolves into a
+fact rather than a choice. The distinction matters most under **Blocked by**, where `N/A`
+means the question is ready to work on right now:
+
+```
+rg -A2 '## Blocked by' docs/questions/ | rg -B2 'N/A'
+```
+
+Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, or
+`problem`. That last one partitions the folder: `rg -l 'resolves_into: constraint'` is the
+research backlog, and everything resolving into a decision is a choice waiting to be made.
+The body's **Resolves into** section names the specific destination and why; the frontmatter
+is the category, so it can be queried.
+
+The first six are stable and short. **Why it matters** is what's blocked or what gets
+expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency:
+what must be answered first, and what this unblocks. **What would settle it** is the evidence,
+measurement, or event that would end the question — not another question, which is what
+*blocked by* is for. **Resolves into** names where the answer lands when it isn't a decision,
+which is how research questions differ from choices. **Source** records where the question
+came from, so provenance survives the deletion of whatever raised it.
+
+The last two grow. **Options** holds each candidate answer with its strongest case and its
+cost. **Findings** holds what we've learned so far, each with where it came from — partial
+answers, sources checked, dead ends. A finding graduates to `../constraints.md` once it's
+confirmed; until then it lives here.
+
+<!-- Template:
+
+# <The question, asked in plain words?>
+
+## Why it matters
+
+...
+
+## Blocked by
+
+...
+
+## Blocks
+
+...
+
+## What would settle it
+
+...
+
+## Resolves into
+
+...
+
+## Source
+
+...
+
+## Options
+
+...
+
+## Findings
+
+...
+-->
+
+## The list
 
 ---
 

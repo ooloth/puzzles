@@ -10,7 +10,7 @@ A record of the reasoning behind choices that took some thought, or could reason
 have gone a different way.
 
 One file per decision: `NNNN-kebab-title.md`, numbered in the order made.
-**Append-only** — a decision that changes is *superseded* by a new one, never edited.
+**Append-only** — a decision that changes is _superseded_ by a new one, never edited.
 The record of what we believed at the time is the entire point.
 
 _No decisions recorded yet._
@@ -30,7 +30,7 @@ Spending equal effort on both is the real waste.
 2. **Estimate the magnitudes.** How much data, how often, how large, how fast, how many.
    Most bad technical decisions come from never having done the arithmetic — "this is 40MB
    and 200ms" dissolves most debates before they start. If you can't get within an order of
-   magnitude, that *is* the finding: go measure, then decide.
+   magnitude, that _is_ the finding: go measure, then decide.
 3. **Find three options, and make one of them "not yet."** Two options is a coin toss with
    extra steps. Doing nothing, or the dumbest thing that could work, is the most frequently
    correct and least frequently considered option.
@@ -56,12 +56,12 @@ An ADR citing nothing was made on vibes.
 <!-- Template:
 
 ---
-number: 0001
+number: 01
 status: proposed | accepted | superseded by 00NN
 date: YYYY-MM-DD
 ---
 
-# 0001 — <the choice, plainly stated>
+# 01 — <the choice, plainly stated>
 
 ## Forced by
 <the constraint, user need, or ranking that made this necessary — by reference>

@@ -9,11 +9,12 @@ resolves_into: decision
 ## Why it matters
 
 [What renders the client?](what-renders-the-client.md) proposes a component framework; this
-picks which one, and only matters if that resolves that way. It is the dependency the interface is written against for the life of the
-project, and the interface is where nearly all the work happens.
+picks which one, and only matters if that resolves that way. It is the dependency the interface
+is written against for the life of the project, and the interface is where nearly all the work
+happens.
 
-It is also the decision most exposed to familiarity masquerading as reasoning, which the rendering question
-records as its own biggest risk. The measurement below exists to catch that.
+It is also the decision most exposed to familiarity masquerading as reasoning, which the
+rendering question records as its own biggest risk. The measurement below exists to catch that.
 
 ## Blocked by
 

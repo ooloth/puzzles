@@ -23,12 +23,16 @@ crashed, or the page closed deliberately.
 **If violated** Half an hour of a player's thinking disappears, with no error and no way to
 recover it. A player who loses work once has no reason to believe it won't happen again.
 
-**Bearing on this** [How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)
-sets the bound that would make this testable.
-[How would we verify progress is never lost?](../questions/how-would-we-verify-progress-is-never-lost.md)
-is unanswered, which is why the enforcement line above reads as it does. Safari's seven-day
-eviction of script-writable storage can also wipe local state independently of any
-interruption — see [../constraints.md](../constraints.md).
+**Bearing on this** [How long must in-progress work survive, and on which devices?](../questions/how-long-must-in-progress-work-survive.md)
+is the question that gives this promise a bound and a scope. As written it has neither, which is
+why the same sentence can be read as "until the tab closes" and as "forever, anywhere", and those
+are different applications. Answer it before anything downstream.
+[How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)
+then sets the tolerance that makes it testable, and
+[how would we verify progress is never lost?](../questions/how-would-we-verify-progress-is-never-lost.md)
+is unanswered, which is why the enforcement line above reads as it does. Safari's eviction of
+script-writable storage can also wipe local state independently of any interruption — see
+[../constraints.md](../constraints.md).
 
 ## Reopening restores the grid, notes and selection
 

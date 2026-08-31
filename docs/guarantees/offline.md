@@ -14,16 +14,21 @@ is fine belong in [latency.md](latency.md).
 ## Play continues through a loss of connectivity
 
 The board stays fully interactive with no errors and no broken interface while there is no
-connection at all. How long that has to hold is not yet settled, so no duration is claimed
-here.
+connection at all. Neither how long that has to hold nor how much of the app it covers is
+settled, so no duration and no scope are claimed here.
 
 **Enforced by** Nothing. Asserted only.
 
 **If violated** The modal use case — playing on a commute — is exactly where the app stops
 working.
 
-**Bearing on this** [How long must offline play survive?](../questions/how-long-must-offline-play-survive.md)
-is what turns this into a bounded, testable claim.
+**Bearing on this** two questions bound this promise along different axes, and both are open.
+[How long must offline play survive?](../questions/how-long-must-offline-play-survive.md) is the
+duration. [What can a player do with no network?](../questions/what-can-a-player-do-with-no-network.md)
+is the scope — the board already open, or a browsable archive they can start something new from —
+and it is the one that sizes client storage by orders of magnitude.
+[How does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md)
+covers the shell, without which neither of the others means anything.
 
 ## The player's network state is never shown
 

@@ -40,7 +40,9 @@ experience below.
 
 **Puzzles generated here, seen each morning.** Not a supply mechanism — the point is opening the
 app to a puzzle this project made. That makes the generator part of the reward rather than
-infrastructure supporting it, and it indicates a daily rhythm rather than an unlimited catalogue.
+infrastructure supporting it. It also leans toward a daily rhythm over an unlimited catalogue,
+which is a lean rather than a settled answer — see
+[is there one puzzle a day, or unlimited play?](questions/is-there-one-puzzle-a-day-or-unlimited-play.md).
 
 **A demonstrable internet-facing full-stack system.** The maintainer wants a public demonstration
 of his ability to build, deploy and operate an internet-facing full-stack app.
@@ -82,8 +84,10 @@ project generated, and a system whose operation is worth describing to someone h
 ## Not this
 
 - **Two devices editing the same puzzle at once.** Picking a puzzle up on another device is part
-  of the vision above; two devices editing the same board simultaneously is not, and never
-  becomes so. CRDT-grade conflict resolution is therefore not needed at any point.
+  of the vision above; two people solving one board together is not. Whether *one* person's two
+  devices can hold the same board open, and how well that has to work, is
+  [open](questions/can-two-devices-edit-the-same-board-at-once.md) — the app cannot prevent it, so
+  ruling it out here would have been a claim about intent rather than behaviour.
 - **Leaderboard integrity or anti-cheat.** Nothing is ranked, and cheating only spoils the game
   for the cheater. This holds while nothing is worth gaining by cheating; a paid tier is
   uncommitted but deliberately not ruled out, so the exclusion is conditional rather than

@@ -67,9 +67,10 @@ considerable overhead if it does not.
 ## Findings
 
 **[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) would
-make this decision small.** Under its leading option the server checks that a payload is a well-formed board and
-never interprets its contents. A store that never reads inside the value needs to do exactly one
-thing, which every option above does equally well. Unless the usage question above reverses it,
+make this decision small.** Under its leading option the server checks that a payload is a
+well-formed board and never interprets its contents. A store that never reads inside the value
+needs to do exactly one thing, which every option above does equally well. Unless the usage
+question above reverses it,
 this is close to a non-decision — which is worth knowing before spending a week on it.
 
 **The client's data representation does not constrain this.** Snapshot or event log, the server

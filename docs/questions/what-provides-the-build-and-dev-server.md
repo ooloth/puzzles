@@ -41,7 +41,11 @@ Split out of the rendering question by ADR-0004.
 
 ## Options
 
-...
+The TypeScript toolchains, per
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) — Vite and
+Bun being the obvious two, with a framework's own tooling a third where it has one.
+
+Not yet narrowed.
 
 ## Findings
 

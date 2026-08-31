@@ -19,7 +19,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[What languages does this project use?](what-languages-does-this-project-use.md),
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md),
 [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md),
 [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md),
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).

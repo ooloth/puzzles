@@ -18,7 +18,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[what languages this project uses and in what language](what-languages-does-this-project-use.md), and
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md), and
 any future decision where the enjoyable option and the better option differ.
 
 ## What would settle it

@@ -17,9 +17,9 @@ records as its own biggest risk. The measurement below exists to catch that.
 
 ## Blocked by
 
-[What languages does this project use?](what-languages-does-this-project-use.md) — the candidate
-set is entirely different depending on the answer, and shortlisting before it is settled means
-assuming it.
+N/A — nothing needs to be answered first.
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md) settled the
+language, so the candidate set is the TypeScript component frameworks.
 
 ## Blocks
 
@@ -54,7 +54,12 @@ member open.
 
 ## Options
 
-...
+The TypeScript field, per
+[ADR-0006](../decisions/0006-typescript-everywhere-with-the-rules-shared-as-source.md). React,
+Svelte, Solid, Vue and Preact are the plausible candidates; the shortlist should be two or three
+rather than all of them, chosen so the comparison can actually be run.
+
+Not yet narrowed — the comparison below is what narrows it.
 
 ## Findings
 
@@ -66,6 +71,10 @@ opt-out visible in review rather than an omission nobody sees.
 **Markup is validated when the code is built rather than when a page is served**, so a mistyped
 element is a build error instead of a silently malformed page.
 
-Both are in the portable standards described in [../standards/README.md](../standards/README.md);
+**Framework micro-benchmarks are not a criterion at this scale.** A previous decision leaned on a
+10-15% throughput difference between two web frameworks while conceding in the same breath that it
+did not matter. Whatever separates these candidates, it will not be that.
+
+The first two are in the portable standards described in [../standards/README.md](../standards/README.md);
 they are recorded here because they are properties to test candidates against rather than things
 to remember later.

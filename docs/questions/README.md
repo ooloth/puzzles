@@ -127,10 +127,6 @@ These gate nearly everything else. The first is the critical path to anything on
   The component that delivers the inner loop ADR-0004 was decided for.
 
 
-- [What languages does this project use?](what-languages-does-this-project-use.md)
-  Spans every deployable, and turns on whether there is one implementation of the puzzle rules
-  or more than one.
-
 
 - [What does the server store, if anything?](what-does-the-server-store-if-anything.md)
   Whether the data store choice is significant or nearly irrelevant.

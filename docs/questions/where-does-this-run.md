@@ -104,6 +104,16 @@ multi-app future.
 
 ## Findings
 
+**Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
+Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely
+first-party — which is the shape of a static host with its API on another origin, per
+[../constraints.md](../constraints.md). Serving the client and its API from one origin avoids the
+test entirely. A bearer token in script-writable storage avoids it too, at the cost of living in
+storage the browser evicts and being reachable by any script that runs on the page. Neither is
+forced; what is forced is that this gets chosen rather than inherited from wherever the two things
+happen to be deployed.
+
+
 **The option set that was researched contained only one of the three tiers above.** Every
 candidate weighed was a place to run a long-lived process with a disk attached, because a local
 database file was treated as a fixed requirement. That a server might be unnecessary was not

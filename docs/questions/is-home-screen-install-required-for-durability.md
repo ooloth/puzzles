@@ -20,10 +20,6 @@ enough sync cadence makes install unnecessary. Also informed by
 [how long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 which sets how often the wipe fires at all.
 
-## Blocks
-
-onboarding design, the wording of the durability guarantee.
-
 ## What would settle it
 
 Whether a server copy exists. If

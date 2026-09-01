@@ -16,10 +16,6 @@ most consequential guarantee in the product is enforced by nothing.
 
 [How much unsynced work is acceptable](how-much-unsynced-work-is-acceptable.md).
 
-## Blocks
-
-the enforcement column for the durability guarantees.
-
 ## What would settle it
 
 ...

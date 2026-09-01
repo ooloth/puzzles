@@ -31,15 +31,6 @@ N/A — settled, and the answer forces this one's hand.
 work survives on every device they use, which cannot be delivered by a device. So a server exists,
 and what is live here is what it does rather than whether it is there. Ready to work on now.
 
-## Blocks
-
-Whether a server exists, and therefore
-[what does the server store, if anything?](what-does-the-server-store-if-anything.md),
-[where does this run?](where-does-this-run.md),
-[what load should the server handle?](what-load-should-the-server-handle.md), and which database
-if any. Also [are there user accounts?](are-there-user-accounts.md), since identity only has to
-exist if something off-device has to be attributed.
-
 ## What would settle it
 
 Testing every candidate under Options against the same pair of questions: could the device hold
@@ -88,6 +79,13 @@ quietly leaves reports nothing either. This is the one candidate whose whole pur
 the failure of the others.
 
 ## Findings
+
+**What this decides beyond itself.** Whether a server exists, and therefore
+[what does the server store, if anything?](what-does-the-server-store-if-anything.md),
+[where does this run?](where-does-this-run.md),
+[what load should the server handle?](what-load-should-the-server-handle.md), and which database
+if any. Also [are there user accounts?](are-there-user-accounts.md), since identity only has to
+exist if something off-device has to be attributed.
 
 **Not blockers, and worth saying so.**
 That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)

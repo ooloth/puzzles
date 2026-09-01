@@ -34,14 +34,6 @@ it is a redeploy plus whichever of the three above has to move with it.
 
 N/A — its inputs are settled. Ready to work on now.
 
-## Blocks
-
-[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md),
-[which database, if any?](which-database-if-any.md),
-[where does this run?](where-does-this-run.md),
-[what runs the server?](what-runs-the-server-if-there-is-one.md), and
-[how is the server operated?](how-is-the-server-operated.md), whose size is set entirely by this.
-
 ## What would settle it
 
 Naming what the server must do between requests, and what it must keep. Everything else follows.

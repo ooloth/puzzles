@@ -16,10 +16,6 @@ silent stall never produces. No timeout figure exists anywhere.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 Measurement on a real device on a real degraded link.

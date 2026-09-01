@@ -22,11 +22,6 @@ question about reversibility rather than about features.
 [Do privacy regulations apply](do-privacy-regulations-apply.md),
 [Is there one puzzle a day, or unlimited play](is-there-one-puzzle-a-day-or-unlimited-play.md).
 
-## Blocks
-
-anti-cheat posture, [are there user accounts](are-there-user-accounts.md), payment and tax
-obligations.
-
 ## What would settle it
 
 ...

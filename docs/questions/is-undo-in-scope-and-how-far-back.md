@@ -15,10 +15,6 @@ requirement. Unlimited undo constrains the state model; shallow undo doesn't.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[snapshot or event log](is-puzzle-state-a-snapshot-or-an-event-log.md).
-
 ## What would settle it
 
 ...

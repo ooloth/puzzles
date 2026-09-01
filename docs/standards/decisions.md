@@ -54,6 +54,25 @@ already believed in, which is why it always looks complete. Tracing "which datab
 five steps and had a gap at nearly every one. Tracing "which language" runs four and ends at a
 product question nobody had asked.
 
+**A decision is narrow in what it settles and wide in what it considers.**
+Deciding one thing at a time is not deciding it in isolation. A runtime chosen without looking at
+what it does to the database and the hosting is one decision made and two foreclosed, and the
+foreclosure is silent — nothing about deploying a hello world announces that a database class has
+just been chosen. Before recording a choice, name what else it moves, and check that the things it
+moves are ones we would still choose. The failure has two shapes that look like opposites: bundling
+several decisions into one record so that none of them is argued, and settling one narrowly while
+quietly settling others by consequence. Both are avoided by the same habit, which is to decide the
+small thing while looking at the whole system.
+
+**Decisions are sequenced so that a milestone is reached in a state worth keeping.**
+Dependency order is the mechanism; the target is an observable state whose choices would not be
+revisited. A decision taken in order to reach a milestone, which one would expect to redo shortly
+after, has been made too early — it is either missing an input or the milestone is drawn in the
+wrong place. **Provisional is not a category here.** If a choice would be redone, either it waits
+for what it is missing, or what it is missing joins the milestone. This is what stops a sequence
+optimising for arriving somewhere quickly at the cost of arriving somewhere that has to be
+dismantled.
+
 **A prerequisite found while tracing is decided before the decision that surfaced it.**
 Stop the decision in front of you and go and make the prerequisite first. Not note it and carry
 on. Not make the current one provisionally. Not make it and plan to revisit. The prerequisite is

@@ -16,11 +16,6 @@ than smuggled into individual decisions as a performance or architecture argumen
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md), and
-any future decision where the enjoyable option and the better option differ.
-
 ## What would settle it
 
 ...
@@ -42,6 +37,9 @@ Finding drawn from legacy ADR-02 (use Rust for the backend).
 ...
 
 ## Findings
+
+**What this decides beyond itself.** [which language the deployables share](../decisions/0005-typescript-across-every-deployable.md), and
+any future decision where the enjoyable option and the better option differ.
 
 Legacy ADR-01 answered a version of this question, and chose craft. It accepted writing grid
 interaction in an unfamiliar expression DSL rather than the maintainer's stronger TypeScript,

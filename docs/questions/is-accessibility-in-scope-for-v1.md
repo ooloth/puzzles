@@ -15,10 +15,6 @@ screen-reader design questions, and retrofitting them is expensive. Silence is n
 
 [What interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 ...

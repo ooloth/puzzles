@@ -214,7 +214,7 @@ by choices made in areas that look unrelated.
 
 ## What goes in a question file
 
-Eight sections, in a fixed order. **Every section stays**, with `...` where nothing has been
+Seven sections, in a fixed order. **Every section stays**, with `...` where nothing has been
 recorded yet — the empty ones are the reminder of what hasn't been thought about.
 
 `...` and `N/A` mean different things. `...` means nobody has looked. `N/A` means someone
@@ -231,7 +231,13 @@ Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `con
 research backlog, and everything resolving into a decision is a choice waiting to be made.
 
 The first six sections are stable and short. **Why it matters** is what's blocked or what gets
-expensive if we're wrong. **Blocked by** and **Blocks** are the two directions of dependency.
+expensive if we're wrong. **Blocked by** names what genuinely has to be answered first, and why — blockers only. Anything
+that merely bears on the question goes under **Findings**, because a Blocked by that lists
+everything related is how a question ends up appearing to wait on things it does not.
+
+There is no **Blocks** section. It was the same graph written backwards, maintained by hand in two
+places, and it went stale. `scripts/check-docs.py --blocks` derives it from the Blocked by lists
+instead, so it is always correct and never edited.
 **What would settle it** is the evidence, measurement, or event that would end the question — not
 another question, which is what *blocked by* is for. **Resolves into** names where the answer
 lands. **Source** records where the question came from, so provenance survives the deletion of
@@ -262,10 +268,6 @@ question that was split says what it no longer covers so a reader does not go lo
 ...
 
 ## Blocked by
-
-...
-
-## Blocks
 
 ...
 

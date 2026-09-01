@@ -17,10 +17,6 @@ than a differentiator — and something else has to carry the product.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 An hour with a few of the popular apps and aeroplane mode.

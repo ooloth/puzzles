@@ -19,10 +19,6 @@ Nothing on the road to a tech stack waits on this.
 
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 
-## Blocks
-
-[what makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md).
-
 ## What would settle it
 
 ...

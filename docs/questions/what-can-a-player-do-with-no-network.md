@@ -23,14 +23,6 @@ storage-mechanism argument made so far has quietly assumed the small reading, wh
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-Which client storage mechanism is used, and how much content is fetched ahead of time.
-[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)
-covers the shell; this covers the content. Also bears on
-[how long must offline play survive?](how-long-must-offline-play-survive.md), which asks the same
-thing along the time axis rather than the content axis.
-
 ## What would settle it
 
 Deciding what a player should be able to reach with the network gone, then checking that the
@@ -61,6 +53,12 @@ someone who finishes on a commute and wants another, without unbounded growth.
 without limit.
 
 ## Findings
+
+**What this decides beyond itself.** Which client storage mechanism is used, and how much content is fetched ahead of time.
+[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+covers the shell; this covers the content. Also bears on
+[how long must offline play survive?](how-long-must-offline-play-survive.md), which asks the same
+thing along the time axis rather than the content axis.
 
 **A promise already made may decide this.** [../problem.md](../problem.md) describes play in
 tunnels and dead zones as the modal case rather than the edge case. Someone who finishes a puzzle

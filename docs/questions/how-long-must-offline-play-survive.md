@@ -16,10 +16,6 @@ ahead of time.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-how many puzzles are cached locally, the wording of the offline guarantee.
-
 ## What would settle it
 
 ...

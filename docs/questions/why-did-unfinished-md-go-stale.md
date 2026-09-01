@@ -21,10 +21,6 @@ file is next to depend on somebody remembering.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-Nothing. It is process work that makes other work more reliable.
-
 ## What would settle it
 
 Identifying what makes this file different from the ones that stay current, then binding it to a

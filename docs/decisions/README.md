@@ -61,10 +61,17 @@ Spending equal effort on both is the real waste.
 6. **Write down what would change your mind — before deciding.** Pre-committing to the
    disconfirming evidence blocks motivated reasoning, and it's what fills in **Revisit when**.
 
-**Decide one thing at a time.** A decision about how processes relate is not a decision about
-how modules are organised, and a decision about where something runs is not a decision about
-what it stores. Letting the second ride along inside the first is how a choice gets made
-without anyone noticing it was made, and without it ever being argued.
+**Decide one thing at a time — and look at everything while you do.** A decision about how
+processes relate is not a decision about how modules are organised, and a decision about where
+something runs is not a decision about what it stores. Letting the second ride along inside the
+first is how a choice gets made without anyone noticing it was made, and without it ever being
+argued.
+
+That is about what a record *settles*, not about what it *considers*, and the two pull in opposite
+directions if the difference is missed. A choice made without looking at what it forecloses
+elsewhere is narrow in the wrong way: one thing decided, several settled by consequence, none of
+them argued. Name what else the choice moves before recording it. Both halves are stated as
+standards in [../standards/decisions.md](../standards/decisions.md).
 
 **Familiarity is not a reason.** "I already know X" is a legitimate cost input, but it has to
 be stated as a cost of adopting Y — never smuggled in as a merit of X.

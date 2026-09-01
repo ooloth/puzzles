@@ -20,10 +20,6 @@ or makes it disappear.
 [ADR-0006](../decisions/0006-what-a-players-work-survives.md) settles that a signed-in player's work
 follows them, so this asks how that is done rather than whether it is wanted.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 ...

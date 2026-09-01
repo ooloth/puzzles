@@ -27,12 +27,6 @@ Nothing about that choice announces itself as a door closing.
 N/A — nothing needs to be answered first, though each door has its own question about whether it
 is wanted at all.
 
-## Blocks
-
-Nothing directly, and that is the point: it constrains *how* other decisions are made rather than
-gating them. It should be consulted by every decision record, which is why the answer belongs in
-[../decisions/README.md](../decisions/README.md) as a checklist rather than only in this folder.
-
 ## What would settle it
 
 Listing the futures worth preserving, and for each, naming the specific present decision that
@@ -55,6 +49,10 @@ deferring the rest defensible.
 N/A — this resolves into a list, not a choice between alternatives.
 
 ## Findings
+
+**What this decides beyond itself.** Nothing directly, and that is the point: it constrains *how* other decisions are made rather than
+gating them. It should be consulted by every decision record, which is why the answer belongs in
+[../decisions/README.md](../decisions/README.md) as a checklist rather than only in this folder.
 
 **Four doors are already named across existing docs, none of them here.**
 

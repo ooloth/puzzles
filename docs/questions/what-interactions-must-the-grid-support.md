@@ -23,11 +23,6 @@ judged against a grid that already works than in the abstract.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md), since keyboard navigation
-is both an interaction and an accessibility affordance.
-
 ## What would settle it
 
 Solving puzzles on paper and in existing apps, and noticing which interactions carry the

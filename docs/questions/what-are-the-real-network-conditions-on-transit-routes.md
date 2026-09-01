@@ -17,10 +17,6 @@ under-built.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 Carrying a phone on the actual commute with something logging.

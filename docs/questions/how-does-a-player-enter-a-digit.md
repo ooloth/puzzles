@@ -26,11 +26,6 @@ digits in different places.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[What latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md),
-since what has to happen within the budget depends on what an input is.
-
 ## What would settle it
 
 Building it and using it on a phone. This is a question where a day of solving on a real device

@@ -28,12 +28,6 @@ host; it does not need a runtime.
 N/A — settled. [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery,
 which is what gives this question its shape. Ready to work on now.
 
-## Blocks
-
-[What renders the client?](what-renders-the-client.md) and everything under it, plus
-[where does this run?](where-does-this-run.md), since a static bundle and a rendering server want
-different hosts.
-
 ## What would settle it
 
 Checking whether anything genuinely requires markup to be produced per request. Personalisation,
@@ -61,6 +55,10 @@ to happen on a bad connection.
 game.
 
 ## Findings
+
+**What this decides beyond itself.** [What renders the client?](what-renders-the-client.md) and everything under it, plus
+[where does this run?](where-does-this-run.md), since a static bundle and a rendering server want
+different hosts.
 
 **Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
 Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely

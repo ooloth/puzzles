@@ -22,12 +22,6 @@ machinery for a case that never does.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
-and [what does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md),
-both of which currently assume the answer is no.
-
 ## What would settle it
 
 Deciding whether it is *possible* and whether it is *supported*, which are different questions

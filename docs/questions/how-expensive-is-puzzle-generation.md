@@ -26,13 +26,6 @@ shape of the content pipeline.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md),
-[Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md),
-[Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md),
-[Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
-
 ## What would settle it
 
 Writing a generator for one variant in one language and timing it: fill, then clue removal with

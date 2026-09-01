@@ -21,13 +21,6 @@ rewriting the interface.
 N/A — nothing needs to be answered first, though a framework with a strongly implied toolchain
 would narrow it.
 
-## Blocks
-
-[How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md).
-This looked independent and is not: the tooling for generating a precache manifest exists for one
-toolchain and not the other, so the offline shell is downstream of this choice rather than beside
-it.
-
 ## What would settle it
 
 Measuring the thing the decision was made for: cold start, save-to-visible-result on a warm
@@ -52,6 +45,11 @@ Narrowed by the research below to Vite. Bun remains a live option for the parts 
 that are not the browser build, and those are separate choices.
 
 ## Findings
+
+**What this decides beyond itself.** [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md).
+This looked independent and is not: the tooling for generating a precache manifest exists for one
+toolchain and not the other, so the offline shell is downstream of this choice rather than beside
+it.
 
 Researched 2026-08-31, with Bun 1.4.0 released eleven days earlier.
 

@@ -16,10 +16,6 @@ complains.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-observability approach.
-
 ## What would settle it
 
 ...

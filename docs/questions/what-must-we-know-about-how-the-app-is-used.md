@@ -39,14 +39,6 @@ and fails the guard question in [../problem.md](../problem.md).
 is collecting behavioural data about players, and what may be collected is unresearched. Deciding
 to collect before knowing that is deciding it twice.
 
-## Blocks
-
-Which database, if any — see [what does the server hold?](what-does-the-server-hold.md) and
-[what does the server store, if anything?](what-does-the-server-store-if-anything.md). Also
-[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and
-[how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
-neither of which is answerable while this is open.
-
 ## What would settle it
 
 Naming the specific things that would change a decision if known, and discarding the rest. The
@@ -88,6 +80,12 @@ than analytics in machinery and more expensive in retention and privacy, since i
 per-player detail indefinitely rather than aggregating it away.
 
 ## Findings
+
+**What this decides beyond itself.** Which database, if any — see [what does the server hold?](what-does-the-server-hold.md) and
+[what does the server store, if anything?](what-does-the-server-store-if-anything.md). Also
+[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and
+[how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
+neither of which is answerable while this is open.
 
 **A privacy cost arrives with the third option, not the first.** An identifier that singles out a
 person is likely personal data even with no name attached, so anything per-player reaches

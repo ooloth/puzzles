@@ -22,13 +22,6 @@ that distinction concrete instead of rhetorical.
 [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) settled that the client holds state, but
 — the architecture decides whether one player input becomes one request or none.
 
-## Blocks
-
-[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md),
-[What does the server store, if anything?](what-does-the-server-store-if-anything.md),
-[Where does this run?](where-does-this-run.md),
-[What is the acceptable running cost?](what-is-the-acceptable-running-cost.md).
-
 ## What would settle it
 
 Picking a concurrent-player target, then deriving a request rate from it using the input rhythm

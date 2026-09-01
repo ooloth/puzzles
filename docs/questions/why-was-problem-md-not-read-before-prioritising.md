@@ -22,10 +22,6 @@ both easiest and most expensive.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-Nothing. It is process work that makes other work more reliable.
-
 ## What would settle it
 
 Identifying why the file was not reached, then making reaching it automatic for the class of task

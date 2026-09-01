@@ -15,11 +15,6 @@ exists, whether streaks make sense, and whether "today" needs timezone handling.
 
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
 
-## Blocks
-
-generation cadence, [is there a paid tier](is-there-a-paid-tier.md),
-[does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).
-
 ## What would settle it
 
 ...

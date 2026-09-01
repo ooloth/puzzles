@@ -16,10 +16,6 @@ are written down; neither yields.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-sync cadence, [how much unsynced work is acceptable](how-much-unsynced-work-is-acceptable.md).
-
 ## What would settle it
 
 ...

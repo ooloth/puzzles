@@ -18,10 +18,6 @@ of how little data moves.
 — worked alongside this rather than before it, since the two are one tradeoff seen from either end:
 how often to write, and what a write costs.
 
-## Blocks
-
-[how we would verify progress is never lost](how-would-we-verify-progress-is-never-lost.md).
-
 ## What would settle it
 
 ...

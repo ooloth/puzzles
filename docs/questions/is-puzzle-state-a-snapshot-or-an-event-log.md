@@ -16,10 +16,6 @@ to be reconciled.
 [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md),
 [Is undo in scope, and how far back](is-undo-in-scope-and-how-far-back.md).
 
-## Blocks
-
-[what happens to a losing write](what-happens-to-a-losing-write-when-syncing.md).
-
 ## What would settle it
 
 ...

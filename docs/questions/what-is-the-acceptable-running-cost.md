@@ -18,10 +18,6 @@ differently under a traffic spike.
 
 [What load should the server handle?](what-load-should-the-server-handle.md).
 
-## Blocks
-
-[where this runs](where-does-this-run.md).
-
 ## What would settle it
 
 ...

@@ -17,13 +17,6 @@ may be solving the wrong platform's problem.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
-which currently reasons entirely from Safari's behaviour. Also every promise in
-[../guarantees/durability.md](../guarantees/durability.md), none of which states which
-platforms it holds on.
-
 ## What would settle it
 
 Chrome's and Android's own storage documentation, then confirmation on a real device that the
@@ -44,5 +37,10 @@ constraint' conclusion."
 ...
 
 ## Findings
+
+**What this decides beyond itself.** [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
+which currently reasons entirely from Safari's behaviour. Also every promise in
+[../guarantees/durability.md](../guarantees/durability.md), none of which states which
+platforms it holds on.
 
 ...

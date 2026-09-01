@@ -16,10 +16,6 @@ explicitly, with a tolerable outage length attached, rather than discovered duri
 
 [Where does this run](where-does-this-run.md).
 
-## Blocks
-
-[where this runs](where-does-this-run.md).
-
 ## What would settle it
 
 ...

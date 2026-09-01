@@ -20,10 +20,6 @@ write requires two writers, so with one device this never arises. Also
 [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md), whose
 leading option is that no party arbitrates.
 
-## Blocks
-
-the exact wording of the durability guarantee.
-
 ## What would settle it
 
 ...

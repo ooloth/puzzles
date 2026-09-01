@@ -17,14 +17,6 @@ tier appears.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[are there user accounts](are-there-user-accounts.md),
-[is there a paid tier](is-there-a-paid-tier.md), and
-[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which proposes recording how puzzles are solved and cannot decide to collect anything before what
-may be collected is known.
-
 ## What would settle it
 
 ...
@@ -42,5 +34,11 @@ Ported from the legacy documentation review, 2026-08-30.
 N/A — this resolves into a fact, not a choice.
 
 ## Findings
+
+**What this decides beyond itself.** [are there user accounts](are-there-user-accounts.md),
+[is there a paid tier](is-there-a-paid-tier.md), and
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which proposes recording how puzzles are solved and cannot decide to collect anything before what
+may be collected is known.
 
 ...

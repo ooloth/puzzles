@@ -20,12 +20,6 @@ forbidden.
 [Does a server exist at all?](what-does-the-server-hold.md) — if the answer is no, this
 question closes rather than resolves.
 
-## Blocks
-
-[What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
-and [which database, if any?](which-database-if-any.md), since a store that never reads inside a
-value has a very short list of requirements.
-
 ## What would settle it
 
 The scope question above, then choosing between the options below against the two guarantees.
@@ -61,6 +55,10 @@ of reach whenever the server is unreachable — the condition the app exists for
 *Reject divergent state.* Forbidden by both guarantees above.
 
 ## Findings
+
+**What this decides beyond itself.** [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
+and [which database, if any?](which-database-if-any.md), since a store that never reads inside a
+value has a very short list of requirements.
 
 **Ordering is not arbitration.** A server may assign arrival order to writes without deciding
 whose play was right, and it is the only way to avoid depending on device clocks agreeing. It

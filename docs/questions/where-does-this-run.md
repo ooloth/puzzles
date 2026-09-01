@@ -22,12 +22,6 @@ and nothing else on the list changes the answer.
 Then [which database, if any?](which-database-if-any.md), since an embedded store narrows the field
 to platforms offering persistent local disk and a network-attached one does not.
 
-## Blocks
-
-[how much downtime is acceptable](how-much-downtime-is-acceptable.md),
-[what the acceptable running cost is](what-is-the-acceptable-running-cost.md), backup and
-recovery approach.
-
 ## What would settle it
 
 ...

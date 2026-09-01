@@ -19,10 +19,6 @@ the client holding state, settled by [ADR-0002](../decisions/0002-the-client-hol
 
 [What load should the server handle?](what-load-should-the-server-handle.md).
 
-## Blocks
-
-[where this runs](where-does-this-run.md).
-
 ## What would settle it
 
 ...

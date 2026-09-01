@@ -18,10 +18,6 @@ can be changed without touching markup.
 [What renders the client?](what-renders-the-client.md) — a rendering approach that ships a build
 pipeline anyway changes what a styling toolchain costs.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 Building the same non-trivial piece of the grid both ways and comparing what each costs to change

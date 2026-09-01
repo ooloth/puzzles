@@ -27,10 +27,6 @@ there are no modules yet — and answering it now would mean guessing at a tree 
 workspace support differs between runtimes and package managers, and one of them may make this
 choice for us.
 
-## Blocks
-
-Every other M1 question, since none of them can be scaffolded without somewhere to put the files.
-
 ## What would settle it
 
 Scaffolding it. This is a question where the smallest real attempt beats any amount of comparison:
@@ -65,6 +61,8 @@ breaks the one-implementation requirement in ADR-0004 by putting a publish step 
 and their consumers.
 
 ## Findings
+
+**What this decides beyond itself.** Every other M1 question, since none of them can be scaffolded without somewhere to put the files.
 
 **The number of consumers is what usually decides this, and here it is three across two runtimes.**
 The rules module is imported by the client, by the generator, and possibly by a server — see

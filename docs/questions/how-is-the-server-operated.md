@@ -25,11 +25,6 @@ down for a week.
 [Where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a bare
 virtual machine supplies none of it, so the size of this question is set by that one.
 
-## Blocks
-
-N/A directly, though [how much downtime is acceptable?](how-much-downtime-is-acceptable.md) is
-unanswerable in practice without it.
-
 ## What would settle it
 
 Naming, for each thing that can go wrong, what notices and what happens next. A monitor that runs on

@@ -20,13 +20,6 @@ rather than from behaviour.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-[Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
-and, less directly,
-[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md). Both are
-arguments about how often the wipe actually fires.
-
 ## What would settle it
 
 A real-device test is the only thing that would settle it, and it is slow rather than hard: a
@@ -51,6 +44,11 @@ harder rather than easier.
 N/A — this resolves into a fact, not a choice.
 
 ## Findings
+
+**What this decides beyond itself.** [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
+and, less directly,
+[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md). Both are
+arguments about how often the wipe actually fires.
 
 **The interaction half is answered and recorded in [../constraints.md](../constraints.md).** A
 tap, a click, a keystroke the page handles, an autofill, and an authentication all reset the

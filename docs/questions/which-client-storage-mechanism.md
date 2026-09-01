@@ -28,11 +28,6 @@ work at what the browser keeps and a signed-in player's at indefinitely, and req
 record shape so signing in promotes rather than converts. That shape requirement is a constraint on
 any answer here.
 
-## Blocks
-
-[Which database, if any?](which-database-if-any.md) in part — if the client format is a blob the
-server never reads, the server's store barely matters.
-
 ## What would settle it
 
 The three answers above, then a table of the candidates against them: how much each holds, whether
@@ -103,6 +98,9 @@ maintenance activity, measured bundle size, whether the sync backend is self-hos
 service, the licence, and whether event sourcing is required or merely idiomatic.
 
 ## Findings
+
+**What this decides beyond itself.** [Which database, if any?](which-database-if-any.md) in part — if the client format is a blob the
+server never reads, the server's store barely matters.
 
 **A library is a separate and much smaller decision.** Whether to use `idb`, Dexie or nothing over
 the chosen API is contained behind a persistence module and cheap to reverse, so it does not need

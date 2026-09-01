@@ -19,12 +19,6 @@ lost — can be kept at all, for reasons that turn out to have little to do with
 how often a player returns decides whether browser storage is ever evicted, which is most of what
 this question turns on.
 
-## Blocks
-
-[Are there user accounts?](are-there-user-accounts.md),
-[How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md),
-[What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md),
-
 ## What would settle it
 
 Two things, and the first is research rather than judgement.

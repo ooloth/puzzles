@@ -26,12 +26,6 @@ question about what renders in a browser.
 Still [is the client served as static files?](is-the-client-served-as-static-files.md), which
 decides whether server rendering is in the field at all.
 
-## Blocks
-
-[What builds and serves the client?](what-provides-the-build-and-dev-server.md),
-[how is the app styled?](how-is-the-app-styled.md) and
-[how is the codebase laid out?](how-is-the-codebase-laid-out.md).
-
 ## What would settle it
 
 Building the same non-trivial piece of the grid two ways — a cell that takes a digit, shows

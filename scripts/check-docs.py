@@ -24,6 +24,26 @@ for root, dirs, files in os.walk('docs'):
                 print(f'BROKEN LINK  {p} -> {l}')
                 bad += 1
 
+def blocked_by(fname):
+    m = re.search(r'## Blocked by\n(.*?)\n## ', open(os.path.join(QDIR, fname)).read(), re.S)
+    if not m:
+        return []
+    return [d for d in re.findall(r'\]\(([^)#][^)]*\.md)\)', m.group(1)) if not d.startswith('..')]
+
+
+if '--blocks' in sys.argv:
+    # The inverse of every Blocked by list. Derived, so it cannot go stale.
+    inverse = {}
+    for f in sorted(os.listdir(QDIR)):
+        if f.endswith('.md') and f != 'README.md':
+            for dep in blocked_by(f):
+                inverse.setdefault(dep, []).append(f)
+    for dep in sorted(inverse):
+        print(f'{dep} blocks:')
+        for f in sorted(inverse[dep]):
+            print(f'    {f}')
+    sys.exit(0)
+
 readme = open(os.path.join(QDIR, 'README.md')).read()
 milestone, order, cur = {}, [], None
 for line in readme.split('\n'):

@@ -16,12 +16,6 @@ something the product actually does.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-What the solver has to be able to explain, not merely decide. Also the bundle cost accepted in
-[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md): until hints ship, the
-client carries solving code it does not run.
-
 ## What would settle it
 
 ...
@@ -39,6 +33,10 @@ Ported from the legacy documentation review, 2026-08-30.
 ...
 
 ## Findings
+
+**What this decides beyond itself.** What the solver has to be able to explain, not merely decide. Also the bundle cost accepted in
+[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md): until hints ship, the
+client carries solving code it does not run.
 
 **The maintainer intends to ship hints, after the core solving interface is solid.** This is a
 statement of intent rather than a decision: it settles that hints are wanted, not which techniques

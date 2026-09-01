@@ -16,10 +16,6 @@ a second game actually exists to generalise from.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 ...

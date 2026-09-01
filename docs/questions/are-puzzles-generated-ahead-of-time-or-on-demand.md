@@ -24,11 +24,6 @@ reasoning, while several arguments already lean on generation being batch work n
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md) — if generation is
 genuinely cheap, on demand stays viable and the question is open; if it isn't, it settles itself.
 
-## Blocks
-
-[Where does this run?](where-does-this-run.md),
-[What does the server store, if anything?](what-does-the-server-store-if-anything.md).
-
 ## What would settle it
 
 The cost question above, plus whether the product model needs an unbounded supply of distinct

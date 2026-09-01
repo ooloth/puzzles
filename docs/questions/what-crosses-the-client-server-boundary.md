@@ -25,14 +25,6 @@ while the app is on screen**, fire-and-forget.
 that defines. Also [what does the server hold?](what-does-the-server-hold.md), since what it holds is what has
 to reach it.
 
-## Blocks
-
-[Which database, if any?](which-database-if-any.md),
-[what runs the server?](what-runs-the-server-if-there-is-one.md),
-[what load should the server handle?](what-load-should-the-server-handle.md), and
-[how much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md), which is a
-question about how often this happens.
-
 ## What would settle it
 
 Listing each thing that moves, its direction, its trigger, and its size. A player makes an input

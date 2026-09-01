@@ -17,10 +17,6 @@ wrong is worse than a slower answer at move one.
 
 N/A — nothing needs to be answered first.
 
-## Blocks
-
-the priority ranking in `problem.md`, validation architecture.
-
 ## What would settle it
 
 ...

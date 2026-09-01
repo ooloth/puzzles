@@ -25,11 +25,6 @@ player might start next are another.
 the list of files to precache is produced by the build and only one candidate toolchain can
 produce it.
 
-## Blocks
-
-N/A — nothing waits on this, but the offline guarantee has no enforcement path until it is
-answered.
-
 ## What would settle it
 
 Deciding what must be present before a player goes offline, then choosing a mechanism that puts

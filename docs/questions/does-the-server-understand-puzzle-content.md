@@ -29,13 +29,6 @@ hard part is.
 [What does the server hold?](what-does-the-server-hold.md) — what the server holds bounds
 what it could check.
 
-## Blocks
-
-[What runs the server?](what-runs-the-server-if-there-is-one.md),
-[which database, if any?](which-database-if-any.md), and
-[what does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md), which
-describes validation and merging without this having been settled.
-
 ## What would settle it
 
 Naming what the server would *do* with a rejection, and what the client would do with it in turn.

@@ -16,11 +16,6 @@ without one.
 [Do privacy regulations apply?](do-privacy-regulations-apply.md) — an account is a person, and
 what may be held about one is unresearched.
 
-## Blocks
-
-[is there a paid tier](is-there-a-paid-tier.md),
-[do privacy regulations apply](do-privacy-regulations-apply.md).
-
 ## What would settle it
 
 ...

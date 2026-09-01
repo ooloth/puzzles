@@ -22,10 +22,6 @@ and it is not blocking anything, because there are no modules yet.
 [what renders the client?](what-renders-the-client.md). Mostly, though, it waits on there being
 enough code for the shape of it to be visible.
 
-## Blocks
-
-N/A — nothing waits on this.
-
 ## What would settle it
 
 ...

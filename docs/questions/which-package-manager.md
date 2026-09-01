@@ -16,10 +16,6 @@ typing whatever came to mind, and because two of its failure modes are quiet rat
 N/A — nothing needs to be answered first. It is answerable today and reversible cheaply, which is
 the argument for not spending long on it.
 
-## Blocks
-
-Nothing.
-
 ## What would settle it
 
 Install speed matters least. What matters is whether the lockfile stays readable to whatever

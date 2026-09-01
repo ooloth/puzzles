@@ -21,10 +21,6 @@ together leave little for this to decide. What the server holds — there may be
 which case this closes. Then [which database, if any?](which-database-if-any.md), because a
 runtime that cannot reach the chosen store is disqualified.
 
-## Blocks
-
-[Where does this run?](where-does-this-run.md).
-
 ## What would settle it
 
 Very little, once the two questions above land. The one criterion worth applying deliberately is

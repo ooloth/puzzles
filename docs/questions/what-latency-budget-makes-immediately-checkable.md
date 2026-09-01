@@ -17,10 +17,6 @@ paint — on a named reference device rather than on whatever the developer hold
 [How does a player enter a digit?](how-does-a-player-enter-a-digit.md) — the budget covers the
 input path, and what an input is comes first.
 
-## Blocks
-
-the enforcement column for the responsiveness guarantees, performance testing setup.
-
 ## What would settle it
 
 ...

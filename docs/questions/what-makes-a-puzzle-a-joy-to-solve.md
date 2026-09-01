@@ -24,16 +24,6 @@ Nothing on the road to a tech stack waits on this.
 
 [Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).
 
-## Blocks
-
-[is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md), and through it
-[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md).
-That path is what puts this question in the chain deciding whether a database exists.
-
-[Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md) is a
-prerequisite of this question, not a dependent: a seeded launch set and a generated one need
-different answers to what makes a puzzle good.
-
 ## What would settle it
 
 Probably by solving a lot of puzzles and noticing what separates the good ones, rather than by
@@ -54,6 +44,14 @@ Finding drawn from legacy ADR-22 (seed sudoku puzzles statically).
 ...
 
 ## Findings
+
+**What this decides beyond itself.** [is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md), and through it
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md).
+That path is what puts this question in the chain deciding whether a database exists.
+
+[Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md) is a
+prerequisite of this question, not a dependent: a seeded launch set and a generated one need
+different answers to what makes a puzzle good.
 
 One concrete component, from a library evaluation that rejected a candidate partly for lacking
 it: **symmetric clue removal.** Where the given cells sit in a symmetric pattern rather than

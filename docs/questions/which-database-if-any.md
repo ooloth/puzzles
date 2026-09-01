@@ -23,11 +23,6 @@ silently.
 embedded store needs a long-lived process with a local disk, so that answer sets the class before
 this one picks a member.
 
-## Blocks
-
-[Where does this run?](where-does-this-run.md), since a database with a local file rules out
-several hosts outright.
-
 ## What would settle it
 
 Writing down the actual access patterns — every read and every write the server performs, with

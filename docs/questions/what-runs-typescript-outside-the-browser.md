@@ -30,15 +30,6 @@ which is why it sits ahead of the questions it would otherwise derive from.
 N/A — [ADR-0005](../decisions/0005-typescript-across-every-deployable.md) settled the language, and
 nothing else is required. Ready to work on now.
 
-## Blocks
-
-[Which package manager?](which-package-manager.md),
-[what runs the tests?](what-runs-the-tests.md),
-[what runs the server?](what-runs-the-server-if-there-is-one.md),
-[where does this run?](where-does-this-run.md), and
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md). Some of those it
-may answer outright rather than merely constrain.
-
 ## What would settle it
 
 Scaffolding a hello-world under each candidate and running the actual loop — install, typecheck,

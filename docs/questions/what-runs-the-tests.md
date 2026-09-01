@@ -21,10 +21,6 @@ pointer input, in something that behaves enough like a browser to be worth trust
 [What provides the build and dev server?](what-provides-the-build-and-dev-server.md) — a runner
 that shares the build's transform pipeline avoids maintaining a second one.
 
-## Blocks
-
-[What runs the checks on every change?](what-runs-the-checks-on-every-change.md).
-
 ## What would settle it
 
 Running the two shapes of test that matter — a pure module with branch coverage, and a rendered

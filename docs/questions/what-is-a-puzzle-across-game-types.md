@@ -31,14 +31,6 @@ as a model that fits either.
 N/A — nothing needs to be answered first, and it does not block scaffolding. The shells can be
 stood up and the model experimented with inside them.
 
-## Blocks
-
-[Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) and
-[what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md), both of
-which describe the movement of something this defines. Also
-[which client storage mechanism?](which-client-storage-mechanism.md), whose volume and shape inputs
-come from here.
-
 ## What would settle it
 
 Writing the representation for sudoku and for star battle, and seeing what is genuinely shared
@@ -71,5 +63,11 @@ carries identity, type and versioning. Storage and transport are generic, the do
 migration it risks is the expensive one named above.
 
 ## Findings
+
+**What this decides beyond itself.** [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) and
+[what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md), both of
+which describe the movement of something this defines. Also
+[which client storage mechanism?](which-client-storage-mechanism.md), whose volume and shape inputs
+come from here.
 
 **Nothing is recorded yet.** The representation has never been written down in any form.

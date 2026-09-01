@@ -13,10 +13,6 @@ is asserted from first principles plus one precedent borrowed from a task manage
 mainstream puzzle apps already handle tunnels well, the offline work is table stakes rather
 than a differentiator — and something else has to carry the product.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 An hour with a few of the popular apps and aeroplane mode.

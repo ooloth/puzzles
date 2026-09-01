@@ -13,10 +13,6 @@ would contradict is exactly the failure that hurts most here: a late error inval
 reasoning a player has already built on top of it. Being told at move three that move one was
 wrong is worse than a slower answer at move one.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

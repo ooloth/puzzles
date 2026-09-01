@@ -30,10 +30,6 @@ alive under Safari's first-party test — see [../constraints.md](../constraints
 client lives and where the API lives are one choice, made once. Getting it wrong is not a redeploy;
 it is a redeploy plus whichever of the three above has to move with it.
 
-## Blocked by
-
-N/A — its inputs are settled. Ready to work on now.
-
 ## What would settle it
 
 Naming what the server must do between requests, and what it must keep. Everything else follows.

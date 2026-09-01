@@ -19,12 +19,6 @@ nothing waits on one. And [../constraints.md](../constraints.md) records that iO
 background execution and no reliable session-end hook, so **the only moment anything can be sent is
 while the app is on screen**, fire-and-forget.
 
-## Blocked by
-
-[What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — this moves whatever
-that defines. Also [what does the server hold?](what-does-the-server-hold.md), since what it holds is what has
-to reach it.
-
 ## What would settle it
 
 Listing each thing that moves, its direction, its trigger, and its size. A player makes an input

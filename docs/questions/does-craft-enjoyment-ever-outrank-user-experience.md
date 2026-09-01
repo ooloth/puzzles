@@ -12,10 +12,6 @@ Enjoying the build is a legitimate and stated motive for this project. It's also
 motive that quietly justifies technical choices on other grounds. Better answered openly, once,
 than smuggled into individual decisions as a performance or architecture argument.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

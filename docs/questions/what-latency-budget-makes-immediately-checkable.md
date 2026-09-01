@@ -12,11 +12,6 @@ The most important guarantee in the product is currently unmeasurable, so it can
 and can't be regressed against. It needs a number and a measurement point — input event to
 paint — on a named reference device rather than on whatever the developer holds.
 
-## Blocked by
-
-[How does a player enter a digit?](how-does-a-player-enter-a-digit.md) — the budget covers the
-input path, and what an input is comes first.
-
 ## What would settle it
 
 ...

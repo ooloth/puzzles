@@ -12,14 +12,6 @@ If cross-device resume is in scope and accounts are not, this needs an answer no
 proposed yet. Anything anchored solely in browser-controlled storage is disposable by both the
 browser and the user.
 
-## Blocked by
-
-[Are there user accounts?](are-there-user-accounts.md) — the mechanism chosen there answers this,
-or makes it disappear.
-
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) settles that a signed-in player's work
-follows them, so this asks how that is done rather than whether it is wanted.
-
 ## What would settle it
 
 ...

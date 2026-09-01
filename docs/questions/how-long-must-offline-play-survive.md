@@ -12,10 +12,6 @@ resolves_into: decision
 changes the design substantially — particularly how much content has to be available locally
 ahead of time.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

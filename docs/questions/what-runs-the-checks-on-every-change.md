@@ -16,12 +16,6 @@ standard and a good intention.
 
 [../verification.md](../verification.md) is currently a stub. Whatever answers this fills it.
 
-## Blocked by
-
-[What runs the tests?](what-runs-the-tests.md), and
-[what provides the build and dev server?](what-provides-the-build-and-dev-server.md), since the
-checks are mostly those two invoked non-interactively.
-
 ## What would settle it
 
 Listing what must hold before a change is committed, then deciding which of those a machine can

@@ -17,10 +17,6 @@ misleading them.
 That is worth analysing rather than just fixing, because the same failure will recur in whichever
 file is next to depend on somebody remembering.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Identifying what makes this file different from the ones that stay current, then binding it to a

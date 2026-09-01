@@ -20,10 +20,6 @@ finished and still produce puzzles nobody enjoys.
 generator is built with follows from the shared language — see the order in [README.md](README.md).
 Nothing on the road to a tech stack waits on this.
 
-## Blocked by
-
-[Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).
-
 ## What would settle it
 
 Probably by solving a lot of puzzles and noticing what separates the good ones, rather than by

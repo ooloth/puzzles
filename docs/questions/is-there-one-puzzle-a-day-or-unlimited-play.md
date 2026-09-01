@@ -11,10 +11,6 @@ resolves_into: decision
 Two genuinely different products. It changes what the generator is for, whether an archive
 exists, whether streaks make sense, and whether "today" needs timezone handling.
 
-## Blocked by
-
-[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
-
 ## What would settle it
 
 ...

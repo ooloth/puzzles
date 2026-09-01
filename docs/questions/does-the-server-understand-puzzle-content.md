@@ -24,11 +24,6 @@ server's language only if it needs them. Whether the database has a schema descr
 column holding bytes. And what the client does when the server disagrees with it, which is where the
 hard part is.
 
-## Blocked by
-
-[What does the server hold?](what-does-the-server-hold.md) — what the server holds bounds
-what it could check.
-
 ## What would settle it
 
 Naming what the server would *do* with a rejection, and what the client would do with it in turn.

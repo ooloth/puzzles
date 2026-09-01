@@ -11,10 +11,6 @@ resolves_into: decision
 Never mentioned in any prior document. Grid puzzles have real keyboard navigation and
 screen-reader design questions, and retrofitting them is expensive. Silence is not a decision.
 
-## Blocked by
-
-[What interactions must the grid support?](what-interactions-must-the-grid-support.md).
-
 ## What would settle it
 
 ...

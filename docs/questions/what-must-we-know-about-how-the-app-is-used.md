@@ -28,17 +28,6 @@ currently enforced by nothing; whether that is being kept is a usage question, a
 [how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) has no
 answer without one.
 
-## Blocked by
-
-[Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
-— the strongest demand here is calibrating the generator against real solves, and that demand only
-exists if a grade promises the player something. If it promises nothing, calibration is curiosity
-and fails the guard question in [../problem.md](../problem.md).
-
-[Do privacy regulations apply?](do-privacy-regulations-apply.md) — recording how puzzles are solved
-is collecting behavioural data about players, and what may be collected is unresearched. Deciding
-to collect before knowing that is deciding it twice.
-
 ## What would settle it
 
 Naming the specific things that would change a decision if known, and discarding the rest. The

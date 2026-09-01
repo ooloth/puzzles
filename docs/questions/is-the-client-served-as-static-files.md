@@ -23,11 +23,6 @@ It also decides whether a server is needed for *delivery* at all, which is a sep
 whether one is needed for [storage](what-does-the-server-hold.md). A static bundle needs a file
 host; it does not need a runtime.
 
-## Blocked by
-
-N/A — settled. [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery,
-which is what gives this question its shape. Ready to work on now.
-
 ## What would settle it
 
 Checking whether anything genuinely requires markup to be produced per request. Personalisation,

@@ -19,11 +19,6 @@ inside the server is part of the same decision.
 Currently assumed rather than decided. Nothing in the documentation records the choice or its
 reasoning, while several arguments already lean on generation being batch work nobody waits on.
 
-## Blocked by
-
-[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md) — if generation is
-genuinely cheap, on demand stays viable and the question is open; if it isn't, it settles itself.
-
 ## What would settle it
 
 The cost question above, plus whether the product model needs an unbounded supply of distinct

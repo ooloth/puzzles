@@ -16,18 +16,6 @@ A guest has no copy anywhere to restore from if that goes wrong.
 Nothing has chosen a mechanism. IndexedDB is the reflex answer and gets named in passing often
 enough to look settled.
 
-## Blocked by
-
-Volume, shape and lifetime, in that order, and all three are open.
-
-[What can a player do with no network?](what-can-a-player-do-with-no-network.md) sets volume, and
-the range is orders of magnitude. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
-and [is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md) set shape.
-Lifetime is settled: [ADR-0006](../decisions/0006-what-a-players-work-survives.md) bounds a guest's
-work at what the browser keeps and a signed-in player's at indefinitely, and requires both to be one
-record shape so signing in promotes rather than converts. That shape requirement is a constraint on
-any answer here.
-
 ## What would settle it
 
 The three answers above, then a table of the candidates against them: how much each holds, whether

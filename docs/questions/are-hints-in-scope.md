@@ -12,10 +12,6 @@ A technique-aware hint system — naked singles, hidden pairs, X-wing — has be
 passing and even used as an argument in stack discussions, but has never been stated as
 something the product actually does.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

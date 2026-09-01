@@ -17,12 +17,6 @@ service does not, but bills monthly and adds a network hop. That choice interact
 topology trap recorded in [../constraints.md](../constraints.md), which is a door that closes
 silently.
 
-## Blocked by
-
-[What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — an
-embedded store needs a long-lived process with a local disk, so that answer sets the class before
-this one picks a member.
-
 ## What would settle it
 
 Writing down the actual access patterns — every read and every write the server performs, with

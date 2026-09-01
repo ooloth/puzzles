@@ -18,10 +18,6 @@ The cost was several rounds of work and a diagram that was structurally upside-d
 worth naming, because prioritisation is exactly the task where skipping the problem statement is
 both easiest and most expensive.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Identifying why the file was not reached, then making reaching it automatic for the class of task

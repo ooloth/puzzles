@@ -18,10 +18,6 @@ The gap in cost is large enough that assuming the answer either way is expensive
 means shipping a merge that silently mangles a case that does happen. Assuming yes means building
 machinery for a case that never does.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Deciding whether it is *possible* and whether it is *supported*, which are different questions

@@ -16,10 +16,6 @@ WebKit's source says thirty and Apple's documentation says seven. Until a device
 describes the shipped browser, every durability argument rests on a figure taken from source code
 rather than from behaviour.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 A real-device test is the only thing that would settle it, and it is slow rather than hard: a

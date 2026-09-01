@@ -11,10 +11,6 @@ resolves_into: decision
 Undo appears as an assumed input and as a side benefit of a data model, but never as a
 requirement. Unlimited undo constrains the state model; shallow undo doesn't.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

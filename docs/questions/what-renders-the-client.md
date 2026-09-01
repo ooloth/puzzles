@@ -17,15 +17,6 @@ This asks both halves at once — framework, minimal library or neither, **and w
 downstream turns on answering the class alone, and scaffolding needs the member, so separating them
 would mean deciding the same thing twice.
 
-## Blocked by
-
-The platform half is settled:
-[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery, so this is a
-question about what renders in a browser.
-
-Still [is the client served as static files?](is-the-client-served-as-static-files.md), which
-decides whether server rendering is in the field at all.
-
 ## What would settle it
 
 Building the same non-trivial piece of the grid two ways — a cell that takes a digit, shows

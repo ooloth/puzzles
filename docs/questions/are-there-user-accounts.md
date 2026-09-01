@@ -11,11 +11,6 @@ resolves_into: decision
 Progress is currently promised without one. Cross-device resume may be impossible to do well
 without one.
 
-## Blocked by
-
-[Do privacy regulations apply?](do-privacy-regulations-apply.md) — an account is a person, and
-what may be held about one is unresearched.
-
 ## What would settle it
 
 ...

@@ -22,10 +22,6 @@ generator is an accepted cost rather than a reason to add a second language, so
 without this. What it does gate is whether puzzles are produced on demand or ahead of time, and the
 shape of the content pipeline.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Writing a generator for one variant in one language and timing it: fill, then clue removal with

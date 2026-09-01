@@ -17,14 +17,6 @@ false no matter where state lives.
 It also decides what "already on the device" covers. The interface is one thing; the puzzles a
 player might start next are another.
 
-## Blocked by
-
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md)
-— a design that needs the network for every interaction has nothing to cache. Also
-[what provides the build and dev server?](what-provides-the-build-and-dev-server.md), because
-the list of files to precache is produced by the build and only one candidate toolchain can
-produce it.
-
 ## What would settle it
 
 Deciding what must be present before a player goes offline, then choosing a mechanism that puts

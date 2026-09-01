@@ -43,11 +43,20 @@ information and the most guessing. Splitting is cheap; a decision made a milesto
 The test is whether every part of the answer is needed to see the milestone working. If not, split
 it.
 
-**The grouping is checkable, and checked.** `scripts/check-docs.py` reports three things: broken
-links, a question in no milestone, and a question blocked by one filed later. That last is the
-error worth catching — it means either the milestone is wrong or the dependency is overstated, and
-a decision taken on top of it inherits the mistake. Twenty-two of them existed when the check was
-first written, including a first-milestone question blocked by five later ones.
+**Sequencing lives here and only here.** A question file says what the question is, what would
+settle it, and what has been found out. It does not say what it depends on. Ordering is a
+whole-system judgement, and a single question file has no view of the system — sixty-six files each
+holding a fragment of one graph produced a first milestone whose hosting question waited on five
+later ones, and nobody noticed because noticing would have meant re-reading all of them.
+
+**So work out the order yourself rather than inheriting it.** The grouping below is the current
+best answer and is worth arguing with. If it looks wrong, it may be wrong: say so and change it
+here, where the whole picture is visible.
+
+`scripts/check-docs.py` checks the two things that are facts rather than judgement — every link
+resolves, and every question appears in exactly one milestone. It deliberately does not check the
+ordering, because the ordering is the judgement and a check that passed it would only make a wrong
+sequence look verified.
 
 **Prefer prototyping to predicting.** Where a question could be settled by building the smallest
 throwaway thing that answers it, that is what "what would settle it" should say. This folder has a
@@ -98,7 +107,8 @@ text.
 
 - [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
   to render one. The full answer is not needed until M5.
-- [How is the app styled?](how-is-the-app-styled.md)
+- [How is the app styled?](how-is-the-app-styled.md) — after the renderer, since a rendering
+  approach that ships a build pipeline anyway changes what a styling toolchain costs.
 - [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — module organisation, once there
   are modules to organise.
 
@@ -108,6 +118,7 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 
 - [How does a player enter a digit?](how-does-a-player-enter-a-digit.md)
 - [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
+  — after the above, since the budget covers the input path and what an input is comes first.
 
 ## M4 — the board survives a reload
 
@@ -142,6 +153,8 @@ Not a hard-coded board. Something published, fetched and rendered.
 ## M7 — it works with no network
 
 - [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+  — this looked independent of the build tool and is not: the precache list is a build output, and
+  only one candidate toolchain can produce it. So it waits on M1's build choice.
 - [How long must offline play survive?](how-long-must-offline-play-survive.md)
 - [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
 
@@ -169,7 +182,8 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 - [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md)
 - [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
 - [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
-- [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
+- [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) —
+  a losing write needs two writers, so this does not arise until the two above are answered.
 - [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
 - [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
 - [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
@@ -184,7 +198,8 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 - [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
 - [What load should the server handle?](what-load-should-the-server-handle.md)
 - [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
-- [How is the server operated?](how-is-the-server-operated.md)
+- [How is the server operated?](how-is-the-server-operated.md) — its size is set entirely by M1's
+  hosting choice: a managed platform supplies most of this and a bare machine supplies none of it.
 
 ## Blocking nothing yet
 
@@ -214,7 +229,7 @@ by choices made in areas that look unrelated.
 
 ## What goes in a question file
 
-Seven sections, in a fixed order. **Every section stays**, with `...` where nothing has been
+Six sections, in a fixed order. **Every section stays**, with `...` where nothing has been
 recorded yet — the empty ones are the reminder of what hasn't been thought about.
 
 `...` and `N/A` mean different things. `...` means nobody has looked. `N/A` means someone
@@ -231,13 +246,14 @@ Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `con
 research backlog, and everything resolving into a decision is a choice waiting to be made.
 
 The first six sections are stable and short. **Why it matters** is what's blocked or what gets
-expensive if we're wrong. **Blocked by** names what genuinely has to be answered first, and why — blockers only. Anything
-that merely bears on the question goes under **Findings**, because a Blocked by that lists
-everything related is how a question ends up appearing to wait on things it does not.
+expensive if we're wrong. **There are no Blocked by or Blocks sections.** A per-file dependency list is one graph held in
+sixty-six places, each of which sees a sliver of it. It goes stale invisibly — noticing requires
+re-reading everything around it — and it is trusted precisely because it reads as a fact rather
+than as the judgement it is. The milestone grouping above holds the same information where every
+sequencing claim sits beside the others and one file can be checked against itself.
 
-There is no **Blocks** section. It was the same graph written backwards, maintained by hand in two
-places, and it went stale. `scripts/check-docs.py --blocks` derives it from the Blocked by lists
-instead, so it is always correct and never edited.
+A question that genuinely cannot be worked until another is answered says so under **What would
+settle it**, in prose, as part of describing what an answer requires.
 **What would settle it** is the evidence, measurement, or event that would end the question — not
 another question, which is what *blocked by* is for. **Resolves into** names where the answer
 lands. **Source** records where the question came from, so provenance survives the deletion of
@@ -264,10 +280,6 @@ question that was split says what it no longer covers so a reader does not go lo
 # <The question, asked in plain words?>
 
 ## Why it matters
-
-...
-
-## Blocked by
 
 ...
 

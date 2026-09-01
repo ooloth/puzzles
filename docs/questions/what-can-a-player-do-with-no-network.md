@@ -19,10 +19,6 @@ catalogue is megabytes and needs prefetching, eviction policy, and a rule for wh
 storage-mechanism argument made so far has quietly assumed the small reading, which is why
 `localStorage` looked viable — that was a claim about one board, not about a catalogue.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Deciding what a player should be able to reach with the network gone, then checking that the

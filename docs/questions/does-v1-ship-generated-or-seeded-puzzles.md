@@ -15,10 +15,6 @@ set needs its own validation, because nothing generated it.
 generator is built with follows from the shared language — see the order in [README.md](README.md).
 Nothing on the road to a tech stack waits on this.
 
-## Blocked by
-
-[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).
-
 ## What would settle it
 
 ...

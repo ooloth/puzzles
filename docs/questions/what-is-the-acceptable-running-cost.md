@@ -12,12 +12,6 @@ Currently stated as not wanting to lose much money on this, which is a direction
 number. A ceiling changes which platforms qualify; a preference doesn't. The two behave very
 differently under a traffic spike.
 
-## Blocked by
-
-[Where does this run](where-does-this-run.md).
-
-[What load should the server handle?](what-load-should-the-server-handle.md).
-
 ## What would settle it
 
 ...

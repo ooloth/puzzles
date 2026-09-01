@@ -25,11 +25,6 @@ unevenly.
 **It is the thing blocking scaffolding.** Nothing can be installed or run until it is answered,
 which is why it sits ahead of the questions it would otherwise derive from.
 
-## Blocked by
-
-N/A — [ADR-0005](../decisions/0005-typescript-across-every-deployable.md) settled the language, and
-nothing else is required. Ready to work on now.
-
 ## What would settle it
 
 Scaffolding a hello-world under each candidate and running the actual loop — install, typecheck,

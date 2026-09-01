@@ -12,10 +12,6 @@ Infrequent, batched network activity is the stated preference, because radios ar
 wake regardless of payload size. Bounding worst-case unsynced work pushes the other way. Both
 are written down; neither yields.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

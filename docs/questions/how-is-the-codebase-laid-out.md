@@ -16,12 +16,6 @@ answer "where would I find X" without knowing which technical layer X lives in.
 scaffolding and is answered separately. What is left here is the tree inside whatever that decides,
 and it is not blocking anything, because there are no modules yet.
 
-## Blocked by
-
-[What is the repo's top-level shape?](what-is-the-repos-top-level-shape.md) and
-[what renders the client?](what-renders-the-client.md). Mostly, though, it waits on there being
-enough code for the shape of it to be visible.
-
 ## What would settle it
 
 ...

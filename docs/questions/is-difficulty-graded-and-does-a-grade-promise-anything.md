@@ -16,10 +16,6 @@ needs a difficulty model, not just a solver.
 generator is built with follows from the shared language — see the order in [README.md](README.md).
 Nothing on the road to a tech stack waits on this.
 
-## Blocked by
-
-[What makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md).
-
 ## What would settle it
 
 ...

@@ -24,13 +24,6 @@ be said to validate something it was never established to hold.
 An enumeration here that leaves a candidate out settles the question by omission, and reads as
 complete while doing it. The list under Options is the full set, and it is kept full.
 
-## Blocked by
-
-N/A — settled, and the answer forces this one's hand.
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) promises that a signed-in player's
-work survives on every device they use, which cannot be delivered by a device. So a server exists,
-and what is live here is what it does rather than whether it is there. Ready to work on now.
-
 ## What would settle it
 
 Testing every candidate under Options against the same pair of questions: could the device hold

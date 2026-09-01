@@ -19,10 +19,6 @@ milestone. What is left here — pencil notes, undo, drag-select, keyboard navig
 highlighting — is what makes solving pleasant rather than possible, and every one of them is better
 judged against a grid that already works than in the abstract.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Solving puzzles on paper and in existing apps, and noticing which interactions carry the

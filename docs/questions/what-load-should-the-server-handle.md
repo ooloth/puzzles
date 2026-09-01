@@ -17,11 +17,6 @@ above some level of concurrency; latency at the tail is what a player experience
 because they feel the slow request rather than the average one. Choosing a target is what makes
 that distinction concrete instead of rhetorical.
 
-## Blocked by
-
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) settled that the client holds state, but
-— the architecture decides whether one player input becomes one request or none.
-
 ## What would settle it
 
 Picking a concurrent-player target, then deriving a request rate from it using the input rhythm

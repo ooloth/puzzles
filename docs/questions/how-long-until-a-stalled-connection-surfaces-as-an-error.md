@@ -12,10 +12,6 @@ A connection that is nominally up but stalled is the modal failure in a tunnel, 
 one most network code handles worst — retry logic typically fires on a thrown error, which a
 silent stall never produces. No timeout figure exists anywhere.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Measurement on a real device on a real degraded link.

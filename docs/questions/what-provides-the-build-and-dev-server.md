@@ -16,11 +16,6 @@ It is a separate question from which framework, because the two are less coupled
 most frameworks run under several toolchains, and a toolchain choice can be revisited without
 rewriting the interface.
 
-## Blocked by
-
-N/A — nothing needs to be answered first, though a framework with a strongly implied toolchain
-would narrow it.
-
 ## What would settle it
 
 Measuring the thing the decision was made for: cold start, save-to-visible-result on a warm

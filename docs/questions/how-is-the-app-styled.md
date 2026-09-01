@@ -13,11 +13,6 @@ colour and type, and that scale either comes from somewhere or gets invented one
 The choice also decides whether a build step exists purely for CSS, and how much of the interface
 can be changed without touching markup.
 
-## Blocked by
-
-[What renders the client?](what-renders-the-client.md) — a rendering approach that ships a build
-pipeline anyway changes what a styling toolchain costs.
-
 ## What would settle it
 
 Building the same non-trivial piece of the grid both ways and comparing what each costs to change

@@ -16,11 +16,6 @@ the wrong instrument regardless of how fast it is.
 The interface half has a different requirement: an 81-cell grid, exercised through keyboard and
 pointer input, in something that behaves enough like a browser to be worth trusting.
 
-## Blocked by
-
-[What provides the build and dev server?](what-provides-the-build-and-dev-server.md) — a runner
-that shares the build's transform pipeline avoids maintaining a second one.
-
 ## What would settle it
 
 Running the two shapes of test that matter — a pure module with branch coverage, and a rendered

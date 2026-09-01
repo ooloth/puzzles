@@ -13,13 +13,6 @@ storage. Requiring it puts friction on an audience assumed to have no technical 
 Not requiring it means the durability guarantee is materially weaker for most players than for
 some — and we would be promising something we only sometimes deliver.
 
-## Blocked by
-
-[How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md) — a tight
-enough sync cadence makes install unnecessary. Also informed by
-[how long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
-which sets how often the wipe fires at all.
-
 ## What would settle it
 
 Whether a server copy exists. If

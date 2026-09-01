@@ -20,11 +20,6 @@ It bears directly on a promise nobody can currently keep.
 on every device they use, and there is no version of that where nobody notices the server has been
 down for a week.
 
-## Blocked by
-
-[Where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a bare
-virtual machine supplies none of it, so the size of this question is set by that one.
-
 ## What would settle it
 
 Naming, for each thing that can go wrong, what notices and what happens next. A monitor that runs on

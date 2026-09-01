@@ -13,14 +13,6 @@ whichever runtime the first tutorial used. The server this project might need is
 endpoints that put and fetch bytes — every candidate can do that, so the choice turns on operating
 cost, deployment surface and how reversible it is.
 
-## Blocked by
-
-[What execution shape does the server have?](what-execution-shape-does-the-server-have.md), then
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md), which
-together leave little for this to decide. What the server holds — there may be no server, in
-which case this closes. Then [which database, if any?](which-database-if-any.md), because a
-runtime that cannot reach the chosen store is disqualified.
-
 ## What would settle it
 
 Very little, once the two questions above land. The one criterion worth applying deliberately is

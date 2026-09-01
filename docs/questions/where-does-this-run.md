@@ -12,16 +12,6 @@ Previously settled and now reopened. If the client owns state, the persistent-lo
 requirement that disqualified several platforms may no longer apply, which puts them back in
 contention.
 
-## Blocked by
-
-[What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
-single input this turns on, and the one whose absence let five unrelated questions be listed here
-instead. A long-lived process with a local disk and an ephemeral function want different platforms,
-and nothing else on the list changes the answer.
-
-Then [which database, if any?](which-database-if-any.md), since an embedded store narrows the field
-to platforms offering persistent local disk and a network-attached one does not.
-
 ## What would settle it
 
 ...

@@ -13,10 +13,6 @@ consent, erasure and privacy-policy questions. Nothing in this project has ever 
 Also unexamined: age gating, data residency for any backup, and payment obligations if a paid
 tier appears.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

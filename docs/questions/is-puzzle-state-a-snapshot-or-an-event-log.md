@@ -11,11 +11,6 @@ resolves_into: decision
 Shapes the sync protocol, how undo works, and what "the same board" means when two copies have
 to be reconciled.
 
-## Blocked by
-
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md),
-[Is undo in scope, and how far back](is-undo-in-scope-and-how-far-back.md).
-
 ## What would settle it
 
 ...

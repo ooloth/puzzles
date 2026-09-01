@@ -12,10 +12,6 @@ resolves_into: decision
 determines how much shared abstraction is worth building — and the honest default is none until
 a second game actually exists to generalise from.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

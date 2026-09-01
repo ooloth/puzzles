@@ -12,10 +12,6 @@ There is no error to report, and the player may simply never come back. A failur
 with no detection path is worth designing for deliberately rather than hoping someone
 complains.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 ...

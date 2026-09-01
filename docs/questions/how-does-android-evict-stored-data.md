@@ -13,10 +13,6 @@ assumption with no evidence behind it anywhere in this project's history. If the
 Android, the durability constraints may be very different, and the mitigations we're weighing
 may be solving the wrong platform's problem.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Chrome's and Android's own storage documentation, then confirmation on a real device that the

@@ -11,11 +11,6 @@ resolves_into: decision
 The smallest decision on the stack list, recorded because it is the one most likely to be made by
 typing whatever came to mind, and because two of its failure modes are quiet rather than loud.
 
-## Blocked by
-
-N/A — nothing needs to be answered first. It is answerable today and reversible cheaply, which is
-the argument for not spending long on it.
-
 ## What would settle it
 
 Install speed matters least. What matters is whether the lockfile stays readable to whatever

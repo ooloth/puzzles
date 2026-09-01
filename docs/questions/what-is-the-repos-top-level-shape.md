@@ -21,12 +21,6 @@ It is separated from [how is the codebase laid out?](how-is-the-codebase-laid-ou
 how modules are organised *within* whatever this decides. That question is not blocking anything —
 there are no modules yet — and answering it now would mean guessing at a tree nobody has needed.
 
-## Blocked by
-
-[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) —
-workspace support differs between runtimes and package managers, and one of them may make this
-choice for us.
-
 ## What would settle it
 
 Scaffolding it. This is a question where the smallest real attempt beats any amount of comparison:

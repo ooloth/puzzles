@@ -22,11 +22,6 @@ relative to each other — see [../constraints.md](../constraints.md). Choosing 
 its API elsewhere forecloses that mechanism, silently, months before anyone tries to use it.
 Nothing about that choice announces itself as a door closing.
 
-## Blocked by
-
-N/A — nothing needs to be answered first, though each door has its own question about whether it
-is wanted at all.
-
 ## What would settle it
 
 Listing the futures worth preserving, and for each, naming the specific present decision that

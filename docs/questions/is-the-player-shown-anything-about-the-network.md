@@ -22,10 +22,6 @@ cannot — and reading it as governed here is what has kept observability lookin
 A promise that forbids an affordance rather than a harm makes all three unreachable at once, which
 is why the guarantee is scoped to what the network may do to a player and this file holds the rest.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Naming what a player could *do* with each piece of information. Anything they cannot act on is

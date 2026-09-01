@@ -26,11 +26,6 @@ and three constraint families. Star battle has irregular regions whose boundarie
 puzzle, a variable star count, and adjacency rules. A model that fits both is not obviously the same
 as a model that fits either.
 
-## Blocked by
-
-N/A — nothing needs to be answered first, and it does not block scaffolding. The shells can be
-stood up and the model experimented with inside them.
-
 ## What would settle it
 
 Writing the representation for sudoku and for star battle, and seeing what is genuinely shared

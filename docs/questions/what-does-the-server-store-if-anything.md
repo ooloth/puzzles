@@ -11,14 +11,6 @@ resolves_into: decision
 If the client owns state, the server's job may be small enough that the choice of data store
 barely matters — or that there is nothing to store beyond a sync record.
 
-## Blocked by
-
-the client holding state, settled by [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md).
-
-[Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
-
-[What load should the server handle?](what-load-should-the-server-handle.md).
-
 ## What would settle it
 
 ...

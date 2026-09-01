@@ -13,10 +13,6 @@ specification's classification thresholds and generic research, not from measure
 conditions are milder or harsher than assumed, the offline design is either over-built or
 under-built.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Carrying a phone on the actual commute with something logging.

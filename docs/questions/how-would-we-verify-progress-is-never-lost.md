@@ -12,10 +12,6 @@ This can't be checked by unit tests. Backgrounding, tab kill, and OS memory purg
 devices or an instrumented harness, and no approach has been proposed. Until one exists, the
 most consequential guarantee in the product is enforced by nothing.
 
-## Blocked by
-
-[How much unsynced work is acceptable](how-much-unsynced-work-is-acceptable.md).
-
 ## What would settle it
 
 ...

@@ -15,11 +15,6 @@ shown. A server able to reject a client's state leaves exactly two outcomes when
 power: the work disappears, or the player is asked to choose between versions. Both are already
 forbidden.
 
-## Blocked by
-
-[Does a server exist at all?](what-does-the-server-hold.md) — if the answer is no, this
-question closes rather than resolves.
-
 ## What would settle it
 
 The scope question above, then choosing between the options below against the two guarantees.

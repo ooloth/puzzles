@@ -12,14 +12,6 @@ Last-write-wins discards the losing write. Whether silently discarding a player'
 compatible with promising their progress is never lost is unresolved — and both claims
 currently appear in our own documents.
 
-## Blocked by
-
-[Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — a losing
-write requires two writers, so with one device this never arises. Also
-[is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md), and
-[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md), whose
-leading option is that no party arbitrates.
-
 ## What would settle it
 
 ...

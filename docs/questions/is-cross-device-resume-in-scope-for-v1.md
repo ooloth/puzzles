@@ -13,12 +13,6 @@ a sync protocol and a conflict rule; saying no removes all four and lets hosting
 static files. It also decides whether a promise already made — that in-progress work is never
 lost — can be kept at all, for reasons that turn out to have little to do with second devices.
 
-## Blocked by
-
-[Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) —
-how often a player returns decides whether browser storage is ever evicted, which is most of what
-this question turns on.
-
 ## What would settle it
 
 Two things, and the first is research rather than judgement.

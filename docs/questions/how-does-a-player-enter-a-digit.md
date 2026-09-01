@@ -22,10 +22,6 @@ The choice is not obvious on a phone, which is the primary target. A grid of eig
 small screen has no room for a cell to be a text input, and the two established patterns put the
 digits in different places.
 
-## Blocked by
-
-N/A — nothing needs to be answered first.
-
 ## What would settle it
 
 Building it and using it on a phone. This is a question where a day of solving on a real device

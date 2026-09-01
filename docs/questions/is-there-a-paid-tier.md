@@ -17,11 +17,6 @@ used by the New York Times games, Inkwell, and Circle9. Nothing needs building f
 matters now is that no architectural choice makes adding it later prohibitive, which makes this a
 question about reversibility rather than about features.
 
-## Blocked by
-
-[Do privacy regulations apply](do-privacy-regulations-apply.md),
-[Is there one puzzle a day, or unlimited play](is-there-one-puzzle-a-day-or-unlimited-play.md).
-
 ## What would settle it
 
 ...

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Check docs/ for broken links, unplaced questions, and milestone ordering errors.
+"""Check docs/ for broken links and questions missing from the milestone list.
 
-A milestone ordering error is a question that depends on one filed in a later
-milestone. It means either the milestone is wrong or the dependency is overstated,
-and both are worth knowing before a decision is made on top of it.
+Deliberately narrow. These two are facts — a link resolves or it does not, a
+question appears in docs/questions/README.md or it does not. The ordering of the
+milestones is a judgement made in that file, and is not checked here: a passing
+check on a sequence would only make a wrong one look verified.
 """
 import os, re, sys
 
@@ -23,26 +24,6 @@ for root, dirs, files in os.walk('docs'):
             if not os.path.exists(os.path.normpath(os.path.join(root, l.split('#')[0]))):
                 print(f'BROKEN LINK  {p} -> {l}')
                 bad += 1
-
-def blocked_by(fname):
-    m = re.search(r'## Blocked by\n(.*?)\n## ', open(os.path.join(QDIR, fname)).read(), re.S)
-    if not m:
-        return []
-    return [d for d in re.findall(r'\]\(([^)#][^)]*\.md)\)', m.group(1)) if not d.startswith('..')]
-
-
-if '--blocks' in sys.argv:
-    # The inverse of every Blocked by list. Derived, so it cannot go stale.
-    inverse = {}
-    for f in sorted(os.listdir(QDIR)):
-        if f.endswith('.md') and f != 'README.md':
-            for dep in blocked_by(f):
-                inverse.setdefault(dep, []).append(f)
-    for dep in sorted(inverse):
-        print(f'{dep} blocks:')
-        for f in sorted(inverse[dep]):
-            print(f'    {f}')
-    sys.exit(0)
 
 readme = open(os.path.join(QDIR, 'README.md')).read()
 milestone, order, cur = {}, [], None
@@ -65,21 +46,6 @@ for f in sorted(os.listdir(QDIR)):
     if f.endswith('.md') and f != 'README.md' and f not in milestone:
         print(f'UNPLACED     {f} is in no milestone')
         bad += 1
-
-for f, ms in sorted(milestone.items()):
-    p = os.path.join(QDIR, f)
-    if not os.path.exists(p):
-        continue
-    mm = re.search(r'## Blocked by\n(.*?)\n## ', open(p).read(), re.S)
-    if not mm:
-        continue
-    for dep in re.findall(r'\]\(([^)#][^)]*\.md)\)', mm.group(1)):
-        if dep.startswith('..'):
-            continue
-        dms = milestone.get(dep)
-        if dms and rank.get(dms, 99) > rank.get(ms, 99):
-            print(f'OUT OF ORDER {ms} {f}\n             blocked by {dms} {dep}')
-            bad += 1
 
 print(f'\n{bad} problem(s)')
 sys.exit(1 if bad else 0)

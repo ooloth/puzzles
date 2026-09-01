@@ -73,6 +73,19 @@ for what it is missing, or what it is missing joins the milestone. This is what 
 optimising for arriving somewhere quickly at the cost of arriving somewhere that has to be
 dismantled.
 
+**A decision that the next milestone does not need is not made.**
+The test is not whether a question could be answered — most could, badly. It is whether reaching the
+next observable state requires the answer. Deciding early costs the information that would have
+arrived by the time it was needed, and it costs something worse: once a record exists, everything
+after it treats the choice as settled, so a decision made before it was required is indistinguishable
+from one that was load-bearing. That is how a queue of genuinely foundational decisions gets buried
+among decisions that were merely available.
+
+**Deferring is not deciding provisionally**, and the difference is the whole of it. A deferred
+question stays open, visibly, and nothing is built on it. A provisional decision is built on
+immediately and re-argued later, by which point something depends on it. Where a milestone appears
+to need a provisional answer, the milestone is drawn in the wrong place — see the standard above.
+
 **A prerequisite found while tracing is decided before the decision that surfaced it.**
 Stop the decision in front of you and go and make the prerequisite first. Not note it and carry
 on. Not make the current one provisionally. Not make it and plan to revisit. The prerequisite is

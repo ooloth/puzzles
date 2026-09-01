@@ -68,6 +68,21 @@ Against that: the change was never announced, WebKit published nothing about it,
 documentation still says seven. The commit message also claims it does not change current
 behaviour, which contradicts the test.
 
+**The provenance is now much stronger, and the planning number has moved to thirty
+(2026-08-31).** The constants were read directly in trunk — `operatingDatesWindowLong { 30 }`,
+`operatingDatesWindowShort { 7 }` — and the introducing change identified:
+[PR #21120](https://github.com/WebKit/WebKit/pull/21120), commit `274398@main`, 2024-02-09. Its
+description states the rule in the author's own words: seven days is retained only "when cross-site
+link decoration is detected and if link decoration filtering is disabled", and thirty applies
+otherwise. That is the piece the earlier reading lacked — not two constants whose relationship had
+to be guessed, but the condition, stated by the person who wrote it. A player arriving at this app
+by bookmark or typed URL never meets it. `../constraints.md` now records thirty.
+
+**What is still open is narrower, and it is the original bar this file set.** Source is not
+behaviour. The unresolved contradiction above — a commit that both changes the window and claims to
+change nothing — is exactly what a device test would settle and reading more source will not. The
+question is no longer "seven or thirty"; it is "does a shipped browser do what trunk says".
+
 **The window is counted in days the browser was used, not calendar days.** This is separate from
 the length and is not in dispute. Whichever number is right, it stretches further in wall-clock
 time than it reads — a player who does not open Safari at all is not spending the budget.

@@ -19,6 +19,29 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
+### Question files still size their arguments against a seven-day Safari window
+
+**You'll see** "Safari clears all script-writable storage after seven days" repeated across
+[questions/](questions/) — in
+[is cross-device resume in scope for v1?](questions/is-cross-device-resume-in-scope-for-v1.md) in
+several places, in
+[how does a second device recognise the same person?](questions/how-does-a-second-device-recognise-the-same-person.md),
+in [how does the app itself stay available offline?](questions/how-does-the-app-itself-stay-available-offline.md),
+and in [ADR-0002](decisions/0002-the-client-holds-and-mutates-puzzle-state.md)'s risk section. Read
+together they make a lapsed player look like a normal case.
+
+**Actually** the number is thirty, and seven is a penalty applied only to a domain reached by a
+tracker-originated decorated link — a shape nobody arriving at this app matches.
+[constraints.md](constraints.md) is correct and is the authority; the question files predate it and
+have not been resized. The difference is not cosmetic: it is roughly a four-fold change in how many
+players are ever exposed, and several of those findings argue for machinery that a thirty-day
+window may not justify.
+
+**So** take the figure from `constraints.md` and treat any argument in a question file that turns
+on the length of the gap as needing to be re-run before it is used. ADR-0002 is append-only and its
+conclusion still holds — client-held state is evictable either way — so only the magnitude in its
+risk section is stale.
+
 ### The stack is mid-decision, and looks more settled than it is
 
 **You'll see** a repository with no code in it, a `constraints.md` full of browser specifics, and

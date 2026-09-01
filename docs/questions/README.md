@@ -89,6 +89,10 @@ option to analyse play is preserved.
 access is preserved.
 [0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md) the option to add puzzle
 types is preserved.
+[0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) every puzzle cell is a
+focusable, labelled element.
+[0012](../decisions/0012-all-play-is-reachable-from-the-keyboard-alone.md) all play is reachable from
+the keyboard alone.
 
 Three of those are doors rather than choices — 0008, 0009 and 0010 each keep a future reachable
 rather than building anything. They are titled alike on purpose, so that

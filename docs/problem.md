@@ -29,6 +29,11 @@ secondary desktop use at a different time by the same person. Sessions run minut
 frequently interrupted, and resume anywhere from seconds to days later. While actively
 solving, a player makes a discrete input every one to three seconds.
 
+**The two halves take different input.** Touch on the phone, keyboard on the laptop — and keyboard
+there is the expectation rather than a fallback. Filling a grid by pointing at each cell is slower
+than typing and nobody who can type does it. So the desktop half is keyboard-driven by default, and
+that is a property of how the game is played rather than an accommodation added for anyone.
+
 The audience is deliberately small: a genuinely public v1 found by a few people, not many.
 
 The second stakeholder is the solo maintainer, and there are three distinct reasons this exists.

@@ -8,8 +8,20 @@ resolves_into: decision
 
 ## Why it matters
 
-Never mentioned in any prior document. Grid puzzles have real keyboard navigation and
-screen-reader design questions, and retrofitting them is expensive. Silence is not a decision.
+Grid puzzles have real keyboard navigation and screen-reader design questions, and retrofitting
+them is expensive. Silence is not a decision.
+
+**Two things have been taken out of this question, and what is left is the harder half.**
+[ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) settles that
+every cell is an element that can carry a name, a role and a state, which removes the structural
+blocker without promising anything.
+[ADR-0012](../decisions/0012-all-play-is-reachable-from-the-keyboard-alone.md) promises keyboard
+operation, on the grounds that [../problem.md](../problem.md) makes the desktop half keyboard-driven
+— a product requirement that happens to help here rather than an accessibility decision.
+
+So what remains is assistive technology: what a cell announces, what a screen reader is told about
+selection, givens, notes and violations, and whether any of it is promised for v1. That is the part
+the WebKit findings below make expensive, and none of it is answered by the two records above.
 
 ## What would settle it
 

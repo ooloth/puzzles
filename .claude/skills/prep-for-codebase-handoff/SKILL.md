@@ -75,8 +75,11 @@ detected by a lint script like `check-docs.py` instead.
   recorded; silent contradiction is not.
 - **Figures that moved.** Any number appearing in more than one file, where the copies disagree.
   Check each against `docs/constraints.md`, which is the authority.
-- **Unfinished work in the records.** Unchecked `Also update` boxes in `docs/decisions/`, and
-  sections still holding `...` in question files that have since been worked.
+- **Questions worked but left with placeholders.** A `...` means nobody has looked and is legitimate
+  in an untouched question. It is a defect in one with a substantial Findings section, or one sitting
+  in an early milestone — the question was worked and a section was skipped. Unchecked `Also update`
+  boxes in decision records are the same kind of gap and are caught by `check-docs.py`, so they do
+  not need a scan.
 - **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying _Enforced
   by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
 - **Change narrative.** Search for _used to_, _previously_, _no longer_, _has since_, _was changed

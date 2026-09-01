@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check docs/ for broken links and files missing from the indexes that list them.
+"""Check docs/ for broken links, missing index entries, and unfinished decision records.
 
 Run with: python3 scripts/check-docs.py
 
@@ -83,6 +83,21 @@ def check_indexes():
                 problems.append(f'INDEX STALE  {index} lists {f}, which does not exist')
 
 
+def check_decision_checkboxes():
+    """An unchecked box in a decision record is work the record says is outstanding.
+
+    docs/decisions/README.md carries the template, which is unchecked by design.
+    """
+    for f in sorted(os.listdir('docs/decisions')):
+        if not f.endswith('.md') or f == 'README.md':
+            continue
+        path = os.path.join('docs/decisions', f)
+        for n, line in enumerate(open(path), 1):
+            if line.lstrip().startswith('- [ ]'):
+                item = line.strip().removeprefix('- [ ]').strip()
+                problems.append(f'UNFINISHED   {path}:{n} {item}')
+
+
 def check_top_level_index():
     """docs/README.md lists every top-level doc and directory. CLAUDE.md repeats it."""
     # First path segment only: a link to questions/README.md is a claim about
@@ -107,6 +122,7 @@ def check_top_level_index():
 
 check_links()
 check_indexes()
+check_decision_checkboxes()
 check_top_level_index()
 
 for p in problems:

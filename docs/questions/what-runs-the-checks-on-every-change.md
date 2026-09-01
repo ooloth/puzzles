@@ -53,6 +53,17 @@ alternative.
 
 ## Findings
 
+**One check already exists and nothing runs it.** `scripts/check-docs.py` verifies that every link
+under `docs/` resolves and that every question appears in exactly one milestone. It is plain Python
+with no dependencies, so it presupposes nothing about the runtime and could be wired up before that
+is settled — as a commit hook, as a CI step, or both.
+
+That it is not wired up is the point rather than an oversight: a check nobody runs is a check that
+does not exist, and this question is where that gets fixed. It is also a useful concrete case for
+answering it, since it needs to run on documentation rather than on code and therefore has to work
+before anything is installed.
+
+
 **The documentation checks are not hypothetical.** Manual link and index checks during this
 repo's documentation work caught a dangling pointer to a deleted file, an index that had drifted
 from its folder, and a rewrite that produced a three-hundred-character line. All three would have

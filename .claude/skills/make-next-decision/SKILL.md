@@ -27,6 +27,33 @@ build on unaddressed assumptions.
 
 ## Your task
 
+### 0. Check whether this decision should be made at all — and stop if not
+
+**Do this before anything else, and be willing to end here.** `docs/standards/decisions.md` holds it
+as a Must: a decision the next milestone does not need should not be made yet. The test is not
+whether the question _could_ be answered — most could, badly. It is whether reaching the next
+observable state in `docs/questions/README.md` requires the answer.
+
+If it does not, **say so, stop and do not make it yet.** Instead, tell the user plainly which
+milestone the question actually blocks, name what does block the next one, and recommend working
+that instead. Three reasons to give them (if needed):
+
+- **The answer gets better by waiting.** Everything learned between now and when it is needed is
+  information this decision would otherwise be made without.
+- **It buries the decisions that matter.** Once a record exists, everything after it treats the
+  choice as settled — so a decision made before it was required is indistinguishable from one that
+  was load-bearing, and the genuinely foundational ones stop standing out.
+- **It delays working software.** Every decision made ahead of need is time not spent reaching a
+  milestone, and a milestone reached is what turns the next decisions from predictions into
+  observations.
+
+Deferring is not deciding provisionally. A deferred question stays open with nothing built on it.
+Say that too if needed, since the usual counter-offer is a placeholder answer, and a placeholder is
+the thing this is protecting against.
+
+Only continue past this step if the answer genuinely blocks the next milestone, or if the user
+directs you to proceed anyway after hearing the above.
+
 ### 1. Identify the next most important question to answer
 
 1. Read `docs/standards/decisions.md`, `docs/problem.md`, `docs/constraints.md` and
@@ -89,6 +116,10 @@ record what you find.
 
 ### 5. Document the decision
 
+1. **Re-read `docs/standards/decisions.md` and `docs/decisions/README.md` now**, immediately before
+   writing. Not at the start of the session — now. A summary of them held in working memory for an
+   hour is what produces a record that satisfies the format and breaks a Must, and the failure is
+   invisible because the record looks complete.
 1. Author the ADR
 1. For any resolved question files, mine any valuable content and then delete them
 1. Update all other docs as needed based on the ADR's implications, including `questions/README.md`,

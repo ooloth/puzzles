@@ -9,12 +9,14 @@ The stack and codebase layout is currently being decided, which is why nothing i
 ## Uphold requirements
 
 Before designing, writing, or editing any code, documentation or decisions, invoke the
-`uphold-project-requirements` skill.
+`uphold-project-requirements` skill. Re-invoke the skill repeatedly each time it applies (not just
+once per session). Do not merely refer to your memory of the skill.
 
 ## Decisions
 
 Before making any technical decisions or deciding which decisions to prioritize, invoke the
-`make-next-decision` skill.
+`make-next-decision` skill. Re-invoke the skill repeatedly each time it applies (not just
+once per session). Do not merely refer to your memory of the skill.
 
 ## Key docs
 

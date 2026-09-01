@@ -52,6 +52,8 @@ a cost nobody has counted.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 Legacy ADR-01 states that puzzle grids "need zero-lag drag-select, keyboard nav, live
 highlighting". Nothing else in the corpus corroborates any of the three, and no user research
 exists anywhere in this project's history. Treat them as the previous author's judgement rather

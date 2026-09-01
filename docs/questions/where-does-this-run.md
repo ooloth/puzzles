@@ -92,8 +92,9 @@ multi-app future.
 
 ## Findings
 
-**Not blockers, and worth saying so.**
-Don't decide this one first. Scale is not an input: the audience
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Scale is not an input here.** The audience
 in [../problem.md](../problem.md) is deliberately small, so
 [what load should the server handle?](what-load-should-the-server-handle.md) does not discriminate
 between any candidate below.
@@ -128,15 +129,21 @@ sixty-minute request timeout. Cloudflare Workers with D1 has no persistent proce
 SQLite file. Fly's per-app billing scales roughly linearly per deployable with no bundling
 discount across apps.
 
+*Unverified — no source recorded.*
+
 **Figures and reputational claims, which do not.** Every price above dates from 2026 research
 with no links recorded. The claim that Fly's `shared-cpu-1x` tier suffers sustained CPU steal —
 described as 70% or worse on some hosts, with a free destroy-and-reclone as the first remedy and
 `performance-1x` a 3-10x cost jump — is sourced to unnamed community reports. Useful as
 orientation about what to look into; not evidence.
 
+*Unverified — no source recorded.*
+
 **Backups cover data loss, not downtime.** One machine with one volume has zero hardware-failure
 redundancy, and that holds for a bare VPS exactly as much as for a managed platform. See
 [how much downtime is acceptable](how-much-downtime-is-acceptable.md).
+
+*Reasoned — a property of running one machine with one volume.*
 
 **One rejection rests on an unmeasured premise.** GCE was set aside partly for a tighter compute
 ceiling, which mattered only because generation was assumed to be compute-heavy — see

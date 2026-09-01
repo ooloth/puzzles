@@ -41,16 +41,19 @@ N/A — this resolves into a fact, not a choice.
 
 ## Findings
 
-**What this decides beyond itself.** [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
-and, less directly,
-[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md). Both are
-arguments about how often the wipe actually fires.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Both [is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
+and [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) are
+arguments about how often the wipe actually fires.**
 
 **The interaction half is answered and recorded in [../constraints.md](../constraints.md).** A
 tap, a click, a keystroke the page handles, an autofill, and an authentication all reset the
 clock. Scrolling, viewing, timers, and the app writing to storage do not. That was the more
 useful half: it establishes that an actively playing player is never at risk, so the whole
 question is about the gap between sessions.
+
+*Sourced — recorded in [../constraints.md](../constraints.md).*
 
 **WebKit's source says thirty days for any site arrived at normally.**
 `ResourceLoadStatisticsStore.cpp` carries `operatingDatesWindowLong { 30 }` alongside
@@ -61,14 +64,21 @@ if link decoration filtering is disabled", and thirty applies otherwise. A playe
 bookmark or typed URL never meets that condition. An in-tree layout test asserts thirty.
 [../constraints.md](../constraints.md) records thirty.
 
+*Sourced — WebKit's `ResourceLoadStatisticsStore.cpp` and
+[PR #21120](https://github.com/WebKit/WebKit/pull/21120), commit `274398@main`, 2024-02-09.*
+
 **Apple's documentation still says seven, and the change was never announced.** The 2019 and 2020
 WebKit posts describing a blanket seven-day rule remain published and are what most third-party
 writing cites. Anyone checking this against public documentation will find seven and conclude the
 thirty-day figure is wrong.
 
+*Sourced — the 2019 and 2020 WebKit posts describing the blanket seven-day rule.*
+
 **One contradiction in the source is unresolved.** The commit that introduces the thirty-day window
 also states that it does not change current behaviour, which cannot be squared with the layout test
 asserting thirty. Reading more source will not settle this.
+
+*Sourced — the same WebKit commit and layout test cited above.*
 
 **What remains open is whether a shipped browser behaves the way trunk describes.** Source is not
 behaviour, and no test on a real device has been run. This is the whole of the remaining question.
@@ -76,6 +86,8 @@ behaviour, and no test on a real device has been run. This is the whole of the r
 **The window is counted in days the browser was used, not calendar days.** This is separate from
 the length and is not in dispute. Whichever number is right, it stretches further in wall-clock
 time than it reads — a player who does not open Safari at all is not spending the budget.
+
+*Unverified — no source recorded.*
 
 **Thirty is the planning number.** A device test would confirm it, and being wrong costs a player's
 progress, which [../guarantees/durability.md](../guarantees/durability.md) promises will not happen.

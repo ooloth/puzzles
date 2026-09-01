@@ -44,6 +44,8 @@ broken SSH configuration, and backups.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **A health check that only proves the process is listening proves very little.** The failure this
 project cares about is a write that does not land, so the check has to exercise the storage path
 rather than return a constant.
@@ -53,6 +55,6 @@ copy can capture a torn write; the database's own online backup interface exists
 here rather than in [../constraints.md](../constraints.md) because it only applies if
 [which database, if any?](which-database-if-any.md) lands on an embedded one.
 
+*Unverified — no source recorded.*
+
 **Most of this disappears on a managed platform and none of it disappears on a virtual machine.**
-That asymmetry is a real input to [where does this run?](where-does-this-run.md), and it is
-ordinarily discovered after the hosting choice rather than before it.

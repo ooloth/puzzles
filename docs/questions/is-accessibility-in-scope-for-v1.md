@@ -31,6 +31,8 @@ Finding drawn from legacy ADR-01 (render with server-driven hypermedia).
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 Keyboard navigation was already treated as a grid requirement in legacy ADR-01, well before
 accessibility was raised as a question here. Whether it was meant as an accessibility concern or
 as a power-user convenience isn't recorded.
@@ -48,6 +50,7 @@ first-party accessibility APIs and avoids the class structurally.
 > testing against real VoiceOver early and designing announcements that survive the gaps, rather
 > than assuming correct ARIA produces correct speech.
 
-This was weighed during [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) and judged
-not decisive against web delivery. It is recorded here because it changes the price of this
-question's answer, not that decision. Verified against WebKit's issue tracker, 2026-08-31.
+**This was weighed during [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) and
+judged not decisive against web delivery.**
+
+*Sourced — WebKit's issue tracker, checked 2026-08-31.*

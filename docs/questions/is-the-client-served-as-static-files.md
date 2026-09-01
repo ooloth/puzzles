@@ -50,9 +50,11 @@ game.
 
 ## Findings
 
-**What this decides beyond itself.** [What renders the client?](what-renders-the-client.md) and everything under it, plus
-[where does this run?](where-does-this-run.md), since a static bundle and a rendering server want
-different hosts.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**A static bundle and a rendering server want different hosts.** That bears on
+[what renders the client?](what-renders-the-client.md) and everything under it, plus
+[where does this run?](where-does-this-run.md).
 
 **Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
 Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely
@@ -63,6 +65,7 @@ storage the browser evicts and being reachable by any script that runs on the pa
 forced; what is forced is that this gets chosen rather than inherited from wherever the two things
 happen to be deployed.
 
+*Sourced — per [../constraints.md](../constraints.md).*
 
 **The offline guarantee mostly settles this, but not entirely.** An application can be
 server-rendered on first visit and served from a cache afterwards, so the promise survives
@@ -77,7 +80,11 @@ static deploy or a separate server; it does not require the game itself to be re
 published examples, static single-page applications outnumber meta-framework examples by roughly
 twelve to one, and the flagship projects in that space ship as static bundles.
 
+*Sourced — the local-first ecosystem's own published examples.*
+
 **A documented failure mode argues the same way.** Restoring persisted state during hydration is a
 known and long-lived source of mismatch bugs, and the sanctioned fix — skipping hydration for that
 state — guarantees a flash of empty content on every load. Here that is a blank grid appearing
 before the player's board does.
+
+*Unverified — no source recorded.*

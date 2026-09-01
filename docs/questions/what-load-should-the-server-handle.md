@@ -40,6 +40,8 @@ low-traffic.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **The input rhythm is the one solid input.** A player makes a discrete input — cell select, digit
 entry, note toggle, undo — roughly every one to three seconds while actively solving. That is
 recorded in [../constraints.md](../constraints.md) and is the basis any derivation would start
@@ -58,6 +60,8 @@ about what to design for, and making that choice is most of this question.
 between two web frameworks "doesn't matter for an I/O-bound, low-traffic, SSE-heavy workload".
 The conclusion may well be right; "low-traffic" was never quantified, so it isn't checkable, and
 it shouldn't be repeated as established.
+
+*Unverified — no source recorded.*
 
 **Raw throughput may be the wrong measurement either way.** What a player notices is the slow
 interaction, not the mean request rate, so tail latency is the figure that maps to the

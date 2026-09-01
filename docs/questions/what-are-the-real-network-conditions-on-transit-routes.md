@@ -31,8 +31,16 @@ N/A — this resolves into a fact, not a choice.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 No duration is recorded anywhere, and the figures that circulate — dropouts of "seconds to a
 couple of minutes" — trace to unnamed "subway/transit connectivity research" with no citation, so
-they are not usable. `constraints.md` carries only the qualitative fact, which is uncontroversial:
+they are not usable.
+
+*Unverified — no source recorded.*
+
+`constraints.md` carries only the qualitative fact, which is uncontroversial:
 connectivity drops entirely in tunnels and stalls during tower handoff while still reporting as
 connected.
+
+*Reasoned — uncontroversial as a qualitative fact.*

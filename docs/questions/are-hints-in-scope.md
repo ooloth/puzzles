@@ -30,7 +30,10 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-**What this decides beyond itself.** What the solver has to be able to explain, not merely decide. Also the bundle cost accepted in
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Hints require a solver that can explain its steps, not merely decide the puzzle has one
+solution.** Also the bundle cost accepted in
 [ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md): until hints ship, the
 client carries solving code it does not run.
 

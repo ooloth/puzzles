@@ -45,6 +45,8 @@ convenience feature with no durability role. Costs whatever
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Install is the mechanism; `navigator.storage.persist()` is not an alternative to it.** The API
 only grants persistence to origins already exempt, and an installed app's domain is one of them —
 so calling it changes nothing that installing did not already do, and in an ordinary tab it

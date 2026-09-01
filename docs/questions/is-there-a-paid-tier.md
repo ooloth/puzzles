@@ -45,6 +45,8 @@ harder to convert into, since the first thing a visitor is asked for is money.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **The requirement today is optionality, not capability.** Nothing needs to be gated now, so no
 option is ruled out by lacking entitlement machinery. What matters is what each option costs to
 *add* it to later, which is a question about how reversible each choice is rather than what each

@@ -62,6 +62,8 @@ substantially more machinery than a grid of independent scalars warrants.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **A sudoku board is unusually forgiving of the naive answer.** Roughly 81 independent scalar
 values, no ordered lists, no counters, no text spans. Last-writer-wins per cell does the right
 thing for every case except two devices editing *the same cell*, which is a much narrower target
@@ -70,6 +72,8 @@ than "editing the same board".
 **The strongest general objection to last-writer-wins does not apply here.** It is usually raised
 against counters and ordered collections, where a lost update changes meaning rather than one
 value. Neither exists in this data.
+
+*Unverified — no source recorded.*
 
 **Two known bad outcomes survive whatever is decided**, both recorded in
 [what does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md): a

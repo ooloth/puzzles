@@ -32,6 +32,8 @@ Finding drawn from legacy ADR-12 (host on Fly.io).
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Backups cover data loss, not downtime.** A single machine with a single volume has no
 hardware-failure redundancy, and that is equally true of a bare VPS and of a managed platform —
 neither gives redundancy without paying for it. Restoring from a backup returns the data and says

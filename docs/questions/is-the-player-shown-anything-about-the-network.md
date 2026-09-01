@@ -57,10 +57,11 @@ worth protecting.
 
 ## Findings
 
-**What this decides beyond itself.** [../guarantees/observability.md](../guarantees/observability.md), which is a stub, and
-[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md).
-Also whether a guest is told their work is only held locally, which
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) leaves open.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**[../guarantees/observability.md](../guarantees/observability.md) is currently a stub, and
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) leaves open whether a guest is told
+their work is only held locally.**
 
 **Reporting to the maintainer was never in tension with this.** It is not shown to a player, so no
 promise about the player's experience reaches it. That tension is recorded in

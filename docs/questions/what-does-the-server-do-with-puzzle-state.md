@@ -51,9 +51,11 @@ of reach whenever the server is unreachable — the condition the app exists for
 
 ## Findings
 
-**What this decides beyond itself.** [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
-and [which database, if any?](which-database-if-any.md), since a store that never reads inside a
-value has a very short list of requirements.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**A store that never reads inside a value has a very short list of requirements.** That covers
+[What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) and
+[which database, if any?](which-database-if-any.md).
 
 **Ordering is not arbitration.** A server may assign arrival order to writes without deciding
 whose play was right, and it is the only way to avoid depending on device clocks agreeing. It
@@ -77,6 +79,8 @@ dominating. They took a version-control-inspired design with a full local databa
 device, and that merge core survived a complete rewrite fourteen years later, from Python on App
 Engine to Swift, while everything around it was replaced. Two unrelated arguments — ours from
 promises, theirs from cost — arriving at the same place.
+
+*Unverified — no source recorded.*
 
 **Validating the position against the rules of the game is a separate and deferrable thing.** It
 needs the rules to run on the server as well as the client, and nothing currently depends on a

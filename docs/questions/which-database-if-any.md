@@ -49,8 +49,9 @@ considerable overhead if it does not.
 
 ## Findings
 
-**Not blockers, and worth saying so.**
-Two things that once blocked this are settled.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Two inputs that once left this open are now settled.**
 [ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that the server holds a
 durable per-player record, so the answer is not "nothing".
 [ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) establishes that it has to
@@ -62,18 +63,14 @@ on, so choosing one narrows the hosting options to those offering persistent loc
 managed database makes hosting nearly free of the question. This decides which kind; that one
 decides where.
 
-**The runtime choice reaches this from the other direction.**
-[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) is answered
-first because it blocks scaffolding, and the candidates differ in how well they embed SQLite. That
-is a reason to note what each runtime costs here — not a reason to settle this early so a runtime
-can be justified by it.
+**The runtime candidates differ in how well they embed SQLite, which is relevant here.**
+[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) is a
+reason to note what each runtime costs for this decision — not a reason to settle this question
+early so a runtime can be justified by it.
 
-Then [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which decides whether stored data has to be *queryable* or can stay opaque. That single
-distinction is most of what separates the options below.
-
-Then [what does the server store, if anything?](what-does-the-server-store-if-anything.md) and
-[what load should the server handle?](what-load-should-the-server-handle.md).
+**Whether stored data has to be queryable or can stay opaque is most of what separates the options
+below.** See [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
+— that single distinction is the crux.
 
 **[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) would
 make this decision small.** Under its leading option the server checks that a payload is a

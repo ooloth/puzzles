@@ -43,11 +43,17 @@ specifically.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Four gaps in `bun test` were measured, and all four land on this app's shape.** No watch mode.
 No branch coverage at all — and it reported full line coverage for a component whose keyboard
 handler never ran, which is worse than reporting nothing. Snapshots of a rendered grid were
 unusable. And a failing assertion against an 81-cell grid took six seconds and surfaced as a
 timeout with the diff never printed.
 
+*Measured — `bun test` run against this app's components.*
+
 **Vitest under Bun is not a hedge.** It was shipped broken at the time of the research and is not
 covered by Vitest's own test matrix.
+
+*Sourced — Vitest's own test matrix.*

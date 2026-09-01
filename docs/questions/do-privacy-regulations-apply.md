@@ -31,10 +31,10 @@ N/A — this resolves into a fact, not a choice.
 
 ## Findings
 
-**What this decides beyond itself.** [are there user accounts](are-there-user-accounts.md),
-[is there a paid tier](is-there-a-paid-tier.md), and
-[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which proposes recording how puzzles are solved and cannot decide to collect anything before what
-may be collected is known.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**[What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
+proposes recording how puzzles are solved, and cannot decide to collect anything before what may be
+collected is known.**
 
 ...

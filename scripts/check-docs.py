@@ -120,10 +120,62 @@ def check_top_level_index():
         problems.append(f'TABLE DRIFT  docs/{f} is in docs/README.md but not CLAUDE.md')
 
 
+def question_files():
+    for f in sorted(os.listdir('docs/questions')):
+        if f.endswith('.md') and f != 'README.md':
+            yield os.path.join('docs/questions', f)
+
+
+# Sequencing lives in docs/questions/README.md and nowhere else. These two lead
+# sentences carried it into the question files, and they spread by being copied
+# rather than by being reinvented — which is what makes a literal lookup the
+# right tool. A paraphrase is not caught here, because deciding whether a
+# sentence is an ordering claim is a judgement. prep-for-codebase-handoff scans
+# for that; this catches the copy-paste, which is the common case.
+BANNED_LEADS = (
+    'What this decides beyond itself',
+    'Not blockers, and worth saying so',
+)
+
+# Every Findings section says what a finding is worth, in its own file, because
+# a reader who lands on one question file has not read the folder's README.
+FINDINGS_NOTE = 'Findings are working evidence, not settled fact.'
+
+
+def check_question_sequencing():
+    for path in question_files():
+        for n, line in enumerate(open(path), 1):
+            for phrase in BANNED_LEADS:
+                if phrase in line:
+                    problems.append(
+                        f'SEQUENCING   {path}:{n} "{phrase}" — sequencing belongs in '
+                        f'docs/questions/README.md and nowhere else'
+                    )
+
+
+def check_findings_note():
+    """A worked Findings section carries the status note. An untouched one does not need it."""
+    for path in question_files():
+        text = open(path).read()
+        if '## Findings' not in text:
+            problems.append(f'NO FINDINGS  {path} has no Findings section')
+            continue
+        body = text.split('## Findings', 1)[1].strip()
+        if body in ('', '...'):
+            continue
+        if FINDINGS_NOTE not in body:
+            problems.append(
+                f'UNMARKED     {path} has worked Findings without the status note '
+                f'("{FINDINGS_NOTE}")'
+            )
+
+
 check_links()
 check_indexes()
 check_decision_checkboxes()
 check_top_level_index()
+check_question_sequencing()
+check_findings_note()
 
 for p in problems:
     print(p)

@@ -87,8 +87,10 @@ service, the licence, and whether event sourcing is required or merely idiomatic
 
 ## Findings
 
-**What this decides beyond itself.** [Which database, if any?](which-database-if-any.md) in part — if the client format is a blob the
-server never reads, the server's store barely matters.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**If the client format is a blob the server never reads, the server's store barely matters.**
+See [which database, if any?](which-database-if-any.md).
 
 **A library is a separate and much smaller decision.** Whether to use `idb`, Dexie or nothing over
 the chosen API is contained behind a persistence module and cheap to reverse, so it does not need
@@ -104,3 +106,5 @@ cause — so the write path needs care under every option here. Both are in
 incumbent puzzle apps use `localStorage`. That is not decisive — none of them is offline-first in
 the way this intends — but it is enough that the smaller option deserves a real hearing rather
 than an assumption.
+
+*Unverified — no source recorded.*

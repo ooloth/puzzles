@@ -65,6 +65,8 @@ more than the others.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Nothing has been measured.** No candidate has been run here.
 
 **The intent is to spike this rather than research it**, and it is the first place in the project
@@ -85,11 +87,15 @@ hardware, no date and no link. The comparison also never includes Node, and Node
 built-in `node:sqlite`, so the premise that only Bun has fast in-process SQLite is stale on its own
 terms. Nothing from it should be imported without being re-run here.
 
+*Unverified — no source recorded.*
+
 > The same document asserts that Bun was acquired by Anthropic and that Claude Code is powered by
 > it, and uses that as a reason to consider Bun corporately safe to depend on. Treat this as false
 > unless independently confirmed. It is the clearest example of why that folder is marked
 > non-authoritative, and of why a claim that flatters a preferred option deserves more scrutiny
 > rather than less.
+
+*Unverified — no source recorded.*
 
 **This is coupled to the database choice more than its position suggests.** SQLite performance is a
 real difference between these runtimes, and

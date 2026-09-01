@@ -32,6 +32,8 @@ Findings drawn from legacy ADR-18 (use Sentry for error tracking and alerting).
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Server-side error tracking cannot see this failure.** A service-side error tracker sees errors
 the server produces, which is the right instrument only when the server holds the state. The client
 holds it, so the failures that destroy a player's work — a rejected

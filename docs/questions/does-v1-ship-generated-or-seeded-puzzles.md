@@ -45,7 +45,11 @@ choice nobody needs to make yet.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **A library's licence is evaluated before its features.** A licence that disqualifies is
 disqualifying whichever content strategy wins, so it is the cheapest thing to check and the most
 expensive to discover late. One library fails on exactly this, and its
 missing features were the second reason rather than the first.
+
+*Unverified — no source recorded.*

@@ -34,9 +34,11 @@ constraint' conclusion."
 
 ## Findings
 
-**What this decides beyond itself.** [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
-which currently reasons entirely from Safari's behaviour. Also every promise in
-[../guarantees/durability.md](../guarantees/durability.md), none of which states which
-platforms it holds on.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**[Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
+currently reasons entirely from Safari's behaviour.** Every promise in
+[../guarantees/durability.md](../guarantees/durability.md) also fails to state which platforms it
+holds on.
 
 ...

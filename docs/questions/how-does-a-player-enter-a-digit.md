@@ -56,4 +56,6 @@ worth stating as a deliberate choice rather than arriving at by accident.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Nothing is recorded yet.** No pattern has been surveyed or tried.

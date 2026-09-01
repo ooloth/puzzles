@@ -43,12 +43,16 @@ N/A — this resolves into a fact, not a choice.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 The legacy analysis asserted that "backtracking + uniqueness verification runs in milliseconds
 on a JIT'd runtime (V8/JSC); plenty of production sudoku generators run this in-browser in plain
 JS". No benchmark, no named generator, no measurement on any runtime. The document it appears in
 says of itself: "Do not treat anything here as settled — it's the reasoning trail, not the
 destination." It had been imported into `constraints.md` as an established fact; it has been
 removed.
+
+*Unverified — no source recorded.*
 
 Three parts of the claim are separately unestablished. **Star battle** has a different constraint
 structure, and the claim generalises across variants on no basis. **Difficulty targeting** means
@@ -59,6 +63,8 @@ than uniqueness checking and is proposed in the same passage that calls generati
 What is plausible: for 9×9 sudoku, generation is roughly one solver run per clue removal, so
 order tens to hundreds of milliseconds per puzzle rather than seconds. "Milliseconds" understates
 it. Nothing here is measured.
+
+*Unverified — no source recorded.*
 
 Two arguments in that passage don't depend on speed and survive regardless of the answer: a
 second language means two implementations of the puzzle rules, and generation is batch work
@@ -77,6 +83,8 @@ generation argument never addressed. It is ambiguous in a way worth resolving: v
 player's entry against the rules is roughly 27 checks on a 9×9 grid and trivial, but if
 "validation" means the solver behind hints or difficulty grading, the cost is a different order
 entirely. The ADR doesn't say which it meant.
+
+*Unverified — no source recorded.*
 
 The CPU-bound expectation appears in more than one legacy ADR, but not independently. ADR-04
 repeats ADR-02's premise rather than establishing it, and the compute-ceiling concern in the

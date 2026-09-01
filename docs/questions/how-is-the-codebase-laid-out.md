@@ -88,6 +88,8 @@ the same home.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **The number of consumers of a game's rules is what decides whether a shared interface is worth
 having.** A server-rendered design had two, a web binary and a generator, which was too few. A
 local-first design has three — generator, client, and possibly a server — across two runtimes. Three

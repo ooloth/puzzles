@@ -37,6 +37,8 @@ browser and never how a browser keeps them.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 Caching an app shell and updating it are opposed problems, and any mechanism has to answer both.
 A cache that never updates strands players on an old version indefinitely; one that revalidates
 eagerly reintroduces the network dependency it was meant to remove. The update strategy is the
@@ -66,6 +68,8 @@ statement that there are no plans for a next version and a period in 2024 when i
 was formally abandoned. The better-engineered fork is one person with a fraction of the adoption.
 There is no healthy option to pick.
 
+*Unverified — no source recorded.*
+
 **That argues for owning the service worker and using tooling only to inject the file list.**
 The generated-service-worker mode makes the dependency structural; the inject mode makes it a
 build step producing a list of filenames, which is the most replaceable part of the chain and
@@ -79,14 +83,19 @@ recover. The usual objection to precaching everything is wasted bandwidth, which
 at this app's size. If every chunk is already in the cache, a deleted file on the server is
 irrelevant.
 
+*Unverified — no source recorded.*
+
 **Skipping the waiting phase converts an online-only failure into an offline one.** Activating a
 new service worker immediately, then clearing the previous cache, leaves an already-open page
 asking for files that are in neither the cache nor the server. Prompting the player to reload is
-the current consensus, and switching between the two after launch is documented as painful — so
-this is a decision to make before the first deploy rather than after.
+the current consensus, and switching between the two after launch is documented as painful.
+
+*Unverified — no source recorded.*
 
 **A broken service worker recovers at the speed of its own update check.** The kill switch is a
 known pattern and it works, but practitioners describe waiting days for clients to pick it up,
 and a worker that caches its own script can be unreachable indefinitely. Whatever we ship, the
 recovery path needs rehearsing against a real installed app before launch rather than being
 assumed.
+
+*Unverified — no source recorded.*

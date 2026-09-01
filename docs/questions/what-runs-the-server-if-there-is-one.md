@@ -43,10 +43,16 @@ file, which makes this dependent on the database question rather than beside it.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Writing data access against `node:sqlite` keeps this reversible.** Bun implements it, so the
 same code runs on either runtime and the choice stops being load-bearing. Recorded during the Bun
 research; it is the cheapest hedge available here.
 
+*Unverified — no source recorded.*
+
 **One incompatibility worth knowing early.** `better-sqlite3` does not work under Bun and has not
 for three years. Choosing that library is therefore choosing Node, quietly, in a file that looks
 like it is about the database.
+
+*Unverified — no source recorded.*

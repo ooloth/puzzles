@@ -30,8 +30,6 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-**Not blockers, and worth saying so.**
-The wider set in
-[what interactions must the grid support?](what-interactions-must-the-grid-support.md).
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 ...

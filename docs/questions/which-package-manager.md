@@ -34,11 +34,15 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Two Bun-specific hazards were found during the toolchain research, both silent.** Its lockfile
 is not forward-compatible, so an older Bun against a newer lockfile fails outright in continuous
 integration rather than degrading. And its `trustedDependencies` setting *replaces* the default
 allowlist rather than extending it, so trusting one package silently untrusts several hundred
 others, including ones that need install scripts to work at all.
+
+*Unverified — no source recorded.*
 
 **Neither is disqualifying, and both argue for deciding this deliberately rather than by
 habit** — which is the entire reason this file exists.

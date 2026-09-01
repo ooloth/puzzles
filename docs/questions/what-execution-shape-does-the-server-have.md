@@ -78,6 +78,8 @@ the storage layer are specific to the platform.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **What makes this answerable now.**
 [ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that a server exists and
 holds a durable per-player record, so there is server-side state whatever else is true.

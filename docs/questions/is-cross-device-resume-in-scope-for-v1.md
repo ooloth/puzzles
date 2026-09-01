@@ -58,6 +58,8 @@ can claim it rather than starting from zero. Costs almost nothing now and preser
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **A "no" here makes most of the sync design vacuous.** Divergence requires two writers. With one
 device ever writing a board, the deterministic merge in
 [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) never
@@ -203,13 +205,10 @@ the claimable anchor: adding accounts later becomes "attach this account to the 
 hold" rather than a rescue operation for stranded players. Skipping Layer 1 is what makes Layer 2
 expensive later, not deferring Layer 2 itself.
 
-**The thing that must be decided early is neither of them.** Layer 1 only works if Safari judges
-the cookie-setting server genuinely first-party — see [../constraints.md](../constraints.md). A
+**Layer 1 only works if Safari judges the cookie-setting server genuinely first-party.** A
 static host with its API on another provider is exactly the shape that fails, and it fails
-silently. Adding accounts later is cheap; moving hosting later because the recovery mechanism does
-not work is not. By the sizing rule in [../decisions/](../decisions/) — how expensive is this to
-reverse — topology is the costly one and belongs early, Layer 1 is small and keeps a promise
-already made, and Layer 2 waits.
+silently — see [../constraints.md](../constraints.md). Adding accounts later is cheap; moving
+hosting later because the recovery mechanism does not work is not.
 
 **One argument does pull Layer 2 earlier, and it is commercial rather than technical.** A free
 account exists partly to capture an address, which is the only channel for telling existing
@@ -217,7 +216,9 @@ players about anything paid. If accounts arrive at the same moment as a paid tie
 accumulated before it — the ones most likely to buy — cannot be reached. That argues for identity
 shipping some months ahead of monetisation rather than alongside it.
 
-**Privacy obligations do not wait for Layer 2 entirely.** An opaque token that singles out an
-individual is likely personal data under GDPR even with no name attached, so Layer 1 does not
-escape [do privacy regulations apply?](do-privacy-regulations-apply.md) — it only makes the answer
+**An opaque token that singles out an individual is likely personal data under GDPR even with no
+name attached**, so Layer 1 does not escape
+[do privacy regulations apply?](do-privacy-regulations-apply.md) — it only makes the answer
 smaller.
+
+*Unverified — no source recorded.*

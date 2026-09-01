@@ -51,17 +51,23 @@ converge on, and a genuine fourth option rather than a blend of the others.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Comparable applications converge on a pattern ADR-0004 did not consider.** tldraw keeps React
 and replaced its state layer wholesale. Excalidraw renders to canvas. Lichess's board component
 states its rationale as minimising DOM writes. SudokuPad — Cracking the Cryptic's client, the
 closest surface analogue that exists — uses no framework and no bundler at all. The recurring
 shape is a framework for the shell with direct rendering for the board.
 
+*Unverified — no source recorded.*
+
 **That evidence is weaker than it first appears, and both halves should be recorded.** tldraw and
 Excalidraw are infinite canvases with thousands of objects; Lichess is optimising animation during
 blitz play; SudokuPad is one developer's decade-old codebase. None of them is this app, and none
 of their reasons obviously transfers. What survives is that the split is a real option that a
 serious project chose, not that it is correct here.
+
+*Unverified — no source recorded.*
 
 **The surviving argument for a framework is not rendering.** It is the dev server, the state-to-DOM
 binding not being hand-maintained, and the ecosystem around the browser APIs this design leans on.
@@ -95,6 +101,8 @@ micro-benchmark point above from a suspicion to a measurement, and it kills two 
 once — that a faster framework is worth choosing here, and that React's compiler is needed. It
 also means anything sold on rendering speed is selling something this app cannot spend.
 
+*Measured — updating a cell in an 81-cell React grid, with and without memoisation.*
+
 **Accessibility does not discriminate between them either.** No ecosystem ships an editable 2D
 grid primitive: not React Aria, whose generic grid module is unexported and undocumented and
 whose list component would announce a sudoku board as 81 rows of one cell, and not Zag, Kobalte,
@@ -103,11 +111,16 @@ cost is one to two hundred lines of ordinary TypeScript plus a day of screen-rea
 it is the same work in every candidate. This removes what looked like the strongest reason to
 prefer the largest ecosystem.
 
+*Unverified — no source recorded.*
+
 **Bundle size is a first-visit cost only, which halves its weight rather than removing it.** The
 measured React-to-Preact difference is about 45KB brotli, roughly 300ms on a slow-4G profile, paid
 once and then never again once the app shell is cached. [../constraints.md](../constraints.md)
 establishes that cold-load size matters on a degraded link, so this is real — but it is one
 payment against years of use, and it should not outrank anything structural.
+
+*Measured — React-to-Preact bundle size difference, brotli-compressed, projected on a slow-4G
+profile.*
 
 **What actually separates them is where reactive state is allowed to live.** Vue and Preact
 expose their reactive primitive as a standalone package that runs in plain TypeScript under
@@ -118,10 +131,14 @@ bridge whose contract — an immutable snapshot, stable across calls — is exac
 deterministic per-cell merge wants anyway. On the criterion this question weights highest,
 React's constraint pushes in the right direction rather than the wrong one.
 
+*Unverified — no source recorded.*
+
 **Svelte's `$state` proxies cannot be written to IndexedDB directly**, because `structuredClone`
 rejects proxies; the documented fix is one `$state.snapshot()` call at the persistence boundary.
 Recorded because it lands on this app's hottest path. It does not discriminate between candidates,
 though: Vue's `reactive()` has the identical problem, and the fix is one call in both.
+
+*Unverified — no source recorded.*
 
 **Solid is out on timing rather than design.** Solid 2.0 reached release candidate with the API
 frozen and a thousand-line migration guide, no codemod and no compatibility shim, driven by one
@@ -129,10 +146,14 @@ person who authored over ninety percent of the commits on that branch. Choosing 
 adopting a branch about to become legacy; choosing 2.0 means an RC. Neither suits a project
 meant to run for years with little attention.
 
+*Unverified — no source recorded.*
+
 **Lit is out on tooling decay.** The only thing that type-checks its templates has not been
 released since January 2024, and its useful rules are off by default. For a project whose whole
 premise is a shared typed module, an unchecked string boundary in the view layer is the wrong
 trade.
+
+*Unverified — no source recorded.*
 
 **Vue has no disqualifier and no advantage here.** Recorded because "nothing is wrong with it" is
 a finding, and because absence of a reason to choose something is easy to mistake for absence of
@@ -146,11 +167,13 @@ outweighs the bundle difference above, which is the only measured advantage Prea
 also carries a long-open defect where a checked input is treated as uncontrolled, which is
 precisely the shape of an 81-cell board with locked givens.
 
+*Unverified — no source recorded.*
+
 **Comparable applications converge on a pattern this question should notice.** Apps with this
 app's persistence and sync shape — Excalidraw, tldraw, Actual Budget, Notesnook, Logseq — are
 near-unanimously React with Vite, and tldraw notably kept React while replacing the state layer
 entirely. Meanwhile the closest surface analogue, the Cracking the Cryptic sudoku client, uses
 no framework and no bundler at all. Those are not in conflict: the recurring shape is a framework
-for the shell with a purpose-built state layer and direct rendering for the board. It is worth
-weighing against
-[what renders the client?](what-renders-the-client.md), which is where that option belongs.
+for the shell with a purpose-built state layer and direct rendering for the board.
+
+*Unverified — no source recorded.*

@@ -70,16 +70,14 @@ per-player detail indefinitely rather than aggregating it away.
 
 ## Findings
 
-**What this decides beyond itself.** Which database, if any — see [what does the server hold?](what-does-the-server-hold.md) and
-[what does the server store, if anything?](what-does-the-server-store-if-anything.md). Also
-[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and
-[how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
-neither of which is answerable while this is open.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **A privacy cost arrives with the third option, not the first.** An identifier that singles out a
 person is likely personal data even with no name attached, so anything per-player reaches
 [do privacy regulations apply?](do-privacy-regulations-apply.md). Errors and aggregate counts do
 not.
+
+*Unverified — no source recorded.*
 
 **Three of this project's four recorded failure modes answer "how would we notice" with
 "we wouldn't."** See [../failure-modes/](../failure-modes/). That is the strongest argument that

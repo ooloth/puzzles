@@ -48,6 +48,8 @@ terms, that is an argument for LiveStore. The reverse is not an argument for the
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 The two options start from opposite defaults on derived state. An event log makes every visible
 value — the current board, whether a puzzle is complete, how many cells remain — derived by
 construction, because the log holds moves rather than conclusions. A snapshot stores the board

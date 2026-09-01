@@ -50,8 +50,10 @@ without limit.
 
 ## Findings
 
-**What this decides beyond itself.** Which client storage mechanism is used, and how much content is fetched ahead of time.
-[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**This decides which client storage mechanism is used and how much content is fetched ahead of
+time.** [How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)
 covers the shell; this covers the content. Also bears on
 [how long must offline play survive?](how-long-must-offline-play-survive.md), which asks the same
 thing along the time axis rather than the content axis.

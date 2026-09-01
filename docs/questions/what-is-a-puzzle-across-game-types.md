@@ -59,10 +59,11 @@ migration it risks is the expensive one named above.
 
 ## Findings
 
-**What this decides beyond itself.** [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) and
-[what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md), both of
-which describe the movement of something this defines. Also
-[which client storage mechanism?](which-client-storage-mechanism.md), whose volume and shape inputs
-come from here.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**[Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) and
+[what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) both
+describe the movement of something this defines.** [Which client storage
+mechanism?](which-client-storage-mechanism.md) takes its volume and shape inputs from here.
 
 **Nothing is recorded yet.** The representation has never been written down in any form.

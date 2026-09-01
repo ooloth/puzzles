@@ -72,6 +72,8 @@ technical sophistication.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
 Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely
 first-party — which is the shape of a static host with its API on another origin, per
@@ -99,6 +101,8 @@ fallback for an unusual case — `localStorage` is exactly what Safari's wipe de
 it is the routine path for anyone who plays less than weekly. The same design with a server-set
 cookie instead of `localStorage` would be robust. The storage choice, not the login-free idea, is
 what makes it fragile.
+
+*Unverified — no source recorded.*
 
 **The scanned pairing code is weaker than it sounds.** It requires both devices present and awake,
 and it only flows in one direction comfortably: a laptop can display a code for a phone to scan,

@@ -60,6 +60,8 @@ client that ADR-0002 made authoritative.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **The failure mode is not a rejected write, it is an accepted one.** Recorded as
 [the server hands back state the client will not accept](../failure-modes/the-server-hands-back-state-the-client-will-not-accept.md).
 Whatever is decided here has to answer what the client does in that moment, because every option

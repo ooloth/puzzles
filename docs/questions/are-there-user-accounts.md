@@ -48,13 +48,13 @@ one is ever wanted.
 
 ## Findings
 
-**Not blockers, and worth saying so.**
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes what an account is for: a
-signed-in player's work survives on every device. So
-[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) is downstream of
-this rather than ahead of it — it asks when that ships, not whether accounts exist — and
-[is there a paid tier?](is-there-a-paid-tier.md) is a use an account can be put to rather than a
-reason to have one.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**What an account is for is already established: a signed-in player's work survives on every
+device**, per [ADR-0006](../decisions/0006-what-a-players-work-survives.md).
+[Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) asks when
+that ships, not whether accounts exist, and [is there a paid tier?](is-there-a-paid-tier.md) is a
+use an account can be put to rather than a reason to have one.
 
 **This may not be a separate question.** Every identity mechanism catalogued in
 [how does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
@@ -65,6 +65,8 @@ is answered, since keeping both invites answering the same thing twice and diffe
 Deferring accounts looks free on one reading: without them there is no abuse resistance — an
 identifier anchored in browser storage can be discarded and reissued at will — but the fix for that
 is accounts, which is the same fix that would be built anyway.
+
+*Reasoned — a property of client-side storage under the user's control.*
 
 That reading holds only while nothing needs to attach to a person, and two things do. A durable play
 record is one, per [ADR-0006](../decisions/0006-what-a-players-work-survives.md). A paid tier would

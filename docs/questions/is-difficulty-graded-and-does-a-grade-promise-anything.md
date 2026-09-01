@@ -34,9 +34,9 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-**What this decides beyond itself.** What the generator has to measure while generating, and
-[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which cannot be answered until this is.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Grading decides what the generator has to measure while it generates a puzzle.**
 
 A grade that promises the player something can only be kept honest by checking it against real
 solves, which is a demand for a server and a queryable store. A grade that promises nothing removes

@@ -49,6 +49,8 @@ different frequencies and different failure costs.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **Payload size is not the constraint; connection setup is.** `../constraints.md` records that a
 fresh connection costs three to four round trips before any payload moves, that a degraded link
 sits at or below the 2g tier, and that mobile radios are expensive to wake. So the design pressure

@@ -57,6 +57,8 @@ app and the generator sharing one database file is what forced them onto a singl
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 Several arguments in the corpus already assume the ahead-of-time answer. The legacy analysis
 treats generation as "an offline batch job with no latency requirement", and that assumption is
 load-bearing in the argument that a compiled language isn't needed. If it were reversed, the

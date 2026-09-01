@@ -44,14 +44,20 @@ options that a local database file rules out.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **SQLite permits one writing process at a time, and multiple instances cannot share a local
 file** without corrupting it. This is what couples the data store to hosting: under SQLite,
 single-instance deployment stops being a preference and becomes a correctness requirement. It is
 also what disqualifies serverless platforms, so a different store leaves them in contention.
 
+*Unverified — no source recorded.*
+
 **In WAL mode a filesystem copy is not a valid backup.** It can capture a partial write and
 produce a silently corrupt file, which is worse than no backup because it looks like one. Any
 backup must use SQLite's online backup API or WAL-aware streaming.
+
+*Unverified — no source recorded.*
 
 Both of the above are facts nobody controls, but they only apply if SQLite is chosen. They move
 to [../constraints.md](../constraints.md) with the decision that adopts it, and are deleted with

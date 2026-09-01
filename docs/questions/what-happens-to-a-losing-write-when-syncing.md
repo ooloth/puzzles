@@ -30,6 +30,8 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **There may be no losing write.**
 [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
 settles that merges are deterministic and per cell, which means two devices that edited different

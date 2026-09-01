@@ -39,6 +39,8 @@ least equipped to do well.
 
 ## Findings
 
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
 **The previous decision's load-bearing argument has evaporated.** It chose a utility framework
 substantially because a standalone binary meant no Node.js dependency anywhere, consistent with a
 project that had no JavaScript toolchain at all. A local-first client has a JavaScript toolchain
@@ -56,3 +58,5 @@ reading source as text. A class built by concatenation or assembled from a varia
 detected and its styles are silently absent from the output. The mitigation is discipline —
 complete literal strings somewhere in source, or an explicit safelist — which means the failure
 mode is a missing style rather than an error.
+
+*Unverified — no source recorded.*

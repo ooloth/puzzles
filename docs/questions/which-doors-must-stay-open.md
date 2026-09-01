@@ -45,8 +45,9 @@ N/A — this resolves into a list, not a choice between alternatives.
 
 ## Findings
 
-**What this decides beyond itself.** Nothing directly, and that is the point: it constrains *how* other decisions are made rather than
-gating them. It should be consulted by every decision record, which is why the answer belongs in
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**This question constrains how other decisions are made rather than gating any of them.** It should be consulted by every decision record, which is why the answer belongs in
 [../decisions/README.md](../decisions/README.md) as a checklist rather than only in this folder.
 
 **Four doors are already named across existing docs, none of them here.**

@@ -19,27 +19,9 @@ silently.
 
 ## Blocked by
 
-[What does the server hold?](what-does-the-server-hold.md) — if the answer is nothing,
-there is no database, and this question closes rather than resolves.
-
-**Where the data physically sits is [where does this run?](where-does-this-run.md)**, not here. The
-two are close enough to be confused: an embedded database is a file on whatever box the server runs
-on, so choosing one narrows the hosting options to those offering persistent local disk, while a
-managed database makes hosting nearly free of the question. This decides which kind; that one
-decides where.
-
-**The runtime choice reaches this from the other direction.**
-[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) is answered
-first because it blocks scaffolding, and the candidates differ in how well they embed SQLite. That
-is a reason to note what each runtime costs here — not a reason to settle this early so a runtime
-can be justified by it.
-
-Then [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which decides whether stored data has to be *queryable* or can stay opaque. That single
-distinction is most of what separates the options below.
-
-Then [what does the server store, if anything?](what-does-the-server-store-if-anything.md) and
-[what load should the server handle?](what-load-should-the-server-handle.md).
+[What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — an
+embedded store needs a long-lived process with a local disk, so that answer sets the class before
+this one picks a member.
 
 ## Blocks
 
@@ -77,6 +59,32 @@ an extra network hop. The right answer if per-player queryable data turns out to
 considerable overhead if it does not.
 
 ## Findings
+
+**Not blockers, and worth saying so.**
+Two things that once blocked this are settled.
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that the server holds a
+durable per-player record, so the answer is not "nothing".
+[ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) establishes that it has to
+be queryable, which is what made this a real decision rather than a possible non-decision.
+
+**Where the data physically sits is [where does this run?](where-does-this-run.md)**, not here. The
+two are close enough to be confused: an embedded database is a file on whatever box the server runs
+on, so choosing one narrows the hosting options to those offering persistent local disk, while a
+managed database makes hosting nearly free of the question. This decides which kind; that one
+decides where.
+
+**The runtime choice reaches this from the other direction.**
+[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) is answered
+first because it blocks scaffolding, and the candidates differ in how well they embed SQLite. That
+is a reason to note what each runtime costs here — not a reason to settle this early so a runtime
+can be justified by it.
+
+Then [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which decides whether stored data has to be *queryable* or can stay opaque. That single
+distinction is most of what separates the options below.
+
+Then [what does the server store, if anything?](what-does-the-server-store-if-anything.md) and
+[what load should the server handle?](what-load-should-the-server-handle.md).
 
 **[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) would
 make this decision small.** Under its leading option the server checks that a payload is a

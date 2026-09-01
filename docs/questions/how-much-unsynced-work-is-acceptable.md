@@ -14,7 +14,9 @@ of how little data moves.
 
 ## Blocked by
 
-[What wins when battery and durability conflict](what-wins-when-battery-and-durability-conflict.md).
+[What wins when battery and durability conflict](what-wins-when-battery-and-durability-conflict.md)
+— worked alongside this rather than before it, since the two are one tradeoff seen from either end:
+how often to write, and what a write costs.
 
 ## Blocks
 

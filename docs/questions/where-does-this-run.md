@@ -14,17 +14,13 @@ contention.
 
 ## Blocked by
 
-the client holding state, settled by [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md), and
-[what the server stores](what-does-the-server-store-if-anything.md). Don't decide this one
-first — it was decided first last time.
+[What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
+single input this turns on, and the one whose absence let five unrelated questions be listed here
+instead. A long-lived process with a local disk and an ephemeral function want different platforms,
+and nothing else on the list changes the answer.
 
-[Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
-
-[What load should the server handle?](what-load-should-the-server-handle.md).
-
-[Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) and
-[is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
-— together these decide whether a server is needed at all, which comes before where one runs.
+Then [which database, if any?](which-database-if-any.md), since an embedded store narrows the field
+to platforms offering persistent local disk and a network-attached one does not.
 
 ## Blocks
 
@@ -103,6 +99,12 @@ mismatch rather than price. Back in contention if the server needs less than a d
 multi-app future.
 
 ## Findings
+
+**Not blockers, and worth saying so.**
+Don't decide this one first — it was decided first last time. Scale is not an input: the audience
+in [../problem.md](../problem.md) is deliberately small, so
+[what load should the server handle?](what-load-should-the-server-handle.md) does not discriminate
+between any candidate below.
 
 **Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
 Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely

@@ -31,14 +31,6 @@ N/A — settled, and the answer forces this one's hand.
 work survives on every device they use, which cannot be delivered by a device. So a server exists,
 and what is live here is what it does rather than whether it is there. Ready to work on now.
 
-That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
-does **not** gate this question. It decides whether a store must be queryable or can hold opaque
-bytes, which is the shape of
-[which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
-all. Treating it as a blocker here drags the generator's product questions — puzzle quality,
-difficulty grading, generation cost — onto the path to a server decision, and none of them belongs
-there.
-
 ## Blocks
 
 Whether a server exists, and therefore
@@ -96,6 +88,16 @@ quietly leaves reports nothing either. This is the one candidate whose whole pur
 the failure of the others.
 
 ## Findings
+
+**Not blockers, and worth saying so.**
+That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
+does **not** gate this question. It decides what is collected, not whether anything runs off-device;
+[ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) settles that whatever is
+stored is queryable, which is the shape of
+[which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
+all. Treating it as a blocker here drags the generator's product questions — puzzle quality,
+difficulty grading, generation cost — onto the path to a server decision, and none of them belongs
+there.
 
 **Puzzle content does not need a server to be *delivered*, and may need one to be *withheld*.**
 Generated ahead of time, puzzles can be static files, and a daily rhythm is satisfiable by shipping

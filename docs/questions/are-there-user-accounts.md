@@ -13,10 +13,8 @@ without one.
 
 ## Blocked by
 
-[Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md),
-[Is there a paid tier?](is-there-a-paid-tier.md),
-[Do privacy regulations apply?](do-privacy-regulations-apply.md) — each decides something
-accounts would have to serve, and a mechanism chosen before its purpose tends to acquire one.
+[Do privacy regulations apply?](do-privacy-regulations-apply.md) — an account is a person, and
+what may be held about one is unresearched.
 
 ## Blocks
 
@@ -59,6 +57,14 @@ person rather than to a browser, and because it is the natural place to put a pa
 one is ever wanted.
 
 ## Findings
+
+**Not blockers, and worth saying so.**
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes what an account is for: a
+signed-in player's work survives on every device. So
+[is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) is downstream of
+this rather than ahead of it — it asks when that ships, not whether accounts exist — and
+[is there a paid tier?](is-there-a-paid-tier.md) is a use an account can be put to rather than a
+reason to have one.
 
 **This may not be a separate question.** Every identity mechanism catalogued in
 [how does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)

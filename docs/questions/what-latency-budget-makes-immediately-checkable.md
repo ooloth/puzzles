@@ -14,7 +14,8 @@ paint — on a named reference device rather than on whatever the developer hold
 
 ## Blocked by
 
-[What interactions must the grid support?](what-interactions-must-the-grid-support.md).
+[How does a player enter a digit?](how-does-a-player-enter-a-digit.md) — the budget covers the
+input path, and what an input is comes first.
 
 ## Blocks
 
@@ -37,5 +38,9 @@ Ported from the legacy documentation review, 2026-08-30.
 ...
 
 ## Findings
+
+**Not blockers, and worth saying so.**
+The wider set in
+[what interactions must the grid support?](what-interactions-must-the-grid-support.md).
 
 ...

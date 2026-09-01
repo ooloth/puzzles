@@ -16,10 +16,10 @@ that is the part a listing cannot show and the part that is expensive to get wro
 
 ## Start here
 
-**[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)** Node,
-Bun or Deno. Nothing installs or runs until it is answered, and under Bun or Deno it also answers
-the package manager, the test runner and part of the build tool. Settle it by scaffolding a
-hello-world under each and running the real loop, not by comparing feature lists.
+**[What execution shape does the server have?](what-execution-shape-does-the-server-have.md)** A
+long-lived process with a local disk, or something ephemeral. It is the hub the runtime, the
+database and the hosting all turn on, and answering any of those without it means regretting one of
+them. Its own inputs are settled by ADR-0006 and ADR-0008, so it is ready now.
 
 ## How this list works
 
@@ -43,6 +43,12 @@ information and the most guessing. Splitting is cheap; a decision made a milesto
 The test is whether every part of the answer is needed to see the milestone working. If not, split
 it.
 
+**The grouping is checkable, and checked.** `scripts/check-docs.py` reports three things: broken
+links, a question in no milestone, and a question blocked by one filed later. That last is the
+error worth catching — it means either the milestone is wrong or the dependency is overstated, and
+a decision taken on top of it inherits the mistake. Twenty-two of them existed when the check was
+first written, including a first-milestone question blocked by five later ones.
+
 **Prefer prototyping to predicting.** Where a question could be settled by building the smallest
 throwaway thing that answers it, that is what "what would settle it" should say. This folder has a
 bias toward reasoning on paper that has to be actively resisted.
@@ -59,21 +65,31 @@ deployable, with the rules shared as source.
 
 ## M1 — "Hello!" is live
 
-A deployed skeleton. Client shell, server shell, generator shell, no features. Everything below is
-load-bearing for it, and several will collapse into each other depending on the first answer.
+A deployed skeleton: client shell, server shell, generator shell, no features. **These choices are
+meant to be permanent, not provisional.** The hosting choice is where the client and its API both
+live, and same-origin is what keeps a session cookie alive under Safari's first-party test — so
+getting it wrong is not a redeploy, it is a redeploy plus whichever of the runtime and the database
+has to move with it.
 
-- [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-- [Which package manager?](which-package-manager.md) — only separate if the answer above is Node.
+That is why the database is here rather than with the rest of the server work. It is not needed to
+render "Hello!"; it is needed for the platform choice to be one we keep.
+
+- [What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
+  hub. Everything below except the client chain derives from it.
+- [Which database, if any?](which-database-if-any.md) — the class at minimum. An embedded store
+  needs persistent local disk and narrows hosting; a network-attached one does not.
+- [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) — Node,
+  Bun or Deno. Spike it. Under Bun or Deno it also answers the package manager and the test runner.
+- [Where does this run?](where-does-this-run.md) — from the three above.
+- [What runs the server?](what-runs-the-server-if-there-is-one.md) — mostly falls out of the runtime.
 - [What is the repo's top-level shape?](what-is-the-repos-top-level-shape.md) — one package or
-  several, and where the shared rules module sits so both a browser and a batch process can reach it.
+  several, and where the shared rules module sits so both a browser and a batch process reach it.
+- [Which package manager?](which-package-manager.md) — only separate if the runtime is Node.
 - [Is the client served as static files?](is-the-client-served-as-static-files.md) — derived from
-  0002 and the offline guarantee, so closer to a recording than a decision. It decides whether the
-  scaffold is Vite-shaped or meta-framework-shaped, and whether a file host is enough.
+  0002 and the offline guarantee, so closer to a recording than a decision.
 - [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither,
   and which one.
 - [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
-- [What runs the server?](what-runs-the-server-if-there-is-one.md) — mostly falls out of the runtime.
-- [Where does this run?](where-does-this-run.md)
 
 ## M2 — a grid is on the screen
 
@@ -83,6 +99,8 @@ text.
 - [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
   to render one. The full answer is not needed until M5.
 - [How is the app styled?](how-is-the-app-styled.md)
+- [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — module organisation, once there
+  are modules to organise.
 
 ## M3 — a player can fill it in
 
@@ -95,9 +113,13 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 
 The first durability promise anything actually keeps.
 
+- [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md) — depth is what
+  decides the shape below, so it comes first even though undo itself is an M8 feature.
+- [What can a player do with no network?](what-can-a-player-do-with-no-network.md) — one board or a
+  browsable archive, which sets storage volume by orders of magnitude.
+- [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
 - [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
   one stack choice with no clean migration path.
-- [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
 
 ## M5 — the rules run
 
@@ -105,21 +127,21 @@ Illegal moves are recognised, and a finished board is recognised as finished.
 
 - [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — the full answer,
   now that something depends on it.
-- [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
-  — an input to the above, since a model that fits two game types is often a model that fits two.
 
 ## M6 — a real puzzle appears
 
 Not a hard-coded board. Something published, fetched and rendered.
 
-- [What does the server hold?](what-does-the-server-hold.md) — the catalogue candidate specifically.
+- [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md) — measurement, and
+  both questions below turn on it.
 - [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
 - [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
+- [What does the server hold?](what-does-the-server-hold.md) — the catalogue candidate specifically.
+- [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
 
 ## M7 — it works with no network
 
 - [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
-- [What can a player do with no network?](what-can-a-player-do-with-no-network.md)
 - [How long must offline play survive?](how-long-must-offline-play-survive.md)
 - [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
 
@@ -127,7 +149,6 @@ Not a hard-coded board. Something published, fetched and rendered.
 
 Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
-- [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md)
 - [Are hints in scope?](are-hints-in-scope.md)
 - [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — notes,
   undo, drag-select, keyboard navigation, highlighting.
@@ -137,11 +158,10 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 ## M9 — a player can sign in
 
+- [Do privacy regulations apply?](do-privacy-regulations-apply.md)
 - [Are there user accounts?](are-there-user-accounts.md)
 - [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
-- [Do privacy regulations apply?](do-privacy-regulations-apply.md)
 - [What does the server hold?](what-does-the-server-hold.md) — the rest of the inventory.
-- [Which database, if any?](which-database-if-any.md)
 - [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
 
 ## M10 — work follows a player between devices
@@ -151,12 +171,12 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 - [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
 - [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
 - [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
+- [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
 - [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
 ## M11 — the puzzles are ours
 
-- [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md)
-- [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+- [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
 
 ## M12 — something is paid for
 
@@ -170,8 +190,7 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 Real, and nothing is waiting on them. Several are research rather than choices.
 
-[How is the codebase laid out?](how-is-the-codebase-laid-out.md) — module organisation, once there
-are modules. [What runs the tests?](what-runs-the-tests.md) and
+[What runs the tests?](what-runs-the-tests.md) and
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) — both likely
 answered by the runtime. [How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 [how does Android evict stored data?](how-does-android-evict-stored-data.md),
@@ -184,7 +203,6 @@ answered by the runtime. [How long does Safari really keep our storage?](how-lon
 [what does the server store, if anything?](what-does-the-server-store-if-anything.md),
 [is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
-[what wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md),
 [which doors must stay open?](which-doors-must-stay-open.md),
 [why did unfinished.md go stale?](why-did-unfinished-md-go-stale.md),

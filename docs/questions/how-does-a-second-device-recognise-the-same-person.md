@@ -14,9 +14,11 @@ browser and the user.
 
 ## Blocked by
 
-[is cross-device resume in scope](is-cross-device-resume-in-scope-for-v1.md) and
-[are there user accounts](are-there-user-accounts.md). If either answer is no, this question
-disappears.
+[Are there user accounts?](are-there-user-accounts.md) — the mechanism chosen there answers this,
+or makes it disappear.
+
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) settles that a signed-in player's work
+follows them, so this asks how that is done rather than whether it is wanted.
 
 ## Blocks
 

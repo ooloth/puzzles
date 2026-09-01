@@ -15,7 +15,9 @@ cost, deployment surface and how reversible it is.
 
 ## Blocked by
 
-[What does the server hold?](what-does-the-server-hold.md) — there may be no server, in
+[What execution shape does the server have?](what-execution-shape-does-the-server-have.md), then
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md), which
+together leave little for this to decide. What the server holds — there may be no server, in
 which case this closes. Then [which database, if any?](which-database-if-any.md), because a
 runtime that cannot reach the chosen store is disqualified.
 

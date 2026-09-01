@@ -2,6 +2,7 @@
 number: 0003
 status: accepted
 date: 2026-08-31
+amended: 2026-08-31
 ---
 
 # 0003 — This is delivered over the web
@@ -101,11 +102,10 @@ uses first-party accessibility APIs and avoids the bug class structurally. This 
 judged not decisive; [is accessibility in scope for
 v1?](../questions/is-accessibility-in-scope-for-v1.md) remains open and inherits this as a finding.
 
-**[../constraints.md](../constraints.md)'s browser sections are now a bill this decision chose to
-pay, not weather it inherited.** Roughly two thirds of that file — eviction clocks, the
-`persist()` membership test, the first-party-cookie topology trap, fabricated quota figures, absent
-background execution — exists because of this record and would not exist under any of the rejected
-options. That reframing is most of the value of having argued this rather than inferred it.
+**[../constraints.md](../constraints.md)'s browser sections are the cost of this decision.**
+Roughly two thirds of that file — eviction clocks, the `persist()` membership test, the
+first-party-cookie topology trap, fabricated quota figures, absent background execution — exists
+because of this record and would not exist under any of the rejected options.
 
 **The failure mode worth naming is motivational rather than technical.**
 [ADR-0001](0001-launch-with-sudoku-then-star-battle.md) identifies the maintainer losing interest
@@ -125,12 +125,11 @@ TypeScript codebase and the URL. It does not recover 120Hz. Its cost is a few we
 the store gates described above, and it carries guideline 4.2 risk that an offline-first game with
 bundled assets and local state is well shaped to survive.
 
-**One correction worth recording, because the opposite is widely assumed and was assumed here until
-checked:** wrapping does not by itself escape the storage eviction in `../constraints.md`. WebKit
-states that tracking prevention is enabled by default in all `WKWebView` applications, and
-Capacitor's own documentation warns that mobile operating systems may clear `localStorage`. The
-wrap recovers durability only when storage is routed through a native plugin rather than the
-webview's own store.
+**Wrapping does not by itself escape the storage eviction in `../constraints.md`**, though it is
+widely described as though it does. WebKit states that tracking prevention is enabled by default in
+all `WKWebView` applications, and Capacitor's own documentation warns that mobile operating systems
+may clear `localStorage`. The wrap recovers durability only when storage is routed through a native
+plugin rather than the webview's own store.
 
 That makes the boundary the thing to protect rather than the wrapper the thing to plan:
 

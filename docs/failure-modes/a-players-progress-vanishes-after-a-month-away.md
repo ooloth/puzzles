@@ -5,7 +5,7 @@ decays: slow
 status: active
 ---
 
-# A player's progress vanishes after a week away
+# A player's progress vanishes after a month away
 
 ## Threatens
 
@@ -16,17 +16,20 @@ session is interrupted.
 
 Progress lives in the browser, because
 [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) put it there. Safari
-deletes all script-writable storage after seven days without interaction with the site. A player
-starts a puzzle, life intervenes, and eight days later they open the app to an empty board and no
+deletes all script-writable storage after thirty days without interaction with the site. A player
+starts a puzzle, life intervenes, and five weeks later they open the app to an empty board and no
 explanation. Nothing failed. Every component behaved exactly as designed.
 
 ## Why here specifically
 
-The audience is described as playing in short bursts during commutes, and a gap of a week is
-ordinary for that pattern rather than exceptional. A daily release does not prevent it — it
-protects the players who return daily, who were never at risk, while the player who lapses for
-eight days is both the one who loses their board and the one most likely to be deciding whether
-to come back at all.
+The audience is described as playing in short bursts during commutes, and a month-long gap is
+uncommon for that pattern but not rare — an illness, a busy period at work, or a holiday reaches
+it. A daily release does not prevent it: it protects the players who return daily, who were never
+at risk, while the player who lapses for a month is both the one who loses their board and the one
+most likely to be deciding whether to come back at all.
+
+A thirty-day window makes this rarer than a seven-day one would, which lowers how often this fires
+without changing what happens when it does.
 
 ## How we'd notice
 

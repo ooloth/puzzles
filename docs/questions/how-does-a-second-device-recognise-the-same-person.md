@@ -83,8 +83,8 @@ technical sophistication.
 ## Findings
 
 **The axis that orders all of these is where the credential lives.** Anything held by the browser
-is durable only conditionally: `localStorage` is deleted by Safari after seven days without
-interaction, a cookie written by JavaScript is capped at about the same, and a server-set
+is durable only conditionally: `localStorage` is deleted by Safari after thirty days without
+interaction, a cookie written by JavaScript is capped at about seven, and a server-set
 `HttpOnly` cookie survives only while the setting server looks genuinely first-party. Anything
 held by the *player* — an email, a passkey, a code they can retype — is durable unconditionally,
 because it was never in the browser to be cleared.

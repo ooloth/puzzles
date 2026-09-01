@@ -29,12 +29,12 @@ this question turns on.
 
 Two things, and the first is research rather than judgement.
 
-[Is Safari's storage window still seven days?](is-safaris-storage-window-still-seven-days.md)
-decides whether a returning player ever loses local data in practice. What resets the clock is
-now known — any interaction with the page does, so active play holds it open indefinitely — so
-the answer turns entirely on the length of the gap a lapsed player can take. At seven days
-the durability promise cannot be kept on-device; at thirty, the local-only branch is far stronger
-than it looks.
+[How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md)
+decides whether a returning player ever loses local data in practice. Any interaction with the page
+resets the clock, so active play holds it open indefinitely and the answer turns entirely on the
+length of the gap a lapsed player can take. The recorded figure is thirty days, which makes the
+local-only branch considerably stronger than a seven-day window would. What remains unconfirmed is
+whether a shipped browser matches the source.
 
 The rest is a product call: whether progress following a player is part of what this is, or a
 convenience that can wait.
@@ -80,7 +80,7 @@ machinery exists to serve this answer being yes — which is worth knowing befor
 elsewhere and a way to know it is the right player's. What separates them is that recovery can use
 an identifier the *browser* still holds, while transfer needs one the *player* holds.
 
-Safari's seven-day wipe deletes non-cookie website data, and a server-set `HttpOnly` cookie is not
+Safari's storage wipe deletes non-cookie website data, and a server-set `HttpOnly` cookie is not
 covered by it — see [../constraints.md](../constraints.md). So an anonymous session cookie can
 outlive the progress it points at: local data is wiped, the cookie survives, the server returns
 the last synced state, and the player never learns anything happened. No account, no code, no
@@ -112,11 +112,18 @@ data about people who cannot be identified also cannot be deleted on request.
 
 **Which puts an existing promise in question.**
 [../guarantees/durability.md](../guarantees/durability.md) says in-progress work is never lost,
-however a session is interrupted. Safari clears all script-writable storage after seven days
-without interaction. A player returning after eight days finds nothing, and that is an
-interruption by any ordinary reading. So the durability promise as written may already require
-what cross-device resume requires — in which case the expensive machinery is not optional and
-this question is only about whether to also get transfer, which by then is nearly free.
+however a session is interrupted. Safari clears all script-writable storage after thirty days
+without interaction. A player returning after five weeks finds nothing, and that is an interruption
+by any ordinary reading. So the durability promise as written may already require what cross-device
+resume requires — in which case the expensive machinery is not optional and this question is only
+about whether to also get transfer, which by then is nearly free.
+
+The thirty-day figure weakens this argument without removing it. The promise is unbounded, so it is
+broken by a lapse of any length, and a month is well within what "life intervened" covers. What
+changes is the size of the affected group: a month of absence is far rarer than a week, so the
+question becomes whether the promise should be bounded rather than whether it can be kept. That is
+[how long must in-progress work survive?](how-long-must-in-progress-work-survive.md), and it is
+upstream of this.
 
 **There are exactly two ways to keep that promise, and the cheap one is worse than it looked.**
 A server copy with durable identity, or preventing eviction by requiring home-screen
@@ -167,9 +174,9 @@ their phone and opens the app on their laptop must not be asked to pay again. So
 arrives later either way.
 
 **Engagement frequency changes who is exposed, not whether anyone is.** A daily release creates
-the *opportunity* for daily play; it does not produce it. Whether the seven-day clock fires depends
-on retention, which is unknown and which a small new audience is unlikely to have much of. Even
-committed players take holidays, get busy, or lose a week.
+the *opportunity* for daily play; it does not produce it. Whether the clock fires depends on
+retention, which is unknown and which a small new audience is unlikely to have much of. A month is
+long enough that most lapses never reach it, which narrows this exposure without closing it.
 
 And the exposure inverts in the worst possible way. **The daily model protects the players who need
 protection least.** Someone playing every morning was never at risk; someone who lapses for eight

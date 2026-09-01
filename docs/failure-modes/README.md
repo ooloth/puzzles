@@ -62,7 +62,7 @@ it usually matters more than the failure itself.>
 
 ### Threatening durability
 
-- [A player's progress vanishes after a week away](a-players-progress-vanishes-after-a-week-away.md)
+- [A player's progress vanishes after a month away](a-players-progress-vanishes-after-a-month-away.md)
   — storage eviction, with no error and no report. The only signal is someone not coming back.
 - [A corrupt board becomes the canonical one](a-corrupt-board-becomes-the-canonical-one.md)
   — a client bug propagated by the copy that exists to be recovered from.

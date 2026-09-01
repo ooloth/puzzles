@@ -61,7 +61,7 @@ than skipping them (see [../constraints.md](../constraints.md)) — cheap on a d
 a weak mobile link, and useless with no link at all.
 
 Two constraints already recorded bear directly on this. Browser storage is evictable, and
-Safari clears all script-writable storage after seven days without interaction — which reaches
+Safari clears all script-writable storage after thirty days without interaction — which reaches
 a cached shell as well as saved progress. So "installed once" is not a durable state, and
 whatever answers this question has to survive its own cache being deleted.
 

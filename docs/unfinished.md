@@ -19,28 +19,17 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-### Question files still size their arguments against a seven-day Safari window
+### ADR-0002 cites a seven-day storage window
 
-**You'll see** "Safari clears all script-writable storage after seven days" repeated across
-[questions/](questions/) — in
-[is cross-device resume in scope for v1?](questions/is-cross-device-resume-in-scope-for-v1.md) in
-several places, in
-[how does a second device recognise the same person?](questions/how-does-a-second-device-recognise-the-same-person.md),
-in [how does the app itself stay available offline?](questions/how-does-the-app-itself-stay-available-offline.md),
-and in [ADR-0002](decisions/0002-the-client-holds-and-mutates-puzzle-state.md)'s risk section. Read
-together they make a lapsed player look like a normal case.
+**You'll see** [ADR-0002](decisions/0002-the-client-holds-and-mutates-puzzle-state.md) state in its
+risk section that Safari deletes script-writable storage after seven days without interaction.
 
-**Actually** the number is thirty, and seven is a penalty applied only to a domain reached by a
-tracker-originated decorated link — a shape nobody arriving at this app matches.
-[constraints.md](constraints.md) is correct and is the authority; the question files predate it and
-have not been resized. The difference is not cosmetic: it is roughly a four-fold change in how many
-players are ever exposed, and several of those findings argue for machinery that a thirty-day
-window may not justify.
+**Actually** the window is thirty days, and seven applies only to a domain reached by a
+tracker-originated decorated link, which is not how anyone reaches this app.
+[constraints.md](constraints.md) is the authority on the figure.
 
-**So** take the figure from `constraints.md` and treat any argument in a question file that turns
-on the length of the gap as needing to be re-run before it is used. ADR-0002 is append-only and its
-conclusion still holds — client-held state is evictable either way — so only the magnitude in its
-risk section is stale.
+**So** take the number from `constraints.md`. The decision itself is unaffected — client-held state
+is evictable at either figure — so only the magnitude in that one sentence is wrong.
 
 ### The stack is mid-decision, and looks more settled than it is
 
@@ -49,8 +38,8 @@ question files citing detailed research into React, Preact, Svelte, Vite and Bun
 though the stack is broadly agreed and nobody has got round to typing the install command.
 
 **Actually** only the delivery platform is chosen.
-[ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settled that this is delivered over
-the web on 2026-08-31, which is why the browser specifics in `constraints.md` are in scope — they
+[ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settles that this is delivered over
+the web, which is why the browser specifics in `constraints.md` are in scope — they
 are the price of that one decision and are labelled as such. Everything else in the stack is still
 open: the language, what renders the client, what holds a player's work, whether a server exists,
 and where it deploys. The research inside the question files is homework for decisions still to be

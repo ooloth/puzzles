@@ -54,8 +54,13 @@ concrete one.
 *Per-type models with a shared envelope.* Each game type defines its own shape; a common wrapper
 carries identity, type and versioning. Storage and transport are generic, the domain is not.
 
-*Sudoku only, generalised when the second type arrives.* The honest "not yet". Cheapest now, and the
-migration it risks is the expensive one named above.
+*Sudoku only, generalised when the second type arrives.* **Ruled out** by
+[ADR-0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md). It was the honest "not
+yet" and the cheapest thing available now, and the migration it risks reaches client storage, where
+migrations run once in somebody's browser with no server to retry from.
+
+The two options above both satisfy ADR-0010, which settles what a shape may not assume and nothing
+about what it should contain. Choosing between them is still this question's job.
 
 ## Findings
 

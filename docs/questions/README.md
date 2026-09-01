@@ -87,6 +87,14 @@ and work lives in issues. [0008](../decisions/0008-the-option-to-analyse-play-is
 option to analyse play is preserved.
 [0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md) the option to gate puzzle
 access is preserved.
+[0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md) the option to add puzzle
+types is preserved.
+
+Three of those are doors rather than choices — 0008, 0009 and 0010 each keep a future reachable
+rather than building anything. They are titled alike on purpose, so that
+`ls ../decisions/ | rg 'option-to-.+-is-preserved'` is the list, and
+[../decisions/README.md](../decisions/README.md) makes reading them the first step before any record
+is written.
 
 ## M1 — "Hello!" is live
 

@@ -68,9 +68,10 @@ Minting one on first visit costs almost nothing today.
 > guest record and the account record are one shape, so signing in promotes what is there instead
 > of needing an identifier to have survived.
 
-*More puzzle types.* [ADR-0001](../decisions/0001-launch-with-sudoku-then-star-battle.md)
-sequences star battle after sudoku. The threat is a data model that hard-codes a nine-by-nine grid
-of digits.
+*More puzzle types.* **Held by a record**, not by this list:
+[ADR-0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md). The threat was a data
+model hard-coding a nine-by-nine grid of digits, and that record rules out the four assumptions that
+would produce one while leaving the representation itself open.
 
 *Silent recovery after eviction.* The threat is hosting topology, above.
 

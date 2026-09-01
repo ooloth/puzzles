@@ -25,18 +25,24 @@ Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 question files citing detailed research into React, Preact, Svelte, Vite and Bun. It reads as
 though the stack is broadly agreed and nobody has got round to typing the install command.
 
-**Actually** only the delivery platform is chosen.
-[ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settles that this is delivered over
-the web, which is why the browser specifics in `constraints.md` are in scope — they
-are the price of that one decision and are labelled as such. Everything else in the stack is still
-open: the language, what renders the client, what holds a player's work, whether a server exists,
-and where it deploys. The research inside the question files is homework for decisions still to be
-made, not the conclusions of decisions already made — a shortlist is not a choice.
+**Actually** the product decisions are much further along than the stack, and the two are easy to
+confuse because they sit in one folder.
+[ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settles that this is delivered over the
+web, which is why the browser specifics in `constraints.md` are in scope — they are the price of that
+one decision and are labelled as such.
+[ADR-0005](decisions/0005-typescript-across-every-deployable.md) settles the language.
+[ADR-0006](decisions/0006-what-a-players-work-survives.md) establishes that a server exists and holds
+a durable per-player record.
+
+**Every tool is still open**: what renders the client, what runs TypeScript outside the browser,
+which database, what holds a player's work in the browser, and where any of it deploys. The research
+inside the question files is homework for decisions still to be made, not the conclusions of
+decisions already made — a shortlist is not a choice, and every Findings section now says so in its
+first line.
 
 **So** install nothing yet, and work [questions/README.md](questions/README.md) in the order it
-gives. Each entry names what it derives from, so the order is checkable rather than asserted. If
-you are about to reach for a tool that is not the next entry in that order, that is the signal to
-stop and find the decision above it.
+gives. If you are about to reach for a tool that is not in the current milestone, that is the signal
+to stop and find the decision above it.
 
 <!-- Template:
 

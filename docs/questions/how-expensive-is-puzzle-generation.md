@@ -13,6 +13,15 @@ the language choice. It was never measured — see Findings — and the language
 leans on it. Cost also decides whether puzzles can be generated on demand or must be produced
 ahead of time, which shapes the whole content pipeline.
 
+**This does not gate the language, despite the Blocks list below.** The concern was that
+CPU-heavy generation might rule out a language that also runs in a browser.
+[../problem.md](../problem.md) already settles it: the interactive path outranks batch throughput,
+generation is separable and can be slow, and it never competes with a player mid-puzzle. A slow
+generator is an accepted cost rather than a reason to add a second language, so
+[which language the deployables share](which-language-do-the-deployables-share.md) can be decided
+without this. What it does gate is whether puzzles are produced on demand or ahead of time, and the
+shape of the content pipeline.
+
 ## Blocked by
 
 N/A — nothing needs to be answered first.

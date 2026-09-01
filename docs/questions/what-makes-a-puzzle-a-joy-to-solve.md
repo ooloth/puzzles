@@ -16,6 +16,10 @@ and none is written down.
 Until this is answered, the generator has no target beyond correctness — which means it can be
 finished and still produce puzzles nobody enjoys.
 
+**This gates puzzle quality, not the stack.** It decides whether the puzzles are good. What the
+generator is built with follows from the shared language — see the order in [README.md](README.md).
+Nothing on the road to a tech stack waits on this.
+
 ## Blocked by
 
 [Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).

@@ -27,11 +27,13 @@ complete while doing it. The list under Options is the full set, and it is kept 
 that outlives the device's storage is the main candidate for something that must be true
 elsewhere.
 
-And [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-which supplies two more candidates. Both roots feed this question and neither determines the other,
-so they are answered in turn — but **each answers only what must be true, never whether a server
-follows.** That conclusion is drawn here, once, with the whole list in view. Answering it early
-inside either root is how the list gets shortened without anyone noticing.
+That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
+does **not** gate this question. It decides whether a store must be queryable or can hold opaque
+bytes, which is the shape of
+[which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
+all. Treating it as a blocker here drags the generator's product questions — puzzle quality,
+difficulty grading, generation cost — onto the path to a server decision, and none of them belongs
+there.
 
 ## Blocks
 

@@ -11,6 +11,10 @@ resolves_into: decision
 Generation is deferred in the work order but central to what this project is. A seeded launch
 set needs its own validation, because nothing generated it.
 
+**This gates puzzle quality, not the stack.** It decides whether the puzzles are good. What the
+generator is built with follows from the shared language — see the order in [README.md](README.md).
+Nothing on the road to a tech stack waits on this.
+
 ## Blocked by
 
 [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md).

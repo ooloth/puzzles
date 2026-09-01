@@ -19,154 +19,117 @@ Nothing is installed yet. What follows is how that gets fixed without any of it 
 reflex: each stack decision has the foundational calls it rests on placed ahead of it, so no tool
 is picked before the thing it is supposed to serve is known.
 
+## Start here
+
+Three questions are ready — every input they have is answered. None derives from another, so take
+whichever you like; the bracketed count is how many later decisions each one unblocks.
+
+1. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
+   [9] Decides whether one language must serve a browser and a batch process. Everything about the
+   language, and therefore the generator's runtime, hangs off it.
+2. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
+   [8] The durability promise with a bound and a device scope. Decides whether a server is forced.
+3. **[Is the client served as static files?](is-the-client-served-as-static-files.md)**
+   [7] Decides whether the client can boot and navigate with no network, which prunes the rendering,
+   build and hosting choices together.
+
 ## The order
 
-Each entry names what it derives from, so the order is checkable rather than asserted. If an
-entry's inputs are all answered, it is ready. If they are not, working it produces an answer that
-is arbitrary and will not look arbitrary.
+Twenty records, in four layers. Each layer's inputs are settled by the layers above it, so the
+numbering in [../decisions/](../decisions/) reads as depth: a low number is a decision more things
+rest on.
 
-Ordering is by derivation only. Nothing is placed because it is quick, cheap or unblocking; that is
-why the package manager is last in its chain rather than first.
+Ordering is by derivation. A decision is never taken before something it derives from, whatever
+that would unblock. Among decisions that derive from nothing still open, the one unblocking the
+most is taken first.
 
-[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery. It was the root
-of this order, so it is now a standing input cited as `ADR-0003` rather than by position.
+**What the generator's product questions do not gate.** Whether puzzles are a joy to solve, whether
+difficulty is graded, how expensive generation is, and whether v1 ships generated or seeded puzzles
+all decide whether the puzzles are *good*. None of them decides what the generator is *built with* —
+that follows from the shared language in 0005. They are real and they are not on this road.
 
-### There are two chains, and they do not depend on each other
+### Layer 0 — settled
 
-ADR-0003 unblocked the whole client chain at once. Nothing in it needs a product decision, because
-the promises that are still open — how long work survives, what we must learn from play — do not
-discriminate between any of the candidates. Every framework under consideration can render a grid,
-hold state locally and work offline.
+[0001](../decisions/0001-launch-with-sudoku-then-star-battle.md) which games, in what order.
+[0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) the client holds and mutates
+puzzle state. [0003](../decisions/0003-this-is-delivered-over-the-web.md) this is delivered over the
+web.
 
-The server chain is different. It cannot start until two promises are made, because whether a
-server exists at all depends on them.
+### Layer 1 — ready now
 
-So this is not one list worked top to bottom. It is two lists, and the client chain is ready now
-while the server chain is not.
+0004. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
+      — from 0003. One language must serve a browser and a batch process, or it need not.
 
-**Three things this does not license.**
+0005. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
+      from 0003 and 0004. Also settles what the generator is written in.
 
-Being unblocked is not permission to skip the derivation. Each entry below still gets its inputs
-checked and still produces a record, and an entry whose inputs are answered is *ready to argue*,
-not already decided.
+0006. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
+      0002 and [../guarantees/offline.md](../guarantees/offline.md). The narrow question is whether
+      the client boots and navigates with no network, which is not the same as ruling out every
+      meta-framework — only their server-per-navigation modes.
 
-Nothing gets installed because one question was answered. The client chain ends at a package
-manager for a reason: installing is what happens after the chain, not during it.
+0007. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
+      — from [../guarantees/durability.md](../guarantees/durability.md), which states no bound and
+      names no device. ADR-0003 makes this expensive rather than free: the platform ceiling in
+      [../constraints.md](../constraints.md) binds.
 
-One chain is worked at a time. They are independent, which means either can be picked up — not
-that both should be in flight. Two open chains is two contexts to hold, and the roots in the
-server chain are the harder thinking.
+### Layer 2
 
-### The client chain — ready now
+0008. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from 0007, plus
+      entitlement, push and observability. That file holds the full inventory of candidates and is
+      worked whole, because each candidate can be declined on its own and the sum of those refusals
+      is a static site nobody chose.
 
-Every entry here derives from ADR-0003 or from another entry in this chain. None of it waits on
-anything in the server chain.
+0009. **[What renders the client?](what-renders-the-client.md)** — from 0005 and 0006. Framework,
+      minimal library, or neither; the class, not the member.
 
-C1. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
-    — from ADR-0003. Its force is that one language must serve both a browser and a batch process.
-    ADR-0003 gives it a second job: a rules engine that stays a pure module is what keeps a native
-    shell cheap to add later. Start here — it is the most upstream entry in this chain.
+### Layer 3
 
-C2. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
-    ADR-0003. Implied by ADR-0002 plus the offline guarantee, and decided nowhere. Rules
-    meta-frameworks in or out, which prunes C4 and C5 substantially.
+0010. **[Which component framework?](which-component-framework.md)** — from 0009. Researched;
+      shortlisted to React, Preact and Svelte.
 
-C3. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
-    from ADR-0003 and C1.
+0011. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from 0007 and 0008.
+      The only stack choice with no clean migration path. ADR-0003 adds a constraint on how it is
+      reached: one narrow interface, one implementation behind it, nothing reaching around it.
 
-C4. **[What renders the client?](what-renders-the-client.md)** — from C2 and C3. Framework, minimal
-    library, or neither; the class, not the member.
+0012. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from 0008 and 0005.
 
-C5. **[Which component framework?](which-component-framework.md)** — from C3 and C4. Researched;
-    shortlisted to React, Preact and Svelte.
+0013. **[Which database, if any?](which-database-if-any.md)** — from 0008, and from
+      [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+      which decides whether the store must be queryable or can hold opaque bytes. That usage
+      question gates the *shape* of this decision only. It does not gate 0008.
 
-C6. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from C5.
-    Researched.
+0014. **[Where does it deploy?](where-does-this-run.md)** — from 0008, 0012 and 0013. One trap:
+      silent recovery after eviction depends on the app and its API being hosted so a server-set
+      cookie is judged first-party — see [../constraints.md](../constraints.md).
 
-C7. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
-    — from C6, since the precache list is a build output.
+### Layer 4 — follows from the above
 
-C8. **[What runs the tests?](what-runs-the-tests.md)** — from C6.
+0015. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from
+      0010. Software gets installed here.
 
-C9. **[How is it styled](how-is-the-app-styled.md) and
-    [laid out](how-is-the-codebase-laid-out.md)?** — from C5.
+0016. **[What runs the tests?](what-runs-the-tests.md)** — from 0015.
 
-C10. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
-     C8. Fills the [../verification.md](../verification.md) stub.
+0017. **[How is it styled?](how-is-the-app-styled.md)** — from 0010.
 
-### The server chain — twelve deep, and only its first entries are ready
+0018. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
+      — from 0015, since the precache list is a build output.
 
-Whether a server exists is decided at S8, and S8 needs two promises. One of them, S7, sits on top
-of five generator questions that nobody has worked. **This chain is much further from its stack
-decisions than the client chain is**, and the depth is the reason to expect it to take longer
-rather than a reason to skip ahead inside it.
+0019. **[Which package manager?](which-package-manager.md)** — from 0015 and 0012. Derived from both
+      runtimes.
 
-S1, S2 and S6 are ready now. Nothing derives them.
+0020. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
+      0016. Fills the [../verification.md](../verification.md) stub.
 
-**No entry before S8 concludes that a server exists.** Each answers only what must be true. That
-conclusion is drawn once, at S8, with every candidate in view — the inventory lives in that file,
-and the reason it is gathered rather than settled piecemeal is recorded there.
+Numbers are the intended sequence, not reservations. A record takes the next free number when it is
+written, and if this order changes the numbers here change with it.
 
-S1. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
-    [../guarantees/durability.md](../guarantees/durability.md) with a bound and a device scope.
-    Written without either, it has been read as anything. ADR-0003 makes this expensive rather than
-    free: the platform ceiling in [../constraints.md](../constraints.md) binds, where a native app
-    would have made "indefinitely, on this device" close to free.
-
-S2. **[How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md)** — the base of
-    the generator chain.
-
-S3. **[Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)** —
-    from S2.
-
-S4. **[What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)** — from S3.
-    The stated point of the project, currently answered in one line.
-
-S5. **[Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)**
-    — from S4, and a promise, so it outranks what derives from it. If a grade promises the player
-    something, keeping it honest requires calibrating the generator against real solves, which is
-    S7's strongest demand. If a grade promises nothing, that demand is curiosity and fails the
-    guard question in [../problem.md](../problem.md).
-
-S6. **[Do privacy regulations apply?](do-privacy-regulations-apply.md)** — ready now, and
-    independent of S2 through S5. Recording how puzzles are solved is collecting behavioural data
-    about players. [../constraints.md](../constraints.md) closes by recording that these obligations
-    are unresearched, so S7 cannot decide to collect anything before this is known.
-
-S7. **[What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)**
-    — from S5 and S6. Including what the maintainer wants to learn from historical play, which is
-    the argument for a store that can be queried rather than one that holds opaque bytes.
-
-S8. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from S1 and S7, and from
-    [is there a paid tier?](is-there-a-paid-tier.md), since entitlement is the one thing a device
-    cannot be trusted to hold. Holds the full inventory of candidates; worked whole, in one sitting.
-
-S9. **[What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)**
-    — from S8.
-
-S10. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from S8.
-
-S11. **[Which database, if any?](which-database-if-any.md)** — from S8 and S7. A non-decision only
-     if both queryable-store candidates in S8 lose.
-
-S12. **[Where does it deploy?](where-does-this-run.md)** — from S8, S10 and S11. Late on purpose;
-     it was decided first last time. One trap: silent recovery after eviction depends on the app
-     and its API being hosted so a server-set cookie is judged first-party — see
-     [../constraints.md](../constraints.md).
-
-### Where the chains meet
-
-Neither of these can be worked until both chains reach the entries they name.
-
-J1. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from S1 and S8, plus
-    [what a player can do with no network](what-can-a-player-do-with-no-network.md) for volume and
-    [snapshot or event log](is-puzzle-state-a-snapshot-or-an-event-log.md) with
-    [undo depth](is-undo-in-scope-and-how-far-back.md) for shape. The only stack choice with no
-    clean migration path. ADR-0003 adds a constraint on how it is reached rather than on what is
-    chosen: one narrow interface, one implementation behind it, nothing reaching around it.
-
-J2. **[Which package manager?](which-package-manager.md)** — from C6 and S10. Last because it is
-    derived from both runtimes, not first because it is easy.
+Also open, and gating puzzle quality rather than the stack:
+[what makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md),
+[is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md),
+[how expensive is generation](how-expensive-is-puzzle-generation.md),
+[does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md),
+[how is the codebase laid out](how-is-the-codebase-laid-out.md).
 
 Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any of them.
 Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided

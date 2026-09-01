@@ -12,6 +12,10 @@ resolves_into: decision
 guaranteed to be easier than a *Hard* is a separate and much harder claim to make good on — it
 needs a difficulty model, not just a solver.
 
+**This gates puzzle quality, not the stack.** It decides whether the puzzles are good. What the
+generator is built with follows from the shared language — see the order in [README.md](README.md).
+Nothing on the road to a tech stack waits on this.
+
 ## Blocked by
 
 [What makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md).

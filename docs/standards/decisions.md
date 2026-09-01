@@ -34,7 +34,10 @@ heading will accept invented alternatives, and the format then lends authority t
 earned.
 
 **The order decisions are made in is the order they depend on each other.**
-Speed, familiarity, and how much work something would unblock do not move a decision earlier.
+Speed and familiarity do not move a decision earlier. How much a decision unblocks is different:
+among decisions that do not derive from one another, the one unblocking the most is taken first,
+because reaching the decisions that need making is the point of having an order at all. What is
+forbidden is moving a decision ahead of something it derives from, whatever it would unblock.
 [../questions/README.md](../questions/README.md) holds the order and each entry names what it
 derives from, so the sequence is checkable rather than asserted. An out-of-order answer is not
 wrong-looking — it is arbitrary and reads as considered, which is what makes the cost fall on

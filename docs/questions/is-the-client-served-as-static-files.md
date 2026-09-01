@@ -25,8 +25,8 @@ host; it does not need a runtime.
 
 ## Blocked by
 
-[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md) —
-the question is differently shaped, or absent, on a native platform.
+N/A — settled. [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery,
+which is what gives this question its shape. Ready to work on now.
 
 ## Blocks
 

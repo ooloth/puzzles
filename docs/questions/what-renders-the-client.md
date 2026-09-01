@@ -18,10 +18,11 @@ This is the *class* question — framework, minimal library, or neither. Which f
 
 ## Blocked by
 
-[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md) —
-the whole question is differently shaped on a native platform.
+The platform half is settled:
+[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery, so this is a
+question about what renders in a browser.
 
-Then [is the client served as static files?](is-the-client-served-as-static-files.md), which
+Still [is the client served as static files?](is-the-client-served-as-static-files.md), which
 decides whether server rendering is in the field at all.
 
 ## Blocks

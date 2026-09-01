@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-08-31
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -25,11 +25,13 @@ Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 question files citing detailed research into React, Preact, Svelte, Vite and Bun. It reads as
 though the stack is broadly agreed and nobody has got round to typing the install command.
 
-**Actually** [decisions/](decisions/) holds two records and neither is about the stack. The
-platform, the language, what renders the client, what holds a player's work and whether a server
-exists are all proposed and none is chosen. The research inside the question files is homework
-for decisions still to be made, not the conclusions of decisions already made — a shortlist is
-not a choice.
+**Actually** only the delivery platform is chosen.
+[ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settled that this is delivered over
+the web on 2026-08-31, which is why the browser specifics in `constraints.md` are in scope — they
+are the price of that one decision and are labelled as such. Everything else in the stack is still
+open: the language, what renders the client, what holds a player's work, whether a server exists,
+and where it deploys. The research inside the question files is homework for decisions still to be
+made, not the conclusions of decisions already made — a shortlist is not a choice.
 
 **So** install nothing yet, and work [questions/README.md](questions/README.md) in the order it
 gives. Each entry names what it derives from, so the order is checkable rather than asserted. If

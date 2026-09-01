@@ -29,7 +29,7 @@ build on unaddressed assumptions.
 
 ### 1. Identify the next most important question to answer
 
-1. Read `docs/standards/decisions.md`, `docs/product.md`, `docs/constraints.md` and
+1. Read `docs/standards/decisions.md`, `docs/problem.md`, `docs/constraints.md` and
    `docs/questions/README.md`
 1. List `docs/decisions/` and `docs/questions/` to familiarize yourself with the sets of made and
    unmade decisions
@@ -55,7 +55,7 @@ build on unaddressed assumptions.
    implications for UX, DX, performance and any other relevant system properties without bias.
    Try hard to give all options a fair chance to win and wait to see what the research says.
 1. Verify the subagents' claims, especially where evidence is lacking
-1. Analyze the implications from first principles, with reference to `docs/product.md`,
+1. Analyze the implications from first principles, with reference to `docs/problem.md`,
    `docs/guarantees/` and any other context clarifying what matters to provide users and the
    maintainer with the intended experience
 1. Reason your way to the best answer
@@ -72,5 +72,5 @@ build on unaddressed assumptions.
 1. Author the ADR
 1. For any resolved question files, mine any valuable content and then delete them
 1. Update all other docs as needed based on the ADR's implications, including `questions/README.md`,
-   `docs/product.md`, `docs/architecture.md`, `docs/constraints.md`, `docs/guarantees/` and
+   `docs/problem.md`, `docs/architecture.md`, `docs/constraints.md`, `docs/guarantees/` and
    `docs/failure-modes/`

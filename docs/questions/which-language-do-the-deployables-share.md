@@ -18,9 +18,12 @@ also decides what the generator and any server are written in.
 
 ## Blocked by
 
-[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md),
-then [is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)
+[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)
 — if the rules are not shared, each deployable is free and this question dissolves.
+
+The platform half is settled:
+[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery, which is what
+makes "one TypeScript codebase everywhere" a candidate rather than an assumption.
 
 ## Blocks
 

@@ -32,6 +32,11 @@ costs exactly what discovering a design late costs.
 
 ## Browsers — client-side storage is not durable
 
+*Every browser fact in this file and the two sections below it is in scope because of
+[decisions/0003](decisions/0003-this-is-delivered-over-the-web.md), which chose web delivery. They
+are the price of that decision rather than facts of the world, and they leave with it if it is ever
+superseded. Read them as a bill, not as weather.*
+
 **Safari's Intelligent Tracking Prevention deletes all script-writable storage after 7 days
 without user interaction** — IndexedDB, localStorage, service worker registrations, the Cache
 API — regardless of how much quota is unused.
@@ -192,6 +197,41 @@ engineer attributes it to exactly that. The bug was closed once and has been reo
 *Verified — WebKit bug 229178, reopened, checked 2026-08-31. This is a defect rather than a
 design, so it may be fixed and stop being true. The mitigation is worth taking regardless,
 because it is free and the failure it avoids is a lost first write.*
+
+---
+
+## Browsers — capabilities withheld on iOS
+
+These are not defects and not policy. They are capabilities the platform has and does not expose to
+web content, which makes them a ceiling on how the interface can feel rather than a problem to
+engineer around.
+
+**There is no haptic feedback available to web content on iOS.** Apple implemented the Vibration
+API and then deliberately removed it in 2017, and the standing request to restore even a
+permission-gated version is unassigned with no milestone. A home-screen-installed web app makes no
+difference, because it is the same engine. Android exposes `navigator.vibrate()`, but only as raw
+on/off durations rather than the named, device-tuned effects native code can request.
+
+> So a tactile response to entering a digit is unavailable on the platform this app is primarily
+> aimed at, and no amount of effort inside the web platform changes that. Any design that leans on
+> tactile confirmation has to work without it on iOS, and must not be built and then retrofitted.
+> Recovering it requires a native shell — see
+> [decisions/0003](decisions/0003-this-is-delivered-over-the-web.md).
+
+*Verified — WebKit bugs 171766 (removal, 2017) and 288846 (restore request, open and unassigned),
+plus browser support tables showing no Safari version through 26.6 supporting it, checked
+2026-08-31.*
+
+**Web content is capped at 60 frames per second on iOS, including inside a `WKWebView`.** ProMotion
+displays run at up to 120Hz for native content. The WebKit issues tracking this have been open
+since 2017 and June 2025, the capability exists behind a preference that is off by default, and
+there is no public API for a page or an embedding app to opt in.
+
+> So animation smoothness has a ceiling that native code does not have, and — unusually among the
+> facts in this file — wrapping the app in a native shell does not lift it. Animation should be
+> designed to read well at 60fps rather than tuned to a rate the platform will not deliver.
+
+*Verified — WebKit bugs 173434 and 294338, both open, checked 2026-08-31.*
 
 ---
 

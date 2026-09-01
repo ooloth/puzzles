@@ -28,78 +28,83 @@ not, working it produces an answer that is arbitrary and will not look arbitrary
 Ordering is by derivation only. Nothing here is placed because it is quick, cheap or unblocking;
 that is why the package manager is nineteenth rather than first.
 
-**The three roots.** Nothing derives these, and almost everything derives from them.
+**Above the list.** [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) settled web
+delivery on 2026-08-31. It was the root of this order and is now the standing input that several
+entries below derive from, so it is cited as `ADR-0003` rather than by position.
 
-1. **[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md)**
-   The web is the harder platform for an app promising offline play and durable work — nearly
-   every entry in [../constraints.md](../constraints.md) is the price of choosing it. Never
-   argued, only inferred.
+**The two roots.** Nothing derives these, and almost everything derives from them.
 
-2. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
+1. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
    [../guarantees/durability.md](../guarantees/durability.md) with a bound and a device scope.
-   Written without either, it has been read as anything.
+   Written without either, it has been read as anything. ADR-0003 makes this expensive rather than
+   free: on the web the platform ceiling in [../constraints.md](../constraints.md) binds, where a
+   native app would have made "indefinitely, on this device" close to free.
 
-3. **[What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)**
+2. **[What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)**
    Including what the maintainer wants to learn from historical play — an argument for a server
-   and a queryable store that survives whatever 2 answers.
+   and a queryable store that survives whatever 1 answers.
 
 **Then, in this order.**
 
-4. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from 1.
-   Implied by ADR-0002 plus the offline guarantee, and decided nowhere. Rules meta-frameworks in
-   or out.
+3. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
+   ADR-0003. Implied by ADR-0002 plus the offline guarantee, and decided nowhere. Rules
+   meta-frameworks in or out.
 
-5. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
-   — from 1. Its whole force is that one language must serve a browser and a batch process.
+4. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
+   — from ADR-0003. Its whole force is that one language must serve a browser and a batch process.
+   ADR-0003 also gives it a second job: a rules engine that stays a pure module is what keeps a
+   native shell cheap to add later.
 
-6. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
-   from 1 and 5. One TypeScript codebase everywhere is a web-shaped answer.
+5. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
+   from ADR-0003 and 4. One TypeScript codebase everywhere is a web-shaped answer, and the shape
+   is now chosen.
 
-7. **[What renders the client?](what-renders-the-client.md)** — from 4 and 6. Framework, minimal
+6. **[What renders the client?](what-renders-the-client.md)** — from 3 and 5. Framework, minimal
    library, or neither; the class, not the member.
 
-8. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from 2 and 3, and from
+7. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from 1 and 2, and from
    [is there a paid tier?](is-there-a-paid-tier.md), since entitlement is the one thing a device
    cannot be trusted to hold.
 
-9. **[What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)**
-   — from 8.
+8. **[What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)**
+   — from 7.
 
-10. **[Which component framework?](which-component-framework.md)** — from 6 and 7. Researched;
-    shortlisted to React, Preact and Svelte.
+9. **[Which component framework?](which-component-framework.md)** — from 5 and 6. Researched;
+   shortlisted to React, Preact and Svelte.
 
-11. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from 2 and 8, plus
+10. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from 1 and 7, plus
     [what a player can do with no network](what-can-a-player-do-with-no-network.md) for volume and
     [snapshot or event log](is-puzzle-state-a-snapshot-or-an-event-log.md) with
     [undo depth](is-undo-in-scope-and-how-far-back.md) for shape. The only stack choice with no
-    clean migration path.
+    clean migration path. ADR-0003 adds a constraint on *how* it is reached rather than on what is
+    chosen: one narrow interface, one implementation behind it, nothing reaching around it.
 
-12. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from 10.
+11. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from 9.
     Researched.
 
-13. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from 8.
+12. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from 7.
 
-14. **[Which database, if any?](which-database-if-any.md)** — from 8 and 3. Possibly a
+13. **[Which database, if any?](which-database-if-any.md)** — from 7 and 2. Possibly a
     non-decision, if the server never reads inside what it holds.
 
-15. **[Where does it deploy?](where-does-this-run.md)** — from 8, 13 and 14. Late on purpose; it
+14. **[Where does it deploy?](where-does-this-run.md)** — from 7, 12 and 13. Late on purpose; it
     was decided first last time. One trap: silent recovery after eviction depends on the app and
     its API being hosted so a server-set cookie is judged first-party — see
     [../constraints.md](../constraints.md).
 
-16. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
-    — from 12, since the precache list is a build output.
+15. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
+    — from 11, since the precache list is a build output.
 
-17. **[What runs the tests?](what-runs-the-tests.md)** — from 12.
+16. **[What runs the tests?](what-runs-the-tests.md)** — from 11.
 
-18. **[How is it styled](how-is-the-app-styled.md) and
-    [laid out](how-is-the-codebase-laid-out.md)?** — from 10.
+17. **[How is it styled](how-is-the-app-styled.md) and
+    [laid out](how-is-the-codebase-laid-out.md)?** — from 9.
 
-19. **[Which package manager?](which-package-manager.md)** — from 12 and 13. Last because it is
+18. **[Which package manager?](which-package-manager.md)** — from 11 and 12. Last because it is
     derived from both runtimes, not first because it is easy.
 
-20. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
-    17. Fills the [../verification.md](../verification.md) stub.
+19. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
+    16. Fills the [../verification.md](../verification.md) stub.
 
 Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any of them.
 Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided

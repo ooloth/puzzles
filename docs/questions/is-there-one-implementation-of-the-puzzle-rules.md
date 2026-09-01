@@ -17,9 +17,9 @@ anywhere is not one this project keeps by intending to.
 
 ## Blocked by
 
-[Is this delivered over the web, or natively?](is-this-delivered-over-the-web-or-natively.md) —
-the whole force of the argument is that one language must serve both a browser and a batch
-process, and on a native platform "browser" is the wrong constraint.
+N/A — settled. [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery,
+so "browser" is the right constraint and the argument has its force: one language must serve both a
+browser and a batch process. Ready to work on now.
 
 ## Blocks
 

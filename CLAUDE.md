@@ -18,6 +18,19 @@ Before making any technical decisions or deciding which decisions to prioritize,
 `make-next-decision` skill. Re-invoke the skill repeatedly each time it applies (not just
 once per session). Do not merely refer to your memory of the skill.
 
+Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full. Everything
+downstream is derived from them, and a sequence argued without them is argued from the wrong end.
+
+## Handing over
+
+Invoke the `assess-cold-start` skill as a session nears its end, and before moving to a topic
+unrelated to what came before. It sends a fresh agent into the repo with no briefing and reports
+what misled it, which is not something you can check from inside a session.
+
+If the conversation has accumulated several unrelated topics, say so and recommend cleaning up and
+starting fresh rather than carrying the mixture forward. Permanent docs a stranger can act on are
+worth more than a handoff message, which the next session may never see.
+
 ## Key docs
 
 Index and conventions: `docs/README.md`. Keep this table in step with the one there.

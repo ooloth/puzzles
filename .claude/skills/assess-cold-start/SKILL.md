@@ -65,6 +65,12 @@ The check passes when all of these hold:
   decisions. If a directory implies an answer to an open question, it is a decision nobody argued
   and it will be read as settled.
 - **What is mid-change is flagged where a reader will meet it**, rather than only being true.
+- **No question is answered and still open.** Audit `docs/questions/` for these directly, since a
+  fresh agent cannot spot them — the file reads as open work and it takes knowing the answer landed
+  elsewhere to see otherwise. For each, check whether what it `resolves_into` now exists: a decision
+  record, a constraint, or a change to a config file or skill. Where it does, mine anything the
+  answer did not carry across and delete the question. A queue containing solved problems wastes the
+  next agent's first hour and makes the real work harder to find.
 
 ### 4. Report and fix
 

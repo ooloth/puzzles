@@ -16,6 +16,11 @@ that is the part a listing cannot show and the part that is expensive to get wro
 
 ## Start here
 
+**Read [../problem.md](../problem.md) and [../guarantees/](../guarantees/) in full before deciding
+what to work on.** Everything below is downstream of them, and a sequence argued without them is
+argued from the wrong end. This is the path most readers arrive by, which is why it says so here as
+well as in [../README.md](../README.md).
+
 **[What execution shape does the server have?](what-execution-shape-does-the-server-have.md)** A
 long-lived process with a local disk, or something ephemeral. It is the hub the runtime, the
 database and the hosting all turn on, and answering any of those without it means regretting one of
@@ -218,9 +223,7 @@ answered by the runtime. [How long does Safari really keep our storage?](how-lon
 [is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md),
-[which doors must stay open?](which-doors-must-stay-open.md),
-[why did unfinished.md go stale?](why-did-unfinished-md-go-stale.md),
-[why was problem.md not read before prioritising?](why-was-problem-md-not-read-before-prioritising.md).
+[which doors must stay open?](which-doors-must-stay-open.md).
 
 Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any decision.
 Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided

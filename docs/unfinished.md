@@ -19,18 +19,6 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-### ADR-0002 cites a seven-day storage window
-
-**You'll see** [ADR-0002](decisions/0002-the-client-holds-and-mutates-puzzle-state.md) state in its
-risk section that Safari deletes script-writable storage after seven days without interaction.
-
-**Actually** the window is thirty days, and seven applies only to a domain reached by a
-tracker-originated decorated link, which is not how anyone reaches this app.
-[constraints.md](constraints.md) is the authority on the figure.
-
-**So** take the number from `constraints.md`. The decision itself is unaffected — client-held state
-is evictable at either figure — so only the magnitude in that one sentence is wrong.
-
 ### The stack is mid-decision, and looks more settled than it is
 
 **You'll see** a repository with no code in it, a `constraints.md` full of browser specifics, and

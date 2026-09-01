@@ -10,8 +10,16 @@ A record of the reasoning behind choices that took some thought, or could reason
 have gone a different way.
 
 One file per decision: `NNNN-kebab-title.md`, numbered in the order made.
-**Append-only** — a decision that changes is _superseded_ by a new one, never edited.
-The record of what we believed at the time is the entire point.
+
+**A decision that changes is superseded by a new record, not edited into a different one.** The
+point is that what we believed at the time survives, so a record is never quietly rewritten to look
+better than it was, and reasoning that was wrong stays visible.
+
+That is not a rule against touching the file. Correcting a wrong figure, fixing a broken link,
+repointing a reference to a renamed file, or rewriting an unclear sentence are all improvements to
+the same record and should be made — a record carrying a number we know is wrong is worse than one
+that has been edited. The test is whether the reasoning would still read the same to someone who
+disagreed with it. Note substantive amendments with an `amended:` date in the frontmatter.
 
 ## Before you decide
 

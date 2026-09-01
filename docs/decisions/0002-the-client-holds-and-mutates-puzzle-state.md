@@ -2,7 +2,7 @@
 number: 0002
 status: accepted
 date: 2026-08-31
-amended: 2026-08-31
+amended: 2026-09-01
 ---
 
 # 0002 — The client holds and mutates puzzle state
@@ -49,7 +49,7 @@ does not apply.
 ## Risk
 
 **This decision creates the durability problem rather than solving it.** State on the client is
-state in evictable storage: Safari deletes script-writable storage after seven days without
+state in evictable storage: Safari deletes script-writable storage after thirty days without
 interaction, and Chrome evicts whole origins under pressure. Before this decision, losing a
 player's work required a server failure. After it, the browser can do it unprompted. Everything in
 [is cross-device resume in scope for v1?](../questions/is-cross-device-resume-in-scope-for-v1.md)

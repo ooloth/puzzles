@@ -17,7 +17,7 @@ forbidden.
 
 ## Blocked by
 
-[Does a server exist at all?](what-must-be-true-off-device.md) — if the answer is no, this
+[Does a server exist at all?](what-does-the-server-hold.md) — if the answer is no, this
 question closes rather than resolves.
 
 ## Blocks

@@ -4,19 +4,22 @@ status: open
 resolves_into: decision
 ---
 
-# What must be true off the device?
+# What does the server hold?
 
 ## Why it matters
 
-This is the question that decides whether a server exists, and it has never been asked directly.
-Every discussion so far has started from a server being assumed and argued about what it should
-do — [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
-specifies how it validates and merges without anything establishing that it is there.
+A server exists — [ADR-0006](../decisions/0006-what-a-players-work-survives.md) forces one. What it
+carries is open, and that is what shapes the database, the hosting, and how much of the system has
+to be operated at all.
 
 A browser can hold a puzzle, a player's progress, and the rules. There are four things it cannot
 hold: something the player must not be able to change, something reachable from a device they have
 not used yet, something that must reach the player while the app is closed, and something that must
 reach us when a promise breaks. Naming which of those apply is the whole decision.
+
+[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) specifies how
+it validates and merges, which is a different question and downstream of this one — a server cannot
+be said to validate something it was never established to hold.
 
 An enumeration here that leaves a candidate out settles the question by omission, and reads as
 complete while doing it. The list under Options is the full set, and it is kept full.

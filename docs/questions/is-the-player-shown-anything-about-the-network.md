@@ -71,5 +71,5 @@ worth protecting.
 **Reporting to the maintainer was never in tension with this.** It is not shown to a player, so no
 promise about the player's experience reaches it. That tension is recorded in
 [../guarantees/observability.md](../guarantees/observability.md) and in
-[what must be true off-device?](what-must-be-true-off-device.md) and is dissolved rather than
+[what does the server hold?](what-does-the-server-hold.md) and is dissolved rather than
 resolved.

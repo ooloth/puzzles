@@ -27,7 +27,7 @@ TypeScript, in the client and in the generator, with the puzzle rules shared as 
 as a compiled artifact.
 
 This binds the deployables that need the rules. A server, if
-[one exists](../questions/what-must-be-true-off-device.md), inherits the same constraint only if it
+[one exists](../questions/what-does-the-server-hold.md), inherits the same constraint only if it
 needs the rules too — which is open, and not settled here.
 
 ## Rejected

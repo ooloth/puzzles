@@ -8,15 +8,19 @@ resolves_into: decision
 
 ## Why it matters
 
-Sharing puzzle logic across generator, server and client is the main driver for splitting into
-packages. Premature splitting costs more than it saves at this size.
+How modules are organised inside the repo: what a directory is named for, and whether a reader can
+answer "where would I find X" without knowing which technical layer X lives in.
+
+**This does not cover how many packages there are.** That is
+[what is the repo's top-level shape?](what-is-the-repos-top-level-shape.md), which blocks
+scaffolding and is answered separately. What is left here is the tree inside whatever that decides,
+and it is not blocking anything, because there are no modules yet.
 
 ## Blocked by
 
-[Which component framework?](which-component-framework.md). Also
-[which language do the deployables share?](../decisions/0005-typescript-across-every-deployable.md), after
-which what remains is how many packages the framework and the shared
-rules module make sensible.
+[What is the repo's top-level shape?](what-is-the-repos-top-level-shape.md) and
+[what renders the client?](what-renders-the-client.md). Mostly, though, it waits on there being
+enough code for the shape of it to be visible.
 
 ## Blocks
 

@@ -22,8 +22,8 @@ while the app is on screen**, fire-and-forget.
 ## Blocked by
 
 [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — this moves whatever
-that defines. Also [what must be true off the device?](what-must-be-true-off-device.md), which says
-what the server holds and therefore what it has to be sent.
+that defines. Also [what does the server hold?](what-does-the-server-hold.md), since what it holds is what has
+to reach it.
 
 ## Blocks
 

@@ -77,7 +77,7 @@ cannot keep.
 ## Risk
 
 **This forces a server, and does so before
-[whether a server exists](../questions/what-must-be-true-off-device.md) has been argued.** The
+[what the server holds](../questions/what-does-the-server-hold.md) has been argued.** The
 signed-in half cannot be delivered without one. That question is still worked whole against its
 whole inventory — a candidate surviving is not the same as the decision being taken — but the
 outcome is no longer genuinely open, and pretending otherwise would be theatre.

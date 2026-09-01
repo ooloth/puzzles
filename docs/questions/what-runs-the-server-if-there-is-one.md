@@ -15,7 +15,7 @@ cost, deployment surface and how reversible it is.
 
 ## Blocked by
 
-[What must be true off the device?](what-must-be-true-off-device.md) — there may be no server, in
+[What does the server hold?](what-does-the-server-hold.md) — there may be no server, in
 which case this closes. Then [which database, if any?](which-database-if-any.md), because a
 runtime that cannot reach the chosen store is disqualified.
 

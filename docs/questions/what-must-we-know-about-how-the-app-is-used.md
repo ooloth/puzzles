@@ -41,7 +41,7 @@ to collect before knowing that is deciding it twice.
 
 ## Blocks
 
-Which database, if any — see [what must be true off-device?](what-must-be-true-off-device.md) and
+Which database, if any — see [what does the server hold?](what-does-the-server-hold.md) and
 [what does the server store, if anything?](what-does-the-server-store-if-anything.md). Also
 [how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),

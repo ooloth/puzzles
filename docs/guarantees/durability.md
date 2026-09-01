@@ -27,7 +27,7 @@ session ended.
 not. This costs more than the guest case: they took an action to prevent it and paid for it in
 friction.
 
-**Bearing on this** [Does a server exist at all?](../questions/what-must-be-true-off-device.md) —
+**Bearing on this** [Does a server exist at all?](../questions/what-does-the-server-hold.md) —
 this promise is what forces one, and that question weighs it against the rest of the inventory.
 [Are there user accounts?](../questions/are-there-user-accounts.md) decides what a player signs in
 to. [How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)

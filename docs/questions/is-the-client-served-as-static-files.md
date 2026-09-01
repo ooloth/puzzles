@@ -20,7 +20,7 @@ framework investigation already concluded against them on evidence, with no reco
 which is the shape of a decision made by accident.
 
 It also decides whether a server is needed for *delivery* at all, which is a separate matter from
-whether one is needed for [storage](what-must-be-true-off-device.md). A static bundle needs a file
+whether one is needed for [storage](what-does-the-server-hold.md). A static bundle needs a file
 host; it does not need a runtime.
 
 ## Blocked by

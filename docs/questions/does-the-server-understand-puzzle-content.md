@@ -26,7 +26,7 @@ hard part is.
 
 ## Blocked by
 
-[What must be true off the device?](what-must-be-true-off-device.md) — what the server holds bounds
+[What does the server hold?](what-does-the-server-hold.md) — what the server holds bounds
 what it could check.
 
 ## Blocks

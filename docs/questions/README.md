@@ -1,63 +1,53 @@
 ---
-updated: 2026-08-31
-update_when: a decision is made, or the order changes
+updated: 2026-09-01
+update_when: a decision is made, a milestone changes, or a question is split
 decays: fast
 status: active
 ---
 
 # Questions
 
-The sibling of [../decisions/](../decisions/): the decisions not yet made, in the order they
-should be made.
+The sibling of [../decisions/](../decisions/): the decisions not yet made, arranged by what they
+stop us building.
 
-A directory listing of this folder is the full inventory — every filename asks its question
-plainly, so there is no index here and nothing to keep in step. What this file holds is the
-**order**, because that is the part a listing cannot show and the part that is expensive to get
-wrong.
-
-Nothing is installed yet. What follows is how that gets fixed without any of it being chosen by
-reflex: each stack decision has the foundational calls it rests on placed ahead of it, so no tool
-is picked before the thing it is supposed to serve is known.
+A directory listing of this folder is the full inventory — every filename asks its question plainly,
+so there is no index here. What this file holds is **which milestone each question blocks**, because
+that is the part a listing cannot show and the part that is expensive to get wrong.
 
 ## Start here
 
-Three questions are ready — every input they have is answered, and none derives from another. Take
-0007 first: it is the only one blocking any code being written at all.
+**[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)** Node,
+Bun or Deno. Nothing installs or runs until it is answered, and under Bun or Deno it also answers
+the package manager, the test runner and part of the build tool. Settle it by scaffolding a
+hello-world under each and running the real loop, not by comparing feature lists.
 
-1. **[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)**
-   Node, Bun or Deno. Nothing can be installed or run until this is answered, and depending on the
-   answer it absorbs the package manager, the test runner and part of the build tool rather than
-   leaving them open. Cheaper to prototype than to predict.
-2. **[Is the client served as static files?](is-the-client-served-as-static-files.md)**
-   Derived from ADR-0002 and the offline guarantee, so it is closer to a recording than a decision.
-   Short, and it unblocks the rendering chain.
-3. **[Does a server exist at all?](what-must-be-true-off-device.md)**
-   ADR-0006 forces one, so what is live is what it holds. Worked whole against its inventory.
+## How this list works
 
-## The order
+**Questions are grouped by the earliest milestone they block.** Not by how foundational they feel —
+by what stops working if they stay open. A question nothing is waiting on sits at the bottom, and
+that is a fine place to be.
 
-Twenty-two records, in four layers, ending at a deployed hello world. Each layer's inputs are settled by the layers above it, so the
-numbering in [../decisions/](../decisions/) reads as depth: a low number is a decision more things
-rest on.
+**Milestones are deliberately small.** The point is to stop designing on paper and start deciding
+against running code. Each one below is something you can look at and see working, and most of them
+are a day or two apart, not a month.
 
-Ordering is by derivation. A decision is never taken before something it derives from, whatever
-that would unblock. Among decisions that derive from nothing still open, the one unblocking the
-most is taken first.
+**Ordering inside a milestone is by derivation.** A decision is never taken before something it
+derives from. Among decisions that derive from nothing still open, the one unblocking the most is
+taken first.
 
-**What the generator's product questions do not gate.** Whether puzzles are a joy to solve, whether
-difficulty is graded, how expensive generation is, and whether v1 ships generated or seeded puzzles
-all decide whether the puzzles are *good*. None of them decides what the generator is *built with* —
-that follows from the shared language in ADR-0005. They are real and they are not on this road.
+**A compound question is split rather than dragged forward.** When only part of a question blocks an
+early milestone, the blocking part becomes its own question and the rest moves to the milestone
+where it belongs. A question that arrives early because one clause of it is urgent forces the whole
+thing to be answered early, and the parts nobody needed yet get answered worst — with the least
+information and the most guessing. Splitting is cheap; a decision made a milestone too soon is not.
+The test is whether every part of the answer is needed to see the milestone working. If not, split
+it.
 
-**What the data model does not gate either.** What a puzzle is across game types, what a player's
-state on it looks like, and what crosses the client/server boundary are the decisions that force
-deletion when they are wrong — a representation assuming a nine-by-nine grid of digits cannot be
-swapped the way a framework can. They still do not block scaffolding: no shell decision, and not
-which database, turns on whether a puzzle is a grid or a region graph. So they are worked against
-running code rather than ahead of it, and the storage interface ADR-0003 requires is what keeps that
-safe.
+**Prefer prototyping to predicting.** Where a question could be settled by building the smallest
+throwaway thing that answers it, that is what "what would settle it" should say. This folder has a
+bias toward reasoning on paper that has to be actively resisted.
 
-### Layer 0 — settled
+## Settled
 
 [0001](../decisions/0001-launch-with-sudoku-then-star-battle.md) which games, in what order.
 [0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) the client holds and mutates
@@ -67,88 +57,142 @@ puzzle rules. [0005](../decisions/0005-typescript-across-every-deployable.md) Ty
 deployable, with the rules shared as source.
 [0006](../decisions/0006-what-a-players-work-survives.md) what a player's work survives, per persona.
 
-### Layer 1 — ready now
+## M1 — "Hello!" is live
 
-0007. **[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)** —
-      from ADR-0005. Node, Bun or Deno. Nothing installs or runs until this is answered, and it may
-      absorb 0011, 0019 and part of 0015 rather than leaving them open.
+A deployed skeleton. Client shell, server shell, generator shell, no features. Everything below is
+load-bearing for it, and several will collapse into each other depending on the first answer.
 
-0008. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
-      0002 and [../guarantees/offline.md](../guarantees/offline.md). The narrow question is whether
-      the client boots and navigates with no network, which is not the same as ruling out every
-      meta-framework — only their server-per-navigation modes.
+- [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+- [Which package manager?](which-package-manager.md) — only separate if the answer above is Node.
+- [What is the repo's top-level shape?](what-is-the-repos-top-level-shape.md) — one package or
+  several, and where the shared rules module sits so both a browser and a batch process can reach it.
+- [Is the client served as static files?](is-the-client-served-as-static-files.md) — derived from
+  0002 and the offline guarantee, so closer to a recording than a decision. It decides whether the
+  scaffold is Vite-shaped or meta-framework-shaped, and whether a file host is enough.
+- [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither,
+  and which one.
+- [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
+- [What runs the server?](what-runs-the-server-if-there-is-one.md) — mostly falls out of the runtime.
+- [Where does this run?](where-does-this-run.md)
 
-0009. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from ADR-0006, plus
-      entitlement, the catalogue, push and observability. ADR-0006 forces one, so the live part is
-      what it holds. Still worked whole against the inventory in that file.
+## M2 — a grid is on the screen
 
-### Layer 2 — what scaffolding needs
+Static, no interaction. Proves the rendering approach against a real shape rather than a page of
+text.
 
-0010. **[How is the codebase laid out?](how-is-the-codebase-laid-out.md)** — from 0007. One package
-      or several, and where the shared rules module sits, which ADR-0004 requires to be reachable
-      from both the client and a batch process.
+- [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
+  to render one. The full answer is not needed until M5.
+- [How is the app styled?](how-is-the-app-styled.md)
 
-0011. **[Which package manager?](which-package-manager.md)** — from 0007, which may answer it
-      outright.
+## M3 — a player can fill it in
 
-0012. **[What renders the client?](what-renders-the-client.md)** — from ADR-0005 and 0008.
-      Framework, minimal library, or neither; the class, not the member.
+Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 
-0013. **[What runs the server?](what-runs-the-server-if-there-is-one.md)** — from 0007 and 0009.
+- [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — the
+  entry path only. Notes, undo and gestures belong to M8.
+- [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
 
-### Layer 3 — the first install and the first deploy
+## M4 — the board survives a reload
 
-0014. **[Which component framework?](which-component-framework.md)** — from 0012. Researched;
-      shortlisted to React, Preact and Svelte.
+The first durability promise anything actually keeps.
 
-0015. **[What builds and serves the client?](what-provides-the-build-and-dev-server.md)** — from
-      0007 and 0014. **Software gets installed here.**
+- [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
+  one stack choice with no clean migration path.
+- [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
 
-0016. **[Where does it deploy?](where-does-this-run.md)** — from 0007, 0009 and 0013. **A hello
-      world is live here.** One trap: a session cookie is capped back to seven days if Safari judges
-      the server setting it not genuinely first-party, which is the shape of a static host with its
-      API elsewhere — see [../constraints.md](../constraints.md).
+## M5 — the rules run
 
-### Layer 4 — once there is running code to decide against
+Illegal moves are recognised, and a finished board is recognised as finished.
 
-0017. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from ADR-0006 and
-      0009. The only stack choice with no clean migration path, which is why ADR-0003 requires one
-      narrow interface with a single implementation behind it and nothing reaching around it.
+- [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — the full answer,
+  now that something depends on it.
+- [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
+  — an input to the above, since a model that fits two game types is often a model that fits two.
 
-0018. **[Which database, if any?](which-database-if-any.md)** — from 0009 and
-      [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-      which decides whether the store is queryable or holds opaque bytes.
+## M6 — a real puzzle appears
 
-0019. **[What runs the tests?](what-runs-the-tests.md)** — from 0007 and 0015.
+Not a hard-coded board. Something published, fetched and rendered.
 
-0020. **[How is it styled?](how-is-the-app-styled.md)** — from 0014.
+- [What does the server hold?](what-does-the-server-hold.md) — the catalogue candidate specifically.
+- [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
+- [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 
-0021. **[How does the app stay available offline?](how-does-the-app-itself-stay-available-offline.md)**
-      — from 0015, since the precache list is a build output.
+## M7 — it works with no network
 
-0022. **[What runs the checks on every change?](what-runs-the-checks-on-every-change.md)** — from
-      0019. Fills the [../verification.md](../verification.md) stub.
+- [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+- [What can a player do with no network?](what-can-a-player-do-with-no-network.md)
+- [How long must offline play survive?](how-long-must-offline-play-survive.md)
+- [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
 
-Numbers are the intended sequence, not reservations. A record takes the next free number when it is
-written, and if this order changes the numbers here change with it.
+## M8 — sudoku is finished, in guest mode
 
-Also open, and gating puzzle quality rather than the stack:
-[what makes a puzzle a joy to solve](what-makes-a-puzzle-a-joy-to-solve.md),
-[is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md),
-[how expensive is generation](how-expensive-is-puzzle-generation.md),
-[does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).
+Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
-Also open, and worked against running code rather than ahead of it:
-[what is a puzzle across game types](what-is-a-puzzle-across-game-types.md),
-[is puzzle state a snapshot or an event log](is-puzzle-state-a-snapshot-or-an-event-log.md),
-[what crosses the client/server boundary](what-crosses-the-client-server-boundary.md),
-[does the server understand puzzle content](does-the-server-understand-puzzle-content.md).
+- [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md)
+- [Are hints in scope?](are-hints-in-scope.md)
+- [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — the rest
+  of it.
+- [Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
+- [What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)
+- [Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md)
 
-Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any of them.
+## M9 — a player can sign in
+
+- [Are there user accounts?](are-there-user-accounts.md)
+- [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
+- [Do privacy regulations apply?](do-privacy-regulations-apply.md)
+- [What does the server hold?](what-does-the-server-hold.md) — the rest of the inventory.
+- [Which database, if any?](which-database-if-any.md)
+- [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
+
+## M10 — work follows a player between devices
+
+- [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md)
+- [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
+- [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
+- [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md)
+- [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
+- [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
+
+## M11 — the puzzles are ours
+
+- [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md)
+- [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+
+## M12 — something is paid for
+
+- [Is there a paid tier?](is-there-a-paid-tier.md)
+- [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
+- [What load should the server handle?](what-load-should-the-server-handle.md)
+- [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
+
+## Blocking nothing yet
+
+Real, and nothing is waiting on them. Several are research rather than choices.
+
+[How is the codebase laid out?](how-is-the-codebase-laid-out.md) — module organisation, once there
+are modules. [What runs the tests?](what-runs-the-tests.md) and
+[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) — both likely
+answered by the runtime. [How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
+[how does Android evict stored data?](how-does-android-evict-stored-data.md),
+[what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
+[what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
+— research. [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
+[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md),
+[how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+[what does the server store, if anything?](what-does-the-server-store-if-anything.md),
+[is home-screen install required for durability?](is-home-screen-install-required-for-durability.md),
+[what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
+[what wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md),
+[does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md),
+[which doors must stay open?](which-doors-must-stay-open.md),
+[why did unfinished.md go stale?](why-did-unfinished-md-go-stale.md),
+[why was problem.md not read before prioritising?](why-was-problem-md-not-read-before-prioritising.md).
+
+Read [which-doors-must-stay-open.md](which-doors-must-stay-open.md) before recording any decision.
 Deferring is only safe while the deferred thing stays cheap to add, and whether it does is decided
 by choices made in areas that look unrelated.
-
-Everything else in this folder is real and is not next. It will be, in its turn.
 
 ## What goes in a question file
 
@@ -185,6 +229,11 @@ of a rule already in force, competing with the real one for whoever finds it fir
 
 **One question per file**, and the filename asks the question as plainly as it can, so a directory
 listing reads as the list of what is open.
+
+**A question is split when only part of it blocks an early milestone.** The blocking part becomes
+its own file and the rest stays where it belongs. Both halves keep the format below, and the
+question that was split says what it no longer covers so a reader does not go looking for it here.
+
 
 <!-- Template:
 

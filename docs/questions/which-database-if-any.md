@@ -19,7 +19,7 @@ silently.
 
 ## Blocked by
 
-[What must be true off the device?](what-must-be-true-off-device.md) — if the answer is nothing,
+[What does the server hold?](what-does-the-server-hold.md) — if the answer is nothing,
 there is no database, and this question closes rather than resolves.
 
 Then [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),

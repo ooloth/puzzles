@@ -94,10 +94,21 @@ the failure of the others.
 
 ## Findings
 
-**Puzzle content does not need a server by itself.** Generated ahead of time, puzzles are static
-files, and a daily rhythm is satisfiable by shipping a manifest. That removes the most obvious
-reason to have one and leaves the less obvious ones, which is why this question is worth asking
-rather than assuming.
+**Puzzle content does not need a server to be *delivered*, and may need one to be *withheld*.**
+Generated ahead of time, puzzles can be static files, and a daily rhythm is satisfiable by shipping
+a manifest. Being generated ahead of time does not make them static, though — the same puzzles are
+equally rows a runtime serves, and which they are is a real fork rather than a consequence.
+
+The deciding input is not delivery. It is that content shipped as static files alongside the app
+cannot be withheld from anyone who already has the app — recorded in
+[is there a paid tier?](is-there-a-paid-tier.md). So an archive that might ever be gated cannot be
+static, and the catalogue candidate stands or falls with entitlement rather than separately from it.
+
+The tradeoffs, since neither side is obviously right: static files get CDN caching, precaching for
+offline, and no runtime on the load path, at the cost of a deploy per publication and no way to
+gate. Rows served by a runtime get gating, publishing as a write rather than a deploy, and an
+archive that grows without redeploying, at the cost of putting a server on the path to content and
+needing a caching story the static option gets free.
 
 **Entitlement is the one candidate that cannot be softened.** Progress can be lost, a catalogue
 can be stale, usage can go unmeasured — all degrade gracefully. A paid tier enforced on the device
@@ -132,12 +143,11 @@ inside them. Usage and observability both require asking questions of the data. 
 [which database, if any?](which-database-if-any.md) is a non-decision only if both of those lose;
 if either survives, blob against queryable is a real fork and that entry needs rewriting.
 
-**Observability conflicts with a promise already made.**
-[../guarantees/offline.md](../guarantees/offline.md) says the player's network state is never shown
-— no spinner, no banner, no sync indicator. Anything reporting home does so invisibly and fails
-invisibly, which rules out the ordinary shapes of error reporting.
-[../guarantees/observability.md](../guarantees/observability.md) names the same tension and it is
-unresolved.
+**Observability does not conflict with the offline guarantee.** That promise bounds what the network
+may do to a player — block, delay, interrupt — and reporting to the maintainer does none of those,
+because the player never sees it. What the maintainer is told is not governed by a promise about the
+player's experience. What remains true is that anything reporting home has to fail invisibly, since
+a failed report must not become a visible error.
 
 **No candidate here has been priced.** This list establishes which are live, not what any costs.
 [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md) and

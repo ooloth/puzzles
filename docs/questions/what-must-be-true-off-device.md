@@ -23,9 +23,10 @@ complete while doing it. The list under Options is the full set, and it is kept 
 
 ## Blocked by
 
-[How long must in-progress work survive?](how-long-must-in-progress-work-survive.md) — a promise
-that outlives the device's storage is the main candidate for something that must be true
-elsewhere.
+N/A — settled, and the answer forces this one's hand.
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) promises that a signed-in player's
+work survives on every device they use, which cannot be delivered by a device. So a server exists,
+and what is live here is what it does rather than whether it is there. Ready to work on now.
 
 That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
 does **not** gate this question. It decides whether a store must be queryable or can hold opaque

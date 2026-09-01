@@ -66,6 +66,14 @@ retrofittable only by a rescue operation.
 all, which turns a later addition into a migration for every existing player rather than a lookup.
 Minting one on first visit costs almost nothing today.
 
+> A locally-minted identifier is script-writable, so the browser's eviction takes it along with
+> everything else — and it takes it from exactly the lapsed players who would need it. Only
+> something a server sets survives, per [../constraints.md](../constraints.md). So this door is held
+> open by a server, or by the player having signed in, rather than by a line of client code.
+> [ADR-0006](../decisions/0006-what-a-players-work-survives.md) closes the gap a different way: the
+> guest record and the account record are one shape, so signing in promotes what is there instead
+> of needing an identifier to have survived.
+
 *More puzzle types.* [ADR-0001](../decisions/0001-launch-with-sudoku-then-star-battle.md)
 sequences star battle after sudoku. The threat is a data model that hard-codes a nine-by-nine grid
 of digits.

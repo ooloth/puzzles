@@ -24,9 +24,10 @@ is picked before the thing it is supposed to serve is known.
 Two questions are ready — every input they have is answered. Neither derives from the other, so take
 whichever you like; the bracketed count is how many later decisions each one unblocks.
 
-1. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
-   [8] The durability promise with a bound and a device scope. Decides whether a server is forced,
-   and with it the whole server, database and hosting half of the stack.
+1. **[Does a server exist at all?](what-must-be-true-off-device.md)**
+   [6] ADR-0006 promises a signed-in player's work survives on every device, which forces one. The
+   file holds the full inventory of candidates and is worked whole, so a forced answer still gets
+   argued against the rest rather than assumed.
 2. **[Is the client served as static files?](is-the-client-served-as-static-files.md)**
    [7] Decides whether the client can boot and navigate with no network, which prunes the rendering,
    build and hosting choices together. Unblocks 0009 once done.
@@ -54,27 +55,23 @@ puzzle state. [0003](../decisions/0003-this-is-delivered-over-the-web.md) this i
 web. [0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) one implementation of the
 puzzle rules. [0005](../decisions/0005-typescript-across-every-deployable.md) TypeScript across every
 deployable, with the rules shared as source.
+[0006](../decisions/0006-what-a-players-work-survives.md) what a player's work survives, per persona.
 
 ### Layer 1 — ready now
 
-0006. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
+0007. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
       0002 and [../guarantees/offline.md](../guarantees/offline.md). The narrow question is whether
       the client boots and navigates with no network, which is not the same as ruling out every
       meta-framework — only their server-per-navigation modes.
 
-0007. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
-      — from [../guarantees/durability.md](../guarantees/durability.md), which states no bound and
-      names no device. ADR-0003 makes this expensive rather than free: the platform ceiling in
-      [../constraints.md](../constraints.md) binds.
+0008. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from ADR-0006, plus
+      entitlement, push and observability. ADR-0006 forces one, so the live part is what it does
+      rather than whether it exists. Still worked whole against the inventory in that file, because
+      the other candidates shape it and each can be declined on its own.
 
 ### Layer 2
 
-0008. **[Does a server exist at all?](what-must-be-true-off-device.md)** — from 0007, plus
-      entitlement, push and observability. That file holds the full inventory of candidates and is
-      worked whole, because each candidate can be declined on its own and the sum of those refusals
-      is a static site nobody chose.
-
-0009. **[What renders the client?](what-renders-the-client.md)** — from 0005 and 0006. Framework,
+0009. **[What renders the client?](what-renders-the-client.md)** — from ADR-0005 and 0007. Framework,
       minimal library, or neither; the class, not the member.
 
 ### Layer 3
@@ -82,7 +79,7 @@ deployable, with the rules shared as source.
 0010. **[Which component framework?](which-component-framework.md)** — from 0009. Researched;
       shortlisted to React, Preact and Svelte.
 
-0011. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from 0007 and 0008.
+0011. **[Which client storage mechanism?](which-client-storage-mechanism.md)** — from ADR-0006 and 0008.
       The only stack choice with no clean migration path. ADR-0003 adds a constraint on how it is
       reached: one narrow interface, one implementation behind it, nothing reaching around it.
 
@@ -94,8 +91,11 @@ deployable, with the rules shared as source.
       question gates the *shape* of this decision only. It does not gate 0008.
 
 0014. **[Where does it deploy?](where-does-this-run.md)** — from 0008, 0012 and 0013. One trap:
-      silent recovery after eviction depends on the app and its API being hosted so a server-set
-      cookie is judged first-party — see [../constraints.md](../constraints.md).
+      a session cookie is capped back to seven days if Safari judges the server setting it not
+      genuinely first-party, which is the shape of a static host with its API elsewhere — see
+      [../constraints.md](../constraints.md). ADR-0006 rejected anonymous recovery, so this no
+      longer decides whether a recovery mechanism works, but it still decides whether a signed-in
+      player stays signed in.
 
 ### Layer 4 — follows from the above
 

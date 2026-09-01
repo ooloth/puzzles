@@ -8,13 +8,13 @@ resolves_into: decision
 
 ## Why it matters
 
-It is where the promise in [../guarantees/durability.md](../guarantees/durability.md) is actually
-kept or broken, and it is the one stack choice with no clean migration path: changing it later
-means moving every existing player's data with code that has to run in their browser, once,
-correctly, with no way to retry from the server if a server does not exist.
+It is where the promises in [../guarantees/durability.md](../guarantees/durability.md) are actually
+kept or broken, and it is the one stack choice with no clean migration path: changing it later means
+moving every existing player's data with code that has to run in their browser, once, correctly.
+A guest has no copy anywhere to restore from if that goes wrong.
 
-[Which language do the deployables share?](../decisions/0005-typescript-across-every-deployable.md) refers to
-IndexedDB as though this had been decided. It has not.
+Nothing has chosen a mechanism. IndexedDB is the reflex answer and gets named in passing often
+enough to look settled.
 
 ## Blocked by
 
@@ -23,8 +23,10 @@ Volume, shape and lifetime, in that order, and all three are open.
 [What can a player do with no network?](what-can-a-player-do-with-no-network.md) sets volume, and
 the range is orders of magnitude. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
 and [is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md) set shape.
-[How long must in-progress work survive?](how-long-must-in-progress-work-survive.md) sets
-lifetime, and decides whether anything off-device has to back it up.
+Lifetime is settled: [ADR-0006](../decisions/0006-what-a-players-work-survives.md) bounds a guest's
+work at what the browser keeps and a signed-in player's at indefinitely, and requires both to be one
+record shape so signing in promotes rather than converts. That shape requirement is a constraint on
+any answer here.
 
 ## Blocks
 

@@ -65,6 +65,18 @@ it waits for all of them.
 
 ## Should
 
+**A decision whose inputs can be measured is measured rather than argued.**
+Where the smallest throwaway thing that produces an observation would settle a question, that is
+what settles it, and the record cites the observation rather than a comparison of descriptions. This
+holds most strongly for tool, runtime and library choices, where published numbers describe someone
+else's workload on someone else's hardware and the only figure that binds is the one from here. The
+exception is where a spike would cost more than being wrong — say so, and read instead.
+
+A measurement is only better than an argument when it measures the thing the decision turns on. A
+benchmark that does not resemble the real workload is worse than no number, because it carries the
+authority of evidence without the substance. What makes one usable is recorded in
+[../constraints.md](../constraints.md).
+
 **Decisions are deferred until leaving one open would close a door unnoticed.**
 Most choices that feel urgent are reversible in an afternoon and cost nothing to postpone. The few
 worth stopping for are the ones that narrow everything downstream without announcing that they

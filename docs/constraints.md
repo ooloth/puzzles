@@ -14,11 +14,40 @@ regulator. Traps *inside* the repo go in [gotchas.md](gotchas.md).
 Every fact carries its implication. A fact alone is inert: the bug is never *not knowing* the
 fact, it's not having thought through the consequence.
 
-Every fact also carries how we know it. **Verified** means checked against a named primary
-source, or observed directly. **Reasoned** means derived from a property that can be checked
-but hasn't been measured here — usable, and not the same as measured. Anything asserted
-without either doesn't belong in this file; it belongs in [questions/](questions/) until
-somebody establishes it.
+Every fact also carries how we know it, in one of three tiers. They are ordered, and the top one is
+worth reaching for.
+
+**Measured** — observed here, on hardware and under conditions we control, with the method recorded
+beside the number. What was run, on what, how many times, and against what baseline. A figure
+without its method is an assertion with a number in it, and reads as stronger than a sourced claim
+while being weaker.
+
+**Sourced** — checked against a named primary source: a specification, vendor documentation, or code
+we read ourselves. Better than nothing and not the same as observed. Documentation describes intent;
+shipped software sometimes disagrees, which is why
+[how long does Safari really keep our storage?](questions/how-long-does-safari-really-keep-our-storage.md)
+stays open with the constant read from the source and the behaviour unconfirmed.
+
+**Reasoned** — derived from a property that can be checked but has not been measured here. Usable,
+and the tier most likely to be quietly promoted by a later reader.
+
+Anything asserted without one of the three doesn't belong here; it belongs in
+[questions/](questions/) until somebody establishes it.
+
+**A measurement is only worth more than a source when it measures the right thing.** Four ways one
+goes wrong here, and the first two have already been avoided by accident rather than by care:
+
+- **Measuring what does not bind.** Framework render throughput was dismissed as a criterion for an
+  81-cell grid because the whole budget is one percent of a frame. A real number about an irrelevant
+  quantity ends arguments it should not.
+- **Measuring where the failure cannot occur.** The storage failures below do not reproduce in a
+  desktop browser, so a desktop measurement of them is a measurement of nothing. Measure on the
+  device the constraint belongs to.
+- **Measuring a synthetic workload.** Ten thousand inserts in a loop is not one input every one to
+  three seconds from a backgrounded mobile app. Shape the spike like the real thing or state plainly
+  that it is a ceiling rather than an expectation.
+- **Measuring once.** A single run on a warm machine hides variance, and variance is often the
+  finding.
 
 Nothing here depends on a technology we haven't chosen. Facts that would only apply under a
 particular stack arrive with the ADR that adopts it, and leave when it's superseded.

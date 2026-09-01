@@ -164,6 +164,7 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 - [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
 - [What load should the server handle?](what-load-should-the-server-handle.md)
 - [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
+- [How is the server operated?](how-is-the-server-operated.md)
 
 ## Blocking nothing yet
 

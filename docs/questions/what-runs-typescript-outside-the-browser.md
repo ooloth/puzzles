@@ -79,4 +79,35 @@ more than the others.
 
 ## Findings
 
-**Nothing is recorded yet.** No candidate has been evaluated and no benchmark or trial has been run.
+**Nothing has been measured.** No candidate has been run here.
+
+**The intent is to spike this rather than research it**, and it is the first place in the project
+where that applies. Scaffold the same trivial thing under each candidate — a client entry point, a
+server that answers one route, a batch script, and the shared rules module imported by two of them —
+then run install, typecheck, test, build, serve and the batch script, and record what each took and
+what broke. Budget hours. Delete the spikes afterwards; the observation is the artifact.
+
+Deciding this by reading would be choosing on the strength of numbers produced by other people, on
+other hardware, for other workloads — which is exactly what
+[../standards/decisions.md](../standards/decisions.md) now says not to do where a measurement is
+available.
+
+**A Bun preference already exists in [../brainstorming/](../brainstorming/) and it does not survive
+inspection.** It rests almost entirely on `bun:sqlite` being a native in-process driver, with
+figures like ten thousand inserts in 12ms against Deno's 45ms. Those numbers carry no method, no
+hardware, no date and no link. The comparison also never includes Node, and Node now ships a
+built-in `node:sqlite`, so the premise that only Bun has fast in-process SQLite is stale on its own
+terms. Nothing from it should be imported without being re-run here.
+
+> The same document asserts that Bun was acquired by Anthropic and that Claude Code is powered by
+> it, and uses that as a reason to consider Bun corporately safe to depend on. Treat this as false
+> unless independently confirmed. It is the clearest example of why that folder is marked
+> non-authoritative, and of why a claim that flatters a preferred option deserves more scrutiny
+> rather than less.
+
+**This is coupled to the database choice more than its position suggests.** SQLite performance is a
+real difference between these runtimes, and
+[which database, if any?](which-database-if-any.md) is not decided and does not need to be for a
+hello world. The honest handling is to note what each runtime does to the later options rather than
+to settle the database early to justify a runtime — which is the direction the brainstorming
+document argues in, and it is backwards.

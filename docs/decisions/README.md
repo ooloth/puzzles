@@ -46,12 +46,19 @@ Spending equal effort on both is the real waste.
    Most bad technical decisions come from never having done the arithmetic — "this is 40MB
    and 200ms" dissolves most debates before they start. If you can't get within an order of
    magnitude, that _is_ the finding: go measure, then decide.
-3. **Find three options, and make one of them "not yet."** Two options is a coin toss with
+3. **Ask what would be cheaper to build than to argue about.** Most tool and runtime questions
+   are answerable by a spike — the smallest throwaway thing that produces an observation — and
+   a spike settles them better than reading, because it measures this project on this hardware
+   rather than someone else's. Budget hours, delete it afterwards, and record what you ran
+   alongside what you saw. A measurement whose method is not written down is an assertion with
+   a number in it. Where nothing can be spiked, say so, so that reading is a choice rather than
+   a default.
+4. **Find three options, and make one of them "not yet."** Two options is a coin toss with
    extra steps. Doing nothing, or the dumbest thing that could work, is the most frequently
    correct and least frequently considered option.
-4. **Predict each option's failure.** How does it break, and would we notice? An option that
+5. **Predict each option's failure.** How does it break, and would we notice? An option that
    fails silently should lose to one that fails loudly, even when it's otherwise better.
-5. **Write down what would change your mind — before deciding.** Pre-committing to the
+6. **Write down what would change your mind — before deciding.** Pre-committing to the
    disconfirming evidence blocks motivated reasoning, and it's what fills in **Revisit when**.
 
 **Decide one thing at a time.** A decision about how processes relate is not a decision about

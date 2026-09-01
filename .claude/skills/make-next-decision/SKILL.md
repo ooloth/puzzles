@@ -49,16 +49,36 @@ build on unaddressed assumptions.
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to research all viable options and wait for the user's approval
 
-### 3. Research all viable answers
+### 3. Settle it by measuring where you can, and research the rest
 
-1. Deploy as many parallel subagents as needed to DEEPLY research all viable choices and their
-   implications for UX, DX, performance and any other relevant system properties without bias.
-   Try hard to give all options a fair chance to win and wait to see what the research says.
-1. Verify the subagents' claims, especially where evidence is lacking
+**Ask first what could be built instead of argued.** Most stack questions are answerable by a spike
+— the smallest throwaway thing that produces an observation — and a spike beats any amount of
+reading because it measures this project on this hardware rather than someone else's. Scaffolding a
+hello world under three runtimes and running the real loop settles more than a week of comparison.
+Budget hours, not days, and delete the spike afterwards.
+
+**Research is for finding out what to check, not for reaching the answer.** Its job is to surface
+the candidates, the known traps, and the properties worth measuring. Treat a number you read as a
+hypothesis about what you will observe, not as a finding.
+
+1. Name what a spike would settle, and what it would not. Anything left over is what research is
+   for. If nothing can be spiked, say so explicitly rather than defaulting to reading.
+1. Run the spike. Record what you ran, on what, and what you observed — a measurement without its
+   method is an assertion.
+1. Deploy as many parallel subagents as needed to research whatever the spike cannot reach, without
+   bias. Give every option a fair chance and wait to see what comes back.
+1. Verify the subagents' claims, especially where evidence is lacking. A claim with a citation that
+   nobody opened is not verified, and a number with no method behind it is not a measurement.
 1. Analyze the implications from first principles, with reference to `docs/problem.md`,
    `docs/guarantees/` and any other context clarifying what matters to provide users and the
    maintainer with the intended experience
 1. Reason your way to the best answer
+
+**Beware of measuring the wrong thing.** A microbenchmark that does not resemble the real workload
+is worse than no number, because it looks like evidence. Check that what you measured is what the
+decision turns on, that the environment resembles production, and that the difference is large
+enough to matter against everything else in the budget. `docs/constraints.md` describes how to
+record what you find.
 
 ### 4. Present the decision
 

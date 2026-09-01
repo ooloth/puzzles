@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """Check docs/ for broken links and questions missing from the milestone list.
 
+Run with: python3 scripts/check-docs.py
+
 Deliberately narrow. These two are facts — a link resolves or it does not, a
 question appears in docs/questions/README.md or it does not. The ordering of the
 milestones is a judgement made in that file, and is not checked here: a passing
 check on a sequence would only make a wrong one look verified.
+
+Nothing runs this automatically yet, so it is a check that does not exist for
+anyone who does not think to type it. Wiring it into a commit hook or CI is
+docs/questions/what-runs-the-checks-on-every-change.md, which belongs to a later
+milestone — doing it now would answer that question early. It needs no runtime of
+its own, so it can be wired up before the stack is chosen.
 """
 import os, re, sys
 

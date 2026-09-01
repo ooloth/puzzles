@@ -8,17 +8,26 @@ resolves_into: decision
 
 ## Why it matters
 
-How modules are organised inside the repo: what a directory is named for, and whether a reader can
-answer "where would I find X" without knowing which technical layer X lives in.
+Nothing can be scaffolded until files have somewhere to go, so some answer is needed for M1. Not all
+of it: how many packages there are and where the shared rules module sits are needed to put the
+first file down, while what a directory is named for and how deep the tree goes can settle once
+there are modules to organise.
 
-**This does not cover how many packages there are.** That is
-[what is the repo's top-level shape?](what-is-the-repos-top-level-shape.md), which blocks
-scaffolding and is answered separately. What is left here is the tree inside whatever that decides,
-and it is not blocking anything, because there are no modules yet.
+[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) and
+[ADR-0005](../decisions/0005-typescript-across-every-deployable.md) together set the one hard
+constraint: the puzzle rules are one implementation, shared as source, reachable by both a browser
+and a batch process without a publish step between them. Whatever shape is chosen has to allow that.
 
 ## What would settle it
 
-...
+Scaffolding it. Create the shape, import the rules module from a browser entry point and from a
+batch script, and see whether the tooling complains. What to check while doing it: whether the
+browser build resolves the import without a publish step, whether type checking works across the
+boundary, and whether the batch script can run the same source the browser bundles.
+
+Being wrong here is cheap, which is unusual for an M1 decision. Moving between one package and
+several is a file move and a configuration change — no data migration, nothing a player sees. That
+is an argument for the simpler option and letting the need appear.
 
 ## Resolves into
 
@@ -26,31 +35,66 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Options ported from legacy ADR-23 (organize by domain concept, not technical layer).
+Options ported from legacy ADR-23 (organize by domain concept, not technical layer). The sketch
+below was drawn as directories at the repo root before being recorded here.
 
 ## Options
 
-*By domain concept.* Folders named for what the code is about — a player and their progress, one
-game's rules, storage — so a name answers "where would I find X" without the reader knowing which
-technical layer a concept lives in.
+*One package.* Everything in a single project with directories for the client, the server, the
+generator and the rules. Nothing to configure, no workspace tooling, no publish semantics. The
+shared rules module is a directory that everything imports by relative path.
 
-*By technical layer.* One `routes/`, `views/`, `models/` spanning every game.
+*Workspaces.* Separate packages for the deployables and the shared rules, related by whatever the
+package manager provides. Real boundaries the tooling enforces, at the cost of configuration and a
+class of resolution problem that does not exist in a single package.
 
-Within domain organisation, a second choice: one shared module holding every game's rules, or a
-module per game. A shared module keeps the tree smaller, but editing one game recompiles the
-others and nothing but convention stops one game reaching into another's internals.
+*Separate repositories.* Listed to be dismissed: it puts a publish step between the rules and their
+consumers, which ADR-0004 forbids.
+
+Within any of those, a second axis. **By domain concept:** folders named for what the code is about
+— a player and their progress, one game's rules, storage — so a name answers "where would I find X"
+without the reader knowing which technical layer a concept lives in. **By technical layer:** one
+`routes/`, `views/`, `models/` spanning every game. And within domain organisation, one shared
+module holding every game's rules, or a module per game: a shared module keeps the tree smaller, but
+editing one game recompiles the others and nothing but convention stops one game reaching into
+another's internals.
+
+### A sketch, drawn outside-in
+
+Deployables at the top, a functional core beneath them, storage as its own concern:
+
+```
+apps/
+  web-frontend/     the client
+  web-backend/      imperative shell over core/
+  generator/        puzzle generator workload; imperative shell over core/
+core/
+  sudoku/           pure domain logic, used by both generation and play
+store/              storage, server-side and client-side
+scripts/            lint and ops helpers
+```
+
+It reads as the architecture rather than as a framework's conventions, and a newcomer can guess
+where something lives from the top level alone.
+
+Four things it decides that are open, and it is worth being explicit that a sketch is not an
+argument for any of them. It assumes **workspaces** rather than one package. It splits **frontend
+from backend** as separate deployables. It puts rules in a **per-game module** (`core/sudoku`)
+rather than one shared module, which the second axis above has not settled. And `store/` couples
+server-side and client-side storage in one place, which is two decisions —
+[which database](which-database-if-any.md) and
+[which client storage mechanism](which-client-storage-mechanism.md) — that are open and may not want
+the same home.
 
 ## Findings
 
-The number of consumers of a game's rules changes with the architecture, and that is what decides
-whether a common interface across games is worth having. A server-rendered design had two — a web
-binary and a generator — which was too few to justify one. A local-first design has three,
-generator, client and possibly a server, across two runtimes. Three consumers across a runtime
-boundary is the pressure that actually produces a shared interface, so the answer here follows
-from [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) and the runtimes it implies
-more than from taste.
+**The number of consumers of a game's rules is what decides whether a shared interface is worth
+having.** A server-rendered design had two, a web binary and a generator, which was too few. A
+local-first design has three — generator, client, and possibly a server — across two runtimes. Three
+consumers across a runtime boundary is the pressure that produces a shared interface, so this
+follows from [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) and the
+runtimes it implies rather than from taste.
 
-The structural criteria this answer has to satisfy — where a package boundary is earned, when
-repetition is acceptable, and domain logic staying free of I/O — hold whichever option wins, so
-they aren't inputs to the choice. They live in the portable standards described in
-[../standards/README.md](../standards/README.md).
+**The structural criteria hold whichever option wins**, so they are not inputs to the choice: where
+a package boundary is earned, when repetition is acceptable, and domain logic staying free of I/O.
+They live in the portable standards described in [../standards/README.md](../standards/README.md).

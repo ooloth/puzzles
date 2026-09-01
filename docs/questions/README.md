@@ -91,8 +91,9 @@ render "Hello!"; it is needed for the platform choice to be one we keep.
   Bun or Deno. Spike it. Under Bun or Deno it also answers the package manager and the test runner.
 - [Where does this run?](where-does-this-run.md) — from the three above.
 - [What runs the server?](what-runs-the-server-if-there-is-one.md) — mostly falls out of the runtime.
-- [What is the repo's top-level shape?](what-is-the-repos-top-level-shape.md) — one package or
-  several, and where the shared rules module sits so both a browser and a batch process reach it.
+- [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
+  many packages, and where the shared rules module sits so both a browser and a batch process can
+  reach it. What a directory is named for can settle once there are modules.
 - [Which package manager?](which-package-manager.md) — only separate if the runtime is Node.
 - [Is the client served as static files?](is-the-client-served-as-static-files.md) — derived from
   0002 and the offline guarantee, so closer to a recording than a decision.
@@ -109,8 +110,6 @@ text.
   to render one. The full answer is not needed until M5.
 - [How is the app styled?](how-is-the-app-styled.md) — after the renderer, since a rendering
   approach that ships a build pipeline anyway changes what a styling toolchain costs.
-- [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — module organisation, once there
-  are modules to organise.
 
 ## M3 — a player can fill it in
 

@@ -1,6 +1,6 @@
 ---
 name: make-next-decision
-description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER when the user asks what should be decided next.
+description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER whenever the user asks about prioritizing unresolved questions or unmade decisions, or wants to make a technical decision.
 ---
 
 ## Context
@@ -14,6 +14,11 @@ ideally leave open.
 Each decision we make should make subsequent decisions easier and more definitive and well reasoned.
 Think from first principles and stay rooted in the problems this project is trying to solve.
 
+If the user has asked you to help them make a particular decision, but you can see more
+foundational or otherwise prerequisite decisions which would ideally be made first, **tell them**.
+It is your job to do everything you can to assure decisions build on a solid foundation and do not
+build on unaddressed assumptions.
+
 ## Best practices
 
 1. When a task calls for spawning parallel subagents, prefer a mid-tier model like sonnet over a
@@ -24,17 +29,16 @@ Think from first principles and stay rooted in the problems this project is tryi
 
 ### 1. Identify the next most important question to answer
 
-1. Read `docs/questions/README.md`
-1. List `docs/decisions/` and `docs/questions/` to familiarize yourself with the made and unmade
-   decisions
+1. Read `docs/standards/decisions.md`, `docs/product.md`, `docs/constraints.md` and
+   `docs/questions/README.md`
+1. List `docs/decisions/` and `docs/questions/` to familiarize yourself with the sets of made and
+   unmade decisions
 1. Deploy as many parallel subagents as needed to answer all your fact-based questions about the
    codebase or external systems and dependencies and verify all claims
-1. Identify which decision should be made next
-1. Identify any prerequisite decisions that should ideally be made first to establish a solid
-   foundation of first principles thinking that minimizes assumptions and explicitly weighs all
-   viable options
-1. Identify the most foundational decision that should be made first to enable making the most
-   important decision (identified above) as soon as possible
+1. Identify the most foundational question that should be answered next
+1. Identify any prerequisite decisions that should ideally be made before tackling that question
+   (if any). If those questions have not been tracked, track them now.
+1. Confirm the question that would be most impactful to answer next
 
 ### 2. Present the selected question
 

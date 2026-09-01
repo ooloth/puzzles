@@ -17,7 +17,7 @@ some — and we would be promising something we only sometimes deliver.
 
 [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md) — a tight
 enough sync cadence makes install unnecessary. Also informed by
-[is Safari's storage window still seven days?](is-safaris-storage-window-still-seven-days.md),
+[how long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 which sets how often the wipe fires at all.
 
 ## Blocks

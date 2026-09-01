@@ -32,10 +32,10 @@ costs exactly what discovering a design late costs.
 
 ## Browsers — client-side storage is not durable
 
-*Every browser fact in this file and the two sections below it is in scope because of
-[decisions/0003](decisions/0003-this-is-delivered-over-the-web.md), which chose web delivery. They
-are the price of that decision rather than facts of the world, and they leave with it if it is ever
-superseded. Read them as a bill, not as weather.*
+*Every browser fact in this file is in scope because
+[decisions/0003](decisions/0003-this-is-delivered-over-the-web.md) chose web delivery. These are
+the cost of that decision rather than facts of the world, and they leave with it if it is
+superseded.*
 
 **Safari's Intelligent Tracking Prevention deletes all script-writable storage after 30 days
 without user interaction** — IndexedDB, localStorage, service worker registrations, the Cache
@@ -43,26 +43,16 @@ API — regardless of how much quota is unused. **Seven days is a penalty, not t
 applies only to a domain reached by a tracker-originated link carrying an unfiltered decorated
 identifier.
 
-> So we must never treat client-side persistence as durable storage — but the exposure is roughly
-> four times smaller than the widely-repeated seven-day figure implies. A player returning within a
-> month keeps everything, which puts the entire risk on players who lapse for longer than that. Any
-> argument that durability alone forces a server has to be made against thirty days, not seven, and
-> a site reached by bookmark or typed URL never meets the seven-day condition.
+> So we must never treat client-side persistence as durable storage. A player returning within a
+> month keeps everything, so the risk falls entirely on players who lapse for longer than that.
+> Any argument that durability alone forces a server is made against thirty days.
 
-*Verified as the source's intent, not as observed device behaviour — the distinction matters here.
-Read directly in WebKit trunk, `ResourceLoadStatisticsStore.cpp`, 2026-08-31: `constexpr unsigned
-operatingDatesWindowLong { 30 }` and `operatingDatesWindowShort { 7 }`. The split was introduced by
-[WebKit PR #21120](https://github.com/WebKit/WebKit/pull/21120), commit `274398@main`, 2024-02-09,
-whose description states seven days is retained only "when cross-site link decoration is detected
-and if link decoration filtering is disabled" and thirty applies otherwise. An in-tree layout test
-asserts thirty. It was never announced, which is why the 2019 and 2020 WebKit posts describing a
-blanket seven-day rule are still cited everywhere.*
-
-*One contradiction is unresolved: the same commit also claims it does not change current
-behaviour, which cannot be squared with the test. Nothing short of a real-device test settles that
-— see [how long the window really is](questions/is-safaris-storage-window-still-seven-days.md),
-which is now narrowed to exactly that. Thirty is the number to plan against; seven is no longer
-defensible as the default, but neither figure is confirmed against a shipped browser.*
+*Verified against WebKit trunk, `ResourceLoadStatisticsStore.cpp`, read 2026-08-31: `constexpr
+unsigned operatingDatesWindowLong { 30 }` and `operatingDatesWindowShort { 7 }`. The condition
+separating them is stated in [WebKit PR #21120](https://github.com/WebKit/WebKit/pull/21120),
+commit `274398@main`, 2024-02-09. Apple's published documentation still describes a blanket
+seven-day rule, so third-party sources contradict this. Whether a shipped browser matches the
+source is [an open question](questions/how-long-does-safari-really-keep-our-storage.md).*
 
 **What resets that clock is a deliberate act, not a page view.** A tap or click, a keystroke the
 page handles, an autofill, and an authentication all count. Scrolling, viewing, timers firing,
@@ -104,14 +94,11 @@ widely reported in 2023 and absent from Apple's release notes. The exact IP-matc
 described by third parties rather than by Apple.*
 
 **A home-screen-installed web app is exempt from the deletion mechanism entirely**, with storage
-isolated from regular Safari. This is stronger than WebKit's 2020 post described — that post framed
-it as the installed app keeping its own separate interaction counter, whereas the current source
-excludes the domain from the sweep altogether. This is the only confirmed mitigation.
+isolated from regular Safari. This is the only confirmed mitigation.
 
 > So if durability depends on install, install has to be a designed and encouraged path — and
-> durability then differs between installed and non-installed players. The gap is now between
-> "exempt" and "thirty days" rather than between "exempt" and "seven", which makes install a
-> smaller lever than it looked.
+> durability then differs between installed and non-installed players. The gap install closes is
+> between exempt and thirty days, which makes it a smaller lever than a seven-day window would.
 
 *Verified — WebKit trunk, `ResourceLoadStatisticsStore::shouldExemptFromWebsiteDataDeletion`, read
 2026-08-31. It returns true for any domain in the union of app-bound domains, managed domains,

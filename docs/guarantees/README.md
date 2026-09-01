@@ -61,4 +61,6 @@ or constraints bear on it.
 - [privacy.md](privacy.md) — what we know about a player and what we do with it
 - [security.md](security.md) — what a hostile input or actor cannot do
 
-Add a theme once it has a real promise in it.
+A theme is listed here once it is a promise we expect to make, and carries `status: stub` with
+`_No promises yet._` until it holds one. `rg -l 'No promises yet' docs/guarantees/` lists the empty
+ones — a theme nobody has filled is a promise nobody has written, which is worth being able to see.

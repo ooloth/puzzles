@@ -50,6 +50,6 @@ to actually be better, not merely present.
 
 ## Also update
 
-- [ ] constraints.md — no givens are imported by this decision
-- [ ] guarantees/ — no new promises; [guarantees/sudoku.md](../guarantees/sudoku.md) becomes the
+- [x] constraints.md — no givens are imported by this decision
+- [x] guarantees/ — no new promises; [guarantees/sudoku.md](../guarantees/sudoku.md) becomes the
       place for anything promised about the launch variant specifically

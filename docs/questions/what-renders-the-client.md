@@ -120,13 +120,8 @@ React's constraint pushes in the right direction rather than the wrong one.
 
 **Svelte's `$state` proxies cannot be written to IndexedDB directly**, because `structuredClone`
 rejects proxies; the documented fix is one `$state.snapshot()` call at the persistence boundary.
-Recorded because it lands on this app's hottest path, and qualified because Vue's `reactive()`
-has the identical problem — an early draft of this comparison eliminated Svelte for it while
-clearing Vue, which was not a defensible reading. A second claim in that draft, that renaming a
-symbol from a `.ts` file corrupts `.svelte` files, was a garbled retelling of an editor bug the
-maintainer could not reproduce. **Svelte was provisionally eliminated on bad grounds and is
-reinstated.** Whether it wins is a separate matter; being wrongly excluded is the kind of error
-this question exists to catch.
+Recorded because it lands on this app's hottest path. It does not discriminate between candidates,
+though: Vue's `reactive()` has the identical problem, and the fix is one call in both.
 
 **Solid is out on timing rather than design.** Solid 2.0 reached release candidate with the API
 frozen and a thousand-line migration guide, no codemod and no compatibility shim, driven by one

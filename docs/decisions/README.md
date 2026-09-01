@@ -26,11 +26,14 @@ disagreed with it. Note substantive amendments with an `amended:` date in the fr
 **Read [../standards/decisions.md](../standards/decisions.md) now, even if you read it earlier in
 this session.** A remembered summary produces a record that fits this format and breaks a rule.
 
-**Find this decision in [../questions/README.md](../questions/README.md) and check what sits above
-it.** That file is this one's sibling: the same decisions, before they are made, in the order they
-have to be made. Each entry names what it derives from. If anything it derives from is unanswered,
-the record you are about to write will be arbitrary — and it will not read as arbitrary, which is
-the whole cost. Write the missing question instead, and work that.
+**Find this decision in [../questions/README.md](../questions/README.md) and check the milestone it
+sits in.** That file is this one's sibling: the same decisions, before they are made, grouped by
+what they block. A question is ready when everything its milestone entry names as an input is
+answered. If anything is not, the record you are about to write will be arbitrary — and it will not
+read as arbitrary, which is the whole cost. Write the missing question instead, and work that.
+
+Sequencing lives in that file and nowhere else. Question files do not state what they depend on, so
+there is no second copy of the ordering to consult or to disagree with.
 
 If the decision is not in that order at all, add it there first. A decision nobody could see
 coming is one nobody checked the prerequisites of.

@@ -14,7 +14,15 @@ it is decided by [what execution shape does the server have?](what-execution-sha
 
 ## What would settle it
 
-...
+Knowing the execution shape, then pricing only the platforms that fit it. The figures below were
+gathered before that shape was a question, so most of them describe candidates that may not be in
+the field at all.
+
+Every price here needs re-checking against the vendor before it decides anything, and the
+reputational claims need replacing with something sourced or dropping. A platform is also cheap to
+try: deploying the same trivial app to two candidates costs an afternoon and answers questions about
+build times, cold starts and how much of the operational surface is yours that no comparison page
+will.
 
 ## Resolves into
 
@@ -76,8 +84,8 @@ console complexity.
 *DigitalOcean or Linode.* Roughly $24/month for specs equivalent to Hetzner's — around five times
 the cost with no capability gap relevant here.
 
-*Google Cloud Run, or Cloudflare Workers with D1.* Excluded previously for architectural
-mismatch rather than price. Back in contention if the server needs less than a database.
+*Google Cloud Run, or Cloudflare Workers with D1.* Out on architectural mismatch rather than
+price, and in contention again if the server needs less than a database.
 
 *Coolify on a VPS.* Adds a second control plane to maintain; pays off only with a genuinely
 multi-app future.
@@ -85,7 +93,7 @@ multi-app future.
 ## Findings
 
 **Not blockers, and worth saying so.**
-Don't decide this one first — it was decided first last time. Scale is not an input: the audience
+Don't decide this one first. Scale is not an input: the audience
 in [../problem.md](../problem.md) is deliberately small, so
 [what load should the server handle?](what-load-should-the-server-handle.md) does not discriminate
 between any candidate below.

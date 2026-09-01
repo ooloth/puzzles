@@ -47,5 +47,5 @@ choice nobody needs to make yet.
 
 **A library's licence is evaluated before its features.** A licence that disqualifies is
 disqualifying whichever content strategy wins, so it is the cheapest thing to check and the most
-expensive to discover late. The one library previously examined failed on exactly this, and its
+expensive to discover late. One library fails on exactly this, and its
 missing features were the second reason rather than the first.

@@ -31,8 +31,8 @@ N/A — this resolves into a fact, not a choice.
 
 ## Findings
 
-The durations previously carried in `constraints.md` — dropouts of "seconds to a couple of
-minutes" — trace to unnamed "subway/transit connectivity research" with no citation. They have
-been removed from that file. What survives there is the qualitative fact, which is
-uncontroversial: connectivity drops entirely in tunnels and stalls during tower handoff while
-still reporting as connected.
+No duration is recorded anywhere, and the figures that circulate — dropouts of "seconds to a
+couple of minutes" — trace to unnamed "subway/transit connectivity research" with no citation, so
+they are not usable. `constraints.md` carries only the qualitative fact, which is uncontroversial:
+connectivity drops entirely in tunnels and stalls during tower handoff while still reporting as
+connected.

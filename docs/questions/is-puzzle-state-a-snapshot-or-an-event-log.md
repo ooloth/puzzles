@@ -13,7 +13,14 @@ to be reconciled.
 
 ## What would settle it
 
-...
+Writing both for one board and seeing which is smaller. The pair that matters is applying a move and
+restoring from cold, and the honest comparison includes undo, since
+[how far back it goes](is-undo-in-scope-and-how-far-back.md) is what makes a log pay for itself or
+not.
+
+Two things to size while doing it: what a session's worth of actions costs in bytes under each, and
+what replay costs at the upper end of a game's length. Both are cheap to measure and neither has
+been.
 
 ## Resolves into
 

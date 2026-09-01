@@ -50,8 +50,8 @@ does not apply.
 
 **This decision creates the durability problem rather than solving it.** State on the client is
 state in evictable storage: Safari deletes script-writable storage after thirty days without
-interaction, and Chrome evicts whole origins under pressure. Before this decision, losing a
-player's work required a server failure. After it, the browser can do it unprompted. Everything in
+interaction, and Chrome evicts whole origins under pressure. Losing a player's work no longer needs
+a server failure — the browser can do it unprompted, with nothing to appeal to. Everything in
 [is cross-device resume in scope for v1?](../questions/is-cross-device-resume-in-scope-for-v1.md)
 about recovery exists because of this choice.
 

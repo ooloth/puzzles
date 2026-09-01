@@ -62,12 +62,15 @@ answers both at once — whether a player signs up falls out of which mechanism 
 than being decided first and constraining it. Worth resolving whether these merge before either
 is answered, since keeping both invites answering the same thing twice and differently.
 
-Deferring accounts costs nothing later on one reading: without accounts there is no abuse resistance — an identifier
-anchored in browser storage can be discarded and reissued at will — but the fix for that is
-accounts, which is the same fix that would be built anyway. Nothing is foreclosed by waiting.
+Deferring accounts looks free on one reading: without them there is no abuse resistance — an
+identifier anchored in browser storage can be discarded and reissued at will — but the fix for that
+is accounts, which is the same fix that would be built anyway.
 
-That argument is contingent on [is there a paid tier?](is-there-a-paid-tier.md) staying answered
-no. The moment something is worth gating, abuse resistance stops being free to defer.
+That reading holds only while nothing needs to attach to a person, and two things do. A durable play
+record is one, per [ADR-0006](../decisions/0006-what-a-players-work-survives.md). A paid tier would
+be the other, so [is there a paid tier?](is-there-a-paid-tier.md) staying answered no is a condition
+of it rather than a detail: the moment something is worth gating, abuse resistance stops being free
+to defer.
 
 **Accounts are Layer 2 of three, and most durability arguments are about Layer 1.** An anonymous
 server copy keyed to a cookie keeps the same-device durability promise with no signup at all;
@@ -82,11 +85,6 @@ has to attach to a person, and [../problem.md](../problem.md) now states that re
 vision. Cross-device sync becomes a lookup rather than a transfer problem. And an account is where a
 payment boundary would go if [a paid tier](is-there-a-paid-tier.md) is ever wanted, which makes
 building one early an option-preserving move rather than speculative work.
-
-> So the argument above — that deferring accounts costs nothing because the fix for abuse is the
-> same fix built later — is weaker than it reads. It was written when nothing needed to attach to a
-> person. A durable play record does, so the question is no longer only about abuse resistance and
-> a paid tier.
 
 **Signing in is a cost to the player and the vision minimises it, not the reverse.**
 `../problem.md` asks that work follow the player with nothing reconciled by hand. An account that

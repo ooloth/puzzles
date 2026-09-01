@@ -19,7 +19,7 @@ about grid entries, pencil notes and selection â€” the board in front of them â€
 the finished puzzles and the play record along with it.
 
 **[../constraints.md](../constraints.md) records that eviction is all-or-nothing.** Script-writable
-storage goes after thirty days of browser use, and it takes the board, every past board, the play
+storage goes after thirty days without interaction, and it takes the board, every past board, the play
 record, any locally-held identifier and the cached shell together. There is no arrangement where the
 board is lost and the history survives.
 

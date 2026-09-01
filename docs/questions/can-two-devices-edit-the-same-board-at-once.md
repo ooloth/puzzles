@@ -37,9 +37,10 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised 2026-08-31. [../problem.md](../problem.md) previously ruled it out permanently, in a
-sentence that also carried a positive scope claim. Ruling something out forever is a decision,
-and it had never been argued — least of all against the fact that the app cannot prevent it.
+Raised 2026-08-31, on finding this ruled out permanently in a sentence of
+[../problem.md](../problem.md) that also carried a positive scope claim. Ruling something out
+forever is a decision, and this one had never been argued — least of all against the fact that the
+app cannot prevent it.
 
 ## Options
 

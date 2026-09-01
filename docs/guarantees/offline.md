@@ -30,20 +30,26 @@ and it is the one that sizes client storage by orders of magnitude.
 [How does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md)
 covers the shell, without which neither of the others means anything.
 
-## The player's network state is never shown
+## The network never blocks, delays or interrupts play
 
-No loading spinner, reconnecting banner, sync indicator, or connectivity error appears during
-play. The network is our problem, not something the player is asked to watch.
+No action a player takes waits on the network, fails because of it, or is undone by it. They are
+never asked to retry, reconnect, or choose between versions in order to keep solving. The network is
+our problem to handle, not the player's to manage.
+
+This promise is about what the network is allowed to *do* to a player, not about what the interface
+may *show* them. Displaying that the app is offline — a small indicator, a note that a puzzle will
+sync later — is permitted and is a design judgement, not a broken promise. What is forbidden is
+making the player act on it.
 
 **Enforced by** Nothing. Asserted only.
 
-**If violated** The player is made responsible for conditions they can't affect, in the
-middle of concentrating on something else.
+**If violated** The player is made responsible for conditions they can't affect, in the middle of
+concentrating on something else.
 
 **Bearing on this** [How long until a stalled connection surfaces as an error?](../questions/how-long-until-a-stalled-connection-surfaces-as-an-error.md)
-— a stalled connection produces no thrown error, so anything built to catch errors won't
-notice it. [How would we learn a player lost progress?](../questions/how-would-we-learn-a-player-lost-progress.md)
-is the tension: if nothing is ever shown, nothing tells a player their work is at risk either.
+— a stalled connection produces no thrown error, so anything built to catch errors won't notice it.
+[Is the player shown anything about the network?](../questions/is-the-player-shown-anything-about-the-network.md)
+is the design judgement this promise deliberately leaves open.
 
 ## Conflicts are reconciled without asking the player
 

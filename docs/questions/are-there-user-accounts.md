@@ -50,6 +50,14 @@ the cost of building signup, recovery and credential storage before anything nee
 first visit purely so that a later "claim this progress with an account" upgrade has somewhere to
 attach without restructuring what came before. Defers the work without foreclosing it.
 
+*Accounts as the boundary between tiers of the product.* Guests play the current puzzle with
+progress held locally and no sync. Signing in — through Google, Apple, or email — unlocks
+cross-device sync, a durable play record, streaks and stats. A paid tier would sit above that, over
+the archive, advanced hints, or additional variants. The account is not built to serve
+authentication; it is built because several things the product wants to offer have to attach to a
+person rather than to a browser, and because it is the natural place to put a payment boundary if
+one is ever wanted.
+
 ## Findings
 
 **This may not be a separate question.** Every identity mechanism catalogued in
@@ -71,3 +79,23 @@ server copy keyed to a cookie keeps the same-device durability promise with no s
 accounts extend it across devices and carry a subscription. Deferring them is cheap as long as the
 anonymous layer exists to attach to later — see
 [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md).
+
+**The maintainer leans toward accounts, for what they make possible rather than for what they
+authenticate.** Recorded from the maintainer as a lean rather than a decision. Three reasons, and
+the first is the one that carries weight on its own: a play record that outlives any single device
+has to attach to a person, and [../problem.md](../problem.md) now states that record as part of the
+vision. Cross-device sync becomes a lookup rather than a transfer problem. And an account is where a
+payment boundary would go if [a paid tier](is-there-a-paid-tier.md) is ever wanted, which makes
+building one early an option-preserving move rather than speculative work.
+
+> So the argument above — that deferring accounts costs nothing because the fix for abuse is the
+> same fix built later — is weaker than it reads. It was written when nothing needed to attach to a
+> person. A durable play record does, so the question is no longer only about abuse resistance and
+> a paid tier.
+
+**Signing in is a cost to the player and the vision minimises it, not the reverse.**
+`../problem.md` asks that work follow the player with nothing reconciled by hand. An account that
+gates the first puzzle behind a signup form contradicts the audience it describes: casual solvers,
+no assumed technical sophistication, found rather than marketed. Whatever is decided here, the first
+play has to work without one, which is what makes the guest tier above a requirement rather than a
+tier.

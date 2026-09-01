@@ -41,7 +41,17 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Options
 
-...
+*No paid tier.* Everything the app offers is free to everyone.
+
+*A free tier and a paid tier, divided by an account.* Guests play the current puzzle with progress
+held locally. Signing in is free and unlocks cross-device sync, a durable play record, streaks and
+stats. Payment sits above that, over the archive of past puzzles, advanced hints, or additional
+variants. Recorded from the maintainer as a sketch rather than a commitment; the free-account step
+is what makes it a pipeline rather than a wall, since a player who has already signed in for sync
+has somewhere for a subscription to attach.
+
+*A paid tier with no free account step.* Payment is the only boundary. Simpler to describe and
+harder to convert into, since the first thing a visitor is asked for is money.
 
 ## Findings
 

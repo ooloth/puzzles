@@ -56,10 +56,13 @@ directs you to proceed anyway after hearing the above.
 
 ### 1. Identify the next most important question to answer
 
+1. Read `docs/decisions/README.md` and then **every record in `docs/decisions/`** — the records, not
+   the filenames. A record settles things beyond its title and several settle things by consequence,
+   so a listing is not enough. Pay particular attention to any titled "the option to ... is
+   preserved": each one is a constraint on the decision you are about to make.
 1. Read `docs/standards/decisions.md`, `docs/problem.md`, `docs/constraints.md` and
    `docs/questions/README.md`
-1. List `docs/decisions/` and `docs/questions/` to familiarize yourself with the sets of made and
-   unmade decisions
+1. List `docs/questions/` to familiarize yourself with the set of unmade decisions
 1. Deploy as many parallel subagents as needed to answer all your fact-based questions about the
    codebase or external systems and dependencies and verify all claims
 1. Identify the most foundational question that should be answered next

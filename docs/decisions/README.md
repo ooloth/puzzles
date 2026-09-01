@@ -23,6 +23,31 @@ disagreed with it. Note substantive amendments with an `amended:` date in the fr
 
 ## Before you decide
 
+**Start by reading this folder — the records, not the filenames.** A record settles things beyond
+its title, and several of them settle things by consequence: ADR-0009 closed the catalogue candidate
+inside a question nobody was reading, and ADR-0006 forced a server while arguing about storage. An
+agent that lists this directory and moves on will re-argue a settled choice or build on top of one it
+never saw.
+
+**Then check the doors.** Some records here exist only to keep a future reachable, and they are
+titled so that a listing carries the constraint:
+
+```
+ls docs/decisions/ | rg 'option-to-.+-is-preserved'
+```
+
+That matches on the filename rather than the contents, so this file describing the convention does
+not match its own filter.
+
+Every match is a promise that some later decision must not break. Read each one's **Decision**
+section before recording anything, and if what you are about to decide closes one of them, that is
+the decision — say so and argue it, rather than closing it as a side effect. A door is also allowed
+to be closed deliberately: the record naming it says what would justify that, under **Revisit when**.
+
+Optionality is not free. Each door held open constrains every decision after it, and one nobody walks
+through was a tax paid for nothing. The list stays short, and an entry is retired by a record that
+supersedes it once the future it protects is genuinely abandoned.
+
 **Read [../standards/decisions.md](../standards/decisions.md) now, even if you read it earlier in
 this session.** A remembered summary produces a record that fits this format and breaks a rule.
 

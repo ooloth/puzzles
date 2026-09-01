@@ -88,8 +88,7 @@ text.
 
 Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 
-- [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — the
-  entry path only. Notes, undo and gestures belong to M8.
+- [How does a player enter a digit?](how-does-a-player-enter-a-digit.md)
 - [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
 
 ## M4 — the board survives a reload
@@ -130,8 +129,8 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 - [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md)
 - [Are hints in scope?](are-hints-in-scope.md)
-- [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — the rest
-  of it.
+- [What interactions must the grid support?](what-interactions-must-the-grid-support.md) — notes,
+  undo, drag-select, keyboard navigation, highlighting.
 - [Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
 - [What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)
 - [Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md)

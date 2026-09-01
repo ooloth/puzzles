@@ -8,10 +8,16 @@ resolves_into: decision
 
 ## Why it matters
 
-Sets what the interface has to do, which in turn sets what "instant" has to cover and how capable
-the client has to be. Three interactions have been asserted as requirements with nothing
-corroborating them, and building for the wrong set is expensive at the highest-stakes surface in
-the product.
+Sets what the interface has to do beyond the minimum, which in turn sets what "instant" has to cover
+and how capable the client has to be. Three interactions have been asserted as requirements with
+nothing corroborating them, and building for the wrong set is expensive at the highest-stakes
+surface in the product.
+
+**This does not cover entering a digit at all.** That is
+[how does a player enter a digit?](how-does-a-player-enter-a-digit.md), which blocks a much earlier
+milestone. What is left here — pencil notes, undo, drag-select, keyboard navigation, live
+highlighting — is what makes solving pleasant rather than possible, and every one of them is better
+judged against a grid that already works than in the abstract.
 
 ## Blocked by
 
@@ -19,8 +25,8 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[What latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md),
-[Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md).
+[Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md), since keyboard navigation
+is both an interaction and an accessibility affordance.
 
 ## What would settle it
 
@@ -38,7 +44,20 @@ requirements.
 
 ## Options
 
-...
+Not alternatives — a checklist, where the answer is whichever subset is worth building.
+
+*Pencil notes.* Candidate marks in a cell. Named in [../guarantees/interaction.md](../guarantees/interaction.md)
+as needing to be visually distinct from committed entries, which presumes they exist.
+
+*Undo, and how far back.* [Its own question](is-undo-in-scope-and-how-far-back.md), because the
+depth interacts with whether state is a snapshot or an event log.
+
+*Drag-select across cells.* Asserted as a requirement by the legacy record below.
+
+*Keyboard navigation.* Asserted there too, and separately an accessibility affordance.
+
+*Live highlighting* of the cells related to the current selection. Asserted there, and the one with
+a cost nobody has counted.
 
 ## Findings
 

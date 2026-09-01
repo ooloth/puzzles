@@ -1,6 +1,6 @@
 ---
 name: prep-for-codebase-handoff
-description: Check whether a new agent with no context could pick this repo up and know what to do next, and clean up what would mislead them. Run near the end of a session, or before switching to an unrelated topic. TRIGGER when the user asks whether the repo is ready for a new session, whether the docs are in good shape, or before wrapping up.
+description: Check whether a new agent with no context could pick this repo up and know what to do next, and clean up what would mislead them. TRIGGER when the user asks whether the repo is ready for a new session, when the user asks if the codebase and/or its docs are in good shape, before wrapping up a session, or before switching topics.
 ---
 
 ## Why this exists
@@ -73,10 +73,10 @@ because each needs a judgement rather than a lookup.
   Check each against `docs/constraints.md`, which is the authority.
 - **Unfinished work in the records.** Unchecked `Also update` boxes in `docs/decisions/`, and
   sections still holding `...` in question files that have since been worked.
-- **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying *Enforced
-  by: Nothing* that something now checks, and anything claiming enforcement that no longer exists.
-- **Change narrative.** Search for *used to*, *previously*, *no longer*, *has since*, *was changed
-  to*, and dates used as change markers. The documentation standard forbids these outside the narrow
+- **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying _Enforced
+  by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
+- **Change narrative.** Search for _used to_, _previously_, _no longer_, _has since_, _was changed
+  to_, and dates used as change markers. The documentation standard forbids these outside the narrow
   case where a reader lacking the history would do the wrong thing.
 - **The file system asserting decisions.** Directory names, stub files and scaffolding read as
   settled. If a directory implies an answer to an open question, that is a decision nobody argued.

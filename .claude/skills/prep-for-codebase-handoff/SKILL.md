@@ -87,6 +87,27 @@ detected by a lint script like `check-docs.py` instead.
   case where a reader lacking the history would do the wrong thing.
 - **The file system asserting decisions.** Directory names, stub files and scaffolding read as
   settled. If a directory implies an answer to an open question, that is a decision nobody argued.
+- **A doc contradicting a recorded decision.** The reverse direction from the check above: not an
+  ADR against a later ADR, but any other file asserting something an ADR already settled. Take each
+  record in `docs/decisions/` and search the rest of `docs/`, `CLAUDE.md` and the skills for claims
+  it makes false. `unfinished.md` listed the language as an open stack question for a day after
+  ADR-0005 chose TypeScript, in the file the repo itself calls its highest-consequence one.
+- **A rule violated in the files it governs.** Take each Must in `docs/standards/`, each convention
+  stated in an index README, and each claim a README makes about what a script checks, and go and
+  look at the files it claims authority over. `questions/README.md` said sequencing lives in that
+  file and nowhere else while twenty-one question files carried it under two bold headings, and it
+  described a milestone check `check-docs.py` did not implement. The two headings are now caught by
+  that script; a paraphrase is not, which is why this stays a scan.
+- **An ADR resting on something not yet settled.** For each record, take every **Forced by** input
+  and every **Rejected** reason and ask what it grounds in. A rejection reason that depends on an
+  open question is the expensive one, because the option stays rejected and the reasoning is never
+  revisited. ADR-0006 rejected an anonymous server copy for guests partly because it degrades to
+  seven days when the API is not judged first-party — a consequence of a hosting topology nobody had
+  chosen. `docs/standards/decisions.md` calls this the failure that does not announce itself.
+- **`unfinished.md` entries that are no longer live.** Each entry claims something in the repo will
+  mislead a reader today. Check whether it still would. An entry describing a migration that
+  finished, or a pattern that no longer exists, trains readers to skim the one file whose whole
+  value is being read carefully — and an honestly empty `unfinished.md` is better than a padded one.
 
 Run `python3 scripts/check-docs.py` yourself while the subagents work. It is fast and covers the
 things that are facts rather than judgement.

@@ -76,26 +76,34 @@ directs you to proceed anyway after hearing the above.
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to research all viable options and wait for the user's approval
 
-### 3. Settle it by measuring where you can, and research the rest
+### 3. Look before you leap, then settle it by measuring
 
-**Ask first what could be built instead of argued.** Most stack questions are answerable by a spike
-— the smallest throwaway thing that produces an observation — and a spike beats any amount of
-reading because it measures this project on this hardware rather than someone else's. Scaffolding a
-hello world under three runtimes and running the real loop settles more than a week of comparison.
-Budget hours, not days, and delete the spike afterwards.
+**Look first.** Research surfaces the candidates, the known traps, and — the part that matters most
+— the properties worth observing that you would not have thought of on your own. A spike designed
+before the reading measures what you already expected to see, which is the one result that teaches
+nothing. Budget the reading in the same spirit as the spike: enough to know what to check, then stop.
 
-**Research is for finding out what to check, not for reaching the answer.** Its job is to surface
-the candidates, the known traps, and the properties worth measuring. Treat a number you read as a
-hypothesis about what you will observe, not as a finding.
+**Reading does not reach the answer.** A number you find is a hypothesis about what you will observe
+here, on this hardware, under this workload. It is never a finding. Record where each claim came
+from, and mark the ones that came from nowhere as unverified — an unsourced number reads exactly
+like a sourced one and nothing else tells them apart.
 
-1. Name what a spike would settle, and what it would not. Anything left over is what research is
-   for. If nothing can be spiked, say so explicitly rather than defaulting to reading.
-1. Run the spike. Record what you ran, on what, and what you observed — a measurement without its
-   method is an assertion.
-1. Deploy as many parallel subagents as needed to research whatever the spike cannot reach, without
-   bias. Give every option a fair chance and wait to see what comes back.
+**Then leap.** Most stack questions are answerable by a spike — the smallest throwaway thing that
+produces an observation — and a spike beats any amount of reading, which is why the reading exists
+to aim it rather than to replace it. Scaffolding a hello world under three runtimes and running the
+real loop settles more than a week of comparison. Budget hours, not days, and delete the spike
+afterwards; the observation is the artifact.
+
+1. Deploy as many parallel subagents as needed to survey the field without bias. Ask each for the
+   candidates, the traps, and the specific properties worth observing. Give every option a fair
+   chance and wait to see what comes back.
 1. Verify the subagents' claims, especially where evidence is lacking. A claim with a citation that
    nobody opened is not verified, and a number with no method behind it is not a measurement.
+1. Name what a spike would settle and what it would not, using what the research just told you to
+   look for. If nothing can be spiked, say so explicitly rather than letting the reading you have
+   already done become the answer by default.
+1. Run the spike. Record what you ran, on what, how many times, and what you observed — a
+   measurement without its method is an assertion with a number in it.
 1. Analyze the implications from first principles, with reference to `docs/problem.md`,
    `docs/guarantees/` and any other context clarifying what matters to provide users and the
    maintainer with the intended experience

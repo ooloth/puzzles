@@ -22,8 +22,13 @@ finished and still produce puzzles nobody enjoys.
 
 ## Blocks
 
-[is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md),
-[does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md).
+[is difficulty graded](is-difficulty-graded-and-does-a-grade-promise-anything.md), and through it
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md).
+That path is what puts this question in the chain deciding whether a database exists.
+
+[Does v1 ship generated or seeded puzzles](does-v1-ship-generated-or-seeded-puzzles.md) is a
+prerequisite of this question, not a dependent: a seeded launch set and a generated one need
+different answers to what makes a puzzle good.
 
 ## What would settle it
 

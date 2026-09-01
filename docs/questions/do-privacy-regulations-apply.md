@@ -20,7 +20,10 @@ N/A — nothing needs to be answered first.
 ## Blocks
 
 [are there user accounts](are-there-user-accounts.md),
-[is there a paid tier](is-there-a-paid-tier.md).
+[is there a paid tier](is-there-a-paid-tier.md), and
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which proposes recording how puzzles are solved and cannot decide to collect anything before what
+may be collected is known.
 
 ## What would settle it
 

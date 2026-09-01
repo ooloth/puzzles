@@ -30,7 +30,14 @@ answer without one.
 
 ## Blocked by
 
-N/A — nothing needs to be answered first.
+[Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
+— the strongest demand here is calibrating the generator against real solves, and that demand only
+exists if a grade promises the player something. If it promises nothing, calibration is curiosity
+and fails the guard question in [../problem.md](../problem.md).
+
+[Do privacy regulations apply?](do-privacy-regulations-apply.md) — recording how puzzles are solved
+is collecting behavioural data about players, and what may be collected is unresearched. Deciding
+to collect before knowing that is deciding it twice.
 
 ## Blocks
 

@@ -18,7 +18,14 @@ needs a difficulty model, not just a solver.
 
 ## Blocks
 
-what the generator has to measure while generating.
+What the generator has to measure while generating, and
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which cannot be answered until this is.
+
+A grade that promises the player something can only be kept honest by checking it against real
+solves, which is a demand for a server and a queryable store. A grade that promises nothing removes
+that demand entirely. The same question therefore decides whether one of the strongest arguments
+for a database exists at all.
 
 ## What would settle it
 

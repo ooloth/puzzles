@@ -134,8 +134,8 @@ plugin rather than the webview's own store.
 That makes the boundary the thing to protect rather than the wrapper the thing to plan:
 
 - A rules engine that is a pure module — no DOM, no framework import, no ambient randomness. Free,
-  and already required by [is there one implementation of the puzzle
-  rules?](../questions/is-there-one-implementation-of-the-puzzle-rules.md) for unrelated reasons.
+  and already required by [ADR-0004](0004-one-implementation-of-the-puzzle-rules.md) for unrelated
+  reasons.
 - Serializable state carrying an explicit schema version.
 - **One narrow storage interface with a single implementation behind it, which nothing else in the
   codebase reaches around.** This is the highest-leverage item and the one the correction above

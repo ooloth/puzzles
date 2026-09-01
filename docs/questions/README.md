@@ -24,9 +24,9 @@ is picked before the thing it is supposed to serve is known.
 Three questions are ready — every input they have is answered. None derives from another, so take
 whichever you like; the bracketed count is how many later decisions each one unblocks.
 
-1. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
-   [9] Decides whether one language must serve a browser and a batch process. Everything about the
-   language, and therefore the generator's runtime, hangs off it.
+1. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)**
+   [8] ADR-0004 requires the rules to run in a browser and in a batch process from one source. This
+   settles what the client, the generator and any server are written in.
 2. **[How long must in-progress work survive, and on which devices?](how-long-must-in-progress-work-survive.md)**
    [8] The durability promise with a bound and a device scope. Decides whether a server is forced.
 3. **[Is the client served as static files?](is-the-client-served-as-static-files.md)**
@@ -53,15 +53,14 @@ that follows from the shared language in 0005. They are real and they are not on
 [0001](../decisions/0001-launch-with-sudoku-then-star-battle.md) which games, in what order.
 [0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) the client holds and mutates
 puzzle state. [0003](../decisions/0003-this-is-delivered-over-the-web.md) this is delivered over the
-web.
+web. [0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) one implementation of the
+puzzle rules.
 
 ### Layer 1 — ready now
 
-0004. **[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)**
-      — from 0003. One language must serve a browser and a batch process, or it need not.
-
 0005. **[Which language do the deployables share?](which-language-do-the-deployables-share.md)** —
-      from 0003 and 0004. Also settles what the generator is written in.
+      from 0003 and 0004. Also settles what the generator is written in. ADR-0004 leaves open
+      whether sharing is by source or by a compiled artifact; this decides it.
 
 0006. **[Is the client served as static files?](is-the-client-served-as-static-files.md)** — from
       0002 and [../guarantees/offline.md](../guarantees/offline.md). The narrow question is whether

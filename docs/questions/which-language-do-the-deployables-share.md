@@ -18,12 +18,16 @@ also decides what the generator and any server are written in.
 
 ## Blocked by
 
-[Is there one implementation of the puzzle rules?](is-there-one-implementation-of-the-puzzle-rules.md)
-— if the rules are not shared, each deployable is free and this question dissolves.
-
-The platform half is settled:
+N/A — settled, and both inputs point here.
 [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) chose web delivery, which is what
 makes "one TypeScript codebase everywhere" a candidate rather than an assumption.
+[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) chose one implementation of
+the puzzle rules, which is what gives this question something to answer: the rules must run in a
+browser and in a batch process, from one source. Ready to work on now.
+
+That constraint is the whole of what this question inherits. It does not settle whether sharing
+happens by source — one language everywhere — or by a compiled artifact with an interop boundary and
+a WebAssembly bundle on first load.
 
 ## Blocks
 

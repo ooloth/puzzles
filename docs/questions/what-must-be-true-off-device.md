@@ -13,16 +13,25 @@ Every discussion so far has started from a server being assumed and argued about
 do — [what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
 specifies how it validates and merges without anything establishing that it is there.
 
-A browser can hold a puzzle, a player's progress, and the rules. What it cannot do is hold
-something the player must not be able to change, or something that has to be reachable from a
-device they have not used yet. Those are the only two reasons to run anything at all, and naming
-which apply is the whole decision.
+A browser can hold a puzzle, a player's progress, and the rules. There are four things it cannot
+hold: something the player must not be able to change, something reachable from a device they have
+not used yet, something that must reach the player while the app is closed, and something that must
+reach us when a promise breaks. Naming which of those apply is the whole decision.
+
+An enumeration here that leaves a candidate out settles the question by omission, and reads as
+complete while doing it. The list under Options is the full set, and it is kept full.
 
 ## Blocked by
 
 [How long must in-progress work survive?](how-long-must-in-progress-work-survive.md) — a promise
 that outlives the device's storage is the main candidate for something that must be true
 elsewhere.
+
+And [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+which supplies two more candidates. Both roots feed this question and neither determines the other,
+so they are answered in turn — but **each answers only what must be true, never whether a server
+follows.** That conclusion is drawn here, once, with the whole list in view. Answering it early
+inside either root is how the list gets shortened without anyone noticing.
 
 ## Blocks
 
@@ -35,9 +44,13 @@ exist if something off-device has to be attributed.
 
 ## What would settle it
 
-Listing the candidates and testing each against a single question: could the device hold this
-instead, and what breaks if the player edits it? Anything that survives that test is the reason a
-server exists. If nothing survives it, this is a static site.
+Testing every candidate under Options against the same pair of questions: could the device hold
+this instead, and what breaks if the player edits it? Anything that survives is a reason a server
+exists. If nothing survives, this is a static site.
+
+The list is worked in one sitting, and a candidate is struck off here rather than being quietly
+resolved by whichever other question happens to reach it first. A single surviving candidate
+settles that a server exists; the rest then only shape what it does.
 
 ## Resolves into
 
@@ -65,6 +78,17 @@ device belongs to the person it would be charging.
 *Usage we need to see*, which is [its own question](what-must-we-know-about-how-the-app-is-used.md)
 and which drives whether stored data must be queryable or can stay opaque.
 
+*A message that reaches a closed app.* Web push requires an application server by construction —
+there is no serverless form of it. Whether it is wanted depends on
+[one puzzle a day or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md), since a
+daily rhythm is the only thing here that would justify interrupting anyone.
+
+*Evidence that a promise is being kept.* [../guarantees/observability.md](../guarantees/observability.md)
+names the motivating case exactly: lost progress produces no error and no complaint. A device that
+has silently dropped a player's work is the last thing that will report it, and a player who
+quietly leaves reports nothing either. This is the one candidate whose whole purpose is to observe
+the failure of the others.
+
 ## Findings
 
 **Puzzle content does not need a server by itself.** Generated ahead of time, puzzles are static
@@ -82,3 +106,37 @@ committed.
 [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) already puts
 authoritative state on the client, so anything here is a background copy or a background check.
 Establishing that a server exists does not reopen that decision.
+
+**Each candidate loses on its own, so they are judged together.** Every one can be declined for a
+reason that is sound in isolation: progress loss is rare enough to accept, a paid tier is
+uncommitted, the catalogue can ship with the build, usage can go unmeasured, notifications are a
+nice-to-have, and a bug would surface eventually. Declining all of them separately produces a static
+site without any record that a server was rejected, because no single one of those choices is about
+the server. So a candidate is struck off this list rather than resolved inside whichever other
+question reaches it first, and the list is worked once, whole.
+
+**Recovery after eviction covers a narrower population than the rest of this repo assumes.**
+Script-writable storage survives thirty days of browser use, and the seven-day figure applies only
+to a domain reached by a tracker-originated decorated link — see
+[../constraints.md](../constraints.md). A player returning within a month loses nothing, so this
+candidate argues for a server on behalf of players who lapse for longer than that. The promise in
+[../guarantees/durability.md](../guarantees/durability.md) is unbounded, so a month-long lapse
+still breaks it; what shrinks is how many players it happens to.
+
+**Two candidates decide whether the store must be queryable.** A copy of progress, an entitlement,
+and the catalogue are each satisfied by something that stores bytes under a key and never reads
+inside them. Usage and observability both require asking questions of the data. So
+[which database, if any?](which-database-if-any.md) is a non-decision only if both of those lose;
+if either survives, blob against queryable is a real fork and that entry needs rewriting.
+
+**Observability conflicts with a promise already made.**
+[../guarantees/offline.md](../guarantees/offline.md) says the player's network state is never shown
+— no spinner, no banner, no sync indicator. Anything reporting home does so invisibly and fails
+invisibly, which rules out the ordinary shapes of error reporting.
+[../guarantees/observability.md](../guarantees/observability.md) names the same tension and it is
+unresolved.
+
+**No candidate here has been priced.** This list establishes which are live, not what any costs.
+[What is the acceptable running cost?](what-is-the-acceptable-running-cost.md) and
+[what load should the server handle?](what-load-should-the-server-handle.md) are both open, and a
+candidate that survives on merit can still lose on cost.

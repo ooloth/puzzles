@@ -40,6 +40,14 @@ independent scalar values.
 *Event log.* Undo falls out for free and replay is cheap at 50-300 actions per game, but it
 is more moving parts to build and keep correct.
 
+*An event log adopted as part of [LiveStore](https://livestore.dev/)*, which builds on one and does
+not offer the alternative. It is recorded as a candidate under
+[which client storage mechanism?](which-client-storage-mechanism.md), where what it bundles and what
+it costs are set out. It matters here because choosing it settles this question as a side effect
+rather than on the merits below, and this question also constrains
+[how far back undo goes](is-undo-in-scope-and-how-far-back.md). If the event log wins on its own
+terms, that is an argument for LiveStore. The reverse is not an argument for the event log.
+
 ## Findings
 
 The two options start from opposite defaults on derived state. An event log makes every visible

@@ -68,6 +68,38 @@ Worth considering only if volume rules the first two out.
 *SQLite compiled to WebAssembly, over OPFS.* Real queries on the client. Considerable weight on a
 cold load, and it inherits the OPFS risks rather than escaping them.
 
+*[LiveStore](https://livestore.dev/).* A local-first data layer rather than a storage mechanism:
+SQLite in the browser, an event-sourced state model, reactive queries, and sync to a backend, as one
+package. Named here so it is not overlooked, not because it is favoured.
+
+Three things about it need weighing against this project specifically, and the first two are
+independent of how good it is.
+
+It is a **bundle**, so adopting it answers several open questions at once — this one, whether state
+is [a snapshot or an event log](is-puzzle-state-a-snapshot-or-an-event-log.md), much of
+[which database](which-database-if-any.md), and part of
+[whether a server exists](what-must-be-true-off-device.md), since its sync backend is one. Those
+answers may each be right, but a tool that supplies them is not an argument for them, and
+[../standards/decisions.md](../standards/decisions.md) is about the order in which they are reached.
+It is a candidate for this question once the others are settled, and a way of skipping them before.
+
+It **sits across the storage boundary rather than behind it**.
+[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) names one narrow storage interface,
+with a single implementation behind it and nothing reaching around it, as what keeps a native shell
+cheap to add. A package that also owns reactivity and sync spans that line, so adopting it spends a
+door that record deliberately holds open.
+
+It carries **SQLite as WebAssembly**, which is weight on a cold load that
+[../constraints.md](../constraints.md) already describes as several seconds of round trips before
+any bytes move.
+[ADR-0005](../decisions/0005-typescript-across-every-deployable.md) weighed bundle size against that
+when rejecting a WebAssembly client, so adding a WebAssembly database needs an argument rather than
+an exception.
+
+What to establish when it is evaluated, none of which is recorded here yet: release status and
+maintenance activity, measured bundle size, whether the sync backend is self-hostable or a hosted
+service, the licence, and whether event sourcing is required or merely idiomatic.
+
 ## Findings
 
 **A library is a separate and much smaller decision.** Whether to use `idb`, Dexie or nothing over

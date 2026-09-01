@@ -13,7 +13,7 @@ kept or broken, and it is the one stack choice with no clean migration path: cha
 means moving every existing player's data with code that has to run in their browser, once,
 correctly, with no way to retry from the server if a server does not exist.
 
-[Which language do the deployables share?](which-language-do-the-deployables-share.md) refers to
+[Which language do the deployables share?](../decisions/0005-typescript-across-every-deployable.md) refers to
 IndexedDB as though this had been decided. It has not.
 
 ## Blocked by

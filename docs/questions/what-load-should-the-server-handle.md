@@ -24,7 +24,7 @@ that distinction concrete instead of rhetorical.
 
 ## Blocks
 
-[which language the deployables share](which-language-do-the-deployables-share.md),
+[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md),
 [What does the server store, if anything?](what-does-the-server-store-if-anything.md),
 [Where does this run?](where-does-this-run.md),
 [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md).

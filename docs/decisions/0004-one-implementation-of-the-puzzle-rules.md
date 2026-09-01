@@ -52,7 +52,7 @@ the grade said would never be needed, with nothing raised anywhere.
 
 This does not decide *how* the sharing happens. Sharing by source means one language everywhere;
 sharing a compiled artifact means an interop boundary and, in a browser, a WebAssembly bundle on
-first load. That is [0005](../questions/which-language-do-the-deployables-share.md), and this record
+first load. That is [0005](0005-typescript-across-every-deployable.md), and this record
 is the constraint it inherits: the rules must run in a browser and in a batch process, from one
 source.
 
@@ -73,7 +73,7 @@ source.
 
 - **Decide when the generator is built.** Deferring costs nothing today, since nothing is
   implemented and a single client implementation is trivially the only one. Rejected because
-  [0005](../questions/which-language-do-the-deployables-share.md) has no input without it — the
+  [0005](0005-typescript-across-every-deployable.md) has no input without it — the
   question of which language the deployables share only exists if something is shared — and 0005
   gates every remaining client decision. Deferring this defers the stack.
 

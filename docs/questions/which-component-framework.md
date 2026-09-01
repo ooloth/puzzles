@@ -20,7 +20,7 @@ rendering question records as its own biggest risk. The measurement below exists
 
 [What renders the client?](what-renders-the-client.md), which decides whether a component
 framework is used at all, and
-[which language do the deployables share?](which-language-do-the-deployables-share.md), which
+[which language do the deployables share?](../decisions/0005-typescript-across-every-deployable.md), which
 decides whether the candidate set is the TypeScript field.
 
 ## Blocks
@@ -57,7 +57,7 @@ open.
 ## Options
 
 The TypeScript field, if
-[the language question](which-language-do-the-deployables-share.md) resolves that way. React,
+[the language question](../decisions/0005-typescript-across-every-deployable.md) resolves that way. React,
 Svelte, Solid, Vue and Preact were the plausible candidates.
 
 Narrowed by the research below to **React, Preact and Svelte**. Solid and Vue are out on their

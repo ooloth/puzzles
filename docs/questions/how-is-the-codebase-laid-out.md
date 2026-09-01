@@ -14,7 +14,7 @@ packages. Premature splitting costs more than it saves at this size.
 ## Blocked by
 
 [Which component framework?](which-component-framework.md). Also
-[which language do the deployables share?](which-language-do-the-deployables-share.md), after
+[which language do the deployables share?](../decisions/0005-typescript-across-every-deployable.md), after
 which what remains is how many packages the framework and the shared
 rules module make sensible.
 

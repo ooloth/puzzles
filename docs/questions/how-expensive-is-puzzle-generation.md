@@ -18,7 +18,7 @@ CPU-heavy generation might rule out a language that also runs in a browser.
 [../problem.md](../problem.md) already settles it: the interactive path outranks batch throughput,
 generation is separable and can be slow, and it never competes with a player mid-puzzle. A slow
 generator is an accepted cost rather than a reason to add a second language, so
-[which language the deployables share](which-language-do-the-deployables-share.md) can be decided
+[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md) can be decided
 without this. What it does gate is whether puzzles are produced on demand or ahead of time, and the
 shape of the content pipeline.
 
@@ -28,7 +28,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[which language the deployables share](which-language-do-the-deployables-share.md),
+[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md),
 [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md),
 [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md),
 [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).

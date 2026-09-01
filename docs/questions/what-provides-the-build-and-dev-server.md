@@ -45,7 +45,7 @@ Split out of the rendering question.
 ## Options
 
 The TypeScript toolchains, if
-[the language question](which-language-do-the-deployables-share.md) resolves that way — Vite and
+[the language question](../decisions/0005-typescript-across-every-deployable.md) resolves that way — Vite and
 Bun being the obvious two, with a framework's own tooling a third where it has one.
 
 Narrowed by the research below to Vite. Bun remains a live option for the parts of the toolchain

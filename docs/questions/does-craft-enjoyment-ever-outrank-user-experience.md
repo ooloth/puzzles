@@ -18,7 +18,7 @@ N/A — nothing needs to be answered first.
 
 ## Blocks
 
-[which language the deployables share](which-language-do-the-deployables-share.md), and
+[which language the deployables share](../decisions/0005-typescript-across-every-deployable.md), and
 any future decision where the enjoyable option and the better option differ.
 
 ## What would settle it

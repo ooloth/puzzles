@@ -61,6 +61,10 @@ The cold read prompt, with the repo path filled in:
 Each of these has been a real defect in this repo. None is detectable by `scripts/check-docs.py`,
 because each needs a judgement rather than a lookup.
 
+**The list of scan categories below is intended to grow.** When a check discovers a new failure
+category, add it here with what to look for and where it occurred if it cannot be mechanically
+detected by a lint script like `check-docs.py` instead.
+
 - **Questions that are answered but still open.** For each file in `docs/questions/`, check whether
   what it `resolves_into` now exists — a decision record, a line in `constraints.md`, or a change to
   a config file or skill. Where it does, the question is finished and nobody noticed. This is the

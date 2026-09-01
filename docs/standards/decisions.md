@@ -123,8 +123,8 @@ which doors are being held.
 **A decision found to rest on something unsettled is demoted rather than annotated.**
 A caveat added to a record still leaves it in the folder that holds settled things, where the next
 reader cites the conclusion and misses the qualification. Moving it back to a question keeps the
-reasoning — as options and findings — without keeping the standing. Four records were demoted this
-way on 2026-08-31, and the reasoning survived all four.
+reasoning — as options and findings — without keeping the standing. Nothing is lost by demoting: the
+options and findings survive the move, and only the authority goes.
 
 ## In scope
 

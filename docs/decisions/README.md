@@ -15,6 +15,9 @@ The record of what we believed at the time is the entire point.
 
 ## Before you decide
 
+**Read [../standards/decisions.md](../standards/decisions.md) now, even if you read it earlier in
+this session.** A remembered summary produces a record that fits this format and breaks a rule.
+
 **Find this decision in [../questions/README.md](../questions/README.md) and check what sits above
 it.** That file is this one's sibling: the same decisions, before they are made, in the order they
 have to be made. Each entry names what it derives from. If anything it derives from is unanswered,
@@ -23,8 +26,6 @@ the whole cost. Write the missing question instead, and work that.
 
 If the decision is not in that order at all, add it there first. A decision nobody could see
 coming is one nobody checked the prerequisites of.
-
-Four records had to be demoted back to questions on 2026-08-31 for want of this check.
 
 The same applies in reverse. When a record here turns out to rest on something unsettled, the
 entry in [../unfinished.md](../unfinished.md) is written in the same edit that discovers it —

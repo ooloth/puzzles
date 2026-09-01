@@ -47,7 +47,7 @@ options that a local database file rules out.
 **SQLite permits one writing process at a time, and multiple instances cannot share a local
 file** without corrupting it. This is what couples the data store to hosting: under SQLite,
 single-instance deployment stops being a preference and becomes a correctness requirement. It is
-also why serverless platforms were previously disqualified, so a different store reopens them.
+also what disqualifies serverless platforms, so a different store leaves them in contention.
 
 **In WAL mode a filesystem copy is not a valid backup.** It can capture a partial write and
 produce a silently corrupt file, which is worse than no backup because it looks like one. Any

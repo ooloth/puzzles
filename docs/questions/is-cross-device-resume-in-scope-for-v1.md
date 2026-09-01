@@ -110,7 +110,7 @@ The thirty-day figure weakens this argument without removing it. The promise is 
 broken by a lapse of any length, and a month is well within what "life intervened" covers. What
 changes is the size of the affected group: a month of absence is far rarer than a week, so the
 question becomes whether the promise should be bounded rather than whether it can be kept.
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) has since bounded it per persona: a
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md) bounds it per persona: a
 guest's work lasts as long as the browser keeps it, and a signed-in player's survives on every
 device. That settles the durability half of this question and leaves only its release timing.
 

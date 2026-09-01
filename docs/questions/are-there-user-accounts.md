@@ -62,8 +62,7 @@ answers both at once — whether a player signs up falls out of which mechanism 
 than being decided first and constraining it. Worth resolving whether these merge before either
 is answered, since keeping both invites answering the same thing twice and differently.
 
-Deferring accounts was previously judged to cost nothing later, and the reasoning holds
-independently of that decision: without accounts there is no abuse resistance — an identifier
+Deferring accounts costs nothing later on one reading: without accounts there is no abuse resistance — an identifier
 anchored in browser storage can be discarded and reissued at will — but the fix for that is
 accounts, which is the same fix that would be built anyway. Nothing is foreclosed by waiting.
 

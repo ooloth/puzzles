@@ -8,9 +8,9 @@ resolves_into: decision
 
 ## Why it matters
 
-Previously settled and now reopened. If the client owns state, the persistent-local-disk
-requirement that disqualified several platforms may no longer apply, which puts them back in
-contention.
+The client owns state, so a persistent local disk is a requirement only if the server's own store
+needs one. That is what puts serverless and edge platforms in contention rather than out of it, and
+it is decided by [what execution shape does the server have?](what-execution-shape-does-the-server-have.md).
 
 ## What would settle it
 

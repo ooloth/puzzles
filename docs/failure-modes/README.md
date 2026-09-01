@@ -68,6 +68,8 @@ it usually matters more than the failure itself.>
   — a client bug propagated by the copy that exists to be recovered from.
 - [A cell edit is overwritten by an older one](a-cell-edit-is-overwritten-by-an-older-one.md)
   — clock skew inverting a merge, after which both devices agree on the wrong answer.
+- [The server hands back state the client will not accept](the-server-hands-back-state-the-client-will-not-accept.md)
+  — the work is intact and unreachable, usually because two devices are running different versions.
 
 ### Threatening availability and cost
 

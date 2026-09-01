@@ -23,13 +23,18 @@ downstream is derived from them, and a sequence argued without them is argued fr
 
 ## Handing over
 
-Invoke the `assess-cold-start` skill as a session nears its end, and before moving to a topic
-unrelated to what came before. It sends a fresh agent into the repo with no briefing and reports
-what misled it, which is not something you can check from inside a session.
+Invoke the `prep-for-codebase-handoff` skill as a session nears its end, and before moving to a topic
+unrelated to what came before. If the conversation has accumulated (or is about to accumulate)
+multiple unrelated topics, **warn the user** and recommend cleaning up and starting a fresh session
+rather than carrying the mixed context forward.
 
-If the conversation has accumulated several unrelated topics, say so and recommend cleaning up and
-starting fresh rather than carrying the mixture forward. Permanent docs a stranger can act on are
-worth more than a handoff message, which the next session may never see.
+The handoff prep skill uses parallel subagents to scan for known sources of staleness and drift that
+can't be programmatically detected. It also sends a fresh agent into the repo with no briefing to
+report its impressions of what it found confusing or misleading.
+
+By ensuring the codebase is in an easily understood state (particularly its docs) before handing it
+off, all future visitors benefit from prompt resolution of stale and confusing states and claims.
+In contrast, one-off handoff narratives would allow those risks to linger unresolved.
 
 ## Key docs
 

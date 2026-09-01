@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-09-01
 update_when: a promise about retaining a player's work is made, or an enforcement mechanism changes
 decays: slow
 status: active
@@ -7,42 +7,71 @@ status: active
 
 # Durability
 
-A player's work outlives the session that made it. Whether that work is reachable from a
-*second* device is not settled — see
-[Is cross-device resume in scope for v1?](../questions/is-cross-device-resume-in-scope-for-v1.md).
-Until it is, these promises cover one device.
+A player's work outlives the session that made it. How far it outlives it depends on whether they
+have signed in, and the two bounds are set by
+[ADR-0006](../decisions/0006-what-a-players-work-survives.md).
 
-## Entries and notes survive any interruption
+"Work" means the board in progress, every board they have played, and the record of their play. It
+is one record with one shape for both personas, so signing in promotes what is already there rather
+than converting it.
 
-A player's grid entries and pencil notes are still there when they return, whatever ended the
-session: the app backgrounded, the tab terminated by the OS, the device locked, the browser
-crashed, or the page closed deliberately.
+## A signed-in player's work survives on every device they use
+
+The board in progress, the boards they have finished, and their play record are all there when they
+return — on any device they sign in from, however long they have been away, and however the last
+session ended.
+
+**Enforced by** Nothing. Asserted only. No account, server or sync exists.
+
+**If violated** A player who signed in specifically so their work would be kept discovers it was
+not. This costs more than the guest case: they took an action to prevent it and paid for it in
+friction.
+
+**Bearing on this** [Does a server exist at all?](../questions/what-must-be-true-off-device.md) —
+this promise is what forces one, and that question weighs it against the rest of the inventory.
+[Are there user accounts?](../questions/are-there-user-accounts.md) decides what a player signs in
+to. [How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)
+sets the tolerance that makes this testable, and
+[how would we verify progress is never lost?](../questions/how-would-we-verify-progress-is-never-lost.md)
+is unanswered, which is why the enforcement line above reads as it does.
+
+## A guest's work survives in the browser that made it, until that browser clears it
+
+A guest has not signed in. Their work is held on the device that made it and is reachable from
+nowhere else. It survives the app being backgrounded, the tab terminated by the OS, the device
+locked, the browser crashed, and the page closed deliberately. It does not survive the browser
+clearing site data after a period without interaction — see [../constraints.md](../constraints.md)
+for the current figure and the conditions on it.
+
+The board a guest is working on is kept until they finish it, rather than discarded when the day
+changes.
 
 **Enforced by** Nothing. Asserted only.
 
-**If violated** Half an hour of a player's thinking disappears, with no error and no way to
-recover it. A player who loses work once has no reason to believe it won't happen again.
+**If violated** A guest loses work inside the window they were promised — which is the ordinary
+write-path failure rather than eviction, and is invisible, because a device that has silently
+dropped a player's work is the last thing that will report it.
 
-**Bearing on this** [How long must in-progress work survive, and on which devices?](../questions/how-long-must-in-progress-work-survive.md)
-is the question that gives this promise a bound and a scope. As written it has neither, which is
-why the same sentence can be read as "until the tab closes" and as "forever, anywhere", and those
-are different applications. Answer it before anything downstream.
-[How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)
-then sets the tolerance that makes it testable, and
-[how would we verify progress is never lost?](../questions/how-would-we-verify-progress-is-never-lost.md)
-is unanswered, which is why the enforcement line above reads as it does. Safari's eviction of
-script-writable storage can also wipe local state independently of any interruption — see
-[../constraints.md](../constraints.md).
+**Bearing on this**
+[How long does Safari really keep our storage?](../questions/how-long-does-safari-really-keep-our-storage.md)
+— this bound is only as good as a figure read from browser source rather than observed on a device.
+[Is home-screen install required for durability?](../questions/is-home-screen-install-required-for-durability.md)
+matters for this persona alone: an installed app is exempt from the clearing described above, so a
+guest who installs is durable and a guest who does not is not.
+
+Anything else a guest accumulates — a play record, streaks, statistics — sits inside this bound and
+is promised nothing beyond it. Nothing currently shows a guest any of it.
 
 ## Reopening restores the grid, notes and selection
 
 The board comes back exactly as the player left it, with no explicit sync step and no prompt.
-Selection is included deliberately: restoring the data but losing the player's place still
-costs them their train of thought.
+Selection is included deliberately: restoring the data but losing the player's place still costs
+them their train of thought. This holds within whichever bound above applies to that player.
 
 **Enforced by** Nothing. Asserted only.
 
 **If violated** The player is punished for closing the app, which they do constantly.
 
-**Bearing on this** [Is home-screen install required for durability?](../questions/is-home-screen-install-required-for-durability.md)
-determines whether this holds for every player or only some.
+**Bearing on this**
+[Which client storage mechanism holds a player's work?](../questions/which-client-storage-mechanism.md)
+is where this is kept or broken.

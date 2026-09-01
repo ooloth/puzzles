@@ -69,10 +69,12 @@ A player can:
    prompt.
 5. Never see a loading, reconnecting, or error state during normal play.
 
-And progress follows them — the board left on a phone is waiting on a laptop later, with nothing
-to sign into and nothing to reconcile. This is the part of the vision least tied to a date: what
-matters now is that nothing built early makes it expensive to add, which is
-[which doors must stay open?](questions/which-doors-must-stay-open.md).
+And their work follows them. The board left on a phone is waiting on a laptop later, and a puzzle
+from any past day is still where they left it. Nothing is reconciled by hand and no version is ever
+chosen between.
+
+A record of their play is theirs to keep — what they have solved, and how they are doing — and it
+outlives any one device.
 
 And every puzzle served has exactly one solution, reachable by logic alone.
 
@@ -93,22 +95,18 @@ project generated, and a system whose operation is worth describing to someone h
   uncommitted but deliberately not ruled out, so the exclusion is conditional rather than
   permanent.
 - **Enterprise scale** — or designing for scale at all, yet.
-- **Infrastructure added because it might be needed someday** rather than because it's
-  needed now. No Kubernetes-grade complexity.
+- **Anything built because it might be needed someday** rather than because it's needed now.
 
 ## What wins when things conflict
 
 Settled so far, earlier wins:
 
 1. **Solving experience over puzzle supply.** Borrowed puzzles with an excellent interface
-   is a success; excellent generated puzzles with a mediocre interface is a failure. This
-   also sets the work order — interface before generator, regardless of where launch
-   content comes from.
-2. **Tolerating absence over optimising transfer.** Payloads are a few KB; the cost is
-   connection setup and unavailability. Design effort goes to surviving a missing network,
-   not to making messages smaller.
-3. **The interactive path over batch throughput.** Generation is separable and can be slow.
-   It never competes with a player mid-puzzle.
+   is a success; excellent generated puzzles with a mediocre interface is a failure.
+2. **Play continuing over everything else the app might want to do.** Where solving competes
+   with any other activity, solving wins.
+3. **The interactive path over batch throughput.** A player never waits on puzzle generation,
+   which can be as slow as it needs to be.
 4. **Clarity over cleverness**, because one person maintains this.
 5. **Present need over future-proofing.**
 

@@ -372,6 +372,33 @@ enough.*
 
 ---
 
+## Content delivery — what reaches a device cannot be recalled
+
+**Anything shipped to a device as part of the application can be read and replayed by whoever holds
+it.** A file served to a client sits in that client's cache and on its disk, and neither HTTP nor the
+browser offers a way to withdraw it or to make later access conditional on anything.
+
+> So gating happens before bytes leave the server or not at all. Content that might ever be withheld
+> — from a player who has not paid, or has not reached a date — cannot ship as static files alongside
+> the application. This is a property of client-side delivery rather than of any particular host, and
+> it is settled when the delivery mechanism is chosen rather than when gating is wanted.
+
+*Reasoned — a property of how clients fetch and cache, not specific to any vendor. It follows
+directly and has not been tested here because there is nothing to test it against.*
+
+**An offline promise puts content on the device by construction.** Anything that must be usable with
+no network has to be there before the network goes away, which means it is delivered and therefore
+un-gateable from that moment.
+
+> So gating can only ever apply to content a player has not been given yet. What is in play is theirs
+> — that is not a leak, it is what the offline promise means — and any design that assumes otherwise
+> is assuming something the platform cannot deliver.
+
+*Reasoned — a consequence of the fact above combined with
+[guarantees/offline.md](guarantees/offline.md).*
+
+---
+
 ## Streaming over HTTP proxies
 
 **A streaming bug can live at one specific intersection of proxy, browser and protocol.** One

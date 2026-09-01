@@ -55,7 +55,11 @@ device and its loss is accepted.
 *An entitlement* — whether this player has paid — which cannot live on the device, because the
 device belongs to the person it would be charging.
 
-*The catalogue*, if which puzzles exist changes over time rather than shipping with a build.
+*The catalogue* — **settled**, by
+[ADR-0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md). Puzzle content is
+served by something that can decide whether to serve it, so it is not shipped as static files with
+the application. What is still open here is how much of that content the server understands, which
+is [does the server understand puzzle content?](does-the-server-understand-puzzle-content.md).
 
 *Usage we need to see*, which is [its own question](what-must-we-know-about-how-the-app-is-used.md)
 and which drives whether stored data must be queryable or can stay opaque.
@@ -73,20 +77,14 @@ the failure of the others.
 
 ## Findings
 
-**What this decides beyond itself.** Whether a server exists, and therefore
-[what does the server store, if anything?](what-does-the-server-store-if-anything.md),
-[where does this run?](where-does-this-run.md),
-[what load should the server handle?](what-load-should-the-server-handle.md), and which database
-if any. Also [are there user accounts?](are-there-user-accounts.md), since identity only has to
-exist if something off-device has to be attributed.
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Not blockers, and worth saying so.**
-That is the only blocker. [What must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
-does **not** gate this question. It decides what is collected, not whether anything runs off-device;
-[ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) settles that whatever is
-stored is queryable, which is the shape of
+**What must we know about how the app is used decides what is collected, not whether anything
+runs off-device.** [ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md)
+settles that whatever is stored is queryable, which is the shape of
 [which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
-all. Treating it as a blocker here drags the generator's product questions — puzzle quality,
+all. Folding [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
+into this question would drag the generator's product questions — puzzle quality,
 difficulty grading, generation cost — onto the path to a server decision, and none of them belongs
 there.
 
@@ -96,15 +94,14 @@ a manifest. Being generated ahead of time does not make them static, though — 
 equally rows a runtime serves, and which they are is a real fork rather than a consequence.
 
 The deciding input is not delivery. It is that content shipped as static files alongside the app
-cannot be withheld from anyone who already has the app — recorded in
-[is there a paid tier?](is-there-a-paid-tier.md). So an archive that might ever be gated cannot be
-static, and the catalogue candidate stands or falls with entitlement rather than separately from it.
+cannot be withheld from anyone who already has the app, now recorded in
+[../constraints.md](../constraints.md). So an archive that might ever be gated cannot be static, and
+the catalogue candidate stood or fell with entitlement rather than separately from it. That is what
+[ADR-0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md) decided, and it names
+the cost it took on: a runtime on the path to content, and a caching story the static option got
+free.
 
-The tradeoffs, since neither side is obviously right: static files get CDN caching, precaching for
-offline, and no runtime on the load path, at the cost of a deploy per publication and no way to
-gate. Rows served by a runtime get gating, publishing as a write rather than a deploy, and an
-archive that grows without redeploying, at the cost of putting a server on the path to content and
-needing a caching story the static option gets free.
+*Sourced — the delivery fact is now in [../constraints.md](../constraints.md), tiered there.*
 
 **Entitlement is the one candidate that cannot be softened.** Progress can be lost, a catalogue
 can be stale, usage can go unmeasured — all degrade gracefully. A paid tier enforced on the device

@@ -29,9 +29,17 @@ bare question lists, which is a gap rather than a distinction.
 ## How this list works
 
 Each milestone is a list of **what has to be true to ship it**. Under each requirement sit the
-**givens** — product facts, promises, constraints and records already established — and under the
-givens, the **questions that must be answered** before that requirement can be built. Read left to
-right: what we are shipping, what we already know, what that leaves undecided.
+**givens** — product facts, promises, constraints and records already established — and under those,
+the **questions that must be answered** before that requirement can be built. Read left to right:
+what we are shipping, what we already know, what that leaves undecided. Where a requirement rests on
+no given, its questions sit at the top level; a question is never written as a given, whatever it is
+blocking.
+
+**A question blocks a requirement if building without it would be reversed.** Not only if the work
+is impossible — also if it would be provisional. Choosing a package manager before the runtime is
+settled means choosing again when the runtime lands, so the runtime blocks the layout even though
+nothing stops someone typing the command today. This is what fills the list out: the literal
+blockers are obvious and few, and the reversal risks are what actually decide the order.
 
 **Every requirement is something you can run and look at.** A vertical slice, in the order you would
 build it — the thing that renders before the thing that is served, the thing that is served before
@@ -95,53 +103,64 @@ answered, not for reaching it early: requirements 1 to 6 are what produce those 
 be run and looked at on the way.
 
 **Check the order rather than trusting it.** Two things would move a requirement: a given it needs
-that sits under a later one, or a question under it that another requirement turns out to need
-first.
+that sits under a later one, or a question under it that another requirement turns out to need first.
+Counting how many requirements each question blocks is the audit — the questions blocking the most
+are what to answer first, whichever requirement they were first written under.
 
 1. **The repository builds and runs a TypeScript program.**
-   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
-   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
-     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-     - **Must answer:** [which package manager?](which-package-manager.md)
+   - **Given:** [0006-one-language-across-every-deployable](../decisions/0006-one-language-across-every-deployable.md)
+   - **Given:** [0007-that-language-is-typescript](../decisions/0007-that-language-is-typescript.md)
+     - **Must answer:** [is-the-client-served-as-static-files](is-the-client-served-as-static-files.md)
+     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md)
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
+     - **Must answer:** [which-package-manager](which-package-manager.md)
 2. **The repository holds both halves, with one rules module both can reach.**
-   - **Given:** [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
-     - **Must answer:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md)
+   - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
+     - **Must answer:** [which-package-manager](which-package-manager.md)
+     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
 3. **A browser shows "Hello!" rendered by the client.**
-   - **Given:** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
-   - **Given:** [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
-     - **Must answer:** [what renders the client?](what-renders-the-client.md)
-     - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
+   - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
+   - **Given:** [0014-all-play-is-reachable-from-the-keyboard-alone](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
+     - **Must answer:** [is-the-client-served-as-static-files](is-the-client-served-as-static-files.md)
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md)
+     - **Must answer:** [what-provides-the-build-and-dev-server](what-provides-the-build-and-dev-server.md)
 4. **The client reaches a browser that has no network.**
-   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+   - **Given:** [the-board-in-play-continues-through-a-loss-of-connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+   - **Given:** [the-app-never-opens-to-a-blank-screen-after-the-first-visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+   - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
    - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
-     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
+     - **Must answer:** [is-the-client-served-as-static-files](is-the-client-served-as-static-files.md)
+     - **Must answer:** [what-serves-the-clients-files](what-serves-the-clients-files.md)
+     - **Must answer:** [what-provides-the-build-and-dev-server](what-provides-the-build-and-dev-server.md)
 5. **A server answers one route with a hard-coded response.**
-   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-     - **Must answer:** [what runs the server?](what-runs-the-server.md)
+   - **Given:** [0010-the-store-needs-a-host-so-this-system-has-a-server](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
+   - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md)
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
+     - **Must answer:** [what-runs-the-server](what-runs-the-server.md)
 6. **The client calls that route and shows the answer.**
    - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier surviving Safari's storage wipe unaided
    - **Given:** [../constraints.md](../constraints.md) — that exemption is withdrawn when the setting server is not judged genuinely first-party
-   - **Given:** [is guest recovery worth building?](is-guest-recovery-worth-building.md)
-     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+   - **Given:** [is-guest-recovery-worth-building](is-guest-recovery-worth-building.md)
+     - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md)
+     - **Must answer:** [what-serves-the-clients-files](what-serves-the-clients-files.md)
 7. **Both halves run on a host that suits them.**
-   - **Given:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-   - **Given:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-   - **Given:** [what serves the client's files?](what-serves-the-clients-files.md)
-   - **Given:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-   - **Given:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
-     - **Must answer:** [where does this run?](where-does-this-run.md)
+   - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md)
+   - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
+   - **Must answer:** [is-the-client-served-as-static-files](is-the-client-served-as-static-files.md)
+   - **Must answer:** [what-serves-the-clients-files](what-serves-the-clients-files.md)
+   - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md)
+   - **Must answer:** [where-does-this-run](where-does-this-run.md)
 8. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
-     - **Must answer:** [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
+     - **Must answer:** [where-does-this-run](where-does-this-run.md)
+     - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md)
 9. **A change made locally reaches the deployment.**
-   - **Given:** [where does this run?](where-does-this-run.md)
-     - **Must answer:** [what deploys the code?](what-deploys-the-code.md)
+   - **Must answer:** [where-does-this-run](where-does-this-run.md)
+   - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
+   - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md)
 
 ## M2 — a change can be checked before it ships
 

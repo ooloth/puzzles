@@ -1,3 +1,11 @@
+> **Nothing in this file is decided, and its filename is not a conclusion.** It is a transcript
+> pasted from another AI session. Its claims were sourced there and the reference list did not
+> survive the copy, so the numbers and vendor facts in it have no basis you can check — stripped
+> markers like `[1.1]` and `[]` are still in the text pointing nowhere. Several claims have already
+> been checked and found wrong. Anything here that matters belongs in
+> [../questions/](../questions/) with its provenance, and this file is deleted once that is done.
+> See [README.md](README.md).
+
 The claim that Datastar—and the server-driven hypermedia architecture in general—is "measurably more performant" and "simplifies state" is true for ==transactional web applications== (CRUD, forms, feeds, and dashboards). [[1](https://data-star.dev/), [2](https://plus8soft.com/blog/htmx-vs-react-comparison/)]
 
 However, its core architectural premise—**the server is the source of truth for both state and layout**—introduces hard technical limitations. React and a client-side Single Page Application (SPA) architecture remain technically superior in scenarios where **zero-latency offline capability, hardware-accelerated presentation manipulation, or highly ephemeral client state** are required. [[1](https://data-star.dev/essays/why_another_framework), [2](https://www.infoworld.com/article/4163910/the-front-end-architecture-trilemma-reactivity-vs-hypermedia-vs-local-first-apps.html)]

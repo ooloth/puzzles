@@ -26,8 +26,9 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Demoted from ADR-0003 on 2026-08-31, when a review found it specified the behaviour of a
-component nothing had decided to build.
+Demoted on 2026-08-31 from a record specifying server behaviour, when a review found it described a
+component nothing had decided to build. That record was deleted, and the number it held has since
+been reused, so it is named here rather than cited.
 
 ## Options
 

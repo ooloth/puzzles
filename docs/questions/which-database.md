@@ -42,7 +42,7 @@ A decision record in [../decisions/](../decisions/).
 Raised 2026-08-31, working backward from the stack to find which product truths a database choice
 actually rests on. The chain runs five deep and had a gap at every level.
 
-Merged 2026-09-01 with "what does the server store, if anything?", whose premise ADR-0009 answered
+Merged 2026-09-01 with "what does the server store, if anything?", whose premise [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) answered
 and whose remaining content was about this choice.
 
 ## Options
@@ -92,7 +92,7 @@ Postgres or MySQL and then choosing an operator, which is
 *Unverified — no source recorded.*
 
 **DuckDB is a real embedded database and the wrong shape for this.** Columnar and built for
-analytical scans, so it serves ADR-0011's aggregate questions well and a per-player transactional
+analytical scans, so it serves [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s aggregate questions well and a per-player transactional
 write path poorly. It would be a second store rather than the store.
 
 *Unverified — no source recorded.*

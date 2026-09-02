@@ -1,3 +1,11 @@
+> **Nothing in this file is decided, and its filename is not a conclusion.** It is a transcript
+> pasted from another AI session. Its claims were sourced there and the reference list did not
+> survive the copy, so the numbers and vendor facts in it have no basis you can check — stripped
+> markers like `[1.1]` and `[]` are still in the text pointing nowhere. Several claims have already
+> been checked and found wrong. Anything here that matters belongs in
+> [../questions/](../questions/) with its provenance, and this file is deleted once that is done.
+> See [README.md](README.md).
+
 To resolve the ambiguous officialness of state across your devices and networks, you must choose how your data is represented. You have a direct choice between Mutable State Snapshots (traditional CRUD) and a Deterministic Fact Ledger (Event Sourcing).
 For a solo developer building a cross-platform puzzle engine, your choice here dictates how easily you can scale from Sudoku to Star Battle, and how robustly you can defeat cheating and offline network desynchronization.
 Here is an analysis of your state representation options and the viability of obfuscation.

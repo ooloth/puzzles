@@ -1,3 +1,11 @@
+> **Nothing in this file is decided, and its filename is not a conclusion.** It is a transcript
+> pasted from another AI session. Its claims were sourced there and the reference list did not
+> survive the copy, so the numbers and vendor facts in it have no basis you can check — stripped
+> markers like `[1.1]` and `[]` are still in the text pointing nowhere. Several claims have already
+> been checked and found wrong. Anything here that matters belongs in
+> [../questions/](../questions/) with its provenance, and this file is deleted once that is done.
+> See [README.md](README.md).
+
 critically analyze the tradeoffs of choosing SQLite vs postgresql as the db for this puzzle app. can the former handle the number of small writes likely to occur? assume a small to modest user base.
 
 For a puzzle platform operating on a single-instance VPS or persistent Fly.io volume with a small to modest user base, choosing between SQLite and PostgreSQL comes down to Process Memory Latency vs. Network Layer Headroom.

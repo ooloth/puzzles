@@ -1,3 +1,11 @@
+> **Nothing in this file is decided, and its filename is not a conclusion.** It is a transcript
+> pasted from another AI session. Its claims were sourced there and the reference list did not
+> survive the copy, so the numbers and vendor facts in it have no basis you can check — stripped
+> markers like `[1.1]` and `[]` are still in the text pointing nowhere. Several claims have already
+> been checked and found wrong. Anything here that matters belongs in
+> [../questions/](../questions/) with its provenance, and this file is deleted once that is done.
+> See [README.md](README.md).
+
 - The exact Linux terminal script command loop to configure a fresh Ubuntu VPS with Bun, PM2, and automatic firewall rules.
 - The Caddyfile reverse proxy template to host multiple distinct apps across your subdomains with zero SSL configuration overhead.
 

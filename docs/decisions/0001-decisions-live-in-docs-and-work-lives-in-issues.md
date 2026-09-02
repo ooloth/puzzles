@@ -24,8 +24,8 @@ issue tracker creates sixty pairs that can disagree, and the copy a reader finds
 yet to be chosen and in what order. They are read as a set, and their order is part of their
 meaning.
 
-**GitHub issues hold work**: something to build, with a definition of done and no reasoning to
-preserve once it is closed.
+**An issue tracker holds work**: something to build, with a definition of done and no reasoning to
+preserve once it is closed. Which tracker is not settled here — see the footer.
 
 The test when it is unclear: **after this is finished, is there reasoning worth keeping?** If yes it
 is a decision and it belongs in `docs/`. If the artifact is the whole of it, it is work and it
@@ -35,8 +35,8 @@ belongs in an issue.
 need a decision stops and points at the question, rather than deciding inside itself.
 
 **Milestones live in [../questions/README.md](../questions/README.md) until there are issues to
-group.** Once implementation begins, GitHub Milestones become where issues are grouped and that file
-links to them rather than restating them.
+group.** Once implementation begins, whatever grouping the tracker offers becomes where issues are
+grouped, and that file links to it rather than restating it.
 
 ## Rejected
 
@@ -84,4 +84,5 @@ this, and it only works once there is a tracker to persist to.
 - [x] Nothing in `guarantees/` — this promises a player nothing
 
 Deliberately not decided here: which tracker, what an issue template contains, and how milestones
-are named. The first is GitHub by assumption rather than by argument, and nothing yet depends on it.
+are named. GitHub is the assumption, by inheritance rather than by argument, and nothing yet depends
+on it — which is why the Decision above says "an issue tracker" rather than naming one.

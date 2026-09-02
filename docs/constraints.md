@@ -76,7 +76,7 @@ identifier.
 > month keeps everything, so the risk falls entirely on players who lapse for longer than that.
 > Any argument that durability alone forces a server is made against thirty days.
 
-*Verified against WebKit trunk, `ResourceLoadStatisticsStore.cpp`, read 2026-08-31: `constexpr
+*Sourced — against WebKit trunk, `ResourceLoadStatisticsStore.cpp`, read 2026-08-31: `constexpr
 unsigned operatingDatesWindowLong { 30 }` and `operatingDatesWindowShort { 7 }`. The condition
 separating them is stated in [WebKit PR #21120](https://github.com/WebKit/WebKit/pull/21120),
 commit `274398@main`, 2024-02-09. Apple's published documentation still describes a blanket
@@ -93,7 +93,7 @@ actually used rather than days on the calendar.
 > a property of the lapsed player rather than of the app, and means no amount of background
 > activity can hold the clock open on their behalf.
 
-*Verified — WebKit's tracking-prevention documentation, checked 2026-08-31.*
+*Sourced — WebKit's tracking-prevention documentation, checked 2026-08-31.*
 
 **That wipe covers non-cookie website data only — cookies are a separate mechanism.** WebKit's
 own wording is that "all of website.example's non-cookie website data is deleted". Cookies set by
@@ -106,7 +106,7 @@ to a 400-day ceiling.
 > A cookie written by JavaScript cannot do this, and the difference is invisible in the code that
 > reads it.
 
-*Verified — WebKit's Intelligent Tracking Prevention 2.3 announcement, checked 2026-08-31.*
+*Sourced — WebKit's Intelligent Tracking Prevention 2.3 announcement, checked 2026-08-31.*
 
 **That exemption is lost if Safari judges the server setting the cookie not to be genuinely
 first-party.** Since Safari 16.4 the 7-day cap applies to server-set cookies in two cases: the
@@ -118,7 +118,7 @@ to an IP address whose first half does not match the first half of the IP servin
 > is the shape most likely to fail the IP test, and it fails silently: the cookie simply expires
 > in seven days alongside the storage it was meant to outlive.
 
-*Verified — WebKit's CNAME cloaking and bounce tracking defence post, plus Safari 16.4 behaviour
+*Sourced — WebKit's CNAME cloaking and bounce tracking defence post, plus Safari 16.4 behaviour
 widely reported in 2023 and absent from Apple's release notes. The exact IP-matching rule is
 described by third parties rather than by Apple.*
 
@@ -129,7 +129,7 @@ isolated from regular Safari. This is the only confirmed mitigation.
 > durability then differs between installed and non-installed players. The gap install closes is
 > between exempt and thirty days, which makes it a smaller lever than a seven-day window would.
 
-*Verified — WebKit trunk, `ResourceLoadStatisticsStore::shouldExemptFromWebsiteDataDeletion`, read
+*Sourced — WebKit trunk, `ResourceLoadStatisticsStore::shouldExemptFromWebsiteDataDeletion`, read
 2026-08-31. It returns true for any domain in the union of app-bound domains, managed domains,
 persisted domains, and the standalone-application domain, the last of which is populated from
 `WKWebsiteDataStoreConfiguration.standaloneApplicationURL` — the mechanism behind Add to Home
@@ -144,7 +144,7 @@ the same player installs.
 > to keep it safe. Any promise that the app opens with no network also starts holding only on
 > the installed app's *second* launch.
 
-*Verified — a direct consequence of the storage isolation above.*
+*Reasoned — a direct consequence of the storage isolation above.*
 
 **Since Safari 26 any site can be installed, and the player can decline the isolated store.**
 The installability requirements are gone — no manifest is needed — but the Add to Home Screen
@@ -154,7 +154,7 @@ Safari with ordinary Safari's eviction.
 > So install is easier to reach and less safe to infer. Whether a given player is actually
 > protected has to be tested at runtime, never assumed from having shown them the prompt.
 
-*Verified — WebKit Features in Safari 26.0, checked 2026-08-31.*
+*Sourced — WebKit Features in Safari 26.0, checked 2026-08-31.*
 
 **`navigator.storage.persist()` is a membership test, not a request.** WebKit grants it only to
 origins already exempt from tracking prevention — app-bound domains, domains managed by an MDM
@@ -167,7 +167,7 @@ threshold. In an ordinary Safari tab it returns `false` unconditionally.
 > store, because it reports the same membership that governs deletion. That makes it a better
 > signal than `display-mode: standalone`, which only reports how the page was launched.
 
-*Verified — WebKit trunk, `NetworkStorageManager::persistOrigin`, read 2026-08-31.*
+*Sourced — WebKit trunk, `NetworkStorageManager::persistOrigin`, read 2026-08-31.*
 
 **Chrome evicts whole origins, least-recently-used first**, when it is over its overall
 storage limit. An origin may use up to roughly 60% of disk, much less in Incognito.
@@ -175,14 +175,14 @@ storage limit. An origin may use up to roughly 60% of disk, much less in Incogni
 > So eviction is all-or-nothing. Any recovery path must assume the local store is simply gone
 > — not stale, not partially readable.
 
-*Verified — Chrome's storage documentation, checked 2026-08-29.*
+*Sourced — Chrome's storage documentation, checked 2026-08-29.*
 
 **Android eviction behaviour is unresearched.** No findings exist either way.
 
 > So we must treat it as unknown rather than safe, and must not infer it from Chrome desktop's
 > numbers.
 
-*Verified as a gap — [an open question](questions/how-does-android-evict-stored-data.md).*
+*Sourced — the absence of any finding, tracked as [an open question](questions/how-does-android-evict-stored-data.md).*
 
 ---
 
@@ -204,7 +204,7 @@ event. Firefox raised a quota error 865,703 times at an average of zero percent 
 > dead connection is also useless: in the same dataset, 97.5% of affected sessions exhausted
 > every retry.
 
-*Verified — Expensify's published telemetry, checked 2026-08-31.*
+*Sourced — Expensify's published telemetry, checked 2026-08-31.*
 
 **IndexedDB is unavailable entirely under Lockdown Mode**, and Apple's own description of the
 feature does not mention it.
@@ -213,7 +213,7 @@ feature does not mention it.
 > it can always open. Some players get no persistence at all, and finding that out by crashing
 > is the wrong way to find it out.
 
-*Verified — WebKit's Safari 17 feature announcement.*
+*Sourced — WebKit's Safari 17 feature announcement.*
 
 **`navigator.storage.estimate()` reports a fabricated quota on iOS**, derived from a fixed
 volume capacity rather than the device's real disk, as an anti-fingerprinting measure. Every
@@ -222,7 +222,7 @@ iPhone reports roughly the same number regardless of how much space it has.
 > So we must build no quota management and must never show the figure to anyone. Running out of
 > space is not the failure worth designing against here.
 
-*Verified — WebKit trunk, `WebsiteDataStoreCocoa.mm`, read 2026-08-31.*
+*Sourced — WebKit trunk, `WebsiteDataStoreCocoa.mm`, read 2026-08-31.*
 
 **Letting IndexedDB generate a key currently triggers a WebKit defect.** On iOS 26 the first
 write after a cold start fails when the store relies on the browser to mint the key; a WebKit
@@ -232,7 +232,7 @@ engineer attributes it to exactly that. The bug was closed once and has been reo
 > nothing; adopting it later costs a migration of every player's data, which is why it is
 > recorded here despite being a defect.
 
-*Verified — WebKit bug 229178, reopened, checked 2026-08-31. This is a defect rather than a
+*Sourced — WebKit bug 229178, reopened, checked 2026-08-31. This is a defect rather than a
 design, so it may be fixed and stop being true. The mitigation is worth taking regardless,
 because it is free and the failure it avoids is a lost first write.*
 
@@ -256,7 +256,7 @@ on/off durations rather than the named, device-tuned effects native code can req
 > Recovering it requires a native shell — see
 > [decisions/0003](decisions/0003-this-is-delivered-over-the-web.md).
 
-*Verified — WebKit bugs 171766 (removal, 2017) and 288846 (restore request, open and unassigned),
+*Sourced — WebKit bugs 171766 (removal, 2017) and 288846 (restore request, open and unassigned),
 plus browser support tables showing no Safari version through 26.6 supporting it, checked
 2026-08-31.*
 
@@ -269,7 +269,7 @@ there is no public API for a page or an embedding app to opt in.
 > facts in this file — wrapping the app in a native shell does not lift it. Animation should be
 > designed to read well at 60fps rather than tuned to a rate the platform will not deliver.
 
-*Verified — WebKit bugs 173434 and 294338, both open, checked 2026-08-31.*
+*Sourced — WebKit bugs 173434 and 294338, both open, checked 2026-08-31.*
 
 ---
 
@@ -280,7 +280,7 @@ plus TLS negotiation, three to four in total depending on TLS version and whethe
 
 > So we must optimise for avoiding fresh connections, not for smaller messages.
 
-*Verified — a property of the protocols.*
+*Reasoned — a property of the protocols.*
 
 **Per the WICG Network Information API thresholds, `3g` has an RTT floor around 270ms, and
 `2g`/`slow-2g` run 1400-2000ms or worse.** Degraded real-world signal commonly sits at or
@@ -289,7 +289,7 @@ below the 2g tier.
 > So on a weak link, connection setup alone is several seconds before anything happens.
 > Nothing on the interaction path may require a fresh connection.
 
-*Verified — the WICG Network Information API specification. The thresholds are definitional;
+*Sourced — the WICG Network Information API specification. The thresholds are definitional;
 how often real signal falls into each tier is not, and is
 [an open question](questions/what-are-the-real-network-conditions-on-transit-routes.md).*
 
@@ -338,7 +338,7 @@ Sync and Background Fetch are all absent, with no partial substitute.
 > `visibilitychange` — which has to be fire-and-forget rather than a request we wait on, because
 > nothing guarantees we are still running to see the response.
 
-*Verified — WebKit implements none of the three, checked 2026-08-31.*
+*Sourced — WebKit implements none of the three, checked 2026-08-31.*
 
 ---
 
@@ -409,7 +409,7 @@ all instant.
 > So streaming must be tested on real iOS Safari on a real network. Simulators and desktop
 > browsers cannot catch this class of bug.
 
-*Verified — observed directly while debugging, with the alternatives eliminated one at a time.*
+*Measured — observed directly while debugging, with the alternatives eliminated one at a time.*
 
 **Without content-hashed filenames, browsers revalidate cached assets** with conditional
 requests instead of skipping them.
@@ -417,7 +417,7 @@ requests instead of skipping them.
 > So every asset costs a round trip per load unless content-hashed and cached immutably. Cheap
 > on desktop, expensive on a weak mobile link.
 
-*Verified — HTTP caching semantics.*
+*Reasoned — HTTP caching semantics.*
 
 **Proxies buffer a response before compressing it, which breaks streaming**, and they terminate
 connections they judge idle.
@@ -439,7 +439,7 @@ to any user of that service.** At least one prominent sudoku library is AGPL-3.0
 > So we must audit dependencies for *network* copyleft, not only distribution copyleft. AGPL is
 > disqualifying for anything linked into a hosted service.
 
-*Verified — the licence text.*
+*Sourced — the licence text.*
 
 **Individual puzzle grids are unlikely to be copyrightable**, on the reasoning that the merger
 doctrine and the idea/expression dichotomy treat a valid unique-solution arrangement as a

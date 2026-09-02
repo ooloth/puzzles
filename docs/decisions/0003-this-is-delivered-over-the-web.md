@@ -141,7 +141,7 @@ which belongs with
 
 - **Platform pathology is measurably consuming the interface budget** — service worker behaviour,
   eviction recovery, install prompting and storage failure handling crowding out work on the
-  solving experience. This is the trigger that matters, and it is the same risk ADR-0001 already
+  solving experience. This is the trigger that matters, and it is the same risk [ADR-0002](0002-launch-with-sudoku-then-star-battle.md) already
   names.
 - **Tactile feedback becomes load-bearing** for the experience being aimed at, rather than a thing
   that would be nice. The shell above is the response, not a rewrite.

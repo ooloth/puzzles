@@ -42,7 +42,9 @@ statement of intent rather than a decision: it settles that hints are wanted, no
 they cover, how they are surfaced, or whether they appear in v1. Recorded from the maintainer.
 
 > So the client eventually needs the solver, not only legality and completeness checking. That
-> shrinks the cost accepted in ADR-0004 from permanent dead weight to deferred weight, and it means
+> shrinks the cost accepted in
+> [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+> from permanent dead weight to deferred weight, and it means
 > the client's share of the rules module converges with the generator's rather than staying a
 > subset.
 

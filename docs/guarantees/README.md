@@ -62,5 +62,5 @@ or constraints bear on it.
 - [security.md](security.md) — what a hostile input or actor cannot do
 
 A theme is listed here once it is a promise we expect to make, and carries `status: stub` with
-`_No promises yet._` until it holds one. `rg -l 'No promises yet' docs/guarantees/` lists the empty
+`_No promises yet._` until it holds one. `rg -l 'No promises yet' docs/guarantees/*.md --glob '!README.md'` lists the empty
 ones — a theme nobody has filled is a promise nobody has written, which is worth being able to see.

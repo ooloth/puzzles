@@ -43,7 +43,8 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised 2026-09-01, on noticing that no question asked what the rules module in ADR-0004 operates on,
+Raised 2026-09-01, on noticing that no question asked what the rules module in
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) operates on,
 while several downstream questions described moving and storing it.
 
 ## Options
@@ -60,7 +61,8 @@ carries identity, type and versioning. Storage and transport are generic, the do
 yet" and the cheapest thing available now, and the migration it risks reaches client storage, where
 migrations run once in somebody's browser with no server to retry from.
 
-The two options above both satisfy ADR-0010, which settles what a shape may not assume and nothing
+The two options above both satisfy
+[ADR-0008](../decisions/0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md), which settles what a shape may not assume and nothing
 about what it should contain. Choosing between them is still this question's job.
 
 ## Findings

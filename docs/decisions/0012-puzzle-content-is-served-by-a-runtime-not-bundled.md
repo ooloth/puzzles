@@ -60,7 +60,8 @@ rather than to delivery — an archive that might ever be gated cannot be static
   migration plus a caching story rebuilt from nothing, at the moment there is finally a reason to
   care.
 
-- **Decide it when a paid tier is committed.** The honest "not yet", and the same failure ADR-0008
+- **Decide it when a paid tier is committed.** The honest "not yet", and the same failure
+  [ADR-0011](0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
   found. By then the archive is static, players have it precached, and what would have been a
   decision is a migration. The option is nearly free now precisely because nothing has been
   delivered to anyone.

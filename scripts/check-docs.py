@@ -34,7 +34,7 @@ INDEXES = [
 # records are self-ordering by number. Adding one would create a second place to
 # keep in step for no gain.
 
-SKIP_DIRS = ('@legacy', 'brainstorming')
+SKIP_DIRS = ('brainstorming',)
 
 problems = []
 
@@ -215,6 +215,107 @@ def check_decision_headings():
 # motivated it. prep-for-codebase-handoff scans for both.
 
 
+# Every reference to a decision record is a link, and the link's label matches
+# the record it points at. A renumber on 2026-09-02 rewrote linked labels and
+# left thirty-nine plain-text mentions alone, six of which then named the wrong
+# record — ADR-0007 credited state ownership to the record about which games
+# ship first. A bare mention cannot be checked; a link can.
+ADR_LINK = re.compile(r'\[ADR-(\d{4})\]\((?:\.\./)?(?:decisions/)?(\d{4})-')
+ADR_BARE = re.compile(r'(?<!\[)\bADR-(\d{4})\b')
+
+
+def check_adr_references():
+    for root, dirs, files in os.walk('docs'):
+        if any(skip in root for skip in SKIP_DIRS):
+            continue
+        for f in files:
+            if not f.endswith('.md'):
+                continue
+            path = os.path.join(root, f)
+            for n, line in enumerate(open(path), 1):
+                for m in ADR_LINK.finditer(line):
+                    if m.group(1) != m.group(2):
+                        problems.append(
+                            f'ADR LABEL    {path}:{n} label says ADR-{m.group(1)}, '
+                            f'link points at {m.group(2)}'
+                        )
+                for m in ADR_BARE.finditer(ADR_LINK.sub('', line)):
+                    problems.append(
+                        f'ADR UNLINKED {path}:{n} "ADR-{m.group(1)}" is not a link, so '
+                        f'nothing checks that it names the record it means'
+                    )
+
+
+# constraints.md states three provenance tiers and says anything asserted
+# without one of them does not belong in the file. It then used a fourth,
+# undefined word for most of its entries. Question findings add one more tier,
+# for a claim nobody has established.
+CONSTRAINT_TIERS = ('Measured', 'Sourced', 'Reasoned')
+FINDING_TIERS = CONSTRAINT_TIERS + ('Unverified',)
+# Deliberately a list of near-misses rather than "any word that is not a tier".
+# A Findings section also opens option entries with *Word — ...*, so anything
+# broader flags those. The failure this catches is a plausible synonym used as
+# though it were a tier — constraints.md used "Verified" twenty-two times while
+# defining three tiers that did not include it.
+NEAR_MISS_TIERS = (
+    'Verified', 'Confirmed', 'Established', 'Checked', 'Observed',
+    'Cited', 'Documented', 'Asserted', 'Unsourced', 'Inferred',
+)
+TIER_TAG = re.compile(r'^\*(' + '|'.join(NEAR_MISS_TIERS + FINDING_TIERS) + r')\s+—')
+
+
+def check_tiers_in(path, allowed):
+    for n, line in enumerate(open(path), 1):
+        m = TIER_TAG.match(line)
+        if m and m.group(1) not in allowed:
+            problems.append(
+                f'TIER         {path}:{n} "{m.group(1)}" is not one of {", ".join(allowed)}'
+            )
+
+
+def check_provenance_tiers():
+    check_tiers_in('docs/constraints.md', CONSTRAINT_TIERS)
+    for path in question_files():
+        check_tiers_in(path, FINDING_TIERS)
+
+
+# Three folders, three frontmatter schemas. documentation.md states the default
+# as a Must and exempts the two folders that carry their own, which their
+# READMEs define. Checking it here is what stops the exemption drifting into
+# "nobody bothers".
+SCHEMAS = {
+    'docs/decisions': ('number', 'status', 'date'),
+    'docs/questions': ('opened', 'status', 'resolves_into'),
+}
+DEFAULT_SCHEMA = ('updated', 'update_when', 'decays')
+
+
+def check_frontmatter():
+    for root, dirs, files in os.walk('docs'):
+        if any(skip in root for skip in SKIP_DIRS):
+            continue
+        required = SCHEMAS.get(root, DEFAULT_SCHEMA)
+        for f in sorted(files):
+            if not f.endswith('.md'):
+                continue
+            if f == 'README.md' and root in SCHEMAS:
+                required = DEFAULT_SCHEMA
+            else:
+                required = SCHEMAS.get(root, DEFAULT_SCHEMA)
+            path = os.path.join(root, f)
+            text = open(path).read()
+            if not text.startswith('---\n'):
+                problems.append(f'FRONTMATTER  {path} has none')
+                continue
+            head = text.split('---\n', 2)[1]
+            keys = {l.split(':', 1)[0].strip() for l in head.split('\n') if ':' in l}
+            missing = [k for k in required if k not in keys]
+            if missing:
+                problems.append(
+                    f'FRONTMATTER  {path} missing {", ".join(missing)}'
+                )
+
+
 check_links()
 check_indexes()
 check_decision_checkboxes()
@@ -222,6 +323,9 @@ check_top_level_index()
 check_question_sequencing()
 check_findings_note()
 check_decision_headings()
+check_adr_references()
+check_provenance_tiers()
+check_frontmatter()
 
 for p in problems:
     print(p)

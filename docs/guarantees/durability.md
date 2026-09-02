@@ -12,11 +12,12 @@ they have played, and the record of their play.
 
 ## No bound is currently promised per persona
 
-This file used to promise a signed-in player's work survives on every device they use, and a guest's
-work survives in the browser that made it. Both promises rested on the durability record demoted on 2026-09-01, "What a player's work
-survives," a decision record that was demoted: part of its reasoning turned out to rest on a
-rejection that did not hold up, so it no longer counts as a decision this project has made. The
-record itself is deleted; everything it argued is carried forward in the three questions below.
+No bound is promised for either persona. The record that set them — "What a player's work
+survives" — was demoted on 2026-09-01, because part of its reasoning rested on a rejection that did
+not hold up. It is deleted, and everything it argued is carried forward in the three questions below.
+
+A reader arriving here expecting a durability promise should know there is currently none, rather
+than infer one from [../problem.md](../problem.md), which still states the intent.
 
 What each bound actually is, and whether a guest's record and a signed-in player's record share one
 shape, are now open questions rather than settled promises:

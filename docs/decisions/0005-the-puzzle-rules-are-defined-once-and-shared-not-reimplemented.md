@@ -52,7 +52,7 @@ the grade said would never be needed, with nothing raised anywhere.
 
 This does not decide *how* the sharing happens. Sharing by source means one language everywhere;
 sharing a compiled artifact means an interop boundary and, in a browser, a WebAssembly bundle on
-first load. That is [0005](0007-that-language-is-typescript.md), and this record
+first load. That is [ADR-0006](0006-one-language-across-every-deployable.md), and this record
 is the constraint it inherits: the rules must run in a browser and in a batch process, from one
 source.
 
@@ -60,22 +60,24 @@ source.
 
 - **Two implementations kept in agreement by differential testing.** The strongest rejected option,
   and not a straw one — property-based differential testing is a real mitigation rather than a
-  hopeful one, and it frees each deployable to use whatever suits it. Rejected because the cost is
-  an obligation with no end date, because it only protects the cases someone thought to generate,
-  and because it protects nothing until it is built. The freedom it buys has no use here:
+  hopeful one, and it frees each deployable to use whatever suits it. **The disqualifying reason on its own is that it only protects the cases
+  somebody thought to generate**, and a rules disagreement that no generator produced is exactly the
+  one that reaches a player. The other two costs are real and would not disqualify it alone: the
+  obligation has no end date, and it protects nothing until it is built. The freedom it buys has no use here:
   [../problem.md](../problem.md) ranks clarity over cleverness because one person maintains this,
   and there is one maintainer and no second team wanting a different language.
 
 - **No rules on the client at all.** The client renders a board and reports moves; everything is
   judged elsewhere. Rejected because recognising a completed board means checking that it is full
   and satisfies the constraints, which *is* the rules — so the client needs them even in a version
-  of the product that never flags a wrong move. ADR-0002 and the offline guarantee then rule out
+  of the product that never flags a wrong move. [ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md)
+  and the offline guarantee then rule out
   asking anyone else.
 
 - **Decide when the generator is built.** Deferring costs nothing today, since nothing is
   implemented and a single client implementation is trivially the only one. Rejected because
-  [0005](0007-that-language-is-typescript.md) has no input without it — the
-  question of which language the deployables share only exists if something is shared — and 0005
+  [ADR-0006](0006-one-language-across-every-deployable.md) has no input without it — the
+  question of which language the deployables share only exists if something is shared — and it
   gates every remaining client decision. Deferring this defers the stack.
 
 ## Risk

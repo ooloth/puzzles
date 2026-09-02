@@ -66,9 +66,9 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
 - **Model sudoku directly: an eighty-one character string.** The universal sudoku interchange
   format, understood by every library and tool in the space, trivially indexed, diffed and
   transmitted, and the smallest thing that could possibly work. A competent person ships this, and
-  many have. Rejected because ADR-0001 already scheduled the game that breaks it, and by then the
+  many have. Rejected because [ADR-0002](0002-launch-with-sudoku-then-star-battle.md) already scheduled the game that breaks it, and by then the
   format is in the store, in the generator's output, in every player's browser and in the rules
-  module at once. This is not a shape somebody might regret; it is one ADR-0001 guarantees will be
+  module at once. This is not a shape somebody might regret; it is one [ADR-0002](0002-launch-with-sudoku-then-star-battle.md) guarantees will be
   regretted.
 
 - **A fully generic constraint model** — variables, domains and constraints, with each game type
@@ -77,8 +77,9 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
   constraint engine before a grid has ever been rendered, and clarity over cleverness is the fourth
   tiebreak in that file precisely because one person maintains this.
 
-- **Decide it when star battle arrives.** The honest "not yet", and the same failure ADR-0008 and
-  ADR-0009 both found. What makes it worse here is where the data sits: server rows can be migrated
+- **Decide it when star battle arrives.** The honest "not yet", and the same failure
+  [ADR-0011](0011-stored-play-data-can-be-analysed-not-just-retrieved.md) and
+  [ADR-0012](0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) both found. What makes it worse here is where the data sits: server rows can be migrated
   by code that runs once under supervision, and client storage cannot.
 
 - **Preserve the option in the code without recording it.** Write the generic shape and let the
@@ -91,7 +92,7 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
 
 **Generality is paid at every read site, forever, and star battle may never ship.** A shape that can
 express an arbitrary region partition is more awkward for sudoku than an eighty-one character string
-in every place that touches it — the generator, the rules, the renderer, the store. If ADR-0001's
+in every place that touches it — the generator, the rules, the renderer, the store. If [ADR-0002](0002-launch-with-sudoku-then-star-battle.md)'s
 sequencing changes, this will have been a tax collected for nothing.
 
 **It is decided with nothing written down and nothing measured.** The representation has never

@@ -61,7 +61,7 @@ to show that something is pending, and forbids the network blocking, delaying or
 A failed send is retried later or dropped; it is never surfaced as an error the player must act on.
 
 **A server answering in HTML fragments narrows [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md)'s
-native recovery path to a webview wrapper.** ADR-0003 names wrapping this web client in a native
+native recovery path to a webview wrapper.** [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) names wrapping this web client in a native
 shell as what keeps the web choice reversible. A server that returns markup for the client to insert
 can only be consumed by something that renders HTML, which forecloses every non-webview native
 client.

@@ -12,7 +12,7 @@ A puzzle keyed by date alone can never have a sibling. Two difficulties for the 
 alongside a full one — the commonest shape in this category — need two rows for one day, and a date
 key cannot hold them. Changing the key later means migrating every stored puzzle and every player's
 record that references a date. Keying by id instead, with a publication date carried as a field,
-costs nothing now. This closes at M2, when the first row is written: whatever key that row uses is
+costs nothing now. This closes at M3, when the first row is written: whatever key that row uses is
 the key every later row inherits.
 
 ## What would settle it

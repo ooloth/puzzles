@@ -1,3 +1,11 @@
+> **Nothing in this file is decided, and its filename is not a conclusion.** It is a transcript
+> pasted from another AI session. Its claims were sourced there and the reference list did not
+> survive the copy, so the numbers and vendor facts in it have no basis you can check — stripped
+> markers like `[1.1]` and `[]` are still in the text pointing nowhere. Several claims have already
+> been checked and found wrong. Anything here that matters belongs in
+> [../questions/](../questions/) with its provenance, and this file is deleted once that is done.
+> See [README.md](README.md).
+
 What is the absolute best possible stack for this app? assume we value safety, performance and UX. Start by identifying the top 3 options. Focus on technical factors.
 
 Top 3 Architectural Stacks

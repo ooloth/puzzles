@@ -30,8 +30,9 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Demoted from ADR-0004 on 2026-08-31, after research contradicted the grounds on which it rejected
-its alternatives.
+Demoted on 2026-08-31 from a record that chose the client's rendering approach, after research
+contradicted the grounds on which it rejected its alternatives. That record was deleted, and the
+number it held has since been reused, so it is named here rather than cited.
 
 ## Options
 
@@ -53,7 +54,7 @@ converge on, and a genuine fourth option rather than a blend of the others.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Comparable applications converge on a pattern ADR-0004 did not consider.** tldraw keeps React
+**Comparable applications converge on a pattern the demoted record did not consider.** tldraw keeps React
 and replaced its state layer wholesale. Excalidraw renders to canvas. Lichess's board component
 states its rationale as minimising DOM writes. SudokuPad — Cracking the Cryptic's client, the
 closest surface analogue that exists — uses no framework and no bundler at all. The recurring
@@ -71,9 +72,9 @@ serious project chose, not that it is correct here.
 
 **The surviving argument for a framework is not rendering.** It is the dev server, the state-to-DOM
 binding not being hand-maintained, and the ecosystem around the browser APIs this design leans on.
-Those are real; they were just not the arguments ADR-0004 made.
+Those are real; they were just not the arguments the demoted record made.
 
-**The risk ADR-0004 named about itself still stands.** The maintainer's existing strength in one
+**The risk the demoted record named about itself still stands.** The maintainer's existing strength in one
 ecosystem is a legitimate cost input and never a merit, and this is the decision most likely to be
 familiarity wearing a reason's clothes.
 

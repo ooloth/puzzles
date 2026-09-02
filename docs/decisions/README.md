@@ -51,7 +51,7 @@ still recorded, see below.
 
 Two failures this prevents, both of which have happened here:
 
-- **A decision settled inside a record about something else.** ADR-0003 mandated a storage interface
+- **A decision settled inside a record about something else.** [ADR-0003](0003-this-is-delivered-over-the-web.md) mandated a storage interface
   and a JSON server contract in a section outside its own Decision heading, under a title announcing
   it decided the delivery platform and nothing else. Nobody scanning this folder would have found
   either.
@@ -107,7 +107,7 @@ source. A rejection is held to the same evidence bar as **Forced by**: it cites
 [../problem.md](../problem.md), or another record.
 
 **Nothing enforces that, and a check that tried was removed.** It looked for a citation anywhere in a
-rejected option, and it passed ADR-0003 — whose bullets cite `problem.md` for one thing and then make
+rejected option, and it passed [ADR-0003](0003-this-is-delivered-over-the-web.md) — whose bullets cite `problem.md` for one thing and then make
 five specific, checkable, unsourced claims about vendor policies and version numbers. A check that
 answers "is there a link" cannot answer "does this support the claim beside it", and reporting clean
 on the record that motivated it is worse than not running. `prep-for-codebase-handoff` reads for it

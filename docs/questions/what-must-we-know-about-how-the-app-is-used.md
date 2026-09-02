@@ -84,7 +84,7 @@ not.
 "we wouldn't."** See [../failure-modes/](../failure-modes/). That is the strongest argument that
 the answer here is not "nothing", independent of any appetite for product analytics.
 
-**ADR-0011 settles that whatever is stored is analysable, not whether anything about usage is
+**[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles that whatever is stored is analysable, not whether anything about usage is
 collected at all.**
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles the
 shape of [which database, if any?](which-database.md) — that stored data can be queried

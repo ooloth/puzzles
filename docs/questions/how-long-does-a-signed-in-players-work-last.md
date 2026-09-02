@@ -27,10 +27,10 @@ and to which devices."
 Answering this in the affirmative — any bound at all beyond the current session — has already forced
 a consequence: something off-device has to hold the record. That consequence was decided separately,
 in [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), "a server
-exists." ADR-0010 was reasoned entirely from the durability record demoted on 2026-09-01's signed-in bound and says explicitly that if
-that bound is ever dropped, ADR-0010 has no independent basis and should be superseded in the same
+exists." [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) was reasoned entirely from the durability record demoted on 2026-09-01's signed-in bound and says explicitly that if
+that bound is ever dropped, [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) has no independent basis and should be superseded in the same
 change. Demoting the durability record does drop it — the signed-in bound is no longer a decided fact, it is this
-open question. Whether ADR-0010 should therefore also be revisited is a live question this record
+open question. Whether [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) should therefore also be revisited is a live question this record
 does not resolve; it is out of scope for this file, and is flagged here so it is not lost.
 
 ## What would settle it
@@ -86,7 +86,7 @@ records that a server exists — so nothing about answering this question re-ope
 one. What remains open is what that server holds and how it is operated, and
 [how is the server operated?](how-is-the-server-operated.md) is the latter half.
 
-**ADR-0010 was reasoned entirely from the signed-in bound this question now reopens, and says so
+**[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) was reasoned entirely from the signed-in bound this question now reopens, and says so
 itself.** Its own Risk section: "its whole basis is one promise in one record. If the durability record's
 signed-in bound is ever revised, this goes with it." Its own Revisit-when section: "the durability record is
 superseded and the signed-in bound is dropped... should be superseded in the same change." Demoting

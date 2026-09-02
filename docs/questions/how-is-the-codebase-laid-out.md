@@ -49,7 +49,8 @@ package manager provides. Real boundaries the tooling enforces, at the cost of c
 class of resolution problem that does not exist in a single package.
 
 *Separate repositories.* Listed to be dismissed: it puts a publish step between the rules and their
-consumers, which ADR-0004 forbids.
+consumers, which
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids.
 
 Within any of those, a second axis. **By domain concept:** folders named for what the code is about
 — a player and their progress, one game's rules, storage — so a name answers "where would I find X"

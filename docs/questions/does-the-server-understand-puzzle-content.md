@@ -28,7 +28,8 @@ hard part is.
 
 Naming what the server would *do* with a rejection, and what the client would do with it in turn.
 Validation that only logs is observability. Validation that refuses a write is a second authority
-over state, which is what ADR-0002 exists to prevent.
+over state, which is what
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) exists to prevent.
 
 The sharp case is not rejection but acceptance: the server stores something malformed and later
 returns it to a client that will not accept it. See Findings.
@@ -56,7 +57,8 @@ from data it cannot describe. Requires a schema, not the rules.
 
 *Full rules validation.* The server runs the rules module and refuses anything illegal. Requires the
 rules on the server, which forces its language, and puts a second authority over state next to a
-client that ADR-0002 made authoritative.
+client that
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) made authoritative.
 
 ## Findings
 
@@ -76,5 +78,6 @@ problem.
 
 **Validation and arbitration are different powers and only one is ruled out.** A previous record
 concluded the server validates puzzle state but does not arbitrate it. Checking a shape is not the
-same as deciding which of two boards is correct, and ADR-0002 forbids the second rather than the
+same as deciding which of two boards is correct, and
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) forbids the second rather than the
 first.

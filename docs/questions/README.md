@@ -160,6 +160,11 @@ a player can see, which is why it has to be a milestone rather than a habit.
 7. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
    platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
    reproduced only on real iOS Safari over a real network.
+8. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+   — how many devices and which, and what runs where. It cannot be answered before
+   [../guarantees/compatibility.md](../guarantees/compatibility.md) says what the matrix is, and that
+   file is a stub that admits every promise in the folder is scoped to something nobody has written
+   down.
 
 ## M3 — a puzzle comes from the store
 
@@ -184,7 +189,7 @@ board for six milestones and meeting the store for the first time with a finishe
 
 ## M4 — a grid is on the screen
 
-The M2 puzzle, rendered as a grid. Static, no interaction.
+The M3 puzzle, rendered as a grid. Static, no interaction.
 
 - [How is the app styled?](how-is-the-app-styled.md) — after the renderer, since a rendering approach
   that ships a build pipeline anyway changes what a styling toolchain costs.
@@ -356,6 +361,10 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
+
+[What belongs on the landing page?](what-belongs-on-the-landing-page.md) — nothing waits on it, and
+it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here
+rather than at a milestone because no milestone in this list is the one where somebody arrives.
 
 ## What goes in a question file
 

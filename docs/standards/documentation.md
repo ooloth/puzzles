@@ -25,7 +25,12 @@ drifts, so it is checked after one. A folder whose directory listing already car
 self-ordering records, filenames that read as questions — needs no index, and adding one creates
 a second thing to keep in step.
 
-**Every file under `docs/` carries `updated`, `update_when` and `decays` in its frontmatter.**
+**Every file under `docs/` carries `updated`, `update_when` and `decays` in its frontmatter, except
+`decisions/` and `questions/`, which carry their own.** A record carries `number`, `status` and
+`date`; a question carries `opened`, `status` and `resolves_into`. Both are defined in their folder's
+README and neither has room for the three fields above — a record's decay is `never` by construction
+and a question's obligation to change is that somebody answers it. `scripts/check-docs.py` enforces
+whichever schema applies.
 `update_when` names the event that obligates a change, which is what makes a stale document
 someone's responsibility rather than nobody's. `decays` tells a reader how hard to verify before
 trusting: `never` for a historical record, `slow` for something deliberate, `fast` for anything
@@ -55,7 +60,7 @@ standards against verification. A boundary line is cheapest at the point where a
 already deciding whether they opened the right file.
 
 **Archival directories are labelled non-authoritative where a reader will meet them.**
-`docs/@legacy/` and `docs/brainstorming/` hold superseded and unfiltered material that reads as
+`docs/brainstorming/` holds unfiltered material that reads as
 settled. Anything that looks authoritative and isn't costs more than it saves unless the label
 sits somewhere the reader passes.
 
@@ -67,4 +72,4 @@ sits somewhere the reader passes.
 
 ## Out of scope
 
-- `docs/@legacy/` and `docs/brainstorming/`, which are archival and left as they were written
+- `docs/brainstorming/`, which is archival and left as it was written

@@ -37,25 +37,29 @@ leaves nothing for a compiled artifact to do.
 ## Rejected
 
 - **A WebAssembly client — Rust with Leptos or Dioxus, or similar.** Not rejected on performance,
-  and saying so would be false: on the js-framework-benchmark both outperform React and land near
-  vanilla JavaScript. Rejected because WebAssembly cannot reach the DOM or browser storage directly
+  and saying so would be false: on the js-framework-benchmark both are reported to outperform React
+  and land near vanilla JavaScript. *That figure is unverified — no result was opened, and it should
+  not be cited.* Rejected because WebAssembly cannot reach the DOM or browser storage directly
   and calls JavaScript glue for all of it. That is not a temporary gap — the core web APIs are
   defined through WebIDL, which assumes JavaScript strings, objects, exceptions, promises and
   garbage collection — and it holds for every storage mechanism, `localStorage`, IndexedDB, the
-  Cache API and OPFS alike. It matters here more than elsewhere because ADR-0002 puts state
+  Cache API and OPFS alike. It matters here more than elsewhere because [ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md) puts state
   ownership and persistence in the client, so the part WebAssembly cannot do natively is the part
-  carrying the most risk, and two runtimes would be maintained to do it. Bundles commonly exceed
+  carrying the most risk, and two runtimes would be maintained to do it. Bundles are said to commonly exceed
   300KB uncompressed, against a cold load that `../constraints.md` records as already several
-  seconds of round trips on a degraded link.
+  seconds of round trips on a degraded link. *That figure is also unverified.* Neither number is
+  load-bearing — the disqualifying reason is the WebIDL boundary above, which stands without them.
 
 - **A language compiling to JavaScript — Elm, ReScript, PureScript.** Loses on ecosystem rather than
   on language quality, and the shortfall lands exactly where this design leans hardest: storage,
   service workers and page lifecycle have the thinnest wrappers. Elm has no comfortable story for a
-  batch generator, which ADR-0004 requires to share the rules.
+  batch generator, which [ADR-0005](0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+  requires to share the rules.
 
 - **Plain JavaScript.** A real option — no build step, the simplest toolchain available, and nothing
   about a grid of eighty-one cells demands a type system. It loses because the rules module is the
-  one piece whose correctness two guarantees rest on, and because ADR-0004 concentrated that
+  one piece whose correctness two guarantees rest on, and because [ADR-0005](0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+  concentrated that
   correctness into a single place where a mistake is inherited everywhere rather than caught by
   disagreement.
 
@@ -71,7 +75,7 @@ noticeable later.
 
 **A single language everywhere is a single blast radius.** A runtime bug, a supply-chain compromise,
 or an ecosystem-wide breaking change reaches the client, the generator and the rules at once. This
-is the direct cost of the concentration ADR-0004 chose, and it is accepted for the same reason.
+is the direct cost of the concentration [ADR-0005](0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) chose, and it is accepted for the same reason.
 
 **Adopting Rust was rejected partly on the cost of a second toolchain, which is a cost rather than a
 disqualification.** Cargo alongside npm, two debuggers, two ecosystems, one maintainer. Stated

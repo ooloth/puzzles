@@ -1,12 +1,11 @@
 # Puzzles ✏️
 
 A web app for solving grid-based logic puzzles like Sudoku and Star Battle, plus a pipeline for
-generating the puzzles themselves.
+generating them.
 
-The goal is create a delightful puzzle-solving UI that rivals the UX of any current alternative,
-while supporting uninterrupted puzzling with or without internet connectivity. Plus, to create an
-engaging collection of custom puzzles with accurate difficulty grading calibrated by the techniques
-required for a human to solve them without needing to guess.
+The goal is a delightful puzzle-solving UI that rivals the UX of any current alternative, 💅 while
+supporting uninterrupted puzzling with or without internet connectivity. 📱 The puzzles themselves
+will be calibrated into difficulty tiers based on the techniques a human would use to solve them.
 
 ## 📖 Docs
 

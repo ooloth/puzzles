@@ -99,7 +99,7 @@ terms. Nothing from it should be imported without being re-run here.
 
 **This is coupled to the database choice more than its position suggests.** SQLite performance is a
 real difference between these runtimes, and
-[which database, if any?](which-database-if-any.md) is not decided and does not need to be for a
+[which database, if any?](which-database.md) is not decided and does not need to be for a
 hello world. The honest handling is to note what each runtime does to the later options rather than
 to settle the database early to justify a runtime — which is the direction the brainstorming
 document argues in, and it is backwards.

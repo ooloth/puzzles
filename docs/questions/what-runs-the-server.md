@@ -4,7 +4,7 @@ status: open
 resolves_into: decision
 ---
 
-# What runs the server, if there is one?
+# What runs the server?
 
 ## Why it matters
 

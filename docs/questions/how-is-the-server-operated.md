@@ -11,7 +11,7 @@ resolves_into: decision
 Running a server is not the same as choosing one. Something has to restart it when it dies, tell
 someone when it stops answering, keep it patched, and let the maintainer back in when they lock
 themselves out. None of that is covered by
-[what runs the server?](what-runs-the-server-if-there-is-one.md) or
+[what runs the server?](what-runs-the-server.md) or
 [where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
 the answer to the second.
 
@@ -53,7 +53,7 @@ rather than return a constant.
 **Backing up a live SQLite file by copying it is unsafe.** In write-ahead-log mode an ordinary file
 copy can capture a torn write; the database's own online backup interface exists for this. Recorded
 here rather than in [../constraints.md](../constraints.md) because it only applies if
-[which database, if any?](which-database-if-any.md) lands on an embedded one.
+[which database, if any?](which-database.md) lands on an embedded one.
 
 *Unverified — no source recorded.*
 

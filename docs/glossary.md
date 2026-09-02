@@ -20,7 +20,7 @@ Cache API. Evictable, per-device, and unreachable from anywhere else. See
 **the store** — the durable copy kept off the player's device, per
 [ADR-0009](decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md). Not
 evictable, not per-device. Whether it is a relational database, a key-value store or a file is
-[open](questions/which-database-if-any.md).
+[open](questions/which-database.md).
 
 > **Never write "storage" unqualified.** The two above have opposite properties — one is taken away
 > without warning and belongs to one device, the other is ours and outlives every device — and a

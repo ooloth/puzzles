@@ -119,7 +119,7 @@ a database.
 **SQLite on a local disk is what disqualified the serverless platforms**, since they offer no
 persistent filesystem for a database file to live on. That disqualification is contingent on a
 data-store choice nobody has made — see
-[what does the server store](what-does-the-server-store-if-anything.md). If the server needs less
+[which database?](which-database.md). If the server needs less
 than a database, those platforms return before pricing is discussed.
 
 **Structural platform facts, which survive re-checking.** Fly volumes are single-attach without

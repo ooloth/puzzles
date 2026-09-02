@@ -51,7 +51,7 @@ background copy or a background check.
 
 **It does not say there is a database**, only that whatever ADR-0009 established has somewhere to
 live. Whether that is a relational database, a key-value store or a file is
-[which database, if any?](../questions/which-database-if-any.md), open.
+[which database, if any?](../questions/which-database.md), open.
 
 ## Rejected
 

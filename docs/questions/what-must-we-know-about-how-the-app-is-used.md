@@ -21,7 +21,7 @@ with durability, and it holds regardless of how
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) are
 eventually answered. It is the one input that can make
-[which database, if any?](which-database-if-any.md) a real decision rather than a formality.
+[which database, if any?](which-database.md) a real decision rather than a formality.
 
 It also decides whether several promises are checkable.
 [../guarantees/durability.md](../guarantees/durability.md) says work is never lost and is
@@ -87,6 +87,6 @@ the answer here is not "nothing", independent of any appetite for product analyt
 **ADR-0011 settles that whatever is stored is analysable, not whether anything about usage is
 collected at all.**
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles the
-shape of [which database, if any?](which-database-if-any.md) — that stored data can be queried
+shape of [which database, if any?](which-database.md) — that stored data can be queried
 rather than only retrieved. Whether anything about usage is collected in the first place is this
 question, and it is a different one.

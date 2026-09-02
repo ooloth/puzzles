@@ -40,7 +40,7 @@ off-device copy is the one that survives the device.
 
 **It settles that such a copy exists, not what is in it or what it is stored in.** Which fields,
 which shape, and which database remain open, including
-[which database, if any?](../questions/which-database-if-any.md).
+[which database, if any?](../questions/which-database.md).
 [ADR-0011](0011-stored-play-data-can-be-analysed-not-just-retrieved.md) constrains what the store has
 to be capable of; this establishes that there is one to constrain.
 

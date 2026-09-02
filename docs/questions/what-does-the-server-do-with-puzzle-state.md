@@ -55,7 +55,7 @@ of reach whenever the server is unreachable — the condition the app exists for
 
 **A store that never reads inside a value has a very short list of requirements.** That covers
 [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) and
-[which database, if any?](which-database-if-any.md).
+[which database, if any?](which-database.md).
 
 **Ordering is not arbitration.** A server may assign arrival order to writes without deciding
 whose play was right, and it is the only way to avoid depending on device clocks agreeing. It

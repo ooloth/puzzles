@@ -107,30 +107,34 @@ Whether the cookie is ever used is decided at M12. What M1 must not do is forecl
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) already puts a
 runtime on the content path, serving the client from the same origin costs nothing.
 
-The database is here at the class level — embedded or network-attached — because that is what sets
-the capability the host has to have. It is not needed to answer one route. It is needed for the
-platform choice to be one we keep.
+**The store's class is settled here and the engine is not.** Whether the store is a file the process
+opens or a service it connects to sets the capability the host must have, and entry 2 settles it as
+part of the execution shape. Which engine, given that class, cannot be argued without a schema and
+waits for M3 — see [which database?](which-database.md).
 
-1. [What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
+1. [Is the client served as static files?](is-the-client-served-as-static-files.md) — first, because
+   it decides whether the deploy artifact is a bundle or a rendering server, which everything below
+   inherits. Derived from [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+   and the offline guarantee, so closer to a recording than a decision — which is what makes taking
+   it first nearly free.
+2. [What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
    hub. Long-lived process, ephemeral functions, or an edge runtime, each paired with the kind of
-   store it can reach.
-2. [Which database, if any?](which-database-if-any.md) — the class only. Embedded needs persistent
-   local disk and narrows hosting to hosts that have one; network-attached does not.
+   store it can reach, so this settles embedded against network-attached too.
 3. [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) — Node,
    Bun or Deno. Spike it. Under Bun or Deno it also answers the package manager and the test runner.
 4. [Where does this run?](where-does-this-run.md) — from the three above, with same-origin as a
    constraint on the answer.
-5. [What runs the server?](what-runs-the-server-if-there-is-one.md) — mostly falls out of the runtime.
-6. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
+5. [What runs the server?](what-runs-the-server.md) — mostly falls out of the runtime.
+6. [Which package manager?](which-package-manager.md) — before the layout, since whether the
+   toolchain does workspaces is an input to how many packages there are. May collapse entirely into
+   entry 3.
+7. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
    many packages, and where the shared rules module sits so both a browser and a batch process can
    reach it.
-7. [Which package manager?](which-package-manager.md) — only separate if the runtime is Node.
-8. [Is the client served as static files?](is-the-client-served-as-static-files.md) — derived from
-   ADR-0004 and the offline guarantee, so closer to a recording than a decision.
-9. [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither.
+8. [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither.
    [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) has already
    ruled out a painted canvas.
-10. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
+9. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
 
 ## M2 — a change can be checked before it ships
 
@@ -177,6 +181,9 @@ board for six milestones and meeting the store for the first time with a finishe
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
 3. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
+4. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
+   the engine waits until here, because choosing between them without an access pattern is choosing
+   by reputation.
 
 ## M4 — a grid is on the screen
 
@@ -350,7 +357,6 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
 [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
-[what does the server store, if anything?](what-does-the-server-store-if-anything.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
 

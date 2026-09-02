@@ -18,7 +18,7 @@ The foreclosure runs one way and is invisible at the moment it happens.
 database on local disk is what disqualifies serverless platforms, Cloudflare Workers with D1 has no
 persistent process and no real database file, and Fly volumes are single-attach. So deploying a
 hello world to an edge platform quietly settles
-[which database, if any?](which-database-if-any.md) — and nothing about that deployment announces
+[which database, if any?](which-database.md) — and nothing about that deployment announces
 that a database class has just been chosen.
 
 It reaches the runtime too. Node, Bun and Deno on a machine can all embed a database; an edge
@@ -58,6 +58,16 @@ in later milestones. The coupling between database, platform and runtime had no 
 positioned as though the other two were independent.
 
 ## Options
+
+The four below are shape-and-store pairs rather than shapes alone, which is deliberate: what a shape
+can reach is most of what distinguishes it. So answering this settles whether the store is a file the
+process opens or a service it connects to — and therefore what the host must provide.
+
+It does not settle which engine. That is [which database?](which-database.md), which waits for a
+schema and sits at M3. Two families span both sides of this line, so the class is a strong default
+toward one engine rather than a choice of it.
+
+
 
 *A long-lived process with a persistent local disk.* An embedded database is a file the process
 opens. No network hop to storage, background work is possible, and the machine is yours to operate —

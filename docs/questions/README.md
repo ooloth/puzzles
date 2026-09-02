@@ -343,9 +343,15 @@ before signing in because the whole question is what a guest gets _without_ an a
 2. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
 3. [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) —
    a losing write needs two writers, so this does not arise until the two above are answered.
-4. [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
-5. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
-6. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
+4. [How does a device know its board is behind?](how-does-a-device-know-its-board-is-behind.md) — a
+   different failure from the one above and easy to mistake for it. No write loses; both copies are
+   legitimate; the player simply resumes from an older board on a device that cannot tell it is
+   older. It is the standing cost of the client authority
+   [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) chose, and it becomes
+   reachable the moment a second device does.
+5. [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
+6. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
+7. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
 ## M15 — the puzzles are ours
 

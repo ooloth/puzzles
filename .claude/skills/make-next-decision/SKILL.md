@@ -159,6 +159,29 @@ afterwards; the observation is the artifact.
    maintainer with the intended experience
 1. Reason your way to the best answer
 
+**Weigh the options by what each forecloses, not by which is better today.** This is what to do
+with a pile of research and no obvious winner, and it is usually the step that produces the answer.
+Present merit is the weakest criterion available and the one a comparison reaches for first — the
+candidates are generally close on it, and the gap that seems to be there is mostly familiarity.
+
+So run each candidate forward instead. Which product futures does it keep reachable, which does it
+close, and what would reopening a closed one actually cost — a route, or a migration? The asymmetry
+that falls out is the decision. `docs/problem.md` is what says which futures are worth keeping, so
+optionality is judged against it rather than against what would be interesting to build.
+
+**Trace the asymmetry rather than asserting it**, because this is the step where a preference gets
+laundered into a derivation. Name the specific later work each direction would require. If the
+cheap direction cannot be described as concrete work that is genuinely small, the asymmetry is not
+established and the argument is doing no work. Check the load-bearing premise underneath it too —
+an asymmetry that holds only if some earlier decision goes a particular way is conditional, and
+says so.
+
+**Then look for what the reframing has separated.** Reasoning this way tends to split one question
+into a short chain: a promise that has to hold, a consequence that follows from it, and only then a
+tool that satisfies it. Record them as a chain of small records rather than one large one. Each
+link is checkable on its own, and a later reader can disagree with one without having to unpick all
+of them.
+
 **Beware of measuring the wrong thing.** A microbenchmark that does not resemble the real workload
 is worse than no number, because it looks like evidence. Check that what you measured is what the
 decision turns on, that the environment resembles production, and that the difference is large

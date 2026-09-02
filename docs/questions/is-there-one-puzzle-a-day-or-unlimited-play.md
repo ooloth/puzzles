@@ -40,3 +40,18 @@ different timezone questions, not one.
 **A daily rhythm is the only thing here that would justify interrupting anyone.** A message that
 reaches a closed app — web push — requires an application server by construction; there is no
 serverless form of it. Whether it is wanted turns on the answer here.
+
+**Push works as a wake-signal rather than a data channel, and there is a decade-proven precedent.**
+Cultured Code's Things Cloud does exactly this: a change on one device goes to their server, the
+server asks Apple's push service to notify the others, and those devices then **pull** the data
+themselves. Their wording is that Apple's "role in this process is only to deliver notifications, not
+transmit the data itself." They use low-priority push, which allows up to ten minutes of latency
+reaching a dormant device, and treat that as acceptable rather than as a defect.
+
+So if a daily rhythm ever justifies a notification, the notification carries nothing. It says "there
+is something new" and the client fetches it on its own terms — which also means the offline and
+latency promises are untouched, because nothing about the app's behaviour depends on the message
+arriving.
+
+*Sourced — Cultured Code's Things Cloud "Nimbus" release post,
+<https://culturedcode.com/things/blog/2015/08/things-cloud-nimbus-released/>, checked 2026-09-02.*

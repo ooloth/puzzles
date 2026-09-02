@@ -25,15 +25,12 @@ well as in [../README.md](../README.md).
 argument: each entry derives from the ones above it, and taking one early makes it arbitrary without
 making it look arbitrary. Every milestone list below is numbered for the same reason.
 
-**The next thing to do is M1's first entry:
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md)** It is
-the hub the runtime, the database and the hosting all turn on.
-
 ## How this list works
 
 **Questions are grouped by the earliest milestone they block.** Not by how foundational they feel —
 by what stops working if they stay open. A question nothing is waiting on sits at the bottom, and
-that is a fine place to be.
+that is a fine place to be. Deferring decisions until they need to be made to unblock the next
+milestone leads to making those decisions with more information and fewer assumptions.
 
 **Milestones are deliberately small.** The point is to stop designing on paper and start deciding
 against running code. Each one below is something you can look at and see working, and most of them

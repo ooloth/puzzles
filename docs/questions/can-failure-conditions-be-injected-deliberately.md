@@ -44,3 +44,34 @@ where the state machine is far smaller, is the open part.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**TigerBeetle's VOPR stubs out every source of non-determinism, then runs the whole cluster in one
+process against mocked I/O.** "All non-deterministic parts of the system are stubbed out. This
+includes the clock, network, and disk operations." It injects dropped and reordered packets,
+partitions, corrupt reads and writes, and crashes.
+
+*Sourced — TigerBeetle internals docs,
+https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/internals/vopr.md.*
+
+**A failing run is reproducible from two numbers.** "When a simulation causes any type of failure, the
+seed and Git commit hash can be used to replay back the exact simulation and bug."
+
+*Sourced — same as above.*
+
+**The precondition is what transfers here, not the harness.** The logic under test has to be a pure
+deterministic function of `(state, event)`, with the wall clock, randomness, network and disk pushed
+to the edges as injected arguments. For a hand-rolled sync reconciler, writing the merge step as
+`(state, event, seed) -> state'` with no `Date.now()` and no I/O inside it buys replayable bug reports
+and offline fuzzing over reordered, dropped and duplicated events.
+
+*Reasoned — an inference from the VOPR's design, not a claim TigerBeetle makes about applicability
+outside their own system.*
+
+**A VOPR-grade harness is not worth building here.** It is a multi-person-year investment reserved for
+a distributed database. The part that fits a solo maintainer is much smaller: a seedable pure reducer
+plus a fuzzer over event orderings.
+
+**Time-compression figures for the VOPR and its FoundationDB lineage could not be verified.** The
+source blog post 404'd during this research. No numbers from it should be repeated here.
+
+*Unverified — no source recorded.*

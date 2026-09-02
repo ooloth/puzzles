@@ -136,3 +136,47 @@ wrapper pays the cost of an interface while keeping none of the swap it exists t
 storage API directly once an interface exists, and nothing in this repo currently catches it. The
 enforceable form is a lint rule restricting imports of the storage API to one path, whatever that
 interface ends up looking like.
+
+**Schema migration of locally stored data is a documented hard spot, and this app's shape walks
+straight into it.** A phone unopened for weeks is exactly the case these warnings are about.
+
+**Dexie requires keeping every old version's `.upgrade()` step in the codebase for as long as users
+might still have to migrate through them.** A user who skipped several app versions walks every
+intermediate step in order, not just the latest one.
+
+*Sourced — https://dexie.org/docs/Version/Version.upgrade().html.*
+
+**Dexie has a multi-tab hazard on schema upgrade.** A schema upgrade in one tab fires `versionchange`
+in others, and a tab that does not handle that event keeps running against a schema it no longer
+understands. Dexie's own recommendation is to force those tabs to reload.
+
+*Sourced — https://dexie.org/docs/Dexie/Dexie.on.versionchange.*
+
+**RxDB's migration has three sharp edges.** It uses an integer schema `version` with per-bump
+`migrationStrategies`. Default values from the new schema are not auto-filled during migration — a
+strategy has to set them explicitly. Writes are blocked while a migration is in progress. And
+migration must run in every tab or worker sharing the store, not just the one that triggered it. As of
+v15 it reuses its replication protocol internally, so a migration interrupted by the user closing the
+browser can resume rather than restart from the beginning.
+
+*Sourced — https://rxdb.info/migration-schema.html.*
+
+**A field rename has no library fix once two versions of the client are both writing to the same
+data.** Ink & Switch's Project Cambria: a rename "will correctly migrate the field to its new name,
+but only if no old copies of the software are still working on this document." An un-upgraded client
+keeps writing the old field name back, and the versions end up "competing to remove and restore
+relocated data." This is a property of having any old client still writing, not something Dexie or
+RxDB's migration tooling solves.
+
+*Sourced — https://www.inkandswitch.com/cambria/.*
+
+**IndexedDB transactions auto-close on an unrelated `await`, and this bites everyone who writes async
+code against it.** A transaction commits the moment control returns to the event loop with no pending
+request. Any `await` on something unrelated in the middle of a transaction silently closes it, and the
+next write throws `TransactionInactiveError`. Reported as worse in Safari and Firefox than Chrome. The
+working pattern is all reads and preparation first with no intervening awaits, then all writes in one
+uninterrupted transaction. There is also no cross-tab isolation — a concurrent write from another tab
+is not fenced off.
+
+*Sourced —
+https://www.browser-storage.com/indexeddb-architecture-advanced-patterns/indexeddb-transaction-management/.*

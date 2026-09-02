@@ -95,11 +95,17 @@ detected by a lint script like `check-docs.py` instead.
   recorded; silent contradiction is not.
 - **Figures that moved.** Any number appearing in more than one file, where the copies disagree.
   Check each against `docs/constraints.md`, which is the authority.
-- **Questions worked but left with placeholders.** A `...` means nobody has looked and is legitimate
-  in an untouched question. It is a defect in one with a substantial Findings section, or one sitting
-  in an early milestone — the question was worked and a section was skipped. Unchecked `Also update`
-  boxes in decision records are the same kind of gap and are caught by `check-docs.py`, so they do
-  not need a scan.
+- **Questions about to be decided with sections still empty.** A `...` means nobody has looked, and
+  it is legitimate almost everywhere — including in a file with a long Findings section. **Evidence
+  parked in a question nobody is working is the system behaving correctly**, not a half-finished job:
+  an agent who finds something relevant while working on something else should drop it there and move
+  on, and requiring them to fill in Options and What-would-settle-it first would mean the finding
+  goes unrecorded instead. Do not report those.
+
+  The narrow defect is a question **in the milestone currently being worked**, at the point where it
+  is about to be answered, with the sections that shape an answer still empty. That is a question
+  being decided without the thinking it asks for. Unchecked `Also update` boxes in decision records
+  are caught by `check-docs.py` and need no scan.
 - **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying _Enforced
   by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
   The frontmatter `enforced` field should agree with the prose; `rg -l 'enforced: no'

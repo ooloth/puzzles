@@ -1,4 +1,4 @@
-# ✏️ Puzzles
+# Puzzles ✏️
 
 A web app for solving grid-based logic puzzles like Sudoku, Star Battle, etc — plus a pipeline for
 generating the puzzles themselves.
@@ -8,7 +8,7 @@ while supporting uninterrupted puzzling with or without internet connectivity. P
 engaging collection of custom puzzles with accurate difficulty grading calibrated by the techniques
 required for a human to solve them without needing to guess.
 
-## 📖 Docs
+## Docs 📖
 
 While this is currently a personal project and not seeking contributions, feel free to follow along
 with this system's design and implementation choices, which are all documented:

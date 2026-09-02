@@ -45,7 +45,7 @@ this session.** A remembered summary produces a record that fits this format and
 ## One record, one decision
 
 **A record settles exactly one thing, and its title says what.** The test for whether you have two:
-*could a reasonable person have decided the headline one way and the second thing the other way?* If
+_could a reasonable person have decided the headline one way and the second thing the other way?_ If
 yes, that is a second decision and it needs its own record. If no, it follows necessarily — and it is
 still recorded, see below.
 
@@ -177,7 +177,7 @@ something runs is not a decision about what it stores. Letting the second ride a
 first is how a choice gets made without anyone noticing it was made, and without it ever being
 argued.
 
-That is about what a record *settles*, not about what it *considers*, and the two pull in opposite
+That is about what a record _settles_, not about what it _considers_, and the two pull in opposite
 directions if the difference is missed. A choice made without looking at what it forecloses
 elsewhere is narrow in the wrong way: one thing decided, several settled by consequence, none of
 them argued. Name what else the choice moves before recording it. Both halves are stated in the
@@ -235,7 +235,8 @@ date: YYYY-MM-DD
 <the condition that should trigger reconsidering this>
 
 ## Also update
-- [ ] questions/README.md — which questions this settles, rescopes, or moves to another milestone
+- [ ] questions/README.md — which questions this settles, re-scopes, or moves to another milestone
+- [ ] architecture.md — new system boundaries or relationships this decision introduces
 - [ ] constraints.md — givens this decision imports
 - [ ] guarantees/ — promises this decision commits us to
 -->

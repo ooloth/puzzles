@@ -59,9 +59,10 @@ worth protecting.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**[../guarantees/observability.md](../guarantees/observability.md) is currently a stub, and
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) leaves open whether a guest is told
-their work is only held locally.**
+**[../guarantees/observability.md](../guarantees/observability.md) is currently a stub, and whether a
+guest is told their work is only held locally is still open** — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md), where the disclosure
+question is raised and left unresolved.
 
 **Reporting to the maintainer was never in tension with this.** It is not shown to a player, so no
 promise about the player's experience reaches it. That tension is recorded in

@@ -1,14 +1,14 @@
 ---
-number: 0005
+number: 0007
 status: accepted
 date: 2026-08-31
 ---
 
-# 0005 — TypeScript across every deployable, with the rules shared as source
+# 0007 — That language is TypeScript
 
 ## Forced by
 
-**[ADR-0004](0004-one-implementation-of-the-puzzle-rules.md) requires the puzzle rules to run in a
+**[ADR-0005](0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) requires the puzzle rules to run in a
 browser and in a batch process from one source.** That is the whole of what this question inherits.
 It leaves open whether the sharing happens by source — one language everywhere — or by a compiled
 artifact with an interop boundary.
@@ -23,30 +23,18 @@ maintains this*.
 
 ## Decision
 
-TypeScript, in the client and in the generator, with the puzzle rules shared as source rather than
-as a compiled artifact.
+**The one language is TypeScript.**
 
-This binds the deployables that need the rules. A server, if
-[one exists](../questions/what-does-the-server-hold.md), inherits the same constraint only if it
-needs the rules too — which is open, and not settled here.
+[ADR-0006](0006-one-language-across-every-deployable.md) settled that there is exactly one and why;
+this settles which. So it binds the client, the generator, and the server that
+[ADR-0010](0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes — not only the
+deployables that touch the rules.
+
+The rules are therefore shared as source. That is a consequence of the two records together rather
+than a separate choice: one language everywhere, and that language directly runnable in a browser,
+leaves nothing for a compiled artifact to do.
 
 ## Rejected
-
-- **A TypeScript client with the rules compiled to WebAssembly, and a native generator.** The
-  strongest rejected option, and the one the earlier research did not confront: it is what "sharing
-  a compiled artifact" actually means, and the usual objections to WebAssembly do not touch it. The
-  rules module is pure computation and reaches neither the DOM nor storage, so the boundary problems
-  that rule out a WebAssembly *client* do not apply.
-
-  It loses on three counts. The marshalling sits on the interactive path rather than in a batch job:
-  ADR-0004 established that the client and the generator converge on the human-method engine, and
-  legality runs on every keystroke at one input every one to three seconds, so board state crosses a
-  JavaScript-to-WebAssembly boundary constantly. Exposing unmanaged WebAssembly data to
-  garbage-collected JavaScript is a documented abstraction leak whose worst property is that some
-  misuse is invisible to sanitizers, surfacing only in production — which applied to board state
-  before it is persisted is
-  [a corrupt board becoming canonical](../failure-modes/a-corrupt-board-becomes-the-canonical-one.md).
-  And the thing it buys is generator speed, which `../problem.md` has already declined to want.
 
 - **A WebAssembly client — Rust with Leptos or Dioxus, or similar.** Not rejected on performance,
   and saying so would be false: on the js-framework-benchmark both outperform React and land near

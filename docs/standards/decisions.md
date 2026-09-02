@@ -106,9 +106,7 @@ Most choices that feel urgent are reversible in an afternoon and cost nothing to
 worth stopping for are the ones that narrow everything downstream without announcing that they
 have — hosting topology that silently caps a recovery mechanism, a data shape that assumes one
 puzzle type, an absent identifier that turns a later feature into a migration. Optionality is
-preserved cheaply and early or not at all, and
-[../questions/which-doors-must-stay-open.md](../questions/which-doors-must-stay-open.md) names
-which doors are being held.
+preserved cheaply and early or not at all.
 
 ## Consider
 

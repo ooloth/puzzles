@@ -8,10 +8,10 @@ resolves_into: decision
 
 ## Why it matters
 
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) makes the client
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) makes the client
 authoritative over puzzle state, and
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) makes a server hold a durable copy of
-it. Neither says whether the server can read what it is holding.
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) makes a server
+hold a durable copy of it. Neither says whether the server can read what it is holding.
 
 The two ends are far apart. A **store** accepts whatever the client sends, keyed by player and
 puzzle, and never looks inside — it cannot tell a board from a shopping list. A **participant**
@@ -19,7 +19,7 @@ knows what a board is, checks that what arrives has the right shape and types, a
 not. Everything in between is a choice about how much of the domain lives in two places.
 
 It decides three things that are expensive to change later. Whether the puzzle rules run on the
-server, which [ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) says forces the
+server, which [ADR-0007](../decisions/0007-that-language-is-typescript.md) says forces the
 server's language only if it needs them. Whether the database has a schema describing puzzles or a
 column holding bytes. And what the client does when the server disagrees with it, which is where the
 hard part is.

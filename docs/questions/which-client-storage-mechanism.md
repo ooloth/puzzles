@@ -77,7 +77,7 @@ door that record deliberately holds open.
 It carries **SQLite as WebAssembly**, which is weight on a cold load that
 [../constraints.md](../constraints.md) already describes as several seconds of round trips before
 any bytes move.
-[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) weighed bundle size against that
+[ADR-0007](../decisions/0007-that-language-is-typescript.md) weighed bundle size against that
 when rejecting a WebAssembly client, so adding a WebAssembly database needs an argument rather than
 an exception.
 
@@ -108,3 +108,31 @@ the way this intends — but it is enough that the smaller option deserves a rea
 than an assumption.
 
 *Unverified — no source recorded.*
+
+**[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md)'s native-shell recovery path only
+stays cheap if storage has one swappable implementation.** That recovery path is a plugin swap only
+if there is one place in the codebase to make it; storage calls scattered across call sites turn the
+swap into a rewrite.
+
+**Wrapping this client in a `WKWebView` does not by itself escape the storage eviction in
+[../constraints.md](../constraints.md).** WebKit states that tracking prevention is enabled by
+default in every `WKWebView` application, and Capacitor's own documentation warns that mobile
+operating systems may still clear `localStorage`. Durability is recovered only when storage is
+routed through a native plugin instead of the webview's own store.
+
+*Sourced — WebKit and Capacitor documentation.*
+
+**The write-failure behaviour `../constraints.md` records has to be implemented once, not at every
+call site.** A write can be rejected for reasons unrelated to quota, and the error misreports the
+cause. Whichever mechanism is chosen, detecting the store's absence and never treating a rejected
+write as self-resolving are behaviours that belong behind one interface — implemented differently at
+each call site is implemented inconsistently.
+
+**A thin wrapper shaped like the underlying storage API is not a real boundary.** An interface
+shaped like IndexedDB cannot be implemented by something that is not IndexedDB, so a pass-through
+wrapper pays the cost of an interface while keeping none of the swap it exists to buy.
+
+**A storage boundary can be drawn and then leaked through.** Nothing stops a module importing the
+storage API directly once an interface exists, and nothing in this repo currently catches it. The
+enforceable form is a lint rule restricting imports of the storage API to one path, whatever that
+interface ends up looking like.

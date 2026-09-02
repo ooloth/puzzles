@@ -50,8 +50,10 @@ one is ever wanted.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**What an account is for is already established: a signed-in player's work survives on every
-device**, per [ADR-0006](../decisions/0006-what-a-players-work-survives.md).
+**What an account is for is not settled, but the leading candidate is durability: a signed-in
+player's work surviving on every device** — see
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md),
+which is still open.
 [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) asks when
 that ships, not whether accounts exist, and [is there a paid tier?](is-there-a-paid-tier.md) is a
 use an account can be put to rather than a reason to have one.
@@ -69,10 +71,11 @@ is accounts, which is the same fix that would be built anyway.
 *Reasoned — a property of client-side storage under the user's control.*
 
 That reading holds only while nothing needs to attach to a person, and two things do. A durable play
-record is one, per [ADR-0006](../decisions/0006-what-a-players-work-survives.md). A paid tier would
-be the other, so [is there a paid tier?](is-there-a-paid-tier.md) staying answered no is a condition
-of it rather than a detail: the moment something is worth gating, abuse resistance stops being free
-to defer.
+record is one — see
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md). A
+paid tier would be the other, so [is there a paid tier?](is-there-a-paid-tier.md) staying answered no
+is a condition of it rather than a detail: the moment something is worth gating, abuse resistance
+stops being free to defer.
 
 **Accounts are Layer 2 of three, and most durability arguments are about Layer 1.** An anonymous
 server copy keyed to a cookie keeps the same-device durability promise with no signup at all;
@@ -87,6 +90,15 @@ has to attach to a person, and [../problem.md](../problem.md) now states that re
 vision. Cross-device sync becomes a lookup rather than a transfer problem. And an account is where a
 payment boundary would go if [a paid tier](is-there-a-paid-tier.md) is ever wanted, which makes
 building one early an option-preserving move rather than speculative work.
+
+**A paid tier's entitlement and identity is not held open by any record.** Withholding content
+itself is [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md)'s job
+and that is settled. What is not settled is knowing who is entitled, and the threat is a paid tier
+that ends up enforceable only by a rescue operation bolted on after the fact rather than an account
+able to carry entitlement from the start. [../problem.md](../problem.md) records that the tier
+itself is uncommitted and deliberately not ruled out; [is there a paid
+tier?](is-there-a-paid-tier.md) is where that commitment gets made, and this question is what it
+would depend on.
 
 **Signing in is a cost to the player and the vision minimises it, not the reverse.**
 `../problem.md` asks that work follow the player with nothing reconciled by hand. An account that

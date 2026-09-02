@@ -1,10 +1,10 @@
 ---
-number: 0011
+number: 0013
 status: accepted
 date: 2026-09-01
 ---
 
-# 0011 — Every puzzle cell is a focusable, labelled element
+# 0013 — Every puzzle cell is a focusable, labelled element
 
 ## Forced by
 
@@ -35,7 +35,7 @@ that question satisfies this except a canvas.
 
 **What it buys now** is that keyboard operation is possible at all. A player can move focus to a
 cell, which is the precondition for doing anything there without a pointer. What a player can
-actually *do* from the keyboard is [ADR-0012](0012-all-play-is-reachable-from-the-keyboard-alone.md),
+actually *do* from the keyboard is [ADR-0014](0014-all-play-is-reachable-from-the-keyboard-alone.md),
 which is a separate decision because a grid of focusable cells can still require a mouse to enter a
 digit.
 
@@ -54,10 +54,12 @@ a rewrite.
   layout and typography, one draw call instead of eighty-one elements participating in layout and
   paint, no browser inconsistency in how cells size themselves, and a well-trodden path — several
   well-regarded puzzle apps are built this way. Keyboard is even recoverable, by putting a key
-  handler on a wrapper element. What is not recoverable is assistive technology: a canvas has
-  nothing to attach a name or a state to, so support means building a parallel DOM tree by hand and
-  keeping it in sync with the painting. That is a second implementation of the grid, maintained
-  forever, and it is a rewrite rather than an addition.
+  handler on a wrapper element. What is not recoverable is assistive technology, which
+  [../guarantees/accessibility.md](../guarantees/accessibility.md) records as expensive to retrofit
+  once an interaction model exists: a canvas has nothing to attach a name or a state to, so support
+  means building a parallel DOM tree by hand and keeping it in sync with the painting. That is a
+  second implementation of the grid, maintained forever, and it is a rewrite rather than an
+  addition.
 
 - **Divs with click handlers and no focus management.** Not so much chosen as arrived at, which is
   what makes it the likeliest outcome of not deciding. It produces a grid that looks correct and
@@ -66,7 +68,8 @@ a rewrite.
   the day it ships.
 
 - **Decide it at M9, where the question already sits.** The honest "not yet", and it is late by five
-  milestones. The renderer is chosen at M1 and the input model at M4.
+  milestones per [../questions/README.md](../questions/README.md): the renderer is chosen at M1 and
+  the input model at M4.
 
 - **Promise full screen-reader support now.** Over-decides, and would be a promise effort alone
   cannot keep. The finding in
@@ -100,7 +103,7 @@ what stops it becoming a habit.
   solving. `../constraints.md` predicts it will not, and a measurement disagreeing with it is the
   finding.
 - **A puzzle type arrives whose board is not a grid of discrete cells.** The decision is written
-  about cells because [ADR-0010](0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md) scopes the
+  about cells because [ADR-0008](0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md) scopes the
   project to cell-marking puzzles. An edge-marking puzzle would need this argued again.
 - **Assistive technology is ruled out of scope permanently**, at which point the canvas option
   returns with only the keyboard requirement against it, and that is satisfiable with a wrapper.
@@ -111,7 +114,7 @@ what stops it becoming a habit.
 - [x] Nothing in `constraints.md` — this imports no facts about the world; the WebKit grid bugs stay
       a finding in the open question until somebody establishes them here
 - [x] `guarantees/accessibility.md` — no promise is made by this record; the promise is
-      [ADR-0012](0012-all-play-is-reachable-from-the-keyboard-alone.md)'s
+      [ADR-0014](0014-all-play-is-reachable-from-the-keyboard-alone.md)'s
 
 Deliberately not decided here: what a cell announces, whether accessibility is in scope for v1, what
 renders the client, what markup or roles are used, how focus moves between cells, and what a player

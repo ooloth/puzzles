@@ -9,7 +9,7 @@ resolves_into: decision
 ## Why it matters
 
 The puzzle rules and the merge are pure modules whose correctness is the whole argument for
-[one implementation of the puzzle rules](../decisions/0004-one-implementation-of-the-puzzle-rules.md), and the portable
+[one implementation of the puzzle rules](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md), and the portable
 standards ask for branch coverage on exactly that kind of code. A runner that cannot measure it is
 the wrong instrument regardless of how fast it is.
 

@@ -1,10 +1,10 @@
 ---
-number: 0001
+number: 0002
 status: accepted
 date: 2026-08-31
 ---
 
-# 0001 — Launch with sudoku, then star battle, then expand gradually
+# 0002 — Launch with sudoku, then star battle
 
 ## Forced by
 
@@ -24,9 +24,12 @@ machinery is proven. Types beyond those two are deliberately not chosen now.
 - **Star battle first** — it is the more interesting puzzle and the one the maintainer would
   rather build, but its interaction is multi-cell marking across irregular regions. Starting
   there means taking on the hardest interaction work at the same time as the offline
-  persistence, caching and update machinery, with no way to tell which one is failing.
+  persistence, caching and update machinery, with no way to tell which one is failing —
+  against [../problem.md](../problem.md)'s ranking of the solving experience, and interface
+  work before generator work, first.
 - **Several types at launch** — adds scope before a single type has demonstrated that the
-  machinery works at all.
+  machinery works at all, against [../problem.md](../problem.md)'s "present need over
+  future-proofing".
 
 ## Risk
 

@@ -10,10 +10,11 @@ resolves_into: decision
 
 **It decides whether same-origin hosting is forced or merely preferred**, which reaches the platform
 choice at the first milestone.
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) accepts that a guest can lose
-everything when the browser clears its storage, on the grounds that a guest wanting durability should
-get an account. That reasoning has a premise: an account exists to be offered. If the first release
-ships guests only, it does not, and the only persona in the product has no recovery at all.
+The leading option for a guest's durability bound accepts that a guest can lose everything when the
+browser clears its storage, on the grounds that a guest wanting durability should get an account —
+see [how long does a guest's work last?](how-long-does-a-guests-work-last.md), still open. That
+reasoning has a premise: an account exists to be offered. If the first release ships guests only, it
+does not, and the only persona in the product has no recovery at all.
 
 There is exactly one mechanism that restores a lapsed guest's work without asking them for anything,
 and whether it works is decided by where the client and the API are deployed relative to each other —
@@ -41,14 +42,14 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised 2026-09-01. ADR-0006 rejected an anonymous server copy for guests, giving three reasons. One
+Raised 2026-09-01. the durability record demoted on 2026-09-01 rejected an anonymous server copy for guests, giving three reasons. One
 of them — that the mechanism silently degrades to seven days when the API is not judged first-party —
 is a consequence of a hosting topology nobody has chosen yet, which means an option was rejected
 partly on grounds a later decision could remove.
 
 ## Options
 
-*Do not build it.* A guest's work lives and dies in the browser that made it, which is what ADR-0006
+*Do not build it.* A guest's work lives and dies in the browser that made it, which is what the durability record
 records today. Nothing to operate, nothing stored about anyone, no endpoint to abuse. The cost falls
 entirely on returning lapsed players.
 
@@ -58,8 +59,7 @@ cookie survives, the server hands the state back, and the player is never told a
 
 *Do not build it, but hold the constraint anyway.* Same-origin costs nothing when a server exists, so
 the door can be held open for a milestone or two while the product question above is answered. The
-risk is that a door held open indefinitely is a tax paid for nothing — see
-[which doors must stay open?](which-doors-must-stay-open.md).
+risk is that a door held open indefinitely is a tax paid for nothing.
 
 *Offer accounts early instead.* Skip the anonymous tier and make the first durable thing a sign-in.
 Honest and expensive: it introduces identity to an audience [../problem.md](../problem.md) describes
@@ -80,15 +80,18 @@ state, and there are three candidates for what holds it:
 | Something the player holds — an email address, a passkey, a code | Yes | Yes, and that is an account |
 
 The list is exhaustive, which is what makes the middle row load-bearing: it is the only mechanism
-that protects a lapsed guest for free, and it is the one ADR-0006 rejected.
+that protects a lapsed guest for free, and it is the one the durability record rejected.
 
 *Sourced — the wipe covers non-cookie website data only, and server-set cookies follow their declared
 lifetime to a 400-day ceiling, per [../constraints.md](../constraints.md).*
 
-**One of ADR-0006's three rejection reasons is contingent on a decision not yet made.** It listed
-orphan rows, undeletable data about unidentifiable people, and silent degradation to seven days when
-the API is not judged first-party. The third is a property of hosting topology, and choosing
-same-origin removes it. The other two stand.
+**None of the durability record's three rejection reasons stands unconditionally.** It listed orphan rows,
+undeletable data about unidentifiable people, and silent degradation to seven days when the API is
+not judged first-party. The seven-day degradation is contingent on
+[where does this run?](where-does-this-run.md) — same-origin removes it, and nobody has chosen a
+hosting topology yet. The undeletable-data problem is contingent on
+[do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. The
+orphan-rows cost is overstated: a TTL or a cleanup job on unclaimed rows handles it.
 
 **Home-screen install is the only confirmed mitigation and it is not a substitute.** An installed web
 app is exempt from the clearing mechanism entirely. Three things stop it being an answer: install
@@ -111,3 +114,13 @@ it is not a weaker form of cross-device sync; it covers a case sync does not, an
 does not.
 
 *Sourced — a consequence of the cookie lifetime ceiling in [../constraints.md](../constraints.md).*
+
+**Signing in does not have to depend on a locally-minted identifier surviving the wipe.** A
+locally-minted identifier is script-writable, so the browser's eviction takes it along with
+everything else — and takes it from exactly the lapsed players who would need it. The leading option
+in
+[is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
+closes that gap a different way: the guest record and the account record are one shape, so signing in
+promotes what is already there instead of needing an identifier to have carried over. That is
+separate from the middle row of the table above: the cookie recovers the same browser after a wipe,
+and an account promotes the same record from any browser at all.

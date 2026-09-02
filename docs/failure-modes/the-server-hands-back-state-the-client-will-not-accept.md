@@ -34,12 +34,15 @@ existing rows do not satisfy.
 
 ## Why here specifically
 
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) makes the client
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) makes the client
 authoritative, so there is nothing to appeal to. The server cannot re-derive a correct board,
 because it may not know what one is — see
 [does the server understand puzzle content?](../questions/does-the-server-understand-puzzle-content.md).
-And [ADR-0006](../decisions/0006-what-a-players-work-survives.md) makes this a *signed-in* player's
-problem specifically, which is the persona who took an action to protect their work.
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes that
+the server holds a durable per-player record, which makes this at minimum a *signed-in* player's
+problem — the persona who took an action to protect their work. Whether it also reaches a guest's
+depends on [is guest recovery worth building?](../questions/is-guest-recovery-worth-building.md),
+which is still open.
 
 The version case is guaranteed to occur rather than merely possible. A web client updates whenever
 the player loads it, and [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) plus the

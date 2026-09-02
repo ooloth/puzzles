@@ -1,10 +1,10 @@
 ---
-number: 0007
+number: 0001
 status: accepted
 date: 2026-09-01
 ---
 
-# 0007 — Decisions live in docs, work lives in issues
+# 0001 — Decisions live in docs and work lives in issues
 
 ## Forced by
 
@@ -47,11 +47,12 @@ links to them rather than restating them.
 
 - **Docs for everything, including work.** Also one place, and it is what has happened so far
   because everything so far has been documentation. Rejected because it has no notion of assignment,
-  state or done, and because a task with no reasoning attached is pure overhead in a format built to
-  carry reasoning.
+  state or done, and because a task with no reasoning attached is pure overhead in a format
+  [../standards/decisions.md](../standards/decisions.md) says exists to carry a chain of reasoning.
 
 - **Not yet — keep using documents until it hurts.** The genuine "not yet", and it is correct right
-  up to the point where the first implementation work exists. This record exists so that the
+  up to the point where the first implementation work exists — the deferral test in
+  [../standards/decisions.md](../standards/decisions.md). This record exists so that the
   transition is a decision rather than a drift, since the natural failure is opening issues that
   duplicate questions because the boundary was never stated.
 

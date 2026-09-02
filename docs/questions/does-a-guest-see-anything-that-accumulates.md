@@ -19,9 +19,9 @@ That makes this the input to
 visibly, recovery has almost nothing to recover and the case for building it is weak. If a streak is
 on screen, the case is strong and the mechanism has to exist before the streak does.
 
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) names this in its Risk section and
-leaves it open: guest stats are the strongest conversion lever and the largest silent-loss risk at
-once. Its second revisit trigger is this question being answered yes.
+Guest stats double as the strongest conversion lever and the largest silent-loss risk at once — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md), where this question's
+answer is one of the things that would tip the guest durability bound.
 
 ## What would settle it
 
@@ -40,7 +40,7 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-01, while working
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). ADR-0006
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). the durability record demoted on 2026-09-01
 rejected guest recovery on the grounds that the answer for a guest wanting durability is an account.
 That reasoning does not hold if the first release ships guests only, and tracing why led here: the
 size of the problem is set by what a guest is shown, and nobody had asked.
@@ -56,11 +56,11 @@ a signed-in player, or for a guest if guest recovery is built. The rule is that 
 visible when a mechanism can carry it, not before. Keeps the lever without creating the loss.
 
 *Everything is shown to everyone, and the loss is accepted.* Simplest to build and the most generous
-to a guest who never lapses. It is also the shape that produces the failure ADR-0006 describes,
+to a guest who never lapses. It is also the shape that produces the failure the durability record describes,
 silently, to exactly the players least likely to report it.
 
 *Everything is shown to everyone, and the limit is disclosed.* The same, with the guest told what
-will not be kept. ADR-0006 deliberately left the disclosure question open, and it is a real tradeoff:
+will not be kept. the durability record deliberately left the disclosure question open, and it is a real tradeoff:
 saying nothing makes the loss silent, and saying it on the first visit is a warning before there is
 anything to lose.
 

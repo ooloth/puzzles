@@ -34,7 +34,7 @@ Ported from the legacy documentation review, 2026-08-30.
 
 **Hints require a solver that can explain its steps, not merely decide the puzzle has one
 solution.** Also the bundle cost accepted in
-[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md): until hints ship, the
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md): until hints ship, the
 client carries solving code it does not run.
 
 **The maintainer intends to ship hints, after the core solving interface is solid.** This is a
@@ -72,7 +72,7 @@ deciding which techniques it requires. Hinting means telling a player which tech
 Both rest on the same two things: detecting applicable techniques, and ordering them by difficulty.
 Two implementations of that ordering would let a puzzle graded as needing only simple techniques
 offer a hint the grade said would never be needed, with nothing surfacing the contradiction — the
-silent-disagreement failure [ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md)
+silent-disagreement failure [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
 exists to prevent.
 
 > So a technique difficulty ordering is needed for hints whether or not a grade is ever shown to a

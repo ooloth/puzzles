@@ -1,11 +1,11 @@
 ---
-number: 0002
+number: 0004
 status: accepted
 date: 2026-08-31
 amended: 2026-09-01
 ---
 
-# 0002 — The client holds and mutates puzzle state
+# 0004 — The client holds and mutates puzzle state
 
 ## Forced by
 
@@ -29,12 +29,14 @@ without waiting on anything remote. The rules needed to validate a move run on t
 
 ## Rejected
 
-- **The server holds state and the client renders it.** Fails both promises by construction. Every
-  state change needs a round trip, so there is no version of this that works in a tunnel. This is
-  true of the whole category of server-owned-state approaches, not of any particular one, so it
-  cannot be rescued by choosing a better framework.
+- **The server holds state and the client renders it.** Fails both promises —
+  [offline.md](../guarantees/offline.md) and [latency.md](../guarantees/latency.md) — by
+  construction. Every state change needs a round trip, so there is no version of this that works in
+  a tunnel. This is true of the whole category of server-owned-state approaches, not of any
+  particular one, so it cannot be rescued by choosing a better framework.
 - **The client caches but defers mutation to the server.** Reads work offline, writes do not, which
-  fails the first promise for exactly the case it exists to cover: a player mid-puzzle underground.
+  fails [offline.md](../guarantees/offline.md)'s promise for exactly the case it exists to cover: a
+  player mid-puzzle underground.
 
 One argument for server-owned state deserves an answer, because it is true. A hypermedia
 framework's local signals can handle transient interaction — a drag in progress, a hover, a

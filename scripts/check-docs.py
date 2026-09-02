@@ -170,12 +170,98 @@ def check_findings_note():
             )
 
 
+def decision_files():
+    for f in sorted(os.listdir('docs/decisions')):
+        if f.endswith('.md') and f != 'README.md':
+            yield os.path.join('docs/decisions', f)
+
+
+# The template's headings, in order. Two decisions hid for a month inside a
+# section a record invented for itself, outside Decision, Rejected and Risk —
+# so an unexpected heading is where a buried decision goes to live.
+TEMPLATE_HEADINGS = [
+    '## Forced by',
+    '## Decision',
+    '## Rejected',
+    '## Risk',
+    '## Revisit when',
+    '## Also update',
+]
+
+
+def check_decision_headings():
+    for path in decision_files():
+        found = [l.rstrip() for l in open(path) if l.startswith('## ')]
+        if found != TEMPLATE_HEADINGS:
+            extra = [h for h in found if h not in TEMPLATE_HEADINGS]
+            missing = [h for h in TEMPLATE_HEADINGS if h not in found]
+            detail = []
+            if extra:
+                detail.append('unexpected ' + ', '.join(f'"{h}"' for h in extra))
+            if missing:
+                detail.append('missing ' + ', '.join(f'"{h}"' for h in missing))
+            if not detail:
+                detail.append('out of order')
+            problems.append(f'HEADINGS     {path} — {"; ".join(detail)}')
+
+
+def check_rejected_citations():
+    """A rejection is held to the same evidence bar as Forced by.
+
+    Every weak reason found in an audit of this folder argued for the option
+    that lost, never for the one that won. A rejection is also never revisited,
+    because reality tests the option you took and never the one you did not.
+    So each rejected option cites something: a fact, a promise, a problem
+    statement, or another record.
+    """
+    for path in decision_files():
+        text = open(path).read()
+        if '## Rejected' not in text:
+            continue
+        section = text.split('## Rejected', 1)[1].split('\n## ', 1)[0]
+        # Bullets start at column 0 with "- "; continuation lines are indented.
+        bullets, current = [], None
+        for line in section.split('\n'):
+            if line.startswith('- '):
+                if current is not None:
+                    bullets.append(current)
+                current = line
+            elif current is not None:
+                current += '\n' + line
+        if current is not None:
+            bullets.append(current)
+        for b in bullets:
+            if b.strip().upper().startswith('- N/A'):
+                continue
+            if not cites_something(b):
+                head = b.strip().split('\n')[0][:70]
+                problems.append(
+                    f'UNSOURCED    {path} — rejected option cites nothing: {head}'
+                )
+
+
+# A citation in any of the three forms this repo actually uses. Deliberately
+# generous: this is a floor, not a judgement about whether each factual claim
+# inside a bullet has provenance. That needs a reader, and
+# prep-for-codebase-handoff scans for it.
+def cites_something(text):
+    if re.search(r'\]\((?!http|mailto|data:)[^)#][^)]*\)', text):
+        return True
+    if re.search(r'`[^`]*\.md`', text):
+        return True
+    if re.search(r'\bADR-\d{4}\b', text):
+        return True
+    return False
+
+
 check_links()
 check_indexes()
 check_decision_checkboxes()
 check_top_level_index()
 check_question_sequencing()
 check_findings_note()
+check_decision_headings()
+check_rejected_citations()
 
 for p in problems:
     print(p)

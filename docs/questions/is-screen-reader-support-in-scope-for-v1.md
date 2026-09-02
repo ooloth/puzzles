@@ -12,10 +12,10 @@ Grid puzzles have real keyboard navigation and screen-reader design questions, a
 them is expensive. Silence is not a decision.
 
 **Two things have been taken out of this question, and what is left is the harder half.**
-[ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) settles that
+[ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) settles that
 every cell is an element that can carry a name, a role and a state, which removes the structural
 blocker without promising anything.
-[ADR-0012](../decisions/0012-all-play-is-reachable-from-the-keyboard-alone.md) promises keyboard
+[ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) promises keyboard
 operation, on the grounds that [../problem.md](../problem.md) makes the desktop half keyboard-driven
 — a product requirement that happens to help here rather than an accessibility decision.
 

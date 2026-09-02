@@ -1,10 +1,10 @@
 ---
-number: 0004
+number: 0005
 status: accepted
 date: 2026-08-31
 ---
 
-# 0004 — One implementation of the puzzle rules
+# 0005 — The puzzle rules are defined once and shared, not reimplemented
 
 ## Forced by
 
@@ -19,7 +19,7 @@ at an unsound one. Both are behaving correctly by their own lights, and neither 
 notice the other. A promise that can be broken with nothing raised anywhere is not one this project
 keeps by intending to.
 
-**[ADR-0002](0002-the-client-holds-and-mutates-puzzle-state.md) put puzzle state on the client, and
+**[ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md) put puzzle state on the client, and
 [../guarantees/offline.md](../guarantees/offline.md) promises play continues with no connection.**
 So the client cannot delegate these judgements. It holds them locally or it cannot tell a player
 their board is finished.
@@ -52,7 +52,7 @@ the grade said would never be needed, with nothing raised anywhere.
 
 This does not decide *how* the sharing happens. Sharing by source means one language everywhere;
 sharing a compiled artifact means an interop boundary and, in a browser, a WebAssembly bundle on
-first load. That is [0005](0005-typescript-across-every-deployable-rules-shared-as-source.md), and this record
+first load. That is [0005](0007-that-language-is-typescript.md), and this record
 is the constraint it inherits: the rules must run in a browser and in a batch process, from one
 source.
 
@@ -62,8 +62,9 @@ source.
   and not a straw one — property-based differential testing is a real mitigation rather than a
   hopeful one, and it frees each deployable to use whatever suits it. Rejected because the cost is
   an obligation with no end date, because it only protects the cases someone thought to generate,
-  and because it protects nothing until it is built. The freedom it buys has no use here: there is
-  one maintainer and no second team wanting a different language.
+  and because it protects nothing until it is built. The freedom it buys has no use here:
+  [../problem.md](../problem.md) ranks clarity over cleverness because one person maintains this,
+  and there is one maintainer and no second team wanting a different language.
 
 - **No rules on the client at all.** The client renders a board and reports moves; everything is
   judged elsewhere. Rejected because recognising a completed board means checking that it is full
@@ -73,7 +74,7 @@ source.
 
 - **Decide when the generator is built.** Deferring costs nothing today, since nothing is
   implemented and a single client implementation is trivially the only one. Rejected because
-  [0005](0005-typescript-across-every-deployable-rules-shared-as-source.md) has no input without it — the
+  [0005](0007-that-language-is-typescript.md) has no input without it — the
   question of which language the deployables share only exists if something is shared — and 0005
   gates every remaining client decision. Deferring this defers the stack.
 
@@ -98,10 +99,10 @@ process from one source, or produce an artifact portable to both. That rules out
 for the generator on the generator's merits alone.
 
 **It creates a shape that must stay general.**
-[ADR-0001](0001-launch-with-sudoku-then-star-battle.md) sequences star battle after sudoku, and
-[which doors must stay open?](../questions/which-doors-must-stay-open.md) names a data model that
-hard-codes a nine-by-nine grid of digits as the threat. A shared rules module is exactly where that
-mistake would be made once and inherited everywhere.
+[ADR-0002](0002-launch-with-sudoku-then-star-battle.md) sequences star battle after sudoku, and
+[ADR-0008](0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md) rules out a data model
+that hard-codes a nine-by-nine grid of digits. A shared rules module is exactly where that mistake
+would be made once and inherited everywhere.
 
 ## Revisit when
 

@@ -15,7 +15,7 @@ session is interrupted.
 ## How it happens
 
 Progress lives in the browser, because
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) put it there. Safari
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) put it there. Safari
 deletes all script-writable storage after thirty days without interaction with the site. A player
 starts a puzzle, life intervenes, and five weeks later they open the app to an empty board and no
 explanation. Nothing failed. Every component behaved exactly as designed.

@@ -81,9 +81,10 @@ the storage layer are specific to the platform.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **What makes this answerable now.**
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that a server exists and
-holds a durable per-player record, so there is server-side state whatever else is true.
-[ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md) establishes that the store
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes that
+a server exists and holds a durable per-player record, so there is server-side state whatever else
+is true.
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) establishes that the store
 has to be queryable rather than opaque. Together those are enough: the remaining candidates in
 [what does the server hold?](what-does-the-server-hold.md) — entitlement, the catalogue, push,
 observability — are each satisfied by any shape below and so do not discriminate.

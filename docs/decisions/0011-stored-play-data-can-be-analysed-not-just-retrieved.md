@@ -1,10 +1,10 @@
 ---
-number: 0008
+number: 0011
 status: accepted
 date: 2026-09-01
 ---
 
-# 0008 — Anything the server stores is queryable
+# 0011 — Stored play data can be analysed, not just retrieved
 
 ## Forced by
 
@@ -46,9 +46,9 @@ will not be the reason they cannot be answered.
 ## Rejected
 
 - **Deciding it when the analysis is wanted.** The honest "not yet", and it fails on the one thing
-  that matters: by then there is player data in whatever shape was chosen, and changing it is a
-  migration rather than a decision. The option costs almost nothing now precisely because there is
-  nothing stored yet.
+  that matters under [../standards/decisions.md](../standards/decisions.md)'s deferral test: by then
+  there is player data in whatever shape was chosen, and changing it is a migration rather than a
+  decision. The option costs almost nothing now precisely because there is nothing stored yet.
 
 - **An opaque blob store, queried never.** Genuinely simpler, and it was the live possibility that
   made [which database, if any?](../questions/which-database-if-any.md) describable as a

@@ -19,6 +19,27 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
+### ADR-0003 disqualifies its strongest rejected option on claims nobody checked
+
+**You'll see** [ADR-0003](decisions/0003-this-is-delivered-over-the-web.md), the record that chose
+web delivery, rejecting one native codebase across iOS and Android on five specific, checkable
+claims: that `react-native-macos` trails core by roughly six minor versions, that Expo has no desktop
+support, that Apple Developer Program enrolment has documented multi-week silences, that Google Play
+requires a twelve-tester fourteen-day closed test for personal accounts created after November 2023,
+and that App Store guideline 4.3(b) has been used to reject original puzzle games as
+saturated-category spam. It reads as researched.
+
+**Actually** none of the five is in [constraints.md](constraints.md) and none carries a source. An
+audit on 2026-09-01 found them, and `decisions/README.md` is explicit that a rejection is held to the
+same evidence bar as **Forced by**. The record calls this "the strongest rejected option, and it
+deserves the space" — and then disqualifies it on assertions.
+
+**So** do not cite any of those five figures for anything. The conclusion may well be right: the
+first Forced-by input — one codebase serving phone and desktop — decides it without them, and that
+one is sourced to [problem.md](problem.md). What is unverified is the margin, not the direction.
+Verifying them into `constraints.md`, or softening the rejection to what can be shown, is
+outstanding work.
+
 ### The stack is mid-decision, and looks more settled than it is
 
 **You'll see** a repository with no code in it, a `constraints.md` full of browser specifics, and
@@ -30,9 +51,10 @@ confuse because they sit in one folder.
 [ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settles that this is delivered over the
 web, which is why the browser specifics in `constraints.md` are in scope — they are the price of that
 one decision and are labelled as such.
-[ADR-0005](decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) settles the language.
-[ADR-0006](decisions/0006-what-a-players-work-survives.md) establishes that a server exists and holds
-a durable per-player record.
+[ADR-0007](decisions/0007-that-language-is-typescript.md) settles the language.
+[ADR-0010](decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes that a
+server exists. What it holds for a signed-in player, and for how long, is still open — see
+[how long does a signed-in player's work last?](questions/how-long-does-a-signed-in-players-work-last.md).
 
 **Every tool is still open**: what renders the client, what runs TypeScript outside the browser,
 which database, what holds a player's work in the browser, and where any of it deploys. The research

@@ -18,7 +18,7 @@ CPU-heavy generation might rule out a language that also runs in a browser.
 [../problem.md](../problem.md) already settles it: the interactive path outranks batch throughput,
 generation is separable and can be slow, and it never competes with a player mid-puzzle. A slow
 generator is an accepted cost rather than a reason to add a second language, so
-[which language the deployables share](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) can be decided
+[which language the deployables share](../decisions/0007-that-language-is-typescript.md) can be decided
 without this. What it does gate is whether puzzles are produced on demand or ahead of time, and the
 shape of the content pipeline.
 

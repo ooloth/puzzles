@@ -15,10 +15,9 @@ with the thinking process underlying this system's design and implementation cho
 documented:
 
 - **`docs/problem.md`** — who this is for, and what would count as success.
-- `docs/decisions/README.md` — how choices get made and recorded
-- **`docs/decisions/`** — the choices already made, each with what forced it, what was rejected, and
-  the risk being accepted
-- **`docs/questions/README.md`** — every decision still to be made, grouped by the milestone it
+- **`docs/questions/README.md`** — decisions that need to be made, grouped by the milestone each
   blocks (start here if you want to know what's coming next)
+- **`docs/decisions/`** — choices already made with their rationale, including why each needed to
+  be made, what alternatves were rejected, and what trade-offs were accepted
 - **`docs/README.md`** — everything else: the promises made to players, the constraints the platform
-  imposes, the standards the project aims to uphold, and the ways this system can fail
+  imposes, the standards the project aims to uphold, and the known ways the system can fail

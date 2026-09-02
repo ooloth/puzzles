@@ -52,9 +52,9 @@ considerable overhead if it does not.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **Two inputs that once left this open are now settled.**
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that the server holds a
-durable per-player record, so the answer is not "nothing".
-[ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md) establishes that it has to
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes that
+the server holds a durable per-player record, so the answer is not "nothing".
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) establishes that it has to
 be queryable, which is what made this a real decision rather than a possible non-decision.
 
 **Where the data physically sits is [where does this run?](where-does-this-run.md)**, not here. The

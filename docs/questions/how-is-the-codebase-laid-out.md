@@ -13,8 +13,8 @@ of it: how many packages there are and where the shared rules module sits are ne
 first file down, while what a directory is named for and how deep the tree goes can settle once
 there are modules to organise.
 
-[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) and
-[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) together set the one hard
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) and
+[ADR-0007](../decisions/0007-that-language-is-typescript.md) together set the one hard
 constraint: the puzzle rules are one implementation, shared as source, reachable by both a browser
 and a batch process without a publish step between them. Whatever shape is chosen has to allow that.
 
@@ -94,7 +94,7 @@ the same home.
 having.** A server-rendered design had two, a web binary and a generator, which was too few. A
 local-first design has three — generator, client, and possibly a server — across two runtimes. Three
 consumers across a runtime boundary is the pressure that produces a shared interface, so this
-follows from [ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) and the
+follows from [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) and the
 runtimes it implies rather than from taste.
 
 **The structural criteria hold whichever option wins**, so they are not inputs to the choice: where

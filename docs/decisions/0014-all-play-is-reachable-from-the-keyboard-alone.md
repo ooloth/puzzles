@@ -1,10 +1,10 @@
 ---
-number: 0012
+number: 0014
 status: accepted
 date: 2026-09-01
 ---
 
-# 0012 — All play is reachable from the keyboard alone
+# 0014 — All play is reachable from the keyboard alone
 
 ## Forced by
 
@@ -12,7 +12,7 @@ date: 2026-09-01
 that filling a grid by pointing at each cell is slower than typing. That makes this a requirement of
 the product rather than an accommodation, and it is why this record exists now rather than at M9.
 
-**[ADR-0011](0011-every-puzzle-cell-is-a-focusable-labelled-element.md) makes it possible and does
+**[ADR-0013](0013-every-puzzle-cell-is-a-focusable-labelled-element.md) makes it possible and does
 not make it true.** A grid of focusable cells can still require a pointer to enter a digit, toggle a
 note, or undo. Focus is the precondition; this is the promise.
 
@@ -52,8 +52,9 @@ that this record is about play and does not pretend to more reach than it argued
 - **Keyboard support for the common actions, pointer for the rest.** The pragmatic version, and the
   one almost every implementation ends up at. It is cheaper at every step and it fails by accretion
   rather than by decision: each individual action that ships pointer-only is defensible, and the
-  set is not. Rejected because the cost of the rule is nearly zero at design time and the cost of
-  the exception is discovered by a player who cannot finish a puzzle.
+  set is not. Rejected because [../problem.md](../problem.md) makes keyboard-driven desktop play the
+  default rather than a fallback, so the cost of the rule is nearly zero at design time and the cost
+  of the exception is discovered by a player who cannot finish a puzzle.
 
 - **Decide it at M9, with the rest of the interaction set.** The honest "not yet", and the input
   model is chosen at M4. An interaction designed for touch and extended afterwards is exactly the
@@ -106,7 +107,7 @@ cited as having answered it.
       unenforced, and the scope limited to solving
 - [x] Nothing in `constraints.md` — this imports no facts about the world
 - [x] Nothing in `problem.md` — the input fact it rests on was added by
-      [ADR-0011](0011-every-puzzle-cell-is-a-focusable-labelled-element.md)
+      [ADR-0013](0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
 
 Deliberately not decided here: which keys do what, how notes are entered, whether drag-select ships
 in some form, whether accessibility is in scope for v1, what a screen reader announces, and whether

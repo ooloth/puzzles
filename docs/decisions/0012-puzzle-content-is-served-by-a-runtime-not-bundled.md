@@ -1,10 +1,10 @@
 ---
-number: 0009
+number: 0012
 status: accepted
 date: 2026-09-01
 ---
 
-# 0009 — Puzzle content is served by a runtime, not shipped with the app
+# 0012 — Puzzle content is served by a runtime, not bundled
 
 ## Forced by
 
@@ -72,18 +72,17 @@ deciding one decides the other.
   them below the solving experience and below play continuing.
 
 - **Gate at the CDN with signed or expiring URLs, and keep the files static.** A real middle path
-  that keeps most of the static option's advantages. Rejected because it fails against the offline
-  promise rather than against the gating one: content precached for offline play is on the device
-  and no URL scheme reaches it, so the mechanism protects exactly the content that is not the
-  problem.
+  that keeps most of the static option's advantages. Rejected because it fails against
+  [offline.md](../guarantees/offline.md)'s promise rather than against the gating one: content
+  precached for offline play is on the device and no URL scheme reaches it, so the mechanism
+  protects exactly the content that is not the problem.
 
 ## Risk
 
 **A runtime is now on the path to content, and it needs a caching story the static option got
 free.** That is real ongoing work — cache headers, content hashing, an invalidation story — bought
 against an option nobody has exercised. If the paid tier never happens, it will have been paid for
-nothing. [Which doors must stay open?](../questions/which-doors-must-stay-open.md) records that
-optionality has a cost and is not zero, and this is an instance of it.
+nothing.
 
 **It settles part of a question still open.** [What does the server
 hold?](../questions/what-does-the-server-hold.md) is meant to be worked once, whole, with every

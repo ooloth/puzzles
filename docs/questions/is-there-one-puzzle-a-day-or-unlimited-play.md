@@ -29,4 +29,10 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-...
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**If "today" is a server date with no player timezone, adding per-player local days later means
+recomputing every stored streak.** [Can more than one puzzle be published per
+day?](can-more-than-one-puzzle-be-published-per-day.md) is the catalogue-shape half of the same
+problem: what "today" means for looking a puzzle up and what it means for a streak are two
+different timezone questions, not one.

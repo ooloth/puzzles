@@ -9,7 +9,14 @@ decays: never
 A record of the reasoning behind choices that took some thought, or could reasonably
 have gone a different way.
 
-One file per decision: `NNNN-kebab-title.md`, numbered in the order made.
+One file per decision: `NNNN-kebab-title.md`.
+
+**Numbers follow the order decisions derive from each other, not the order they were written.** A
+record inserted into the middle of the chain renumbers everything after it, and every link with it.
+That churn is a one-time cost each time and it buys something permanent: reading the listing top to
+bottom is reading the argument being built, from the product statement forward. Chronology helps
+nobody — what a reader needs is which decisions a decision rests on, and the numbers carry that for
+free. `scripts/check-docs.py` catches every link a renumber breaks, so the operation is mechanical.
 
 **A decision that changes is superseded by a new record, not edited into a different one.** The
 point is that what we believed at the time survives, so a record is never quietly rewritten to look
@@ -48,16 +55,17 @@ Two failures this prevents, both of which have happened here:
   and a JSON server contract in a section outside its own Decision heading, under a title announcing
   it decided the delivery platform and nothing else. Nobody scanning this folder would have found
   either.
-- **A record contradicting itself about what it settled.** ADR-0006's Risk section said it forced a
-  server; its footer said whether a server exists was undecided. A reader checking the footer to see
-  what was open got the wrong answer from the same file.
+- **A record contradicting itself about what it settled.** The durability record demoted on
+  2026-09-01 had a Risk section saying it forced a server and a footer saying whether a server exists
+  was undecided. A reader checking the footer to see what was open got the wrong answer from the same
+  file.
 
 **A consequence is recorded as a decision, not left implicit.** Something that follows necessarily
 from an earlier record is still a constraint on implementation, and one that lives only inside
 another record's reasoning is invisible to anyone reading the listing. It uses the same template as
 everything else. Where it has no genuine alternative, **Rejected** says so and names what rejecting
 it would actually mean — usually reversing the parent — rather than inventing an option to fill the
-section. [ADR-0015](0015-a-server-exists.md) is the worked example.
+section. [ADR-0010](0010-the-store-needs-a-host-so-this-system-has-a-server.md) is the worked example.
 
 **Do not fear a long listing.** Atomic records multiply, and that is the cost being paid for a folder
 whose filenames are load-bearing. A hundred short titles you can scan beats twelve long records you
@@ -77,6 +85,37 @@ the option feels like the point. It is the reason; the constraint is the point.
 
 **A record that preserves an option says so in its Decision section**, so the reason is one line
 inside the file rather than a category in the filename.
+
+**Name the record for what a future agent must now abide by.** A title is a claim about the system
+that is true after this record and was not before — an invariant facing the architecture, the way
+[../guarantees/](../guarantees/) holds the ones facing the player. Not the topic, not the motive, not
+the option preserved. If someone scanning `ls docs/decisions/` cannot tell whether this record
+constrains their work, rename it.
+
+## Write the Rejected section first
+
+**Before the Decision section, and before you have chosen.** An option you can only argue against
+after picking a winner was never evaluated — it was justified against. This is the single change most
+likely to improve a record here, because an audit on 2026-09-01 found that every weak reason in this
+folder argued for the option that lost, and not one argued for the option that won. Reasoning that is
+sloppy in only one direction is not sloppy.
+
+**Each option is evaluated from first principles, without bias.** No claim carried over from an
+earlier document without re-establishing it. No assumption stated as a fact. No number without its
+source. A rejection is held to the same evidence bar as **Forced by**: it cites
+[../constraints.md](../constraints.md), [../guarantees/](../guarantees/),
+[../problem.md](../problem.md), or another record. `scripts/check-docs.py` enforces that.
+
+**One disqualifying reason, named.** Not a stack. If three are listed, say which one would disqualify
+the option on its own — and if none would, the option is not disqualified and you have more work to
+do. Three individually weak reasons read as one strong case, and nobody asks which is load-bearing.
+That is exactly how the durability record demoted on 2026-09-01 foreclosed the only free recovery
+mechanism available: two of its three reasons turned on questions that were still open, and the third
+was a routine cleanup job described as though it were structural.
+
+**Every rejection says what would have to change for it to reverse.** A rejection with no reversal
+condition cannot be checked, and it is permanent by default — a chosen option gets tested by reality,
+and a rejected one never does.
 
 **Find this decision in [../questions/README.md](../questions/README.md) and check the milestone it
 sits in.** That file is this one's sibling: the same decisions, before they are made, grouped by

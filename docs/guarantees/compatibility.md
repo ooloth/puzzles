@@ -15,8 +15,9 @@ _No promises yet._
 
 This matters sooner than it looks. The storage behaviour that shapes
 [durability.md](durability.md) differs by browser and by version, and only Safari's is written
-down. [../constraints.md](../constraints.md) states its eviction window and
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) bounds the durability promise against
-it, so the promises there hold on a platform nobody has named.
+down. [../constraints.md](../constraints.md) states its eviction window, and how long a guest's work
+is expected to last against it is still open — see
+[how long does a guest's work last?](../questions/how-long-does-a-guests-work-last.md) — so the
+promises there hold on a platform nobody has named.
 [How does Android evict stored data?](../questions/how-does-android-evict-stored-data.md) is
 unresearched, which is half the market with no stated position at all.

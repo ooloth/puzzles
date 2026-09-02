@@ -17,9 +17,10 @@ all.
 There is a second reader here besides the running system: the maintainer. Wanting to look at
 historical play — which puzzles people finish, where they stall, whether a difficulty grade
 predicts anything — is a reason for both a server and a queryable store that has nothing to do
-with durability, and it survives
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) having settled how long a player's
-work lasts. It is the one input that can make
+with durability, and it holds regardless of how
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) are
+eventually answered. It is the one input that can make
 [which database, if any?](which-database-if-any.md) a real decision rather than a formality.
 
 It also decides whether several promises are checkable.

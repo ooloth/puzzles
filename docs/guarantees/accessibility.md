@@ -14,7 +14,7 @@ violations — and these are expensive to retrofit once an interaction model exi
 ## Every action a player takes while solving is reachable from the keyboard alone
 
 Selecting a cell, entering a value, clearing it, toggling a note, undoing — all of it, with no
-pointer. Set by [ADR-0012](../decisions/0012-all-play-is-reachable-from-the-keyboard-alone.md).
+pointer. Set by [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md).
 
 The scope is the board. Surfaces outside play — settings, an archive listing — are not covered by
 this promise, and that is an absence of argument rather than a decision that they may be
@@ -30,13 +30,13 @@ case.
 **Bearing on this** [How does a player enter a digit?](../questions/how-does-a-player-enter-a-digit.md)
 and [what interactions must the grid support?](../questions/what-interactions-must-the-grid-support.md)
 decide what the set of actions is, and this promise covers whatever they produce.
-[ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) is what makes it
+[ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) is what makes it
 possible: a painted grid has nothing to move focus to.
 
 ---
 
 **No promise is made about assistive technology**, and that is not silence.
-[ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) keeps it
+[ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) keeps it
 structurally reachable — every cell is an element that can carry a name, a role and a state — without
 committing to it. [Is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
 is where that is decided, and it records open WebKit bugs covering exactly the grid mechanics a

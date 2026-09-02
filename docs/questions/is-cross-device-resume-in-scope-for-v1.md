@@ -112,9 +112,11 @@ The thirty-day figure weakens this argument without removing it. The promise is 
 broken by a lapse of any length, and a month is well within what "life intervened" covers. What
 changes is the size of the affected group: a month of absence is far rarer than a week, so the
 question becomes whether the promise should be bounded rather than whether it can be kept.
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md) bounds it per persona: a
-guest's work lasts as long as the browser keeps it, and a signed-in player's survives on every
-device. That settles the durability half of this question and leaves only its release timing.
+How long a guest's work lasts, and how long a signed-in player's does, are both open — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md).
+The durability half of this question is unresolved until those settle, which leaves this question's
+release timing as the only part that can be worked now.
 
 **There are exactly two ways to keep that promise, and the cheap one is worse than it looked.**
 A server copy with durable identity, or preventing eviction by requiring home-screen

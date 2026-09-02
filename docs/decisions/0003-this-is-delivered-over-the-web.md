@@ -75,8 +75,9 @@ question, and this record deliberately does not answer them.
   three-client commitment on day one.
 
 - **Both a web client and native clients.** It is the only option that pays both sets of costs, and
-  for one maintainer it is the least defensible of the three. Nothing about the current stage
-  requires it.
+  for one maintainer it is the least defensible of the three — against
+  [../problem.md](../problem.md)'s "clarity over cleverness" and "present need over
+  future-proofing". Nothing about the current stage requires it.
 
 ## Risk
 
@@ -107,47 +108,34 @@ first-party-cookie topology trap, fabricated quota figures, absent background ex
 because of this record and would not exist under any of the rejected options.
 
 **The failure mode worth naming is motivational rather than technical.**
-[ADR-0001](0001-launch-with-sudoku-then-star-battle.md) identifies the maintainer losing interest
+[ADR-0002](0002-launch-with-sudoku-then-star-battle.md) identifies the maintainer losing interest
 as the top project risk, and `../problem.md` ranks the solving experience first. The way this
 decision goes wrong is not that the web turns out to be technically incapable — it is that the
 platform pathology above consumes the interface budget, and the interesting work never starts.
 
-## The recovery path, and what keeps it cheap
-
-Deferring native is only safe while it stays cheap to add, per
-[which doors must stay open?](../questions/which-doors-must-stay-open.md). It does, and the path is
-worth naming with its cost so that "web" is a reversible decision rather than an optimistic one.
-
-Wrapping this web client in a native shell (Capacitor is the healthiest of these, actively released
-through 2026) recovers haptics, background execution, push, and store presence, while keeping one
+**Deferring native is only safe while it stays cheap to add**, and that cost is worth accepting
+knowingly so that "web" is a reversible decision rather than an optimistic one. Wrapping
+this web client in a native shell (Capacitor is the healthiest of these, actively released through
+2026) recovers haptics, background execution, push, and store presence, while keeping one
 TypeScript codebase and the URL. It does not recover 120Hz. Its cost is a few weeks of work plus
 the store gates described above, and it carries guideline 4.2 risk that an offline-first game with
-bundled assets and local state is well shaped to survive.
-
-**Wrapping does not by itself escape the storage eviction in `../constraints.md`**, though it is
-widely described as though it does. WebKit states that tracking prevention is enabled by default in
-all `WKWebView` applications, and Capacitor's own documentation warns that mobile operating systems
-may clear `localStorage`. The wrap recovers durability only when storage is routed through a native
-plugin rather than the webview's own store.
-
-That makes the boundary the thing to protect rather than the wrapper the thing to plan. Four things
-keep it cheap, and each is settled by its own record rather than here:
-
-- A rules engine that is a pure module — no DOM, no framework import, no ambient randomness. Free,
-  and already required by [ADR-0004](0004-one-implementation-of-the-puzzle-rules.md) for unrelated
-  reasons.
-- Serializable state carrying an explicit schema version. Not yet decided anywhere; it belongs with
-  [is puzzle state a snapshot or an event log?](../questions/is-puzzle-state-a-snapshot-or-an-event-log.md).
-- Storage reached through one narrow interface —
-  [ADR-0013](0013-storage-is-reached-through-one-narrow-interface.md). The highest-leverage of the
-  four, and the one the correction above makes load-bearing.
-- A server contract in JSON rather than HTML fragments —
-  [ADR-0014](0014-the-server-contract-is-json-not-html-fragments.md).
-
-The third and fourth were mandated in this section as bullets until 2026-09-01, under a record that
-says it decides the delivery platform and nothing else. Both are separable choices — nothing about
-delivering over the web forces either — and neither was findable from this record's title. They are
-now their own records, and this one cites them.
+bundled assets and local state is well shaped to survive. **Wrapping does not by itself escape the
+storage eviction in `../constraints.md`**, though it is widely described as though it does: WebKit
+states that tracking prevention is enabled by default in all `WKWebView` applications, and
+Capacitor's own documentation warns that mobile operating systems may clear `localStorage`. The
+wrap recovers durability only when storage is routed through a native plugin rather than the
+webview's own store — which is what makes the storage boundary the thing to protect, not the
+wrapper the thing to plan. What keeps that boundary cheap to hold is
+[which client storage mechanism holds a player's work?](../questions/which-client-storage-mechanism.md)
+and, for the server side of the same recovery path,
+[what crosses the client/server boundary?](../questions/what-crosses-the-client-server-boundary.md).
+Two more conditions keep this recovery path cheap and neither is decided by this record: a rules
+engine that stays a pure module — no DOM, no framework import, no ambient randomness — which is
+free here and already required by
+[ADR-0005](0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) for unrelated
+reasons; and serializable state carrying an explicit schema version, not yet decided anywhere,
+which belongs with
+[is puzzle state a snapshot or an event log?](../questions/is-puzzle-state-a-snapshot-or-an-event-log.md).
 
 ## Revisit when
 

@@ -8,9 +8,10 @@ resolves_into: decision
 
 ## Why it matters
 
-A server exists — [ADR-0006](../decisions/0006-what-a-players-work-survives.md) forces one. What it
-carries is open, and that is what shapes the database, the hosting, and how much of the system has
-to be operated at all.
+A server exists —
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) forces one. What
+it carries is open, and that is what shapes the database, the hosting, and how much of the system
+has to be operated at all.
 
 A browser can hold a puzzle, a player's progress, and the rules. There are four things it cannot
 hold: something the player must not be able to change, something reachable from a device they have
@@ -56,7 +57,7 @@ device and its loss is accepted.
 device belongs to the person it would be charging.
 
 *The catalogue* — **settled**, by
-[ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md). Puzzle content is
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md). Puzzle content is
 served by something that can decide whether to serve it, so it is not shipped as static files with
 the application. What is still open here is how much of that content the server understands, which
 is [does the server understand puzzle content?](does-the-server-understand-puzzle-content.md).
@@ -80,7 +81,7 @@ the failure of the others.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **What must we know about how the app is used decides what is collected, not whether anything
-runs off-device.** [ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md)
+runs off-device.** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
 settles that whatever is stored is queryable, which is the shape of
 [which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
 all. Folding [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
@@ -97,7 +98,7 @@ The deciding input is not delivery. It is that content shipped as static files a
 cannot be withheld from anyone who already has the app, now recorded in
 [../constraints.md](../constraints.md). So an archive that might ever be gated cannot be static, and
 the catalogue candidate stood or fell with entitlement rather than separately from it. That is what
-[ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md) decided, and it names
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) decided, and it names
 the cost it took on: a runtime on the path to content, and a caching story the static option got
 free.
 
@@ -110,7 +111,7 @@ and [../problem.md](../problem.md) records that the option must stay open rather
 committed.
 
 **A server can exist without being on the interaction path.**
-[ADR-0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) already puts
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) already puts
 authoritative state on the client, so anything here is a background copy or a background check.
 Establishing that a server exists does not reopen that decision.
 

@@ -10,15 +10,16 @@ resolves_into: decision
 
 It is the one thing every part of the system touches. The generator produces it, the database stores
 it, the server holds a copy, the rules module operates on it, and the client renders it.
-[ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) committed to one
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) committed to one
 implementation of the rules without saying what shape those rules operate on.
 
 **It is also the decision that forces deletion when it is wrong.** A framework can be swapped by
 rewriting the interface. A representation that assumes a nine-by-nine grid of digits cannot: adding
 star battle then means migrating every stored puzzle, every player record, the generator's output,
 the rules module and the client at once.
-[Which doors must stay open?](which-doors-must-stay-open.md) names exactly this as the threat, and
-[ADR-0001](../decisions/0001-launch-with-sudoku-then-star-battle.md) guarantees a second game type
+[ADR-0008](../decisions/0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md) now rules
+out exactly this — a representation that hard-codes a nine-by-nine grid of digits — and
+[ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) guarantees a second game type
 arrives.
 
 Sudoku and star battle differ in ways a naive model hides. Sudoku is a fixed square grid with digits
@@ -55,7 +56,7 @@ concrete one.
 carries identity, type and versioning. Storage and transport are generic, the domain is not.
 
 *Sudoku only, generalised when the second type arrives.* **Ruled out** by
-[ADR-0010](../decisions/0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md). It was the honest "not
+[ADR-0008](../decisions/0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md). It was the honest "not
 yet" and the cheapest thing available now, and the migration it risks reaches client storage, where
 migrations run once in somebody's browser with no server to retry from.
 

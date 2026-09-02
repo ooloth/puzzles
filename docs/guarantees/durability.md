@@ -7,66 +7,34 @@ status: active
 
 # Durability
 
-A player's work outlives the session that made it. How far it outlives it depends on whether they
-have signed in, and the two bounds are set by
-[ADR-0006](../decisions/0006-what-a-players-work-survives.md).
+A player's work outlives the session that made it. "Work" means the board in progress, every board
+they have played, and the record of their play.
 
-"Work" means the board in progress, every board they have played, and the record of their play. It
-is one record with one shape for both personas, so signing in promotes what is already there rather
-than converting it.
+## No bound is currently promised per persona
 
-## A signed-in player's work survives on every device they use
+This file used to promise a signed-in player's work survives on every device they use, and a guest's
+work survives in the browser that made it. Both promises rested on the durability record demoted on 2026-09-01, "What a player's work
+survives," a decision record that was demoted: part of its reasoning turned out to rest on a
+rejection that did not hold up, so it no longer counts as a decision this project has made. The
+record itself is deleted; everything it argued is carried forward in the three questions below.
 
-The board in progress, the boards they have finished, and their play record are all there when they
-return — on any device they sign in from, however long they have been away, and however the last
-session ended.
+What each bound actually is, and whether a guest's record and a signed-in player's record share one
+shape, are now open questions rather than settled promises:
 
-**Enforced by** Nothing. Asserted only. No account, server or sync exists.
+- [How long does a guest's work last?](../questions/how-long-does-a-guests-work-last.md)
+- [How long does a signed-in player's work last?](../questions/how-long-does-a-signed-in-players-work-last.md)
+- [Is the guest record the same shape as the account record?](../questions/is-the-guest-record-the-same-shape-as-the-account-record.md)
 
-**If violated** A player who signed in specifically so their work would be kept discovers it was
-not. This costs more than the guest case: they took an action to prevent it and paid for it in
-friction.
-
-**Bearing on this** [Does a server exist at all?](../questions/what-does-the-server-hold.md) —
-this promise is what forces one, and that question weighs it against the rest of the inventory.
-[Are there user accounts?](../questions/are-there-user-accounts.md) decides what a player signs in
-to. [How much unsynced work is acceptable?](../questions/how-much-unsynced-work-is-acceptable.md)
-sets the tolerance that makes this testable, and
-[how would we verify progress is never lost?](../questions/how-would-we-verify-progress-is-never-lost.md)
-is unanswered, which is why the enforcement line above reads as it does.
-
-## A guest's work survives in the browser that made it, until that browser clears it
-
-A guest has not signed in. Their work is held on the device that made it and is reachable from
-nowhere else. It survives the app being backgrounded, the tab terminated by the OS, the device
-locked, the browser crashed, and the page closed deliberately. It does not survive the browser
-clearing site data after a period without interaction — see [../constraints.md](../constraints.md)
-for the current figure and the conditions on it.
-
-The board a guest is working on is kept until they finish it, rather than discarded when the day
-changes.
-
-**Enforced by** Nothing. Asserted only.
-
-**If violated** A guest loses work inside the window they were promised — which is the ordinary
-write-path failure rather than eviction, and is invisible, because a device that has silently
-dropped a player's work is the last thing that will report it.
-
-**Bearing on this**
-[How long does Safari really keep our storage?](../questions/how-long-does-safari-really-keep-our-storage.md)
-— this bound is only as good as a figure read from browser source rather than observed on a device.
-[Is home-screen install required for durability?](../questions/is-home-screen-install-required-for-durability.md)
-matters for this persona alone: an installed app is exempt from the clearing described above, so a
-guest who installs is durable and a guest who does not is not.
-
-Anything else a guest accumulates — a play record, streaks, statistics — sits inside this bound and
-is promised nothing beyond it. Nothing currently shows a guest any of it.
+[../problem.md](../problem.md) still states the intent this file cannot yet promise: a record of a
+player's play is theirs to keep, and it outlives any one device. That is a statement of what success
+looks like, not a guarantee this file can make until one of the three questions above settles it.
 
 ## Reopening restores the grid, notes and selection
 
 The board comes back exactly as the player left it, with no explicit sync step and no prompt.
 Selection is included deliberately: restoring the data but losing the player's place still costs
-them their train of thought. This holds within whichever bound above applies to that player.
+them their train of thought. This holds for as long as the player's work is held at all, whatever
+that turns out to be once the questions above are answered.
 
 **Enforced by** Nothing. Asserted only.
 

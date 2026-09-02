@@ -1,14 +1,14 @@
 ---
-number: 0010
+number: 0008
 status: accepted
 date: 2026-09-01
 ---
 
-# 0010 — Nothing about a puzzle is inferred from it being sudoku
+# 0008 — A stored puzzle describes its own size, regions and values
 
 ## Forced by
 
-**[ADR-0001](0001-launch-with-sudoku-then-star-battle.md) guarantees a second game type arrives.**
+**[ADR-0002](0002-launch-with-sudoku-then-star-battle.md) guarantees a second game type arrives.**
 Star battle is not a maybe. It is the next thing after sudoku, and it differs from sudoku in every
 part of a puzzle's shape: no digits, a variable grid size, and regions whose boundaries are part of
 the puzzle rather than derivable from a cell's coordinates.
@@ -20,8 +20,10 @@ identifier that turns a later feature into a migration."
 
 **[../questions/README.md](../questions/README.md) now puts a puzzle in the store at M2.** That is
 the moment the shape stops being a paper question. By M5 a player's board is in client storage too,
-and [ADR-0006](0006-what-a-players-work-survives.md) records why that is the worst place to discover
-a migration: it runs once, in somebody's browser, with no server to retry from.
+and
+[is the guest record the same shape as the account record?](../questions/is-the-guest-record-the-same-shape-as-the-account-record.md)
+records why that is the worst place to discover a migration: it runs once, in somebody's browser,
+with no server to retry from.
 
 **[../problem.md](../problem.md) ranks clarity over cleverness and present need over
 future-proofing, and rules out anything built because it might be needed someday.** That is a
@@ -80,9 +82,10 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
   by code that runs once under supervision, and client storage cannot.
 
 - **Preserve the option in the code without recording it.** Write the generic shape and let the
-  reason live in whoever wrote it. Rejected because the pressure to collapse it arrives later, from
-  someone reasonably observing that the region map is the same every time and the size is always
-  nine — and with no record, that person is right.
+  reason live in whoever wrote it. Rejected because [../standards/decisions.md](../standards/decisions.md)
+  treats the chain of reasoning as the deliverable, not the code alone, and the pressure to collapse
+  it arrives later, from someone reasonably observing that the region map is the same every time and
+  the size is always nine — and with no record, that person is right.
 
 ## Risk
 
@@ -90,8 +93,6 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
 express an arbitrary region partition is more awkward for sudoku than an eighty-one character string
 in every place that touches it — the generator, the rules, the renderer, the store. If ADR-0001's
 sequencing changes, this will have been a tax collected for nothing.
-[Which doors must stay open?](../questions/which-doors-must-stay-open.md) records that this cost is
-real and that the list of doors should stay short.
 
 **It is decided with nothing written down and nothing measured.** The representation has never
 existed in any form, so the four assumptions above are reasoned from how the two games differ rather

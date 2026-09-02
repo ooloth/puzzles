@@ -78,6 +78,23 @@ discovered now and parked where it belongs is what this file is for.
 
 When a milestone becomes the next one, run the seven steps on it. Not before.
 
+## This file and the issue tracker
+
+**Each slice below is one GitHub issue**, per
+[../decisions/0015-the-issue-tracker-is-github-issues.md](../decisions/0015-the-issue-tracker-is-github-issues.md)
+and
+[../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
+The tracker holds what work exists and what state it is in. This file holds why — what each slice
+rests on, what blocks it, and why they are in this order.
+
+**So nothing here records status.** No checkboxes, no "done", no "in progress". Those change daily,
+this file is already the fastest-decaying document in `docs/`, and a stale checkbox in a file whose
+value is being trusted is worse than no checkbox.
+
+**The slice title is the join key.** It appears here and in the issue, and nothing checks that the two
+still match — `scripts/check-docs.py` cannot see the tracker. If they disagree, the tracker is right
+about what work exists and this file is right about why.
+
 ## Housekeeping
 
 **A question resolves into as many records as it contains decisions** — the separability test in

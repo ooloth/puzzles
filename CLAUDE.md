@@ -21,6 +21,35 @@ once per session). Do not merely refer to your memory of the skill.
 Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full. Everything
 downstream is derived from them, and a sequence argued without them is argued from the wrong end.
 
+## Where work lives, and where thinking lives
+
+**Work is GitHub Issues in this repository.** One issue per delivery slice, grouped by a GitHub
+milestone matching M1, M2 and so on. The title is the slice's observable and the definition of done
+is that the observable is true. The tracker is where you read what exists and what state it is in.
+
+**Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
+which questions block it. `docs/decisions/` holds what has been settled and why.
+
+**Neither restates the other.** No reasoning in an issue — an issue that turns out to need a decision
+stops and points at the question. No status in the docs — no checkboxes, no "in progress". The slice
+title appears in both as the join key, and where they disagree the tracker is right about what work
+exists and the docs are right about why.
+
+**Which one to open, by what you are doing:**
+
+- Deciding what to work on next, or why something is blocked → `docs/questions/README.md`
+- Building the thing you already chose → the issue
+- Wondering why a slice exists, or what it rests on → `docs/questions/README.md`
+- Recording that something is done, or how far along it is → the issue
+- Answering a question → `docs/decisions/`, then update `docs/questions/README.md`
+
+**Before opening an issue, check the slice exists in `docs/questions/README.md`.** If it does not,
+either it is not a slice or that file is behind — and the second is the more likely, since work tends
+to get invented at the keyboard.
+
+Set by [ADR-0015](docs/decisions/0015-the-issue-tracker-is-github-issues.md) and
+[ADR-0016](docs/decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
+
 ## Handing over
 
 Invoke the `prep-for-codebase-handoff` skill as a session nears its end, and before moving to a topic

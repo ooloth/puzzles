@@ -34,7 +34,11 @@ there is the expectation rather than a fallback. Filling a grid by pointing at e
 than typing and nobody who can type does it. So the desktop half is keyboard-driven by default, and
 that is a property of how the game is played rather than an accommodation added for anyone.
 
-The audience is deliberately small: a genuinely public v1 found by a few people, not many.
+**Launch is sized small; the ceiling is not.** A genuinely public v1 is expected to be found by a
+small number of people, and nothing needs designing for more than that on the day it ships. That is a
+statement about what to build first, not a prediction — success is not ruled out, and a decision that
+would make growing into it expensive is a decision that needs arguing rather than one that follows
+from this paragraph.
 
 The second stakeholder is the solo maintainer, and there are three distinct reasons this exists.
 They pull in different directions often enough to be worth keeping separate.
@@ -99,7 +103,8 @@ project generated, and a system whose operation is worth describing to someone h
   for the cheater. This holds while nothing is worth gaining by cheating; a paid tier is
   uncommitted but deliberately not ruled out, so the exclusion is conditional rather than
   permanent.
-- **Enterprise scale** — or designing for scale at all, yet.
+- **Designing for scale, yet.** Not the same as ruling it out. Nothing is built for load that does
+  not exist, and nothing should be built in a way that makes serving more people later a rewrite.
 - **Anything built because it might be needed someday** rather than because it's needed now.
 
 ## What wins when things conflict

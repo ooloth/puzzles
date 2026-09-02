@@ -93,13 +93,28 @@ that is true after this record and was not before — an invariant facing the ar
 the option preserved. If someone scanning `ls docs/decisions/` cannot tell whether this record
 constrains their work, rename it.
 
-## Write the Rejected section first
+## You arrive with a leaning
 
-**Before the Decision section, and before you have chosen.** An option you can only argue against
-after picking a winner was never evaluated — it was justified against. This is the single change most
-likely to improve a record here, because an audit on 2026-09-01 found that every weak reason in this
-folder argued for the option that lost, and not one argued for the option that won. Reasoning that is
-sloppy in only one direction is not sloppy.
+**Assume you already favour something before you have evaluated anything.** It comes from
+familiarity, from whichever option a question file happens to list first, or from having half-formed
+an answer while reading. The leaning itself is not the problem — not knowing you have one is, because
+it quietly turns evaluation into a search for reasons.
+
+**So write the strongest case *for* each option you expect to reject, before writing the case against
+any of them.** The order is the whole mechanism. An option argued against once a winner exists was
+justified against rather than evaluated, and the two produce text that looks identical.
+
+**The tell that it went wrong is that the weak reasoning all points one way.** An audit on 2026-09-01
+found that every weak reason in this folder argued for the option that lost, and not one argued for
+the option that won. Nobody writes a flimsy argument for the option they took.
+
+**If the exercise changed nothing, say which thing happened.** Either the decision was genuinely
+obvious — record it briefly and move on — or the alternatives were performed rather than considered.
+A Rejected section that reads as thorough and moved nobody is worse than a short one admitting the
+choice was clear, because it spends a reader's trust on reasoning that did no work.
+
+**The finished record keeps template order**, Decision above Rejected. This is about the order you
+think in, not the order the reader meets.
 
 **Each option is evaluated from first principles, without bias.** No claim carried over from an
 earlier document without re-establishing it. No assumption stated as a fact. No number without its

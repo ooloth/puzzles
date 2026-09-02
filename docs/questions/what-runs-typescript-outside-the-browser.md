@@ -89,13 +89,34 @@ terms. Nothing from it should be imported without being re-run here.
 
 *Unverified — no source recorded.*
 
-> The same document asserts that Bun was acquired by Anthropic and that Claude Code is powered by
-> it, and uses that as a reason to consider Bun corporately safe to depend on. Treat this as false
-> unless independently confirmed. It is the clearest example of why that folder is marked
-> non-authoritative, and of why a claim that flatters a preferred option deserves more scrutiny
-> rather than less.
+**Bun is owned by Anthropic, and Claude Code runs on it.** Announced 2 December 2025: Anthropic
+acquired Oven, the company behind Bun, and describes Bun as "the infrastructure powering Claude Code,
+Claude Agent SDK, and future AI coding products & tools". Bun stays MIT-licensed with the same team,
+and Bun's own wording on the dependency is "Claude Code ships as a Bun executable to millions of
+users. If Bun breaks, Claude Code breaks."
 
-*Unverified — no source recorded.*
+That is a real answer to the ordinary worry about a young runtime — the largest user of this one has
+a direct incentive to keep it working. It cuts the other way too, and the record should say so: the
+runtime's priorities now answer to an AI coding company's needs, which are not this project's, and a
+dependency that is safe because one corporation needs it is safe for exactly as long as that holds.
+
+*Sourced — <https://bun.com/blog/bun-joins-anthropic>, read 2026-09-02.*
+
+**The document's causal story about the Rust rewrite is not supported.** It claimed the Zig-to-Rust
+rewrite was "a production requirement for Anthropic's flagship CLI". The rewrite is real and began in
+May 2026, and the stated rationale is memory safety. Neither Bun's announcement nor the public record
+connects it to Anthropic or to Claude Code.
+
+*Sourced — <https://en.wikipedia.org/wiki/Bun_(software)>, read 2026-09-02. The rewrite's own
+announcement was not opened.*
+
+> **This entry said the opposite until 2026-09-02, and the correction is worth keeping visible.** It
+> read: "Treat this as false unless independently confirmed. It is the clearest example of why that
+> folder is marked non-authoritative, and of why a claim that flatters a preferred option deserves
+> more scrutiny rather than less." The scrutiny it demanded was never applied — nobody ran the search
+> — and a hedge hardened into a verdict that then travelled into a commit message. The brainstorming
+> document was right about the fact and wrong about the reason, and this file was wrong about both
+> for two days. Scepticism that never gets tested is not scepticism.
 
 **This is coupled to the database choice more than its position suggests.** SQLite performance is a
 real difference between these runtimes, and

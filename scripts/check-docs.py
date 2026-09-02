@@ -62,6 +62,35 @@ def check_links():
                     problems.append(f'BROKEN LINK  {path} -> {link}')
 
 
+ANY_LINK = re.compile(r'\]\(([^)]*)\)')
+
+
+def check_heading_anchors():
+    """No link points at a heading.
+
+    standards/documentation.md: a path survives a document being reorganised, an anchor
+    breaks the moment someone rewords a heading, and nothing reports it. This is that
+    report. check_links() cannot do it — it strips fragments before resolving, and skips
+    same-document links entirely, so both kinds passed silently until 2026-09-02.
+    """
+    for root, _, files in os.walk('docs'):
+        if any(skip in root for skip in SKIP_DIRS):
+            continue
+        for f in files:
+            if not f.endswith('.md'):
+                continue
+            path = os.path.join(root, f)
+            for n, line in enumerate(open(path), 1):
+                for target in ANY_LINK.findall(line):
+                    if target.startswith(('http', 'mailto', 'data:')):
+                        continue
+                    if '#' in target:
+                        problems.append(
+                            f'HEADING LINK {path}:{n} "{target}" points at a heading; '
+                            f'link the file instead'
+                        )
+
+
 def check_indexes():
     for index, directory in INDEXES:
         # Only sibling links count. An index links out to other directories too,
@@ -317,6 +346,7 @@ def check_frontmatter():
 
 
 check_links()
+check_heading_anchors()
 check_indexes()
 check_decision_checkboxes()
 check_top_level_index()

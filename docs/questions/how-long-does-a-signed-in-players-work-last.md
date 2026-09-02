@@ -13,10 +13,11 @@ one device: the board left on a phone is waiting on a laptop later, and a puzzle
 still where they left it, with nothing reconciled by hand. Signing in is the one mechanism that can
 actually deliver that — nothing on a device can reach a second device that has never seen the first.
 
-[../guarantees/durability.md](../guarantees/durability.md) currently promises a player's work
-survives the session that made it, with no bound and no device named. For a signed-in player, this
-question is what turns that unbounded sentence into an actual promise instead of a claim two people
-could read two different ways.
+No guarantee bounds this, and that absence is deliberate: nothing promises how long a player's
+work lasts. What exists is an intention in [../problem.md](../problem.md),
+stated with no bound and no device named. For a signed-in player, this question is what turns that
+unbounded sentence into an actual promise instead of a claim two people could read two different
+ways.
 
 This bound does not run into the client-storage eviction problem
 [../constraints.md](../constraints.md) records for guests — a signed-in player's record lives off the
@@ -68,7 +69,7 @@ of the guest one.
 
 *One bound for everyone.* Give a signed-in player only what a guest gets, or give a guest what a
 signed-in player gets. See
-[how long does a guest's work last?](how-long-does-a-guests-work-last.md#options) for the durability record's
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md) for the durability record's
 reasoning against this: it either abandons what [../problem.md](../problem.md) asks for, or it cannot
 be kept for a player with nothing to attach work to. If this question and that one are ever answered
 the same way, they collapse into a single question.

@@ -62,8 +62,9 @@ the game itself to be rendered remotely." So the answer here cannot force the re
 should not be allowed to look as though it does.
 
 **Anything shown before a player can solve is on the offline path too.**
-[../guarantees/offline.md](../guarantees/offline.md) promises the app opens and plays with no
-network, and [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+[The app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) and
+[the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md),
+and [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
 records that the precache list is a build output. A landing page is either precached, in which case
 it is part of the shell and its weight is permanent, or it is not, in which case a returning offline
 player must not be routed through it.

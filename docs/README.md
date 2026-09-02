@@ -16,7 +16,7 @@ Full context: [problem.md](problem.md).
 | -------------------------------- | --------------------------------------- |
 | [decisions/](decisions/)         | Choices already made, and why           |
 | [failure-modes/](failure-modes/) | Ways it can fail, and whether we'd know |
-| [guarantees/](guarantees/)       | Promises to players we must never break |
+| [guarantees/](guarantees/)       | Promises to players we must never break, one per file |
 | [questions/](questions/)         | Decisions not yet made, in order        |
 | [standards/](standards/)         | What correct work looks like here       |
 | [architecture](architecture.md)  | Where code lives and what calls what    |

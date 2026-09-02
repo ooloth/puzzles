@@ -112,8 +112,8 @@ a schema. None of that is authorised here, and the three questions named above d
 ## Also update
 
 - [x] Nothing in `constraints.md` — this imports no facts about the world
-- [x] Nothing in `guarantees/` — `guarantees/durability.md` currently promises no per-persona bound,
-      and the three questions named above are where each bound is decided
+- [x] Nothing in `guarantees/` — nothing promises how long a player's work lasts, and the three
+      questions named above are where each bound is decided
 
 Deliberately not decided here: what is stored, in what shape, in which database, who can reach it,
 how it gets there, how long it is kept, and what a guest gets.

@@ -8,9 +8,12 @@ resolves_into: decision
 
 ## Why it matters
 
-It is where the promises in [../guarantees/durability.md](../guarantees/durability.md) are actually
-kept or broken, and it is the one stack choice with no clean migration path: changing it later means
-moving every existing player's data with code that has to run in their browser, once, correctly.
+It is where the promise in
+[reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+is actually kept or broken. Nothing promises how long a player's work lasts either, and it is the
+one stack choice with no clean migration path: changing
+it later means moving every existing player's data with code that has to run in their browser,
+once, correctly.
 A guest has no copy anywhere to restore from if that goes wrong.
 
 Nothing has chosen a mechanism. IndexedDB is the reflex answer and gets named in passing often

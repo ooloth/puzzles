@@ -14,10 +14,11 @@ without interaction, and Chrome evicts a whole origin, least-recently-used first
 its disk budget. There is no arrangement where the board is lost and something else about the guest
 survives — whatever bound this question settles on, the mechanism that enforces it is binary.
 
-[../guarantees/durability.md](../guarantees/durability.md) currently promises a player's work
-survives the session that made it, with no bound and no device named. Read one way that means "until
-the tab closes"; read the other it means "forever, anywhere". For a guest specifically, neither
-reading is true today, and the gap between them is this question.
+No guarantee bounds this, and that absence is deliberate: nothing promises how long a player's
+work lasts. What exists is an intention in [../problem.md](../problem.md)
+that a player's record is theirs to keep. Read one way that means "until the tab closes"; read the
+other it means "forever, anywhere". For a guest specifically, neither reading is true today, and the
+gap between them is this question.
 
 [../problem.md](../problem.md) says a record of a player's play is theirs to keep and outlives any
 one device. A guest's work today lives and dies in the one browser that made it. Whatever this

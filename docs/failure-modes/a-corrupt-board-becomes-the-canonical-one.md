@@ -9,8 +9,9 @@ status: active
 
 ## Threatens
 
-[durability.md](../guarantees/durability.md), and
-[correctness.md](../guarantees/correctness.md) once anything depends on stored state being sound.
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md),
+and correctness — a theme tracked but not yet promised in
+[the guarantees README](../guarantees/README.md) — once anything depends on stored state being sound.
 
 ## How it happens
 

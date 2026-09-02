@@ -28,8 +28,9 @@ pointer.** Selecting a cell, entering a value, clearing it, toggling a note, und
 else [what interactions must the grid support?](../questions/what-interactions-must-the-grid-support.md)
 turns out to include.
 
-This is a promise, and it goes in [../guarantees/accessibility.md](../guarantees/accessibility.md)
-where a player can hold us to it. The record here is the decision to make it.
+This is a promise, and it goes in [every action while solving is reachable from the
+keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboard.md) where a
+player can hold us to it. The record here is the decision to make it.
 
 **The binding form is "every action", not "the important actions".** That is the whole content of
 the decision. A list of keyboard-reachable actions is a list somebody will fail to extend when the
@@ -58,7 +59,7 @@ that this record is about play and does not pretend to more reach than it argued
 
 - **Decide it at M9, with the rest of the interaction set.** The honest "not yet", and the input
   model is chosen at M4. An interaction designed for touch and extended afterwards is exactly the
-  retrofit `../guarantees/accessibility.md` warns is expensive.
+  retrofit `../guarantees/README.md` warns is expensive.
 
 - **Make it a standard rather than a promise.** Genuinely arguable: a rule about how interactions
   are built could live in `../standards/` and be checked at review. Rejected because
@@ -73,9 +74,10 @@ that this record is about play and does not pretend to more reach than it argued
 ## Risk
 
 **The promise is unenforced, and this record does not change that.** Nothing checks it, because
-there is no code. `../guarantees/accessibility.md` will say _Enforced by: Nothing. Asserted only._
-alongside every other promise in that folder, and the honest reading is that this is a commitment to
-build the check rather than a check.
+there is no code. [Every action while solving is reachable from the
+keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboard.md) will say
+_Enforced by: Nothing. Asserted only._ alongside every other promise in that folder, and the honest
+reading is that this is a commitment to build the check rather than a check.
 
 **It constrains M4 and M9 before either is worked.** [How does a player enter a
 digit?](../questions/how-does-a-player-enter-a-digit.md) now has an option class ruled out — a
@@ -103,8 +105,10 @@ cited as having answered it.
 
 ## Also update
 
-- [x] `guarantees/accessibility.md` — gains the promise, with its enforcement line reading as
-      unenforced, and the scope limited to solving
+- [x] [every action while solving is reachable from the
+      keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboard.md) — gains
+      the promise, with its enforcement line reading as unenforced, and the scope limited to
+      solving
 - [x] Nothing in `constraints.md` — this imports no facts about the world
 - [x] Nothing in `problem.md` — the input fact it rests on was added by
       [ADR-0013](0013-every-puzzle-cell-is-a-focusable-labelled-element.md)

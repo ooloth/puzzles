@@ -8,8 +8,8 @@ resolves_into: decision
 
 ## Why it matters
 
-[../guarantees/offline.md](../guarantees/offline.md) promises play continues through a total loss
-of connectivity, and everything so far has read that as *the puzzle already open keeps working*.
+[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+is promised, and everything so far has read that as *the puzzle already open keeps working*.
 That is the smallest possible reading. A larger one — finish this puzzle, then browse the archive
 and start another, all in a tunnel — is a different product and a different app by orders of
 magnitude.

@@ -15,10 +15,11 @@ themselves out. None of that is covered by
 [where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
 the answer to the second.
 
-It bears directly on a promise nobody can currently keep.
-[../guarantees/durability.md](../guarantees/durability.md) says a signed-in player's work survives
-on every device they use, and there is no version of that where nobody notices the server has been
-down for a week.
+It bears directly on an intention nothing can currently keep.
+[../problem.md](../problem.md) says a record of a player's play is theirs to keep and outlives any
+one device — and no guarantee has been made of it yet: nothing promises how long a player's work
+lasts. There is no version of that intention where nobody notices the server has been down for a
+week.
 
 ## What would settle it
 

@@ -395,7 +395,7 @@ un-gateable from that moment.
 > is assuming something the platform cannot deliver.
 
 *Reasoned — a consequence of the fact above combined with
-[guarantees/offline.md](guarantees/offline.md).*
+[the board in play continues through a loss of connectivity](guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md).*
 
 ---
 

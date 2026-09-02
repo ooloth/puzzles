@@ -90,6 +90,7 @@ time than it reads — a player who does not open Safari at all is not spending 
 *Unverified — no source recorded.*
 
 **Thirty is the planning number.** A device test would confirm it, and being wrong costs a player's
-progress, which [../guarantees/durability.md](../guarantees/durability.md) promises will not happen.
+progress. No guarantee currently forbids that — nothing promises how long a player's work
+lasts — but it is the outcome [../problem.md](../problem.md) exists to rule out.
 Until that test runs, any argument whose conclusion changes between a week and a month is worth
 stating both ways.

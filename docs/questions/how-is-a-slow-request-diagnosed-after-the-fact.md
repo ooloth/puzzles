@@ -8,8 +8,8 @@ resolves_into: decision
 
 ## Why it matters
 
-[../guarantees/latency.md](../guarantees/latency.md) promises that input registers without
-waiting for the network, and [../constraints.md](../constraints.md) records that a stalled
+[Input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
+is promised, and [../constraints.md](../constraints.md) records that a stalled
 connection produces no thrown error — it just sits there, still reporting as connected. Put
 together: a slow request is exactly the failure this app is built to hide from the player, which
 means it is also hidden from whoever is trying to find out why it happened.

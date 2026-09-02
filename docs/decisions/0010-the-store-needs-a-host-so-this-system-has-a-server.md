@@ -113,8 +113,8 @@ change, both routes change together rather than one holding the other up.
 ## Also update
 
 - [x] Nothing in `constraints.md` — this imports no facts about the world
-- [x] Nothing in `guarantees/` — this promises a player nothing, and
-      `guarantees/durability.md` currently promises no per-persona bound
+- [x] Nothing in `guarantees/` — this promises a player nothing, and nothing promises how long a
+      player's work lasts
 - [x] `questions/what-does-the-server-hold.md` — a server existing does not settle what is on it,
       and that question is still worked whole
 

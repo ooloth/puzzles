@@ -1,6 +1,6 @@
 ---
-updated: 2026-09-01
-update_when: a decision is made, a milestone changes, or a question is split
+updated: 2026-09-02
+update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
 ---
@@ -83,89 +83,68 @@ be what selects one.
 **These choices are permanent.** Discovering later that the server needs something the host cannot
 give does not cost a redeploy — it moves both halves, plus whatever else was chosen to fit.
 
-1. **Both halves run on a host chosen deliberately.**
-   - **Given:** [../problem.md](../problem.md) names interruption as the normal case, and
-     [the board stays playable with no connection](../guarantees/play-continues-through-a-loss-of-connectivity.md),
-     [the app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen.md)
-     and [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) put the state and
-     the app itself on the device.
-     - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline means the
-       thing is on the device before the network goes.
-       - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-         — decides whether the host must run something on the path a player takes to open the app.
-   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) a
-     server exists and holds a durable per-player record;
-     [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) its store
-     must be queryable rather than an opaque blob.
-     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-       — decides whether the host must offer a persistent disk, which is the largest cut through the
-       candidate field.
-   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) and
-     [ADR-0007](../decisions/0007-that-language-is-typescript.md) — one language across every
-     deployable, and it is TypeScript.
-     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-       — the host has to run it.
-   - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier
-     that survives Safari's storage wipe unaided, and the exemption is withdrawn when the setting
-     server is not judged genuinely first-party.
-     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
-       — can disqualify a host outright, so it precedes pricing any.
-   - **Given:** all four answers above, which say what the host must run, what it must offer the
-     store, and what topology it must permit.
-     - **Must answer:** [where does this run?](where-does-this-run.md) — the irreversible one.
+**The order is derived by counting, so check it rather than trusting it.** A question appearing under
+several requirements is foundational; a requirement carrying several of those is worth doing first.
+Recount whenever a question is added or a requirement changes, and reorder if the count says so.
 
-2. **A server answers one route with a hard-coded response.**
-   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md),
-     [ADR-0007](../decisions/0007-that-language-is-typescript.md).
-     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-       — also under 1.
-   - **Given:** the execution shape and the host, from 1.
-     - **Must answer:** [what runs the server?](what-runs-the-server.md) — mostly falls out of the
-       runtime.
-
-3. **A browser can load the client.**
-   - **Given:** the offline promises and
-     [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md), as in 1.
+1. **Both halves run on a suitable host.**
+   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+   - **Given:** [../constraints.md](../constraints.md)
      - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-       — also under 1.
+   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
+   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
+   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
+     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+   - **Given:** [../constraints.md](../constraints.md)
+   - **Given:** [is guest recovery worth building?](is-guest-recovery-worth-building.md)
+     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
+     - **Must answer:** [where does this run?](where-does-this-run.md)
+2. **A server answers one route with a hard-coded response.**
+   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
+   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
+   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
+     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+     - **Must answer:** [what runs the server?](what-runs-the-server.md)
+   - **Given:** [where does this run?](where-does-this-run.md)
+     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
+3. **A browser can load the client.**
+   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+   - **Given:** [../constraints.md](../constraints.md)
+     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
+     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
    - **Given:** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
-     and [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) — every cell
-     is a focusable, labelled element and all play is keyboard-reachable, so a painted grid is out.
+   - **Given:** [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
+   - **Given:** [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
      - **Must answer:** [what renders the client?](what-renders-the-client.md)
-       - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
-         — a renderer that ships its own build pipeline changes what this costs.
-
+     - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
 4. **The repository holds both halves and builds them.**
-   - **Given:** the runtime from 1, which may bundle a package manager and make this moot.
+   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
+   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
+     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
      - **Must answer:** [which package manager?](which-package-manager.md)
    - **Given:** [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
-     — one rules module reachable from both a browser and a batch process.
-     - **Must answer:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md) — only how
-       many packages, and where that shared module sits.
-
+     - **Must answer:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md)
+   - **Given:** [what renders the client?](what-renders-the-client.md)
+     - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
 5. **The deployment answers at an address we control.**
-   - **Given:** the host, from 1.
-   - **Given:** [../constraints.md](../constraints.md) — the cookie exemption turns on what the
-     domain resolves to, so a proxy in front of the origin can cap it silently.
+   - **Given:** [../constraints.md](../constraints.md)
+   - **Given:** [is guest recovery worth building?](is-guest-recovery-worth-building.md)
+   - **Given:** [where does this run?](where-does-this-run.md)
+     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
      - **Must answer:** [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
-
 6. **A change made locally reaches the deployment.**
-   - **Given:** the host, from 1 — several candidates ship their own git integration.
+   - **Given:** [where does this run?](where-does-this-run.md)
+   - **Given:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md)
      - **Must answer:** [what deploys the code?](what-deploys-the-code.md)
-
-**Why this order.** Three questions sit under more than one requirement:
-[the entry document](is-the-client-served-as-static-files.md) under 1 and 3,
-[what runs TypeScript](what-runs-typescript-outside-the-browser.md) under 1, 2 and 4, and
-[the execution shape](what-execution-shape-does-the-server-have.md) under 1 and 2. Requirement 1
-carries all three, which is why it comes first and why it has five questions under it while
-requirement 6 has one. Answering 1 leaves 2, 4, 5 and 6 with almost nothing.
-
-**Gaps to watch.** Requirement 5 has an unexamined given: nothing says where a certificate comes
-from, and it may fall inside the domain question or may not. And nothing asks how the two halves are
-actually served from one origin — one process serving both, a proxy, or platform routing. That may
-sit inside [what runs the server?](what-runs-the-server.md) or
-[where does this run?](where-does-this-run.md); if it sits in neither, it is a question nobody has
-written.
 
 ## M2 — a change can be checked before it ships
 

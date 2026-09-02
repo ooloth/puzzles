@@ -54,5 +54,6 @@ to actually be better, not merely present.
 ## Also update
 
 - [x] constraints.md — no givens are imported by this decision
-- [x] guarantees/ — no new promises; [guarantees/sudoku.md](../guarantees/sudoku.md) becomes the
-      place for anything promised about the launch variant specifically
+- [x] guarantees/ — no new promises; the sudoku theme in
+      [the guarantees README](../guarantees/README.md) becomes the place for anything promised
+      about the launch variant specifically

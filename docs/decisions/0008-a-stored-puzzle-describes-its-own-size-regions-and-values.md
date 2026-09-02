@@ -125,7 +125,10 @@ is open, and a model built against exactly two examples usually fits exactly two
 
 - [x] Nothing in `constraints.md` — this imports no facts about the world
 - [x] Nothing in `guarantees/` — this promises a player nothing; what a player is promised about
-      puzzle quality is already in `guarantees/puzzles.md` and is unchanged
+      puzzle quality is already in [every puzzle has exactly one
+      solution](../guarantees/every-puzzle-has-exactly-one-solution.md) and [every puzzle is
+      solvable by deduction alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md),
+      and is unchanged
 - [x] `questions/what-is-a-puzzle-across-game-types.md` — one of its three options is ruled out here
 - [x] `questions/which-doors-must-stay-open.md` — this door is now held by a record rather than a
       list entry

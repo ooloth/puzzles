@@ -8,14 +8,14 @@ resolves_into: decision
 
 ## Why it matters
 
-[../guarantees/offline.md](../guarantees/offline.md) promises the network never blocks, delays or
-interrupts play. That is a promise about what the network may do to a player. Whether the interface
+[The network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md).
+That is a promise about what the network may do to a player. Whether the interface
 says anything about it — an offline glyph, a note that a puzzle will sync later, a quiet indication
 that something is pending — is a separate judgement, and it is open.
 
 Three things depend on this being answered deliberately rather than by default: whether a guest is
 told their work is held only on this device, whether a pending sync is ever visible, and what
-[observability](../guarantees/observability.md) is allowed to be. The last is not really governed by
+[observability](../guarantees/README.md) is allowed to be. The last is not really governed by
 this question at all — alerts go to the maintainer, who can act on them, not to the player, who
 cannot — and reading it as governed here is what has kept observability looking like a conflict.
 
@@ -59,13 +59,13 @@ worth protecting.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**[../guarantees/observability.md](../guarantees/observability.md) is currently a stub, and whether a
-guest is told their work is only held locally is still open** — see
+**[Observability](../guarantees/README.md) is a theme in the guarantees README holding no promises
+yet, and whether a guest is told their work is only held locally is still open** — see
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md), where the disclosure
 question is raised and left unresolved.
 
 **Reporting to the maintainer was never in tension with this.** It is not shown to a player, so no
 promise about the player's experience reaches it. That tension is recorded in
-[../guarantees/observability.md](../guarantees/observability.md) and in
+[the guarantees README](../guarantees/README.md) and in
 [how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and is
 dissolved rather than resolved.

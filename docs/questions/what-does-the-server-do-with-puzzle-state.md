@@ -9,11 +9,12 @@ resolves_into: decision
 ## Why it matters
 
 If a server exists, this is where two promises are kept or broken.
-[../guarantees/durability.md](../guarantees/durability.md) says a player's work is never lost and
-[../guarantees/offline.md](../guarantees/offline.md) says no merge or conflict prompt is ever
-shown. A server able to reject a client's state leaves exactly two outcomes when it uses that
-power: the work disappears, or the player is asked to choose between versions. Both are already
-forbidden.
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+for as long as a player's work is held, and
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md):
+no merge or conflict prompt is ever shown. A server able to reject a client's state leaves exactly
+two outcomes when it uses that power: the work disappears, or the player is asked to choose between
+versions. Both are already forbidden.
 
 ## What would settle it
 

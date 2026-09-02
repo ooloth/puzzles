@@ -14,8 +14,9 @@ parses. Nothing today asserts any of these. Without an assertion, a bug that pro
 board fails silently — the corrupted state gets read back, rendered, and played on top of, and
 nobody finds out until much later, if ever.
 
-[../guarantees/correctness.md](../guarantees/correctness.md) names "a partial write is never
-observable" and "the board on screen always matches the board in storage" as candidate promises.
+[The guarantees README](../guarantees/README.md) names "a partial
+write is never observable" and "the board on screen always matches the board in storage" as
+candidate promises.
 Neither is checkable without something asserting it — a promise with no assertion behind it is a
 claim, not a guarantee.
 

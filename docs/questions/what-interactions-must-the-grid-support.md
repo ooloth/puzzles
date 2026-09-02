@@ -37,8 +37,10 @@ requirements.
 
 Not alternatives — a checklist, where the answer is whichever subset is worth building.
 
-*Pencil notes.* Candidate marks in a cell. Named in [../guarantees/interaction.md](../guarantees/interaction.md)
-as needing to be visually distinct from committed entries, which presumes they exist.
+*Pencil notes.* Candidate marks in a cell. Named in
+[the guarantees README](../guarantees/README.md) as a likely
+candidate for needing to be visually distinct from committed entries — not yet a promise — which
+presumes they exist.
 
 *Undo, and how far back.* [Its own question](is-undo-in-scope-and-how-far-back.md), because the
 depth interacts with whether state is a snapshot or an event log.

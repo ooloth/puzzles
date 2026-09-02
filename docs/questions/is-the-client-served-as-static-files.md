@@ -9,9 +9,10 @@ resolves_into: decision
 ## Why it matters
 
 This is already implied by things that have been accepted, and is written down nowhere. [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
-puts authoritative state on the client, and [../guarantees/offline.md](../guarantees/offline.md)
-promises play continues with no network — so the application has to boot from what is already on
-the device, with no server round trip in the path. That is a real architectural commitment and
+puts authoritative state on the client, and
+[the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+— so the application has to boot from what is already on the device, with no server round trip in
+the path. That is a real architectural commitment and
 nobody has recorded it.
 
 It is the decision that rules out server rendering and the meta-frameworks built around it. A

@@ -37,8 +37,7 @@ constraint' conclusion."
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **[Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
-currently reasons entirely from Safari's behaviour.** Every promise in
-[../guarantees/durability.md](../guarantees/durability.md) also fails to state which platforms it
-holds on.
+currently reasons entirely from Safari's behaviour.** Nothing promises how long a player's work
+lasts, and that too is silent on which platforms it holds on.
 
 ...

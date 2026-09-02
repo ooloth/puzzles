@@ -36,8 +36,9 @@ implementation — the same job [../guarantees/](../guarantees/) does for promis
 title does not tell you whether to open the file, the title is wrong and fixing it is the first task.
 
 **Read [../guarantees/](../guarantees/) too.** Promises are not decisions and do not live here, but
-they bind just as hard. `guarantees/offline.md` constrains a stack choice as tightly as anything in
-this folder and appears nowhere in it.
+they bind just as hard. [Play continues through a loss of
+connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md) constrains a stack
+choice as tightly as anything in this folder and appears nowhere in it.
 
 **Read the portable decision-making standard now, even if you read it earlier in
 this session.** A remembered summary produces a record that fits this format and breaks a rule.

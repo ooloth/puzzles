@@ -41,7 +41,8 @@ value rather than a session.
 
 What remains open is narrower than the title suggests: whether losing one cell's value silently is
 acceptable, or whether that case deserves surfacing somehow — bearing in mind that
-[offline.md](../guarantees/offline.md) forbids asking the player to choose.
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md)
+forbids asking the player to choose.
 
 **Every sync engine somebody would plausibly reach for solves a problem this app does not have, and
 four of them died or stalled inside eighteen months.** They exist for concurrent multi-writer

@@ -8,10 +8,12 @@ date: 2026-08-31
 
 ## Forced by
 
-**[../guarantees/puzzles.md](../guarantees/puzzles.md) promises every puzzle has exactly one
-solution and is solvable by deduction alone, and records that both are enforced by nothing.** They
-are assertions today. Whatever eventually enforces them is code that decides whether a board is
-legal, whether it is complete, and whether its solution is unique.
+**[Every puzzle has exactly one
+solution](../guarantees/every-puzzle-has-exactly-one-solution.md) and [every puzzle is solvable by
+deduction alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md), and both record
+that they are enforced by nothing.** They are assertions today. Whatever eventually enforces them
+is code that decides whether a board is legal, whether it is complete, and whether its solution is
+unique.
 
 **Two implementations of that code can disagree, and the disagreement produces no error anywhere.**
 The generator concludes it has produced a sound puzzle. The client concludes the player is looking
@@ -20,9 +22,10 @@ notice the other. A promise that can be broken with nothing raised anywhere is n
 keeps by intending to.
 
 **[ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md) put puzzle state on the client, and
-[../guarantees/offline.md](../guarantees/offline.md) promises play continues with no connection.**
-So the client cannot delegate these judgements. It holds them locally or it cannot tell a player
-their board is finished.
+[play continues through a loss of
+connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md) is promised.** So the
+client cannot delegate these judgements. It holds them locally or it cannot tell a player their
+board is finished.
 
 ## Decision
 
@@ -119,9 +122,11 @@ would be made once and inherited everywhere.
 ## Also update
 
 - [x] Nothing in `constraints.md` — this imports no new facts about the world
-- [x] Nothing in `guarantees/` — `puzzles.md` still records both promises as enforced by nothing.
-      This decision makes enforcement possible in one place rather than two; it does not enforce
-      anything, and no code exists yet.
+- [x] Nothing in `guarantees/` — [every puzzle has exactly one
+      solution](../guarantees/every-puzzle-has-exactly-one-solution.md) and [every puzzle is
+      solvable by deduction alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md)
+      still record both promises as enforced by nothing. This decision makes enforcement possible
+      in one place rather than two; it does not enforce anything, and no code exists yet.
 
 Deliberately not decided here: which language, whether the sharing is by source or by compiled
 artifact, how the module is split between its consumers, and whether hints ship in v1.

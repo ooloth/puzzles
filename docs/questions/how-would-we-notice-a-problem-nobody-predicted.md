@@ -13,11 +13,11 @@ Every check named so far — the runtime invariants, the stored-data audit, the 
 a failure nobody anticipated: an error rate moving that has no alert on it, a distribution
 shifting, something appearing in logs with no handler written for it.
 
-[../guarantees/observability.md](../guarantees/observability.md) is a stub, and it names lost
-progress as its motivating case precisely because that failure produces no error, no crash, and no
-complaint — the exact shape of a problem nobody predicted. Without something watching for the
-unexpected rather than the expected, this class of failure stays invisible until a player notices
-and leaves, which is also the point at which the maintainer finds out last.
+Observability is a section in the [guarantees README](../guarantees/README.md) holding no promises
+yet, and it names lost progress as its motivating case precisely because that failure produces no
+error, no crash, and no complaint — the exact shape of a problem nobody predicted. Without something
+watching for the unexpected rather than the expected, this class of failure stays invisible until a
+player notices and leaves, which is also the point at which the maintainer finds out last.
 
 ## What would settle it
 

@@ -8,9 +8,10 @@ resolves_into: decision
 
 ## Why it matters
 
-[../guarantees/durability.md](../guarantees/durability.md) is the promise that a player's work
-outlives the session that made it, and that promise is only as real as the backup behind it. A
-backup that has never been restored is a belief about what it contains, not a fact — the failure
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+is the promise that a player's work outlives the session that made it, and that promise is only as
+real as the backup behind it. A backup that has never been restored is a belief about what it
+contains, not a fact — the failure
 mode is a restore that silently produces an empty or corrupt database at the exact moment it is
 needed, which is also the worst possible moment to discover that for the first time.
 

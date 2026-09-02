@@ -24,8 +24,8 @@ eventually answered. It is the one input that can make
 [which database, if any?](which-database.md) a real decision rather than a formality.
 
 It also decides whether several promises are checkable.
-[../guarantees/durability.md](../guarantees/durability.md) says work is never lost and is
-currently enforced by nothing; whether that is being kept is a usage question, and
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+is currently enforced by nothing; whether that is being kept is a usage question, and
 [how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) has no
 answer without one.
 
@@ -42,8 +42,8 @@ product appetite question.
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), and probably an entry in
-[../guarantees/observability.md](../guarantees/observability.md).
+A decision record in [../decisions/](../decisions/), and probably a new promise under the
+Observability theme in [the guarantees README](../guarantees/README.md).
 
 ## Source
 

@@ -15,13 +15,14 @@ one shape. If they do, signing in promotes what is already there — attaches an
 that already exists in the right form — rather than converting it from one representation to
 another.
 
-**The promise half:** [../problem.md](../problem.md) and
-[../guarantees/durability.md](../guarantees/durability.md) both describe a player's work as
-continuous across whatever happens to them, including signing in. Nothing is reconciled by hand and
-no version is ever chosen between. A guest who signs in and finds their board reset, or their notes
-gone, has had a version chosen for them silently. Whether the decision half is answered "same shape"
-or "different shape" determines whether that promise is cheap to keep or something a conversion step
-has to get right, every time, for every player, with no dry run against real data before it matters.
+**The promise half:** [../problem.md](../problem.md) says a record of a player's play is theirs to
+keep, and
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md):
+nothing is reconciled by hand and no version is ever chosen between. A guest who signs in and finds
+their board reset, or their notes gone, has had a version chosen for them silently. Whether the
+decision half is answered "same shape" or "different shape" determines whether that promise is
+cheap to keep or something a conversion step has to get right, every time, for every player, with
+no dry run against real data before it matters.
 
 the durability record demoted on 2026-09-01 called the decision half "the load-bearing half of this decision — the bounds could be
 revised later at ordinary cost, and this could not." It did not spell out why revising a bound is

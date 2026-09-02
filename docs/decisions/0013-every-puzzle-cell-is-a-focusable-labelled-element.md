@@ -18,9 +18,8 @@ sits at M9. The decision that forecloses it comes five milestones before the que
 about it, which is the pattern the portable decision-making standard names as worth stopping for:
 a choice that narrows everything downstream without announcing that it has.
 
-**[../guarantees/accessibility.md](../guarantees/accessibility.md) records that these are expensive
-to retrofit once an interaction model exists**, and says plainly that silence is not a decision to
-skip it.
+**[../guarantees/README.md](../guarantees/README.md) records that these are expensive to retrofit
+once an interaction model exists**, and says plainly that silence is not a decision to skip it.
 
 ## Decision
 
@@ -54,7 +53,7 @@ a rewrite.
   paint, no browser inconsistency in how cells size themselves, and a well-trodden path — several
   well-regarded puzzle apps are built this way. Keyboard is even recoverable, by putting a key
   handler on a wrapper element. What is not recoverable is assistive technology, which
-  [../guarantees/accessibility.md](../guarantees/accessibility.md) records as expensive to retrofit
+  [../guarantees/README.md](../guarantees/README.md) records as expensive to retrofit
   once an interaction model exists: a canvas has nothing to attach a name or a state to, so support
   means building a parallel DOM tree by hand and keeping it in sync with the painting. That is a
   second implementation of the grid, maintained forever, and it is a rewrite rather than an
@@ -112,7 +111,9 @@ what stops it becoming a habit.
 - [x] `problem.md` — records that the desktop half is keyboard-driven, which this rests on
 - [x] Nothing in `constraints.md` — this imports no facts about the world; the WebKit grid bugs stay
       a finding in the open question until somebody establishes them here
-- [x] `guarantees/accessibility.md` — no promise is made by this record; the promise is
+- [x] [every action while solving is reachable from the
+      keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboard.md) — no
+      promise is made by this record; the promise is
       [ADR-0014](0014-all-play-is-reachable-from-the-keyboard-alone.md)'s
 
 Deliberately not decided here: what a cell announces, whether accessibility is in scope for v1, what

@@ -9,9 +9,12 @@ status: active
 
 ## Threatens
 
-[durability.md](../guarantees/durability.md) — the work is intact on the server and unreachable by
-the player. Also [offline.md](../guarantees/offline.md), because the natural failure is a board that
-will not open.
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+— the work is intact on the server and unreachable by
+the player. Also
+[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md),
+because a board that will not open is exactly the presentation that promise forbids — though the
+cause here is a version disagreement rather than the network.
 
 ## How it happens
 

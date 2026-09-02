@@ -9,8 +9,11 @@ status: active
 
 ## Threatens
 
-[durability.md](../guarantees/durability.md) — that in-progress work is never lost, however a
-session is interrupted.
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+— the board does not come back at all. How long that promise is meant to hold for is itself
+unsettled; nothing promises how long a player's work lasts, which is why this failure currently
+violates an intention in [../problem.md](../problem.md) rather than a bound anything has
+committed to.
 
 ## How it happens
 

@@ -23,9 +23,9 @@ Android says its eviction behaviour is unknown and must not be inferred from Chr
 numbers. So the platform this app is aimed at hardest is the one with the least written down, and
 the coverage question is not symmetric across the matrix.
 
-**It is also unbounded until somebody says what the matrix is.**
-[../guarantees/compatibility.md](../guarantees/compatibility.md) is a stub and says so plainly: every
-promise in that folder "is implicitly scoped to something, and until that scope is written down each
+**It is also unbounded until somebody says what the matrix is.** Compatibility is a section in the
+[guarantees README](../guarantees/README.md) holding no promises yet, and it says so plainly: every
+promise in this folder "is implicitly scoped to something, and until that scope is written down each
 one quietly claims more than it can deliver." Testing everywhere is not a plan. This question cannot
 be answered without that scope, and naming the scope is most of the work.
 
@@ -35,9 +35,9 @@ is the argument for everything else in this milestone.
 ## What would settle it
 
 Naming the matrix first — which browsers, which OS versions, which device classes — which belongs in
-[../guarantees/compatibility.md](../guarantees/compatibility.md) and does not exist. Then, for each
-cell, what is actually run there and how often: a full suite, a smoke path, or a manual look before a
-release.
+the [guarantees README](../guarantees/README.md)'s compatibility section and does not exist yet.
+Then, for each cell, what is actually run there and how often: a full suite, a smoke path, or a
+manual look before a release.
 
 The useful sorting question is which failures each rung can see. A headless browser cannot see the
 storage evictions. A simulator cannot see the network-path bugs. Only a real device on a real network
@@ -46,8 +46,8 @@ than a single mechanism, and what belongs on each rung is the decision.
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), and probably promises in
-[../guarantees/compatibility.md](../guarantees/compatibility.md).
+A decision record in [../decisions/](../decisions/), and probably promises in the
+[guarantees README](../guarantees/README.md)'s compatibility section.
 
 ## Source
 

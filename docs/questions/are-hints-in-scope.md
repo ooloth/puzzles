@@ -58,7 +58,9 @@ board has exactly one solution, and backtracking search answers that well while 
 how a person would get there. A **human-method engine** enumerates the techniques that apply at the
 current board state — naked single, hidden pair, X-wing — and orders them by difficulty. Only the
 second can produce a hint of this kind, and a puzzle it cannot solve by technique alone is one that
-requires guessing, which [../guarantees/puzzles.md](../guarantees/puzzles.md) already forbids.
+requires guessing, which
+[every puzzle is solvable by deduction alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md)
+already forbids.
 
 > So the generator needs both: the decision procedure to check uniqueness, and the human-method
 > engine to confirm the puzzle is reachable by deduction and to grade it. The client needs the

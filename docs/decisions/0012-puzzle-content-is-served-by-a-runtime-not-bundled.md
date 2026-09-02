@@ -38,10 +38,10 @@ boundary exists, nothing is withheld from anyone, and no player sees any differe
 out is a delivery shape that makes withholding impossible later.
 
 **It applies only to content a player has not been given yet.** Anything already delivered is theirs,
-including everything precached so that
-[../guarantees/offline.md](../guarantees/offline.md) can be kept. That is not a leak to be closed —
-it is what an offline promise means. Gating governs the boundary of what is handed over, never what
-has been.
+including everything precached so that [play continues through a loss of
+connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md) can be kept. That is
+not a leak to be closed — it is what an offline promise means. Gating governs the boundary of what
+is handed over, never what has been.
 
 **It settles the catalogue candidate in the server's inventory** by consequence, and that is
 stated here rather than left to be discovered. The finding that ties the catalogue to entitlement
@@ -72,10 +72,11 @@ rather than to delivery — an archive that might ever be gated cannot be static
   them below the solving experience and below play continuing.
 
 - **Gate at the CDN with signed or expiring URLs, and keep the files static.** A real middle path
-  that keeps most of the static option's advantages. Rejected because it fails against
-  [offline.md](../guarantees/offline.md)'s promise rather than against the gating one: content
-  precached for offline play is on the device and no URL scheme reaches it, so the mechanism
-  protects exactly the content that is not the problem.
+  that keeps most of the static option's advantages. Rejected because it fails against [play
+  continues through a loss of
+  connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)'s promise rather
+  than against the gating one: content precached for offline play is on the device and no URL
+  scheme reaches it, so the mechanism protects exactly the content that is not the problem.
 
 ## Risk
 

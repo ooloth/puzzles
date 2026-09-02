@@ -39,7 +39,8 @@ Whether an offline device can detect it at all. It cannot, without contacting so
 any detection happens at the moment connectivity returns and is therefore after the fact.
 
 Whether the two copies can be reconciled without asking the player, which
-[../guarantees/offline.md](../guarantees/offline.md) already promises. If the answer to
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md)
+already promises. If the answer to
 [is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) is an
 event log, two divergent histories over one board may merge without a choice being presented. If it
 is a snapshot, one of them is being discarded and the promise is under strain.
@@ -58,14 +59,16 @@ a rendering decision, and the "ahead" case turned out to describe a failure noth
 
 *Say nothing and let it reconcile.* The player continues, the copies merge or one wins when the
 network returns, and nothing is surfaced. Keeps
-[../guarantees/offline.md](../guarantees/offline.md)'s promise that the player is never asked to
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md)'s
+promise that the player is never asked to
 arbitrate. Whether it is honest depends entirely on whether the merge actually preserves both.
 
 *Tell the player when it is detected.* Not a prompt and not a choice — an indicator that this board
 has newer work elsewhere. Honest, and it arrives too late to prevent the divergence it describes.
 
 *Prevent it.* Refuse to open a board the device cannot confirm is current. Directly contradicts
-[../guarantees/offline.md](../guarantees/offline.md) and
+[the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+and
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md), and is recorded here to
 be rejected explicitly rather than left as an unexamined option.
 

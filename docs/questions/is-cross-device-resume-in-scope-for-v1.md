@@ -100,13 +100,18 @@ same server, permanently unreachable.
 indefinitely, which needs a retention policy and raises a privacy question with no easy answer:
 data about people who cannot be identified also cannot be deleted on request.
 
-**Which puts an existing promise in question.**
-[../guarantees/durability.md](../guarantees/durability.md) says in-progress work is never lost,
-however a session is interrupted. Safari clears all script-writable storage after thirty days
-without interaction. A player returning after five weeks finds nothing, and that is an interruption
-by any ordinary reading. So the durability promise as written may already require what cross-device
-resume requires — in which case the expensive machinery is not optional and this question is only
-about whether to also get transfer, which by then is nearly free.
+**Which makes this conditional on a bound nobody has set.**
+[../problem.md](../problem.md) intends that a player's record is theirs to keep and outlives any one
+device, and no guarantee has committed to it: nothing promises how long a player's work lasts.
+Safari clears all script-writable storage after
+thirty days without interaction, so a player returning after five weeks finds nothing.
+
+If a durability bound is ever set that covers that gap, it requires what cross-device resume
+requires — in which case the expensive machinery is not optional and this question is only about
+whether to also get transfer, which by then is nearly free. **That is an argument about a promise
+not yet made**, so it establishes what setting the bound would cost rather than what is already
+owed. Setting the bound is
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md).
 
 The thirty-day figure weakens this argument without removing it. The promise is unbounded, so it is
 broken by a lapse of any length, and a month is well within what "life intervened" covers. What

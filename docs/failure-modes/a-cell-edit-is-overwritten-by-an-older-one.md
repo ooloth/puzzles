@@ -9,8 +9,8 @@ status: active
 
 ## Threatens
 
-[durability.md](../guarantees/durability.md) — a player's work disappearing without their
-involvement.
+[Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+— a player's work disappearing without their involvement.
 
 ## How it happens
 
@@ -25,7 +25,8 @@ which is worse than disagreeing.
 The merge is deliberately deterministic and unsupervised, per
 [what the server does with puzzle state](../questions/what-does-the-server-do-with-puzzle-state.md), so
 nothing is watching for an implausible ordering. And because
-[offline.md](../guarantees/offline.md) forbids ever asking the player to choose, there is no path
+[conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md)
+forbids ever asking the player to choose, there is no path
 by which a suspicious merge surfaces for a human to look at.
 
 ## How we'd notice

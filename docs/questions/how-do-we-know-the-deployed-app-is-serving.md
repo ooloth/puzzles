@@ -10,8 +10,9 @@ resolves_into: decision
 
 Nothing today reports whether the deployed app is actually serving. A player who opens a static
 client can be looking at bytes that loaded from cache while the API behind it is dead, so the app
-can look fine and still be broken. [../guarantees/observability.md](../guarantees/observability.md)
-is a stub with no promises yet, and this is the plainest case it should cover — not a failure in a
+can look fine and still be broken. The observability theme in
+[the guarantees README](../guarantees/README.md)
+holds no promises yet, and this is the plainest case it should cover — not a failure in a
 promise about a player's data, just whether the thing is up at all.
 
 [../problem.md](../problem.md) names the solo maintainer as a stakeholder. A check that only a

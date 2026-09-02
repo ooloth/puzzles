@@ -14,8 +14,9 @@ Naming what actually moves — and in which direction, and how often — is what
 Several things are already fixed and they constrain this more than it looks.
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) makes the client
 authoritative, so nothing crossing this boundary is a request for permission.
-[../guarantees/offline.md](../guarantees/offline.md) means every crossing is opportunistic and
-nothing waits on one. And [../constraints.md](../constraints.md) records that iOS gives web apps no
+[The network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md),
+so every crossing is opportunistic and nothing waits on one. And
+[../constraints.md](../constraints.md) records that iOS gives web apps no
 background execution and no reliable session-end hook, so **the only moment anything can be sent is
 while the app is on screen**, fire-and-forget.
 
@@ -56,9 +57,11 @@ fresh connection costs three to four round trips before any payload moves, that 
 sits at or below the 2g tier, and that mobile radios are expensive to wake. So the design pressure
 is toward few, batched crossings rather than small ones.
 
-**A crossing that fails must not become visible.** `../guarantees/offline.md` allows the interface
-to show that something is pending, and forbids the network blocking, delaying or interrupting play.
-A failed send is retried later or dropped; it is never surfaced as an error the player must act on.
+**A crossing that fails must not become visible.**
+[The network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+allows the interface to show that something is pending, and forbids the network blocking, delaying
+or interrupting play. A failed send is retried later or dropped; it is never surfaced as an error
+the player must act on.
 
 **A server answering in HTML fragments narrows [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md)'s
 native recovery path to a webview wrapper.** [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) names wrapping this web client in a native
@@ -71,9 +74,10 @@ client.
 state on the client for latency and offline reasons. A hypermedia-style crossing would add a second
 rendering path on top of that layer rather than remove the one that already exists.
 
-**[../guarantees/offline.md](../guarantees/offline.md) requires the client to render a board it
-already holds.** A server that returns markup for the client to insert is a server the client cannot
-do without, which the offline guarantee rules out regardless of what shape this boundary settles on.
+**[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+requires the client to render a board it already holds.** A server that returns markup for the
+client to insert is a server the client cannot do without, which that guarantee rules out
+regardless of what shape this boundary settles on.
 
 **Deciding this now would bind with no server, no schema and no endpoint in existence.** Nothing
 here has been designed yet, so an early answer constrains a thing that does not exist. That gap is

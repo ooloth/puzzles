@@ -11,16 +11,18 @@ amended: 2026-09-01
 
 Two promises in [../guarantees/](../guarantees/), in order of weight.
 
-**Play continues through a total loss of connectivity** ([offline.md](../guarantees/offline.md)).
+**[Play continues through a loss of
+connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md).**
 With no network there is nothing to ask, so the only state that can change is state already on the
 device. Nothing else satisfies this — it is a property of the arrangement rather than of any
 framework, and no amount of optimism about round trips substitutes for a board that is already
 there.
 
-**Input registers without waiting for the network**
-([latency.md](../guarantees/latency.md)). Even with a good connection, a remote source of truth
-leaves two options: wait for it, which violates the promise, or render immediately from a local
-copy — which means local state exists and the first reason has already decided this.
+**[Input registers without waiting for the
+network](../guarantees/input-registers-without-waiting-for-the-network.md).** Even with a good
+connection, a remote source of truth leaves two options: wait for it, which violates the promise,
+or render immediately from a local copy — which means local state exists and the first reason has
+already decided this.
 
 ## Decision
 
@@ -29,14 +31,17 @@ without waiting on anything remote. The rules needed to validate a move run on t
 
 ## Rejected
 
-- **The server holds state and the client renders it.** Fails both promises —
-  [offline.md](../guarantees/offline.md) and [latency.md](../guarantees/latency.md) — by
-  construction. Every state change needs a round trip, so there is no version of this that works in
-  a tunnel. This is true of the whole category of server-owned-state approaches, not of any
-  particular one, so it cannot be rescued by choosing a better framework.
+- **The server holds state and the client renders it.** Fails both promises — [play continues
+  through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+  and [input registers without waiting for the
+  network](../guarantees/input-registers-without-waiting-for-the-network.md) — by construction.
+  Every state change needs a round trip, so there is no version of this that works in a tunnel.
+  This is true of the whole category of server-owned-state approaches, not of any particular one,
+  so it cannot be rescued by choosing a better framework.
 - **The client caches but defers mutation to the server.** Reads work offline, writes do not, which
-  fails [offline.md](../guarantees/offline.md)'s promise for exactly the case it exists to cover: a
-  player mid-puzzle underground.
+  fails [play continues through a loss of
+  connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)'s promise for
+  exactly the case it exists to cover: a player mid-puzzle underground.
 
 One argument for server-owned state deserves an answer, because it is true. A hypermedia
 framework's local signals can handle transient interaction — a drag in progress, a hover, a

@@ -8,16 +8,16 @@ date: 2026-09-01
 
 ## Forced by
 
-**[../problem.md](../problem.md) names a generator whose puzzles have to be good**, and
-[../guarantees/puzzles.md](../guarantees/puzzles.md) promises every puzzle is solvable by deduction
-alone. Whether generated puzzles actually satisfy that, and whether a difficulty grade predicts
-anything, can only be checked against real solves. That is the maintainer's feedback loop, and it is
-not a metrics dashboard — it is the only signal that the thing the project exists to build is
-working.
+**[../problem.md](../problem.md) names a generator whose puzzles have to be good**, and [every
+puzzle is solvable by deduction
+alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md) is promised. Whether generated
+puzzles actually satisfy that, and whether a difficulty grade predicts anything, can only be
+checked against real solves. That is the maintainer's feedback loop, and it is not a metrics
+dashboard — it is the only signal that the thing the project exists to build is working.
 
-**[../guarantees/observability.md](../guarantees/observability.md) names the case this also covers**:
-lost progress produces no error and no complaint. A device that silently dropped a player's work is
-the last thing that will report it.
+**The observability theme in [the guarantees README](../guarantees/README.md) names the case this
+also covers**: lost progress produces no error and no complaint. A device that silently dropped a
+player's work is the last thing that will report it.
 
 **The cost of preserving the option is nearly zero, and the cost of recovering it later is not.**
 Whether stored data can be asked questions of is a property of how it is stored, and it is decided

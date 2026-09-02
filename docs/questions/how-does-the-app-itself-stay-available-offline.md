@@ -8,8 +8,8 @@ resolves_into: decision
 
 ## Why it matters
 
-[../guarantees/offline.md](../guarantees/offline.md) promises play continues through a total
-loss of connectivity. Every discussion of that promise so far has been about *data* — where
+[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+promises exactly that. Every discussion of that promise so far has been about *data* — where
 progress lives and how it survives. None has been about the app: if the shell isn't already on
 the device, opening it with no network gives a player nothing to play with, and the promise is
 false no matter where state lives.

@@ -236,8 +236,9 @@ date: YYYY-MM-DD
 
 ## Also update
 - [ ] questions/README.md — which questions this settles, re-scopes, or moves to another milestone
-- [ ] architecture.md — new system boundaries or relationships this decision introduces
+- [ ] architecture.md — system boundaries or relationships this decision defines
 - [ ] constraints.md — givens this decision imports
+- [ ] glossary.md — domain terminology this decision introduces
 - [ ] guarantees/ — promises this decision commits us to
 -->
 

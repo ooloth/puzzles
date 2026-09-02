@@ -19,27 +19,6 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-### ADR-0003 disqualifies its strongest rejected option on claims nobody checked
-
-**You'll see** [ADR-0003](decisions/0003-this-is-delivered-over-the-web.md), the record that chose
-web delivery, rejecting one native codebase across iOS and Android on five specific, checkable
-claims: that `react-native-macos` trails core by roughly six minor versions, that Expo has no desktop
-support, that Apple Developer Program enrolment has documented multi-week silences, that Google Play
-requires a twelve-tester fourteen-day closed test for personal accounts created after November 2023,
-and that App Store guideline 4.3(b) has been used to reject original puzzle games as
-saturated-category spam. It reads as researched.
-
-**Actually** none of the five is in [constraints.md](constraints.md) and none carries a source. An
-audit on 2026-09-01 found them, and `decisions/README.md` is explicit that a rejection is held to the
-same evidence bar as **Forced by**. The record calls this "the strongest rejected option, and it
-deserves the space" — and then disqualifies it on assertions.
-
-**So** do not cite any of those five figures for anything. The conclusion may well be right: the
-first Forced-by input — one codebase serving phone and desktop — decides it without them, and that
-one is sourced to [problem.md](problem.md). What is unverified is the margin, not the direction.
-Verifying them into `constraints.md`, or softening the rejection to what can be shown, is
-outstanding work.
-
 ### The stack is mid-decision, and looks more settled than it is
 
 **You'll see** a repository with no code in it, a `constraints.md` full of browser specifics, and

@@ -46,27 +46,27 @@ question, and this record deliberately does not answer them.
 
 - **One native codebase across iOS and Android (React Native + Expo).** The strongest rejected
   option, and it deserves the space. It costs the least of any native path — TypeScript is the
-  actual language, and the feature set this app needs (offline SQLite, haptics, push) is reachable
-  through Expo modules with no native code written. It renders real platform views, so it inherits
-  Apple's and Google's design changes instead of chasing them. It was rejected for two reasons
-  neither of which is about code quality. First, **its desktop story is the weakest of the native
-  options** — `react-native-macos` trails core by roughly six minor versions and Expo has no
-  desktop support at all — so satisfying `../problem.md`'s desktop requirement means shipping a web
-  build regardless, and the native codebase becomes an addition to the web one rather than a
-  replacement for it. Second, **three gates sit on the critical path** to a public v1 in a few
-  months: Apple Developer Program enrolment, which has documented multi-week silences on Apple's
-  own forums through 2026; Google Play's requirement that personal accounts created after November
-  2023 run a closed test with twelve testers opted in continuously for fourteen days before
-  production access; and App Store guideline 4.3(b), under which original puzzle games have been
-  rejected as saturated-category spam and overturned only on escalation to the App Review Board.
-  Grid logic puzzles are about as saturated a category as the store has. None of these are risks we
-  can retire by working harder, and all three fall on the one deliverable `../problem.md` asks for.
+  actual language, and the feature set this app needs is reachable through Expo modules with no
+  native code written. It renders real platform views, so it inherits Apple's and Google's design
+  changes instead of chasing them.
 
-  *Flutter and Kotlin Multiplatform were considered within this option and lose to it. Flutter has
-  paused its iOS design-language work since June 2025, so its stock iOS chrome trails the current
-  system, and its web target renders to a canvas — which would foreclose a good web version rather
-  than provide one. Kotlin Multiplatform's cost is its toolchain rather than its language, and it
-  is the largest of the three.*
+  **The disqualifying reason is that it does not remove the web build.**
+  [../problem.md](../problem.md) requires desktop as well as phone, and this option has no desktop
+  target — so satisfying that statement means shipping a web client anyway, and the native codebase
+  becomes an addition to it rather than a replacement for it. That is a second deployable for one
+  maintainer, against `../problem.md`'s ranking of clarity over cleverness. This reason stands on
+  its own and is the one to argue with.
+
+  *A second reason was recorded and is not evidence. It held that three store gates sit on the
+  critical path to a public v1 — Apple Developer Program enrolment delays, Google Play's closed-test
+  requirement for newer personal accounts, and App Store guideline 4.3(b) rejections of
+  saturated-category puzzle games. The direction is plausible and every specific was unsourced, so
+  none of it is in [../constraints.md](../constraints.md) and none of it should be cited. If this
+  record is ever reopened, that is what needs establishing first.*
+
+  *Flutter and Kotlin Multiplatform were considered within this option and lose to it on the same
+  desktop reasoning. Claims recorded about Flutter's iOS design-language work and its canvas web
+  target were also unsourced and are not repeated here.*
 
 - **Two native codebases, Swift and Kotlin.** The only path to the platform's actual ceiling, and
   this app is small enough that reaching a v1 on both is plausible. Rejected because the cost is

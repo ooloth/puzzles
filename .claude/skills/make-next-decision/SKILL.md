@@ -63,8 +63,14 @@ directs you to proceed anyway after hearing the above.
    this folder grows without bound and reading all of it will not stay affordable. If a title does
    not tell you whether to open the file, that is a defect: say so, and fix it before deciding
    anything on top of it.
-1. Read `docs/guarantees/` for the themes that bear on the question. Promises are not decisions and
-   do not appear in `docs/decisions/`, and they bind just as hard.
+1. **List `docs/guarantees/` and open every promise whose filename bears on the question.** One file
+   is one promise, named for the promise, so the listing is the checklist of what is owed to players
+   the same way `docs/decisions/` is the checklist of what is binding on implementation. Promises do
+   not appear in `docs/decisions/` and they bind just as hard. Two things the listing will not tell
+   you, so check them: `rg -l 'kind: non-promise' docs/guarantees/` finds the places a promise is
+   deliberately withheld — reasoning that assumes one of those exists is the most common way this
+   folder gets misread — and `docs/guarantees/README.md` holds the themes that have no promises yet,
+   which is where an absence you should have noticed will be.
 1. Invoke the `uphold-standards` skill to load the portable decision-making standard, and read
    `docs/problem.md`, `docs/constraints.md` and `docs/questions/README.md`
 1. List `docs/questions/` to familiarize yourself with the set of unmade decisions

@@ -102,6 +102,14 @@ detected by a lint script like `check-docs.py` instead.
   not need a scan.
 - **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying _Enforced
   by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
+  The frontmatter `enforced` field should agree with the prose; `rg -l 'enforced: no'
+  docs/guarantees/` is the backlog and it is only as good as that agreement.
+- **A promise cited that was never made.** Take each file carrying `kind: non-promise` in
+  `docs/guarantees/` and search the rest of `docs/` for text asserting the promise it withholds.
+  Demoting a record leaves every citation of it behind, reading exactly as it did when the promise
+  was real. Splitting `guarantees/` into one file per promise on 2026-09-02 surfaced nine such
+  citations of a durability bound that had been demoted the day before — in question files, failure
+  modes, and a multi-paragraph argument that rested on it as its premise.
 - **Change narrative.** Search for _used to_, _previously_, _no longer_, _has since_, _was changed
   to_, and dates used as change markers. The documentation standard forbids these outside the narrow
   case where a reader lacking the history would do the wrong thing.

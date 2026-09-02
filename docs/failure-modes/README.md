@@ -70,6 +70,8 @@ it usually matters more than the failure itself.>
   — clock skew inverting a merge, after which both devices agree on the wrong answer.
 - [The server hands back state the client will not accept](the-server-hands-back-state-the-client-will-not-accept.md)
   — the work is intact and unreachable, usually because two devices are running different versions.
+- [A player resumes from a board another device moved past](a-player-resumes-from-a-board-another-device-moved-past.md)
+  — nothing is lost and nothing is wrong, and the player still watches their progress go backwards.
 
 ### Threatening availability and cost
 

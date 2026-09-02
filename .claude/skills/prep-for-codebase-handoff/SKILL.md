@@ -91,7 +91,8 @@ detected by a lint script like `check-docs.py` instead.
   ADR against a later ADR, but any other file asserting something an ADR already settled. Take each
   record in `docs/decisions/` and search the rest of `docs/`, `CLAUDE.md` and the skills for claims
   it makes false. `unfinished.md` listed the language as an open stack question for a day after
-  ADR-0005 chose TypeScript, in the file the repo itself calls its highest-consequence one.
+  a record had already chosen TypeScript, in the file the repo itself calls its
+  highest-consequence one.
 - **A rule violated in the files it governs.** Take each Must in `docs/standards/`, each convention
   stated in an index README, and each claim a README makes about what a script checks, and go and
   look at the files it claims authority over. `questions/README.md` said sequencing lives in that
@@ -101,9 +102,13 @@ detected by a lint script like `check-docs.py` instead.
 - **An ADR resting on something not yet settled.** For each record, take every **Forced by** input
   and every **Rejected** reason and ask what it grounds in. A rejection reason that depends on an
   open question is the expensive one, because the option stays rejected and the reasoning is never
-  revisited. ADR-0006 rejected an anonymous server copy for guests partly because it degrades to
-  seven days when the API is not judged first-party — a consequence of a hosting topology nobody had
-  chosen. `docs/standards/decisions.md` calls this the failure that does not announce itself.
+  revisited. **Check Rejected hardest**, because reality tests the option that was taken and never
+  the one that was not, so a rejection's stated reason is the last word on it permanently. The
+  durability record demoted on 2026-09-01 foreclosed the only free guest recovery mechanism on three
+  costs: two turned on questions still open, and the third was a routine cleanup job described as
+  structural. Watch for the signature — when the weak reasoning in a record all argues for the option
+  that lost and none of it for the option that won, the section was written to justify rather than to
+  evaluate. `docs/standards/decisions.md` calls this the failure that does not announce itself.
 - **`unfinished.md` entries that are no longer live.** Each entry claims something in the repo will
   mislead a reader today. Check whether it still would. An entry describing a migration that
   finished, or a pattern that no longer exists, trains readers to skim the one file whose whole

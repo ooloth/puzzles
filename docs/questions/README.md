@@ -52,8 +52,8 @@ one question produces one ADR, and none that a question is deleted the moment on
 [Is screen reader support in scope for v1?](is-screen-reader-support-in-scope-for-v1.md) spilled two
 records and stayed open with the harder half. A question that spilled all of itself is deleted, as
 "which doors must stay open?" was on 2026-09-01. The counting rule is the
-separability test in [../decisions/README.md](../decisions/README.md): *could a reasonable person
-have decided one part one way and another part the other way?* Every yes is another record.
+separability test in [../decisions/README.md](../decisions/README.md): _could a reasonable person
+have decided one part one way and another part the other way?_ Every yes is another record.
 
 A question is deleted once nothing is left in it that a record has not settled. Mine what is worth
 keeping first — findings graduate to [../constraints.md](../constraints.md), and reasoning belongs in
@@ -80,7 +80,7 @@ here, where the whole picture is visible.
 
 `scripts/check-docs.py` checks the things that are facts rather than judgement — every link
 resolves, every question appears in a milestone, and no question file has grown a sequencing
-section back. It deliberately does not check the *ordering*, because the ordering is the judgement
+section back. It deliberately does not check the _ordering_, because the ordering is the judgement
 and a check that passed it would only make a wrong sequence look verified.
 
 ## Settled
@@ -132,7 +132,48 @@ platform choice to be one we keep.
    ruled out a painted canvas.
 10. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
 
-## M2 — a puzzle comes from the store
+## M2 — dev tooling creates convenient feedback loops
+
+Nothing a player can see, which is exactly why it slips forever if it is not a milestone. M1 is the
+first thing that exists and the first thing that can be wrong without anyone noticing, and every
+milestone after this one is verified using whatever gets built here. Doing it once now, while the
+stack is chosen and nothing is built on it, is when it is cheapest and when it pays back most.
+
+**These are feedback loops, and the list is deliberately longer than the two anyone reaches for.**
+Tests and CI are the obvious pair. The rest are the ones that decide whether a change can be checked
+in a minute or an afternoon — and each is used many times a day, by the maintainer and by an agent
+working without them.
+
+1. [What runs the tests?](what-runs-the-tests.md) — likely answered by M1's runtime.
+2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
+   already exists and nothing runs it, which is the shape of the whole problem.
+3. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
+   — every milestone here claims to be observable, and nothing says what observing one consists of.
+   This is where [../verification.md](../verification.md) gets its content.
+4. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+   — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
+5. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+   of a check are only comparable if they start from the same place.
+6. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+   — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
+   standing between someone and checking whether a change works.
+7. [How do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) — a
+   static client loading from cache hides a dead API for a long time.
+8. [How is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) — the deploy
+   is the moment a working system becomes a broken one.
+9. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
+   motivating case in [../guarantees/observability.md](../guarantees/observability.md): it produces
+   no error, no crash and no complaint.
+10. [How do we exercise offline, throttled and backgrounded conditions?](how-do-we-exercise-offline-throttled-and-backgrounded-conditions.md)
+    — [../constraints.md](../constraints.md) records that the storage failures do not reproduce in a
+    desktop browser, so the conditions this app is designed for are the hardest to create on purpose.
+11. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — following
+    from the above, and from a streaming bug that reproduced only on real iOS Safari over a real
+    network.
+12. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — after M3, when there is
+    something in the store. An untested restore is a belief.
+
+## M3 — a puzzle comes from the store
 
 One seeded puzzle, written to the store by hand, read back by the endpoint, and displayed however
 crudely. No grid, no interaction, no generator. This is where migrations, backups and connection
@@ -140,24 +181,24 @@ handling become real, and where
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s queryability
 stops being a promise about a store nobody has built.
 
-It sits here rather than at M7 because the alternative is building the client against a hard-coded
+It sits here rather than at M8 because the alternative is building the client against a hard-coded
 board for six milestones and meeting the store for the first time with a finished game attached.
 
 1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
-   to write one row and read it back. The full answer is not needed until M6.
+   to write one row and read it back. The full answer is not needed until M7.
 2. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
 3. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
 
-## M3 — a grid is on the screen
+## M4 — a grid is on the screen
 
 The M2 puzzle, rendered as a grid. Static, no interaction.
 
 - [How is the app styled?](how-is-the-app-styled.md) — after the renderer, since a rendering approach
   that ships a build pipeline anyway changes what a styling toolchain costs.
 
-## M4 — a player can fill it in
+## M5 — a player can fill it in
 
 Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 
@@ -167,26 +208,26 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
 2. [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
    — after the above, since the budget covers the input path and what an input is comes first.
 
-## M5 — the board survives a reload
+## M6 — the board survives a reload
 
 The first durability promise anything actually keeps.
 
 1. [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md) — depth is what
-   decides the shape below, so it comes first even though undo itself is an M9 feature.
+   decides the shape below, so it comes first even though undo itself is an M10 feature.
 2. [What can a player do with no network?](what-can-a-player-do-with-no-network.md) — one board or a
    browsable archive, which sets storage volume by orders of magnitude.
 3. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
 4. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
    one stack choice with no clean migration path.
 
-## M6 — the rules run
+## M7 — the rules run
 
 Illegal moves are recognised, and a finished board is recognised as finished.
 
 - [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — the full answer,
   now that something depends on it.
 
-## M7 — the puzzles are real
+## M8 — the puzzles are real
 
 Not one seeded row. Something published on a rhythm, fetched and rendered.
 
@@ -199,14 +240,14 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md); what remains
    here is how much of it the server understands.
 
-## M8 — it works with no network
+## M9 — it works with no network
 
 1. [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
    — the precache list is a build output, so this waits on M1's build choice.
 2. [How long must offline play survive?](how-long-must-offline-play-survive.md)
 3. [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
 
-## M9 — sudoku is finished, in guest mode
+## M10 — sudoku is finished, in guest mode
 
 Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
@@ -221,11 +262,11 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md); what is left is
    what a cell announces.
 
-## M10 — a guest's work survives eviction
+## M11 — a guest's work survives eviction
 
 The point at which a guest has something worth keeping and the browser is the only thing keeping it.
-It sits after M9 because the size of the problem is set by how much a guest has accumulated, and
-before signing in because the whole question is what a guest gets *without* an account.
+It sits after M10 because the size of the problem is set by how much a guest has accumulated, and
+before signing in because the whole question is what a guest gets _without_ an account.
 
 1. [Does a guest see anything that accumulates?](does-a-guest-see-anything-that-accumulates.md) — the
    product question that sizes everything below. A board's value decays with absence; a streak's does
@@ -236,7 +277,7 @@ before signing in because the whole question is what a guest gets *without* an a
 4. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
    — the only confirmed mitigation, and it cannot be required of anyone.
 
-## M11 — a player can sign in
+## M12 — a player can sign in
 
 1. [Do privacy regulations apply?](do-privacy-regulations-apply.md) — first, because it prices
    everything else here.
@@ -245,11 +286,11 @@ before signing in because the whole question is what a guest gets *without* an a
    — likely the same question as the one above; resolve whether they merge before answering either.
 4. [How long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md)
 5. [Is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
-   — decided here rather than at M10, because it is a claim about both records at once.
+   — decided here rather than at M11, because it is a claim about both records at once.
 6. [What does the server hold?](what-does-the-server-hold.md) — the rest of the inventory.
 7. [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
 
-## M12 — work follows a player between devices
+## M13 — work follows a player between devices
 
 1. [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
 2. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
@@ -259,11 +300,11 @@ before signing in because the whole question is what a guest gets *without* an a
 5. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
 6. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
-## M13 — the puzzles are ours
+## M14 — the puzzles are ours
 
 - [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
 
-## M14 — something is paid for
+## M15 — something is paid for
 
 1. [Is there a paid tier?](is-there-a-paid-tier.md)
 2. [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
@@ -276,16 +317,12 @@ before signing in because the whole question is what a guest gets *without* an a
 
 Real, and nothing is waiting on them. Several are research rather than choices.
 
-[What runs the tests?](what-runs-the-tests.md) and
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) — both likely
-answered by the runtime.
 [How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 [how does Android evict stored data?](how-does-android-evict-stored-data.md),
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
 [what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
 — research.
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
-[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md),
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
 [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
 [what does the server store, if anything?](what-does-the-server-store-if-anything.md),
@@ -331,10 +368,10 @@ to look settled. Every Findings section opens with that sentence, so a reader wh
 without reading this one still knows what they are holding.
 
 **A finding that asserts a fact about the world carries the tier it was established at**, using the
-same three words [../constraints.md](../constraints.md) uses — *Measured*, *Sourced*, *Reasoned* —
+same three words [../constraints.md](../constraints.md) uses — _Measured_, _Sourced_, _Reasoned_ —
 plus a fourth this folder needs and that file does not:
 
-- ***Unverified — no source recorded.*** Somebody wrote it down and nobody can say why it is true.
+- **_Unverified — no source recorded._** Somebody wrote it down and nobody can say why it is true.
   This is the most useful tag in the set, because an unsourced number reads exactly like a sourced
   one and this is what tells them apart. Several arrived here from legacy documents and none of them
   should decide anything.
@@ -342,7 +379,7 @@ plus a fourth this folder needs and that file does not:
 A finding that is a judgement, a product opinion, or an implication for the options here carries no
 tier, because there is nothing to have established.
 
-A finding may record what a standard *implies for these options*; it may not restate the standard
+A finding may record what a standard _implies for these options_; it may not restate the standard
 itself. The first shifts a decision and belongs here. The second is a weaker local copy of a rule
 already in force, competing with the real one for whoever finds it first.
 
@@ -358,7 +395,6 @@ listing reads as the list of what is open.
 **A question is split when only part of it blocks an early milestone.** The blocking part becomes
 its own file and the rest stays where it belongs. Both halves keep the format below, and the
 question that was split says what it no longer covers so a reader does not go looking for it here.
-
 
 <!-- Template:
 

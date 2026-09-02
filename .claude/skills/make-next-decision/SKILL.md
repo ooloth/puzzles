@@ -93,7 +93,40 @@ directs you to proceed anyway after hearing the above.
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to research all viable options and wait for the user's approval
 
+**Say nothing about where the answer is leaning, and do not form a lean to keep to yourself.** At
+this point the options have not been researched, so any sense of the likely answer came from a
+question file's accumulated content rather than from evidence — which is exactly the thing step 3
+exists to test. Naming a favourite here commits you to defending it and turns the research into
+confirmation. Flagging which findings are weakly sourced is not the same thing and is worth doing;
+saying which side they point to is.
+
 ### 3. Look before you leap, then settle it by measuring
+
+**Arrive at the question file as though it were blank.** Whatever Options and Findings you find
+there are claims to verify. They are not a head start, not a shortlist you are refining, and not a
+position to argue from. Run the investigation you would have run if the file had held nothing but
+its title.
+
+This is the most expensive habit to get wrong, because inherited content does not read as
+inherited. A question file accumulates over weeks from earlier sessions, legacy documents and
+research nobody re-checked, and by the time you arrive it reads as the state of the art on the
+subject. Treating it as a starting position means the field was narrowed by whoever wrote first,
+the framing was set by whoever framed it first, and your research quietly becomes an exercise in
+choosing among their candidates. The three specific failures to watch for:
+
+- **An option that is absent is not an option that was rejected.** A candidate nobody listed looks
+  identical to one that was considered and dropped. Rebuild the field yourself before comparing
+  anything in it, and include what the file does not mention.
+- **A finding is evidence of what somebody believed, not of what is true.** Every Findings section
+  in this repo says so in its first line. Check the tier on each one, and treat _Unverified_ and a
+  vague source as equivalent to absent — an unsourced claim reads exactly like a sourced one and
+  nothing else tells them apart.
+- **The framing is inherited too, and it is the part nobody checks.** "Which of these three?" may
+  be the wrong question, and a file that asks it will never say so. Restate the problem without
+  naming a solution before you accept the file's version of it.
+
+Where verification confirms what the file already said, you have lost nothing but the time. Where
+it does not, you have found the thing this step exists for.
 
 **Look first.** Research surfaces the candidates, the known traps, and — the part that matters most
 — the properties worth observing that you would not have thought of on your own. A spike designed

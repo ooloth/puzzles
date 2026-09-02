@@ -43,11 +43,10 @@ including everything precached so that
 it is what an offline promise means. Gating governs the boundary of what is handed over, never what
 has been.
 
-**It settles the catalogue candidate in
-[what does the server hold?](../questions/what-does-the-server-hold.md)** by consequence, and that is
-stated here rather than left to be discovered. That question's own finding already ties the catalogue
-to entitlement rather than to delivery — an archive that might ever be gated cannot be static — so
-deciding one decides the other.
+**It settles the catalogue candidate in the server's inventory** by consequence, and that is
+stated here rather than left to be discovered. The finding that ties the catalogue to entitlement
+rather than to delivery — an archive that might ever be gated cannot be static — is recorded in
+[../constraints.md](../constraints.md), so deciding one decides the other.
 
 ## Rejected
 
@@ -84,11 +83,14 @@ free.** That is real ongoing work — cache headers, content hashing, an invalid
 against an option nobody has exercised. If the paid tier never happens, it will have been paid for
 nothing.
 
-**It settles part of a question still open.** [What does the server
-hold?](../questions/what-does-the-server-hold.md) is meant to be worked once, whole, with every
-candidate struck off deliberately. This strikes one off ahead of that, for a stated reason, and the
-outcome of the catalogue candidate is no longer genuinely open. Pretending otherwise would be worse
-than saying it.
+**It settles part of the server's inventory ahead of the rest.** The catalogue candidate is one of
+several still being decided piecemeal — see
+[is there a paid tier?](../questions/is-there-a-paid-tier.md),
+[what must we know about how the app is used?](../questions/what-must-we-know-about-how-the-app-is-used.md),
+[is there one puzzle a day, or unlimited play?](../questions/is-there-one-puzzle-a-day-or-unlimited-play.md),
+and [how would we learn a player lost progress?](../questions/how-would-we-learn-a-player-lost-progress.md).
+This record strikes the catalogue off ahead of those, for a stated reason, and its outcome is no
+longer genuinely open. Pretending otherwise would be worse than saying it.
 
 **Nothing here stops a player copying what they have.** A determined person can read the puzzles
 their own browser holds and republish them. The decision buys a boundary, not enforcement, and

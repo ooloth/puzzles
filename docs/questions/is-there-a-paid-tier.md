@@ -64,3 +64,8 @@ right now — see
 leading option keeps the server out of gameplay entirely. Those are
 separate objects and separate authorities, and conflating them would import a server into
 gameplay to solve a content-delivery problem.
+
+**Entitlement is the one candidate that cannot be softened.** Progress can be lost, a catalogue
+can be stale, usage can go unmeasured — all degrade gracefully. A paid tier enforced on the device
+is not enforced, because the device belongs to the person it would be charging. That is why the
+option must stay open rather than be settled by default — see [../problem.md](../problem.md).

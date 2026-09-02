@@ -173,6 +173,33 @@ working without them.
 12. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — after M3, when there is
     something in the store. An untested restore is a belief.
 
+**The loops above check for failures somebody thought of. These are for the ones nobody did.**
+They are the same milestone and the same argument: each is cheap while nothing is built, and each is
+used for the life of the project.
+
+13. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
+    — [../guarantees/correctness.md](../guarantees/correctness.md) names "a partial write is never
+    observable" and "the board on screen always matches the board in storage" as candidate promises,
+    and neither is checkable unless something asserts it where it can fail.
+14. [What invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md)
+    — a different question: not what one write asserts, but what stays true across every row. A
+    request path only ever sees its own rows.
+15. [How would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
+    — everything above tests a failure someone imagined.
+    [../guarantees/observability.md](../guarantees/observability.md) is a stub and names lost progress
+    as its motivating case precisely because it produces no error.
+16. [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
+    — the ordinary ones, decided rather than inherited from whatever the platform happens to show.
+17. [What is worth being woken up for?](what-is-worth-being-woken-up-for.md) — an alert nobody acts on
+    trains everyone to ignore all of them, and a solo maintainer has no rotation.
+18. [How is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md)
+    — [../constraints.md](../constraints.md) records that a stalled connection throws no error, so
+    something slow is invisible unless it was instrumented before it happened.
+19. [Can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
+    — write failures that misidentify their own cause, IndexedDB absent under Lockdown Mode, a
+    connection that stalls while reporting as connected. Every one is a code path that never executes
+    unless it is forced to.
+
 ## M3 — a puzzle comes from the store
 
 One seeded puzzle, written to the store by hand, read back by the endpoint, and displayed however
@@ -236,9 +263,6 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 2. [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 4. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
-5. [What does the server hold?](what-does-the-server-hold.md) — the catalogue candidate is settled by
-   [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md); what remains
-   here is how much of it the server understands.
 
 ## M9 — it works with no network
 
@@ -287,8 +311,7 @@ before signing in because the whole question is what a guest gets _without_ an a
 4. [How long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md)
 5. [Is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
    — decided here rather than at M11, because it is a claim about both records at once.
-6. [What does the server hold?](what-does-the-server-hold.md) — the rest of the inventory.
-7. [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
+6. [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
 
 ## M13 — work follows a player between devices
 

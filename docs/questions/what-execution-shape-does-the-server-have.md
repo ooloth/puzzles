@@ -85,9 +85,12 @@ the storage layer are specific to the platform.
 a server exists and holds a durable per-player record, so there is server-side state whatever else
 is true.
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) establishes that the store
-has to be queryable rather than opaque. Together those are enough: the remaining candidates in
-[what does the server hold?](what-does-the-server-hold.md) — entitlement, the catalogue, push,
-observability — are each satisfied by any shape below and so do not discriminate.
+has to be queryable rather than opaque. Together those are enough: the remaining candidates —
+entitlement, usage, push, and observability — are each satisfied by any shape below and so do not
+discriminate. See [is there a paid tier?](is-there-a-paid-tier.md),
+[what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
+[is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md), and
+[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md).
 
 **Nothing has been measured, and at this scale performance is unlikely to decide it.** What should
 decide it is what has to be true between requests, and how much operational surface one maintainer

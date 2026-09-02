@@ -35,8 +35,7 @@ byte. Revising the shape those bytes are in touches every one of them.
 
 Whether the storage design chosen in
 [which client storage mechanism?](which-client-storage-mechanism.md), and whatever the server-side
-schema turns out to be once
-[what does the server hold?](what-does-the-server-hold.md) is answered, can represent a guest and a
+schema turns out to be once what the server holds is answered, can represent a guest and a
 signed-in player identically except for an identity field attached on sign-in. If it can, without
 contortions, that is evidence for one shape. If representing a guest cleanly requires fields or
 constraints a signed-in record does not need, or vice versa, that is evidence the two should diverge.
@@ -91,8 +90,7 @@ about how long a guest's copy of it survives, or how long a signed-in player's d
 neither depends on how this one is answered.
 
 **"Same shape" would close a door if decided before the shape itself is written down.** Committing to
-one representation for both personas, before
-[what does the server hold?](what-does-the-server-hold.md) and
+one representation for both personas, before what the server holds and
 [which client storage mechanism?](which-client-storage-mechanism.md) have actually produced a
 candidate shape, risks locking in a structure nobody has stress-tested against what a guest record
 and an account record each need. This question is better settled once a shape exists to check the

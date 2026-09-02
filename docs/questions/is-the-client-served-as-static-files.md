@@ -19,8 +19,9 @@ framework investigation already concluded against them on evidence, with no reco
 which is the shape of a decision made by accident.
 
 It also decides whether a server is needed for *delivery* at all, which is a separate matter from
-whether one is needed for [storage](what-does-the-server-hold.md). A static bundle needs a file
-host; it does not need a runtime.
+whether one is needed for storage — settled by
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md). A static
+bundle needs a file host; it does not need a runtime.
 
 ## What would settle it
 

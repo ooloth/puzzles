@@ -37,9 +37,13 @@ answer.
 
 **It settles existence and nothing else.** What the server holds beyond the store, what execution
 shape it runs in, and where it runs are each their own question, and
-[../questions/README.md](../questions/README.md) sequences them.
-[What does the server hold?](../questions/what-does-the-server-hold.md) is still worked whole against
-its whole inventory — a server existing is not the same as a candidate on that list surviving.
+[../questions/README.md](../questions/README.md) sequences them. What the server holds beyond the
+store is decided candidate by candidate:
+[is there a paid tier?](../questions/is-there-a-paid-tier.md),
+[what must we know about how the app is used?](../questions/what-must-we-know-about-how-the-app-is-used.md),
+[is there one puzzle a day, or unlimited play?](../questions/is-there-one-puzzle-a-day-or-unlimited-play.md),
+and [how would we learn a player lost progress?](../questions/how-would-we-learn-a-player-lost-progress.md)
+— a server existing is not the same as any one of those candidates surviving.
 
 **It is not on the interaction path.** [ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md)
 put authoritative state on the client, and this does not reopen it. Everything the server does is a
@@ -77,11 +81,14 @@ schedules that or says what it does. The milestone sequence puts a same-origin e
 route at M1 and a store behind it at M2, and neither is a server in the sense this record might be
 read to authorise.
 
-**It arrives before [what does the server hold?](../questions/what-does-the-server-hold.md) is
-worked.** The danger is that question being treated as answered because a server is now settled. It
-is not: [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) put exactly
-one candidate on that list beyond doubt, and the others — entitlement, push, observability — have
-neither survived nor been struck off.
+**It arrives before the rest of what the server holds is worked.** The danger is that a server
+existing is read as settling what else it carries. It does not:
+[ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) put exactly one
+candidate beyond doubt, and the others — entitlement, usage, push, observability — are each still
+open in their own question: [is there a paid tier?](../questions/is-there-a-paid-tier.md),
+[what must we know about how the app is used?](../questions/what-must-we-know-about-how-the-app-is-used.md),
+[is there one puzzle a day, or unlimited play?](../questions/is-there-one-puzzle-a-day-or-unlimited-play.md),
+and [how would we learn a player lost progress?](../questions/how-would-we-learn-a-player-lost-progress.md).
 
 **It has no independent basis.** Both routes to it run through other records: the store, from
 [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md), and withholdable

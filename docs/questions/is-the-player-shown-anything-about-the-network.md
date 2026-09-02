@@ -67,5 +67,5 @@ question is raised and left unresolved.
 **Reporting to the maintainer was never in tension with this.** It is not shown to a player, so no
 promise about the player's experience reaches it. That tension is recorded in
 [../guarantees/observability.md](../guarantees/observability.md) and in
-[what does the server hold?](what-does-the-server-hold.md) and is dissolved rather than
-resolved.
+[how would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) and is
+dissolved rather than resolved.

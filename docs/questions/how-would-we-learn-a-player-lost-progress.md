@@ -45,3 +45,16 @@ never raised.
 about a disk filling up, a cache silently failing, or a write path that returns success without
 persisting. A green check answers "is it running", which is a different question from "is it
 working".
+
+**Lost progress produces no error, no crash and no complaint.** A device that has silently
+dropped a player's work is the last thing that will report it, and a player who quietly leaves
+reports nothing either. Evidence that the durability promise is being kept has to come from
+somewhere other than the player noticing.
+
+**Reporting home does not conflict with the offline guarantee.**
+[../guarantees/offline.md](../guarantees/offline.md) bounds what the network may do to a player —
+block, delay, interrupt — and reporting to the maintainer does none of those, because the player
+never sees it. What remains true is that anything reporting home has to fail invisibly: a failed
+report must not become a visible error. A server that only receives these reports does not reopen
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)'s decision to keep
+authoritative state on the client — it can exist without sitting on the interaction path.

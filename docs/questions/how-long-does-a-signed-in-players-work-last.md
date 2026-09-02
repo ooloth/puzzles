@@ -37,7 +37,7 @@ does not resolve; it is out of scope for this file, and is flagged here so it is
 
 Nothing external blocks an answer — this is a product and cost call, not a research gap. It is
 settled once [are there user accounts?](are-there-user-accounts.md) fixes what a player signs into,
-[what does the server hold?](what-does-the-server-hold.md) fixes what an account can actually store,
+what the server holds fixes what an account can actually store,
 and [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) decides
 whether "any device" ships in the first release or later.
 
@@ -79,13 +79,12 @@ the same way, they collapse into a single question.
 
 **This bound, once set to anything beyond the current session, forces a server.** the durability record's Risk
 section said so directly: the signed-in half cannot be delivered without something off-device, and
-that consequence was real enough that it was recorded before
-[what does the server hold?](what-does-the-server-hold.md) had been argued. That consequence is
+that consequence was real enough that it was recorded before what the server holds had been argued.
+That consequence is
 already acted on — [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
 records that a server exists — so nothing about answering this question re-opens whether to build
-one. What remains open is what that server holds and how it is operated, which are
-[what does the server hold?](what-does-the-server-hold.md) and
-[how is the server operated?](how-is-the-server-operated.md).
+one. What remains open is what that server holds and how it is operated, and
+[how is the server operated?](how-is-the-server-operated.md) is the latter half.
 
 **ADR-0010 was reasoned entirely from the signed-in bound this question now reopens, and says so
 itself.** Its own Risk section: "its whole basis is one promise in one record. If the durability record's
@@ -93,9 +92,8 @@ signed-in bound is ever revised, this goes with it." Its own Revisit-when sectio
 superseded and the signed-in bound is dropped... should be superseded in the same change." Demoting
 the durability record is exactly that event. This is recorded as a finding rather than acted on, because
 superseding a decision record is outside what this question can do on its own — it needs its own
-decision, made with the full inventory in
-[what does the server hold?](what-does-the-server-hold.md) in view, not made as a side effect of
-opening this file.
+decision, made with the full inventory of what the server holds in view, not made as a side effect
+of opening this file.
 
 **Two bounds, one per persona, are a standing cost, not a one-time edit.** Every promise in
 [../guarantees/](../guarantees/) now has to name which persona it covers, and a promise that quietly

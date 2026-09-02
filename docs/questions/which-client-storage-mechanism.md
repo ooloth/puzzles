@@ -62,8 +62,8 @@ independent of how good it is.
 
 It is a **bundle**, so adopting it answers several open questions at once — this one, whether state
 is [a snapshot or an event log](is-puzzle-state-a-snapshot-or-an-event-log.md), much of
-[which database](which-database-if-any.md), and part of
-[what the server holds](what-does-the-server-hold.md), since its sync backend is one. Those
+[which database](which-database-if-any.md), and part of what the server holds, since its sync
+backend is one. Those
 answers may each be right, but a tool that supplies them is not an argument for them, and
 [README.md](README.md) is about the order in which they are reached.
 It is a candidate for this question once the others are settled, and a way of skipping them before.

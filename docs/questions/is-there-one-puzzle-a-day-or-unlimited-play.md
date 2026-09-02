@@ -36,3 +36,7 @@ recomputing every stored streak.** [Can more than one puzzle be published per
 day?](can-more-than-one-puzzle-be-published-per-day.md) is the catalogue-shape half of the same
 problem: what "today" means for looking a puzzle up and what it means for a streak are two
 different timezone questions, not one.
+
+**A daily rhythm is the only thing here that would justify interrupting anyone.** A message that
+reaches a closed app — web push — requires an application server by construction; there is no
+serverless form of it. Whether it is wanted turns on the answer here.

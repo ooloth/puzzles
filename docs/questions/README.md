@@ -103,7 +103,7 @@ client and its API both live and moving either later moves both.
 is the only thing that survives the browser's storage wipe without asking a player for anything, and
 [../constraints.md](../constraints.md) records that Safari withdraws that exemption when the setting
 server is not judged genuinely first-party — the shape of a static host with its API elsewhere.
-Whether the cookie is ever used is decided at M10. What M1 must not do is foreclose it, and given
+Whether the cookie is ever used is decided at M12. What M1 must not do is foreclose it, and given
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) already puts a
 runtime on the content path, serving the client from the same origin costs nothing.
 
@@ -132,17 +132,16 @@ platform choice to be one we keep.
    ruled out a painted canvas.
 10. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
 
-## M2 — dev tooling creates convenient feedback loops
+## M2 — a change can be checked before it ships
 
-Nothing a player can see, which is exactly why it slips forever if it is not a milestone. M1 is the
-first thing that exists and the first thing that can be wrong without anyone noticing, and every
-milestone after this one is verified using whatever gets built here. Doing it once now, while the
-stack is chosen and nothing is built on it, is when it is cheapest and when it pays back most.
+M1 is the first thing that exists and the first thing that can be wrong without anyone noticing.
+Everything after this is verified using whatever gets built here, so building it once now — while the
+stack is chosen and nothing is built on it — is when it is cheapest and when it pays back most.
 
-**These are feedback loops, and the list is deliberately longer than the two anyone reaches for.**
-Tests and CI are the obvious pair. The rest are the ones that decide whether a change can be checked
-in a minute or an afternoon — and each is used many times a day, by the maintainer and by an agent
-working without them.
+Each entry is a maintainer's problem rather than a thing a project ought to have, and each is the
+difference between checking a change in a minute and checking it in an afternoon. They are used many
+times a day, by the maintainer and by an agent working without them. This milestone produces nothing
+a player can see, which is why it has to be a milestone rather than a habit.
 
 1. [What runs the tests?](what-runs-the-tests.md) — likely answered by M1's runtime.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
@@ -157,48 +156,9 @@ working without them.
 6. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-7. [How do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) — a
-   static client loading from cache hides a dead API for a long time.
-8. [How is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) — the deploy
-   is the moment a working system becomes a broken one.
-9. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
-   motivating case in [../guarantees/observability.md](../guarantees/observability.md): it produces
-   no error, no crash and no complaint.
-10. [How do we exercise offline, throttled and backgrounded conditions?](how-do-we-exercise-offline-throttled-and-backgrounded-conditions.md)
-    — [../constraints.md](../constraints.md) records that the storage failures do not reproduce in a
-    desktop browser, so the conditions this app is designed for are the hardest to create on purpose.
-11. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — following
-    from the above, and from a streaming bug that reproduced only on real iOS Safari over a real
-    network.
-12. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — after M3, when there is
-    something in the store. An untested restore is a belief.
-
-**The loops above check for failures somebody thought of. These are for the ones nobody did.**
-They are the same milestone and the same argument: each is cheap while nothing is built, and each is
-used for the life of the project.
-
-13. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
-    — [../guarantees/correctness.md](../guarantees/correctness.md) names "a partial write is never
-    observable" and "the board on screen always matches the board in storage" as candidate promises,
-    and neither is checkable unless something asserts it where it can fail.
-14. [What invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md)
-    — a different question: not what one write asserts, but what stays true across every row. A
-    request path only ever sees its own rows.
-15. [How would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
-    — everything above tests a failure someone imagined.
-    [../guarantees/observability.md](../guarantees/observability.md) is a stub and names lost progress
-    as its motivating case precisely because it produces no error.
-16. [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
-    — the ordinary ones, decided rather than inherited from whatever the platform happens to show.
-17. [What is worth being woken up for?](what-is-worth-being-woken-up-for.md) — an alert nobody acts on
-    trains everyone to ignore all of them, and a solo maintainer has no rotation.
-18. [How is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md)
-    — [../constraints.md](../constraints.md) records that a stalled connection throws no error, so
-    something slow is invisible unless it was instrumented before it happened.
-19. [Can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
-    — write failures that misidentify their own cause, IndexedDB absent under Lockdown Mode, a
-    connection that stalls while reporting as connected. Every one is a code path that never executes
-    unless it is forced to.
+7. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+   platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
+   reproduced only on real iOS Safari over a real network.
 
 ## M3 — a puzzle comes from the store
 
@@ -270,6 +230,10 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    — the precache list is a build output, so this waits on M1's build choice.
 2. [How long must offline play survive?](how-long-must-offline-play-survive.md)
 3. [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
+4. [How do we exercise offline, throttled and backgrounded conditions?](how-do-we-exercise-offline-throttled-and-backgrounded-conditions.md)
+   — [../constraints.md](../constraints.md) records that the storage failures do not reproduce in a
+   desktop browser, so the conditions this milestone is about are the hardest ones to create on
+   purpose. It sits here rather than at M2 because there is nothing offline to exercise until now.
 
 ## M10 — sudoku is finished, in guest mode
 
@@ -286,10 +250,48 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md); what is left is
    what a cell announces.
 
-## M11 — a guest's work survives eviction
+## M11 — the running system reports its own failures
+
+M2 built what checks a change before it ships. These are for after it has shipped, and they need what
+M2 did not have: a store with rows in it, a deployed thing with traffic, and a product somebody could
+be using. They sit before the guest durability work below because the whole question there is whether
+players are losing work, and nothing currently could tell us either way.
+
+1. [How do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) — a
+   static client loading from cache hides a dead API for a long time.
+2. [How is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) — the deploy
+   is the moment a working system becomes a broken one.
+3. [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
+   — the ordinary ones, decided rather than inherited from whatever the platform happens to show.
+4. [What is worth being woken up for?](what-is-worth-being-woken-up-for.md) — an alert nobody acts on
+   trains everyone to ignore all of them, and a solo maintainer has no rotation.
+5. [How is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md)
+   — [../constraints.md](../constraints.md) records that a stalled connection throws no error, so
+   something slow is invisible unless it was instrumented before it happened.
+6. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
+   motivating case in [../guarantees/observability.md](../guarantees/observability.md): it produces
+   no error, no crash and no complaint.
+7. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
+   — [../guarantees/correctness.md](../guarantees/correctness.md) names "a partial write is never
+   observable" and "the board on screen always matches the board in storage" as candidate promises,
+   and neither is checkable unless something asserts it where it can fail.
+8. [What invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md)
+   — a different question: not what one write asserts, but what stays true across every row. A
+   request path only ever sees its own rows.
+9. [How would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
+   — everything above tests a failure someone imagined.
+10. [Can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
+    — write failures that misidentify their own cause, IndexedDB absent under Lockdown Mode, a
+    connection that stalls while reporting as connected. Every one is a code path that never executes
+    unless it is forced to.
+11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
+    a belief.
+
+## M12 — a guest's work survives eviction
 
 The point at which a guest has something worth keeping and the browser is the only thing keeping it.
-It sits after M10 because the size of the problem is set by how much a guest has accumulated, and
+It sits after M10 because the size of the problem is set by how much a guest has accumulated,
+and after M11 because nothing before that could tell us whether work is being lost. It sits
 before signing in because the whole question is what a guest gets _without_ an account.
 
 1. [Does a guest see anything that accumulates?](does-a-guest-see-anything-that-accumulates.md) — the
@@ -301,7 +303,7 @@ before signing in because the whole question is what a guest gets _without_ an a
 4. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
    — the only confirmed mitigation, and it cannot be required of anyone.
 
-## M12 — a player can sign in
+## M13 — a player can sign in
 
 1. [Do privacy regulations apply?](do-privacy-regulations-apply.md) — first, because it prices
    everything else here.
@@ -310,10 +312,10 @@ before signing in because the whole question is what a guest gets _without_ an a
    — likely the same question as the one above; resolve whether they merge before answering either.
 4. [How long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md)
 5. [Is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
-   — decided here rather than at M11, because it is a claim about both records at once.
+   — decided here rather than at M12, because it is a claim about both records at once.
 6. [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
 
-## M13 — work follows a player between devices
+## M14 — work follows a player between devices
 
 1. [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
 2. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
@@ -323,11 +325,11 @@ before signing in because the whole question is what a guest gets _without_ an a
 5. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
 6. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
-## M14 — the puzzles are ours
+## M15 — the puzzles are ours
 
 - [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
 
-## M15 — something is paid for
+## M16 — something is paid for
 
 1. [Is there a paid tier?](is-there-a-paid-tier.md)
 2. [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)

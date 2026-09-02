@@ -28,9 +28,29 @@ this skill costs.
 
 **One subagent for the cold read**, with no briefing beyond the prompt below.
 
-**One subagent per scan** in the next section. Give each the specific thing to look for and ask for
-file and line references. They are mechanical searches with a judgement call at the end, which is
-what a mid-tier model does well.
+**Subagents for the scans**, each given the specific thing to look for and asked for file and line
+references. They are mechanical searches with a judgement call at the end, which is what a mid-tier
+model does well.
+
+**Give every agent an explicit, bounded file list, and tell it not to spawn subagents of its own.**
+This is what decides how long the check takes, and it is not obvious. On 2026-09-02 the whole run
+took 25 minutes because two agents nested: one was told to scan "every file in `docs/questions/`" —
+84 files — and one to check "every rule against everything it governs", and both fanned out
+internally rather than reading. They took 22.8 and 14.4 minutes. Meanwhile the agent carrying the
+*most* scans and the *most* tool calls finished in 6 minutes, because its scope was 14 decision
+records.
+
+So the cost is unbounded scope, not scans per agent. Bundling several scans into one agent is fine
+and often better, since they share the reading. What is not fine is handing one agent a whole
+directory:
+
+- **Split a large directory across agents by file list**, not by scan category. Three agents over 28
+  question files each run in roughly a third of the wall clock of one agent over 84.
+- **Say "read these files yourself; do not spawn subagents."** A nested agent serialises — the parent
+  waits on a child that waits on tool calls — and its report reaches you two relays from the source,
+  which is also two chances for a claim to lose its hedges.
+- **Wall clock is the slowest agent, not the total.** One unbounded agent makes everything else's
+  parallelism irrelevant.
 
 The cold read prompt, with the repo path filled in:
 

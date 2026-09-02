@@ -104,6 +104,11 @@ Whether the cookie is ever used is decided at M12. What M1 must not do is forecl
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) already puts a
 runtime on the content path, serving the client from the same origin costs nothing.
 
+**Same-origin is not sufficient on its own**, which is why entry 5 exists. The same constraint
+withdraws the exemption based on what the domain resolves to, so a reverse proxy in front of the
+origin can cap the cookie at seven days whatever the origin serves. That half is a decision rather
+than a constraint, and it fails without an error.
+
 **The store's class is settled here and the engine is not.** Whether the store is a file the process
 opens or a service it connects to sets the capability the host must have, and entry 2 settles it as
 part of the execution shape. Which engine, given that class, cannot be argued without a schema and
@@ -120,18 +125,26 @@ waits for M3 — see [which database?](which-database.md).
 3. [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) — Node,
    Bun or Deno. Spike it. Under Bun or Deno it also answers the package manager and the test runner.
 4. [Where does this run?](where-does-this-run.md) — from the three above, with same-origin as a
-   constraint on the answer.
-5. [What runs the server?](what-runs-the-server.md) — mostly falls out of the runtime.
-6. [Which package manager?](which-package-manager.md) — before the layout, since whether the
+   constraint on the answer. Its option list is prior research gathered under an assumption no longer
+   in force, so the field gets rebuilt here rather than priced.
+5. [How does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) — the
+   ordering here is genuinely two-part. What Safari does with a proxied domain is research, and it
+   has to be established *before* entry 4 closes, because it can disqualify a topology. The choice it
+   feeds — proxied or not, apex or subdomain, where the certificate comes from — needs the host and
+   so lands after.
+6. [What runs the server?](what-runs-the-server.md) — mostly falls out of the runtime.
+7. [What deploys the code?](what-deploys-the-code.md) — cheap to reverse and easy to leave
+   unowned. Mostly falls out of the host, since several candidates ship their own git integration.
+8. [Which package manager?](which-package-manager.md) — before the layout, since whether the
    toolchain does workspaces is an input to how many packages there are. May collapse entirely into
    entry 3.
-7. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
+9. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
    many packages, and where the shared rules module sits so both a browser and a batch process can
    reach it.
-8. [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither.
-   [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) has already
-   ruled out a painted canvas.
-9. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
+10. [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither.
+    [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) has already
+    ruled out a painted canvas.
+11. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
 
 ## M2 — a change can be checked before it ships
 

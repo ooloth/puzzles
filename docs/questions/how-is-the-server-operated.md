@@ -11,7 +11,7 @@ resolves_into: decision
 Running a server is not the same as choosing one. Something has to restart it when it dies, tell
 someone when it stops answering, keep it patched, and let the maintainer back in when they lock
 themselves out. None of that is covered by
-[what runs the server?](what-runs-the-server.md) or
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) or
 [where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
 the answer to the second.
 

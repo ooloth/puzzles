@@ -18,7 +18,7 @@ they bring: Bun is also a package manager, test runner and bundler; Deno is also
 test runner, formatter and linter; Node is none of those and expects them to be chosen separately.
 So this decision either absorbs [which package manager?](which-package-manager.md),
 [what runs the tests?](what-runs-the-tests.md) and part of
-[what builds and serves the client?](what-provides-the-build-and-dev-server.md), or leaves all three
+[what builds and serves the client?](what-builds-the-client-and-serves-it-in-development.md), or leaves all three
 open. It also bounds [where does this run?](where-does-this-run.md), since hosts support these
 unevenly.
 
@@ -124,3 +124,15 @@ real difference between these runtimes, and
 hello world. The honest handling is to note what each runtime does to the later options rather than
 to settle the database early to justify a runtime — which is the direction the brainstorming
 document argues in, and it is backwards.
+
+**Writing data access against `node:sqlite` would keep that coupling loose.** Bun implements it, so
+the same code runs on either runtime and the choice stops being load-bearing. Recorded during the Bun
+research as the cheapest hedge available.
+
+*Unverified — no source recorded.*
+
+**One incompatibility worth knowing early.** `better-sqlite3` does not work under Bun and has not for
+three years. Choosing that library is therefore choosing Node, quietly, in a file that looks like it
+is about the database.
+
+*Unverified — no source recorded.*

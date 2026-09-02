@@ -4,7 +4,12 @@ status: open
 resolves_into: decision
 ---
 
-# What provides the build and dev server?
+# What builds the client and serves it in development?
+
+**Not cleanly a client-side question, despite the name.** A dev server usually proxies the API as
+well, and under some runtimes one tool builds both halves — so an answer here can reach across the
+boundary. What serves the client once deployed is
+[what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
 
 ## Why it matters
 

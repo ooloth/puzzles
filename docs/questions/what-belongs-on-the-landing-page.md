@@ -56,7 +56,7 @@ Raised 2026-09-02 by the maintainer, alongside the browser testing question.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **Whatever this is, it does not have to be part of the app.**
-[Is the client served as static files?](is-the-client-served-as-static-files.md) already records that
+[Is the entry document produced per request?](is-the-entry-document-produced-per-request.md) already records that
 "anything outside the game can be a separate static deploy or a separate server; it does not require
 the game itself to be rendered remotely." So the answer here cannot force the rendering decision, and
 should not be allowed to look as though it does.

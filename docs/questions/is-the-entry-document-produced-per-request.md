@@ -4,7 +4,14 @@ status: open
 resolves_into: decision
 ---
 
-# Is the client served as static files?
+# Is the entry document produced per request?
+
+**Scoped to the document a browser receives when someone opens the app.** Not how much rendered
+content that document carries — that is
+[what renders the client?](what-renders-the-client.md). Not how other routes behave — that is
+[does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md). Not
+what answers the request for it — that is
+[what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
 
 ## Why it matters
 

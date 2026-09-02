@@ -4,14 +4,19 @@ status: open
 resolves_into: decision
 ---
 
-# What serves the client's files?
+# What serves the client's files in production?
+
+**Production only.** What serves them while developing is
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+They are the same job in two environments, and the gap between them is
+[how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
 
 ## Why it matters
 
 Something has to answer the browser when it asks for the client, and nothing currently says what.
-[What runs the server?](what-runs-the-server.md) is about the runtime behind the API and says nothing
-about static assets. [Where does this run?](where-does-this-run.md) picks a host, not what the host
-serves with.
+[What handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is about the
+layer answering API requests and says nothing about static assets.
+[Where does this run?](where-does-this-run.md) picks a host, not what the host serves with.
 
 It is what makes an origin arrangement achievable or not. The same process can serve both the
 client's files and the API, or a content delivery network can serve the files while a separate
@@ -56,10 +61,10 @@ work, and it makes the arrangement the platform's rather than ours to reason abo
 
 **Content-hashed filenames are what make an asset cacheable without a revalidation round trip**, per
 [../constraints.md](../constraints.md). That is produced by whatever builds the client, so this
-question and [what builds and serves the client?](what-provides-the-build-and-dev-server.md) meet at
+question and [what builds and serves the client?](what-builds-the-client-and-serves-it-in-development.md) meet at
 the filenames.
 
 **This is only a question if the client is a set of files.** If the entry document is produced per
 request, the process producing it is already answering the browser, and this collapses into
-[what runs the server?](what-runs-the-server.md). See
-[is the entry document produced per request?](is-the-client-served-as-static-files.md).
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). See
+[is the entry document produced per request?](is-the-entry-document-produced-per-request.md).

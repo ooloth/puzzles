@@ -58,12 +58,43 @@ cost of not getting the free recovery mechanism.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The Safari rule this turns on is the weakest-sourced entry in [../constraints.md](../constraints.md).**
-That file records the IP-matching clause as described by third parties rather than by Apple. It
-should not decide a topology until somebody establishes it. See
-[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md), which asks
-the same underlying thing about what the browser resolves.
+### The Safari rule has been established, and it answers this file's first open item
+
+**It was read in WebKit's own source on 2026-09-02 and is now recorded in
+[../constraints.md](../constraints.md) at the *Sourced* tier.** It previously sat here as the
+weakest-sourced claim in that file, described by third parties rather than by Apple, with a note that
+it should decide nothing until somebody established it. Somebody has.
+
+**The answer to "same registrable domain or genuinely third-party?" is: neither framing is the one
+that matters.** The cap is applied to a request that looks first-party by hostname and resolves
+elsewhere — so `api.example.com` on a different provider *is* caught, and being on the same
+registrable domain does not save it. What escapes the test is the API answering on the **same
+hostname** as the app, path-routed, because then no second host is resolved and there is nothing to
+compare.
+
+*Sourced — per [../constraints.md](../constraints.md), which carries the code and its provenance.*
+
+**A genuinely separate origin is worse than capped, not exempt.** The cap check returns early for
+requests that are third-party, because those are already handled by ordinary third-party cookie
+blocking. Reading "the cap does not apply" as safety is the trap this entry exists to prevent.
+
+*Sourced — per [../constraints.md](../constraints.md).*
+
+### What is still open
+
+**Whether a CDN or reverse proxy in front of two different backends rescues a split topology.** If
+one proxy fronts both hostnames and presents the browser the same address for each, the comparison
+would pass — but no primary source states that a proxied zone guarantees matching addresses across
+hostnames, and the one source asserting it fails sells the remedy. Unresolved, and it only matters if
+a split topology is wanted at all.
+
+*Unverified — no source recorded either way.*
 
 **Being forced into one origin and choosing it are different outcomes.** Both may end with the client
 and the API together, and only one of them constrains every later hosting decision. Which one this is
 should be explicit in the record.
+
+**Nothing here yet says the cookie mechanism will be used.** The constraint decides what stays
+reachable. Whether sessions are carried this way is
+[how does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
+and [is guest recovery worth building?](is-guest-recovery-worth-building.md), both open.

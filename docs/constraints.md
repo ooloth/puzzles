@@ -109,18 +109,31 @@ to a 400-day ceiling.
 *Sourced — WebKit's Intelligent Tracking Prevention 2.3 announcement, checked 2026-08-31.*
 
 **That exemption is lost if Safari judges the server setting the cookie not to be genuinely
-first-party.** Since Safari 16.4 the 7-day cap applies to server-set cookies in two cases: the
-setting server sits behind a CNAME resolving to a third-party host, or its A/AAAA record resolves
-to an IP address whose first half does not match the first half of the IP serving the site.
+first-party.** The 7-day cap applies to a subresource request that looks first-party by hostname but
+resolves somewhere else — either through a CNAME pointing at a different host, or, when there is no
+CNAME, to an IP address matching the first-party host's in fewer than its leading 16 bits for IPv4
+or 64 bits for IPv6.
 
-> So the recovery mechanism above depends on deployment topology, not just on code. Serving the
-> app from one provider and setting cookies from another — a static host with an API elsewhere —
-> is the shape most likely to fail the IP test, and it fails silently: the cookie simply expires
-> in seven days alongside the storage it was meant to outlive.
+> So the recovery mechanism above depends on deployment topology, not just on code. A static host
+> with the API on its own subdomain is the shape that fails, and it fails silently: the cookie
+> expires in seven days alongside the storage it was meant to outlive. Two consequences are easy to
+> get backwards. **Serving the API on the same hostname as the app skips the test entirely**, because
+> there is then no second host to resolve and compare — which makes path-based routing, not merely
+> the same registrable domain, the arrangement that is safe. And a *genuinely* cross-origin API is
+> not exempt because the cap does not reach it: its cookies are blocked outright by ordinary
+> third-party cookie blocking, which is worse rather than better.
 
-*Sourced — WebKit's CNAME cloaking and bounce tracking defence post, plus Safari 16.4 behaviour
-widely reported in 2023 and absent from Apple's release notes. The exact IP-matching rule is
-described by third parties rather than by Apple.*
+*Sourced — WebKit [PR #5347](https://github.com/WebKit/WebKit/pull/5347), diff read 2026-09-02, for
+[bug 246477](https://bugs.webkit.org/show_bug.cgi?id=246477) ("Cap cookie lifetimes to 7 days for
+responses from third party IP addresses", filed by Wenson Hsieh 2022-10-13, resolved 2022-10-21).
+`shouldCapCookieExpiryForThirdPartyIPAddress` compares `remote.matchingNetMaskLength(firstParty)`
+against `4 * sizeof(struct in_addr)` and `4 * sizeof(struct in6_addr)` — 16 and 64 bits, evaluated
+here rather than quoted from the source. The call sits behind `if (request.isThirdParty()) return;`,
+so it runs only for requests that are not third-party, and behind `if (cnameDomain.isEmpty())`, so
+the IP comparison is the fallback when no CNAME exists. Top-level navigations are excluded earlier.
+Which Safari version shipped it is widely reported as 16.4 and appears in no Apple release note, so
+the version is unverified while the mechanism is not. Whether current WebKit trunk still carries it
+unchanged was not confirmed.*
 
 **A home-screen-installed web app is exempt from the deletion mechanism entirely**, with storage
 isolated from regular Safari. This is the only confirmed mitigation.

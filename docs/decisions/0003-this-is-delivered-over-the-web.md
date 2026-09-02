@@ -2,7 +2,7 @@
 number: 0003
 status: accepted
 date: 2026-08-31
-amended: 2026-08-31
+amended: 2026-09-01
 ---
 
 # 0003 — This is delivered over the web
@@ -99,8 +99,7 @@ drag- or physics-driven, where the difference would be visible.
 Open WebKit bugs cover `aria-selected` not being announced on `role=gridcell`, column headers not
 being announced during cell navigation, and row headers in `aria-owns` grids. A native grid view
 uses first-party accessibility APIs and avoids the bug class structurally. This was weighed and
-judged not decisive; [is accessibility in scope for
-v1?](../questions/is-accessibility-in-scope-for-v1.md) remains open and inherits this as a finding.
+judged not decisive; [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md) remains open and inherits this as a finding.
 
 **[../constraints.md](../constraints.md)'s browser sections are the cost of this decision.**
 Roughly two thirds of that file — eviction clocks, the `persist()` membership test, the
@@ -131,17 +130,24 @@ all `WKWebView` applications, and Capacitor's own documentation warns that mobil
 may clear `localStorage`. The wrap recovers durability only when storage is routed through a native
 plugin rather than the webview's own store.
 
-That makes the boundary the thing to protect rather than the wrapper the thing to plan:
+That makes the boundary the thing to protect rather than the wrapper the thing to plan. Four things
+keep it cheap, and each is settled by its own record rather than here:
 
 - A rules engine that is a pure module — no DOM, no framework import, no ambient randomness. Free,
   and already required by [ADR-0004](0004-one-implementation-of-the-puzzle-rules.md) for unrelated
   reasons.
-- Serializable state carrying an explicit schema version.
-- **One narrow storage interface with a single implementation behind it, which nothing else in the
-  codebase reaches around.** This is the highest-leverage item and the one the correction above
-  makes load-bearing.
-- A server contract, if a server exists, that is JSON rather than HTML fragments. Costs nothing;
-  skipping it forecloses every non-webview native client.
+- Serializable state carrying an explicit schema version. Not yet decided anywhere; it belongs with
+  [is puzzle state a snapshot or an event log?](../questions/is-puzzle-state-a-snapshot-or-an-event-log.md).
+- Storage reached through one narrow interface —
+  [ADR-0013](0013-storage-is-reached-through-one-narrow-interface.md). The highest-leverage of the
+  four, and the one the correction above makes load-bearing.
+- A server contract in JSON rather than HTML fragments —
+  [ADR-0014](0014-the-server-contract-is-json-not-html-fragments.md).
+
+The third and fourth were mandated in this section as bullets until 2026-09-01, under a record that
+says it decides the delivery platform and nothing else. Both are separable choices — nothing about
+delivering over the web forces either — and neither was findable from this record's title. They are
+now their own records, and this one cites them.
 
 ## Revisit when
 

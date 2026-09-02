@@ -2,6 +2,7 @@
 number: 0006
 status: accepted
 date: 2026-09-01
+amended: 2026-09-01
 ---
 
 # 0006 — A player's work survives per persona, and the record is one shape
@@ -115,7 +116,13 @@ players. This is a standing cost on `../guarantees/`, not a one-time edit.
       covering the play record as well as the board
 - [x] Nothing in `constraints.md` — this imports no new facts about the world
 
-Deliberately not decided here: whether a server exists, which storage mechanism holds any of this,
-what identity a signed-in player has, when each phase ships, whether guests are shown stats, whether
-a guest is told the limit, and what a guest can reach beyond the board they are working on — which
-is [one puzzle a day, or unlimited play?](../questions/is-there-one-puzzle-a-day-or-unlimited-play.md).
+**Decided here by consequence, and recorded separately:** a server exists, per the Risk section
+above. That is [ADR-0015](0015-a-server-exists.md). This footer claimed it was undecided until
+2026-09-01, while the Risk section said the opposite, so a reader checking here to find what was
+still open was told the wrong thing by this file.
+
+Deliberately not decided here: which storage mechanism holds any of this, what the server holds
+beyond the durable record, what identity a signed-in player has, when each phase ships, whether
+guests are shown stats, whether a guest is told the limit, and what a guest can reach beyond the
+board they are working on — which is
+[one puzzle a day, or unlimited play?](../questions/is-there-one-puzzle-a-day-or-unlimited-play.md).

@@ -30,8 +30,15 @@ a door, it is a hope.
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), and a check added to the procedure in
-[../decisions/README.md](../decisions/README.md).
+As many records in [../decisions/](../decisions/) as it holds separable decisions, and then deletion.
+Three are already written — [0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md),
+[0010](../decisions/0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md) and
+[0013](../decisions/0013-storage-is-reached-through-one-narrow-interface.md) — and this file has
+nothing left except the question of whether a door exists that nothing is tracking.
+
+It does not resolve into a checklist in [../decisions/README.md](../decisions/README.md). That was
+the earlier plan and it was wrong: a record that keeps a future reachable is titled by what it binds,
+like every other record, so it is found by reading the listing rather than by a category filter.
 
 ## Source
 
@@ -47,18 +54,22 @@ N/A — this resolves into a list, not a choice between alternatives.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**This question constrains how other decisions are made rather than gating any of them.** It should be consulted by every decision record, which is why the answer belongs in
-[../decisions/README.md](../decisions/README.md) as a checklist rather than only in this folder.
+**Three of the four doors this file named are now records, and the fourth is a question in M1.** What
+is left here is the part nobody has done: looking for a door that nothing is tracking. A door with no
+identified threat is a hope rather than a door, so the search has to name the present decision that
+would foreclose each candidate, or find nothing and say so.
 
-**Four doors are already named across existing docs, none of them here.**
+*A paid tier.* **Half held by a record.**
+[ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md) keeps content withholdable.
+The other half is entitlement and identity, whose threat is any decision making a paid tier
+enforceable only by a rescue operation — and whose inputs land at M10, so it is not held open here.
+[../problem.md](../problem.md) records that the tier itself is uncommitted and deliberately not ruled
+out.
 
-*A paid tier.* [../problem.md](../problem.md) records that it is uncommitted and deliberately not
-ruled out. The threat is any decision that makes entitlement unenforceable or identity
-retrofittable only by a rescue operation.
-
-*Progress following a player between devices.* The threat is shipping with no stable identifier at
-all, which turns a later addition into a migration for every existing player rather than a lookup.
-Minting one on first visit costs almost nothing today.
+*Progress following a player between devices.* **Now a question rather than a door**:
+[is guest recovery worth building?](is-guest-recovery-worth-building.md), which is M1's third entry.
+The threat is shipping with no stable identifier, and the mechanism that would supply one is the same
+one that would recover a wiped guest, so the two are decided together rather than separately.
 
 > A locally-minted identifier is script-writable, so the browser's eviction takes it along with
 > everything else — and it takes it from exactly the lapsed players who would need it. Only
@@ -69,11 +80,22 @@ Minting one on first visit costs almost nothing today.
 > of needing an identifier to have survived.
 
 *More puzzle types.* **Held by a record**, not by this list:
-[ADR-0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md). The threat was a data
+[ADR-0010](../decisions/0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md). The threat was a data
 model hard-coding a nine-by-nine grid of digits, and that record rules out the four assumptions that
 would produce one while leaving the representation itself open.
 
-*Silent recovery after eviction.* The threat is hosting topology, above.
+*Silent recovery after eviction.* **The same question as the one above**, for the same reason: only a
+server-set cookie survives the wipe, and deciding to mint one is deciding both.
+
+*A native shell.* **Held by two records** —
+[ADR-0013](../decisions/0013-storage-is-reached-through-one-narrow-interface.md) and
+[ADR-0014](../decisions/0014-the-server-contract-is-json-not-html-fragments.md) — both extracted from
+[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md), which named the recovery path and
+mandated what keeps it cheap without titling either as a decision.
+
+*Assistive technology.* **Held by
+[ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md)**, which keeps the
+grid structurally reachable. The threat was a canvas renderer, chosen at M1 and asked about at M9.
 
 **The cheap-now, expensive-later asymmetry is the whole shape of this question.** In every case
 above, the door is held open by a small decision taken early — an identifier, a generic board

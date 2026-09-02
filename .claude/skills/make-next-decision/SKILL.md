@@ -56,10 +56,14 @@ directs you to proceed anyway after hearing the above.
 
 ### 1. Identify the next most important question to answer
 
-1. Read `docs/decisions/README.md` and then **every record in `docs/decisions/`** — the records, not
-   the filenames. A record settles things beyond its title and several settle things by consequence,
-   so a listing is not enough. Pay particular attention to any titled "the option to ... is
-   preserved": each one is a constraint on the decision you are about to make.
+1. Read `docs/decisions/README.md`, then list `docs/decisions/` and read every record whose title
+   bears on the question in front of you. Titles state what is now binding rather than what the
+   topic was, so the listing is a checklist and filtering it is safe — which is the point, because
+   this folder grows without bound and reading all of it will not stay affordable. If a title does
+   not tell you whether to open the file, that is a defect: say so, and fix it before deciding
+   anything on top of it.
+1. Read `docs/guarantees/` for the themes that bear on the question. Promises are not decisions and
+   do not appear in `docs/decisions/`, and they bind just as hard.
 1. Read `docs/standards/decisions.md`, `docs/problem.md`, `docs/constraints.md` and
    `docs/questions/README.md`
 1. List `docs/questions/` to familiarize yourself with the set of unmade decisions

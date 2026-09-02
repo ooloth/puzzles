@@ -26,10 +26,10 @@ argument: each entry derives from the ones above it, and taking one early makes 
 making it look arbitrary. Every milestone list below is numbered for the same reason.
 
 **The next thing to do is M1's first entry: [which doors must stay
-open?](which-doors-must-stay-open.md)** Both this file and
-[../decisions/README.md](../decisions/README.md) instruct you to consult it before recording any
-decision, and it is unanswered — so that instruction currently cannot be followed, and every decision
-in M1 is one it is supposed to govern.
+open?](which-doors-must-stay-open.md)** Three of the four doors it named have become records —
+0009, 0010 and 0013 — and the fourth is M1's third entry. What is left is the narrow and useful
+part: whether anything else must stay reachable that nothing is currently tracking. Answering it as
+no is what makes the rest of M1 safe to decide.
 
 ## How this list works
 
@@ -48,6 +48,18 @@ an optionality claim nobody can exercise against a running system is a hope.
 **Ordering inside a milestone is by derivation.** A decision is never taken before something it
 derives from. Among decisions that derive from nothing still open, the one unblocking the most is
 taken first.
+
+**A question resolves into as many records as it contains decisions.** There is no expectation that
+one question produces one ADR, and none that a question is deleted the moment one is written.
+[Is screen reader support in scope for v1?](is-screen-reader-support-in-scope-for-v1.md) spilled two
+records and stayed open with the harder half; [which doors must stay
+open?](which-doors-must-stay-open.md) has spilled three and is nearly empty. The counting rule is the
+separability test in [../decisions/README.md](../decisions/README.md): *could a reasonable person
+have decided one part one way and another part the other way?* Every yes is another record.
+
+A question is deleted once nothing is left in it that a record has not settled. Mine what is worth
+keeping first — findings graduate to [../constraints.md](../constraints.md), and reasoning belongs in
+whichever record it argues for.
 
 **A compound question is split rather than dragged forward.** When only part of a question blocks an
 early milestone, the blocking part becomes its own question and the rest moves to the milestone
@@ -79,26 +91,28 @@ and a check that passed it would only make a wrong sequence look verified.
 [0002](../decisions/0002-the-client-holds-and-mutates-puzzle-state.md) the client holds and mutates
 puzzle state. [0003](../decisions/0003-this-is-delivered-over-the-web.md) this is delivered over the
 web. [0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) one implementation of the
-puzzle rules. [0005](../decisions/0005-typescript-across-every-deployable.md) TypeScript across every
+puzzle rules. [0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) TypeScript across every
 deployable, with the rules shared as source.
 [0006](../decisions/0006-what-a-players-work-survives.md) what a player's work survives, per persona.
 [0007](../decisions/0007-decisions-live-in-docs-and-work-lives-in-issues.md) decisions live in docs
-and work lives in issues. [0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) the
-option to analyse play is preserved.
-[0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md) the option to gate puzzle
-access is preserved.
-[0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md) the option to add puzzle
-types is preserved.
+and work lives in issues.
+[0008](../decisions/0008-anything-the-server-stores-is-queryable.md) anything the server stores is
+queryable. [0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md) puzzle content is
+served by a runtime, not shipped with the app.
+[0010](../decisions/0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md) nothing about a
+puzzle is inferred from it being sudoku.
 [0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) every puzzle cell is a
 focusable, labelled element.
 [0012](../decisions/0012-all-play-is-reachable-from-the-keyboard-alone.md) all play is reachable from
 the keyboard alone.
+[0013](../decisions/0013-storage-is-reached-through-one-narrow-interface.md) storage is reached
+through one narrow interface.
+[0014](../decisions/0014-the-server-contract-is-json-not-html-fragments.md) the server contract is
+JSON, not HTML fragments. [0015](../decisions/0015-a-server-exists.md) a server exists.
 
-Three of those are doors rather than choices — 0008, 0009 and 0010 each keep a future reachable
-rather than building anything. They are titled alike on purpose, so that
-`ls ../decisions/ | rg 'option-to-.+-is-preserved'` is the list, and
-[../decisions/README.md](../decisions/README.md) makes reading them the first step before any record
-is written.
+That list is deliberately a list of takeaways rather than of topics, so
+`ls ../decisions/` is the checklist of what is settled. Reading it is the first step in
+[../decisions/README.md](../decisions/README.md) before any record is written.
 
 ## M1 — "Hello!" is live
 
@@ -116,8 +130,8 @@ the capability the host has to have. It is not needed to answer one route. It is
 platform choice to be one we keep, and "do not change hosts" is the constraint the whole milestone is
 organised around.
 
-1. [Which doors must stay open?](which-doors-must-stay-open.md) — first, because every decision below
-   is one it governs and both indexes already say to consult it.
+1. [Which doors must stay open?](which-doors-must-stay-open.md) — first, and now nearly empty. What
+   remains is whether an untracked door exists; every decision below is one it would govern.
 2. [Does a guest see anything that accumulates?](does-a-guest-see-anything-that-accumulates.md) — the
    product question that sizes the one below. A board's value decays with absence; a streak's does not.
 3. [Is guest recovery worth building?](is-guest-recovery-worth-building.md) — decides whether
@@ -145,7 +159,7 @@ organised around.
 
 One seeded puzzle, written to the store by hand, read back by the endpoint, and displayed however
 crudely. No grid, no interaction, no generator. This is where migrations, backups and connection
-handling become real, and where [ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md)'s
+handling become real, and where [ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md)'s
 queryability stops being a promise about a store nobody has built.
 
 It sits here rather than at M7 because the alternative is building the client against a hard-coded
@@ -199,7 +213,7 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 4. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
 5. [What does the server hold?](what-does-the-server-hold.md) — the catalogue candidate is settled by
-   [ADR-0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md); what remains here
+   [ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md); what remains here
    is how much of it the server understands.
 
 ## M8 — it works with no network
@@ -219,7 +233,7 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    undo, drag-select, keyboard navigation, highlighting.
 3. [Is difficulty graded, and does a grade promise anything?](is-difficulty-graded-and-does-a-grade-promise-anything.md)
 4. [What makes a puzzle a joy to solve?](what-makes-a-puzzle-a-joy-to-solve.md)
-5. [Is accessibility in scope for v1?](is-accessibility-in-scope-for-v1.md)
+5. [Is screen reader support in scope for v1?](is-screen-reader-support-in-scope-for-v1.md)
 
 ## M10 — a player can sign in
 

@@ -23,33 +23,60 @@ disagreed with it. Note substantive amendments with an `amended:` date in the fr
 
 ## Before you decide
 
-**Start by reading this folder — the records, not the filenames.** A record settles things beyond
-its title, and several of them settle things by consequence: ADR-0009 closed the catalogue candidate
-inside a question nobody was reading, and ADR-0006 forced a server while arguing about storage. An
-agent that lists this directory and moves on will re-argue a settled choice or build on top of one it
-never saw.
+**Start with a listing of this folder, and open what bears on your question.** That works because
+every title states what is now true, so the listing is the checklist of settled constraints on
+implementation — the same job [../guarantees/](../guarantees/) does for promises to players. If a
+title does not tell you whether to open the file, the title is wrong and fixing it is the first task.
 
-**Then check the doors.** Some records here exist only to keep a future reachable, and they are
-titled so that a listing carries the constraint:
-
-```
-ls docs/decisions/ | rg 'option-to-.+-is-preserved'
-```
-
-That matches on the filename rather than the contents, so this file describing the convention does
-not match its own filter.
-
-Every match is a promise that some later decision must not break. Read each one's **Decision**
-section before recording anything, and if what you are about to decide closes one of them, that is
-the decision — say so and argue it, rather than closing it as a side effect. A door is also allowed
-to be closed deliberately: the record naming it says what would justify that, under **Revisit when**.
-
-Optionality is not free. Each door held open constrains every decision after it, and one nobody walks
-through was a tax paid for nothing. The list stays short, and an entry is retired by a record that
-supersedes it once the future it protects is genuinely abandoned.
+**Read [../guarantees/](../guarantees/) too.** Promises are not decisions and do not live here, but
+they bind just as hard. `guarantees/offline.md` constrains a stack choice as tightly as anything in
+this folder and appears nowhere in it.
 
 **Read [../standards/decisions.md](../standards/decisions.md) now, even if you read it earlier in
 this session.** A remembered summary produces a record that fits this format and breaks a rule.
+
+## One record, one decision
+
+**A record settles exactly one thing, and its title says what.** The test for whether you have two:
+*could a reasonable person have decided the headline one way and the second thing the other way?* If
+yes, that is a second decision and it needs its own record. If no, it follows necessarily — and it is
+still recorded, see below.
+
+Two failures this prevents, both of which have happened here:
+
+- **A decision settled inside a record about something else.** ADR-0003 mandated a storage interface
+  and a JSON server contract in a section outside its own Decision heading, under a title announcing
+  it decided the delivery platform and nothing else. Nobody scanning this folder would have found
+  either.
+- **A record contradicting itself about what it settled.** ADR-0006's Risk section said it forced a
+  server; its footer said whether a server exists was undecided. A reader checking the footer to see
+  what was open got the wrong answer from the same file.
+
+**A consequence is recorded as a decision, not left implicit.** Something that follows necessarily
+from an earlier record is still a constraint on implementation, and one that lives only inside
+another record's reasoning is invisible to anyone reading the listing. It uses the same template as
+everything else. Where it has no genuine alternative, **Rejected** says so and names what rejecting
+it would actually mean — usually reversing the parent — rather than inventing an option to fill the
+section. [ADR-0015](0015-a-server-exists.md) is the worked example.
+
+**Do not fear a long listing.** Atomic records multiply, and that is the cost being paid for a folder
+whose filenames are load-bearing. A hundred short titles you can scan beats twelve long records you
+have to read.
+
+## The title is the takeaway
+
+**A title states what is now binding, not why it was decided.** The motive belongs in **Forced by**
+and in the rationale; the title belongs to whoever will have to abide by it and has not read the
+file.
+
+This is easy to get backwards, and three records here did. "The option to gate puzzle access is
+preserved" names a motive, and nobody looking for how puzzle content is delivered would open it. It
+is now "puzzle content is served by a runtime, not shipped with the app" — the same record, titled by
+its conclusion. Records that exist to keep a future reachable are especially prone to this, because
+the option feels like the point. It is the reason; the constraint is the point.
+
+**A record that preserves an option says so in its Decision section**, so the reason is one line
+inside the file rather than a category in the filename.
 
 **Find this decision in [../questions/README.md](../questions/README.md) and check the milestone it
 sits in.** That file is this one's sibling: the same decisions, before they are made, grouped by

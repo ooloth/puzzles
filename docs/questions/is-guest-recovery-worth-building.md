@@ -8,18 +8,22 @@ resolves_into: decision
 
 ## Why it matters
 
-**It decides whether same-origin hosting is forced or merely preferred**, which reaches the platform
-choice at the first milestone.
-The leading option for a guest's durability bound accepts that a guest can lose everything when the
-browser clears its storage, on the grounds that a guest wanting durability should get an account —
-see [how long does a guest's work last?](how-long-does-a-guests-work-last.md), still open. That
-reasoning has a premise: an account exists to be offered. If the first release ships guests only, it
-does not, and the only persona in the product has no recovery at all.
+**It is the only thing that saves a lapsed guest, and it is the only durability a guest gets if the
+first release ships without accounts.** The leading option for a guest's durability bound accepts
+that a guest loses everything when the browser clears its storage, on the grounds that a guest
+wanting durability should sign in — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md), still open. That reasoning
+has a premise: an account exists to be offered. A guest-only first release does not have one.
 
-There is exactly one mechanism that restores a lapsed guest's work without asking them for anything,
-and whether it works is decided by where the client and the API are deployed relative to each other —
-see [../constraints.md](../constraints.md). So this cannot be settled after the hosting choice. It is
-an input to it.
+**It is answered here and constrained much earlier.** There is exactly one mechanism that restores a
+lapsed guest's work without asking them for anything — a server-set cookie — and whether it survives
+depends on the client and the API sharing an origin, per [../constraints.md](../constraints.md). That
+is a constraint on M1's hosting choice rather than a reason to answer this question there: holding
+same-origin open costs nothing once a runtime is on the content path, and closing it happens silently
+and cannot be undone without moving hosts.
+
+So M1 must not foreclose this. Whether it is built is decided here, once a guest has something worth
+keeping and the browser is the only thing keeping it.
 
 ## What would settle it
 

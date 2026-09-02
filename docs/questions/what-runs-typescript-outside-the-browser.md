@@ -8,7 +8,7 @@ resolves_into: decision
 
 ## Why it matters
 
-[ADR-0005](../decisions/0005-typescript-across-every-deployable.md) chose the language and said
+[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) chose the language and said
 nothing about what executes it. Three things need a non-browser runtime — the server, the generator,
 and the tooling that runs tests and checks — and they do not have to agree, though there is little
 reason for them not to.

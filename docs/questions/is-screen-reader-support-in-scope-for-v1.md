@@ -4,7 +4,7 @@ status: open
 resolves_into: decision
 ---
 
-# Is accessibility in scope for v1?
+# Is screen reader support in scope for v1?
 
 ## Why it matters
 

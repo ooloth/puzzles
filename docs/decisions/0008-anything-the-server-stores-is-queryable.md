@@ -4,7 +4,7 @@ status: accepted
 date: 2026-09-01
 ---
 
-# 0008 — The option to analyse play is preserved
+# 0008 — Anything the server stores is queryable
 
 ## Forced by
 
@@ -28,6 +28,10 @@ by the database and the shape written into it. Discovering the need afterwards m
 Anything the server stores is stored so that it can be queried later — questions like which puzzles
 get finished, where players stall, and whether a difficulty grade predicts anything have to be
 answerable without a migration.
+
+**The option this preserves is analysing play**, and it is the rationale rather than the rule. What
+binds implementation is the sentence above: a store that cannot be asked questions is ruled out,
+whether or not anyone ever asks one.
 
 **This preserves an option; it does not schedule the work.** Nothing is collected, no analysis is
 built, and no telemetry ships because of this record. What is ruled out is a storage choice that

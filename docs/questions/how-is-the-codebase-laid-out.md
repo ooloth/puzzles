@@ -14,7 +14,7 @@ first file down, while what a directory is named for and how deep the tree goes 
 there are modules to organise.
 
 [ADR-0004](../decisions/0004-one-implementation-of-the-puzzle-rules.md) and
-[ADR-0005](../decisions/0005-typescript-across-every-deployable.md) together set the one hard
+[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) together set the one hard
 constraint: the puzzle rules are one implementation, shared as source, reachable by both a browser
 and a batch process without a publish step between them. Whatever shape is chosen has to allow that.
 

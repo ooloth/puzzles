@@ -19,7 +19,7 @@ knows what a board is, checks that what arrives has the right shape and types, a
 not. Everything in between is a choice about how much of the domain lives in two places.
 
 It decides three things that are expensive to change later. Whether the puzzle rules run on the
-server, which [ADR-0005](../decisions/0005-typescript-across-every-deployable.md) says forces the
+server, which [ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) says forces the
 server's language only if it needs them. Whether the database has a schema describing puzzles or a
 column holding bytes. And what the client does when the server disagrees with it, which is where the
 hard part is.

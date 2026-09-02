@@ -30,7 +30,7 @@ confuse because they sit in one folder.
 [ADR-0003](decisions/0003-this-is-delivered-over-the-web.md) settles that this is delivered over the
 web, which is why the browser specifics in `constraints.md` are in scope — they are the price of that
 one decision and are labelled as such.
-[ADR-0005](decisions/0005-typescript-across-every-deployable.md) settles the language.
+[ADR-0005](decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) settles the language.
 [ADR-0006](decisions/0006-what-a-players-work-survives.md) establishes that a server exists and holds
 a durable per-player record.
 

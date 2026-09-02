@@ -88,8 +88,7 @@ is the point, and it is also the cost, and whoever meets it will be right that t
 small.
 
 **It is not an accessibility guarantee.** Keyboard operability is necessary for screen-reader use
-and nowhere near sufficient. [Is accessibility in scope for
-v1?](../questions/is-accessibility-in-scope-for-v1.md) stays open, and this record should not be
+and nowhere near sufficient. [Is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md) stays open, and this record should not be
 cited as having answered it.
 
 ## Revisit when

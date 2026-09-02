@@ -4,7 +4,7 @@ status: accepted
 date: 2026-09-01
 ---
 
-# 0009 — The option to gate puzzle access is preserved
+# 0009 — Puzzle content is served by a runtime, not shipped with the app
 
 ## Forced by
 
@@ -29,6 +29,9 @@ shipping a JSON file announces that.
 
 **Puzzle content is served by something that can decide whether to serve it, rather than shipped as
 static files alongside the application.**
+
+**The option this preserves is a paid tier**, and it is the rationale rather than the rule. What
+binds implementation is the sentence above, and it binds whether or not anything is ever charged for.
 
 This preserves an option; it does not schedule the work. No entitlement is checked, no payment
 boundary exists, nothing is withheld from anyone, and no player sees any difference. What is ruled

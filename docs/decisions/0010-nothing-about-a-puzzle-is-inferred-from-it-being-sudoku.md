@@ -4,7 +4,7 @@ status: accepted
 date: 2026-09-01
 ---
 
-# 0010 — The option to add puzzle types is preserved
+# 0010 — Nothing about a puzzle is inferred from it being sudoku
 
 ## Forced by
 
@@ -42,6 +42,10 @@ Concretely, four assumptions are ruled out:
   arbitrary partition that has to be stored with the puzzle.
 - That a clue is a pre-filled cell. Sudoku's givens are; other grid logic puzzles carry clues that
   belong to a row, a region or the grid as a whole.
+
+**The option this preserves is adding puzzle types**, and it is the rationale rather than the rule.
+What binds implementation is the four assumptions above, and they bind whether or not star battle
+ever ships.
 
 **This preserves an option; it does not design a schema.** It rules out one of the three candidates
 in [what is a puzzle, across game types?](../questions/what-is-a-puzzle-across-game-types.md) — the

@@ -55,7 +55,7 @@ concrete one.
 carries identity, type and versioning. Storage and transport are generic, the domain is not.
 
 *Sudoku only, generalised when the second type arrives.* **Ruled out** by
-[ADR-0010](../decisions/0010-the-option-to-add-puzzle-types-is-preserved.md). It was the honest "not
+[ADR-0010](../decisions/0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md). It was the honest "not
 yet" and the cheapest thing available now, and the migration it risks reaches client storage, where
 migrations run once in somebody's browser with no server to retry from.
 

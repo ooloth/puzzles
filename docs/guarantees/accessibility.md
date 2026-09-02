@@ -38,6 +38,6 @@ possible: a painted grid has nothing to move focus to.
 **No promise is made about assistive technology**, and that is not silence.
 [ADR-0011](../decisions/0011-every-puzzle-cell-is-a-focusable-labelled-element.md) keeps it
 structurally reachable — every cell is an element that can carry a name, a role and a state — without
-committing to it. [Is accessibility in scope for v1?](../questions/is-accessibility-in-scope-for-v1.md)
+committing to it. [Is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
 is where that is decided, and it records open WebKit bugs covering exactly the grid mechanics a
 puzzle board needs, so part of the cost there is waiting rather than working.

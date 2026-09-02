@@ -41,7 +41,7 @@ below record both why that is evidence and why it is weak evidence.
 *A minimal library*, for binding state to the DOM without a component model.
 
 *A component framework.* The candidate field, given
-[ADR-0005](../decisions/0005-typescript-across-every-deployable.md), was React, Svelte, Solid, Vue
+[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md), was React, Svelte, Solid, Vue
 and Preact. The research below narrows it to **React, Preact and Svelte**: Solid and Vue are out on
 their own merits, and Lit was considered and is out. React and Preact share a programming model, so
 that shortlist is two comparisons rather than three.

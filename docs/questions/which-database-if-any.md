@@ -54,7 +54,7 @@ considerable overhead if it does not.
 **Two inputs that once left this open are now settled.**
 [ADR-0006](../decisions/0006-what-a-players-work-survives.md) establishes that the server holds a
 durable per-player record, so the answer is not "nothing".
-[ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md) establishes that it has to
+[ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md) establishes that it has to
 be queryable, which is what made this a real decision rather than a possible non-decision.
 
 **Where the data physically sits is [where does this run?](where-does-this-run.md)**, not here. The

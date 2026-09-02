@@ -56,7 +56,7 @@ device and its loss is accepted.
 device belongs to the person it would be charging.
 
 *The catalogue* — **settled**, by
-[ADR-0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md). Puzzle content is
+[ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md). Puzzle content is
 served by something that can decide whether to serve it, so it is not shipped as static files with
 the application. What is still open here is how much of that content the server understands, which
 is [does the server understand puzzle content?](does-the-server-understand-puzzle-content.md).
@@ -80,7 +80,7 @@ the failure of the others.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **What must we know about how the app is used decides what is collected, not whether anything
-runs off-device.** [ADR-0008](../decisions/0008-the-option-to-analyse-play-is-preserved.md)
+runs off-device.** [ADR-0008](../decisions/0008-anything-the-server-stores-is-queryable.md)
 settles that whatever is stored is queryable, which is the shape of
 [which database, if any?](which-database-if-any.md) rather than whether anything runs off-device at
 all. Folding [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md)
@@ -97,7 +97,7 @@ The deciding input is not delivery. It is that content shipped as static files a
 cannot be withheld from anyone who already has the app, now recorded in
 [../constraints.md](../constraints.md). So an archive that might ever be gated cannot be static, and
 the catalogue candidate stood or fell with entitlement rather than separately from it. That is what
-[ADR-0009](../decisions/0009-the-option-to-gate-puzzle-access-is-preserved.md) decided, and it names
+[ADR-0009](../decisions/0009-puzzle-content-is-served-by-a-runtime.md) decided, and it names
 the cost it took on: a runtime on the path to content, and a caching story the static option got
 free.
 

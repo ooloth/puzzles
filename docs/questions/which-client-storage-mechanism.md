@@ -77,7 +77,7 @@ door that record deliberately holds open.
 It carries **SQLite as WebAssembly**, which is weight on a cold load that
 [../constraints.md](../constraints.md) already describes as several seconds of round trips before
 any bytes move.
-[ADR-0005](../decisions/0005-typescript-across-every-deployable.md) weighed bundle size against that
+[ADR-0005](../decisions/0005-typescript-across-every-deployable-rules-shared-as-source.md) weighed bundle size against that
 when rejecting a WebAssembly client, so adding a WebAssembly database needs an argument rather than
 an exception.
 

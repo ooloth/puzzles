@@ -13,7 +13,7 @@ is a property of how the game is played, not an accommodation. A grid a player c
 keyboard fails half the audience described there before accessibility is mentioned at all.
 
 **[../questions/README.md](../questions/README.md) chooses the renderer at M1 and the input model at
-M4**, while [is accessibility in scope for v1?](../questions/is-accessibility-in-scope-for-v1.md)
+M4**, while [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
 sits at M9. The decision that forecloses it comes five milestones before the question that asks
 about it, which is the pattern
 [../standards/decisions.md](../standards/decisions.md) names as worth stopping for: a choice that
@@ -70,7 +70,7 @@ a rewrite.
 
 - **Promise full screen-reader support now.** Over-decides, and would be a promise effort alone
   cannot keep. The finding in
-  [is accessibility in scope for v1?](../questions/is-accessibility-in-scope-for-v1.md) records open
+  [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md) records open
   WebKit bugs covering exactly the mechanics a puzzle board needs — `aria-selected` not announced on
   `role=gridcell`, column headers not announced while navigating — the oldest from 2022. Correct
   ARIA does not reliably produce correct speech here.
@@ -100,7 +100,7 @@ what stops it becoming a habit.
   solving. `../constraints.md` predicts it will not, and a measurement disagreeing with it is the
   finding.
 - **A puzzle type arrives whose board is not a grid of discrete cells.** The decision is written
-  about cells because [ADR-0010](0010-the-option-to-add-puzzle-types-is-preserved.md) scopes the
+  about cells because [ADR-0010](0010-nothing-about-a-puzzle-is-inferred-from-it-being-sudoku.md) scopes the
   project to cell-marking puzzles. An edge-marking puzzle would need this argued again.
 - **Assistive technology is ruled out of scope permanently**, at which point the canvas option
   returns with only the keyboard requirement against it, and that is satisfiable with a wrapper.

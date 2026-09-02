@@ -433,6 +433,17 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here
 rather than at a milestone because no milestone in this list is the one where somebody arrives.
 
+[Does a player see stats about their play?](does-a-player-see-stats-about-their-play.md) and
+[can a player explore past puzzles?](can-a-player-explore-past-puzzles.md) — both are intent stated in
+[../problem.md](../problem.md) that no record argues and no promise covers: "what they have solved,
+and how they are doing", and a puzzle from any past day. They are here rather than at a milestone
+because nothing waits on either, and because both are tracked to stop an infrastructure decision
+foreclosing them without noticing. The archive question is the nearer of the two — it meets
+[is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) at M8
+and [what can a player do with no network?](what-can-a-player-do-with-no-network.md) at M6, and
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) has already
+constrained how an archive would be delivered.
+
 ## What goes in a question file
 
 Six sections, in a fixed order. **Every section stays**, with `...` where nothing has been

@@ -22,10 +22,9 @@ what to work on.** Everything below is downstream of them, and a sequence argued
 argued from the wrong end. This is the path most readers arrive by, which is why it says so here as
 well as in [../README.md](../README.md).
 
-**Then work M1 from the top.** Its requirements are ordered so that the first one carries the
-questions the others depend on — answer those and most of what follows has almost nothing left
-blocking it. M1 is laid out this way; M2 onward are still bare question lists, which is a gap rather
-than a distinction.
+**Then work M1 from the top.** Its requirements are slices you can run and look at, in the order you
+would build them, each with the questions that block it. M1 is laid out this way; M2 onward are still
+bare question lists, which is a gap rather than a distinction.
 
 ## How this list works
 
@@ -34,14 +33,23 @@ Each milestone is a list of **what has to be true to ship it**. Under each requi
 givens, the **questions that must be answered** before that requirement can be built. Read left to
 right: what we are shipping, what we already know, what that leaves undecided.
 
+**Every requirement is something you can run and look at.** A vertical slice, in the order you would
+build it — the thing that renders before the thing that is served, the thing that is served before
+the thing that is deployed. Deploying is the last slice, not the first: a hosting choice made before
+anything exists to host is made against an imagined system. "Both halves are deployed" is close to
+the milestone's end state rather than a step toward it, so if a requirement reads like the milestone
+restated, it is bundling slices that could each be observed on their own.
+
 That shape does three jobs:
 
 - **It shows what is blocked.** A requirement with no question under it can be built today. One with
   five is where the thinking has to happen first.
 - **It finds missing questions.** If a requirement's givens do not reach a buildable state and no
   question says why, the question has not been written yet.
-- **It orders the work.** A question sitting under several requirements is foundational — answering
-  it unblocks more than one. Requirements are ordered so those come first.
+- **It finds bundled requirements.** Several unrelated groups of givens under one requirement means
+  it is really several requirements, each of which could be observed separately and sequenced on its
+  own. One group of givens per requirement is the target, and where that cannot be reached honestly,
+  the bundling is real rather than a formatting problem.
 
 **Deferring is the default.** An unanswered question is optionality retained, and everything learned
 before it must be answered is information the answer would otherwise be made without. A question
@@ -80,70 +88,59 @@ halves ship, onto a host that has to satisfy the server and whatever its store t
 client runs almost anywhere, so it is the half least able to discriminate between hosts and must not
 be what selects one.
 
-**These choices are permanent.** Discovering later that the server needs something the host cannot
-give does not cost a redeploy — it moves both halves, plus whatever else was chosen to fit.
+**The hosting choice is permanent, and it is the eighth slice rather than the first.** Discovering
+later that the server needs something the host cannot give does not cost a redeploy — it moves both
+halves, plus whatever else was chosen to fit. That is an argument for reaching it with its inputs
+answered, not for reaching it early: requirements 1 to 6 are what produce those inputs, and each can
+be run and looked at on the way.
 
-**The order is derived by counting, so check it rather than trusting it.** A question appearing under
-several requirements is foundational; a requirement carrying several of those is worth doing first.
-Recount whenever a question is added or a requirement changes, and reorder if the count says so.
+**Check the order rather than trusting it.** Two things would move a requirement: a given it needs
+that sits under a later one, or a question under it that another requirement turns out to need
+first.
 
-1. **Both halves run on a suitable host.**
-   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
-   - **Given:** [../constraints.md](../constraints.md)
-     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
-   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
-     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-   - **Given:** [../constraints.md](../constraints.md)
-   - **Given:** [is guest recovery worth building?](is-guest-recovery-worth-building.md)
-     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
-     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
-     - **Must answer:** [where does this run?](where-does-this-run.md)
-2. **A server answers one route with a hard-coded response.**
-   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
-   - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
-     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-     - **Must answer:** [what runs the server?](what-runs-the-server.md)
-   - **Given:** [where does this run?](where-does-this-run.md)
-     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
-3. **A browser can load the client.**
-   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
-   - **Given:** [../constraints.md](../constraints.md)
-     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
-     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
-   - **Given:** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
-   - **Given:** [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
-   - **Given:** [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
-     - **Must answer:** [what renders the client?](what-renders-the-client.md)
-     - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
-4. **The repository holds both halves and builds them.**
+1. **The repository builds and runs a TypeScript program.**
    - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)
    - **Given:** [ADR-0007](../decisions/0007-that-language-is-typescript.md)
      - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
      - **Must answer:** [which package manager?](which-package-manager.md)
+2. **The repository holds both halves, with one rules module both can reach.**
    - **Given:** [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
      - **Must answer:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md)
-   - **Given:** [what renders the client?](what-renders-the-client.md)
+3. **A browser shows "Hello!" rendered by the client.**
+   - **Given:** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
+   - **Given:** [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
+     - **Must answer:** [what renders the client?](what-renders-the-client.md)
      - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
-5. **The deployment answers at an address we control.**
-   - **Given:** [../constraints.md](../constraints.md)
+4. **The client reaches a browser that has no network.**
+   - **Given:** [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+   - **Given:** [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+   - **Given:** [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+   - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
+   - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
+     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
+     - **Must answer:** [what serves the client's files?](what-serves-the-clients-files.md)
+5. **A server answers one route with a hard-coded response.**
+   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
+   - **Given:** [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+     - **Must answer:** [what runs the server?](what-runs-the-server.md)
+6. **The client calls that route and shows the answer.**
+   - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier surviving Safari's storage wipe unaided
+   - **Given:** [../constraints.md](../constraints.md) — that exemption is withdrawn when the setting server is not judged genuinely first-party
    - **Given:** [is guest recovery worth building?](is-guest-recovery-worth-building.md)
-   - **Given:** [where does this run?](where-does-this-run.md)
      - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+7. **Both halves run on a host that suits them.**
+   - **Given:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+   - **Given:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
+   - **Given:** [what serves the client's files?](what-serves-the-clients-files.md)
+   - **Given:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+   - **Given:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+     - **Must answer:** [where does this run?](where-does-this-run.md)
+8. **The deployment answers at an address we control.**
+   - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
      - **Must answer:** [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
-6. **A change made locally reaches the deployment.**
+9. **A change made locally reaches the deployment.**
    - **Given:** [where does this run?](where-does-this-run.md)
-   - **Given:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md)
      - **Must answer:** [what deploys the code?](what-deploys-the-code.md)
 
 ## M2 — a change can be checked before it ships

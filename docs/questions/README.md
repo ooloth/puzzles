@@ -11,8 +11,9 @@ The sibling of [../decisions/](../decisions/): the decisions not yet made, arran
 stop us building.
 
 A directory listing of this folder is the full inventory — every filename asks its question plainly,
-so there is no index here. What this file holds is **which milestone each question blocks**, because
-that is the part a listing cannot show and the part that is expensive to get wrong.
+so there is no index here. What this file holds is **what has to be shipped, what is already
+established, and which questions stand between the two**. That is the part a listing cannot show, and
+the part every session was otherwise reconstructing from scratch.
 
 ## Start here
 
@@ -21,72 +22,53 @@ what to work on.** Everything below is downstream of them, and a sequence argued
 argued from the wrong end. This is the path most readers arrive by, which is why it says so here as
 well as in [../README.md](../README.md).
 
-**Then work [M1](#m1--hello-is-live) from the top.** Its list is numbered because the order is the
-argument: each entry derives from the ones above it, and taking one early makes it arbitrary without
-making it look arbitrary. Every milestone list below is numbered for the same reason.
+**Then work M1 from the top.** Its requirements are ordered so that the first one carries the
+questions the others depend on — answer those and most of what follows has almost nothing left
+blocking it. M1 is laid out this way; M2 onward are still bare question lists, which is a gap rather
+than a distinction.
 
 ## How this list works
 
-**Questions are grouped by the earliest milestone they block.** Not by how foundational they feel —
-by what stops working if they stay open. A question nothing is waiting on sits at the bottom, and
-that is a fine place to be. Deferring decisions until they need to be made to unblock the next
-milestone leads to making those decisions with more information and fewer assumptions.
+Each milestone is a list of **what has to be true to ship it**. Under each requirement sit the
+**givens** — product facts, promises, constraints and records already established — and under the
+givens, the **questions that must be answered** before that requirement can be built. Read left to
+right: what we are shipping, what we already know, what that leaves undecided.
 
-**Milestones are deliberately small.** The point is to stop designing on paper and start deciding
-against running code. Each one below is something you can look at and see working, and most of them
-are a day or two apart, not a month.
+That shape does three jobs:
 
-**Each milestone is a thin vertical slice, not a horizontal layer.** Every one below can be run and
-looked at end to end. That is what makes the doors held open in M1 checkable rather than asserted —
-an optionality claim nobody can exercise against a running system is a hope.
+- **It shows what is blocked.** A requirement with no question under it can be built today. One with
+  five is where the thinking has to happen first.
+- **It finds missing questions.** If a requirement's givens do not reach a buildable state and no
+  question says why, the question has not been written yet.
+- **It orders the work.** A question sitting under several requirements is foundational — answering
+  it unblocks more than one. Requirements are ordered so those come first.
 
-**Ordering inside a milestone is by derivation.** A decision is never taken before something it
-derives from. Among decisions that derive from nothing still open, the one unblocking the most is
-taken first.
+**Deferring is the default.** An unanswered question is optionality retained, and everything learned
+before it must be answered is information the answer would otherwise be made without. A question
+earns its place here only by naming what breaks if it waits. When one does have to be answered, it is
+made as narrow as possible, and the record says which doors it closes — closing one is clarifying and
+irreversible, so it is confirmed rather than noticed afterwards.
 
-**A question resolves into as many records as it contains decisions.** There is no expectation that
-one question produces one ADR, and none that a question is deleted the moment one is written.
-[Is screen reader support in scope for v1?](is-screen-reader-support-in-scope-for-v1.md) spilled two
-records and stayed open with the harder half. A question that spilled all of itself is deleted, as
-"which doors must stay open?" was on 2026-09-01. The counting rule is the
-separability test in [../decisions/README.md](../decisions/README.md): _could a reasonable person
-have decided one part one way and another part the other way?_ Every yes is another record.
+**Sequencing lives here and only here.** Question files say what the question is and what would
+settle it. They do not say what they depend on or what they block, because that is a whole-system
+judgement and no single file can see it.
 
-A question is deleted once nothing is left in it that a record has not settled. Mine what is worth
-keeping first — findings graduate to [../constraints.md](../constraints.md), and reasoning belongs in
-whichever record it argues for.
+**A question resolves into as many records as it contains decisions** — the separability test in
+[../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
+record has not settled; mine it first, since findings graduate to
+[../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
+**Promises are written as they fall out of records**, on the decision template's checklist, rather
+than committed to in advance.
 
-**A compound question is split rather than dragged forward.** When only part of a question blocks an
-early milestone, the blocking part becomes its own question and the rest moves to the milestone
-where it belongs. A question that arrives early because one clause of it is urgent forces the whole
-thing to be answered early, and the parts nobody needed yet get answered worst — with the least
-information and the most guessing. Splitting is cheap; a decision made a milestone too soon is not.
-The test is whether every part of the answer is needed to see the milestone working. If not, split
-it.
-
-**Sequencing lives here and only here.** A question file says what the question is, what would
-settle it, and what has been found out. It does not say what it depends on, what it blocks, or what
-it decides beyond itself. Ordering is a whole-system judgement, and a single question file has no
-view of the system — sixty-odd files each holding a fragment of one graph produced a first milestone
-whose hosting question waited on five later ones, and nobody noticed because noticing would have
-meant re-reading all of them.
-
-**So work out the order yourself rather than inheriting it.** The grouping below is the current
-best answer and is worth arguing with. If it looks wrong, it may be wrong: say so and change it
-here, where the whole picture is visible.
-
-`scripts/check-docs.py` checks the things that are facts rather than judgement — every link
-resolves, every question appears in a milestone, and no question file has grown a sequencing
-section back. It deliberately does not check the _ordering_, because the ordering is the judgement
-and a check that passed it would only make a wrong sequence look verified.
+`scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
+appears in a milestone, no question file has grown a sequencing section. It does not check the
+ordering, because a check that passed it would only make a wrong order look verified.
 
 ## Settled
 
-**[../decisions/](../decisions/) is the list, and it is not repeated here.** Every record is titled
-by what it settled, so the directory listing is the checklist of constraints already in force, and a
-second copy in this file would be one more thing to keep in step and the first to go stale.
-Records are numbered in the order they derive from each other, so reading them in order is reading
-the argument being built.
+**[../decisions/](../decisions/) is the list, and it is not repeated here.** Every record is titled by
+what it settled, so the listing is the checklist of constraints in force. Records are numbered in the
+order they derive from each other, so reading them in order is reading the argument being built.
 
 ## M1 — "Hello!" is live
 
@@ -94,117 +76,96 @@ A deployed skeleton: a client, an endpoint answering one route with a hard-coded
 nothing else. No database, no puzzle, no features.
 
 **M1 is a vertical slice through the whole system, not a front end with a stub behind it.** Both
-halves are deployed, and they are deployed on a host that has to satisfy the server and whatever the
-server's store turns out to need. The client will run almost anywhere, so it is the half least able
-to discriminate between hosts and must not be what selects one. This is why the entries below reach
-the hosting question through the store's class and the runtime rather than starting from it.
+halves ship, onto a host that has to satisfy the server and whatever its store turns out to need. The
+client runs almost anywhere, so it is the half least able to discriminate between hosts and must not
+be what selects one.
 
-**These choices are meant to be permanent, not provisional.** Discovering after the fact that the
-server needs something the host cannot give does not cost a redeploy — it moves both halves, plus
-whatever else was chosen to fit the host.
+**These choices are permanent.** Discovering later that the server needs something the host cannot
+give does not cost a redeploy — it moves both halves, plus whatever else was chosen to fit.
 
-**Nothing below is settled here.** This section says what has to be answered and in what order. Where
-an entry looks like it is arguing for an answer, that is a defect: the argument belongs in the record
-that settles it, and a rationale sitting in this file is a decision that never went through the
-process. One such argument — that the client and the API share an origin — was found on 2026-09-02
-and is now entry 4.
+1. **Both halves run on a host chosen deliberately.**
+   - **Given:** [../problem.md](../problem.md) names interruption as the normal case, and
+     [the board stays playable with no connection](../guarantees/play-continues-through-a-loss-of-connectivity.md),
+     [the app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen.md)
+     and [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) put the state and
+     the app itself on the device.
+     - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline means the
+       thing is on the device before the network goes.
+       - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
+         — decides whether the host must run something on the path a player takes to open the app.
+   - **Given:** [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) a
+     server exists and holds a durable per-player record;
+     [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) its store
+     must be queryable rather than an opaque blob.
+     - **Must answer:** [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+       — decides whether the host must offer a persistent disk, which is the largest cut through the
+       candidate field.
+   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) and
+     [ADR-0007](../decisions/0007-that-language-is-typescript.md) — one language across every
+     deployable, and it is TypeScript.
+     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+       — the host has to run it.
+   - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier
+     that survives Safari's storage wipe unaided, and the exemption is withdrawn when the setting
+     server is not judged genuinely first-party.
+     - **Must answer:** [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+       — can disqualify a host outright, so it precedes pricing any.
+   - **Given:** all four answers above, which say what the host must run, what it must offer the
+     store, and what topology it must permit.
+     - **Must answer:** [where does this run?](where-does-this-run.md) — the irreversible one.
 
-**Reading the list.** It is a derivation, not an agenda. Each **Given** is a promise, a constraint,
-a record, or a capability we have decided to keep reachable. Each **Settle now** is the question that
-those givens make unavoidable, with the reason it cannot be deferred any further. Nesting is
-dependency: nothing indented can be answered until what it sits under is.
+2. **A server answers one route with a hard-coded response.**
+   - **Given:** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md),
+     [ADR-0007](../decisions/0007-that-language-is-typescript.md).
+     - **Must answer:** [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+       — also under 1.
+   - **Given:** the execution shape and the host, from 1.
+     - **Must answer:** [what runs the server?](what-runs-the-server.md) — mostly falls out of the
+       runtime.
 
-A question with no unanswered question above it is answerable today. Checkboxes track what has
-closed.
+3. **A browser can load the client.**
+   - **Given:** the offline promises and
+     [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md), as in 1.
+     - **Must answer:** [is the entry document produced per request?](is-the-client-served-as-static-files.md)
+       — also under 1.
+   - **Given:** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
+     and [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) — every cell
+     is a focusable, labelled element and all play is keyboard-reachable, so a painted grid is out.
+     - **Must answer:** [what renders the client?](what-renders-the-client.md)
+       - **Must answer:** [what builds and serves the client?](what-provides-the-build-and-dev-server.md)
+         — a renderer that ships its own build pipeline changes what this costs.
 
-### Everything that constrains the host
+4. **The repository holds both halves and builds them.**
+   - **Given:** the runtime from 1, which may bundle a package manager and make this moot.
+     - **Must answer:** [which package manager?](which-package-manager.md)
+   - **Given:** [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+     — one rules module reachable from both a browser and a batch process.
+     - **Must answer:** [how is the codebase laid out?](how-is-the-codebase-laid-out.md) — only how
+       many packages, and where that shared module sits.
 
-The host is the choice M1 exists to get right, and the only one here that cannot be taken back
-cheaply. Four independent things narrow the field, and none of them is a hosting question. Each has
-to be established before any host can be priced, because each can strike candidates off.
+5. **The deployment answers at an address we control.**
+   - **Given:** the host, from 1.
+   - **Given:** [../constraints.md](../constraints.md) — the cookie exemption turns on what the
+     domain resolves to, so a proxy in front of the origin can cap it silently.
+     - **Must answer:** [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
 
-- **Given — the app is played where connectivity fails.** [../problem.md](../problem.md) names
-  interruption as the normal case rather than the edge case, and three promises follow:
-  [play continues through a loss of connectivity](../guarantees/play-continues-through-a-loss-of-connectivity.md),
-  [the app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen.md),
-  and
-  [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md).
-  [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) puts authoritative state
-  on the device in order to keep them.
-  - **Given — keeping a promise offline puts the thing on the device before the network goes**, and
-    [../constraints.md](../constraints.md) records that what reaches a device cannot be recalled.
-    - **Settle now:** [ ] [Is the app's entry document produced per request?](is-the-client-served-as-static-files.md)
-      — this is where the promises above meet the deploy artifact. If the document the browser gets
-      when someone opens the app is computed per request, then the copy that opens with no network
-      has to be a *second, different* artifact, and the host must run something on the entry path. If
-      it exists before the request, the two are the same artifact and the host may not need to. That
-      is a difference in what the host must do, so it cannot wait for the host to be chosen.
-      **It settles only that**: not how much rendered content the document carries (that needs the
-      renderer, below), and not how other routes behave (M8's crawler question).
+6. **A change made locally reaches the deployment.**
+   - **Given:** the host, from 1 — several candidates ship their own git integration.
+     - **Must answer:** [what deploys the code?](what-deploys-the-code.md)
 
-- **Given — this system has a server and its store must be queryable.**
-  [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes the
-  server; [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-  establishes that the store cannot be an opaque blob, because the generator's feedback loop depends
-  on querying it.
-  - **Settle now:** [ ] [What execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-    — a long-lived process can open its store as a local file; an ephemeral or edge runtime has to
-    reach one over a network. That is the difference between needing a host with a persistent disk
-    and needing one without, which is the single largest cut through the candidate field. Only the
-    store's *class* is settled here. The engine needs a schema and waits for M3 — see
-    [which database?](which-database.md).
+**Why this order.** Three questions sit under more than one requirement:
+[the entry document](is-the-client-served-as-static-files.md) under 1 and 3,
+[what runs TypeScript](what-runs-typescript-outside-the-browser.md) under 1, 2 and 4, and
+[the execution shape](what-execution-shape-does-the-server-have.md) under 1 and 2. Requirement 1
+carries all three, which is why it comes first and why it has five questions under it while
+requirement 6 has one. Answering 1 leaves 2, 4, 5 and 6 with almost nothing.
 
-- **Given — one language across every deployable, and that language is TypeScript.**
-  [ADR-0006](../decisions/0006-one-language-across-every-deployable.md),
-  [ADR-0007](../decisions/0007-that-language-is-typescript.md).
-  - **Settle now:** [ ] [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-    — the host has to run whatever this is, and the candidates differ in what they need from one.
-    Spike it rather than compare it.
-
-- **Given — a server-set cookie is the only identifier that survives Safari's storage wipe without
-  asking the player for anything**, per [../constraints.md](../constraints.md), and that exemption is
-  withdrawn when the setting server is not judged genuinely first-party. Whether that recovery
-  mechanism is ever built is M12's [is guest recovery worth building?](is-guest-recovery-worth-building.md).
-  Whether it *can* be is set by where the two halves are deployed, which M1 decides permanently.
-  - **Settle now:** [ ] [Do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
-    — it can disqualify a host outright, so it comes before pricing any. It sits after the entry
-    document question, because where the client sits relative to the API only means something once
-    it is known whether a separate client artifact exists at all.
-
-- **Given — all four answers above**, which between them say what the host must run, what it must
-  offer the store, and what topology it must permit.
-  - **Settle then:** [ ] [Where does this run?](where-does-this-run.md) — the field gets rebuilt here
-    rather than priced from the list already in that file, which was gathered under an assumption no
-    longer in force.
-    - **Settle then:** [ ] [How does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
-      — the choice needs the host. The research feeding it does not, and has to happen before the
-      host is chosen, since what Safari does with a proxied domain can strike a topology out.
-    - **Settle then:** [ ] [What runs the server?](what-runs-the-server.md) — mostly falls out of the
-      runtime.
-    - **Settle then:** [ ] [What deploys the code?](what-deploys-the-code.md) — mostly falls out of
-      the host, since several candidates ship their own git integration. Cheap to reverse, and easy
-      to leave unowned.
-
-### Everything that shapes the code
-
-- **Given — every puzzle cell is a focusable, labelled element, and all play is reachable from the
-  keyboard.** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) and
-  [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) have already ruled
-  out a painted canvas, so what is open is narrower than it looks.
-  - **Given — whether the entry document is produced per request**, which decides whether the
-    renderer has to be able to produce markup outside a browser at all.
-    - **Settle then:** [ ] [What renders the client?](what-renders-the-client.md)
-      - **Settle then:** [ ] [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
-        — needs the renderer, since a renderer that ships its own build pipeline changes what this
-        costs.
-
-- **Given — the runtime chosen above**, which may bundle a package manager and make this moot.
-  - **Settle then:** [ ] [Which package manager?](which-package-manager.md)
-    - **Given — how many packages the toolchain makes cheap**, plus
-      [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
-      requiring one rules module that both a browser and a batch process can reach.
-      - **Settle then:** [ ] [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only
-        the part M1 needs: how many packages, and where that shared module sits.
+**Gaps to watch.** Requirement 5 has an unexamined given: nothing says where a certificate comes
+from, and it may fall inside the domain question or may not. And nothing asks how the two halves are
+actually served from one origin — one process serving both, a proxy, or platform routing. That may
+sit inside [what runs the server?](what-runs-the-server.md) or
+[where does this run?](where-does-this-run.md); if it sits in neither, it is a question nobody has
+written.
 
 ## M2 — a change can be checked before it ships
 

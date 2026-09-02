@@ -10,7 +10,7 @@ date: 2026-09-01
 
 **Two kinds of thing need tracking and they want opposite shapes.** A decision is read in aggregate:
 its value is the chain from what the product is for to the choice, and a reader needs the neighbours
-to check it. [../standards/decisions.md](../standards/decisions.md) puts it plainly — the chain is
+to check it. The portable decision-making standard puts it plainly — the chain is
 the deliverable. Work is the opposite. Its value is that exactly one thing is in front of you, and
 its neighbours are noise until it is done.
 
@@ -48,11 +48,11 @@ links to them rather than restating them.
 - **Docs for everything, including work.** Also one place, and it is what has happened so far
   because everything so far has been documentation. Rejected because it has no notion of assignment,
   state or done, and because a task with no reasoning attached is pure overhead in a format
-  [../standards/decisions.md](../standards/decisions.md) says exists to carry a chain of reasoning.
+  the portable decision-making standard says exists to carry a chain of reasoning.
 
 - **Not yet — keep using documents until it hurts.** The genuine "not yet", and it is correct right
   up to the point where the first implementation work exists — the deferral test in
-  [../standards/decisions.md](../standards/decisions.md). This record exists so that the
+  the portable decision-making standard. This record exists so that the
   transition is a decision rather than a drift, since the natural failure is opening issues that
   duplicate questions because the boundary was never stated.
 

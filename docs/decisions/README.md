@@ -39,7 +39,7 @@ title does not tell you whether to open the file, the title is wrong and fixing 
 they bind just as hard. `guarantees/offline.md` constrains a stack choice as tightly as anything in
 this folder and appears nowhere in it.
 
-**Read [../standards/decisions.md](../standards/decisions.md) now, even if you read it earlier in
+**Read the portable decision-making standard now, even if you read it earlier in
 this session.** A remembered summary produces a record that fits this format and breaks a rule.
 
 ## One record, one decision
@@ -104,7 +104,14 @@ sloppy in only one direction is not sloppy.
 earlier document without re-establishing it. No assumption stated as a fact. No number without its
 source. A rejection is held to the same evidence bar as **Forced by**: it cites
 [../constraints.md](../constraints.md), [../guarantees/](../guarantees/),
-[../problem.md](../problem.md), or another record. `scripts/check-docs.py` enforces that.
+[../problem.md](../problem.md), or another record.
+
+**Nothing enforces that, and a check that tried was removed.** It looked for a citation anywhere in a
+rejected option, and it passed ADR-0003 — whose bullets cite `problem.md` for one thing and then make
+five specific, checkable, unsourced claims about vendor policies and version numbers. A check that
+answers "is there a link" cannot answer "does this support the claim beside it", and reporting clean
+on the record that motivated it is worse than not running. `prep-for-codebase-handoff` reads for it
+instead.
 
 **One disqualifying reason, named.** Not a stack. If three are listed, say which one would disqualify
 the option on its own — and if none would, the option is not disqualified and you have more work to
@@ -173,8 +180,8 @@ argued.
 That is about what a record *settles*, not about what it *considers*, and the two pull in opposite
 directions if the difference is missed. A choice made without looking at what it forecloses
 elsewhere is narrow in the wrong way: one thing decided, several settled by consequence, none of
-them argued. Name what else the choice moves before recording it. Both halves are stated as
-standards in [../standards/decisions.md](../standards/decisions.md).
+them argued. Name what else the choice moves before recording it. Both halves are stated in the
+portable decision-making standard.
 
 **Familiarity is not a reason.** "I already know X" is a legitimate cost input, but it has to
 be stated as a cost of adopting Y — never smuggled in as a merit of X.
@@ -191,6 +198,11 @@ Standards belong on that list because they can decide a question, not only shape
 is built — an option that satisfies a standard by construction is preferable to one that
 satisfies it only if nobody slips. Their scope lines describe when a file is being edited, so
 nothing pulls them into view while a decision is still being made. Go and look.
+
+The decision-making rules themselves are portable and live outside this repo, in the shared
+engineering standards — not under `standards/` here. A **Forced by** that leans on them names
+the standard in prose rather than linking into `standards/`, since there is nothing local to
+link to.
 
 An ADR citing nothing was made on vibes.
 
@@ -223,6 +235,7 @@ date: YYYY-MM-DD
 <the condition that should trigger reconsidering this>
 
 ## Also update
+- [ ] questions/README.md — which questions this settles, rescopes, or moves to another milestone
 - [ ] constraints.md — givens this decision imports
 - [ ] guarantees/ — promises this decision commits us to
 -->
@@ -238,3 +251,9 @@ date: YYYY-MM-DD
   equally binding forever.
 - An unchecked box under **Also update** is visibly unfinished work. `constraints.md` stays
   empty exactly when people skip it.
+- **The `questions/README.md` box is the one that stops the milestone list going stale.** A record
+  almost always changes what some question is asking, or which milestone needs it, or whether it
+  still needs asking at all — and nobody notices from inside the record. Two examples left over
+  after a day's work: `what-runs-the-server-if-there-is-one` and
+  `what-does-the-server-store-if-anything` both carry conditionals that records have since answered.
+  Tick the box by saying what moved, or by saying nothing did.

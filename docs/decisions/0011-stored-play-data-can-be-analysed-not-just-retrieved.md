@@ -46,7 +46,7 @@ will not be the reason they cannot be answered.
 ## Rejected
 
 - **Deciding it when the analysis is wanted.** The honest "not yet", and it fails on the one thing
-  that matters under [../standards/decisions.md](../standards/decisions.md)'s deferral test: by then
+  that matters under the portable decision-making standard's deferral test: by then
   there is player data in whatever shape was chosen, and changing it is a migration rather than a
   decision. The option costs almost nothing now precisely because there is nothing stored yet.
 

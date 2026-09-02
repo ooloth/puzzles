@@ -65,7 +65,7 @@ is [a snapshot or an event log](is-puzzle-state-a-snapshot-or-an-event-log.md), 
 [which database](which-database-if-any.md), and part of
 [what the server holds](what-does-the-server-hold.md), since its sync backend is one. Those
 answers may each be right, but a tool that supplies them is not an argument for them, and
-[../standards/decisions.md](../standards/decisions.md) is about the order in which they are reached.
+[README.md](README.md) is about the order in which they are reached.
 It is a candidate for this question once the others are settled, and a way of skipping them before.
 
 It **sits across the storage boundary rather than behind it**.

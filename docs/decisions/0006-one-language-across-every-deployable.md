@@ -57,7 +57,7 @@ it holds whichever language wins.
   player being told a legal move is illegal.
 
 - **Decide it per deployable, as each one is built.** The honest "not yet". It fails on the same
-  ground [../standards/decisions.md](../standards/decisions.md) names for any deferred structural
+  ground the portable decision-making standard names for any deferred structural
   choice that narrows everything downstream without announcing it: by the time a second deployable
   exists, the first has a toolchain, and matching it is no longer a decision but an accommodation.
 

@@ -13,7 +13,7 @@ Star battle is not a maybe. It is the next thing after sudoku, and it differs fr
 part of a puzzle's shape: no digits, a variable grid size, and regions whose boundaries are part of
 the puzzle rather than derivable from a cell's coordinates.
 
-**[../standards/decisions.md](../standards/decisions.md) says decisions are deferred until leaving
+**The portable decision-making standard says decisions are deferred until leaving
 one open would close a door unnoticed, and names this door.** Its example list is "hosting topology
 that silently caps a recovery mechanism, **a data shape that assumes one puzzle type**, an absent
 identifier that turns a later feature into a migration."
@@ -82,7 +82,7 @@ hold one. Claiming otherwise would be preserving an option nobody has costed.
   by code that runs once under supervision, and client storage cannot.
 
 - **Preserve the option in the code without recording it.** Write the generic shape and let the
-  reason live in whoever wrote it. Rejected because [../standards/decisions.md](../standards/decisions.md)
+  reason live in whoever wrote it. Rejected because the portable decision-making standard
   treats the chain of reasoning as the deliverable, not the code alone, and the pressure to collapse
   it arrives later, from someone reasonably observing that the region map is the same every time and
   the size is always nine — and with no record, that person is right.

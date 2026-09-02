@@ -108,7 +108,21 @@ detected by a lint script like `check-docs.py` instead.
   costs: two turned on questions still open, and the third was a routine cleanup job described as
   structural. Watch for the signature — when the weak reasoning in a record all argues for the option
   that lost and none of it for the option that won, the section was written to justify rather than to
-  evaluate. `docs/standards/decisions.md` calls this the failure that does not announce itself.
+  evaluate. The portable decision-making standard calls this the failure that does not announce itself.
+- **A question whose premise a record has settled.** Read every question filename and its **Why it
+  matters** against `docs/decisions/`. A conditional that a record now answers is the clearest
+  signal — `what-runs-the-server-if-there-is-one` and `what-does-the-server-store-if-anything` both
+  outlived the records that answered "yes" and "something". Also look for Options that a record has
+  ruled out and Why-it-matters paragraphs that argue from a decision since superseded. A question
+  asking something already answered makes a reader re-open a settled argument.
+- **A rejection that reads as researched and is not.** The `check-docs.py` citation check was removed
+  because it could not do this: it passed ADR-0003, whose bullets cite `problem.md` for one thing and
+  then make five specific, checkable, unsourced claims about vendor policies and version numbers.
+  Read each **Rejected** bullet and ask three things. Does the citation support the claim it is
+  attached to, or merely sit near it? Are there specific-sounding details — versions, percentages,
+  dates, named policies — with no source? And if several reasons are given, is any one of them
+  disqualifying alone? Specific detail is the most convincing thing in a bad argument, which is why
+  this needs reading rather than matching.
 - **`unfinished.md` entries that are no longer live.** Each entry claims something in the repo will
   mislead a reader today. Check whether it still would. An entry describing a migration that
   finished, or a pattern that no longer exists, trains readers to skim the one file whose whole

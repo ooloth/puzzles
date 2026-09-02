@@ -77,7 +77,7 @@ what broke. Budget hours. Delete the spikes afterwards; the observation is the a
 
 Deciding this by reading would be choosing on the strength of numbers produced by other people, on
 other hardware, for other workloads — which is exactly what
-[../standards/decisions.md](../standards/decisions.md) now says not to do where a measurement is
+the portable decision-making standard now says not to do where a measurement is
 available.
 
 **A Bun preference already exists in [../brainstorming/](../brainstorming/) and it does not survive

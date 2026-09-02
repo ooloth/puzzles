@@ -15,9 +15,8 @@ keyboard fails half the audience described there before accessibility is mention
 **[../questions/README.md](../questions/README.md) chooses the renderer at M1 and the input model at
 M4**, while [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
 sits at M9. The decision that forecloses it comes five milestones before the question that asks
-about it, which is the pattern
-[../standards/decisions.md](../standards/decisions.md) names as worth stopping for: a choice that
-narrows everything downstream without announcing that it has.
+about it, which is the pattern the portable decision-making standard names as worth stopping for:
+a choice that narrows everything downstream without announcing that it has.
 
 **[../guarantees/accessibility.md](../guarantees/accessibility.md) records that these are expensive
 to retrofit once an interaction model exists**, and says plainly that silence is not a decision to

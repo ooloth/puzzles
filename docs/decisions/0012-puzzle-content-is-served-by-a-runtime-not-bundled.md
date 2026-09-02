@@ -18,7 +18,7 @@ Gating happens before bytes leave the server or not at all, so content that migh
 cannot ship as static files alongside the application. That is a property of delivery, and it is
 settled when the delivery mechanism is chosen rather than when gating is wanted.
 
-**[../standards/decisions.md](../standards/decisions.md) says decisions are deferred until leaving
+**The portable decision-making standard says decisions are deferred until leaving
 one open would close a door unnoticed.** This is one of those. The milestone sequence in
 [../questions/README.md](../questions/README.md) now puts a puzzle on the screen from a store at the
 second milestone, which makes puzzle delivery something that gets *built* long before anyone asks

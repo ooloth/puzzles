@@ -29,8 +29,9 @@ build on unaddressed assumptions.
 
 ### 0. Check whether this decision should be made at all — and stop if not
 
-**Do this before anything else, and be willing to end here.** `docs/standards/decisions.md` holds it
-as a Must: a decision the next milestone does not need should not be made yet. The test is not
+**Do this before anything else, and be willing to end here.** The portable decision-making
+standard (invoke the `uphold-standards` skill to load it) holds it as a Must: a decision the next
+milestone does not need should not be made yet. The test is not
 whether the question _could_ be answered — most could, badly. It is whether reaching the next
 observable state in `docs/questions/README.md` requires the answer.
 
@@ -64,14 +65,23 @@ directs you to proceed anyway after hearing the above.
    anything on top of it.
 1. Read `docs/guarantees/` for the themes that bear on the question. Promises are not decisions and
    do not appear in `docs/decisions/`, and they bind just as hard.
-1. Read `docs/standards/decisions.md`, `docs/problem.md`, `docs/constraints.md` and
-   `docs/questions/README.md`
+1. Invoke the `uphold-standards` skill to load the portable decision-making standard, and read
+   `docs/problem.md`, `docs/constraints.md` and `docs/questions/README.md`
 1. List `docs/questions/` to familiarize yourself with the set of unmade decisions
 1. Deploy as many parallel subagents as needed to answer all your fact-based questions about the
    codebase or external systems and dependencies and verify all claims
 1. Identify the most foundational question that should be answered next
 1. Identify any prerequisite decisions that should ideally be made before tackling that question
    (if any). If those questions have not been tracked, track them now.
+1. **Ask what the next milestone needs that nothing is tracking.** A decision creates questions as
+   often as it answers them, and a question nobody has posed is invisible in a folder organised by
+   filename. Two passes: read the last few records and ask what each made newly askable or newly
+   urgent, then read the next milestone's description and ask what reaching it requires that no file
+   in `docs/questions/` covers. Write the missing ones before choosing what to answer — six questions
+   in one session came from this, and one of them closed at the second milestone.
+1. **Ask what the records have made stale.** For each question in the current and next milestone,
+   check its premise against `docs/decisions/`. A question whose conditional a record has answered
+   sends a reader to re-open a settled argument.
 1. Confirm the question that would be most impactful to answer next
 
 ### 2. Present the selected question
@@ -131,10 +141,11 @@ record what you find.
 
 ### 5. Document the decision
 
-1. **Re-read `docs/standards/decisions.md` and `docs/decisions/README.md` now**, immediately before
-   writing. Not at the start of the session — now. A summary of them held in working memory for an
-   hour is what produces a record that satisfies the format and breaks a Must, and the failure is
-   invisible because the record looks complete.
+1. **Re-invoke the `uphold-standards` skill for the portable decision-making standard, and re-read
+   `docs/decisions/README.md`, now**, immediately before writing. Not at the start of the session —
+   now. A summary of them held in working memory for an hour is what produces a record that
+   satisfies the format and breaks a Must, and the failure is invisible because the record looks
+   complete.
 1. Author the ADR
 1. For any resolved question files, mine any valuable content and then delete them
 1. Update all other docs as needed based on the ADR's implications, including `questions/README.md`,

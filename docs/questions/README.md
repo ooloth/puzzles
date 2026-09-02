@@ -105,7 +105,9 @@ record has not settled; mine it first, since findings graduate to
 than committed to in advance.
 
 `scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
-appears in a milestone, no link points at a heading, no question file has grown a sequencing section.
+is referenced at least once from the lists below, no link points at a heading, no question file has
+grown a sequencing section. A question deliberately appears under more than one milestone where it is
+needed twice, so nothing checks for a single appearance.
 It does not check the ordering, because a check that passed it would only make a wrong order look
 verified.
 
@@ -171,7 +173,6 @@ thing in M1 is the string the endpoint returns.
    - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier surviving Safari's storage wipe unaided
    - **Given:** [../constraints.md](../constraints.md) — that exemption is withdrawn when the setting server is not judged genuinely first-party
    - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
-   - **Given:** [is-guest-recovery-worth-building](is-guest-recovery-worth-building.md)
      - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md)
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md)
      - **Must answer:** [where-does-this-run](where-does-this-run.md)

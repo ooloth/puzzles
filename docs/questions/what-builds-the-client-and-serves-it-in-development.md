@@ -37,9 +37,9 @@ Split out of the rendering question.
 
 ## Options
 
-The TypeScript toolchains, if
-[the language question](../decisions/0007-that-language-is-typescript.md) resolves that way — Vite and
-Bun being the obvious two, with a framework's own tooling a third where it has one.
+The TypeScript toolchains, since
+[ADR-0007](../decisions/0007-that-language-is-typescript.md) settled the language — Vite and Bun being
+the obvious two, with a framework's own tooling a third where it has one.
 
 Narrowed by the research below to Vite. Bun remains a live option for the parts of the toolchain
 that are not the browser build, and those are separate choices.

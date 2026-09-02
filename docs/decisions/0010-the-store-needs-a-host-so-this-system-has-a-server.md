@@ -115,8 +115,9 @@ change, both routes change together rather than one holding the other up.
 - [x] Nothing in `constraints.md` — this imports no facts about the world
 - [x] Nothing in `guarantees/` — this promises a player nothing, and nothing promises how long a
       player's work lasts
-- [x] `questions/what-does-the-server-hold.md` — a server existing does not settle what is on it,
-      and that question is still worked whole
+- [x] `questions/` — a server existing does not settle what is on it. The inventory question that
+      once asked this as a whole was retired, and what it covered is now worked as separate
+      questions about the store, the boundary and the content
 
 Deliberately not decided here: what the server holds, what execution shape it has, where it runs,
 what it stores, whether it understands puzzle content, and when any of it is built.

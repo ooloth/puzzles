@@ -73,7 +73,7 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | ---------------------- | --------------------------------------- |
 | `docs/decisions/`      | Choices already made, and why           |
 | `docs/failure-modes/`  | Ways it can fail, and whether we'd know |
-| `docs/guarantees/`     | Promises to players we must never break |
+| `docs/guarantees/`     | Promises to players we must never break, one per file |
 | `docs/questions/`      | Decisions not yet made, in order        |
 | `docs/standards/`      | What correct work looks like here       |
 | `docs/architecture.md` | Where code lives and what calls what    |

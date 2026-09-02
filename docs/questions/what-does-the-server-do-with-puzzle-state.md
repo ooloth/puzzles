@@ -8,7 +8,8 @@ resolves_into: decision
 
 ## Why it matters
 
-If a server exists, this is where two promises are kept or broken.
+A server exists, per [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md).
+This is where two promises are kept or broken.
 [Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
 for as long as a player's work is held, and
 [conflicts are reconciled without asking the player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md):

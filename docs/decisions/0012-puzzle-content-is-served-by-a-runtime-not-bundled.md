@@ -119,8 +119,8 @@ there is no body of content to gate and the whole option was theoretical.
       recalled, and an offline promise puts content on the device by construction
 - [x] Nothing in `guarantees/` — this promises a player nothing and deliberately withholds nothing
       from them today
-- [x] `questions/what-does-the-server-hold.md` — the catalogue candidate is settled by this record
-      rather than by that question
+- [x] `questions/` — the catalogue candidate is settled by this record rather than by any open
+      question
 
 Deliberately not decided here: whether there is a paid tier, what the catalogue is stored in, whether
 puzzles are generated ahead of time or on demand, whether an archive exists at all, and what a player

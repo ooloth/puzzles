@@ -38,7 +38,7 @@ server exists. What it holds for a signed-in player, and for how long, is still 
 **Every tool is still open**: what renders the client, what runs TypeScript outside the browser,
 which database, what holds a player's work in the browser, and where any of it deploys. The research
 inside the question files is homework for decisions still to be made, not the conclusions of
-decisions already made — a shortlist is not a choice, and every Findings section now says so in its
+decisions already made — a shortlist is not a choice, and every Findings section says so in its
 first line.
 
 **So** install nothing yet, and work [questions/README.md](questions/README.md) in the order it

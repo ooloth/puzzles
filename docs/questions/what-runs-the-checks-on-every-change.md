@@ -56,7 +56,7 @@ alternative.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **One check already exists and nothing runs it.** `scripts/check-docs.py` verifies that every link
-under `docs/` resolves and that every question appears in exactly one milestone. It is plain Python
+under `docs/` resolves and that every question is referenced from the milestone list. It is plain Python
 with no dependencies, so it presupposes nothing about the runtime and could be wired up before that
 is settled — as a commit hook, as a CI step, or both.
 

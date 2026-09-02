@@ -81,10 +81,10 @@ ANY_LINK = re.compile(r'\]\(([^)]*)\)')
 def check_heading_anchors():
     """No link points at a heading.
 
-    standards/documentation.md: a path survives a document being reorganised, an anchor
-    breaks the moment someone rewords a heading, and nothing reports it. This is that
-    report. check_links() cannot do it — it strips fragments before resolving, and skips
-    same-document links entirely, so both kinds passed silently until 2026-09-02.
+    The portable documentation standard asks that references point at files: a path survives
+    a document being reorganised, an anchor breaks the moment someone rewords a heading, and
+    nothing reports it. This is that report. check_links() cannot do it: it strips the fragment
+    before resolving the path, and skips same-document links entirely, so both kinds pass it.
     """
     for root, _, files in os.walk('docs'):
         if any(skip in root for skip in SKIP_DIRS):

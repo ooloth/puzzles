@@ -16,9 +16,9 @@ players, the same way a listing of [../decisions/](../decisions/) is the list of
 implementation. A theme file holding four promises hides four separate enforcement states behind one
 filename, and the thing that gets violated is a promise rather than a theme.
 
-Nothing here is enforced yet, because there is no application code yet. The `enforced` field in each
-file's frontmatter is what tells you which have become real: `rg -l 'enforced: no' docs/guarantees/`
-is the backlog.
+Nothing here is enforced yet, because there is no application code yet. Each file says so under
+**Enforced by**, and carries an `enforced` field saying the same thing — so the folder is the backlog,
+and it is short enough to read.
 
 Each promise states what it costs when it breaks. *How* it breaks is
 [../failure-modes/](../failure-modes/) — the two are halves of one picture, and a guarantee whose
@@ -71,8 +71,8 @@ Related promises group themselves by sharing an opening phrase — `every-puzzle
 - Present tense, unconditional within the caveat the name states.
 - Every qualifier is measurable or enumerable. If a claim needs "immediately", "several", or "normal
   play", either replace it or the guarantee isn't written yet.
-- Frontmatter carries `theme` and `enforced`, so the folder can be grouped and queried without
-  reading it.
+- Frontmatter carries `theme` and `enforced`. Nothing reads either field and nothing checks that
+  `enforced` agrees with the **Enforced by** line, so both are descriptive rather than load bearing.
 
 Under the claim: what enforces it, what breaks if it doesn't hold, and what open questions or
 constraints bear on it.
@@ -113,9 +113,9 @@ For a game played on a commute this is the normal case rather than an edge case.
 - [The player is never asked to retry or reconnect](the-player-is-never-asked-to-retry-or-reconnect.md)
 - [Conflicts are reconciled without asking the player](conflicts-are-reconciled-without-asking-the-player.md)
 
-Two claims that used to ride inside the retry promise — that no move is lost when a connection fails,
-and that no move is reverted by a later sync — are not promised. Both are real commitments about
-reconciliation that no record has argued, and they get written here if and when
+Two nearby claims are not promised: that no move is lost when a connection fails, and that no move
+is reverted by a later sync. Both are real commitments about reconciliation that no record has
+argued, and they get written here if and when
 [what happens to a losing write when syncing?](../questions/what-happens-to-a-losing-write-when-syncing.md)
 settles.
 

@@ -13,8 +13,10 @@ regretting one of them later.** A long-lived process on a machine with a persist
 hold an embedded database, run background work and keep things in memory between requests. An
 ephemeral or edge runtime can do none of those and needs its state over a network.
 
-The foreclosure runs one way and is invisible at the moment it happens.
-[Where does this run?](where-does-this-run.md) already records the consequences: an embedded
+The foreclosure runs one way and is invisible at the moment it happens. The consequences are
+already written down in [where does this run?](where-does-this-run.md), which is cited here for its
+findings rather than as something to answer first — the order lives in
+[README.md](README.md) and puts this question ahead of it. An embedded
 database on local disk is what disqualifies serverless platforms, Cloudflare Workers with D1 has no
 persistent process and no real database file, and Fly volumes are single-attach. So deploying a
 hello world to an edge platform quietly settles

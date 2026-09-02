@@ -65,7 +65,7 @@ cargo-culted or ignored.
 
 - [documentation.md](documentation.md) — files under `docs/`, `README.md` at any level, `CLAUDE.md`
 
-Decision-making rules used to live here as `decisions.md`. They turned out to be true of any
-codebase, not just this one, so they moved to the portable set described above.
+Decision-making rules are true of any codebase rather than only this one, so they live in the
+portable set described above rather than here.
 
 Add a file once a theme has real content. Keep this list in step with the directory.

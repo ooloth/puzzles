@@ -80,7 +80,7 @@ file.
 
 This is easy to get backwards, and three records here did. "The option to gate puzzle access is
 preserved" names a motive, and nobody looking for how puzzle content is delivered would open it. It
-is now "puzzle content is served by a runtime, not shipped with the app" — the same record, titled by
+is now "puzzle content is served by a runtime, not bundled" — the same record, titled by
 its conclusion. Records that exist to keep a future reachable are especially prone to this, because
 the option feels like the point. It is the reason; the constraint is the point.
 

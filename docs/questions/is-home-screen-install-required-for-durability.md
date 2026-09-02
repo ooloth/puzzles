@@ -10,16 +10,18 @@ resolves_into: decision
 
 Install is the only confirmed exemption from Safari's wipe of script-writable
 storage. Requiring it puts friction on an audience assumed to have no technical sophistication.
-Not requiring it means the durability guarantee is materially weaker for most players than for
-some — and we would be promising something we only sometimes deliver.
+Not requiring it means durability is materially weaker for most players than for some, which
+bounds what can ever be promised — and a promise kept only sometimes is worse than none.
 
 ## What would settle it
 
 Whether a server copy exists. If
 [cross-device resume](is-cross-device-resume-in-scope-for-v1.md) brings one, install stops being
 load-bearing for durability and becomes an optimisation — worth encouraging, never required. If
-it does not, install is one of only two ways to keep a promise already made, and the question is
-whether we are willing to condition that promise on an action most players will not take.
+it does not, install is one of only two ways any durability bound could be kept at all, and the
+question becomes whether a bound may be conditioned on an action most players will not take.
+No such bound is promised yet — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md).
 
 ## Resolves into
 
@@ -32,12 +34,12 @@ of install turned out to be worse than recorded.
 
 ## Options
 
-*Required.* The durability promise holds, and only for players who install. Everyone else is
+*Required.* Whatever bound is eventually set holds only for players who install. Everyone else is
 told, or not told, that their progress is provisional.
 
 *Encouraged but not required.* Prompt at a moment where the benefit is legible, and accept two
-tiers of durability. This is what most apps do, and it means the guarantee has to be worded for
-the weaker tier.
+tiers of durability. This is what most apps do, and it means any bound has to be worded for the
+weaker tier.
 
 *Irrelevant.* A server copy makes local eviction survivable, so install is a performance and
 convenience feature with no durability role. Costs whatever

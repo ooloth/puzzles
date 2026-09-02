@@ -68,6 +68,13 @@ is a roadmap question settled in [decisions/](decisions/). What belongs here is 
 those decisions should not quietly close off — so a feature described below arriving later than
 another is normal, and a decision that makes one of them expensive to add is not.
 
+**This section runs ahead of what is promised, and that is the arrangement rather than a gap.**
+[guarantees/](guarantees/) holds only what has been committed to, and it will always be a subset of
+what is described here — a sentence below is an intention until a record argues it into a promise and
+code makes it true. So nothing here may be cited as a guarantee, and finding that a guarantee does
+not yet exist for something below is the expected state rather than a defect. The reverse would be
+the defect: a promise in `guarantees/` pointing at nothing in this file.
+
 A player can:
 
 1. Tap a cell, enter a digit, or toggle a note and see it register immediately — on any

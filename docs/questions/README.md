@@ -90,61 +90,121 @@ the argument being built.
 
 ## M1 — "Hello!" is live
 
-A deployed skeleton: a static client, a same-origin endpoint answering one route with a hard-coded
-response, and nothing else. No database, no puzzle, no features.
+A deployed skeleton: a client, an endpoint answering one route with a hard-coded response, and
+nothing else. No database, no puzzle, no features.
 
-**These choices are meant to be permanent, not provisional**, because the hosting choice is where the
-client and its API both live and moving either later moves both.
+**M1 is a vertical slice through the whole system, not a front end with a stub behind it.** Both
+halves are deployed, and they are deployed on a host that has to satisfy the server and whatever the
+server's store turns out to need. The client will run almost anywhere, so it is the half least able
+to discriminate between hosts and must not be what selects one. This is why the entries below reach
+the hosting question through the store's class and the runtime rather than starting from it.
 
-**Same-origin is a constraint on that choice rather than a question of its own.** A server-set cookie
-is the only thing that survives the browser's storage wipe without asking a player for anything, and
-[../constraints.md](../constraints.md) records that Safari withdraws that exemption when the setting
-server is not judged genuinely first-party — the shape of a static host with its API elsewhere.
-Whether the cookie is ever used is decided at M12. What M1 must not do is foreclose it, and given
-[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) already puts a
-runtime on the content path, serving the client from the same origin costs nothing.
+**These choices are meant to be permanent, not provisional.** Discovering after the fact that the
+server needs something the host cannot give does not cost a redeploy — it moves both halves, plus
+whatever else was chosen to fit the host.
 
-**Same-origin is not sufficient on its own**, which is why entry 5 exists. The same constraint
-withdraws the exemption based on what the domain resolves to, so a reverse proxy in front of the
-origin can cap the cookie at seven days whatever the origin serves. That half is a decision rather
-than a constraint, and it fails without an error.
+**Nothing below is settled here.** This section says what has to be answered and in what order. Where
+an entry looks like it is arguing for an answer, that is a defect: the argument belongs in the record
+that settles it, and a rationale sitting in this file is a decision that never went through the
+process. One such argument — that the client and the API share an origin — was found on 2026-09-02
+and is now entry 4.
 
-**The store's class is settled here and the engine is not.** Whether the store is a file the process
-opens or a service it connects to sets the capability the host must have, and entry 2 settles it as
-part of the execution shape. Which engine, given that class, cannot be argued without a schema and
-waits for M3 — see [which database?](which-database.md).
+**Reading the list.** It is a derivation, not an agenda. Each **Given** is a promise, a constraint,
+a record, or a capability we have decided to keep reachable. Each **Settle now** is the question that
+those givens make unavoidable, with the reason it cannot be deferred any further. Nesting is
+dependency: nothing indented can be answered until what it sits under is.
 
-1. [Is the client served as static files?](is-the-client-served-as-static-files.md) — first, because
-   it decides whether the deploy artifact is a bundle or a rendering server, which everything below
-   inherits. Derived from [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
-   and the offline guarantee, so closer to a recording than a decision — which is what makes taking
-   it first nearly free.
-2. [What execution shape does the server have?](what-execution-shape-does-the-server-have.md) — the
-   hub. Long-lived process, ephemeral functions, or an edge runtime, each paired with the kind of
-   store it can reach, so this settles embedded against network-attached too.
-3. [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) — Node,
-   Bun or Deno. Spike it. Under Bun or Deno it also answers the package manager and the test runner.
-4. [Where does this run?](where-does-this-run.md) — from the three above, with same-origin as a
-   constraint on the answer. Its option list is prior research gathered under an assumption no longer
-   in force, so the field gets rebuilt here rather than priced.
-5. [How does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) — the
-   ordering here is genuinely two-part. What Safari does with a proxied domain is research, and it
-   has to be established *before* entry 4 closes, because it can disqualify a topology. The choice it
-   feeds — proxied or not, apex or subdomain, where the certificate comes from — needs the host and
-   so lands after.
-6. [What runs the server?](what-runs-the-server.md) — mostly falls out of the runtime.
-7. [What deploys the code?](what-deploys-the-code.md) — cheap to reverse and easy to leave
-   unowned. Mostly falls out of the host, since several candidates ship their own git integration.
-8. [Which package manager?](which-package-manager.md) — before the layout, since whether the
-   toolchain does workspaces is an input to how many packages there are. May collapse entirely into
-   entry 3.
-9. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only the part M1 needs: how
-   many packages, and where the shared rules module sits so both a browser and a batch process can
-   reach it.
-10. [What renders the client?](what-renders-the-client.md) — framework, minimal library or neither.
-    [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) has already
-    ruled out a painted canvas.
-11. [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
+A question with no unanswered question above it is answerable today. Checkboxes track what has
+closed.
+
+### Everything that constrains the host
+
+The host is the choice M1 exists to get right, and the only one here that cannot be taken back
+cheaply. Four independent things narrow the field, and none of them is a hosting question. Each has
+to be established before any host can be priced, because each can strike candidates off.
+
+- **Given — the app is played where connectivity fails.** [../problem.md](../problem.md) names
+  interruption as the normal case rather than the edge case, and three promises follow:
+  [play continues through a loss of connectivity](../guarantees/play-continues-through-a-loss-of-connectivity.md),
+  [the app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen.md),
+  and
+  [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md).
+  [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) puts authoritative state
+  on the device in order to keep them.
+  - **Given — keeping a promise offline puts the thing on the device before the network goes**, and
+    [../constraints.md](../constraints.md) records that what reaches a device cannot be recalled.
+    - **Settle now:** [ ] [Is the app's entry document produced per request?](is-the-client-served-as-static-files.md)
+      — this is where the promises above meet the deploy artifact. If the document the browser gets
+      when someone opens the app is computed per request, then the copy that opens with no network
+      has to be a *second, different* artifact, and the host must run something on the entry path. If
+      it exists before the request, the two are the same artifact and the host may not need to. That
+      is a difference in what the host must do, so it cannot wait for the host to be chosen.
+      **It settles only that**: not how much rendered content the document carries (that needs the
+      renderer, below), and not how other routes behave (M8's crawler question).
+
+- **Given — this system has a server and its store must be queryable.**
+  [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes the
+  server; [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+  establishes that the store cannot be an opaque blob, because the generator's feedback loop depends
+  on querying it.
+  - **Settle now:** [ ] [What execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+    — a long-lived process can open its store as a local file; an ephemeral or edge runtime has to
+    reach one over a network. That is the difference between needing a host with a persistent disk
+    and needing one without, which is the single largest cut through the candidate field. Only the
+    store's *class* is settled here. The engine needs a schema and waits for M3 — see
+    [which database?](which-database.md).
+
+- **Given — one language across every deployable, and that language is TypeScript.**
+  [ADR-0006](../decisions/0006-one-language-across-every-deployable.md),
+  [ADR-0007](../decisions/0007-that-language-is-typescript.md).
+  - **Settle now:** [ ] [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+    — the host has to run whatever this is, and the candidates differ in what they need from one.
+    Spike it rather than compare it.
+
+- **Given — a server-set cookie is the only identifier that survives Safari's storage wipe without
+  asking the player for anything**, per [../constraints.md](../constraints.md), and that exemption is
+  withdrawn when the setting server is not judged genuinely first-party. Whether that recovery
+  mechanism is ever built is M12's [is guest recovery worth building?](is-guest-recovery-worth-building.md).
+  Whether it *can* be is set by where the two halves are deployed, which M1 decides permanently.
+  - **Settle now:** [ ] [Do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
+    — it can disqualify a host outright, so it comes before pricing any. It sits after the entry
+    document question, because where the client sits relative to the API only means something once
+    it is known whether a separate client artifact exists at all.
+
+- **Given — all four answers above**, which between them say what the host must run, what it must
+  offer the store, and what topology it must permit.
+  - **Settle then:** [ ] [Where does this run?](where-does-this-run.md) — the field gets rebuilt here
+    rather than priced from the list already in that file, which was gathered under an assumption no
+    longer in force.
+    - **Settle then:** [ ] [How does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
+      — the choice needs the host. The research feeding it does not, and has to happen before the
+      host is chosen, since what Safari does with a proxied domain can strike a topology out.
+    - **Settle then:** [ ] [What runs the server?](what-runs-the-server.md) — mostly falls out of the
+      runtime.
+    - **Settle then:** [ ] [What deploys the code?](what-deploys-the-code.md) — mostly falls out of
+      the host, since several candidates ship their own git integration. Cheap to reverse, and easy
+      to leave unowned.
+
+### Everything that shapes the code
+
+- **Given — every puzzle cell is a focusable, labelled element, and all play is reachable from the
+  keyboard.** [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) and
+  [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) have already ruled
+  out a painted canvas, so what is open is narrower than it looks.
+  - **Given — whether the entry document is produced per request**, which decides whether the
+    renderer has to be able to produce markup outside a browser at all.
+    - **Settle then:** [ ] [What renders the client?](what-renders-the-client.md)
+      - **Settle then:** [ ] [What builds and serves the client?](what-provides-the-build-and-dev-server.md)
+        — needs the renderer, since a renderer that ships its own build pipeline changes what this
+        costs.
+
+- **Given — the runtime chosen above**, which may bundle a package manager and make this moot.
+  - **Settle then:** [ ] [Which package manager?](which-package-manager.md)
+    - **Given — how many packages the toolchain makes cheap**, plus
+      [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+      requiring one rules module that both a browser and a batch process can reach.
+      - **Settle then:** [ ] [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — only
+        the part M1 needs: how many packages, and where that shared module sits.
 
 ## M2 — a change can be checked before it ships
 
@@ -175,9 +235,9 @@ a player can see, which is why it has to be a milestone rather than a habit.
    reproduced only on real iOS Safari over a real network.
 8. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. It cannot be answered before
-   [../guarantees/compatibility.md](../guarantees/compatibility.md) says what the matrix is, and that
-   file is a stub that admits every promise in the folder is scoped to something nobody has written
-   down.
+   the compatibility theme in [the guarantees README](../guarantees/README.md) says what the matrix
+   is, and that theme holds no promises yet, admitting every promise in the folder is scoped to
+   something nobody has written down.
 
 ## M3 — a puzzle comes from the store
 
@@ -245,6 +305,14 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 2. [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 4. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+5. [Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) —
+   the first URL worth sharing or indexing exists here. It sits at this milestone rather than at M1
+   because no rendering choice forecloses it: a rebuild on publish and a single runtime-rendered
+   route are both additive. The record that settles M1's rendering shape should say so explicitly.
+6. [Do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
+   the assumption in play is one host with everything under paths, and it is an assumption rather
+   than a decision. M1 already places the client and the API on one origin, so what is open here is
+   only whether a third kind of route joins them.
 
 ## M9 — it works with no network
 
@@ -291,10 +359,11 @@ players are losing work, and nothing currently could tell us either way.
    — [../constraints.md](../constraints.md) records that a stalled connection throws no error, so
    something slow is invisible unless it was instrumented before it happened.
 6. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
-   motivating case in [../guarantees/observability.md](../guarantees/observability.md): it produces
+   motivating case in the observability theme of
+   [the guarantees README](../guarantees/README.md): it produces
    no error, no crash and no complaint.
 7. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
-   — [../guarantees/correctness.md](../guarantees/correctness.md) names "a partial write is never
+   — the correctness theme in [the guarantees README](../guarantees/README.md) names "a partial write is never
    observable" and "the board on screen always matches the board in storage" as candidate promises,
    and neither is checkable unless something asserts it where it can fail.
 8. [What invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md)

@@ -27,6 +27,16 @@ which is why it sits ahead of the questions it would otherwise derive from.
 
 ## What would settle it
 
+**This cannot be worked until
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) lands.**
+An edge runtime removes a whole tier of candidates, and a long-lived process keeps them, so the field
+is not knowable before the shape is. Scaffolding under candidates that the shape would have
+disqualified is the wasted half of this work.
+
+It is also answered together with
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) rather than
+before it, because the two constrain each other in both directions.
+
 Scaffolding a hello-world under each candidate and running the actual loop — install, typecheck,
 test, build, run a server, run a batch script — rather than comparing feature lists. This is a
 decision where prototyping is cheaper than predicting, and the cost of being wrong is a re-scaffold

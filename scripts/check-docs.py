@@ -39,9 +39,22 @@ SKIP_DIRS = ('brainstorming',)
 problems = []
 
 
+COMMENT_BLOCK = re.compile(r'<!--.*?-->', re.DOTALL)
+
+
+def without_comments(text):
+    """Text with HTML comment blocks removed.
+
+    Templates live in comments and contain placeholder links on purpose. Scanning them
+    reports every placeholder as broken, which is noise that trains people to ignore the
+    checker. A comment is not a claim about anything, so nothing in one is checked.
+    """
+    return COMMENT_BLOCK.sub('', text)
+
+
 def links_in(path):
-    """Every relative markdown link target in a file."""
-    text = open(path).read()
+    """Every relative markdown link target in a file, ignoring templates in comments."""
+    text = without_comments(open(path).read())
     return [
         l for l in re.findall(r'\]\(([^)#][^)]*)\)', text)
         if not l.startswith(('http', 'mailto', 'data:'))
@@ -80,7 +93,8 @@ def check_heading_anchors():
             if not f.endswith('.md'):
                 continue
             path = os.path.join(root, f)
-            for n, line in enumerate(open(path), 1):
+            text = without_comments(open(path).read())
+            for n, line in enumerate(text.splitlines(), 1):
                 for target in ANY_LINK.findall(line):
                     if target.startswith(('http', 'mailto', 'data:')):
                         continue

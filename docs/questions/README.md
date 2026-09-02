@@ -22,57 +22,63 @@ what to work on.** Everything below is downstream of them, and a sequence argued
 argued from the wrong end. This is the path most readers arrive by, which is why it says so here as
 well as in [../README.md](../README.md).
 
-**Then work M1 from the top.** Its requirements are slices you can run and look at, in the order you
-would build them, each with the questions that block it. M1 is laid out this way; M2 onward are still
-bare question lists, which is a gap rather than a distinction.
+**Then work M1 from the top.** Its slices are things you can run and look at, in the order you would
+build them, each with the questions that block it. Only the current milestone is laid out that way —
+the rest are bare question lists on purpose, for the reason given below.
 
-## How this list works
+## Building a milestone's list
 
-Each milestone is a list of **what has to be true to ship it**. Under each requirement sit the
-**givens** — product facts, promises, constraints and records already established — and under those,
-the **questions that must be answered** before that requirement can be built. Read left to right:
-what we are shipping, what we already know, what that leaves undecided. Where a requirement rests on
-no given, its questions sit at the top level; a question is never written as a given, whatever it is
-blocking.
+Seven steps. Each one exists because skipping it produced a list that had to be rebuilt.
 
-**A question blocks a requirement if building without it would be reversed.** Not only if the work
-is impossible — also if it would be provisional. Choosing a package manager before the runtime is
-settled means choosing again when the runtime lands, so the runtime blocks the layout even though
-nothing stops someone typing the command today. This is what fills the list out: the literal
-blockers are obvious and few, and the reversal risks are what actually decide the order.
+1. **Write the milestone's end state in one sentence.**
+2. **List the observable slices between nothing and that end state.** Each is one product change you
+   can run and look at. Build order, not risk order — the thing that renders before the thing that is
+   served, the thing that is served before the thing that is deployed. Deploying is the last slice: a
+   hosting choice made before anything exists to host is made against an imagined system.
+3. **Under each slice, list the givens** — the records, promises and constraints already established
+   that bear on *that* slice. Link each one. Where the link is to a large file, name the single
+   invariant being relied on, one bullet per invariant.
+4. **Under the givens, list the questions that must be answered.** A question blocks a slice if
+   building without it would be **reversed**, not only if the work is impossible. Choosing a package
+   manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
+   are few; the reversal risks are what decide the order.
+5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
+   repetition is what makes step 7 possible and what lets a reader audit one slice without holding
+   the others in their head.
+6. **Order the questions within a slice** by what has to be answered first. Where two constrain each
+   other in both directions they are answered together, and each question file says so under **What
+   would settle it**. That is the only place a dependency between questions is written down.
+7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
+   slices. A slice that reads like the milestone restated is bundling. A question written as a given
+   is a question — questions are always **Must answer**, whatever they are blocking. Then count how
+   many slices each question blocks: that orders the slices, and says nothing about the order inside
+   one.
 
-**Questions are listed in the order they have to be answered.** Counting how many slices a question
-blocks orders the slices; it says nothing about the order *within* one, and a slice that carries
-several questions carries their dependencies too. Where two questions constrain each other in both
-directions they are answered together rather than sequenced, and the question files say so.
+**Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
+smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
+category: if a choice would be redone shortly after the milestone, it is missing an input or the
+milestone is drawn in the wrong place. Placeholder *values* are fine; placeholder *choices* are not.
 
-**Every requirement is something you can run and look at.** A vertical slice, in the order you would
-build it — the thing that renders before the thing that is served, the thing that is served before
-the thing that is deployed. Deploying is the last slice, not the first: a hosting choice made before
-anything exists to host is made against an imagined system. "Both halves are deployed" is close to
-the milestone's end state rather than a step toward it, so if a requirement reads like the milestone
-restated, it is bundling slices that could each be observed on their own.
+**Deferring is the default, and it is the point.** An unanswered question is optionality retained,
+and everything learned before it must be answered is information the answer would otherwise be made
+without. The skill this list is trying to capture is spotting the moment a question can no longer be
+put off, and making it as narrow as possible when that moment arrives. Closing a door is clarifying
+and irreversible, so the record that closes one says which one.
 
-That shape does three jobs:
+## Milestones below the current one stay unplanned
 
-- **It shows what is blocked.** A requirement with no question under it can be built today. One with
-  five is where the thinking has to happen first.
-- **It finds missing questions.** If a requirement's givens do not reach a buildable state and no
-  question says why, the question has not been written yet.
-- **It finds bundled requirements.** Several unrelated groups of givens under one requirement means
-  it is really several requirements, each of which could be observed separately and sequenced on its
-  own. One group of givens per requirement is the target, and where that cannot be reached honestly,
-  the bundling is real rather than a formatting problem.
+They are a list of questions grouped by the milestone that first needs them, and nothing more.
+**Expanding one into slices and givens before it is next is planning against a system that does not
+exist yet** — the slices are only knowable once the preceding milestone's decisions have landed, and
+a plan built earlier gets rewritten rather than followed. It is the same argument as deferring a
+decision: plan it when you know the most, which is as late as possible.
 
-**Deferring is the default.** An unanswered question is optionality retained, and everything learned
-before it must be answered is information the answer would otherwise be made without. A question
-earns its place here only by naming what breaks if it waits. When one does have to be answered, it is
-made as narrow as possible, and the record says which doors it closes — closing one is clarifying and
-irreversible, so it is confirmed rather than noticed afterwards.
+**Adding a question to a future milestone is not expanding it**, and is always welcome. A question
+discovered now and parked where it belongs is what this file is for.
 
-**Sequencing lives here and only here.** Question files say what the question is and what would
-settle it. They do not say what they depend on or what they block, because that is a whole-system
-judgement and no single file can see it.
+When a milestone becomes the next one, run the seven steps on it. Not before.
+
+## Housekeeping
 
 **A question resolves into as many records as it contains decisions** — the separability test in
 [../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
@@ -82,14 +88,31 @@ record has not settled; mine it first, since findings graduate to
 than committed to in advance.
 
 `scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
-appears in a milestone, no question file has grown a sequencing section. It does not check the
-ordering, because a check that passed it would only make a wrong order look verified.
+appears in a milestone, no link points at a heading, no question file has grown a sequencing section.
+It does not check the ordering, because a check that passed it would only make a wrong order look
+verified.
 
-## Settled
+**[../decisions/](../decisions/) is the list of what is settled, and it is not repeated here.** Every
+record is titled by what it settled, so the listing is the checklist of constraints in force.
 
-**[../decisions/](../decisions/) is the list, and it is not repeated here.** Every record is titled by
-what it settled, so the listing is the checklist of constraints in force. Records are numbered in the
-order they derive from each other, so reading them in order is reading the argument being built.
+<!-- Template for a milestone. Links are shown as backticked pseudo-syntax so the checker does not
+     try to resolve them; write them as real markdown links.
+
+## M<N> — <the end state, in a few words>
+
+<One sentence: what exists when this is done, and what deliberately does not.>
+
+1. **<A slice you can run and look at.>**
+   - **Given:** `[<record-promise-or-constraint>](<its-path>)`
+   - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)`
+     - **Must answer:** `[<question-filename>](<question-filename>.md)`
+2. **<The next slice.>**
+   - **Must answer:** `[<question-filename>](<question-filename>.md)`
+
+Questions are always "Must answer", never "Given". Where a slice rests on no given, its questions
+sit at the top level. Link text is the filename, so the list reads without opening anything.
+-->
 
 ## M1 — "Hello!" is live
 
@@ -99,24 +122,8 @@ nothing else. No database, no puzzle, no features.
 **M1 is a vertical slice through the whole system, not a front end with a stub behind it.** Both
 halves ship, onto a host that has to satisfy the server and whatever its store turns out to need. The
 client runs almost anywhere, so it is the half least able to discriminate between hosts and must not
-be what selects one.
-
-**Every component installed here is the permanent one.** M1 is a tracer bullet: the real stack, wired
-end to end, doing the smallest thing it can do. Nothing is scaffolding to be replaced at M4 — a
-choice we would expect to redo shortly after the milestone means the milestone is drawn in the wrong
-place, not that a placeholder is acceptable. The only throwaway thing in M1 is the string the
-endpoint returns.
-
-**The hosting choice is permanent too, and it is the fourth slice rather than the first.** Discovering
-later that the server needs something the host cannot give does not cost a redeploy — it moves both
-halves, plus whatever else was chosen to fit. That is an argument for reaching it with its inputs
-answered, not for reaching it early: slices 1 to 3 are what produce those inputs, and each can be run
-and looked at on the way.
-
-**Check the order rather than trusting it.** Two things would move a requirement: a given it needs
-that sits under a later one, or a question under it that another requirement turns out to need first.
-Counting how many requirements each question blocks is the audit — the questions blocking the most
-are what to answer first, whichever requirement they were first written under.
+be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
+thing in M1 is the string the endpoint returns.
 
 1. **A server answers one route, observed with curl, locally.**
    - **Given:** [0006-one-language-across-every-deployable](../decisions/0006-one-language-across-every-deployable.md)

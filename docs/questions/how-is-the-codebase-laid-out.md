@@ -20,6 +20,11 @@ and a batch process without a publish step between them. Whatever shape is chose
 
 ## What would settle it
 
+**Whether the toolchain does workspaces is an input, so this waits on
+[which package manager?](which-package-manager.md)** — which in turn waits on the runtime. A layout
+chosen before the toolchain is a layout the toolchain may not support, and the shape is what
+everything installed afterwards sits inside.
+
 Scaffolding it. Create the shape, import the rules module from a browser entry point and from a
 batch script, and see whether the tooling complains. What to check while doing it: whether the
 browser build resolves the import without a publish step, whether type checking works across the

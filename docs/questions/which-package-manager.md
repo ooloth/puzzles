@@ -13,6 +13,11 @@ typing whatever came to mind, and because two of its failure modes are quiet rat
 
 ## What would settle it
 
+**This may not survive
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).** Two of the
+candidate runtimes ship a package manager, and adopting one of those answers this question by
+consequence rather than by argument. Deciding first means deciding twice.
+
 Install speed matters least. What matters is whether the lockfile stays readable to whatever
 tooling runs in continuous integration, and whether the trust model has surprises.
 

@@ -5,7 +5,7 @@ generating them.
 
 The goal is a delightful puzzle-solving UI that rivals the UX of any current alternative, 💅 while
 supporting uninterrupted puzzling with or without internet connectivity. 📱 The puzzles themselves
-will be calibrated into difficulty tiers based on the techniques a human would use to solve them. 🤖🙅
+will be tuned based on the techniques a human would actually use to solve them. 🤖🙅
 
 ## 📖 Docs
 

@@ -36,8 +36,13 @@ that does not.
 ## What would settle it
 
 Describing what a maintainer and an agent each have to do to get a working store, from a clean
-checkout, under each candidate arrangement — and what happens when that step fails offline, since
-[../problem.md](../problem.md) describes work happening in gaps and transit.
+checkout, under each candidate arrangement — and what happens when that step fails with no network.
+
+*Corrected 2026-09-02: an earlier version justified the offline case by citing
+[../problem.md](../problem.md) on work happening "in gaps and transit". That passage is about
+**players**, not about the maintainer, and nothing records where or how the maintainer works. The
+offline case is still worth covering; the reason given for it was borrowed from a sentence about
+somebody else.*
 
 Worth checking rather than assuming: whether a development instance of a managed store can be free
 and always-on, whether the local and deployed stores can be the same engine and version, and whether
@@ -47,6 +52,20 @@ anything about the arrangement makes it possible to run against production data 
 
 A decision record in [../decisions/](../decisions/), and content for
 [../verification.md](../verification.md) once there is something to run.
+
+**This sits at M2 only, and it went to M1 and back twice before settling there.** The second time was
+worse than the first: a **Must establish** label had just been invented for research, and this got
+filed under it because it *fitted the label* rather than because the M1 decision needed it. Fitting a
+category is not the same as blocking something.
+
+What M1 actually needs from this subject is nothing. Developer ergonomics is a comfort property, and
+the criterion M1 is being decided on is which option keeps technical doors open — those are different
+tests, and this one loses. Any ergonomic difference between the arrangements can be noted in
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) as a known
+consideration without being established first.
+
+There is also a practical bar: a daily loop needs a project to have a loop in. At slice 1 there is
+no project.
 
 ## Source
 

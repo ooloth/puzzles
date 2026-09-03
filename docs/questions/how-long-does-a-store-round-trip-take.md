@@ -8,17 +8,19 @@ resolves_into: constraint
 
 ## Why it matters
 
-**The store decision has been argued from estimates, and estimates are what this project's own
-standards say not to decide on.** Whether the store sits in the process or across a network is the
-hub of [what execution shape does the server have?](what-execution-shape-does-the-server-have.md),
-and every latency claim made about it so far is an order-of-magnitude guess. A measurement is
-available, so a guess is not good enough.
+**Less than it first appeared, and that is the finding rather than a reason to drop it.** This was
+opened as the blocking measurement for
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). Asking
+what the number would actually change moved it off that path within a day, and the reasoning is
+recorded below so nobody re-promotes it.
 
-**There are two regimes and they give opposite answers, which is exactly why this needs numbers.**
-One store operation with a player waiting is judged against a network floor of hundreds of
-milliseconds, so a difference of a millisecond disappears. Many operations with nobody waiting — the
-generator validating a candidate, an analytical scan over solve history — compound the same ratio
-until it is minutes. Any single number that does not say which regime it belongs to is misleading.
+**What it is still good for**: turning a *Reasoned* claim in [../constraints.md](../constraints.md)
+into a *Measured* one, cheaply, and falsifying an arithmetic argument that several decisions now lean
+on. That is worth a short session at some point. It is not worth blocking a milestone for.
+
+**What it is not good for**: choosing between a store in the process and a store over a network. The
+difference does not reach a player, and the workloads where it would compound turn out to be
+avoidable by writing the code differently rather than by choosing a locality.
 
 ## What would settle it
 
@@ -81,6 +83,35 @@ what settles the question.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+### Why this stopped blocking the store decision
+
+**Each measurement was checked against the question "what would this result change?", and almost
+nothing survived.** Recorded in full because the reasoning is what stops it being re-promoted by
+somebody who finds a plausible-looking spike design in a question file.
+
+**The embedded-engine comparison discriminates between runtimes, not between localities.** It only
+applies if the store is a file, and even then it is an input to
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) rather than
+to the shape.
+
+**The in-process versus warm-network comparison cannot cross a threshold.** For it to change
+anything the prediction below would have to be wrong by roughly a hundredfold, because the client
+sits behind the RTT floor in [../constraints.md](../constraints.md) and the store difference is about
+a millisecond. That file's own warning names this shape of error first: "measuring what does not
+bind."
+
+**The cold-start penalty is real and still does not discriminate.** The conclusion it supports — do
+not let the store sleep — is satisfiable at both ends, since a file never sleeps and an always-on
+managed store never sleeps.
+
+**The "many operations compound" argument was overstated.** An analytical scan is one query: the
+store runs it internally and returns a small result, so the network hop is paid once rather than per
+row. A generator that touches the store per candidate is a design flaw rather than a property of the
+architecture, and it is batchable under either locality. So the second regime is mostly a shape of
+code rather than a shape of system.
+
+*Reasoned — 2026-09-02, by working through what each result would move.*
 
 ### The predictions this is testing, recorded before the run
 

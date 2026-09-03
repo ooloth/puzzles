@@ -35,6 +35,13 @@ the motivating case for exactly that.
 It does not need instrumentation to exist yet. It needs the enumeration, because the enumeration is
 an input to a decision being taken now and the instrumentation is not.
 
+**The enumeration blocks the store decision; verifying it by experiment does not.** Killing a store
+mid-write, disconnecting it and corrupting a file are the honest way to find out whether the list is
+right — and they say nothing about whether we would *notice* until there is a system that could have
+noticed. That half waits for
+[can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md),
+and this file should be revisited when it lands rather than treated as closed.
+
 ## Resolves into
 
 Entries in [../failure-modes/](../failure-modes/) for anything found that nothing has described, and

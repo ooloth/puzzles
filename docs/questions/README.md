@@ -176,8 +176,8 @@ inventing a derivation.
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
      - **Must establish:** [what-does-a-player-wait-for](what-does-a-player-wait-for.md) — the moments the client blocks on the server, which is what decides whether store latency matters at all
-     - **Must establish:** [how-long-does-a-store-round-trip-take](how-long-does-a-store-round-trip-take.md) — measured here, because every latency claim made so far is an estimate
-     - **Must establish:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — an enumeration per candidate, not a choice
+     - **Must establish:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — the enumeration only; verifying it by breaking things needs a system to break
+     - **Given:** [which-stores-can-run-inside-the-server-process](which-stores-can-run-inside-the-server-process.md) — closed 2026-09-02: in-process means SQLite. Listed as a given rather than omitted, because the two candidates dropped to get there are recorded there and should not be re-opened by someone who cannot see they were considered
      - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — only in the branch where the store is a file; it drops to M3 otherwise
      - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — resolves into three records: store locality, then runtime tier, then whether a process exists between requests
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
@@ -461,6 +461,12 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
 [what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
 — research.
+[How long does a store round trip take?](how-long-does-a-store-round-trip-take.md) — opened as the
+blocking measurement for M1's store decision and moved here within a day, once asking what each
+number would change found that almost none of it changes that decision. Still worth running at some
+point to turn a *Reasoned* claim in [../constraints.md](../constraints.md) into a *Measured* one, and
+the file records why it stopped blocking so nobody re-promotes it.
+
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
 [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),

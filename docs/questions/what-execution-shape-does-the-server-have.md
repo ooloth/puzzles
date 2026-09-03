@@ -59,15 +59,13 @@ adversarially. The first two steps are inputs; only after them is anything decid
 
 1. **Redraw the field on the three axes below**, so that no argument reasons from a vendor name to a
    runtime constraint.
-2. **Establish three facts, none of which exists yet.** Measure the store round trip — in-process,
-   warm over a network, and cold after a scale-to-zero suspension — against the mobile RTT floor,
-   shaped like the generator's validation loop and an analytical scan rather than like a tight insert
-   loop. Enumerate what can fail independently under each arrangement, per
-   [what fails independently, and would we know?](what-fails-independently-and-would-we-know.md). And
-   describe what local development costs under each, per
-   [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
-   Whether any given platform offers a disk that survives a restart, a redeploy and a scale-to-zero
-   belongs to [where does this run?](where-does-this-run.md) and is tracked there.
+2. **Run the one spike that blocks this, and no more of it than that.** Its scope is set below, and
+   the point of scoping it that tightly is that most of what looked worth measuring turns out not to
+   change this decision. Enumerate what can fail independently alongside it, per
+   [what fails independently, and would we know?](what-fails-independently-and-would-we-know.md) —
+   the enumeration blocks this; verifying it by breaking things does not, and waits for a system to
+   break. Whether any given platform offers a disk that survives a restart, a redeploy and a
+   scale-to-zero belongs to [where does this run?](where-does-this-run.md) and is tracked there.
 3. **Decide whether the store is in the process or over a network.** The trade is
    reasoning-simplicity against operational-simplicity, and it is decided on which option keeps the
    most technical properties reachable — latency, safety, portability, and the ones not yet known to
@@ -84,6 +82,37 @@ adversarially. The first two steps are inputs; only after them is anything decid
 Only then is [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
 safe to answer, because store locality constrains the runtime field and a runtime chosen first can be
 reversed by it.
+
+### The spike that was designed for this, and why none of it is left
+
+**Written after asking what each measurement would change, which should have come first.** An earlier
+design measured store round-trip latency across five arrangements. Working through what each number
+would move found that almost none of it moves this decision, and
+[../constraints.md](../constraints.md) already warns about exactly that failure — "a real number
+about an irrelevant quantity ends arguments it should not."
+
+**There is no blocking spike left.** Everything that was in one has either moved to a milestone that
+needs it or been answered:
+
+- **What can run in-process** is closed —
+  [which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
+  records that it is SQLite, with PGlite and DuckDB examined and dropped for stated reasons.
+- **The daily-loop comparison** is dropped. Developer ergonomics is a comfort property and this is
+  being decided on which option keeps technical doors open — a different test, which ergonomics
+  loses. It also needs a project to have a loop in, and there isn't one.
+- **Engine suitability for analytical questions** is at M3 with
+  [which database, if any?](which-database.md), because it separates engines rather than localities.
+- **Fault injection** waits for a system to break, per
+  [can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md).
+- **Round-trip latency** moves nothing here, per
+  [how long does a store round trip take?](how-long-does-a-store-round-trip-take.md).
+
+> So the remaining input is an afternoon of writing rather than a spike: the failure-domain
+> enumeration, and the list of moments a player actually waits. Both are analysis, and after them
+> this decision is a judgement between two well-understood options rather than a research project.
+
+*Reasoned — 2026-09-02, by asking of each measurement what decision its result would change, and
+again after the in-process field closed to a single candidate.*
 
 ## Resolves into
 

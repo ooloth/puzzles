@@ -169,8 +169,11 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**Slice 1 is a chain, not a set.** Its questions are listed in the order they must be worked. **Store
-locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it.
+**Slice 1's questions are a set rather than a chain.** They were ordered on the claim that store
+locality constrains the runtime, and that claim is false: Node, Bun and Deno all ship `node:sqlite`
+as a built-in, so the same data-access code runs on every runtime under either store answer. No
+question here is reversed by another, so the order below is build order rather than dependency order,
+and any of them can be worked first.
 
 **Two of the three claims once bundled into the server's execution shape are settled.**
 [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) records that nothing on

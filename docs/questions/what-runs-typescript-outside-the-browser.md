@@ -139,15 +139,19 @@ without a flag since v23.4.0 and v22.13.0. Bun's Node-compatibility documentatio
 "Fully implemented", noting only that `backup()` blocks the event loop where Node runs it on a worker
 thread. So the same data-access code runs on both runtimes unchanged.
 
-> So the old premise that only Bun has good in-process SQLite is stale, and with it the strongest
-> version of the Bun preference. What survives is narrower: an embedded store disadvantages *Deno*
-> specifically, because its npm route to native addons carries the lifecycle-script caveat that Node
-> and Bun do not.
+**Deno ships it too, so the coupling is not loose — it is absent.** Deno's own Node-built-in
+compatibility reference lists `node:sqlite` among its fully supported modules, added in Deno v2.2,
+with further APIs in 2.7. It is a genuine built-in: no npm specifier, no `node_modules`, no FFI
+permission flag, no native addon.
+
+> So no runtime is disadvantaged by an embedded store, and the store's locality does not narrow the
+> runtime field at all. The same data-access code runs unchanged on all three.
 
 *Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html) and
-[bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis), both read by me
-2026-09-02. Note that a research agent reported `node:sqlite` as fully stable in Node 26; the
-documentation says release candidate, so that claim is corrected here rather than carried.*
+[bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis) read 2026-09-02, and
+[Deno's Node API compatibility reference](https://docs.deno.com/runtime/reference/node_apis/) read
+2026-09-03. All three opened by me. A research agent reported `node:sqlite` as fully stable in
+Node 26; the documentation says release candidate, so that is what is recorded.*
 
 ### The store constrains this question through locality, not through engine
 

@@ -14,13 +14,14 @@ in it, is a migration — and the data being moved is the thing
 [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) exists to
 keep.
 
-**It constrains the runtime, weakly but in one direction.** Under a service the drivers are portable
-JavaScript and no runtime is advantaged. Under a file the runtime's embedded-driver story matters:
-`node:sqlite` ships in Node without a flag and Bun implements it fully, so data access written
-against it runs on both. What a file costs is Deno, whose route to native addons carries a
-lifecycle-script caveat the other two do not. So a runtime chosen while this is open can be reversed
-by it — which is why [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
-sits behind this one.
+**It does not constrain the runtime.** Node, Bun and Deno all ship `node:sqlite` as a built-in, and
+all three run the portable JavaScript Postgres clients. So the same data-access code runs on every
+runtime under either answer here, and nothing about this question narrows the field in
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) — a claim
+this file previously made and which was false.
+
+*Sourced — [Deno's Node API compatibility reference](https://docs.deno.com/runtime/reference/node_apis/)
+lists `node:sqlite` as fully supported since v2.2, read 2026-09-03.*
 
 **It decides where the generator writes**, though not where it runs. Under a service the generator
 writes to the store from anywhere. Under a file it either shares the machine or publishes through the
@@ -75,34 +76,68 @@ are yours to operate, and that is the cost.
 sleep. Operation of the store belongs to somebody else. A network path, a credential and a vendor are
 added.
 
-*Not yet — defer to M3 and narrow the runtime.* The third option, and the one that costs least today.
-M1 is a hello world with no store in it; M3 writes the first row. Deferring means choosing a runtime
-that works under either branch — Node or Bun, both of which ship `node:sqlite` — which forecloses Deno
-on a hypothetical rather than on its merits. Nothing else at M1 is known to need this.
+*Not yet — defer to M3.* The third option, and the one that costs least today. M1 is a hello world
+with no store in it; M3 writes the first row. **Deferring now costs nothing**, which was not true when
+this question was framed: it was thought to narrow the runtime field, and it does not, so there is no
+longer a price for waiting. What deferring buys is everything learned between now and M3 — including
+whatever [are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md)
+and [what is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) settle, both of
+which describe what the store will actually hold.
 
-### Engine and locality are separate axes, and conflating them narrows the field
+### Engine and locality are separate axes, and the third corner collapses on inspection
 
 **"A file or a service" is not the same question as "SQLite or Postgres".** SQLite is available as a
-network service — libSQL and Turso are SQLite the engine, reached over a network, with Turso's
-embedded replicas placing a local read copy beside the process while the durable copy stays managed.
-Postgres has an in-process form too, though a much younger one.
-
-So the grid has four corners rather than two, and only three of them have been considered:
+network service — libSQL, hosted as Turso — so the grid has four corners rather than two:
 
 | | file the process opens | service over a network |
 | --- | --- | --- |
 | **SQLite** | a file on a volume | libSQL / Turso |
 | **Postgres** | pglite, young and single-connection | managed Postgres |
 
-**The top-right cell is the one nothing has examined**, and it is the one that would get some of the
-file's reasoning-simplicity with the service's operational-simplicity. Whether it actually does, and
-what it costs in vendor specificity, is not established — Turso's embedded replicas are proprietary,
-so depending on them sets the exit cost, which is the pattern
-the Findings below already record for managed vendors generally.
+**The top-right corner was examined on 2026-09-03 and is not a third locality.** The pitch that made
+it interesting — an embedded replica holding a local copy beside the process while the durable copy
+stays managed — does not deliver what it sounds like:
 
-**Which engine is a separate decision** at [which database?](which-database.md), deliberately left to
-M3 so that it is not chosen without an access pattern. What this question decides is locality, and it
-should be argued without assuming the engine follows.
+- **Writes do not go local.** Turso's documentation: writes "are sent to the remote primary database
+  configured at `syncUrl` by default. They are NOT written to the local file first." So a write pays
+  the same network round trip as any other network store, and the local copy buys nothing on the
+  write path.
+- **Reads are stale by default.** The replica that made a write sees it immediately; every other
+  replica sees it "when they call `sync()`, or at the next sync period".
+- **It needs a writable local filesystem** — "In certain contexts, such as serverless environments
+  without a filesystem, you can't use embedded replicas." So it requires the volume that the file
+  option requires, without removing the network from the write path.
+- **It carries a corruption footgun stated in the documentation**: "Do not open the local database
+  while the embedded replica is syncing. This can lead to data corruption."
+
+*Sourced — [Turso's embedded replicas documentation](https://docs.turso.tech/features/embedded-replicas/introduction),
+opened and read by me 2026-09-03.*
+
+**And the product is on its legacy track.** libSQL's own README says: "If you're starting a new
+project, you probably want to look into Turso. libSQL is actively maintained, but new features are
+being developed in Turso." Turso Database is a from-scratch Rust rewrite whose maintainers state it
+has "not yet reached 1.0" and advise keeping independent backups until it does. So adopting this
+corner today means adopting the track the vendor points new projects away from, with a successor that
+is not ready for the one thing this store must not do.
+
+*Sourced — [libSQL's README](https://github.com/tursodatabase/libsql), opened and read by me
+2026-09-03. The pre-1.0 status of the rewrite is second-hand from a research agent reading the Turso
+repository.*
+
+**One documented data-loss incident exists**, in December 2023: 0.07% of databases were configured
+with an empty backup identifier, and the remedy discarded writes made after 1 December for those
+databases. Second-hand and worth re-reading before it decides anything, but it is the exact failure
+this store exists to prevent.
+
+> So the third corner is not a third locality. Strip the embedded replica and what remains is a
+> service reached over a network that happens to speak SQLite — cell C with a different engine. Which
+> engine a service runs is [which database?](which-database.md) at M3, not this question.
+
+**The bottom-left corner is not real either.** pglite is Postgres compiled to WebAssembly, running
+in-process and single-connection. Young, and not a candidate for the durable copy of player work.
+
+> So this question has two answers rather than four, and the engine question is genuinely orthogonal
+> and genuinely deferred.
 
 ## Findings
 

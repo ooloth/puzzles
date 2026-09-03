@@ -46,16 +46,20 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised 2026-09-01. the durability record demoted on 2026-09-01 rejected an anonymous server copy for guests, giving three reasons. One
+Raised 2026-09-01, from a draft durability record that was demoted rather than accepted and no
+longer exists. It rejected an anonymous server copy for guests, giving three reasons. One
 of them — that the mechanism silently degrades to seven days when the API is not judged first-party —
 is a consequence of a hosting topology nobody has chosen yet, which means an option was rejected
 partly on grounds a later decision could remove.
 
 ## Options
 
-*Do not build it.* A guest's work lives and dies in the browser that made it, which is what the durability record
-records today. Nothing to operate, nothing stored about anyone, no endpoint to abuse. The cost falls
-entirely on returning lapsed players.
+*Do not build it.* A guest's work lives and dies in the browser that made it. Nothing to operate,
+nothing stored about anyone, no endpoint to abuse. The cost falls entirely on returning lapsed
+players. Note that
+[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) puts the
+durable copy off the device but says explicitly that it "does not say what a guest gets", so it
+neither forces nor forbids this.
 
 *Build it, and hold the hosting constraint that makes it work.* The server sets an `HttpOnly` cookie
 on first visit and keeps a copy of the guest's record against it. Local storage is cleared, the
@@ -84,12 +88,12 @@ state, and there are three candidates for what holds it:
 | Something the player holds — an email address, a passkey, a code | Yes | Yes, and that is an account |
 
 The list is exhaustive, which is what makes the middle row load-bearing: it is the only mechanism
-that protects a lapsed guest for free, and it is the one the durability record rejected.
+that protects a lapsed guest for free, and it is the one the demoted draft rejected.
 
 *Sourced — the wipe covers non-cookie website data only, and server-set cookies follow their declared
 lifetime to a 400-day ceiling, per [../constraints.md](../constraints.md).*
 
-**None of the durability record's three rejection reasons stands unconditionally.** It listed orphan rows,
+**None of that draft's three rejection reasons stands unconditionally.** It listed orphan rows,
 undeletable data about unidentifiable people, and silent degradation to seven days when the API is
 not judged first-party. The seven-day degradation is contingent on
 [where does this run?](where-does-this-run.md) — same-origin removes it, and nobody has chosen a

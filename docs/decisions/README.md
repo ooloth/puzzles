@@ -272,6 +272,8 @@ date: YYYY-MM-DD
 - **The `questions/README.md` box is the one that stops the milestone list going stale.** A record
   almost always changes what some question is asking, or which milestone needs it, or whether it
   still needs asking at all — and nobody notices from inside the record. Two examples left over
-  after a day's work: `what-runs-the-server-if-there-is-one` and
-  `what-does-the-server-store-if-anything` both carry conditionals that records have since answered.
+  A question whose title carries a conditional — "if there is one", "if anything" — is the clearest
+  case, because the record that answers the conditional leaves the question asking something settled.
+  Bare filenames in prose are invisible to `scripts/check-docs.py`, which matches markdown links
+  only, so a renamed question leaves a dead reference here that nothing reports; link them.
   Tick the box by saying what moved, or by saying nothing did.

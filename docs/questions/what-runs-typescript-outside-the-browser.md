@@ -120,13 +120,11 @@ connects it to Anthropic or to Claude Code.
 *Sourced — <https://en.wikipedia.org/wiki/Bun_(software)>, read 2026-09-02. The rewrite's own
 announcement was not opened.*
 
-> **This entry said the opposite until 2026-09-02, and the correction is worth keeping visible.** It
-> read: "Treat this as false unless independently confirmed. It is the clearest example of why that
-> folder is marked non-authoritative, and of why a claim that flatters a preferred option deserves
-> more scrutiny rather than less." The scrutiny it demanded was never applied — nobody ran the search
-> — and a hedge hardened into a verdict that then travelled into a commit message. The brainstorming
-> document was right about the fact and wrong about the reason, and this file was wrong about both
-> for two days. Scepticism that never gets tested is not scepticism.
+> **A hedge is a request for work, not a finding.** Marking this claim "treat as false unless
+> confirmed" and leaving it there is how a caveat hardens into a verdict nobody tested: the
+> brainstorming document turned out to be right about the fact and wrong about the reason, and both
+> halves were assumed rather than checked. Where a claim carries a hedge, run the search or say
+> plainly that nobody has.
 
 **This is coupled to the database choice more than its position suggests.** SQLite performance is a
 real difference between these runtimes, and

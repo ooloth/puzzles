@@ -42,7 +42,11 @@ was playing and then wasn't — which is indistinguishable from ordinary churn.
 
 ## What reduces it
 
-A server copy keyed to something the wipe does not reach, which is the substance of
+A server copy keyed to something the wipe does not reach.
+[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md)
+establishes that such a copy exists and says explicitly that it "does not say what a guest gets", so
+whether it reaches this player is
+[is guest recovery worth building?](../questions/is-guest-recovery-worth-building.md) and
 [is cross-device resume in scope for v1?](../questions/is-cross-device-resume-in-scope-for-v1.md).
 Or home-screen installation, which exempts storage from the cap entirely but relies on a prompt
 being accepted. Nothing else prevents it.

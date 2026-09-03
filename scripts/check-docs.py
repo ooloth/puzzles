@@ -61,18 +61,29 @@ def links_in(path):
     ]
 
 
-def check_links():
+def markdown_files():
+    """Every markdown file whose links are checked: all of docs/, plus CLAUDE.md.
+
+    CLAUDE.md is included because it links into docs/decisions/ by number, and
+    decisions/README.md tells a renumbering author that this script catches every link a
+    renumber breaks. Walking docs/ alone left the one file outside it unchecked, so that
+    promise was false for exactly the links most likely to move.
+    """
     for root, _, files in os.walk('docs'):
         if any(skip in root for skip in SKIP_DIRS):
             continue
         for f in files:
-            if not f.endswith('.md'):
-                continue
-            path = os.path.join(root, f)
-            for link in links_in(path):
-                target = os.path.normpath(os.path.join(root, link.split('#')[0]))
-                if not os.path.exists(target):
-                    problems.append(f'BROKEN LINK  {path} -> {link}')
+            if f.endswith('.md'):
+                yield root, os.path.join(root, f)
+    yield '.', 'CLAUDE.md'
+
+
+def check_links():
+    for root, path in markdown_files():
+        for link in links_in(path):
+            target = os.path.normpath(os.path.join(root, link.split('#')[0]))
+            if not os.path.exists(target):
+                problems.append(f'BROKEN LINK  {path} -> {link}')
 
 
 ANY_LINK = re.compile(r'\]\(([^)]*)\)')

@@ -249,15 +249,15 @@ a player can see, which is why it has to be a milestone rather than a habit.
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
    [what execution shape does the server have?](what-execution-shape-does-the-server-have.md).
-5. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+6. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
-6. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+7. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-7. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+8. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
    platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
    reproduced only on real iOS Safari over a real network.
-8. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+9. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. It cannot be answered before
    the compatibility theme in [the guarantees README](../guarantees/README.md) says what the matrix
    is, and that theme holds no promises yet, admitting every promise in the folder is scoped to

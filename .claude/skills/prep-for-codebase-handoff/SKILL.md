@@ -121,8 +121,11 @@ detected by a lint script like `check-docs.py` instead.
   by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
   The frontmatter `enforced` field should agree with the prose; `rg -l 'enforced: no'
   docs/guarantees/` is the backlog and it is only as good as that agreement.
-- **A promise cited that was never made.** Take each file carrying `kind: non-promise` in
-  `docs/guarantees/` and search the rest of `docs/` for text asserting the promise it withholds.
+- **A promise cited that was never made.** The withheld promises are stated in prose in
+  `docs/guarantees/README.md` — under each theme, and in "Themes holding no promises yet". Read those
+  statements and search the rest of `docs/` for text asserting one of them as though it existed.
+  There is no frontmatter marking a withheld promise, so this cannot be grepped; a scan that looks
+  for one finds nothing and reports clean.
   Demoting a record leaves every citation of it behind, reading exactly as it did when the promise
   was real. Splitting `guarantees/` into one file per promise on 2026-09-02 surfaced nine such
   citations of a durability bound that had been demoted the day before — in question files, failure

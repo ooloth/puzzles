@@ -21,9 +21,12 @@ together or the second one goes.
 **Where a folder is read through an index, the index lists exactly the files present.**
 A file missing from it is invisible to anyone who reads the index instead of the directory, and
 an entry pointing at a deleted file costs a read to discover. Bulk additions are where this
-drifts, so it is checked after one. A folder whose directory listing already carries the meaning —
-self-ordering records, filenames that read as questions — needs no index, and adding one creates
-a second thing to keep in step.
+drifts, so it is checked after one. A folder whose directory listing already carries membership —
+self-ordering records, filenames that read as questions — needs no index *for membership*, and one
+added for that alone is a second thing to keep in step. An index earns its place by carrying what a
+listing cannot: ordering, what each file rests on, why one comes before another. Where it does, it
+still lists exactly the files present, because a reader who trusts it instead of the directory sees
+only what it shows.
 
 **Every file under `docs/` carries `updated`, `update_when` and `decays` in its frontmatter, except
 `decisions/` and `questions/`, which carry their own.** A record carries `number`, `status` and

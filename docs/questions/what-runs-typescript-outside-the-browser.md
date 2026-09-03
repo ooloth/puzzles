@@ -135,11 +135,35 @@ hello world. The honest handling is to note what each runtime does to the later 
 to settle the database early to justify a runtime — which is the direction the brainstorming
 document argues in, and it is backwards.
 
-**Writing data access against `node:sqlite` would keep that coupling loose.** Bun implements it, so
-the same code runs on either runtime and the choice stops being load-bearing. Recorded during the Bun
-research as the cheapest hedge available.
+**Writing data access against `node:sqlite` keeps that coupling loose, and this is now established.**
+Node's own documentation gives `node:sqlite` a stability of "1.2 - Release candidate", available
+without a flag since v23.4.0 and v22.13.0. Bun's Node-compatibility documentation says the module is
+"Fully implemented", noting only that `backup()` blocks the event loop where Node runs it on a worker
+thread. So the same data-access code runs on both runtimes unchanged.
 
-*Unverified — no source recorded.*
+> So the old premise that only Bun has good in-process SQLite is stale, and with it the strongest
+> version of the Bun preference. What survives is narrower: an embedded store disadvantages *Deno*
+> specifically, because its npm route to native addons carries the lifecycle-script caveat that Node
+> and Bun do not.
+
+*Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html) and
+[bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis), both read by me
+2026-09-02. Note that a research agent reported `node:sqlite` as fully stable in Node 26; the
+documentation says release candidate, so that claim is corrected here rather than carried.*
+
+### The store constrains this question through locality, not through engine
+
+**Which engine the store runs is not an input here; whether the store is a file or a service is.**
+Under a network-attached store the drivers are portable JavaScript and every candidate runtime is
+equal, so the coupling is severed. Under a store opened as a file the runtime's embedded-driver and
+native-addon story matters, and the field narrows — by one candidate, per the finding above, rather
+than to a single winner.
+
+> So [what execution shape does the server have?](what-execution-shape-does-the-server-have.md) has
+> to settle store locality *before* this question is answered, not after. Answering this first and
+> locality later risks a runtime chosen under an assumption that the later answer reverses.
+
+*Reasoned — 2026-09-02, from the driver facts above.*
 
 **One incompatibility worth knowing early.** `better-sqlite3` does not work under Bun and has not for
 three years. Choosing that library is therefore choosing Node, quietly, in a file that looks like it

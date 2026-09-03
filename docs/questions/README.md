@@ -150,6 +150,9 @@ thing in M1 is the string the endpoint returns.
    - **Given:** [0010-the-store-needs-a-host-so-this-system-has-a-server](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md)
+     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md)
+     - **Must answer:** [how-is-the-store-reached-in-local-development](how-is-the-store-reached-in-local-development.md)
      - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md)
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md)
@@ -238,6 +241,10 @@ board for six milestones and meeting the store for the first time with a finishe
 4. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
    the engine waits until here, because choosing between them without an access pattern is choosing
    by reputation.
+5. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+   real secret exists here, because this is where the store gains a row and, if it is reached over a
+   network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
+   none.
 
 ## M4 — a grid is on the screen
 

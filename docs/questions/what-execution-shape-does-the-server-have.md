@@ -52,6 +52,34 @@ reachable over a network. Where the store is a local file, the generator is pinn
 machine, and that is a consequence of the cell rather than an independent choice. See
 [are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
 
+### The order the remaining work has to happen in
+
+Agreed 2026-09-02, after two attempts at a sequence were found unsound and a third was audited
+adversarially. The first two steps are inputs; only after them is anything decidable.
+
+1. **Redraw the field on the three axes below**, so that no argument reasons from a vendor name to a
+   runtime constraint.
+2. **Establish three facts, none of which exists yet.** Measure the store round trip — in-process,
+   warm over a network, and cold after a scale-to-zero suspension — against the mobile RTT floor,
+   shaped like the generator's validation loop and an analytical scan rather than like a tight insert
+   loop. Enumerate what can fail independently under each arrangement, per
+   [what fails independently, and would we know?](what-fails-independently-and-would-we-know.md). And
+   check whether an embedded store is reachable at all on the platforms that would otherwise win,
+   including whether a container gets a durable disk.
+3. **Decide whether the store is in the process or over a network**, with the trade stated as
+   reasoning-simplicity against operational-simplicity rather than as a dominance, and with the
+   maintainer's appetite supplied as a stated input rather than inferred.
+4. **Decide whether the runtime is a constrained isolate**, which largely follows from the step above
+   plus [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)'s one-toolchain
+   argument.
+5. **Record whether a process exists between requests** — the third claim this question resolves
+   into, and the one two earlier sequences dropped. A consequence or a platform setting rather than an
+   argument, but recorded either way.
+
+Only then is [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md)
+safe to answer, because store locality constrains the runtime field and a runtime chosen first can be
+reversed by it.
+
 ## Resolves into
 
 Several records in [../decisions/](../decisions/) rather than one. The reasoning splits into
@@ -73,11 +101,22 @@ rejected.
 
 ## Options
 
-### The field, drawn as two axes
+### Three axes, not two — and platform is downstream of all of them
 
-The distinguishing axes are **how long a process lives** and **where the store sits**. Crossing them
-gives the cells below. Combinations absent from the list are absent because they do not exist — a
-scale-to-zero container or an ephemeral function has no persistent local disk to open a file on.
+**The cells below were drawn on two axes and that was a mistake.** The real axes are independent:
+
+1. **Is the store in the process, or reached over a network?**
+2. **Does a process exist between requests?**
+3. **Is the runtime a constrained isolate, or an ordinary one?**
+
+**Where it is hosted is a consequence of those three, not a fourth axis.** Cell 5 below was written as
+"an edge runtime with an edge store", which quietly equated choosing Cloudflare with choosing an
+isolate. Cloudflare Containers is generally available and runs an ordinary container, so that platform
+can serve cell 3 as easily as cell 5. Any argument that reasons from a vendor name to a runtime
+constraint is making this error.
+
+The cells are kept below because the analysis attached to them is still good. They should be redrawn
+on the three axes above before anything is recorded.
 
 ### 1. An always-on process with a store it opens as a file
 
@@ -109,6 +148,16 @@ socket to be held open.
 A constrained V8 isolate rather than a full runtime, with a store shaped to match it. The most
 constrained and the hardest to reverse, because both the runtime and the storage layer are specific
 to the platform.
+
+### 6. An always-on process with Postgres embedded in it
+
+Listed late because nobody listed it at all, which is the failure this file has already made once.
+PGlite is Postgres compiled to WebAssembly and run in-process. It is recorded in
+[which database, if any?](which-database.md) as "the one embedded option whose queries survive a
+later move to a network store unchanged" — which makes it the only candidate that buys in-process
+simplicity now without making a later move to a network store a rewrite. It has not been evaluated
+here and its maturity, its resource profile and whether it can serve this workload at all are
+unknown.
 
 ### Ruled out by a record, not by preference
 
@@ -269,6 +318,68 @@ they would elsewhere, because low traffic is the design point rather than a temp
 *Sourced — second-hand from research agents, not opened by me. Re-check before either decides
 anything.*
 
+### What each end actually costs, over years rather than months
+
+**Monthly cost does not discriminate.** Self-operated lands near €8/month on Hetzner once the
+instance, the IPv4 address, a volume and backups are counted, or about $9.42 on a Fly machine with a
+volume and a dedicated address. Managed lands at nothing on free tiers, or $10–25/month paid. Same
+order of magnitude, both small against any plausible budget.
+
+*Sourced — vendor pricing pages read 2026-09-02 by research agents; the totals are their arithmetic,
+not mine.*
+
+**Self-operating does not insulate against vendor pricing, only slows it.** Hetzner raised its entry
+cloud tier 33% effective 15 June 2026 — CAX11 from €4.49 to €5.99 monthly — with no reason given in
+the announcement. Existing customers keep legacy pricing unless they modify the server, which makes
+the insulation conditional on never rescaling.
+
+*Sourced — Hetzner's own price-adjustment documentation, read by me 2026-09-02. Larger figures
+circulating for other tiers were not verified.*
+
+**Every managed vendor examined changed its terms within five years, on its own schedule.**
+PlanetScale announced on 2024-03-06 and retired its free plan on 2024-04-08 — about thirty-two days,
+alongside layoffs, with the announcement offering "If this puts you in a difficult situation, please
+email support@planetscale.com". Heroku removed free dynos and databases in 2022. Vercel wound down
+its own Postgres product and force-migrated it. Neon was acquired and changed its pricing model.
+Deno Deploy Classic shut down in July 2026.
+
+*Sourced — PlanetScale's announcement read by me 2026-09-02; the rest second-hand from research
+agents.*
+
+**One licence term is easy to miss.** Vercel's free plan is "for personal, non-commercial use", which
+is a licence restriction rather than a usage cap. A genuinely public v1 with any commercial character
+starts at $20 per seat per month there before any store is paid for.
+
+*Sourced — Vercel's pricing page, read by me 2026-09-02.*
+
+**A free tier behaves like an outage at this traffic level.** Supabase pauses free projects after a
+week of inactivity and Render's free Postgres expires thirty days after creation. Low traffic is this
+project's design point rather than a temporary condition, so both are live failure modes rather than
+edge cases.
+
+*Sourced — second-hand from research agents.*
+
+**No vendor's documentation claims to test-restore your data.** Restorability is asserted across
+every managed store examined and demonstrated by none of them, which makes rehearsing a restore the
+maintainer's job at both ends rather than only at the self-operated one.
+
+*Reasoned — from the absence of any such claim in the documentation surveyed, which is weaker
+evidence than a statement to the contrary would be.*
+
+**The two ends fail in different shapes, and that is the durable difference.** Self-operated risk is
+attention: it is unbounded, it fails silently, and its worst case is losing a player's work with no
+second copy. Managed risk is timing: it is bounded, it announces itself, it arrives on somebody
+else's deadline, and the data is usually portable when it does. A solo maintainer with a day job is
+better placed to absorb a deadline than to notice a silence.
+
+**Portability at the managed end holds only where the vendor's differentiator is unused.** Neon and
+Supabase run real Postgres, so `pg_dump` moves the data. Neon's branching, Turso's embedded replicas
+and Supabase's auth and storage layers are proprietary, and depending on them is normally the reason
+to choose those vendors over plain managed Postgres. Exit cost is set by which of the two is being
+bought.
+
+*Sourced — second-hand from research agents.*
+
 ### What each cell forecloses, and what reopening costs
 
 **Cells 2, 3 and 4 are one another's neighbours.** They share a full runtime and a network store, so
@@ -291,6 +402,209 @@ platform-specific runtime APIs *and* finding the generator a home it never had.
 premise it rests on is
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md): reverse the
 queryability requirement and the eliminated storage tier returns and the field changes shape.*
+
+### Held in isolation, with cost and effort set aside, the technical analysis does discriminate
+
+**This was run as a deliberate exercise**: assume money is no object and maintainer effort is free,
+and ask what remains. The point was to find out whether a technical answer exists underneath the
+operational argument, or whether the operational argument *is* the decision. It turns out to be the
+former, and the result is sharper than expected.
+
+**Half the edge argument holds and half of it collapsed under scrutiny. This entry records both,
+because the collapsed half was written here first as though it were settled.**
+
+**What holds: the edge's one advantage is useless here.** Its technical proposition is putting
+compute near the user to cut latency. This project has recorded that the server is not on any path a
+player waits on, that
+[input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
+is structural rather than a duration, and that no server latency budget exists anywhere. So whatever
+the edge tier costs, it is not buying anything this system needs.
+
+**What collapsed: the constraints are narrower than stated, and one of them is gone.** An adversarial
+review found, and I verified against Cloudflare's own documentation on 2026-09-02:
+
+- **A filesystem exists.** `node:fs` is implemented over a memory-backed virtual filesystem with a
+  writable `/tmp`. The claim "no filesystem at all", written into this file earlier and attributed to
+  my own reading, was wrong. What is true is narrower: "the contents of `/tmp` are not persistent and
+  are unique to each request", so there is no *persistent* filesystem — which still rules out an
+  embedded database but is a different and smaller claim.
+- **The `eval` restriction applies at Worker startup, not to request handling**, and is adjustable by
+  compatibility flag. Reported by the review; I did not open the flag documentation myself.
+- **The generator has a first-class home on the same platform.** Cloudflare Containers is generally
+  available on the Workers Paid plan and is positioned for "Resource-intensive applications that
+  require CPU cores running in parallel, large amounts of memory or disk space" and "Applications and
+  libraries that require a full filesystem, specific runtime, or Linux-like environment". That was the
+  strongest leg of the case against the edge tier and it does not survive.
+
+> So the claim "an edge runtime is dominated" is **withdrawn**. It was not supportable, and it was
+> written into this file as a finished argument before anyone had tried to break it.
+
+**The framing error underneath it: the platform and the runtime tier are not the same axis.** Cell 5
+was drawn as "an edge runtime with an edge store", which silently equated choosing Cloudflare with
+choosing a constrained isolate. Containers means a platform in the edge tier can run an ordinary
+container — which is cell 3. So the real question is narrower than the cell implies: whether the
+*server* runs in a constrained isolate, which is separable from where anything is hosted.
+
+**What survives against the isolate is one argument, and it is not about capability.** Running the
+server in an isolate while the generator runs in a container is two runtimes for one maintainer,
+which is the cost
+[ADR-0006](../decisions/0006-one-language-across-every-deployable.md) exists to avoid — its own words
+are that such an arrangement satisfies it "by accident rather than by fit". That is a real argument
+and a much weaker one than the case previously recorded here.
+
+*Sourced — Cloudflare's `node:fs`, Containers and D1 limits documentation, read by me 2026-09-02, and
+the records named. The compatibility-flag claim is second-hand.*
+
+**A figure recorded here earlier was also wrong.** This file said D1's free tier is 5 GB. Cloudflare's
+limits page gives a **maximum database size of 500 MB on the free plan** and 10 GB on paid; the 5 GB
+figure came from the pricing page, which is measuring included storage rather than the ceiling. The
+same page describes D1 as designed "for horizontal scale out across multiple, smaller (10 GB)
+databases, such as per-user, per-tenant or per-entity databases", which bears on whether one D1 is a
+sensible home for cross-player analysis.
+
+*Sourced — Cloudflare's D1 limits documentation, read by me 2026-09-02.*
+
+**A network-attached store dominates a store opened as a file, under the same assumption.** The
+honest way to test this is to enumerate what an embedded file buys *technically* and see what
+survives:
+
+- **Lower read and write latency.** Does not bind: nothing is waiting on it.
+- **No network partition between the process and its store.** Real, but a partition surfaces as
+  server unavailability, which four promises already describe the client absorbing without showing a
+  player anything.
+- **Transactions spanning everything in the file.** Real, but this is one-store-versus-two rather
+  than file-versus-service — a single managed Postgres gives the same thing.
+- **No connection pooling or connection limits.** Real under per-request compute; trivial under a
+  long-lived process.
+- **Backup is one file; local development is deterministic; there is no external dependency at
+  boot.** All three are maintainer effort, which this exercise holds at zero.
+- **Fast analytical scans over local data.** Real, and the analysis
+  [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves is
+  maintainer-facing and offline, so it has no budget either.
+
+> So every technical advantage of the embedded file either turns on latency that does not bind, or on
+> effort that has been set aside. **The entire remaining case for it is cost and maintainer effort** —
+> which is a clarifying result rather than a dismissive one, because those are real. It means the
+> SQLite question is not a technical question for this project. It is an economic one wearing
+> technical clothes, and the performance argument that originally justified it was retired by the
+> architecture flip rather than by anything in this analysis.
+
+*Reasoned — by enumeration against the records and guarantees, 2026-09-02. The enumeration is the
+argument; if an advantage is missing from that list, the conclusion changes.*
+
+**An always-on process and a scale-to-zero container are technically indistinguishable here.** They
+differ in whether a process exists between requests, and nothing recorded needs one to — no scheduled
+work, no state held in memory. Moving between them is a platform setting rather than a change to
+anything written.
+
+**Ephemeral functions differ from both in one real way**: no process between requests means no
+in-process background work at all, and every request pays a store connection. Neither binds today.
+Both are constraints the other two do not carry.
+
+### The store's latency can be felt — but the thing that decides it is not in-process versus network
+
+**There are moments where a player waits on the server**, and the earlier finding that "nothing is
+waiting on it" was about the *input* path only. Picking up a second device that must fetch newer
+state, refreshing a stale archive on regaining connectivity, and signing in are all moments where the
+client is blocked on a response. None is promised anything, and all would be felt.
+
+**The arithmetic says the store's contribution is invisible next to the network — unless the store
+was asleep.** [../constraints.md](../constraints.md) records a 3g RTT floor around 270ms, 2g at
+1400–2000ms, and three to four round trips before any payload moves on a fresh connection. Against
+that floor:
+
+- **In-process versus a warm network store in the same region** is a difference of roughly a
+  millisecond. Under half a percent of the smallest plausible client-perceived wait. Not detectable.
+- **A warm store versus one that has scaled to zero** is a difference of hundreds of milliseconds.
+  Neon suspends after five minutes of inactivity and reactivates "within a few hundred milliseconds",
+  and free plans cannot disable it. That roughly doubles the perceived wait, and it is very
+  detectable.
+
+> So the discriminator is **whether the store sleeps**, not whether it is in the process. An
+> always-on network store is indistinguishable from an embedded one at the client. A scale-to-zero
+> store is not.
+
+**And the alignment is the worst possible one for this project.** Traffic is deliberately tiny, so
+five minutes of inactivity is the normal state rather than an exception — the store would be cold for
+most first touches. The three moments named above are all *first touch after a gap*, which is exactly
+the case that pays the wake-up. Stacking a scale-to-zero compute in front of a scale-to-zero store
+pays it twice.
+
+> So this is a real argument, and it argues against **sleeping**, which is a property both an
+> always-on managed store and an embedded file happen to have. It does not by itself argue for
+> SQLite.
+
+*Sourced — Neon's scale-to-zero documentation read by me 2026-09-02; RTT figures per
+[../constraints.md](../constraints.md). The one-millisecond same-region figure is an order-of-magnitude
+estimate and has not been measured here — which is what the spike is for.*
+
+### Being industry-standard is a legitimate input, and it is traceable rather than a preference
+
+**[../problem.md](../problem.md) names "a system whose operation is worth describing to someone
+hiring for it" as one of three maintainer purposes.** Postgres is the default of most full-stack
+work, so experience with it converts into something the problem statement already says it wants. That
+makes this an input rather than taste — but a weak one, because that same purpose carries the guard
+"would this be worth building if its demonstration value were zero", and the answer for a store is
+plainly yes either way.
+
+**The counter is that neither candidate is a risky bet.** The failure this reasoning guards against is
+choosing something that becomes unmaintained, deprecated or unaffordable. SQLite and Postgres are both
+about as far from that as software gets, so the durability argument does not separate them and only
+the familiarity argument does.
+
+### Neither direction dominates, and the earlier claim that one did was wrong
+
+**The enumeration that concluded a network store dominates had a gap, and it was a convenient one.**
+It listed "no network partition between the process and its store" and dismissed it as surfacing as
+server unavailability that the client absorbs. That is an argument about *player impact*. It says
+nothing about the failure domain continuing to exist and having to be reasoned about, monitored and
+debugged — which is architecture rather than effort, and so is not disposed of by holding effort at
+zero.
+
+**The honest shape of the trade is two different kinds of simplicity.** An embedded store is simpler
+to *reason about*: one file, in-process, always reachable, no credentials, no pool, no partition, one
+fewer thing that can be down. A managed network store is simpler to *operate*: no volume, no
+patching, no backup script you wrote yourself, no restore you have to remember to rehearse. A solo
+maintainer wants both and cannot have both.
+
+> So there is no dominance in either direction. What was presented earlier as a derivation was an
+> enumeration with the strongest opposing item filed under the wrong heading.
+
+### Why hosting kept dominating the discussion, and what that indicated
+
+**The requirement turned out to be thin, so nothing capability-shaped was left to discriminate on.**
+Once every candidate can do everything the records require, the only remaining differences are
+operational — and operations is mostly a property of the host. That is why a question about
+execution shape kept resolving into an argument about hosting, and it was a signal rather than a
+digression.
+
+**The question as originally framed bundled two decisions along that seam.** One is technically
+derivable now, from records already in force: not an edge runtime, and a store reached over a
+network. The other — how much operational surface to own, and whether cost overturns the first — is
+economic, currently fuzzy, and does not become answerable by thinking harder. Bundling them is what
+made this feel circular.
+
+### Store locality has to be settled before the runtime, not after it
+
+**The old coupling between store and runtime ran through performance and is gone; a different
+coupling remains and runs through locality.** Under a network-attached store the drivers are portable
+JavaScript and no runtime is advantaged. Under a store opened as a file the runtime's embedded-driver
+and native-addon story matters. So a runtime chosen while locality is open can be reversed by the
+locality answer, which makes any sequence that settles the runtime first unsound.
+
+**The coupling is much weaker than it was, and the residue is one candidate.** `node:sqlite` is
+available in Node without a flag and Bun implements it fully, so data access written against it runs
+on both — see
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) for the
+sourcing. What an embedded store still costs is Deno, whose route to native addons carries a
+lifecycle-script caveat the other two do not.
+
+> So the practical choice is between settling locality now — which frees all three runtimes if it
+> lands on a network store — and deferring locality at the price of narrowing the runtime field to
+> the two that survive either branch. Those trade different optionality against each other, and the
+> second forecloses Deno on a hypothetical rather than on its merits.
+
+*Reasoned — 2026-09-02, from the driver facts recorded in the runtime question.*
 
 ### What is unverified
 

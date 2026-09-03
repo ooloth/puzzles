@@ -1,0 +1,75 @@
+---
+opened: 2026-09-02
+status: open
+resolves_into: decision
+---
+
+# How is the store reached in local development?
+
+## Why it matters
+
+**It is an input to the store decision rather than a consequence of it**, which is why it sits at M1
+alongside [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
+rather than at M3 with the engine. A store the process opens as a file needs nothing installed and
+nothing running: the file is there or it is created. A store reached over a network needs something
+to connect to — a container to start, a hosted development instance to reach, or a second copy of the
+data somewhere.
+
+That difference is felt every day rather than once, and it is one of the few places where the two
+candidate arrangements differ in something the maintainer touches constantly. It belongs in the
+argument, and [which database, if any?](which-database.md) records the embedded side of it — "local
+development with nothing to install or start" — without the network side having been described at
+all.
+
+It also bears on whether a check can run anywhere.
+[What runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 inherits
+whatever is decided here: a test suite that needs a live database is a different proposition from one
+that does not.
+
+## What would settle it
+
+Describing what a maintainer and an agent each have to do to get a working store, from a clean
+checkout, under each candidate arrangement — and what happens when that step fails offline, since
+[../problem.md](../problem.md) describes work happening in gaps and transit.
+
+Worth checking rather than assuming: whether a development instance of a managed store can be free
+and always-on, whether the local and deployed stores can be the same engine and version, and whether
+anything about the arrangement makes it possible to run against production data by accident.
+
+## Resolves into
+
+A decision record in [../decisions/](../decisions/), and content for
+[../verification.md](../verification.md) once there is something to run.
+
+## Source
+
+Raised 2026-09-02. An adversarial audit of the execution-shape analysis found that local development
+under a network-attached store is discussed nowhere, while the embedded option's zero-install
+property is recorded in [which database, if any?](which-database.md) as a benefit with nothing
+weighed against it.
+
+## Options
+
+*The same shape as production.* Whatever runs deployed also runs locally — a file if the store is a
+file, a container running the same engine if it is a service. Highest parity, which is what
+[how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+exists to protect.
+
+*A different shape locally.* An embedded store for development and a network store deployed, or a
+hosted development instance rather than a local one. Cheaper to start, and it puts a difference
+between the two environments in the layer most likely to behave differently under load and failure.
+
+*Not yet.* Nothing is built and no store exists, so this could wait — except that it is an input to
+the choice being made now rather than a consequence of it.
+
+## Findings
+
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**The embedded side of this comparison is already written down and the network side is not.**
+[Which database, if any?](which-database.md) records "no database process to run, patch or monitor,
+and local development with nothing to install or start" as a property of SQLite as a file. Nothing
+anywhere describes what the network-attached equivalent costs, which makes the existing comparison
+one-sided rather than settled.
+
+*Reasoned — from reading that file, 2026-09-02.*

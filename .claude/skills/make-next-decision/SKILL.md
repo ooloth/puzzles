@@ -155,6 +155,11 @@ afterwards; the observation is the artifact.
    chance and wait to see what comes back.
 1. Verify the subagents' claims, especially where evidence is lacking. A claim with a citation that
    nobody opened is not verified, and a number with no method behind it is not a measurement.
+1. **Write what you have established into the question file before going further**, per "While a
+   question is being worked, its file is where the work goes" in `docs/questions/README.md`. Do it
+   at each point the picture changes rather than once at the end — research held only in the
+   conversation is lost to a context window, and what gets reconstructed later is the summary rather
+   than the sourcing. Record the eliminations and the confirmations too, not just the surprises.
 1. Name what a spike would settle and what it would not, using what the research just told you to
    look for. If nothing can be spiked, say so explicitly rather than letting the reading you have
    already done become the answer by default.

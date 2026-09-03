@@ -474,6 +474,29 @@ question came from, so provenance survives the deletion of whatever raised it.
 
 The last two grow. **Options** holds each candidate answer with its strongest case and its cost.
 
+### While a question is being worked, its file is where the work goes
+
+**Findings are written into the file as they are established, not gathered up at the end.** A session
+that ends with its research only in the conversation has to be run again, and the second run does not
+reproduce the first — it reproduces whatever the summary said, which is the part that already lost
+the hedges and the sources. Anything worth having found is worth appending before moving to the next
+thing.
+
+That includes the results that changed nothing. **A candidate checked and eliminated, a claim checked
+and confirmed, and a claim checked and found unsupported are all findings**, and the last two are the
+ones a later session will otherwise redo. An option that was considered and dropped is
+indistinguishable from one nobody thought of unless the file says so.
+
+**Options and Findings take subheadings once they outgrow a flat list.** Both sections accumulate
+across sessions, and a wall of bold lead sentences stops being navigable at around a screenful. Group
+them by what they are about — the field, what it costs, what it forecloses, what is unverified — and
+keep the tier line on each claim. Nothing else about the format changes.
+
+**The file gets more organised as the answer gets closer, and then it is deleted.** Findings graduate
+to [../constraints.md](../constraints.md), reasoning graduates into whichever record it argues for,
+and the file goes once nothing is left in it that a record has not settled. Tidying it as you go is
+what makes that final pass a mining exercise rather than an archaeology one.
+
 ### Findings are evidence, not fact
 
 **Findings** holds what we've learned so far. Nothing in it is established, and nothing in it may be

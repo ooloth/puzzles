@@ -51,15 +51,6 @@ and whose remaining content was about this choice.
 development with nothing to install or start. Costs backup tooling that a managed service would have
 supplied, and gives no concurrent writers and no second instance.
 
-*PGlite — Postgres compiled to WebAssembly, embedded.* Same SQL as a Postgres server, running
-in-process against a local directory. The one embedded option whose queries survive a later move to a
-network store unchanged. Two things from PGlite's own documentation cut against it: it holds **a
-single exclusive connection**, a harder limit than SQLite's one-writer-many-readers, and its stated
-use cases are testing, local development, web containers and on-device AI, with serving an
-application not among them.
-[Which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
-drops it for those reasons.
-
 *Managed Postgres.* Everything, forever, for a monthly fee and a network hop. The right answer if
 per-player queryable data turns out to be substantial, and considerable overhead if it does not.
 
@@ -71,11 +62,29 @@ than a different vendor, and the one that pairs with an edge runtime.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**What is viable in-process is a separate, earlier question.**
-[Which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
-establishes what can live in the process at all, as an input to the locality decision at M1. This
-question picks an engine given an access pattern and a schema, and needs neither of those to exist
-before that one is answered. It closes the in-process field to SQLite.
+### The embedded field is one candidate
+
+**Embedded means SQLite.** The two alternatives were examined and neither survives, so a choice of
+"in the process" is a choice of SQLite by construction rather than by preference. Recorded here so
+the field is not re-enumerated: an option written down nowhere is indistinguishable from one nobody
+thought of.
+
+**PGlite — Postgres compiled to WebAssembly, run in the process — is out on its connection model.**
+Its documentation states that it "only has a single exclusive connection to the database", which is a
+harder limit than SQLite's one writer with concurrent readers: every request serialises through one
+connection. Its stated use cases are unit and CI testing, local development, web containers, and
+on-device AI, with serving an application not among them. What it offered over SQLite was Postgres
+dialect portability, and that is a cheaper exit bought with a worse concurrency model and a tool used
+off the path its maintainers describe.
+
+*Sourced — [pglite.dev/docs](https://pglite.dev/docs/) and
+[pglite.dev/docs/about](https://pglite.dev/docs/about), read 2026-09-02.*
+
+*It would reverse if* its connection model changed, or if query portability to a network Postgres
+became the deciding property of this choice rather than one input among several.
+
+**DuckDB is out on its shape**, for the reason recorded further down: it is columnar and built for
+analytical scans, and this store takes small writes and point reads.
 
 **A measurement this question needs.** Whether an engine answers
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s questions —
@@ -89,19 +98,12 @@ earliest it can be run rather than merely where it is filed.
 
 *Reasoned — from what separates an engine choice from a locality choice.*
 
-**Two families span both sides of the embedded/network line, so the class does not pick the engine.**
+**The network side spans both engine families and the embedded side does not.** Over a network the
+choice is open — SQLite reached remotely as Turso, Cloudflare D1 or LiteFS, or Postgres and its
+hosts. In the process it is SQLite or libSQL, which is the same engine under different governance.
+So locality does not pick the engine on one side of the line and very nearly does on the other.
 
-| | Embedded | Network |
-| --- | --- | --- |
-| SQLite family | SQLite, libSQL | Turso, Cloudflare D1, LiteFS |
-| Postgres family | PGlite | Postgres, and its hosts |
-
-The useful consequence is that "embedded" is a strong default toward SQLite rather than a tautology,
-and PGlite is the reason. Anyone reasoning that choosing embedded *is* choosing SQLite is skipping a
-step.
-
-*Unverified — no source recorded. Reasoned from training knowledge on 2026-09-01, and the maturity of
-PGlite in particular is exactly the kind of fact that moves fastest.*
+*Reasoned — from the field enumerated above.*
 
 **libSQL is a SQLite fork, not an alternative to it.** Same SQL, broadly the same file format,
 different governance and extra features. Choosing it is choosing SQLite with a different maintainer.

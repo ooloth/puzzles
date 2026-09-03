@@ -26,9 +26,9 @@ avoidable by writing the code differently rather than by choosing a locality.
 
 Running it, on this hardware, with the method recorded. What to measure and how:
 
-**Configurations.** `node:sqlite` against a local file; `bun:sqlite` against a local file; PGlite
-in-process; Postgres in a local container; and a managed Postgres both warm and after it has been
-left idle long enough to suspend.
+**Configurations.** `node:sqlite` against a local file; `bun:sqlite` against a local file; Postgres
+in a local container; and a managed Postgres both warm and after it has been left idle long enough to
+suspend.
 
 **Workloads shaped like the real thing rather than like a benchmark.** A single row read and written,
 which is the sync path. A loop resembling the generator validating a candidate. An aggregate scan

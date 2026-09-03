@@ -89,9 +89,9 @@ changes this decision. [../constraints.md](../constraints.md) warns about that s
 directly: "a real number about an irrelevant quantity ends arguments it should not." What remains
 belongs elsewhere or is answered:
 
-- **What can run in-process** is closed —
-  [which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
-  records that it is SQLite, with PGlite and DuckDB examined and dropped for stated reasons.
+- **What can run in-process** is settled: SQLite. The alternatives are enumerated and dropped in
+  [which database, if any?](which-database.md), so the in-process branch is a known quantity and the
+  open part is what it costs to leave.
 - **The daily-loop comparison** is dropped. Developer ergonomics is a comfort property and this is
   being decided on which option keeps technical doors open — a different test, which ergonomics
   loses. It also needs a project to have a loop in, and there isn't one.
@@ -177,16 +177,6 @@ socket to be held open.
 A constrained V8 isolate rather than a full runtime, with a store shaped to match it. The most
 constrained and the hardest to reverse, because both the runtime and the storage layer are specific
 to the platform.
-
-### 6. An always-on process with Postgres embedded in it
-
-Listed late because nobody listed it at all, which is the failure this file has already made once.
-PGlite is Postgres compiled to WebAssembly and run in-process. It is recorded in
-[which database, if any?](which-database.md) as "the one embedded option whose queries survive a
-later move to a network store unchanged" — which makes it the only candidate that buys in-process
-simplicity now without making a later move to a network store a rewrite. It has not been evaluated
-here and its maturity, its resource profile and whether it can serve this workload at all are
-unknown.
 
 ### Ruled out by a record, not by preference
 

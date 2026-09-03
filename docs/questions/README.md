@@ -170,8 +170,9 @@ be what selects one — which is why hosting is the fourth slice and not the fir
 thing in M1 is the string the endpoint returns.
 
 **Slice 1 is a chain, not a set.** Its questions are listed in the order they must be worked. **Store
-locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it,
-and the first two questions establish facts the shape question reasons from.
+locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it;
+the first two questions establish facts the shape question reasons from; and the fourth is downstream
+of the third, mattering only in one of its branches.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
@@ -186,11 +187,10 @@ derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
-     - **Given:** [which-stores-can-run-inside-the-server-process](which-stores-can-run-inside-the-server-process.md) — closed 2026-09-02: in-process means SQLite. Kept visible rather than omitted, because the two candidates dropped to get there are recorded there and an option nobody can see was considered gets re-opened
      - **Must answer:** [what-does-a-player-wait-for](what-does-a-player-wait-for.md) — or else store locality is chosen without knowing whether a player ever waits on the store. Removing that wait later means moving the data
-     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — or else store locality rests on a simplicity claim with no comparison behind it
-     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — or else a local file puts the generator on the server's machine, and separating them means moving the catalogue. Costs nothing in the network branch, where this drops to M3
+     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — or else the store is chosen on which option has fewer things that can fail alone, with nothing behind the claim, and correcting that later moves the data
      - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — or else runtime, host and engine constrain each other by accident, and unwinding that once player data exists is a migration
+     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — or else, in the branch where the store is a file, the generator lands on the server's machine by consequence and separating them moves the catalogue. In the network branch nothing breaks and this drops to M3
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it

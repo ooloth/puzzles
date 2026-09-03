@@ -441,3 +441,125 @@ embedded side — which was the shape of an earlier assumption.
 
 *Sourced — [Bun's SQL documentation](https://bun.com/docs/runtime/sql), opened and read by me
 2026-09-03.*
+
+### Scored against a product that grows: no engine wins
+
+Three independent analyses on 2026-09-03 — a steelman for each engine, each required to argue against
+itself, plus a neutral comparator — scored today's interactions and twelve plausible future features
+at 1k, 10k, 50k, 100k and 1M daily active users, with hosting held constant at self-managed on one
+VPS so that engine fit was isolated from operational outsourcing. The features scored: leaderboards,
+real-time collaborative solving, friend challenges, tournaments, a paid tier, an archive, stats and
+streaks, multiple game types, social features, push notifications, adaptive difficulty, and live
+multiplayer racing.
+
+**Nothing in today's workload discriminates at any tier up to 1M DAU.** All three agree. The three
+independently estimated peak board-state write rates at 1M DAU as 694, 3,700 and 5,333 writes per
+second — an eightfold spread in assumptions, every one of them far below SQLite's established
+15,000–70,000 sustained ceiling. The conclusion survives the disagreement, which is what makes it
+worth having.
+
+**Eleven of the twelve future features preserve the property that decides this**: a player writes only
+their own rows. Leaderboards, challenges, tournaments, entitlement checks, the archive, stats, game
+types, social, notifications and per-player recommendations are all own-row writes and indexed reads.
+The neutral comparator returned "no difference" on every one of them at every tier, and the two
+steelmen's disagreements about them are about *technique* — `SELECT … FOR UPDATE SKIP LOCKED` against
+an atomic `UPDATE … LIMIT 1 RETURNING` for matchmaking — rather than about capability.
+
+**Only one shape discriminates: two independent people writing the same row under a tight latency
+budget.** That is real-time collaborative solving, and the write half of live racing. It is the one
+place SQLite's writer lock, which is scoped to the database file rather than to a row, taxes writers
+that have no logical relationship to each other.
+
+> **And that discriminator dissolves, because neither engine serves it.** Postgres's native primitive
+> for live fan-out is `LISTEN`/`NOTIFY`, and a transaction issuing `NOTIFY` takes a lock during commit
+> that serializes commits across the whole database — the ordering guarantee in the documentation,
+> that "messages from different transactions are delivered in the order in which the transactions
+> committed", is what requires it. The Postgres steelman rated the feature **not Fine at any tier,
+> including 1k DAU**. So the live path has to leave the database under either engine, broadcast
+> in-process or through a separate pub/sub, with the store holding periodic durable checkpoints — and
+> at that point the two engines are doing the same undemanding job again.
+
+*Sourced — [PostgreSQL's NOTIFY documentation](https://www.postgresql.org/docs/current/sql-notify.html),
+opened and read by me 2026-09-03, for the commit-order guarantee and the 8000-byte payload cap. The
+commit-lock mechanism and a measured 2.9K writes/sec ceiling are second-hand. **A search summary
+claiming the bottleneck has been fixed in Postgres core is wrong**: DBOS's own article states the
+Postgres 19 patch "does not remove the global lock or fix the bottleneck we observed."*
+
+**What survives as a real difference, stated without inflation.** Postgres's row-level locking gives
+concurrent independent writers real parallelism, and SQLite's does not. That is a genuine engine
+property. It is unused here, because the architecture already avoids the shape that needs it: the
+client owns state and syncs in the background, so the server never has many actors contending under a
+latency budget. Postgres also has a more mature path out of its own analytical ceiling — logical
+replication and change-data-capture into a warehouse — where SQLite's equivalent is hand-rolled.
+
+**The exits are asymmetric in shape rather than in size.** Leaving Postgres is a known procedure:
+logical replication, a short cutover, sequences fixed by hand. Leaving SQLite is two to six weeks for
+one person — schema design, SQL rewrite, a bulk load, a cutover strategy — but it is rarely the whole
+thing that has to move. The cheaper exit is a graft: put the contended pieces somewhere suited to them
+and leave board state, catalogue and per-player stats where they are.
+
+> So the technical comparison does not decide this, under assumptions deliberately generous to growth
+> and to a feature set nobody has committed to. That is now established from three directions —
+> workload fit, failure domains, and future features — rather than suspected. What remains are the
+> failure-domain asymmetry recorded above, the operational question, and whatever
+> [../problem.md](../problem.md)'s third maintainer purpose is worth.
+
+*Reasoned — from three independent analyses, 2026-09-03. Their rate estimates are Reasoned rather than
+Measured: this product has no usage data, because it does not exist.*
+
+### The operational comparison, with hosting held constant
+
+Both self-managed on one VPS, so that the comparison is between engines rather than between operating
+something and paying somebody else to. Hours are estimates for someone competent who does not do this
+daily.
+
+**Setup is a wash, which is the opposite of the folklore.**
+
+| | A file | A service on the same machine |
+| --- | --- | --- |
+| VPS, SSH hardening, firewall, TLS, process manager, deploy | 4–6h | 4–6h |
+| Store setup | volume, Litestream, bucket — 2–3h | install, configure, tune — 1–2h |
+| Backup | included in the above | `pg_dump` on a schedule 1h, or WAL archiving for point-in-time recovery 3–5h |
+| Restore drill, integrity check, alerting | 3–5h | 2–3h |
+| **Total** | **~9–14h** | **~8–16h** |
+
+Setting up Litestream and a restore drill is about as much work as setting up Postgres and its backup
+story. "A file is simpler to set up" does not survive doing either of them *safely*, which is the only
+version worth comparing.
+
+**Recurring effort is near-identical.** Operating-system updates are automated either way; a monthly
+restore drill is about half an hour either way. The service adds an occasional look at bloat and
+vacuum — call it fifteen minutes a month.
+
+**The real difference is annual, and it is one thing.** A service has major-version upgrades:
+`pg_upgrade` or dump-and-restore, two to six hours, with downtime, roughly yearly to stay current
+against a five-year support window. A file has no equivalent — the library version travels with the
+runtime.
+
+> So the operational case is narrower than it is usually stated, and it is worth stating precisely
+> rather than in the folklore version. What a file saves is **not** setup time and **not** day-to-day
+> attention. It is a recurring maintenance event, and three failure domains that do not exist.
+
+*Reasoned — 2026-09-03, from the operational surfaces established above. Not measured, and nobody has
+run either of these.*
+
+**Making the quiet failures loud is a one-time build, and this file previously treated it as a
+permanent property.** The list is bounded: `PRAGMA integrity_check` on a schedule against a restored
+copy, a restore drill that opens the replica and checks row counts, a heartbeat proving Litestream is
+still replicating, a disk-space alert, and process liveness. Five scheduled jobs and an alert channel.
+Once built, the silence is gone permanently, while the count of failure domains is structural and is
+not.
+
+**Counting the domains, on the same machine**: a file has the application process, the host, the disk,
+the backup mechanism and lock contention — about five. A service on that same machine has all of
+those, plus a database daemon that can crash independently of the application, a connection pool, a
+local socket, and a recurring major-version upgrade — about eight.
+
+**And one point on the failure this store exists to prevent.** Litestream replicates continuously with
+a one-second default interval, so the recovery point objective is about a second. A self-managed
+service with a nightly dump has a recovery point objective of hours, unless WAL archiving is set up as
+well. On losing the last copy of a player's work, a file with continuous replication beats a
+self-managed service with a naive backup, and loses only to a managed one.
+
+*Reasoned — from Litestream's documented default sync interval and ordinary backup practice,
+2026-09-03.*

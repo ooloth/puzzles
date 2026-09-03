@@ -444,6 +444,43 @@ Cloudflare and Envoy too. That generalisation is untested here.*
 
 ---
 
+## Machines and volumes — one disk is one point of failure
+
+**A volume attached to a machine is not replicated, and losing the drive loses the data.** Fly states
+it directly: "If your app needs a volume to function, and the NVMe drive hosting your volume fails,
+then that instance of your app goes down. There's no way around that." Volumes are independent of one
+another — "Fly.io does not automatically replicate data among the volumes on an app" — and the
+provider's own daily snapshots "shouldn't be your primary backup method."
+
+*Sourced — [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), read 2026-09-02.*
+
+**So a store held on one machine's disk survives a restart and a redeploy, and does not survive the
+machine.** Anything that has to outlive the host needs a copy that is not on it. That is what
+[ADR-0022](decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) commits
+to and what [how is the store backed up?](questions/how-is-the-store-backed-up.md) has to deliver;
+until it does, the third of those three events is a claim nothing can honour.
+
+**Recovery from host loss is a rebuild, not a failover** — provision, restore, redeploy. The length of
+that outage is set mostly by how automated the procedure is rather than by which provider is chosen,
+which is why it bears on
+[how much downtime is acceptable?](questions/how-much-downtime-is-acceptable.md) without being
+answered by a hosting choice.
+
+## Databases — SQLite is not safe on a network filesystem
+
+**SQLite's maintainers advise against it, and the failure is corruption rather than an error.** From
+the locking documentation: "POSIX advisory locking is known to be buggy or even unimplemented on many
+NFS implementations (including recent versions of Mac OS X) and that there are reports of locking
+problems for network filesystems under Windows. Your best defense is to not use SQLite for files on a
+network filesystem."
+
+*Sourced — [sqlite.org/lockingv3.html](https://www.sqlite.org/lockingv3.html), read 2026-09-03.*
+
+**So an embedded store and a network-mounted disk do not combine.** This rules out Cloud Run's Cloud
+Storage FUSE and NFS mounts and AWS Lambda with EFS as homes for one, whatever else they offer, and it
+is why [ADR-0021](decisions/0021-the-server-and-its-store-share-a-machine.md) puts the process and the
+file on the same machine rather than treating co-location as an implementation detail.
+
 ## Law and licensing
 
 **AGPL-3.0's network-use clause generally requires releasing a hosted service's complete source

@@ -293,7 +293,14 @@ board for six milestones and meeting the store for the first time with a finishe
 5. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
    the engine waits until here, because choosing between them without an access pattern is choosing
    by reputation.
-6. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+6. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
+   is where a backup stops being hypothetical. It sits at this milestone rather than later because
+   setting it up alongside the store is when it is cheapest, and because the named precedent for
+   deferring it is an operational inventory of roughly twenty-five tasks written for exactly this
+   architecture with no backup or restore procedure in it. Distinct from
+   [is the store's backup restorable?](is-the-stores-backup-restorable.md) at M11, which asks whether
+   anyone has actually rehearsed one.
+7. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
    none.

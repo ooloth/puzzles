@@ -8,9 +8,11 @@ resolves_into: decision
 
 ## Why it matters
 
-A single machine has no hardware redundancy, and backups protect data, not availability.
-Accepting that is entirely reasonable for a project this size — but it should be accepted
-explicitly, with a tolerable outage length attached, rather than discovered during one.
+No candidate arrangement gives hardware redundancy without paying for it, and backups protect data
+rather than availability. Accepting that is entirely reasonable for a project this size — but it
+should be accepted explicitly, with a tolerable outage length attached, rather than discovered during
+one. How much redundancy is even in question depends on the arrangement, which is why this cannot be
+answered before the store's shape is.
 
 ## What would settle it
 

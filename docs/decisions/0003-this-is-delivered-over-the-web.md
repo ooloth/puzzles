@@ -153,8 +153,13 @@ which belongs with
 
 - [x] `constraints.md` — the browser sections are scoped to this decision; haptics and the
       refresh-rate cap added as facts
-- [x] `guarantees/` — no promise changes. `durability.md` and `compatibility.md` are written in
-      browser vocabulary, which this record makes legitimate rather than presumptuous
+- [x] `guarantees/` — no promise changes. The durability and compatibility material is written in
+      browser vocabulary, which this record makes legitimate rather than presumptuous. That material
+      lived in theme files at the time; the folder has since moved to one promise per file, so the
+      durability claim is now
+      [reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+      and compatibility is a theme holding no promises yet, per
+      [../guarantees/README.md](../guarantees/README.md)
 - [x] `questions/README.md` — this entry removed from the order, the remainder renumbered
 
 Deliberately not decided here: what renders the client, which storage mechanism holds a player's

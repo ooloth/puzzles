@@ -173,9 +173,11 @@ board and never interprets its contents, which every option above does equally w
 
 ### Engine-level facts established while resolving the store's failure domains
 
-*Mined 2026-09-02 from [what fails independently, and would we know?](README.md), since resolved and
-deleted. Recorded here because they separate engines rather than localities, which is this question's
-job rather than the execution shape's.*
+*Mined 2026-09-02 from the failure-domain enumeration, whose durable output is in
+[../failure-modes/](../failure-modes/) and in the Findings of
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). The
+question file that held it is resolved and deleted. These are recorded here because they separate
+engines rather than localities, which is this question's job.*
 
 **SQLite's corruption detection is opt-in, and its own documentation now says so by example.**
 [sqlite.org/wal.html](https://www.sqlite.org/wal.html) carries a section titled "The WAL-Reset Bug" —

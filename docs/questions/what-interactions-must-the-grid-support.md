@@ -56,10 +56,13 @@ a cost nobody has counted.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-Legacy ADR-01 states that puzzle grids "need zero-lag drag-select, keyboard nav, live
-highlighting". Nothing else in the corpus corroborates any of the three, and no user research
-exists anywhere in this project's history. Treat them as the previous author's judgement rather
-than as established requirements.
+**Legacy ADR-01 states that puzzle grids "need zero-lag drag-select, keyboard nav, live
+highlighting".** Nothing else in the corpus corroborates any of the three, and no user research
+exists anywhere in this project's history. They are the previous author's judgement rather than
+established requirements.
+
+*Unverified — no source recorded. The claim is quoted accurately from that document; what is
+unverified is the document's own basis for it.*
 
 Live highlighting carries a cost nobody costed: highlighting the cells related to the current
 selection means recomputing those relationships on every cursor move, which is exactly the

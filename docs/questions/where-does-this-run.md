@@ -232,3 +232,41 @@ creation with a 14-day grace period before deletion. Low traffic is this project
 than a temporary condition, so both are live failure modes.
 
 *Sourced — second-hand from a research agent reading each vendor's documentation 2026-09-02.*
+
+### What was searched for and not found, so nobody researches it twice
+
+*Each of these is an absence rather than a fact. They are recorded because an unanswered question
+looks identical to an unasked one, and the second invites a repeat search.*
+
+**No official Cloud Run cold-start figure exists.** Google's documentation describes it as dependent
+on runtime, image and init code without giving a number. Third-party estimates cluster at 200ms–2s
+for Node, which is not a measurement and should not be cited as one.
+
+**No official Supabase figure for how long unpausing takes.** The pause behaviour is documented; the
+duration is not. A related GitHub issue title suggests it is not always instant, and that was not
+opened or corroborated.
+
+**Render's paid Postgres price was not confirmed.** A figure near $6/month for the entry tier appears
+in search summaries, and the pricing page did not render to the agent that tried. Treat it as unknown
+rather than as $6.
+
+**Railway has no fixed cheapest tier to quote**, because it prices by consumption rather than by named
+plan. Third-party breakdowns land somewhere in $8–25/month for a small Postgres, which is a range
+rather than a price.
+
+**No documented unrecoverable data-loss incident was found at Neon, Supabase, Railway, Render or
+PlanetScale.** Extended outages are documented and several have public post-mortems; permanent loss is
+not. This is an absence of evidence — small providers do not always publish their worst incidents, and
+"no data was lost" is self-reported in every case examined.
+
+**Neither Supabase's nor Neon's terms address keep-alive pinging**, in either direction. Neon's
+acceptable-use policy bars excessive consumption in general terms and says nothing about a scheduled
+ping. So whether the common workaround for scale-to-zero is permitted is genuinely unsettled rather
+than permitted-by-silence.
+
+**One anecdote was deliberately discarded**: a forum comment claiming Supabase now pauses projects
+despite cron pings. Single uncorroborated source, not opened by me, recorded here only so that
+finding it later is not mistaken for new information.
+
+*Sourced — a research agent searched for each of these 2026-09-02 and reported the absence. I did not
+repeat the searches.*

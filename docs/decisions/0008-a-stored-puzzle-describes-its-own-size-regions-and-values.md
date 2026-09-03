@@ -130,8 +130,10 @@ is open, and a model built against exactly two examples usually fits exactly two
       solvable by deduction alone](../guarantees/every-puzzle-is-solvable-by-deduction-alone.md),
       and is unchanged
 - [x] `questions/what-is-a-puzzle-across-game-types.md` — one of its three options is ruled out here
-- [x] `questions/which-doors-must-stay-open.md` — this door is now held by a record rather than a
-      list entry
+- [x] The register of doors to keep open — this door is now held by this record rather than by a
+      list entry. That register has since been abolished: a future worth keeping reachable is kept
+      reachable by the record that says what is binding, per
+      [../questions/README.md](../questions/README.md), and there is no separate file to update
 
 Deliberately not decided here: what the representation actually is, whether it is one model or one
 per type, how it is versioned, what the rules module operates on, how a board in progress is stored

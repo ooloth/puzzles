@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-09-03
 update_when: the users, the problem, or what we optimize for changes
 decays: slow
 status: active

@@ -46,11 +46,14 @@ operating it costs one person, and which of those costs is worth paying.
 is decided by throughput, and any argument that reaches for requests per second is answering a
 question this project does not have.
 
-The generator is worth checking separately rather than assuming it colocates. If puzzles are
-produced ahead of time, generation is a batch job that can run anywhere — but only where the store is
-reachable over a network. Where the store is a local file, the generator is pinned to the same
-machine, and that is a consequence of the cell rather than an independent choice. See
-[are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
+The generator is worth checking separately rather than assuming it colocates. Generation is batch
+work and can run anywhere the *writer* of the catalogue can reach. **That is not the same as anywhere
+the store can be reached**: under a local file store the generator either shares the machine and
+writes the file directly, or publishes through the server's own API and runs anywhere at the cost of
+an endpoint and a credential. Neither cell forces a location; what a local file forces is a choice
+between those two routes. See
+[are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+and [are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md).
 
 ### The order the remaining work has to happen in
 
@@ -58,12 +61,12 @@ The first two steps are inputs. Only after them is anything decidable.
 
 1. **Redraw the field on the three axes below**, so that no argument reasons from a vendor name to a
    runtime constraint.
-2. ~~**Enumerate what can fail independently, and what a player waits for.**~~ **Both are done**, and
-   their results are in the Findings below. The failure-domain comparison across all four cells and
-   the waiting-moment enumeration were completed 2026-09-02; the questions that held them are
-   resolved and deleted, with their durable output in [../problem.md](../problem.md) under "Where a
-   player waits" and in two new entries in [../failure-modes/](../failure-modes/). Verifying the
-   failure enumeration by breaking things did not block this and waits for a system to break, per
+2. **Both inputs are answered, and their results are in the Findings below.** The failure-domain
+   comparison across all four cells and the enumeration of what a player waits for were completed
+   2026-09-02. The questions that held them are resolved and deleted; their durable output is in
+   [../problem.md](../problem.md) under "Where a player waits" and in two new entries in
+   [../failure-modes/](../failure-modes/). Verifying the failure enumeration by breaking things never
+   blocked this and waits for a system to break, per
    [can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md).
    Whether any given platform offers a disk that survives a restart, a redeploy and a scale-to-zero
    belongs to [where does this run?](where-does-this-run.md) and is tracked there.
@@ -104,12 +107,13 @@ belongs elsewhere or is answered:
 - **Round-trip latency** moves nothing here, per
   [how long does a store round trip take?](how-long-does-a-store-round-trip-take.md).
 
-> So the remaining input is an afternoon of writing rather than a spike: the failure-domain
-> enumeration, and the list of moments a player actually waits. Both are analysis, and after them
-> this decision is a judgement between two well-understood options rather than a research project.
+> So the remaining input was an afternoon of writing rather than a spike, and it has been written.
+> This decision is now a judgement between well-understood options rather than a research project,
+> and nothing is waiting on a measurement.
 
 *Reasoned — 2026-09-02, by asking of each measurement what decision its result would change, and
-again after the in-process field closed to a single candidate.*
+again after the in-process field closed to a single candidate. Updated 2026-09-03 once both analyses
+landed.*
 
 ## Resolves into
 
@@ -153,7 +157,8 @@ on the three axes above before anything is recorded.
 
 Node, Bun or Deno on a machine or micro-VM with a volume attached. No network hop to storage,
 background work is possible, and the machine is yours to operate — which is the cost, and it is
-recurring. The generator must share the machine, because it writes to the same file.
+recurring. The generator either shares the machine and writes the file directly, or publishes through
+the server's API and runs anywhere; this cell forces that choice rather than forcing a location.
 
 ### 2. An always-on process with a network-attached store
 
@@ -277,15 +282,16 @@ long enough that something falls off it.
 *Reasoned — from reading that material, which is non-authoritative and cited here for what it
 enumerates rather than for anything it concludes.*
 
-**The tooling around embedded SQLite is mixed, and an earlier version of this finding overstated the
-decay.** Litestream is disaster recovery rather than high availability and replicates asynchronously,
-but it is **actively maintained**: v0.5.17 shipped 2026-08-31, with v0.5.13 through v0.5.17 across
-June–August 2026, a release every two to four weeks. LiteFS is the deprioritised one — LiteFS Cloud
-was sunset in October 2024 and LiteFS itself is pre-1.0. Fly volumes attach to exactly one machine
-with no replication, so the volume is a single point of failure.
+**Litestream is actively maintained; LiteFS is not.** Litestream shipped v0.5.17 on 2026-08-31, with
+v0.5.13 through v0.5.17 across June–August 2026 — a release every two to four weeks. It is disaster
+recovery rather than high availability and replicates asynchronously, which is a description of what
+it does rather than a sign of decay. LiteFS is the deprioritised one: LiteFS Cloud was sunset in
+October 2024 and LiteFS itself is pre-1.0.
 
-The correction matters because Litestream is the piece that would actually be relied on, and
-"the tooling is weaker than it was" was being carried as though it applied to both.
+Litestream is the piece that would actually be relied on, so the distinction is the whole finding.
+
+**Fly volumes attach to exactly one machine with no replication**, so the volume is a single point of
+failure.
 
 *Sourced — [Litestream releases](https://github.com/benbjohnson/litestream/releases) and
 [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), both opened and read by me
@@ -415,8 +421,9 @@ small precisely if handlers target the web-standard `Request` and `Response` int
 identified as the hedge that keeps this cheap.
 
 **Cell 1 and cell 5 are the two that create a migration to leave.** Leaving cell 1 means exporting
-from a file into a network store with live player data in it, plus rehoming the generator that was
-pinned to the same machine. Leaving cell 5 means migrating the store *and* rewriting off
+from a file into a network store with live player data in it, plus rehoming the generator if it was
+put on the same machine rather than made to publish through the server. Leaving cell 5 means
+migrating the store *and* rewriting off
 platform-specific runtime APIs *and* finding the generator a home it never had.
 
 > So the asymmetry is between a middle that is cheap to change your mind about and two ends that are
@@ -690,13 +697,22 @@ line lists "what the catalogue is stored in" among what it deliberately does not
 
 *Reasoned — from the records named, each opened and checked 2026-09-02.*
 
-**A store opened as a file pins the generator to the server's machine, and that meets a stated
-ranking.** [../problem.md](../problem.md) ranks "the interactive path over batch throughput" third.
-Generation is search-heavy batch work; sharing one small machine with request serving is that ranking
-being violated as a consequence of a store choice rather than by anyone deciding it. Mitigable —
-scheduling, niceness, a larger machine — but it is a cost the network branch does not carry.
+**A local file store does not pin the generator, and the argument that it did has been withdrawn.**
+It pins the *writer* of the catalogue, and the writer can be the server: a generator that publishes
+over HTTP runs anywhere under a file store exactly as under a network one. The cost of that route is
+an endpoint and a credential, needed only in this branch; the slower bulk write does not bind,
+because [../problem.md](../problem.md) ranks the interactive path over batch throughput and says
+generation "can be as slow as it needs to be".
 
-*Reasoned — from [../problem.md](../problem.md)'s conflict ranking, 2026-09-02.*
+**What survives is narrower.** If the generator *is* put on the server's machine, search-heavy batch
+work competes with request serving, and that same ranking is violated by consequence rather than by
+anyone deciding it. That is an argument against one particular arrangement of cell 1, not against
+cell 1.
+
+*Reasoned — 2026-09-03, correcting a claim carried here since 2026-09-02. It was never sourced to a
+record; it was inferred from "the generator writes to the same file", which nothing established. See
+[are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) for the
+derivation.*
 
 ### The failure-domain comparison, and why it did not go where it was expected to
 

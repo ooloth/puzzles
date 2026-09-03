@@ -16,35 +16,30 @@ content behind a runtime that can decide whether to serve it. They have almost n
 the catalogue is written rarely by the generator and read by everyone, and the player record is
 written constantly by one player and read by that player.
 
-**Whether this is an input to
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) depends on
-how that question lands, which is why the milestone it belongs to is not yet fixed.** It was filed at
-M1 on the strength of one claim: that a store the process opens as a file pins the generator to the
-server's machine. That holds if the generator writes puzzles into the same file, and not if the
-catalogue is somewhere it can reach over a network. So this matters at M1 only in the branch where
-the store is a local file — and in that branch it matters a great deal, because it decides whether a
-class of hybrid arrangement exists that nothing has enumerated: a local file for one body of data and
-a network service for the other.
+**This does not block M1, and it sits at M3.** It was filed at M1 on the strength of one claim — that
+a store the process opens as a file pins the generator to the server's machine — and that claim is
+false as stated. A generator publishes either by writing the store directly or by sending puzzles
+through the server's own API, and the second runs anywhere under a file store exactly as under a
+network one. The Findings below carry the derivation.
 
-In the other branch it is an M3 question and nothing at M1 waits on it. The Findings below record
-that reasoning; until a record settles the branch, this file stays where the more demanding of the
-two readings puts it.
+**What it still does is decide where a join happens**, and that is the part most likely to be
+discovered late. It also decides whether a hybrid arrangement exists that nothing has enumerated — a
+local file for one body of data and a network service for the other — which is a question about the
+execution shape field's shape rather than about M1.
 
-It also decides where a join happens, and that is the part most likely to be discovered late.
+**It cannot be deferred past M3**, because that is where the first row is written and a row has to be
+written somewhere.
 
 ## What would settle it
 
 Naming what each body of data is for, who writes it and how often, and — the part that discriminates
 — whether any question anyone wants to ask has to read both at once.
 
-Worth checking rather than assuming: whether
+**One input is now settled rather than assumed.**
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s requirement
-applies equally to both. It says "anything the server stores", which reads as covering the catalogue
-as well as the player record, and a catalogue that only ever needs fetching by key would otherwise be
-a candidate for something much simpler.
-
-This cannot be deferred past M3, because that milestone writes the first row and reads it back, and
-a row has to be written somewhere.
+covers the catalogue as well as the player record — its wording is "anything the server stores" — so
+the simpler storage a fetch-by-key catalogue would have allowed is not available. The Findings record
+how that was checked.
 
 ## Resolves into
 
@@ -54,14 +49,20 @@ A decision record in [../decisions/](../decisions/).
 
 Raised 2026-09-02, during the foreclosure analysis on
 [what execution shape does the server have?](what-execution-shape-does-the-server-have.md). The
-claim that an embedded store pins the generator to the server's machine turned out to rest on this,
-and nothing asked it.
+claim that an embedded store pins the generator to the server's machine appeared to rest on this,
+and nothing had asked it.
+
+Worked 2026-09-03, which found the pinning claim false and moved this question from M1 to M3. The
+investigation is kept because it settled two things — that the queryability requirement covers the
+catalogue, and that the generator is never pinned by store locality alone — even though it did not
+produce a decision.
 
 ## Options
 
 *One store, holding both.* Joins are a query rather than application code. One thing to operate, one
-backup, one schema to keep coherent. The generator must be able to reach whatever the server's store
-is, which is the coupling that matters if that store is a file.
+backup, one schema to keep coherent. Whatever writes the catalogue must be able to reach the server's
+store — directly if it can, or through the server if it cannot, which is the choice a file store
+forces.
 
 *Two stores.* Each is sized, deployed and operated on its own terms, and the catalogue can be
 read-mostly and cached hard. Any question spanning both becomes application-level work, and there are
@@ -99,13 +100,14 @@ process lifetime with a single store locality. If there are two stores, they can
 localities — a player record in a network service and a catalogue served from files on disk, or the
 reverse — and the foreclosure analysis for each cell would need redoing.
 
-**It is the difference between the generator being pinned and being free.** A generator writing to a
-network-attached catalogue can run anywhere, including a laptop.
-[ADR-0006](../decisions/0006-one-language-across-every-deployable.md) already names a second
-toolchain as the cost it exists to avoid, and being pinned to the server's machine is a related cost
-arriving by a different route.
+**It changes what publishing a puzzle costs, though not where the generator can run.** A generator
+writing to a network-attached catalogue writes to it directly from anywhere. Under a local file it
+either shares the machine or gains a publish endpoint and a credential — both workable, and the
+second is what keeps it free to run on a laptop.
+[ADR-0006](../decisions/0006-one-language-across-every-deployable.md) names a second toolchain as the
+cost it exists to avoid, which is a different cost from either of these.
 
-*Reasoned — from the records named.*
+*Reasoned — from the records named, corrected 2026-09-03.*
 
 ### What is not yet known
 
@@ -114,18 +116,16 @@ arriving by a different route.
 the minimum and M7 for the whole answer. A store decision that assumes a shape which has not been
 argued would be resting on an inference.
 
-**This question's urgency is entirely borrowed, and it can be given back.** It was raised at M1
-because of one claim — that a store opened as a file pins the generator to the server's machine — and
-that claim only exists in the local-file world. Settle
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) toward a
-store reached over a network and the pinning disappears, the hybrid arrangements it warned about stop
-existing, and nothing at M1 needs this answered. It then belongs at M3, where the first row is
-written and where the catalogue's shape is argued.
+**This question's urgency was borrowed and has been given back.** It was raised at M1 on the pinning
+claim, and that claim is false in every branch rather than merely absent from one — see below. So
+nothing at M1 waits on this, and it sits at M3, where the first row is written and where the
+catalogue's shape is argued.
 
-> So the two questions are not circular, though they look it. This one is downstream. It was
-> promoted on the strength of a consequence that turns out to hold in only one branch.
+> So the two questions are not circular, though they looked it. This one is downstream, and it was
+> promoted on the strength of a consequence that does not hold at all.
 
-*Reasoned — 2026-09-02, on re-examining why this was filed against M1 at all.*
+*Reasoned — 2026-09-02 on re-examining why this was filed against M1, and corrected 2026-09-03 when
+the underlying claim was found false rather than branch-specific.*
 
 **Nothing has established how often the catalogue is written.** That depends on
 [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) and
@@ -135,7 +135,9 @@ problems.
 
 ### The catalogue may be on the daily path, and that was not known when this was framed
 
-*Mined 2026-09-02 from [what does a player wait for?](README.md), since resolved and deleted.*
+*Mined 2026-09-02 from the waiting-moment enumeration, whose durable output is in
+[../problem.md](../problem.md) under "Where a player waits". The question file that held it is
+resolved and deleted.*
 
 **The most frequent blocking moment in the product is fetching a puzzle the device has never had.**
 It happens to every active player at least daily, because

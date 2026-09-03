@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-02
+updated: 2026-09-03
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -193,7 +193,6 @@ derivation.
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
      - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — or else runtime, host and engine constrain each other by accident, and unwinding that once player data exists is a migration. **Both of its blocking inputs are now answered** — the waiting moments are in [../problem.md](../problem.md) under "Where a player waits", and the failure-domain comparison is in that file's Findings, alongside two new entries in [../failure-modes/](../failure-modes/)
-     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — or else, in the branch where the store is a file, the generator lands on the server's machine by consequence and separating them moves the catalogue. In the network branch nothing breaks and this drops to M3
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
@@ -277,16 +276,21 @@ stops being a promise about a store nobody has built.
 It sits here rather than at M8 because the alternative is building the client against a hard-coded
 board for six milestones and meeting the store for the first time with a finished game attached.
 
-1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
+1. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
+   first, because it decides whether the first row goes into one store or two, and everything below
+   assumes an answer. Moved here from M1 on 2026-09-03: it was filed there on the claim that a store
+   opened as a file pins the generator to the server's machine, and that claim is false — a generator
+   can publish through the server's API and run anywhere under either store locality.
+2. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
    to write one row and read it back. The full answer is not needed until M7.
-2. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
+3. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
-3. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
+4. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
-4. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
+5. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
    the engine waits until here, because choosing between them without an access pattern is choosing
    by reputation.
-5. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+6. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
    none.

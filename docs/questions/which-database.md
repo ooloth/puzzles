@@ -20,7 +20,7 @@ bytes under a key and never reads inside them. So the answer is not "nothing" an
 store.
 
 **Whether the store is a file the process opens or a service it connects to is decided at M1**, by
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md), because
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md), because
 that is what sets the capability the host must have. What is left here is which engine, given that
 class — and that cannot be argued without a schema, which is why it sits at M3 rather than M1.
 
@@ -91,7 +91,7 @@ analytical scans, and this store takes small writes and point reads.
 which puzzles get finished, where players stall, whether a grade predicts anything —
 acceptably at plausible volume is worth running rather than assuming. It sits with this question
 rather than with
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) because it
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md) because it
 discriminates between *engines* and not between localities: both sides of that line offer SQL engines
 that can express the queries. It needs a schema and a synthetic history, which is why M3 is the
 earliest it can be run rather than merely where it is filed.
@@ -175,7 +175,7 @@ board and never interprets its contents, which every option above does equally w
 
 *Mined 2026-09-02 from the failure-domain enumeration, whose durable output is in
 [../failure-modes/](../failure-modes/) and in the Findings of
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). The
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md). The
 question file that held it is resolved and deleted. These are recorded here because they separate
 engines rather than localities, which is this question's job.*
 
@@ -218,7 +218,7 @@ opened by me; re-check before this decides anything.*
 
 **Turso's free tier advertises no sleeping**, which is unusual in the managed field and matters given
 the cold-touch finding recorded against
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). Its
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md). Its
 embedded-replica feature is proprietary, so relying on it sets the exit cost.
 
 *Sourced — second-hand from a research agent, 2026-09-02.*

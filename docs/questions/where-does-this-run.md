@@ -22,7 +22,7 @@ resolves before it reaches the platform is its own question — see
 ## What would settle it
 
 Knowing the execution shape, then pricing only the platforms that fit it.
-[What execution shape does the server have?](what-execution-shape-does-the-server-have.md) settles
+[Is the store a file or a service?](is-the-store-a-file-or-a-service.md) settles
 whether the store is a file the process opens or a service it connects to, and that is what decides
 which platforms can host this at all.
 
@@ -172,7 +172,7 @@ stated; the ones marked second-hand were not opened by me.*
 **Whether a platform sleeps is now a first-order property rather than a detail.** The waiting-moment
 enumeration found that seven of nine blocking moments are first contact after a gap, and that this is
 structural rather than a consequence of low traffic — see
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) for the
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md) for the
 derivation. So wake-up latency lands on most waits in the product, and it does not improve with growth.
 
 **Fly.io distinguishes suspend from stop, and only one of them is fast.** Resume from suspended is

@@ -10,7 +10,7 @@ resolves_into: constraint
 
 **Less than it first appeared, and that is the finding rather than a reason to drop it.** This was
 opened as the blocking measurement for
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). Asking
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md). Asking
 what the number would actually change moved it off that path within a day, and the reasoning is
 recorded below so nobody re-promotes it.
 

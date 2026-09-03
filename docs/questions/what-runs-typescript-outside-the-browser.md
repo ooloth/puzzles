@@ -28,7 +28,7 @@ which is why it sits ahead of the questions it would otherwise derive from.
 ## What would settle it
 
 **This cannot be worked until
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) lands.**
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md) lands.**
 An edge runtime removes a whole tier of candidates, and a long-lived process keeps them, so the field
 is not knowable before the shape is. Scaffolding under candidates that the shape would have
 disqualified is the wasted half of this work.
@@ -157,7 +157,7 @@ equal, so the coupling is severed. Under a store opened as a file the runtime's 
 native-addon story matters, and the field narrows — by one candidate, per the finding above, rather
 than to a single winner.
 
-> So [what execution shape does the server have?](what-execution-shape-does-the-server-have.md) has
+> So [is the store a file or a service?](is-the-store-a-file-or-a-service.md) has
 > to settle store locality *before* this question is answered, not after. Answering this first and
 > locality later risks a runtime chosen under an assumption that the later answer reverses.
 

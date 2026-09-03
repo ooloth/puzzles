@@ -170,14 +170,14 @@ be what selects one — which is why hosting is the fourth slice and not the fir
 thing in M1 is the string the endpoint returns.
 
 **Slice 1 is a chain, not a set.** Its questions are listed in the order they must be worked. **Store
-locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it,
-and the store question is downstream of the shape question, mattering only in one of its branches.
+locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it.
 
-**The two questions that fed the shape question are resolved and deleted.** What a player waits for
-graduated to [../problem.md](../problem.md); what fails independently graduated to
-[../failure-modes/](../failure-modes/), with the arrangement-specific half redistributed as findings
-into the questions it informs. Both are gone rather than kept as answered files, per the housekeeping
-rule below.
+**Two of the three claims once bundled into the server's execution shape are settled.**
+[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) records that nothing on
+the request path scales to zero, and
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) records that the
+server does not run in a constrained isolate. What is left of that question is store locality, which
+is why it now asks only that.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
@@ -192,7 +192,7 @@ derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
-     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — or else runtime, host and engine constrain each other by accident, and unwinding that once player data exists is a migration. **Both of its blocking inputs are now answered** — the waiting moments are in [../problem.md](../problem.md) under "Where a player waits", and the failure-domain comparison is in that file's Findings, alongside two new entries in [../failure-modes/](../failure-modes/)
+     - **Must answer:** [is-the-store-a-file-or-a-service](is-the-store-a-file-or-a-service.md) — or else the runtime is chosen against a store locality that reverses it, and moving player data between a file and a service once players have work in it is the one migration M1 can create
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
@@ -250,7 +250,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
-   [what execution shape does the server have?](what-execution-shape-does-the-server-have.md).
+   [is the store a file or a service?](is-the-store-a-file-or-a-service.md).
 6. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
 7. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)

@@ -79,7 +79,7 @@ without reopening this.
 **It reaches a server that does not exist yet.**
 [ADR-0010](0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes that one will, and
 this constrains what runs on it before
-[what execution shape does the server have?](../questions/what-execution-shape-does-the-server-have.md)
+[is the store a file or a service?](../questions/is-the-store-a-file-or-a-service.md)
 has been worked. An edge runtime that only executes one language would satisfy this by accident
 rather than by fit.
 

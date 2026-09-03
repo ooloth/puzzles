@@ -40,7 +40,7 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-01, while working
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). the durability record demoted on 2026-09-01
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md). the durability record demoted on 2026-09-01
 rejected guest recovery on the grounds that the answer for a guest wanting durability is an account.
 That reasoning does not hold if the first release ships guests only, and tracing why led here: the
 size of the problem is set by what a guest is shown, and nobody had asked.

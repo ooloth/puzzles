@@ -12,7 +12,7 @@ resolves_into: decision
 earlier.** You cannot choose how to reach the store locally before knowing what the store is, so this
 sits at M2 with the rest of the development loop rather than at M1. What M1 needs is the *comparison*
 — what each candidate arrangement would cost in the daily loop — and that is a finding recorded
-against [what execution shape does the server have?](what-execution-shape-does-the-server-have.md),
+against [is the store a file or a service?](is-the-store-a-file-or-a-service.md),
 not a door closed here.
 
 It was briefly filed at M1 as a decision. That was a mistake worth recording: an input to a choice is
@@ -54,7 +54,7 @@ A decision record in [../decisions/](../decisions/), and content for
 **This sits at M2, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and M1
 is decided on which option keeps technical doors open — a different test, which ergonomics loses. Any
 ergonomic difference between the arrangements can be noted in
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) without
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md) without
 being established first. A daily loop also needs a project to have a loop in, and slice 1 has none.
 
 **Resist filing it earlier.** It reads like an input to the store decision, and being one is not the

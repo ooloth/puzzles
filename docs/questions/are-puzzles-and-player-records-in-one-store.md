@@ -48,7 +48,7 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-02, during the foreclosure analysis on
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). The
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md). The
 claim that an embedded store pins the generator to the server's machine appeared to rest on this,
 and nothing had asked it.
 
@@ -94,11 +94,11 @@ and whether it was finished is a property of the play.
 
 ### What it changes about the execution shape field
 
-**A "two stores" answer creates hybrid cells nobody has enumerated.** The field in
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) crosses
-process lifetime with a single store locality. If there are two stores, they can have different
-localities — a player record in a network service and a catalogue served from files on disk, or the
-reverse — and the foreclosure analysis for each cell would need redoing.
+**A "two stores" answer creates arrangements nobody has enumerated.**
+[Is the store a file or a service?](is-the-store-a-file-or-a-service.md) asks about one locality for
+one store. If there are two stores they can have different localities — a player record in a network
+service and a catalogue served from files on disk, or the reverse — and that question's comparison
+would need redoing against the pair rather than against a single store.
 
 **It changes what publishing a puzzle costs, though not where the generator can run.** A generator
 writing to a network-attached catalogue writes to it directly from anywhere. Under a local file it
@@ -190,7 +190,7 @@ including a laptop, under a local file store exactly as it would under a network
 
 Nothing in [../decisions/](../decisions/) says the generator writes directly. The assumption was
 carried into
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) as "The
+[is the store a file or a service?](is-the-store-a-file-or-a-service.md) as "The
 generator must share the machine, because it writes to the same file", and nothing argued it.
 
 **What the publish-through-the-server route actually costs**, so this is a comparison rather than a

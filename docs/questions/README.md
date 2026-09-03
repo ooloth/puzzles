@@ -355,6 +355,10 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    — [../constraints.md](../constraints.md) records that the storage failures do not reproduce in a
    desktop browser, so the conditions this milestone is about are the hardest ones to create on
    purpose. It sits here rather than at M2 because there is nothing offline to exercise until now.
+5. [Is a puzzle fetched before it is needed?](is-a-puzzle-fetched-before-it-is-needed.md) — the only
+   answer that removes the most common wait in the product rather than dressing it, per
+   [../problem.md](../problem.md) under "Where a player waits". It sits here rather than at M8 because
+   prefetching is an offline capability and needs a rhythm to fetch ahead of, which M8 establishes.
 
 ## M10 — sudoku is finished, in guest mode
 
@@ -408,6 +412,13 @@ players are losing work, and nothing currently could tell us either way.
     unless it is forced to.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
+12. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
+    has to end in something, and the player cannot be told, because
+    [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+    forbids it. So a failed write exists only inside the client where nothing is watching, which is
+    this milestone's theme reached from the client side.
+    [The durable copy stops being written](../failure-modes/the-durable-copy-stops-being-written.md)
+    is what happens if it is never answered.
 
 ## M12 — a guest's work survives eviction
 

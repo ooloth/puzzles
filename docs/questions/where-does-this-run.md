@@ -112,6 +112,29 @@ deployable with no bundling discount across apps.
 
 *Unverified — no source recorded.*
 
+**A platform in the edge tier is not the same thing as a constrained runtime, and pricing this list
+should not assume it is.** Cloudflare Containers is generally available on the Workers Paid plan and
+is positioned for "Resource-intensive applications that require CPU cores running in parallel, large
+amounts of memory or disk space" and "Applications and libraries that require a full filesystem,
+specific runtime, or Linux-like environment". So that platform can run an ordinary container
+alongside isolates, which removes the assumption that choosing it means accepting an isolate — and it
+gives a search-heavy generator a first-class home there.
+
+*Sourced — Cloudflare's Containers documentation, read 2026-09-02.*
+
+**What that leaves open here, and it is a question for this file rather than for the shape:
+does a container on any of these platforms get a disk that survives?** The relevant property is not
+whether a filesystem exists — several offer one that lives in memory for the duration of a request —
+but whether anything written survives a restart, a redeploy and a scale-to-zero. That is what decides
+whether an embedded store is reachable on a given platform at all, and it is the difference between
+this list having one column or two.
+
+Check it for each candidate rather than by reputation: a container platform, a micro-VM with a
+volume, a plain machine, and the managed tier. Cloudflare Containers specifically was not checked for
+this — its documentation was read for what it is *for*, not for what its disk guarantees.
+
+*Unverified — the question has been posed and not answered.*
+
 **Figures and reputational claims.** Every price above dates from 2026 research with no links
 recorded. The claim that Fly's `shared-cpu-1x` tier suffers sustained CPU steal — described as 70%
 or worse on some hosts, with a free destroy-and-reclone as the first remedy and `performance-1x` a

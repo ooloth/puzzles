@@ -144,18 +144,33 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
+**Slice 1 is a chain, not a set, and the order inside it has been wrong twice.** The questions below
+it are listed in the order they must be answered, and the two things that make that order load
+bearing are worth stating here because both were discovered by getting them backwards. **Store
+locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it.
+And **three of the questions are inputs rather than decisions** — they change the answer to the shape
+question rather than following from it, and answering the shape first would mean answering it without
+them.
+
+**Nothing in M1 is decided on the maintainer's current appetite for operating infrastructure.** That
+appetite is real and it is deliberately not being used as an input, because it is a short-term guess
+about a long-lived choice. What decides these is which option keeps the most technical properties
+reachable — performance, safety, portability — including the ones that are not obviously important
+yet. Where a question genuinely cannot be settled without a preference, it says so rather than
+inventing a derivation.
+
 1. **A server answers one route, observed with curl, locally.**
    - **Given:** [0006-one-language-across-every-deployable](../decisions/0006-one-language-across-every-deployable.md)
    - **Given:** [0007-that-language-is-typescript](../decisions/0007-that-language-is-typescript.md)
    - **Given:** [0010-the-store-needs-a-host-so-this-system-has-a-server](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
-     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md)
-     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md)
-     - **Must answer:** [how-is-the-store-reached-in-local-development](how-is-the-store-reached-in-local-development.md)
-     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md)
-     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md)
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md)
+   - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
+     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — an input to the shape, not a consequence of it
+     - **Must answer:** [how-is-the-store-reached-in-local-development](how-is-the-store-reached-in-local-development.md) — an input to the shape, not a consequence of it
+     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — only in the branch where the store is a file; it drops to M3 otherwise
+     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — resolves into three records: store locality, then runtime tier, then whether a process exists between requests
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md)
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
 2. **A browser shows "Hello!" rendered by the client, locally.**
@@ -174,7 +189,8 @@ thing in M1 is the string the endpoint returns.
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md)
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier surviving Safari's storage wipe unaided
-   - **Given:** [../constraints.md](../constraints.md) — that exemption is withdrawn when the setting server is not judged genuinely first-party
+   - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving elsewhere, and the test is skipped entirely when the API is path-routed on the app's own hostname
+   - **Given:** [../constraints.md](../constraints.md) — a genuinely cross-origin API is blocked outright rather than capped, so it is worse and not exempt
    - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
      - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md)
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md)

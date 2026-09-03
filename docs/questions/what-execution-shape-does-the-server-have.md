@@ -64,11 +64,16 @@ adversarially. The first two steps are inputs; only after them is anything decid
    shaped like the generator's validation loop and an analytical scan rather than like a tight insert
    loop. Enumerate what can fail independently under each arrangement, per
    [what fails independently, and would we know?](what-fails-independently-and-would-we-know.md). And
-   check whether an embedded store is reachable at all on the platforms that would otherwise win,
-   including whether a container gets a durable disk.
-3. **Decide whether the store is in the process or over a network**, with the trade stated as
-   reasoning-simplicity against operational-simplicity rather than as a dominance, and with the
-   maintainer's appetite supplied as a stated input rather than inferred.
+   describe what local development costs under each, per
+   [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
+   Whether any given platform offers a disk that survives a restart, a redeploy and a scale-to-zero
+   belongs to [where does this run?](where-does-this-run.md) and is tracked there.
+3. **Decide whether the store is in the process or over a network.** The trade is
+   reasoning-simplicity against operational-simplicity, and it is decided on which option keeps the
+   most technical properties reachable — latency, safety, portability, and the ones not yet known to
+   matter — rather than on the maintainer's current appetite for operating infrastructure. That
+   appetite is a short-term guess about a long-lived choice, and it is deliberately excluded until
+   the technical case has been made without it.
 4. **Decide whether the runtime is a constrained isolate**, which largely follows from the step above
    plus [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)'s one-toolchain
    argument.

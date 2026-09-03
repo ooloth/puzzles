@@ -21,15 +21,24 @@ resolves before it reaches the platform is its own question — see
 
 ## What would settle it
 
-Knowing the execution shape, then pricing only the platforms that fit it.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) settles
-whether the store is a file the process opens or a service it connects to, and that is what decides
-which platforms can host this at all.
+Pricing the platforms that fit the shape, which is now known. Four records settle it: the store is a
+SQLite file the server process opens
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), on the same machine as the process
+([ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)), on a disk that survives
+restart and redeploy ([ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)),
+in an ordinary runtime that never scales to zero on the request path
+([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md),
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)).
 
-**The field has not been rebuilt since that became a separate question.** The candidates below were
-gathered while a local database file was treated as a fixed requirement, so the list is shaped by an
-assumption that is no longer in force, and platforms that would have been excluded by it were never
-written down. Rebuild the field from scratch once the shape is known rather than pricing this list.
+**So a candidate has to offer four things**: an ordinary long-running process, a local disk beside it,
+that disk surviving a redeploy, and a deploy model that never runs two processes against one volume.
+
+**What is still genuinely open is whether that machine is managed or bare**, and that is most of what
+this question now decides. Both satisfy every record above — a managed platform with a persistent
+volume qualifies exactly as a rented virtual machine does — and they differ enormously in how much of
+[how is the server operated?](how-is-the-server-operated.md) and
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) they supply.
 
 A platform is also cheap to try. Deploying the same trivial application to two candidates costs an
 afternoon and answers questions about build times, cold starts and how much of the operational
@@ -48,7 +57,7 @@ Options and findings ported from legacy ADR-12 (host on Fly.io).
 ## Options
 
 **Everything below is prior research, not a shortlist.** It records what one round of comparison
-looked at, under an assumption that has since been removed. Every figure dates from 2026 with no
+looked at, under an assumption no longer in force. Every figure dates from 2026 with no
 link recorded, and every reputational claim is sourced to unnamed community reports. None of it
 decides anything until it has been re-checked against the vendor.
 
@@ -69,11 +78,19 @@ console complexity.
 *DigitalOcean or Linode.* Roughly $24/month for specs equivalent to Hetzner's — around five times
 the cost with no capability gap relevant here.
 
-*Cloudflare, Google Cloud Run, and the rest of the serverless and edge tier.* Previously set aside
-on the assumption that a database file on a local disk was required. That assumption is not in
-force: [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) requires
-the store to be queryable, which several managed and edge databases are. These are candidates again,
-and they have not been researched.
+*Cloudflare Workers and the rest of the constrained-isolate tier.* Ruled out by
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md), because the store
+cannot be at the edge and edge compute reading a central store adds a hop rather than removing one.
+Cloudflare as a *platform* is not ruled out — Containers runs an ordinary container — so this
+excludes a runtime tier rather than a vendor.
+
+*Google Cloud Run and the rest of the serverless tier.* Ruled out on two counts.
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+requires a disk that survives a redeploy, and Cloud Run's local filesystem is memory-backed and
+per-instance; its volume mounts are FUSE or NFS, which
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) rules out on SQLite's own
+advice. Scale-to-zero on the request path is separately ruled out by
+[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md).
 
 *Coolify on a VPS.* Adds a second control plane to maintain; pays off only with a genuinely
 multi-app future.
@@ -166,8 +183,7 @@ genuinely multi-app future — rather than choosing a cheap option and leaving t
 
 ### Platform facts established while enumerating failure domains and waiting moments
 
-*Mined 2026-09-02 from two question files since resolved and deleted. Each was verified at the tier
-stated; the ones marked second-hand were not opened by me.*
+*Each of the following was verified at the tier stated; the ones marked second-hand were not opened by me.*
 
 **Whether a platform sleeps is now a first-order property rather than a detail.** The waiting-moment
 enumeration found that seven of nine blocking moments are first contact after a gap, and that this is

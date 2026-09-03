@@ -84,8 +84,8 @@ says when it is waiting for the network" was raised 2026-09-03 while enumerating
 for. It was not written, because promises are written as they fall out of records rather than
 committed to in advance — but it is what the fourth option above would commit to.
 
-**The waits it would cover are now enumerated** in [../problem.md](../problem.md) under "Where a
-player waits", which this question did not have when it was framed. Five moments, of which one —
+**The waits it would cover are enumerated** in [../problem.md](../problem.md) under "Where a player
+waits". Five moments, of which one —
 opening a puzzle whose content has never reached the device — happens to every active player at least
 daily. That changes the scale of this question: it is not only about an offline glyph on an unusual
 day, it is about the ordinary daily entry into the app.

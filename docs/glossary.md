@@ -24,8 +24,7 @@ settled by [ADR-0020](decisions/0020-the-stores-engine-is-sqlite.md).
 
 > **Never write "storage" unqualified.** The two above have opposite properties — one is taken away
 > without warning and belongs to one device, the other is ours and outlives every device — and a
-> sentence that does not say which one it means is read as whichever the reader had in mind. This
-> has already produced one record whose title had to be corrected.
+> sentence that does not say which one it means is read as whichever the reader had in mind.
 
 **the board** — the grid a player is currently solving, including their entries and notes.
 

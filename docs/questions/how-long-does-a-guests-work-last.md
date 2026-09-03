@@ -60,10 +60,10 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Opened 2026-09-01 by demoting the durability record demoted on 2026-09-01, "What a player's work survives" (the decision record itself
-is deleted; this question, its two siblings, and the Findings below carry forward everything in it).
-Its guest bound was argued from a rejection that does not hold up. the durability record rejected an anonymous
-server copy for guests on three costs. An audit found two of the three are not settled facts at all —
+Opened 2026-09-01 by demoting the durability record, "What a player's work survives" (that record is
+deleted; this question, its two siblings, and the Findings below carry forward everything in it). Its
+guest bound was argued from a rejection that does not hold up: it rejected an anonymous server copy
+for guests on three costs. An audit found two of the three are not settled facts at all —
 they are exactly what
 [where does this run?](where-does-this-run.md) and
 [do privacy regulations apply?](do-privacy-regulations-apply.md) are still working out — and the

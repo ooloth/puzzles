@@ -14,12 +14,12 @@ the store is reached over a network — a connection string with credentials in 
 secrets. The milestone is a hard-coded response with no database, so there is nothing to inject and no
 secret handling to design." That stops being true one milestone later.
 
-**It is an operational surface that one candidate arrangement does not have.** A store the process
-opens as a file needs no credential at all. A store reached over a network needs one, needs it in
-every environment including a developer's laptop and whatever runs the checks, and needs a story for
-what happens when it is rotated or leaked. That asymmetry belongs in
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) as a cost
-of one side, and it is currently counted nowhere.
+**The store contributes no secret at all, which is smaller than this question was framed for.**
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) makes the store a file
+the process opens, so there is no credential to hold, rotate or leak, and no copy of one needed on a
+developer's laptop or in whatever runs the checks. What remains are secrets that have nothing to do
+with the store: whatever a deploy authenticates with, whatever the generator uses if it publishes
+through the server's API, and whatever object storage the backups are written to.
 
 The cost of getting it wrong is not gradual. A credential committed to a public repository is
 disclosed permanently, and this repository is public per
@@ -55,18 +55,17 @@ Least to build, and it ties the arrangement to the host in a small way.
 More moving parts than this system's size justifies today, and the option that scales past one
 deployable.
 
-*No secret, because there is nothing to authenticate to.* Available only if the store is in the
-process. Listed because it is the honest zero on this axis and it is one of the things the store
-decision is choosing between.
+*No secret at all.* Not available. It was the honest zero on this axis while the store might have
+needed a credential; the store does not, and the remaining secrets — deploy, publish, backup
+destination — are not removed by that.
 
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**This is a cost carried by one branch of an open decision and by neither the other.** It is recorded
-as a question rather than folded into
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) because it
-outlives that decision: even with a network store chosen, what a secret is and how it travels is a
-separate choice that the shape does not make.
+**This outlives the store decision, which is why it is a question rather than a line in a record.**
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) removed the store's
+credential and removed nothing else. What a secret is and how it travels is a separate choice that no
+store shape makes.
 
 *Reasoned — 2026-09-02.*

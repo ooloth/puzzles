@@ -107,7 +107,7 @@ second is what keeps it free to run on a laptop.
 [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) names a second toolchain as the
 cost it exists to avoid, which is a different cost from either of these.
 
-*Reasoned — from the records named, corrected 2026-09-03.*
+*Reasoned — from the records named, 2026-09-03.*
 
 ### What is not yet known
 
@@ -124,8 +124,7 @@ catalogue's shape is argued.
 > So the two questions are not circular, though they looked it. This one is downstream, and it was
 > promoted on the strength of a consequence that does not hold at all.
 
-*Reasoned — 2026-09-02 on re-examining why this was filed against M1, and corrected 2026-09-03 when
-the underlying claim was found false rather than branch-specific.*
+*Reasoned — from the records named, 2026-09-03.*
 
 **Nothing has established how often the catalogue is written.** That depends on
 [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) and
@@ -135,9 +134,8 @@ problems.
 
 ### The catalogue may be on the daily path, and that was not known when this was framed
 
-*Mined 2026-09-02 from the waiting-moment enumeration, whose durable output is in
-[../problem.md](../problem.md) under "Where a player waits". The question file that held it is
-resolved and deleted.*
+*Reasoned — from the waiting-moment enumeration in [../problem.md](../problem.md) under "Where a
+player waits", 2026-09-02.*
 
 **The most frequent blocking moment in the product is fetching a puzzle the device has never had.**
 It happens to every active player at least daily, because
@@ -204,9 +202,7 @@ are needed only in this branch.
 > server. Both routes to M1 are now weak: this one is dissolved, and the daily-path route below
 > sharpens the shape argument without reversing it.
 
-*Reasoned — 2026-09-03, by asking what the pinning claim actually requires. This is a correction to a
-finding carried since 2026-09-02, and it weakens an argument that was being used against the
-local-file branch.*
+*Reasoned — 2026-09-03, by asking what the pinning claim actually requires.*
 
 ### What the unknowns would and would not change
 

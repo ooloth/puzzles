@@ -32,8 +32,8 @@ which is why it sits ahead of the questions it would otherwise derive from.
 [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) settle a SQLite file
 on an ordinary always-on runtime. All three candidates here ship `node:sqlite` as a built-in, so none
-is advantaged or disqualified by the store. What those records do remove is the edge tier, which was
-never one of the options below.
+is advantaged or disqualified by the store. What those records do remove is the edge
+runtime, which is struck from the options below rather than weighed there.
 
 It is also answered together with
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) rather than
@@ -71,9 +71,11 @@ TypeScript story natively.
 constraints; the server has hosting constraints the generator does not. Splitting is possible and
 costs a second toolchain for one maintainer.
 
-*An edge runtime for the server specifically* — Workers and similar — which is a different execution
-model rather than a different implementation of the same one, and constrains what the server can do
-more than the others.
+*An edge runtime for the server specifically* — Workers and similar. **Ruled out** by
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md): the store cannot
+be at the edge, so edge compute reading a central store adds a network hop rather than removing one.
+Kept in the list because it is the option somebody would otherwise reach for, and knowing it was
+considered is worth more than a shorter list.
 
 ## Findings
 

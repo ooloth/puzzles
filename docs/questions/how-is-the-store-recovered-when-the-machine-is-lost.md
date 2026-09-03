@@ -85,5 +85,4 @@ in the product: opening a puzzle whose content has never reached the device. An 
 morning commute means nobody starts that day's puzzle.
 
 So this is a downtime bet rather than a data-loss bet — the data-loss half is
-[how is the store backed up?](how-is-the-store-backed-up.md) — but the downtime is not free, and an
-earlier framing of it here as absorbed by the client was too generous.
+[how is the store backed up?](how-is-the-store-backed-up.md) — and the downtime is not free.

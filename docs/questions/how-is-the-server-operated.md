@@ -69,14 +69,15 @@ here rather than in [../constraints.md](../constraints.md) because it only appli
 
 ### The operational comparison this inherits, and why this question got bigger
 
-*Mined 2026-09-03 from the store-locality question, since resolved into
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and deleted.*
+*Reasoned — from the operational comparison behind
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md), 2026-09-03.*
 
-**This question's milestone was set on an assumption that no longer holds.** It sits at M16 with the
-note that its size "is set entirely by M1's hosting choice: a managed platform supplies most of this
-and a bare machine supplies none of it". M1 has now chosen a file on a machine we operate, so the
-second branch is the live one and this question is larger than its position suggests. Whether it moves
-earlier is a sequencing judgement for whoever next runs the milestone steps.
+**This question's size is set by a hosting choice that is narrowed but not made.** The store records
+require an ordinary process with a local disk beside it, which removes the serverless and edge tiers —
+but a managed platform offering a persistent volume satisfies them exactly as a rented virtual machine
+does. So the branch that decides how big this question is, managed against bare, is still open at
+[where does this run?](where-does-this-run.md). A managed platform supplies most of what follows and a
+bare machine supplies none of it.
 
 **Setup effort is a wash between an embedded store and a database server, which is the opposite of
 the folklore.** Standing up continuous replication plus a restore drill is about as much work as

@@ -80,7 +80,7 @@ not.
 
 *Unverified — no source recorded.*
 
-**Three of this project's four recorded failure modes answer "how would we notice" with
+**Most of this project's recorded failure modes answer "how would we notice" with
 "we wouldn't."** See [../failure-modes/](../failure-modes/). That is the strongest argument that
 the answer here is not "nothing", independent of any appetite for product analytics.
 

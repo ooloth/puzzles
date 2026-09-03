@@ -9,8 +9,12 @@ resolves_into: decision
 ## Why it matters
 
 Last-write-wins discards the losing write. Whether silently discarding a player's moves is
-compatible with promising their progress is never lost is unresolved — and both claims
-currently appear in our own documents.
+compatible with what this project intends is unresolved. **No promise about progress never being lost
+exists** — [../guarantees/README.md](../guarantees/README.md) names "that no move is lost when a
+connection fails" as one of two nearby claims deliberately not promised, precisely because no record
+has argued it. What does exist is the intention in [../problem.md](../problem.md) that a player never
+loses in-progress work, and this question is one of the things standing between that intention and a
+promise.
 
 ## What would settle it
 

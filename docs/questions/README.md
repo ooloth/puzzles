@@ -197,7 +197,7 @@ derivation.
    - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — and it narrows no runtime, since Node, Bun and Deno all ship `node:sqlite`
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else this slice has no route to answer with. Answered together with the runtime above, which constrains it in both directions
+     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above, which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
 2. **A browser shows "Hello!" rendered by the client, locally.**
@@ -207,13 +207,13 @@ derivation.
    - **Given:** [the-board-in-play-continues-through-a-loss-of-connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
    - **Given:** [the-app-never-opens-to-a-blank-screen-after-the-first-visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
    - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
-     - **Must answer:** [is-the-entry-document-produced-per-request](is-the-entry-document-produced-per-request.md)
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md)
-     - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md)
+     - **Must answer:** [is-the-entry-document-produced-per-request](is-the-entry-document-produced-per-request.md) — or else the offline mechanism is chosen by accident: a document produced per request cannot be precached as a build output, and [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) needs one that can. Costs a re-scaffold of the serving path
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create
+     - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md)
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md)
+     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the first call across the boundary is shaped by the handler rather than by the contract, which is the thing this slice exists to exercise. Costs a re-scaffold of the boundary
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else the renderer is chosen without knowing it has to fetch and display asynchronously, which is the one thing this slice adds over the last. Costs a re-scaffold of the client half
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — a server-set cookie is the only identifier surviving Safari's storage wipe unaided
    - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving elsewhere, and the test is skipped entirely when the API is path-routed on the app's own hostname
@@ -221,17 +221,17 @@ derivation.
    - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
    - **Given:** [0021-the-server-and-its-store-share-a-machine](../decisions/0021-the-server-and-its-store-share-a-machine.md) — the host must run an ordinary process with a local disk beside it
    - **Given:** [0022-the-machines-disk-survives-restart-redeploy-and-host-replacement](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) — and that disk must survive a redeploy, which platforms vary on
-     - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md)
-     - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md)
+     - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md) — or else the deployment topology caps or destroys the only identifier that survives Safari's storage wipe, per the givens above, and [is guest recovery worth building?](is-guest-recovery-worth-building.md) at M12 finds the mechanism already gone. It fails silently, and unwinding it is a redeploy plus a topology change
+     - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else assets ship without content-hashed filenames and every cached asset is revalidated on every visit, on the network [../problem.md](../problem.md) names as the modal case. Costs a re-scaffold of the build and the serving path together
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the host cannot deploy without briefly running two processes against one volume, and some deploy models cannot be made single-writer-safe at all. Discovering that at M3 is a change of host rather than of configuration
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
-     - **Must answer:** [where-does-this-run](where-does-this-run.md)
-     - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md)
+     - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the platform's own hostname is what the browser resolves, and the first-party test in the given above turns on exactly that. Costs a redeploy, and the failure is silent
+     - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md) — or else a proxy or CDN in front changes what the browser treats as the origin, which is the same silent Safari failure reached by a different route. Costs a redeploy plus whatever sits in front
 6. **A change made locally reaches the deployment.**
-   - **Must answer:** [where-does-this-run](where-does-this-run.md)
-   - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
-   - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md)
+   - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the deploy is built against a platform whose deploy model it does not have; a managed platform supplies most of this and a bare machine supplies none of it. Costs a re-scaffold of the pipeline
+   - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the pipeline cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. Costs a re-scaffold of both the layout and the pipeline
+   - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
 ## M2 — a change can be checked before it ships
 
@@ -291,9 +291,9 @@ board for six milestones and meeting the store for the first time with a finishe
 
 1. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
    first, because it decides whether the first row goes into one store or two, and everything below
-   assumes an answer. Moved here from M1 on 2026-09-03: it was filed there on the claim that a store
-   opened as a file pins the generator to the server's machine, and that claim is false — a generator
-   can publish through the server's API and run anywhere under either store locality.
+   assumes an answer. It does not block M1: a store opened as a file does not pin the generator to
+   the server's machine, because a generator can publish through the server's API and run anywhere
+   under either store locality.
 2. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
    to write one row and read it back. The full answer is not needed until M7.
 3. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
@@ -324,11 +324,11 @@ board for six milestones and meeting the store for the first time with a finishe
    commits to surviving host replacement and the machine cannot deliver that alone. This is the main
    lever on how long an outage lasts, and it is ours rather than a provider's.
 10. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
-    moved here from M1 on 2026-09-03. There is no store at M1, so nothing can be disturbed. What M1
-    owes this question is only that the host it picks *can* deploy without two processes holding one
-    file, and that is recorded against [where does this run?](where-does-this-run.md) there. The rest
-    — checkpointing on exit, replication across a restart, rolling back past a migration — is real
-    from the first row.
+    there is no store at M1, so nothing can be disturbed there. What M1 owes this question is only
+    that the host it picks *can* deploy without two processes holding one file, and that is recorded
+    against [where does this run?](where-does-this-run.md) in that milestone. The rest —
+    checkpointing on exit, replication across a restart, rolling back past a migration — is real from
+    the first row.
 11. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
@@ -456,11 +456,11 @@ players are losing work, and nothing currently could tell us either way.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
 12. [How is the server operated?](how-is-the-server-operated.md) — restarting it, patching it, and
-    noticing it has stopped. Moved here from M16 on 2026-09-03: it sat there because a managed
-    platform would have supplied most of it, and
-    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) chose a machine we
-    operate. Its access-and-hardening half is split out to M2, because that half is needed to check a
-    change rather than to survive one.
+    noticing it has stopped. It sits here because noticing an outage is this milestone's theme, and
+    its size depends on whether [where does this run?](where-does-this-run.md) lands on a managed
+    platform or a bare machine. Its access-and-hardening half is
+    [a separate question](how-is-the-server-reached-and-hardened.md) at M2, because that half is
+    needed to check a change rather than to survive one.
 13. [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the
     scans [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
     preserves are long reads, and a long read blocks WAL checkpointing. It sits here rather than at M3

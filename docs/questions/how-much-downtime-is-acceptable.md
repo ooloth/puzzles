@@ -56,10 +56,8 @@ one object, which is true of only one candidate, and then generalising a conclus
 > otherwise is why it looked answerable. What remains true regardless: no arrangement gives
 > redundancy without paying for it, and none of them names a tolerable outage length for you.
 
-*Reasoned — corrected 2026-09-02 while enumerating failure domains across the four candidate
-arrangements. That question is resolved and deleted; the per-arrangement comparison now sits in the
-Findings of
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).*
+*Reasoned — 2026-09-02, from the failure-domain enumeration across the four candidate arrangements
+that [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) reasons from.*
 
 **Fly.io states the single-volume case in its own words**, for whichever arrangement ends up on one:
 "If your app needs a volume to function, and the NVMe drive hosting your volume fails, then that
@@ -69,8 +67,7 @@ themselves, and Fly's own docs say daily snapshots "shouldn't be your primary ba
 *Sourced — [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), read 2026-09-02.*
 
 **An outage does not stop play, and it does stop everything else.** This is the finding that makes
-this question a product question rather than an operational one, and it was framed too generously
-before 2026-09-03. Solving continues, because
+this question a product question rather than an operational one. Solving continues, because
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) puts the board on the
 client and four promises describe the app working while the server is unreachable. But every moment
 in [../problem.md](../problem.md) under "Where a player waits" needs the server, and the most frequent

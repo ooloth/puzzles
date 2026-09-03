@@ -8,15 +8,15 @@ resolves_into: decision
 
 ## Why it matters
 
-**The decision here is downstream of the store's shape, and only a finding about it is needed
-earlier.** You cannot choose how to reach the store locally before knowing what the store is, so this
-sits at M2 with the rest of the development loop rather than at M1. What M1 needs is the *comparison*
-— what each candidate arrangement would cost in the daily loop — and that is a finding recorded
-against [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
-not a door closed here.
+**The store is a SQLite file the server process opens**
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), so this is no longer a comparison
+between arrangements. It is the narrower question of how a developer gets a database to work against:
+where the file lives, what puts data in it, and whether the same file is reused between runs or made
+fresh.
 
-It was briefly filed at M1 as a decision. That was a mistake worth recording: an input to a choice is
-not the same thing as a choice, and treating one as the other puts a door where there is none.
+**It sits at M2 with the rest of the development loop** because it is about the daily loop rather than
+about what ships. Nothing at M1 waits on it — an M1 hello world has no store.
 
 A store the process opens as a file needs nothing installed and nothing running: the file is there or
 it is created. A store reached over a network needs something to connect to — a container to start, a

@@ -1,6 +1,6 @@
 ---
-updated: 2026-09-02
-update_when: the store arrangement is settled, or anything starts reporting write failures
+updated: 2026-09-03
+update_when: anything starts reporting write failures
 decays: slow
 status: active
 ---
@@ -21,8 +21,8 @@ is in.
 
 Every step is ordinary and none of them raises anything a person sees.
 
-1. A write to the store fails. The cause does not matter here: a full disk, an expired credential, an
-   exhausted connection limit, a network path that has gone away, a store that is being maintained.
+1. A write to the store fails. A full disk, a corrupt page, a file the process cannot open, a bug in
+   the write path. The cause does not matter to what follows.
 2. The client does not care. Four promises describe the app continuing while the server is
    unreachable, so by design the failure is absorbed rather than surfaced. The player is not asked to
    retry, because
@@ -31,8 +31,9 @@ Every step is ordinary and none of them raises anything a person sees.
 3. Play continues normally. The board on the device is authoritative during play
    ([ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)), so nothing on screen
    is wrong, slow, or different.
-4. Nothing reports the failure, because nothing is watching. The store may be a file or a service; in
-   either case the maintainer learns nothing.
+4. Nothing reports the failure, because nothing is watching. The store is a file the process opens
+   ([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)), which removes the
+   causes that involve a network or a credential and removes none of the silence.
 5. The first evidence arrives when someone needs the durable copy — a second device, a recovered
    player, a restore — and finds it stale by however long the failure has been running.
 
@@ -47,9 +48,11 @@ durable copy during ordinary play, so a store that has been rejecting writes for
 exactly like one that has not — until the day it is needed, which is also the day it cannot be fixed
 retroactively.
 
-**This is arrangement-independent.** It holds whether the store is a file the process opens or a
-service it connects to, because what makes it silent is the client absorbing failure rather than
-anything about where the bytes go.
+**What makes this silent is the client absorbing failure, not anything about where the bytes go.**
+So it survives every change to the store's arrangement — it would read the same if the store were a
+service reached over a network, and choosing a file
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)) removed several
+causes and none of the silence.
 
 ## How we'd notice
 

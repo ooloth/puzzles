@@ -155,8 +155,7 @@ which belongs with
       refresh-rate cap added as facts
 - [x] `guarantees/` — no promise changes. The durability and compatibility material is written in
       browser vocabulary, which this record makes legitimate rather than presumptuous. That material
-      lived in theme files at the time; the folder has since moved to one promise per file, so the
-      durability claim is now
+      durability claim is
       [reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
       and compatibility is a theme holding no promises yet, per
       [../guarantees/README.md](../guarantees/README.md)

@@ -61,9 +61,7 @@ cost of not getting the free recovery mechanism.
 ### The Safari rule has been established, and it answers this file's first open item
 
 **It was read in WebKit's own source on 2026-09-02 and is now recorded in
-[../constraints.md](../constraints.md) at the *Sourced* tier.** It previously sat here as the
-weakest-sourced claim in that file, described by third parties rather than by Apple, with a note that
-it should decide nothing until somebody established it. Somebody has.
+[../constraints.md](../constraints.md) at the *Sourced* tier.**
 
 **The answer to "same registrable domain or genuinely third-party?" is: neither framing is the one
 that matters.** The cap is applied to a request that looks first-party by hostname and resolves

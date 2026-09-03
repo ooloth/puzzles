@@ -87,10 +87,10 @@ Four things it decides that are open, and it is worth being explicit that a sket
 argument for any of them. It assumes **workspaces** rather than one package. It splits **frontend
 from backend** as separate deployables. It puts rules in a **per-game module** (`core/sudoku`)
 rather than one shared module, which the second axis above has not settled. And `store/` couples
-server-side and client-side storage in one place, which is two decisions —
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
-[which client storage mechanism](which-client-storage-mechanism.md) — that are open and may not want
-the same home.
+server-side and client-side storage in one place, which are two different things that may not want the
+same home: the server's is a SQLite file
+([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)) and the client's is
+[still open](which-client-storage-mechanism.md).
 
 ## Findings
 

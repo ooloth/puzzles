@@ -96,8 +96,7 @@ days are cached.
 
 *Sourced — second-hand from a research agent, 2026-09-02.*
 
-**Prefetching also makes a server outage invisible to returning players**, which was not part of the
-case for it when this was raised. Everything in [../problem.md](../problem.md) under "Where a player
+**Prefetching also makes a server outage invisible to returning players.** Everything in [../problem.md](../problem.md) under "Where a player
 waits" fails while the server is down, and the most frequent of those moments is exactly the one this
 question would remove. A player who already has tomorrow's puzzle does not notice that the machine is
 being rebuilt.

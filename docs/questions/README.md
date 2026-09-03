@@ -38,10 +38,18 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
 3. **Under each slice, list the givens** — the records, promises and constraints already established
    that bear on *that* slice. Link each one. Where the link is to a large file, name the single
    invariant being relied on, one bullet per invariant.
-4. **Under the givens, list the questions that must be answered.** A question blocks a slice if
+4. **Under the givens, list the questions that must be worked.** A question blocks a slice if
    building without it would be **reversed**, not only if the work is impossible. Choosing a package
    manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
    are few; the reversal risks are what decide the order.
+
+   **Two labels, because two different things block a slice.** **Must answer** is a decision: an
+   answer is picked and a door closes. **Must establish** is research: a fact is found, and there was
+   never a choice to make. A question resolving into a constraint or into
+   [../problem.md](../problem.md) is almost always the second kind. The distinction is not cosmetic —
+   labelling research as a decision invites someone to argue it to a conclusion instead of going and
+   finding out, and it happened here: two enumerations sat in M1 as "Must answer" and read as doors
+   nobody could see the hinges on.
 5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
    repetition is what makes step 7 possible and what lets a reader audit one slice without holding
    the others in their head.
@@ -50,9 +58,10 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    would settle it**. That is the only place a dependency between questions is written down.
 7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
    slices. A slice that reads like the milestone restated is bundling. A question written as a given
-   is a question — questions are always **Must answer**, whatever they are blocking. Then count how
-   many slices each question blocks: that orders the slices, and says nothing about the order inside
-   one.
+   is a question — never a **Given**, whatever it is blocking. Check the two labels while you are
+   there: something listed as **Must answer** that has no options to choose between is research and
+   should be **Must establish**. Then count how many slices each question blocks: that orders the
+   slices, and says nothing about the order inside one.
 
 **Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
 smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
@@ -124,13 +133,14 @@ record is titled by what it settled, so the listing is the checklist of constrai
 1. **<A slice you can run and look at.>**
    - **Given:** `[<record-promise-or-constraint>](<its-path>)`
    - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)`
-     - **Must answer:** `[<question-filename>](<question-filename>.md)`
+     - **Must establish:** `[<question-filename>](<question-filename>.md)` — <a fact to find>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)` — <a door to close>
 2. **<The next slice.>**
    - **Must answer:** `[<question-filename>](<question-filename>.md)`
 
-Questions are always "Must answer", never "Given". Where a slice rests on no given, its questions
-sit at the top level. Link text is the filename, so the list reads without opening anything.
+Questions are never "Given" — they are "Must answer" where an answer is chosen and "Must establish"
+where a fact is found and there was no choice. Where a slice rests on no given, its questions sit at
+the top level. Link text is the filename, so the list reads without opening anything.
 -->
 
 ## M1 — "Hello!" is live
@@ -145,12 +155,11 @@ be what selects one — which is why hosting is the fourth slice and not the fir
 thing in M1 is the string the endpoint returns.
 
 **Slice 1 is a chain, not a set, and the order inside it has been wrong twice.** The questions below
-it are listed in the order they must be answered, and the two things that make that order load
-bearing are worth stating here because both were discovered by getting them backwards. **Store
-locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it.
-And **three of the questions are inputs rather than decisions** — they change the answer to the shape
-question rather than following from it, and answering the shape first would mean answering it without
-them.
+it are listed in the order they must be worked, and the two things that make that order load bearing
+are worth stating here because both were discovered by getting them backwards. **Store locality
+constrains the runtime**, so a runtime chosen while the store is open can be reversed by it. And
+**the first three items are research rather than decisions** — they establish facts the shape
+question reasons from, and working the shape first would mean arguing it without them.
 
 **Nothing in M1 is decided on the maintainer's current appetite for operating infrastructure.** That
 appetite is real and it is deliberately not being used as an input, because it is a short-term guess
@@ -166,8 +175,9 @@ inventing a derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
-     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — an input to the shape, not a consequence of it
-     - **Must answer:** [how-is-the-store-reached-in-local-development](how-is-the-store-reached-in-local-development.md) — an input to the shape, not a consequence of it
+     - **Must establish:** [what-does-a-player-wait-for](what-does-a-player-wait-for.md) — the moments the client blocks on the server, which is what decides whether store latency matters at all
+     - **Must establish:** [how-long-does-a-store-round-trip-take](how-long-does-a-store-round-trip-take.md) — measured here, because every latency claim made so far is an estimate
+     - **Must establish:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — an enumeration per candidate, not a choice
      - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — only in the branch where the store is a file; it drops to M3 otherwise
      - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — resolves into three records: store locality, then runtime tier, then whether a process exists between requests
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
@@ -223,6 +233,11 @@ a player can see, which is why it has to be a milestone rather than a habit.
    This is where [../verification.md](../verification.md) gets its content.
 4. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
+5. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+   — the specific instance of the question above that M1's store choice creates. It sits here rather
+   than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
+   comparison of what each shape would cost in the daily loop, and that is a finding recorded against
+   [what execution shape does the server have?](what-execution-shape-does-the-server-have.md).
 5. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
 6. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)

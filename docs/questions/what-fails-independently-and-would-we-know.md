@@ -1,7 +1,7 @@
 ---
 opened: 2026-09-02
 status: open
-resolves_into: decision
+resolves_into: constraint
 ---
 
 # What fails independently, and would we know?
@@ -37,8 +37,13 @@ an input to a decision being taken now and the instrumentation is not.
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), and probably entries in
-[../failure-modes/](../failure-modes/) for anything found that nothing has described.
+Entries in [../failure-modes/](../failure-modes/) for anything found that nothing has described, and
+material the store record reasons from.
+
+**This is research rather than a choice**, which is why it resolves into a constraint. There is no
+answer to pick — the enumeration either has been done or it has not. It is listed against a milestone
+because a decision there cannot be argued honestly without it, not because a door closes when it
+lands.
 
 ## Source
 

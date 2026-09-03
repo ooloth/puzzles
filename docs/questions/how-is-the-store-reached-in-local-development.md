@@ -8,12 +8,19 @@ resolves_into: decision
 
 ## Why it matters
 
-**It is an input to the store decision rather than a consequence of it**, which is why it sits at M1
-alongside [what execution shape does the server have?](what-execution-shape-does-the-server-have.md)
-rather than at M3 with the engine. A store the process opens as a file needs nothing installed and
-nothing running: the file is there or it is created. A store reached over a network needs something
-to connect to — a container to start, a hosted development instance to reach, or a second copy of the
-data somewhere.
+**The decision here is downstream of the store's shape, and only a finding about it is needed
+earlier.** You cannot choose how to reach the store locally before knowing what the store is, so this
+sits at M2 with the rest of the development loop rather than at M1. What M1 needs is the *comparison*
+— what each candidate arrangement would cost in the daily loop — and that is a finding recorded
+against [what execution shape does the server have?](what-execution-shape-does-the-server-have.md),
+not a door closed here.
+
+It was briefly filed at M1 as a decision. That was a mistake worth recording: an input to a choice is
+not the same thing as a choice, and treating one as the other puts a door where there is none.
+
+A store the process opens as a file needs nothing installed and nothing running: the file is there or
+it is created. A store reached over a network needs something to connect to — a container to start, a
+hosted development instance to reach, or a second copy of the data somewhere.
 
 That difference is felt every day rather than once, and it is one of the few places where the two
 candidate arrangements differ in something the maintainer touches constantly. It belongs in the

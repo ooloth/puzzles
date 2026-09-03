@@ -301,3 +301,143 @@ rates, cold starts, requests per second, memory footprints, costs — none carry
 a working link.
 
 *Unverified — no source recorded.*
+
+### Locality and management are separate axes, and this file conflated them
+
+**The framing above pairs "a file" with "you operate it" and "a service" with "a vendor operates
+it". That is not a logical entailment**, and treating it as one hides a cell:
+
+| | I operate it | A vendor operates it |
+| --- | --- | --- |
+| **embedded file** | SQLite on a machine I run | Cloudflare Durable Objects |
+| **network service** | Postgres on a machine I run | managed Postgres |
+
+**The top-right cell is real.** Cloudflare's Durable Objects run SQLite "as a library. This means the
+database code runs not just on the same machine as the DO, not just in the same process, but in the
+very same thread", with synchronous queries. Cloudflare streams the WAL to object storage, replicates
+every write to five machines and acknowledges after three confirm, and offers point-in-time recovery
+to any moment in the last thirty days. That is a vendor operating the disk, the backup, the
+replication and the restore, under a file the process opens directly.
+
+*Sourced — [Cloudflare's SQLite-in-Durable-Objects post](https://blog.cloudflare.com/sqlite-in-durable-objects/),
+opened and read by me 2026-09-03.*
+
+**And it is unreachable, because of a decision already taken.** Durable Objects require the Workers
+actor model, which [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)
+rules out. So the cell is occupied, and the occupant is behind a door this project closed for
+unrelated reasons.
+
+**The general-purpose version of that cell existed and is gone.** LiteFS Cloud was the product that
+managed an embedded SQLite database on compute you already ran, and Fly sunset it on 2024-10-15. No
+successor with that shape was found. Litestream is alive and actively maintained, but it is a binary
+you run and a bucket you own — the vendor operates none of it.
+
+**Deno KV is the instructive near-miss.** Locally and in the open-source server it is literally a
+SQLite file; on Deno Deploy, where Deno is the one operating it, they swap the engine to FoundationDB.
+Nobody has wanted to run a fleet of arbitrary customer SQLite files as a product.
+
+> So the pairing this file assumed holds in practice while being false in principle, and the reason is
+> commercial rather than technical: the cell is nearly empty because nobody sells it, not because it
+> cannot exist. That is worth knowing, because a commercial absence can end — and if a managed
+> embedded-SQLite product appeared on ordinary compute, this question would need reopening.
+
+*Sourced — the LiteFS Cloud sunset date and the Deno KV engine swap are second-hand from a research
+agent, 2026-09-03.*
+
+**The bottom-left cell is real too, and had not been considered**: Postgres on a machine you run. Its
+operational delta over SQLite on the same machine is narrower than the folklore suggests — installing
+and running the daemon is routine — and concentrates in three places: connection pooling
+infrastructure past roughly 50–100 concurrent connections, backup scheduling that SQLite does not need
+in the same form, and major-version upgrades, which have no SQLite equivalent.
+
+*Reasoned — from a research agent's survey of Postgres operational practice, 2026-09-03.*
+
+### There is no decisive technical winner, and the reason is a property already recorded
+
+**The workload's discriminating property is that there is no cross-player write contention.** One
+player only ever writes their own rows. That is what makes SQLite's single-writer model a non-issue,
+and it is a property of the product rather than of its scale.
+
+**SQLite's ceiling and this workload are three to six orders of magnitude apart.** SQLite's own
+documentation confirms the constraint — "since there is only one WAL file, there can only be one
+writer at a time", while "writers and readers can run at the same time". Independent benchmarks with
+disclosed methods put sustained single-writer throughput between roughly 15,000 writes per second with
+full durability and 70,000+ for small blobs. This product's worst case is one write per input per
+actively-solving player, or about one write per second each. Reaching the floor of that range would
+take on the order of fifteen thousand people typing in the same second.
+
+*Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html), opened and read by me 2026-09-03.
+The throughput figures are second-hand from benchmarks with stated hardware and method.*
+
+**The "many small writes hurt SQLite" folklore is real and misdescribed.** The effect is fsync per
+transaction, not per write: unbatched single-statement inserts are slow, and the same inserts inside
+one transaction are fast. A debounced sync is already the batched shape.
+
+**One genuine asymmetry exists and it favours the service.** A long-running read transaction blocks
+WAL checkpointing: "a long-running read transaction can prevent a checkpointer from making progress",
+and where "there is always at least one active reader, then no checkpoints will be able to complete
+and hence the WAL file will grow without bound". The analytical scans
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves are
+exactly long read transactions. Postgres's MVCC has no equivalent. At an occasional offline scan the
+pathological condition — *always* a reader — does not arise, so this is a wrinkle rather than a
+capability gap.
+
+*Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html), opened and read by me 2026-09-03.*
+
+> So the technical comparison does not decide this, and saying so is the finding rather than a failure
+> to find one. What remains is the failure-domain asymmetry recorded above — that the domains a file
+> removes fail loudly and the one it keeps fails silently — and the operational and economic question
+> this file has been deferring.
+
+### What would make one engine decisively wrong
+
+**A feature where many players write the same row.** A shared leaderboard updated transactionally by
+everyone, or real-time collaborative solving of one board, queues on the same resource rather than on
+aggregate throughput, and a single writer lock is punished by the mechanism rather than by the volume.
+That is the one scenario found where the two engines differ in kind.
+
+**Both are currently out of scope**, and conditionally rather than permanently.
+[../problem.md](../problem.md) puts "two devices editing the same puzzle at once" and "leaderboard
+integrity or anti-cheat" under "Not this", and the second is explicitly conditional — it holds "while
+nothing is worth gaining by cheating", which [is there a paid tier?](is-there-a-paid-tier.md) could
+change.
+
+> So the threshold that would flip this is not a traffic level. It is a product decision, it is
+> written down, and it is currently excluded. That makes it a **Revisit when** condition for whichever
+> record settles this.
+
+*Reasoned — from [../problem.md](../problem.md) and the workload analysis above, 2026-09-03.*
+
+### Driver performance differs between runtimes, and does not reach this decision
+
+**Treating `node:sqlite` and `bun:sqlite` as interchangeable is an assumption about interface, not
+about performance, and the assumption is wrong.** They differ. What the numbers show is that the
+difference does not bind here:
+
+- **`node:sqlite` against `better-sqlite3`** is within 1.5× in either direction depending on the
+  operation — the only comparison found with a disclosed method, three runs, stated hardware.
+- **Bun's claim of 3–6× over `better-sqlite3`** is its own benchmark, read-only, run on macOS 12.3.1
+  — which dates it to 2022, before `node:sqlite` existed. It is contested as measuring row-to-object
+  conversion rather than SQLite. One independent spot-check found about 1.7× on inserts.
+- **Deno's `node:sqlite` is a native Rust implementation over rusqlite**, not WebAssembly. No
+  published benchmark of it against anything was found, which is a genuine unknown rather than a
+  finding.
+- **Absolute throughput** for single keyed inserts sits at 70,000–81,000 per second on a laptop. This
+  product's load is plausibly under 100 per second.
+
+> So every driver has two to three orders of magnitude of headroom, and performance does not
+> discriminate. It is also the wrong question for *this* file: driver speed is an input to
+> [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md), and it
+> applies under either answer here.
+
+*Sourced — second-hand from a research agent, which reported hardware, run counts and dates for the
+methoded benchmarks and flagged the vendor benchmark's age. The Deno rusqlite basis is from a Deno
+GitHub discussion, not opened by me.*
+
+**Bun ships a native Postgres client**, `Bun.SQL`, with prepared statements, transactions, connection
+pooling, TLS modes and `LISTEN`/`NOTIFY`. `COPY` is on its roadmap rather than implemented. It is
+relevant to the runtime question under either answer here, and it means Bun is not only strong on the
+embedded side — which was the shape of an earlier assumption.
+
+*Sourced — [Bun's SQL documentation](https://bun.com/docs/runtime/sql), opened and read by me
+2026-09-03.*

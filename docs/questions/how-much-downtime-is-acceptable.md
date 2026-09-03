@@ -67,3 +67,24 @@ instance of your app goes down. There's no way around that." Volumes are not rep
 themselves, and Fly's own docs say daily snapshots "shouldn't be your primary backup method."
 
 *Sourced — [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), read 2026-09-02.*
+
+**An outage does not stop play, and it does stop everything else.** This is the finding that makes
+this question a product question rather than an operational one, and it was framed too generously
+before 2026-09-03. Solving continues, because
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) puts the board on the
+client and four promises describe the app working while the server is unreachable. But every moment
+in [../problem.md](../problem.md) under "Where a player waits" needs the server, and the most frequent
+of them is opening a puzzle whose content has never reached the device.
+
+> So the honest statement of the cost is: an outage is invisible to somebody mid-puzzle and total for
+> somebody arriving. A failure at eight in the morning means nobody starts that day's puzzle, on a
+> product whose whole shape is a daily puzzle played on a commute.
+
+**Two things would shrink that cost without shortening the outage**, which is why this question should
+not be answered as though recovery speed were the only lever. Prefetching a puzzle before it is needed
+would make an outage invisible to returning players — see
+[is a puzzle fetched before it is needed?](is-a-puzzle-fetched-before-it-is-needed.md). Holding a
+signed-in session locally with a lifetime would stop an outage ejecting people who were already
+signed in.
+
+*Reasoned — from [../problem.md](../problem.md) and the records named, 2026-09-03.*

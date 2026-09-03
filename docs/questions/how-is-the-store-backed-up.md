@@ -54,8 +54,17 @@ work are indistinguishable from outside.
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), and probably a promise-shaped constraint that
-whichever record settles the store's locality can point at.
+A decision record in [../decisions/](../decisions/), and the thing that makes
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+true rather than owed.
+
+**That record commits to surviving host replacement, and a volume cannot deliver it.** Surviving the
+machine needs a copy that is not on the machine, so until this question is answered *and built*, the
+third of that record's three events is an obligation rather than a property. Answering this is what
+closes the gap, and it is also what would make a promise about how long a player's work lasts
+possible — see [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md),
+neither of which can be answered while the last copy sits on one disk.
 
 ## Source
 

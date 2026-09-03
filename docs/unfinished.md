@@ -37,19 +37,6 @@ narrow nothing else. In particular they do **not** narrow the runtime: Node, Bun
 `node:sqlite`, so anyone reasoning "SQLite, therefore runtime X" has inherited a claim that was
 checked and found false on 2026-09-03.
 
-### A durability claim is recorded that nothing yet keeps
-
-**You'll see** [ADR-0022](decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
-stating that the disk holding the store survives restart, redeploy **and host replacement**.
-
-**Actually** the first two are properties of a volume and the third is not. Surviving the machine
-requires a copy that is not on the machine, and no such copy is designed or built. The record says so
-in its own Risk section, and [how is the store backed up?](questions/how-is-the-store-backed-up.md) is
-where it gets answered.
-
-**So** do not cite that record as evidence the data is safe from host loss. Until the backup question
-lands and something is built, it describes an obligation rather than a property.
-
 <!-- Template:
 
 ### <What you'll run into that looks contradictory>

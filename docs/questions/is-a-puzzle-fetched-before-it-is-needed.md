@@ -95,3 +95,15 @@ days are cached.
 > means observing the apps directly rather than reading about them.
 
 *Sourced — second-hand from a research agent, 2026-09-02.*
+
+**Prefetching also makes a server outage invisible to returning players**, which was not part of the
+case for it when this was raised. Everything in [../problem.md](../problem.md) under "Where a player
+waits" fails while the server is down, and the most frequent of those moments is exactly the one this
+question would remove. A player who already has tomorrow's puzzle does not notice that the machine is
+being rebuilt.
+
+> So this is no longer only a latency question. It is also the cheapest available mitigation for the
+> downtime bet [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+> takes, and it competes with recovery speed rather than depending on it.
+
+*Reasoned — 2026-09-03, from the records named.*

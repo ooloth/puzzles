@@ -1,6 +1,7 @@
 ---
 number: 0019
 status: accepted
+amended: 2026-09-03
 date: 2026-09-03
 ---
 
@@ -103,8 +104,13 @@ backups-in-depth is being designed rather than assumed.
 **A single volume has no redundancy**, and recovering from a host failure means provisioning,
 restoring and redeploying rather than failing over. That is a downtime bet rather than a data-loss
 bet, and it is taken knowingly: four promises describe the client absorbing server unavailability, so
-nothing a player is doing during play depends on the server being up. It is recorded in
-[../constraints.md](../constraints.md) and it sharpens
+nothing a player is doing *during play* depends on the server being up.
+
+**What does not continue is entry.** Every moment in [../problem.md](../problem.md) under "Where a
+player waits" needs the server, including the most frequent one, so an outage is invisible to somebody
+mid-puzzle and total for somebody arriving — described at
+[nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md). The volume fact
+is recorded in [../constraints.md](../constraints.md), and both together sharpen
 [how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md) rather than
 answering it.
 

@@ -77,7 +77,13 @@ volume.
 
 *Sourced — second-hand from a research agent reading Fly's volumes documentation, 2026-09-03.*
 
-**The client absorbs the outage.** Four promises describe play continuing while the server is
-unreachable, so this is a downtime bet rather than a data-loss bet — and the data-loss half is
-[how is the store backed up?](how-is-the-store-backed-up.md). Keeping the two apart matters, because
-they are answered by different work and fail in different ways.
+**The client absorbs the outage for play, and not for entry** — and the second half of that
+sentence is what makes outage length a product question rather than only an operational one. Solving
+continues, because the client owns the board. Everything in
+[../problem.md](../problem.md) under "Where a player waits" fails, including the most frequent moment
+in the product: opening a puzzle whose content has never reached the device. An outage during a
+morning commute means nobody starts that day's puzzle.
+
+So this is a downtime bet rather than a data-loss bet — the data-loss half is
+[how is the store backed up?](how-is-the-store-backed-up.md) — but the downtime is not free, and an
+earlier framing of it here as absorbed by the client was too generous.

@@ -78,3 +78,13 @@ option carries and nothing has priced.
 
 *Reasoned — from that enumeration and
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md), 2026-09-02.*
+
+
+**An outage blocks an entitlement check, and does not reclaim what has already been delivered.**
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) puts gating before
+the bytes leave and says what has been handed over is the player's. So while the server is down, a
+paying player keeps everything already on their device and cannot obtain anything new — which is the
+same shape as the free experience during an outage rather than a worse one, and worth knowing before
+anyone designs a check that fails closed on every load.
+
+*Reasoned — 2026-09-03, from the record named.*

@@ -77,6 +77,12 @@ it usually matters more than the failure itself.>
 - [The backup turns out not to restore](the-backup-turns-out-not-to-restore.md)
   — a backup nobody has restored and a backup that cannot be restored look identical from outside.
 
+### Threatening the daily rhythm
+
+- [Nobody can start today's puzzle](nobody-can-start-todays-puzzle.md)
+  — an outage is invisible to somebody mid-puzzle and total for somebody arriving, and the arrivals
+  cluster.
+
 ### Threatening availability and cost
 
 - [The write endpoint becomes free storage for strangers](the-write-endpoint-becomes-free-storage.md)

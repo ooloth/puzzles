@@ -131,6 +131,12 @@ may never exist is not yet part of the vision: signing in
 ([can a player explore past puzzles?](questions/can-a-player-explore-past-puzzles.md)), and viewing a
 stats screen ([does a player see stats about their play?](questions/does-a-player-see-stats-about-their-play.md)).
 
+**This list is also what a server outage takes away.** Solving continues without the server, because
+the client owns the board. Everything above needs it, so while the server is down nobody starts a
+puzzle they have not already got — which is the most common moment on the list. That is why how long
+an outage lasts is a product question rather than only an operational one, and it is asked at
+[how much downtime is acceptable?](questions/how-much-downtime-is-acceptable.md).
+
 **No duration is attached to any of this, deliberately.** What a wait is allowed to cost is
 [what latency budget makes "immediately" checkable?](questions/what-latency-budget-makes-immediately-checkable.md).
 What is settled here is which waits exist.

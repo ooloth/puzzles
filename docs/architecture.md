@@ -65,31 +65,12 @@ constraint from intention. The parts still open are listed at the end and are th
         server's API; which is open.        problem.md, ADR-0012
 ```
 
-## What is fixed, and by what
+## What fixed it
 
-- **The client owns puzzle state and mutates it locally.** The server is not on the path from input
-  to paint. [ADR-0004](decisions/0004-the-client-holds-and-mutates-puzzle-state.md),
-  [ADR-0010](decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-- **Puzzle content is served by a runtime rather than shipped as static files.**
-  [ADR-0012](decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md)
-- **The durable copy of a player's work is off their device.**
-  [ADR-0009](decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md)
-- **Anything the server stores is queryable later, across players, without a migration.**
-  [ADR-0011](decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-- **Nothing on the request path scales to zero** — not the compute, not the store.
-  [ADR-0017](decisions/0017-nothing-on-the-request-path-scales-to-zero.md)
-- **The server runs in an ordinary runtime, not a constrained isolate.**
-  [ADR-0018](decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)
-- **The store is a SQLite file the server process opens**, on the same machine, on a disk that
-  survives restart and redeploy. [ADR-0019](decisions/0019-the-store-is-a-file-the-server-process-opens.md),
-  [ADR-0020](decisions/0020-the-stores-engine-is-sqlite.md),
-  [ADR-0021](decisions/0021-the-server-and-its-store-share-a-machine.md),
-  [ADR-0022](decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
-- **One language across every deployable, and it is TypeScript.**
-  [ADR-0006](decisions/0006-one-language-across-every-deployable.md),
-  [ADR-0007](decisions/0007-that-language-is-typescript.md)
-- **The puzzle rules are defined once and shared rather than reimplemented.**
-  [ADR-0005](decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+Every box above names the record that fixed it, and
+[decisions/](decisions/) is the list of what is settled — every record titled by what it settled, so
+the listing is the checklist. It is not repeated here, because a second copy of it would be one more
+thing to keep in step and the folder is already scannable.
 
 ## Two consequences worth stating, because neither is obvious from the diagram
 

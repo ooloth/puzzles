@@ -115,3 +115,11 @@ infrastructure carries. It is listed as conditional there rather than committed 
 only if this question answers yes.
 
 *Reasoned — from that enumeration, 2026-09-02.*
+
+**Signing in is also what an outage takes away, and staying signed in need not be.** Every moment in
+[../problem.md](../problem.md) under "Where a player waits" needs the server, so a player cannot sign
+in while it is down. Whether an *already* signed-in player is ejected is a design choice this question
+should make rather than inherit: a session held locally with a lifetime survives an outage, and one
+revalidated on every load does not.
+
+*Reasoned — 2026-09-03.*

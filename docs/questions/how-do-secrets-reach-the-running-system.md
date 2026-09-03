@@ -18,7 +18,7 @@ secret handling to design." That stops being true one milestone later.
 opens as a file needs no credential at all. A store reached over a network needs one, needs it in
 every environment including a developer's laptop and whatever runs the checks, and needs a story for
 what happens when it is rotated or leaked. That asymmetry belongs in
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md) as a cost
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) as a cost
 of one side, and it is currently counted nowhere.
 
 The cost of getting it wrong is not gradual. A credential committed to a public repository is
@@ -65,7 +65,7 @@ decision is choosing between.
 
 **This is a cost carried by one branch of an open decision and by neither the other.** It is recorded
 as a question rather than folded into
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md) because it
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) because it
 outlives that decision: even with a network store chosen, what a secret is and how it travels is a
 separate choice that the shape does not make.
 

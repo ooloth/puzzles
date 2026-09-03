@@ -27,11 +27,13 @@ which is why it sits ahead of the questions it would otherwise derive from.
 
 ## What would settle it
 
-**This cannot be worked until
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md) lands.**
-An edge runtime removes a whole tier of candidates, and a long-lived process keeps them, so the field
-is not knowable before the shape is. Scaffolding under candidates that the shape would have
-disqualified is the wasted half of this work.
+**The store's shape is settled and it did not narrow this field.**
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) settle a SQLite file
+on an ordinary always-on runtime. All three candidates here ship `node:sqlite` as a built-in, so none
+is advantaged or disqualified by the store. What those records do remove is the edge tier, which was
+never one of the options below.
 
 It is also answered together with
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) rather than
@@ -126,12 +128,22 @@ announcement was not opened.*
 > halves were assumed rather than checked. Where a claim carries a hedge, run the search or say
 > plainly that nobody has.
 
-**This is coupled to the database choice more than its position suggests.** SQLite performance is a
-real difference between these runtimes, and
-[which database, if any?](which-database.md) is not decided and does not need to be for a
-hello world. The honest handling is to note what each runtime does to the later options rather than
-to settle the database early to justify a runtime — which is the direction the brainstorming
-document argues in, and it is backwards.
+**The coupling to the database ran the other way and has now been cut.** The concern was that
+settling a runtime early would settle the store by convenience. The store is settled first
+([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), and it turned out not to advantage any
+runtime, so this is now a free choice rather than a constrained one.
+
+**Driver performance is a live input here, and it is this question's to weigh rather than the store's.**
+The runtimes are not interchangeable on it: `node:sqlite` and `better-sqlite3` sit within about 1.5x
+either way on the one comparison with a disclosed method, Bun's larger published claim is a read-only
+benchmark from 2022 predating `node:sqlite`, and Deno's implementation is native Rust over rusqlite
+with no published numbers at all. Bun also ships a native Postgres client, `Bun.SQL`, which is not
+relevant to a SQLite store but is evidence about where its effort goes. Absolute throughput for single
+keyed inserts is in the tens of thousands per second, against a plausible load under a hundred — so
+none of this binds, and it should not be allowed to decide the runtime by itself.
+
+*Sourced — second-hand from a research agent, 2026-09-03; the Deno rusqlite basis is from a Deno
+GitHub discussion not opened by me.*
 
 **Writing data access against `node:sqlite` keeps that coupling loose, and this is now established.**
 Node's own documentation gives `node:sqlite` a stability of "1.2 - Release candidate", available
@@ -161,7 +173,7 @@ equal, so the coupling is severed. Under a store opened as a file the runtime's 
 native-addon story matters, and the field narrows — by one candidate, per the finding above, rather
 than to a single winner.
 
-> So [is the store a file or a service?](is-the-store-a-file-or-a-service.md) has
+> So [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) has
 > to settle store locality *before* this question is answered, not after. Answering this first and
 > locality later risks a runtime chosen under an assumption that the later answer reverses.
 

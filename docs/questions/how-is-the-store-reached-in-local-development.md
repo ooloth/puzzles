@@ -12,7 +12,7 @@ resolves_into: decision
 earlier.** You cannot choose how to reach the store locally before knowing what the store is, so this
 sits at M2 with the rest of the development loop rather than at M1. What M1 needs is the *comparison*
 — what each candidate arrangement would cost in the daily loop — and that is a finding recorded
-against [is the store a file or a service?](is-the-store-a-file-or-a-service.md),
+against [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
 not a door closed here.
 
 It was briefly filed at M1 as a decision. That was a mistake worth recording: an input to a choice is
@@ -24,7 +24,7 @@ hosted development instance to reach, or a second copy of the data somewhere.
 
 That difference is felt every day rather than once, and it is one of the few places where the two
 candidate arrangements differ in something the maintainer touches constantly. It belongs in the
-argument, and [which database, if any?](which-database.md) records the embedded side of it — "local
+argument, and [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records the embedded side of it — "local
 development with nothing to install or start" — without the network side having been described at
 all.
 
@@ -54,7 +54,7 @@ A decision record in [../decisions/](../decisions/), and content for
 **This sits at M2, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and M1
 is decided on which option keeps technical doors open — a different test, which ergonomics loses. Any
 ergonomic difference between the arrangements can be noted in
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md) without
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) without
 being established first. A daily loop also needs a project to have a loop in, and slice 1 has none.
 
 **Resist filing it earlier.** It reads like an input to the store decision, and being one is not the
@@ -64,7 +64,7 @@ same as blocking it.
 
 Raised 2026-09-02. An adversarial audit of the execution-shape analysis found that local development
 under a network-attached store is discussed nowhere, while the embedded option's zero-install
-property is recorded in [which database, if any?](which-database.md) as a benefit with nothing
+property is recorded in [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) as a benefit with nothing
 weighed against it.
 
 ## Options
@@ -86,7 +86,7 @@ the choice being made now rather than a consequence of it.
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **The embedded side of this comparison is already written down and the network side is not.**
-[Which database, if any?](which-database.md) records "no database process to run, patch or monitor,
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records "no database process to run, patch or monitor,
 and local development with nothing to install or start" as a property of SQLite as a file. Nothing
 anywhere describes what the network-attached equivalent costs, which makes the existing comparison
 one-sided rather than settled.

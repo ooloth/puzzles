@@ -37,7 +37,7 @@ setting: a player-facing wait may not include waking something up.
 **It does not settle where any of it runs**, which is
 [where does this run?](../questions/where-does-this-run.md), or what the store is, which is
 [are puzzles and player records in one store?](../questions/are-puzzles-and-player-records-in-one-store.md)
-and [which database?](../questions/which-database.md). It constrains those choices without making
+and [ADR-0020](0020-the-stores-engine-is-sqlite.md). It constrains those choices without making
 them.
 
 **Work that is not on the request path is untouched.** The generator may sleep, stop, or run nowhere
@@ -108,7 +108,7 @@ one. Nothing in this project has been timed, because nothing in this project exi
 ## Also update
 
 - [x] `questions/README.md` — this is one of the records
-      [is the store a file or a service?](../questions/is-the-store-a-file-or-a-service.md)
+      [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
       resolves into; that question stays open for store locality
 - [x] `constraints.md` — nothing to import. The wake-up figures are vendor claims about specific
       platforms rather than facts about the world, and they belong with

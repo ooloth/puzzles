@@ -59,7 +59,7 @@ one object, which is true of only one candidate, and then generalising a conclus
 *Reasoned — corrected 2026-09-02 while enumerating failure domains across the four candidate
 arrangements. That question is resolved and deleted; the per-arrangement comparison now sits in the
 Findings of
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md).*
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).*
 
 **Fly.io states the single-volume case in its own words**, for whichever arrangement ends up on one:
 "If your app needs a volume to function, and the NVMe drive hosting your volume fails, then that

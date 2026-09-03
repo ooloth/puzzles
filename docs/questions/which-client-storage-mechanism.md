@@ -65,7 +65,7 @@ independent of how good it is.
 
 It is a **bundle**, so adopting it answers several open questions at once — this one, whether state
 is [a snapshot or an event log](is-puzzle-state-a-snapshot-or-an-event-log.md), much of
-[which database](which-database.md), and part of what the server holds, since its sync
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md), and part of what the server holds, since its sync
 backend is one. Those
 answers may each be right, but a tool that supplies them is not an argument for them, and
 [README.md](README.md) is about the order in which they are reached.
@@ -93,7 +93,7 @@ service, the licence, and whether event sourcing is required or merely idiomatic
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **If the client format is a blob the server never reads, the server's store barely matters.**
-See [which database, if any?](which-database.md).
+See [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md).
 
 **A library is a separate and much smaller decision.** Whether to use `idb`, Dexie or nothing over
 the chosen API is contained behind a persistence module and cheap to reverse, so it does not need

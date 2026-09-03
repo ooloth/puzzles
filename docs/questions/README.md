@@ -195,7 +195,7 @@ derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
-     - **Must answer:** [is-the-store-a-file-or-a-service](is-the-store-a-file-or-a-service.md) — or else the runtime is chosen against a store locality that reverses it, and moving player data between a file and a service once players have work in it is the one migration M1 can create
+     - **Must answer:** [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — or else the runtime is chosen against a store locality that reverses it, and moving player data between a file and a service once players have work in it is the one migration M1 can create
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
@@ -226,6 +226,8 @@ derivation.
      - **Must answer:** [where-does-this-run](where-does-this-run.md)
      - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md)
 6. **A change made locally reaches the deployment.**
+   - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — a deploy replaces the process holding the database open
+     - **Must answer:** [how-does-a-deploy-avoid-disturbing-the-store](how-does-a-deploy-avoid-disturbing-the-store.md) — or else the first deploy is the first time two processes could hold one file, which is the arrangement SQLite's own corruption list warns about, and it recurs on every change rather than once
    - **Must answer:** [where-does-this-run](where-does-this-run.md)
    - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md)
@@ -253,7 +255,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
-   [is the store a file or a service?](is-the-store-a-file-or-a-service.md).
+   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
 6. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
 7. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
@@ -290,7 +292,7 @@ board for six milestones and meeting the store for the first time with a finishe
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
 4. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
-5. [Which database?](which-database.md) — the class was settled at M1 as part of the execution shape;
+5. [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) — the class was settled at M1 as part of the execution shape;
    the engine waits until here, because choosing between them without an access pattern is choosing
    by reputation.
 6. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
@@ -300,7 +302,20 @@ board for six milestones and meeting the store for the first time with a finishe
    architecture with no backup or restore procedure in it. Distinct from
    [is the store's backup restorable?](is-the-stores-backup-restorable.md) at M11, which asks whether
    anyone has actually rehearsed one.
-7. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+7. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+   — journal mode, synchronous level and busy timeout decide whether a committed write survives a
+   power cut, which [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left
+   open. Answered here because the first row is the first thing that could be lost, and the question
+   is framed to test whether the safest setting costs anything at all rather than to position a dial.
+8. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
+   data to lose is when it is cheapest, and
+   [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) already schedules the change
+   that forces one.
+9. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+   — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+   commits to surviving host replacement and the machine cannot deliver that alone. This is the main
+   lever on how long an outage lasts, and it is ours rather than a provider's.
+10. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
    none.
@@ -426,6 +441,11 @@ players are losing work, and nothing currently could tell us either way.
     unless it is forced to.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
+13. [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the
+    scans [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
+    preserves are long reads, and a long read blocks WAL checkpointing. It sits here rather than at M3
+    because there is nothing worth analysing until there is play to analyse, and because whatever the
+    backup answer produces may already be the copy these reads should run against.
 12. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
     has to end in something, and the player cannot be told, because
     [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
@@ -500,7 +520,7 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
 [what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
 — research.
-[How long does a store round trip take?](how-long-does-a-store-round-trip-take.md) — worth running to
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — worth running to
 turn a *Reasoned* claim in [../constraints.md](../constraints.md) into a *Measured* one. The file
 records why the number decides nothing about store locality, so that it does not get promoted back
 into M1.

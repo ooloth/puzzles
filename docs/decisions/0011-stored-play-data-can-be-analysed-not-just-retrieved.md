@@ -51,7 +51,7 @@ will not be the reason they cannot be answered.
   decision. The option costs almost nothing now precisely because there is nothing stored yet.
 
 - **An opaque blob store, queried never.** Genuinely simpler, and it was the live possibility that
-  made [which database, if any?](../questions/which-database.md) describable as a
+  made [ADR-0020](0020-the-stores-engine-is-sqlite.md) describable as a
   non-decision: bytes under a key, no schema, nothing to keep in step. Rejected because it forecloses
   the generator's feedback loop, which is not a nice-to-have — without it there is no way to tell
   whether generated puzzles are good, and `../problem.md` makes that the point of the project.
@@ -74,7 +74,7 @@ anyone deciding to take them on. Nothing here licenses that — the option prese
 store's shape, not about what goes into it.
 
 **It pre-empts part of a question that is still open.**
-[Which database?](../questions/which-database.md) was describable as a possible
+[ADR-0020](0020-the-stores-engine-is-sqlite.md) was describable as a possible
 non-decision only while an opaque store was live. It is now a real choice, and this record is why.
 
 ## Revisit when

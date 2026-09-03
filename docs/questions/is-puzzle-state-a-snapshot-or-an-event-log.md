@@ -119,3 +119,13 @@ That matters because deriving rather than storing is the default the portable st
 and denormalisation is the case that has to be argued. An event log satisfies it without effort;
 a snapshot satisfies it as long as nothing accumulates around it, which is a discipline rather
 than a property. See [../standards/README.md](../standards/README.md) for where those live.
+
+**A trap inherited from [../brainstorming/](../brainstorming/), recorded so it is visible when a shape
+is chosen.** That material proposes storing event payloads as binary blobs, for bandwidth and tamper
+resistance. A blob is opaque to SQL, which is exactly what
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) rules out, and
+nothing in the source notices the contradiction. An event log whose events cannot be queried satisfies
+neither half of what it is for.
+
+*Unverified — no source recorded for anything in that material; roughly fifty numeric claims across it
+carry no method, date or working link.*

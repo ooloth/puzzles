@@ -21,7 +21,7 @@ method."
 
 **The thing that would make a file store regrettable is not the engine.** SQLite is about as
 battle-tested as software gets. The replication tooling is not: it is a much smaller project, and
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md) records a report of a
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) records a report of a
 critical data-loss bug in a 2025 Litestream release and an unexplained corruption-after-restore issue,
 both second-hand and neither re-checked. A single recovery path resting on a single small dependency
 is the weakest link in the chain, and it is worth designing around rather than hoping about.
@@ -60,7 +60,7 @@ whichever record settles the store's locality can point at.
 ## Source
 
 Raised 2026-09-03, while settling
-[is the store a file or a service?](is-the-store-a-file-or-a-service.md). The analysis found no
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md). The analysis found no
 technical winner between the engines and no operational winner large enough to decide it, which left
 the durability of the last copy as the thing actually being chosen between. Separated into its own
 question so that it gets a research pass rather than riding along inside a record about something
@@ -117,3 +117,17 @@ Independence of recovery paths has to mean independence of the things they depen
 independence of the mechanisms.
 
 *Sourced — second-hand from a research agent, 2026-09-02.*
+
+**Fly's own documentation says not to combine LiteFS with autostop**, because the proxy can stop and
+restart machines with no awareness of LiteFS lease state. Not directly binding —
+[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) already rules out
+autostop on the request path — but it is the kind of interaction between two platform features that
+this question has to check for whatever combination it lands on.
+
+*Sourced — second-hand from a research agent reading Fly's documentation, 2026-09-03.*
+
+**Server-side storage brings a recovery point with it, and it is a number somebody has to choose.**
+How much recent work disappears when the machine does is set by the replication interval, not by the
+engine. Litestream's default is one second. Nothing has said what is acceptable, and
+[how much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md) asks the
+client-side half of the same question.

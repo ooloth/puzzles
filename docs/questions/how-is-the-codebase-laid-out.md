@@ -88,7 +88,7 @@ argument for any of them. It assumes **workspaces** rather than one package. It 
 from backend** as separate deployables. It puts rules in a **per-game module** (`core/sudoku`)
 rather than one shared module, which the second axis above has not settled. And `store/` couples
 server-side and client-side storage in one place, which is two decisions —
-[which database](which-database.md) and
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
 [which client storage mechanism](which-client-storage-mechanism.md) — that are open and may not want
 the same home.
 

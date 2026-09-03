@@ -51,7 +51,7 @@ background copy or a background check.
 
 **It does not say there is a database**, only that whatever [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) established has somewhere to
 live. Whether that is a relational database, a key-value store or a file is
-[which database, if any?](../questions/which-database.md), open.
+[ADR-0020](0020-the-stores-engine-is-sqlite.md), open.
 
 ## Rejected
 

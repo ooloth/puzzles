@@ -96,8 +96,8 @@ exist and narrow this. It is a standing cost at every write site rather than a o
 
 ## Also update
 
-- [ ] `questions/README.md` — [which database?](../questions/which-database.md) is answered by this
-      record; its engine eliminations are mined into the Rejected section above and it awaits deletion
+- [x] `questions/README.md` — the engine question is answered by this record; its eliminations are
+      mined into the Rejected section above and it is deleted
 - [x] Nothing in `constraints.md` — the SQLite facts that bear on this are recorded against
       [how is the store backed up?](../questions/how-is-the-store-backed-up.md), where the design that
       depends on them lives

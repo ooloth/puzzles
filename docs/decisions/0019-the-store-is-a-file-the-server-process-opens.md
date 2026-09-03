@@ -131,12 +131,11 @@ reason.
 
 ## Also update
 
-- [ ] `questions/README.md` — three questions are answered and await mining and deletion:
-      [is the store a file or a service?](../questions/is-the-store-a-file-or-a-service.md) by this
-      record, [which database?](../questions/which-database.md) by
-      [ADR-0020](0020-the-stores-engine-is-sqlite.md), and
-      [how long does a store round trip take?](../questions/how-long-does-a-store-round-trip-take.md),
-      which measures a round trip that no longer exists
+- [x] `questions/README.md` — three questions were answered, mined and deleted: the store-locality
+      question by this record, the engine question by
+      [ADR-0020](0020-the-stores-engine-is-sqlite.md), and the store round-trip measurement, which
+      measured a round trip that no longer exists. Five new questions follow from this chain and are
+      placed at M1, M3 and M11
 - [x] `constraints.md` — imports the fact that a volume attached to one machine is not replicated and
       its loss is unrecoverable without an off-machine copy
 - [x] Nothing in `guarantees/` — this promises a player nothing. What is owed them about durability is

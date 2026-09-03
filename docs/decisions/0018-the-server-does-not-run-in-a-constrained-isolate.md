@@ -101,7 +101,7 @@ TypeScript, which is
 - **Decide the runtime tier when something forces it.** The honest "not yet". Rejected because the
   first deployment picks the tier, and picking the isolate settles the storage class silently — the
   argument
-  [is the store a file or a service?](../questions/is-the-store-a-file-or-a-service.md)
+  [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
   opens with. Nothing about deploying a hello world to an edge platform announces that a database
   class has just been chosen, which is what makes this the kind of door worth closing deliberately.
   **Reverses if** the store class is settled first, at which point the runtime tier follows from it
@@ -139,7 +139,7 @@ observable about the edge.
 ## Also update
 
 - [x] `questions/README.md` — this is one of the records
-      [is the store a file or a service?](../questions/is-the-store-a-file-or-a-service.md)
+      [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
       resolves into; that question stays open for store locality
 - [x] `questions/what-runs-typescript-outside-the-browser.md` — the isolate tier is out of its field,
       which leaves ordinary runtimes only

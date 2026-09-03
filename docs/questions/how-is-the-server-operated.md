@@ -54,8 +54,43 @@ rather than return a constant.
 **Backing up a live SQLite file by copying it is unsafe.** In write-ahead-log mode an ordinary file
 copy can capture a torn write; the database's own online backup interface exists for this. Recorded
 here rather than in [../constraints.md](../constraints.md) because it only applies if
-[which database, if any?](which-database.md) lands on an embedded one.
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) lands on an embedded one.
 
 *Unverified — no source recorded.*
 
 **Most of this disappears on a managed platform and none of it disappears on a virtual machine.**
+
+### The operational comparison this inherits, and why this question got bigger
+
+*Mined 2026-09-03 from the store-locality question, since resolved into
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and deleted.*
+
+**This question's milestone was set on an assumption that no longer holds.** It sits at M16 with the
+note that its size "is set entirely by M1's hosting choice: a managed platform supplies most of this
+and a bare machine supplies none of it". M1 has now chosen a file on a machine we operate, so the
+second branch is the live one and this question is larger than its position suggests. Whether it moves
+earlier is a sequencing judgement for whoever next runs the milestone steps.
+
+**Setup effort is a wash between an embedded store and a database server, which is the opposite of
+the folklore.** Standing up continuous replication plus a restore drill is about as much work as
+standing up a daemon plus its backup story — roughly 9–14 hours against 8–16, both including the base
+machine work. Day-to-day attention is near-identical, within about fifteen minutes a month.
+
+**The real operational difference is annual and singular**: a database server has major-version
+upgrades, two to six hours with downtime, roughly yearly to stay current. A file has no equivalent,
+because the library version travels with the runtime.
+
+*Reasoned — 2026-09-03. Estimates for someone competent who does not do this daily; nobody has run
+either.*
+
+**What a machine we operate owns, enumerated**: a volume and its failure mode, a backup mechanism, a
+restore procedure and the discipline of rehearsing it, a process manager, boot persistence, a reverse
+proxy, TLS issuance and renewal, firewall and SSH hardening, unattended security updates, log rotation
+before a disk fills, external uptime monitoring because a machine cannot watch itself, and an alerting
+channel.
+
+**The same inventory, written out in [../brainstorming/](../brainstorming/) for exactly this
+architecture, contained no backup or restore procedure.** Somebody described crash recovery, reboot
+survival and three separate SSH-lockout recovery routes and omitted the step protecting a player's
+work. That is the shape of the risk here: no single task is hard, and the list is long enough that
+something falls off it.

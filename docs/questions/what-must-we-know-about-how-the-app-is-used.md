@@ -21,7 +21,7 @@ with durability, and it holds regardless of how
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) are
 eventually answered. It is the one input that can make
-[which database, if any?](which-database.md) a real decision rather than a formality.
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) a real decision rather than a formality.
 
 It also decides whether several promises are checkable.
 [Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
@@ -87,6 +87,6 @@ the answer here is not "nothing", independent of any appetite for product analyt
 **[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles that whatever is stored is analysable, not whether anything about usage is
 collected at all.**
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles the
-shape of [which database, if any?](which-database.md) — that stored data can be queried
+shape of [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) — that stored data can be queried
 rather than only retrieved. Whether anything about usage is collected in the first place is this
 question, and it is a different one.

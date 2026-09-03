@@ -86,6 +86,58 @@ def check_links():
                 problems.append(f'BROKEN LINK  {path} -> {link}')
 
 
+# A path in backticks is a reference that looks like a link and is checked like
+# prose. docs/decisions/README.md already warns that these "are invisible to
+# scripts/check-docs.py, which matches markdown links only" — and it was right:
+# on 2026-09-03 two dead ones were found by hand, both inside "Also update"
+# checkboxes that read as completed work. ADR-0008 pointed at a question file
+# deleted when the register of open doors was abolished, and ADR-0003 at two
+# guarantee files that stopped existing when that folder moved to one promise per
+# file. Neither is reachable by check_links, and both had been wrong for weeks.
+#
+# Only paths ending in a file extension are checked. A backticked word is usually
+# a field name, and "N/A" contains a slash, so anything broader reports noise.
+BACKTICKED_PATH = re.compile(r'`([^`\s]+\.(?:md|py))`')
+
+# Filenames here are lowercase-kebab, so an uppercase letter means either one of
+# the three shouting filenames or a placeholder in a template — `NNNN-kebab-title.md`
+# names a naming convention rather than a file. Angle brackets are the other
+# placeholder form. Neither is a reference, so neither is checked.
+SHOUTING_FILENAMES = ('README.md', 'CLAUDE.md', 'MEMORY.md')
+
+# Where a backticked path may be rooted. All four conventions are in use and which
+# one a given file means is not worth legislating; resolving under any is enough.
+PATH_BASES = ('docs', 'scripts', '.')
+
+
+def is_placeholder(ref):
+    if '<' in ref:
+        return True
+    return any(c.isupper() for c in ref) and os.path.basename(ref) not in SHOUTING_FILENAMES
+
+
+def check_backticked_paths():
+    """A path written in backticks resolves to a file that exists.
+
+    check_links only sees markdown links, and docs/decisions/README.md already warns
+    that bare paths "are invisible to scripts/check-docs.py". This is the report that
+    makes the warning unnecessary.
+    """
+    for root, path in markdown_files():
+        text = without_comments(open(path).read())
+        for n, line in enumerate(text.splitlines(), 1):
+            for ref in BACKTICKED_PATH.findall(line):
+                if is_placeholder(ref):
+                    continue
+                bases = (root,) + PATH_BASES
+                if any(os.path.exists(os.path.normpath(os.path.join(b, ref))) for b in bases):
+                    continue
+                problems.append(
+                    f'DEAD PATH    {path}:{n} `{ref}` does not exist under {root}/, '
+                    f'docs/, scripts/ or the repo root'
+                )
+
+
 ANY_LINK = re.compile(r'\]\(([^)]*)\)')
 
 
@@ -371,6 +423,7 @@ def check_frontmatter():
 
 
 check_links()
+check_backticked_paths()
 check_heading_anchors()
 check_indexes()
 check_decision_checkboxes()

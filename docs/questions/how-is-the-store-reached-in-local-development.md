@@ -38,11 +38,9 @@ that does not.
 Describing what a maintainer and an agent each have to do to get a working store, from a clean
 checkout, under each candidate arrangement — and what happens when that step fails with no network.
 
-*Corrected 2026-09-02: an earlier version justified the offline case by citing
-[../problem.md](../problem.md) on work happening "in gaps and transit". That passage is about
-**players**, not about the maintainer, and nothing records where or how the maintainer works. The
-offline case is still worth covering; the reason given for it was borrowed from a sentence about
-somebody else.*
+Note that [../problem.md](../problem.md)'s description of work "in gaps and transit" is about
+**players**. Nothing records where or how the maintainer works, so the offline case here rests on
+nothing yet and is worth covering rather than assuming.
 
 Worth checking rather than assuming: whether a development instance of a managed store can be free
 and always-on, whether the local and deployed stores can be the same engine and version, and whether
@@ -53,20 +51,14 @@ anything about the arrangement makes it possible to run against production data 
 A decision record in [../decisions/](../decisions/), and content for
 [../verification.md](../verification.md) once there is something to run.
 
-**This sits at M2 only, and it went to M1 and back twice before settling there.** The second time was
-worse than the first: a separate label for research questions had just been invented, and this got
-filed under it because it *fitted the category* rather than because the M1 decision needed it. The
-label has since been removed for that reason — a new category invites sorting into it, and fitting a
-category is not the same as blocking something.
+**This sits at M2, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and M1
+is decided on which option keeps technical doors open — a different test, which ergonomics loses. Any
+ergonomic difference between the arrangements can be noted in
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) without
+being established first. A daily loop also needs a project to have a loop in, and slice 1 has none.
 
-What M1 actually needs from this subject is nothing. Developer ergonomics is a comfort property, and
-the criterion M1 is being decided on is which option keeps technical doors open — those are different
-tests, and this one loses. Any ergonomic difference between the arrangements can be noted in
-[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) as a known
-consideration without being established first.
-
-There is also a practical bar: a daily loop needs a project to have a loop in. At slice 1 there is
-no project.
+**Resist filing it earlier.** It reads like an input to the store decision, and being one is not the
+same as blocking it.
 
 ## Source
 

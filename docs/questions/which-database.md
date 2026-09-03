@@ -53,12 +53,12 @@ supplied, and gives no concurrent writers and no second instance.
 
 *PGlite — Postgres compiled to WebAssembly, embedded.* Same SQL as a Postgres server, running
 in-process against a local directory. The one embedded option whose queries survive a later move to a
-network store unchanged. Two things this entry omitted until 2026-09-02, both from PGlite's own
-documentation: it holds **a single exclusive connection**, which is a harder limit than SQLite's
-one-writer-many-readers, and its stated use cases are testing, local development, web containers and
-on-device AI — serving an application is not among them. See
-[which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md),
-where it is being checked.
+network store unchanged. Two things from PGlite's own documentation cut against it: it holds **a
+single exclusive connection**, a harder limit than SQLite's one-writer-many-readers, and its stated
+use cases are testing, local development, web containers and on-device AI, with serving an
+application not among them.
+[Which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
+drops it for those reasons.
 
 *Managed Postgres.* Everything, forever, for a monthly fee and a network hop. The right answer if
 per-player queryable data turns out to be substantial, and considerable overhead if it does not.
@@ -75,12 +75,11 @@ than a different vendor, and the one that pairs with an edge runtime.
 [Which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
 establishes what can live in the process at all, as an input to the locality decision at M1. This
 question picks an engine given an access pattern and a schema, and needs neither of those to exist
-before that one is answered. The PGlite claim recorded here — that its queries survive a move to a
-network store unchanged — is what makes that earlier question worth running, and it is unsourced.
+before that one is answered. It closes the in-process field to SQLite.
 
-**A measurement this question needs, which was briefly attached to M1 and belongs here.** Whether an
-engine answers [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s
-questions — which puzzles get finished, where players stall, whether a grade predicts anything —
+**A measurement this question needs.** Whether an engine answers
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s questions —
+which puzzles get finished, where players stall, whether a grade predicts anything —
 acceptably at plausible volume is worth running rather than assuming. It sits with this question
 rather than with
 [what execution shape does the server have?](what-execution-shape-does-the-server-have.md) because it
@@ -88,8 +87,7 @@ discriminates between *engines* and not between localities: both sides of that l
 that can express the queries. It needs a schema and a synthetic history, which is why M3 is the
 earliest it can be run rather than merely where it is filed.
 
-*Reasoned — 2026-09-02, while scoping the spike that blocks the shape decision down to what actually
-blocks it.*
+*Reasoned — from what separates an engine choice from a locality choice.*
 
 **Two families span both sides of the embedded/network line, so the class does not pick the engine.**
 

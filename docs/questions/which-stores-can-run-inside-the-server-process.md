@@ -11,17 +11,14 @@ resolves_into: constraint
 **One half of the store decision is a field nobody has established.** Whether the store sits in the
 process or across a network is the hub of
 [what execution shape does the server have?](what-execution-shape-does-the-server-have.md), and that
-question cannot be argued fairly while only one side of it has been enumerated. The network side has
-a long list of real, current options. The in-process side has been treated as though it means SQLite,
-which is an assumption inherited from an architecture this project no longer has.
+question cannot be argued fairly while only one side of it is enumerated. The network side has a long
+list of real, current options. The in-process side is easy to assume means SQLite, and this file is
+where that assumption gets tested rather than inherited.
 
-**The specific gap is what an in-process store can offer beyond simplicity.** SQLite works and
-nobody doubts it; what is unknown is whether anything in-process also keeps a *portable exit*.
-PGlite — Postgres compiled to WebAssembly and run in the process — is recorded in
-[which database, if any?](which-database.md) as "the one embedded option whose queries survive a
-later move to a network store unchanged". If that is true and it is usable, the in-process branch
-stops being a one-way door and the whole trade changes shape. If it is not, the in-process branch
-means SQLite and a migration, which is what has been assumed without checking.
+**The question is what an in-process store offers beyond simplicity.** SQLite works. What matters is
+whether anything in-process also keeps a *portable exit* — because if not, the in-process branch is a
+one-way door and leaving it costs a migration. PGlite is the only candidate that would have offered
+one, and the Options section records why it does not.
 
 **It is a different question from [which database, if any?](which-database.md)**, which picks an
 engine at M3 given an access pattern and a schema. This asks what is *possible* in-process at all,
@@ -29,18 +26,12 @@ which is an input to a decision being taken now and needs neither.
 
 ## What would settle it
 
-Running each candidate, briefly, rather than reading about it. For each: does it start, does it hold
-a schema, does it answer a query, what does it cost in memory and start-up time, and does anything
-about the runtime it needs conflict with
-[ADR-0007](../decisions/0007-that-language-is-typescript.md).
+The field is settled by argument rather than by measurement, and the Options section carries it: each
+candidate is disqualified by a documented property, not by a number nobody has. Nothing needs
+running.
 
-Three things worth checking rather than assuming, because each would change the answer on its own:
-whether PGlite's WebAssembly runtime is available under every candidate TypeScript runtime, whether
-its resource cost is plausible for a small deployment, and whether the claim that its queries port
-unchanged to a network Postgres survives contact with anything real.
-
-**Budget hours.** This is a viability check, not a comparison — the question is which candidates are
-alive, not which is best.
+**What would reopen it** is a candidate nobody has considered, or a change to the concurrency model
+of one already dropped. Each rejection names its own reversal condition.
 
 ## Resolves into
 
@@ -64,9 +55,9 @@ identical to one that was considered, and this file exists so that nobody re-ope
 *SQLite*, via `node:sqlite` or `bun:sqlite`. Viability was never in doubt. What it costs to leave is
 the open part, and that belongs to the locality decision rather than here.
 
-**PGlite — dropped 2026-09-02.** In-process Postgres compiled to WebAssembly, and the candidate this
-file was largely opened for. Three things against it, of which the first would disqualify it alone:
-it holds **a single exclusive connection** to the database, which is a harder limit than SQLite's
+**PGlite — dropped.** In-process Postgres compiled to WebAssembly. Three things against it, of which
+the first disqualifies it alone: it holds **a single exclusive connection** to the database, a harder
+limit than SQLite's
 one-writer-many-readers and would serialise every request through one connection. Its stated use
 cases are testing, local development, web containers and on-device AI — serving an application is not
 among them. And the only thing it buys over SQLite is Postgres dialect portability, which is a
@@ -75,34 +66,32 @@ cheaper exit bought with a worse concurrency model and a tool used off its own p
 *It would reverse if* PGlite's connection model changed, or if query portability to a network
 Postgres became the deciding property of the store choice rather than one input among several.
 
-**DuckDB — dropped 2026-09-02.** An OLAP engine: columnar, built for analytical scans, and a poor fit
-as a system of record taking many small writes and point reads, which is what
+**DuckDB — dropped.** An OLAP engine: columnar, built for analytical scans, and a poor fit as a
+system of record taking many small writes and point reads, which is what
 [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md)
-establishes this store is for. It was listed by pattern-matching
+establishes this store is for. Matching
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s word
-"analysed" to an analytics engine, when that record asks for an operational store that can *answer*
-questions later rather than for a warehouse.
+"analysed" to an analytics engine is the trap: that record asks for an operational store that can
+*answer* questions later, not for a warehouse.
 
 *It would reverse if* the analytical workload grew enough to want a store of its own, at which point
 it is an addition beside the system of record rather than a replacement for it.
 
-*Nothing.* Recorded because it was a live outcome while the field was still open, and it did not
-happen: SQLite survives.
+*Nothing.* A live outcome while the field was open, and not the one that happened.
 
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Nothing has been run.** No candidate has been started here, and every claim above about what they
-can do comes from documentation or from another question file rather than from observation.
+**No candidate has been run here.** Every claim rests on vendor documentation, which is enough to
+disqualify on a stated architectural property and not enough to confirm one would work well. If
+SQLite ever needs defending on more than reputation, that is the gap.
 
-*Unverified — the question has been posed and not answered.*
+### What PGlite actually is
 
-### PGlite is weaker than it was described as, and the reasons are checkable
-
-**It does run server-side, so the common assumption that it is a browser tool is too narrow.** Its
-documentation says "PGlite can be used in both Node/Bun/Deno or the browser", and under those
-runtimes it persists to the native filesystem rather than to IndexedDB.
+**It runs server-side, so treating it as a browser-only tool is too narrow.** Its documentation says
+"PGlite can be used in both Node/Bun/Deno or the browser", and under those runtimes it persists to
+the native filesystem rather than to IndexedDB.
 
 *Sourced — [pglite.dev/docs](https://pglite.dev/docs/), read 2026-09-02.*
 
@@ -129,9 +118,9 @@ single exclusive connection can serve this app, and whether query portability to
 is worth accepting that plus a tool used outside its stated purpose — when SQLite is in-process, less
 constrained on concurrency, and battle-tested for exactly this shape.
 
-**The premise that makes it worth asking at all remains unverified.** That its queries survive a move
-to a network Postgres unchanged is recorded in [which database, if any?](which-database.md) without a
-source. It is more plausible now that the thing is confirmed to be Postgres in WebAssembly rather
-than a reimplementation, but plausible is not established.
+**Its one selling point here is unverified.** That its queries survive a move to a network Postgres
+unchanged is recorded in [which database, if any?](which-database.md) without a source. Being
+genuinely Postgres in WebAssembly makes it plausible; plausible is not established, and it does not
+matter unless the connection model changes.
 
 *Reasoned — from the sourced facts above.*

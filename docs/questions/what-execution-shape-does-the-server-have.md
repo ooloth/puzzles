@@ -54,8 +54,7 @@ machine, and that is a consequence of the cell rather than an independent choice
 
 ### The order the remaining work has to happen in
 
-Agreed 2026-09-02, after two attempts at a sequence were found unsound and a third was audited
-adversarially. The first two steps are inputs; only after them is anything decidable.
+The first two steps are inputs. Only after them is anything decidable.
 
 1. **Redraw the field on the three axes below**, so that no argument reasons from a vendor name to a
    runtime constraint.
@@ -83,16 +82,12 @@ Only then is [what runs TypeScript outside the browser?](what-runs-typescript-ou
 safe to answer, because store locality constrains the runtime field and a runtime chosen first can be
 reversed by it.
 
-### The spike that was designed for this, and why none of it is left
+### No spike blocks this
 
-**Written after asking what each measurement would change, which should have come first.** An earlier
-design measured store round-trip latency across five arrangements. Working through what each number
-would move found that almost none of it moves this decision, and
-[../constraints.md](../constraints.md) already warns about exactly that failure — "a real number
-about an irrelevant quantity ends arguments it should not."
-
-**There is no blocking spike left.** Everything that was in one has either moved to a milestone that
-needs it or been answered:
+Each candidate measurement was checked against what its result would change, and almost none of it
+changes this decision. [../constraints.md](../constraints.md) warns about that shape of error
+directly: "a real number about an irrelevant quantity ends arguments it should not." What remains
+belongs elsewhere or is answered:
 
 - **What can run in-process** is closed —
   [which stores can run inside the server process?](which-stores-can-run-inside-the-server-process.md)
@@ -444,57 +439,50 @@ and ask what remains. The point was to find out whether a technical answer exist
 operational argument, or whether the operational argument *is* the decision. It turns out to be the
 former, and the result is sharper than expected.
 
-**Half the edge argument holds and half of it collapsed under scrutiny. This entry records both,
-because the collapsed half was written here first as though it were settled.**
+**The edge's one advantage is useless here, and its constraints are narrower than they look. Neither
+half settles the cell.**
 
-**What holds: the edge's one advantage is useless here.** Its technical proposition is putting
-compute near the user to cut latency. This project has recorded that the server is not on any path a
-player waits on, that
+**What holds:** its technical proposition is putting compute near the user to cut latency. This
+project has recorded that the server is not on any path a player waits on, that
 [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
 is structural rather than a duration, and that no server latency budget exists anywhere. So whatever
 the edge tier costs, it is not buying anything this system needs.
 
-**What collapsed: the constraints are narrower than stated, and one of them is gone.** An adversarial
-review found, and I verified against Cloudflare's own documentation on 2026-09-02:
+**What does not hold: three constraints commonly cited against the edge tier.**
 
-- **A filesystem exists.** `node:fs` is implemented over a memory-backed virtual filesystem with a
-  writable `/tmp`. The claim "no filesystem at all", written into this file earlier and attributed to
-  my own reading, was wrong. What is true is narrower: "the contents of `/tmp` are not persistent and
-  are unique to each request", so there is no *persistent* filesystem — which still rules out an
-  embedded database but is a different and smaller claim.
+- **A filesystem exists**, though not a persistent one. `node:fs` runs over a memory-backed virtual
+  filesystem with a writable `/tmp`, and "the contents of `/tmp` are not persistent and are unique to
+  each request". That still rules out an embedded store, but "no filesystem" overstates it.
 - **The `eval` restriction applies at Worker startup, not to request handling**, and is adjustable by
-  compatibility flag. Reported by the review; I did not open the flag documentation myself.
+  compatibility flag. Second-hand; the flag documentation is unopened.
 - **The generator has a first-class home on the same platform.** Cloudflare Containers is generally
   available on the Workers Paid plan and is positioned for "Resource-intensive applications that
   require CPU cores running in parallel, large amounts of memory or disk space" and "Applications and
-  libraries that require a full filesystem, specific runtime, or Linux-like environment". That was the
-  strongest leg of the case against the edge tier and it does not survive.
+  libraries that require a full filesystem, specific runtime, or Linux-like environment", which is the
+  strongest thing the edge tier is said to lack.
 
-> So the claim "an edge runtime is dominated" is **withdrawn**. It was not supportable, and it was
-> written into this file as a finished argument before anyone had tried to break it.
+> So an edge runtime is not dominated. It is worse on several axes and disqualified on none.
 
-**The framing error underneath it: the platform and the runtime tier are not the same axis.** Cell 5
-was drawn as "an edge runtime with an edge store", which silently equated choosing Cloudflare with
-choosing a constrained isolate. Containers means a platform in the edge tier can run an ordinary
-container — which is cell 3. So the real question is narrower than the cell implies: whether the
-*server* runs in a constrained isolate, which is separable from where anything is hosted.
+**Platform and runtime tier are not the same axis.** Cell 5 reads as "an edge runtime with an edge
+store", which equates choosing Cloudflare with choosing a constrained isolate. Containers means a
+platform in the edge tier can run an ordinary container — cell 3. The real question is narrower:
+whether the *server* runs in a constrained isolate, which is separable from where it is hosted.
 
 **What survives against the isolate is one argument, and it is not about capability.** Running the
 server in an isolate while the generator runs in a container is two runtimes for one maintainer,
 which is the cost
 [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) exists to avoid — its own words
 are that such an arrangement satisfies it "by accident rather than by fit". That is a real argument
-and a much weaker one than the case previously recorded here.
+and a weaker one than a capability argument would be.
 
 *Sourced — Cloudflare's `node:fs`, Containers and D1 limits documentation, read by me 2026-09-02, and
 the records named. The compatibility-flag claim is second-hand.*
 
-**A figure recorded here earlier was also wrong.** This file said D1's free tier is 5 GB. Cloudflare's
-limits page gives a **maximum database size of 500 MB on the free plan** and 10 GB on paid; the 5 GB
-figure came from the pricing page, which is measuring included storage rather than the ceiling. The
-same page describes D1 as designed "for horizontal scale out across multiple, smaller (10 GB)
-databases, such as per-user, per-tenant or per-entity databases", which bears on whether one D1 is a
-sensible home for cross-player analysis.
+**D1's ceiling and its included storage are different numbers, and the pricing page gives only the
+second.** The limits page gives a **maximum database size of 500 MB on the free plan** and 10 GB on
+paid, against 5 GB of included storage on the pricing page. The limits page describes D1 as designed
+"for horizontal scale out across multiple, smaller (10 GB) databases, such as per-user, per-tenant or
+per-entity databases", which bears on whether one D1 is a sensible home for cross-player analysis.
 
 *Sourced — Cloudflare's D1 limits documentation, read by me 2026-09-02.*
 
@@ -537,10 +525,10 @@ Both are constraints the other two do not carry.
 
 ### The store's latency can be felt — but the thing that decides it is not in-process versus network
 
-**There are moments where a player waits on the server**, and the earlier finding that "nothing is
-waiting on it" was about the *input* path only. Picking up a second device that must fetch newer
-state, refreshing a stale archive on regaining connectivity, and signing in are all moments where the
-client is blocked on a response. None is promised anything, and all would be felt.
+**There are moments where a player waits on the server.** The claim that nothing waits on it covers
+the *input* path only. Picking up a second device that must fetch newer state, refreshing a stale
+archive on regaining connectivity, and signing in are all moments where the client is blocked on a
+response. None is promised anything, and all would be felt.
 
 **The arithmetic says the store's contribution is invisible next to the network — unless the store
 was asleep.** [../constraints.md](../constraints.md) records a 3g RTT floor around 270ms, 2g at
@@ -586,14 +574,13 @@ choosing something that becomes unmaintained, deprecated or unaffordable. SQLite
 about as far from that as software gets, so the durability argument does not separate them and only
 the familiarity argument does.
 
-### Neither direction dominates, and the earlier claim that one did was wrong
+### Neither direction dominates
 
-**The enumeration that concluded a network store dominates had a gap, and it was a convenient one.**
-It listed "no network partition between the process and its store" and dismissed it as surfacing as
-server unavailability that the client absorbs. That is an argument about *player impact*. It says
-nothing about the failure domain continuing to exist and having to be reasoned about, monitored and
-debugged — which is architecture rather than effort, and so is not disposed of by holding effort at
-zero.
+**The enumeration that appears to make a network store dominant has a gap, and it is a tempting
+one.** "No network partition between the process and its store" looks disposable, because a partition
+surfaces as server unavailability and the client absorbs that. But that is an argument about *player
+impact*. The failure domain still exists, and still has to be reasoned about, monitored and debugged
+— which is architecture rather than effort, so holding effort at zero does not remove it.
 
 **The honest shape of the trade is two different kinds of simplicity.** An embedded store is simpler
 to *reason about*: one file, in-process, always reachable, no credentials, no pool, no partition, one
@@ -601,8 +588,8 @@ fewer thing that can be down. A managed network store is simpler to *operate*: n
 patching, no backup script you wrote yourself, no restore you have to remember to rehearse. A solo
 maintainer wants both and cannot have both.
 
-> So there is no dominance in either direction. What was presented earlier as a derivation was an
-> enumeration with the strongest opposing item filed under the wrong heading.
+> So there is no dominance in either direction. An enumeration that reaches one has filed the
+> strongest opposing item under the wrong heading.
 
 ### Why hosting kept dominating the discussion, and what that indicated
 

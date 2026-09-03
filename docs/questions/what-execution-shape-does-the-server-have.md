@@ -136,60 +136,99 @@ rejected.
 
 ## Options
 
-### Three axes, not two — and platform is downstream of all of them
-
-**The cells below were drawn on two axes and that was a mistake.** The real axes are independent:
+### The field, on three independent axes
 
 1. **Is the store in the process, or reached over a network?**
 2. **Does a process exist between requests?**
 3. **Is the runtime a constrained isolate, or an ordinary one?**
 
-**Where it is hosted is a consequence of those three, not a fourth axis.** Cell 5 below was written as
-"an edge runtime with an edge store", which quietly equated choosing Cloudflare with choosing an
-isolate. Cloudflare Containers is generally available and runs an ordinary container, so that platform
-can serve cell 3 as easily as cell 5. Any argument that reasons from a vendor name to a runtime
-constraint is making this error.
+**Where it is hosted is a consequence of those three, not a fourth axis.** Any argument that reasons
+from a vendor name to a runtime constraint is making an error: Cloudflare Containers is generally
+available and runs an ordinary container, so that platform serves cell D as readily as cell F.
 
-The cells are kept below because the analysis attached to them is still good. They should be redrawn
-on the three axes above before anything is recorded.
+| Cell | Store | Process between requests | Runtime |
+| --- | --- | --- | --- |
+| **A** | file on a volume | yes | ordinary |
+| **B** | file on a volume | no — machine stops, volume persists | ordinary |
+| **C** | network | yes | ordinary |
+| **D** | network | no — container stops | ordinary |
+| **E** | network | no — per-invocation functions | ordinary |
+| **F** | network | no | constrained isolate |
 
-### 1. An always-on process with a store it opens as a file
+**Two combinations are impossible rather than unattractive.** A file store under a constrained
+isolate has nowhere to live: Cloudflare Workers has no filesystem API at all, and its persistence
+primitive is Durable Object storage rather than a mounted disk. And a file store reached *over* a
+network filesystem is ruled out by SQLite's own documentation: "POSIX advisory locking is known to be
+buggy or even unimplemented on many NFS implementations... Your best defense is to not use SQLite for
+files on a network filesystem." That eliminates Cloud Run's GCS FUSE and NFS mounts and AWS Lambda
+with EFS as homes for an embedded store, whatever else they offer.
+
+*Sourced — [sqlite.org/lockingv3.html](https://www.sqlite.org/lockingv3.html), opened and read by me
+2026-09-03. The Cloudflare filesystem claim is second-hand from a research agent.*
+
+### A — an always-on process with a store it opens as a file
 
 Node, Bun or Deno on a machine or micro-VM with a volume attached. No network hop to storage,
 background work is possible, and the machine is yours to operate — which is the cost, and it is
 recurring. The generator either shares the machine and writes the file directly, or publishes through
 the server's API and runs anywhere; this cell forces that choice rather than forcing a location.
 
-### 2. An always-on process with a network-attached store
+Floor cost: about $5.17/month on Fly with a 1 GB volume and a dedicated IPv4, or €6.59–8.09 on
+Hetzner with an IPv4.
+
+### B — a scale-to-zero process with a store it opens as a file
+
+**The cell every previous version of this field said was impossible.** A Fly Machine with a volume
+and `auto_stop_machines` set: the machine stops when idle and costs nothing to run, and the volume
+survives. Fly's own words: "Its data survives suspend, resume, and cold starts, just as it does
+across a normal stop and start", and "Even if a snapshot is discarded and the machine cold starts,
+the data on your volume is still there."
+
+So "an embedded file" and "compute that is free at rest" are compatible, and the earlier framing that
+treated scale-to-zero as implying a network store was wrong. What is paid instead is a wake-up on the
+first request after idle: a few hundred milliseconds from suspend, ~2+ seconds from stopped. Volume
+storage is billed at rest either way.
+
+*Sourced — [fly.io/docs/reference/suspend-resume](https://fly.io/docs/reference/suspend-resume/),
+opened and read by me 2026-09-03.*
+
+**No other platform was found to offer this combination with documentation behind it.** Render's
+sleeping tier and its disk-capable tier are different products. Railway and Koyeb have both
+ingredients and neither documents that they compose. Cloud Run and App Runner have no block device at
+all. That absence matters: cell B currently means Fly specifically, which is a narrower commitment
+than the cell implies.
+
+*Sourced — second-hand from a research agent, 2026-09-03.*
+
+### C — an always-on process with a network-attached store
 
 Keeps background work and in-memory state, gives up the local file, and hands operation of the store
-to somebody else. The generator can run anywhere. Hosting stays open in a way the first option
-closes.
+to somebody else. Hosting stays open in a way the file cells do not.
 
-### 3. A scale-to-zero container with a network-attached store
+### D — a scale-to-zero container with a network-attached store
 
-The cell that was missing. A full runtime in a container that stops when idle — Cloud Run, Fly
-Machines with auto-stop, Render, Railway. Same code and same artifact as the cell above; what
-changes is that no process exists between requests, so nothing can be held in memory and background
-work needs a platform scheduler. The disk is instance-scoped and does not survive.
+A full runtime in a container that stops when idle — Cloud Run, Fly Machines with auto-stop, Render,
+Railway. Same code and same artifact as C; what changes is that no process exists between requests,
+so nothing can be held in memory and background work needs a platform scheduler.
 
-### 4. Ephemeral functions with a network-attached store
+### E — ephemeral functions with a network-attached store
 
 No process between requests, cheapest at rest, least to operate. Every request pays a connection to
 the store, which is why the serverless-Postgres tier ships HTTP drivers rather than expecting a
 socket to be held open.
 
-### 5. An edge runtime with an edge store
+### F — a constrained isolate with a network-attached store
 
-A constrained V8 isolate rather than a full runtime, with a store shaped to match it. The most
-constrained and the hardest to reverse, because both the runtime and the storage layer are specific
-to the platform.
+A V8 isolate rather than a full runtime, with a store shaped to match it. The most constrained and
+the hardest to reverse, because both the runtime and the storage layer are specific to the platform.
+Cloudflare Workers is the only major platform not retreating from this model: Vercel's own
+documentation recommends migrating off its edge runtime, and Deno Deploy Classic has shut down.
 
 ### Ruled out by a record, not by preference
 
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) requires the
 store to answer questions later without a migration, which eliminates a set of edge storage options
-that would otherwise make cell 5 attractive. Cloudflare Workers KV and Deno KV have no query
+that would otherwise make cell F attractive. Cloudflare Workers KV and Deno KV have no query
 language at all. Cloudflare Durable Objects give each object its own isolated SQLite, so a question
 spanning players — which is the whole point of that record — needs a fan-out layer built by hand.
 Of the edge tier only D1 survives, and it survives with limits.
@@ -265,7 +304,7 @@ be spent against does not exist.
 plainly wins on operational surface: one file, no daemon, no connection management. Against a
 *managed* network store the comparison runs the other way, and this has not been argued anywhere.
 
-**Concretely, cell 1 owns work the managed cells do not**: a volume and its failure mode, a backup
+**Concretely, cell A owns work the managed cells do not**: a volume and its failure mode, a backup
 mechanism, a restore procedure and the discipline of rehearsing it, a process manager, boot
 persistence, a reverse proxy, TLS issuance and renewal, firewall and SSH hardening, unattended
 security updates, log rotation before a disk fills, external uptime monitoring because a machine
@@ -334,7 +373,7 @@ and 100,000 rows written per day, and exceeding them fails queries rather than b
 
 **[ADR-0006](../decisions/0006-one-language-across-every-deployable.md) anticipated this**: "An edge
 runtime that only executes one language would satisfy this by accident rather than by fit." The
-generator is search-heavy batch work and cannot run in an isolate, so cell 5 needs a second home for
+generator is search-heavy batch work and cannot run in an isolate, so cell F needs a second home for
 it — which is the second-toolchain cost that record exists to avoid.
 
 *Sourced — per [ADR-0006](../decisions/0006-one-language-across-every-deployable.md).*
@@ -420,9 +459,9 @@ small precisely if handlers target the web-standard `Request` and `Response` int
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) already
 identified as the hedge that keeps this cheap.
 
-**Cell 1 and cell 5 are the two that create a migration to leave.** Leaving cell 1 means exporting
+**Cell A and cell F are the two that create a migration to leave.** Leaving cell A means exporting
 from a file into a network store with live player data in it, plus rehoming the generator if it was
-put on the same machine rather than made to publish through the server. Leaving cell 5 means
+put on the same machine rather than made to publish through the server. Leaving cell F means
 migrating the store *and* rewriting off
 platform-specific runtime APIs *and* finding the generator a home it never had.
 
@@ -466,9 +505,9 @@ the edge tier costs, it is not buying anything this system needs.
 
 > So an edge runtime is not dominated. It is worse on several axes and disqualified on none.
 
-**Platform and runtime tier are not the same axis.** Cell 5 reads as "an edge runtime with an edge
+**Platform and runtime tier are not the same axis.** Cell F reads as "an edge runtime with an edge
 store", which equates choosing Cloudflare with choosing a constrained isolate. Containers means a
-platform in the edge tier can run an ordinary container — cell 3. The real question is narrower:
+platform in the edge tier can run an ordinary container — cell D. The real question is narrower:
 whether the *server* runs in a constrained isolate, which is separable from where it is hosted.
 
 **What survives against the isolate is one argument, and it is not about capability.** Running the
@@ -706,8 +745,8 @@ generation "can be as slow as it needs to be".
 
 **What survives is narrower.** If the generator *is* put on the server's machine, search-heavy batch
 work competes with request serving, and that same ranking is violated by consequence rather than by
-anyone deciding it. That is an argument against one particular arrangement of cell 1, not against
-cell 1.
+anyone deciding it. That is an argument against one particular arrangement of cell A, not against
+cell A.
 
 *Reasoned — 2026-09-03, correcting a claim carried here since 2026-09-02. It was never sourced to a
 record; it was inferred from "the generator writes to the same file", which nothing established. See
@@ -716,7 +755,7 @@ derivation.*
 
 ### The failure-domain comparison, and why it did not go where it was expected to
 
-**Counting independent failure domains: A ≈ 5, B ≈ 7, C ≈ 10, D ≈ 11** (cells 1, 2, 3 and 4 above).
+**Counting independent failure domains: A ≈ 5, B ≈ 7, C ≈ 10, D ≈ 11** (cells A, C, D and E).
 A's list is short structurally rather than through resilience — no network hop and no rotatable
 credential means two domains are absent rather than mitigated. C adds the platform scheduler as
 something that fails while process and store are both healthy. D adds connection-limit exhaustion
@@ -725,7 +764,7 @@ HTTP-to-Postgres proxy as a component that fails while the vendor's status page 
 
 **Fewest-domains and fewest-silent-failures name the same cell, which was not expected.** The question
 that produced this predicted they would diverge, and that the divergence would be the finding. Both
-name cell 1, because with no monitoring built every failure everywhere is silent — the premise
+name cell A, because with no monitoring built every failure everywhere is silent — the premise
 flattens the comparison. So "which fails more quietly" is currently a question about monitoring rather
 than about architecture.
 
@@ -753,3 +792,64 @@ detection is tooling somebody chooses to build, and its absence is invisible.
 *Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html) §11 and
 [tailscale.com/blog/sqlite-wal-reset-bug](https://tailscale.com/blog/sqlite-wal-reset-bug), both
 opened and read by me 2026-09-02.*
+
+### Axis 2 is decidable on evidence already recorded, and it decides first
+
+**Seven of nine blocking moments are first contact after a gap**, per
+[../problem.md](../problem.md) under "Where a player waits". Every cell that scales to zero — B, D, E
+and F — pays a wake-up on exactly those moments rather than on a minority of requests.
+
+**The wake-up is large against the budget it lands in.** Fly documents a few hundred milliseconds
+from suspend and ~2+ seconds from stopped; Cloud Run publishes no figure at all.
+[../constraints.md](../constraints.md) puts the 3g RTT floor near 270ms with three to four round
+trips before payload. So a stopped machine roughly triples the smallest plausible wait and a suspended
+one roughly doubles it.
+
+**Stacking two sleeping things pays it twice.** A scale-to-zero compute in front of a scale-to-zero
+store — the free-tier default at both layers — pays a wake-up on the compute and again on the store,
+on the first touch of the day.
+
+**And the cost of not sleeping is single digits.** The floor for an always-on machine with a volume
+and an address is about $5.17/month on Fly or €6.59–8.09 on Hetzner. Against the monthly figures
+already recorded here for every other option, this does not discriminate.
+
+> So the request path not scaling to zero is derivable now, from the waiting enumeration and two
+> published latency figures, without reference to what anyone wants to operate. It is the first link
+> of the chain rather than the consequence the earlier sequence treated it as: it eliminates D, E and
+> F outright and keeps B only in its suspended form.
+
+*Reasoned — 2026-09-03, from [../problem.md](../problem.md), [../constraints.md](../constraints.md),
+and the Fly figures opened and read by me.*
+
+**Cell B survives this in one form and not the other.** Suspend-resume keeps the wake-up in the
+hundreds of milliseconds; stopped adds seconds. Fly's documentation also warns that resuming from
+suspend can produce clock skew affecting JWT validation, cron and TLS checks, and recommends `stop`
+over `suspend` for clock-sensitive applications — which is the opposite of what the latency argument
+wants. Whether that conflict binds depends on whether anything here is clock-sensitive, and identity
+is not designed yet.
+
+*Sourced — Fly's suspend-resume documentation, second-hand from a research agent for the clock-skew
+caveat, 2026-09-03.*
+
+### Axis 3 follows from a record rather than from a capability
+
+**No capability eliminates the isolate, and one record does.** The technical case for an isolate is
+compute near the user, and nothing here is latency-bound in a way that buys.
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) eliminates most
+edge storage — Workers KV and Deno KV have no query language, Durable Objects isolate each object's
+SQLite so a cross-player question needs a hand-built fan-out — leaving D1 with a 500 MB free ceiling
+and daily row limits that fail queries rather than billing.
+
+**What actually disqualifies it is the second toolchain.** The generator is search-heavy batch work
+and cannot run in an isolate, so cell F needs a container beside it.
+[ADR-0006](../decisions/0006-one-language-across-every-deployable.md) anticipated exactly this: an
+edge runtime "would satisfy this by accident rather than by fit". Cloudflare Containers being
+generally available makes the arrangement possible; it does not make it one runtime.
+
+> So axis 3 is settled by
+> [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) plus the generator's shape,
+> and it is settled the same way whether
+> or not axis 1 lands on a file. That makes it separable, and it should be its own record rather than
+> a clause in the store's.
+
+*Reasoned — from the records named, 2026-09-03.*

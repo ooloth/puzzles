@@ -37,7 +37,7 @@ This is what decides how long the check takes, and it is not obvious. On 2026-09
 took 25 minutes because two agents nested: one was told to scan "every file in `docs/questions/`" —
 84 files — and one to check "every rule against everything it governs", and both fanned out
 internally rather than reading. They took 22.8 and 14.4 minutes. Meanwhile the agent carrying the
-*most* scans and the *most* tool calls finished in 6 minutes, because its scope was 14 decision
+_most_ scans and the _most_ tool calls finished in 6 minutes, because its scope was 14 decision
 records.
 
 So the cost is unbounded scope, not scans per agent. Bundling several scans into one agent is fine
@@ -86,15 +86,15 @@ category, add it here with what to look for and where it occurred if it cannot b
 detected by a lint script like `check-docs.py` instead.
 
 - **An "or else" clause that is not about the architecture.** Every entry in a milestone list in
-  `docs/questions/README.md` carries one, and it should name which *later decision in that slice*
+  `docs/questions/README.md` carries one, and it should name which _later decision in that slice_
   would be taken blind without it, and how the architecture comes out wrong as a result. Three
   substitutes all read as reasons and are not: a practical blocker ("or else nothing can be
   installed" — the work cannot start, which is not the same as the architecture being wrong), a
   comment on how the choice gets made ("or else it is picked by habit" — true of every unanswered
   question, so it distinguishes nothing), and a restatement of the topic ("an input to the shape").
   All three have appeared here. Then apply the test the list states: if you cannot complete "slice N
-  cannot be built without this because ___", the entry does not belong in slice N. This has happened
-  three times and every one moved a question *earlier* than it belonged — check the direction,
+  cannot be built without this because \_\_\_", the entry does not belong in slice N. This has happened
+  three times and every one moved a question _earlier_ than it belonged — check the direction,
   because the bias only runs one way.
 - **Questions that are answered but still open.** For each file in `docs/questions/`, check whether
   what it `resolves_into` now exists — a decision record, a line in `constraints.md`, or a change to
@@ -104,6 +104,23 @@ detected by a lint script like `check-docs.py` instead.
 - **Decisions contradicted by later ones.** Read `docs/decisions/` newest to oldest and check
   whether any earlier record states something a later one changed. Superseding is fine and is
   recorded; silent contradiction is not.
+- **A false claim kept and rebutted rather than replaced.** A file asserts something, and corrects it
+  somewhere further down. Both readings are in the file, and the false one is the one a reader meets
+  first — so anyone who skims, greps, or stops early takes it away as the answer. The correction only
+  works for a reader who gets to the bottom, which is exactly the reader who did not need it.
+  Look for a claim in **Why it matters**, an **Options** entry or a cell description that a later
+  **Findings** entry contradicts, and for the phrases that signal a layer rather than a fix: _an
+  earlier version of this_, _that framing overstated_, _this was carried as though_, _turns out to
+  rest on_. On 2026-09-03 the pinning claim was asserted at line 102 of
+  `docs/questions/are-puzzles-and-player-records-in-one-store.md` and dismantled at line 184 of the
+  same file; `how-much-downtime-is-acceptable.md` opened with an over-general redundancy claim and
+  qualified it thirty lines later.
+  **The fix is to state the true thing where the topic is first raised**, not to add another
+  paragraph. Then check the rest of the repo, because a claim asserted once is usually asserted
+  several times — that one had six sites and only two were known before the scan.
+  Distinguish this from a correction that _quotes_ what it corrects. Naming a false claim inside the
+  sentence that refutes it is how a future reader recognises it when they meet it elsewhere, and it
+  is not this defect. The defect is asserting it in one place and refuting it in another.
 - **Figures that moved.** Any number appearing in more than one file, where the copies disagree.
   Check each against `docs/constraints.md`, which is the authority.
 - **Questions about to be decided with sections still empty.** A `...` means nobody has looked, and
@@ -112,7 +129,6 @@ detected by a lint script like `check-docs.py` instead.
   an agent who finds something relevant while working on something else should drop it there and move
   on, and requiring them to fill in Options and What-would-settle-it first would mean the finding
   goes unrecorded instead. Do not report those.
-
   The narrow defect is a question **in the milestone currently being worked**, at the point where it
   is about to be answered, with the sections that shape an answer still empty. That is a question
   being decided without the thinking it asks for. Unchecked `Also update` boxes in decision records
@@ -120,7 +136,7 @@ detected by a lint script like `check-docs.py` instead.
 - **Guarantees whose enforcement changed.** Anything in `docs/guarantees/` still saying _Enforced
   by: Nothing_ that something now checks, and anything claiming enforcement that no longer exists.
   The frontmatter `enforced` field should agree with the prose; `rg -l 'enforced: no'
-  docs/guarantees/` is the backlog and it is only as good as that agreement.
+docs/guarantees/` is the backlog and it is only as good as that agreement.
 - **A promise cited that was never made.** The withheld promises are stated in prose in
   `docs/guarantees/README.md` — under each theme, and in "Themes holding no promises yet". Read those
   statements and search the rest of `docs/` for text asserting one of them as though it existed.
@@ -130,11 +146,24 @@ detected by a lint script like `check-docs.py` instead.
   was real. Splitting `guarantees/` into one file per promise on 2026-09-02 surfaced nine such
   citations of a durability bound that had been demoted the day before — in question files, failure
   modes, and a multi-paragraph argument that rested on it as its premise.
-- **Change narrative.** Search for _used to_, _previously_, _no longer_, _has since_, _was changed
-  to_, and dates used as change markers. The documentation standard forbids these outside the narrow
-  case where a reader lacking the history would do the wrong thing.
-- **The file system asserting decisions.** Directory names, stub files and scaffolding read as
-  settled. If a directory implies an answer to an open question, that is a decision nobody argued.
+- **Docs narrating their own edit history.** A document describing how it got here rather than what is
+  true now. Search for dates attached to edits rather than to evidence — _corrected 2026-09-03_,
+  _updated once both analyses landed_, _rebuilt from scratch on_, _mined from X, since resolved and
+  deleted_ — and for strikethrough, which is always this defect. A question file's Findings should
+  read as the current best account of what is known, not as a changelog of how it was assembled.
+  _The test: would a reader who never saw the previous version want this sentence?_ If it only makes
+  sense as a diff against something they cannot see, it is narrating the work rather than stating the
+  finding, and the git history already holds it better.
+  \*Do not confuse this with provenance, which is required.**A tier tag and the date a claim was
+  established say how we know something and must stay. A **Source\*\* section says where a question came
+  from and must stay. A record's `amended:` frontmatter must stay. The line between them: evidence for
+  a _claim_ is provenance; narration of edits to the _document_ is not.
+  This one is generated by the act of cleaning up, so it is worst immediately after a session that
+  corrected a lot — an agent replacing a false claim tends to leave a note saying it did. The session
+  on 2026-09-03 that produced the entry above also produced a dozen instances of this one.
+  Search for _used to_, _previously_, _no longer_, _has since_, _was changed to_, and dates used as
+  change markers. The documentation standard forbids these outside the narrow case where a reader
+  lacking the history would do the wrong thing.
 - **A doc contradicting a recorded decision.** The reverse direction from the check above: not an
   ADR against a later ADR, but any other file asserting something an ADR already settled. Take each
   record in `docs/decisions/` and search the rest of `docs/`, `CLAUDE.md` and the skills for claims

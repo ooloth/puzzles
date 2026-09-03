@@ -54,8 +54,9 @@ A decision record in [../decisions/](../decisions/), and content for
 [../verification.md](../verification.md) once there is something to run.
 
 **This sits at M2 only, and it went to M1 and back twice before settling there.** The second time was
-worse than the first: a **Must establish** label had just been invented for research, and this got
-filed under it because it *fitted the label* rather than because the M1 decision needed it. Fitting a
+worse than the first: a separate label for research questions had just been invented, and this got
+filed under it because it *fitted the category* rather than because the M1 decision needed it. The
+label has since been removed for that reason — a new category invites sorting into it, and fitting a
 category is not the same as blocking something.
 
 What M1 actually needs from this subject is nothing. Developer ergonomics is a comfort property, and

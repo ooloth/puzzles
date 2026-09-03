@@ -43,13 +43,27 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
    are few; the reversal risks are what decide the order.
 
-   **Two labels, because two different things block a slice.** **Must answer** is a decision: an
-   answer is picked and a door closes. **Must establish** is research: a fact is found, and there was
-   never a choice to make. A question resolving into a constraint or into
-   [../problem.md](../problem.md) is almost always the second kind. The distinction is not cosmetic —
-   labelling research as a decision invites someone to argue it to a conclusion instead of going and
-   finding out, and it happened here: two enumerations sat in M1 as "Must answer" and read as doors
-   nobody could see the hinges on.
+   **One label: Must answer**, whether the answer is a choice or a fact to go and find. A research
+   question earns its own entry only where nothing else tracks it — where the question it informs
+   records it under **Findings**, that is where it lives.
+
+   **Every entry carries an "or else" clause: which later decision in this slice comes out wrong, and
+   what unwinding it costs.** Two costs exist here. A **re-scaffold** is a day. A **migration of live
+   player data** is not, and it is the only irreversible thing M1 can create. A question whose wrong
+   answer costs a re-scaffold does little work at the front of a slice.
+
+   Three things read as clauses and are not: that work cannot start, that the choice might be made
+   carelessly, and a restatement of the topic. Each is true of every open question, so none
+   distinguishes anything. Where a clause names a mechanism rather than a cost — "whichever is built
+   first fixes the other two" — ask "so what?" until it reaches one.
+
+   **If you cannot complete "slice N cannot be built without this because ___", it does not block
+   slice N.**
+
+   **Defer.** Every sequencing error in this file has moved a question earlier than it belonged, never
+   later. An open question keeps its options and costs nothing. Where it is unclear whether something
+   blocks a slice, it does not.
+
 5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
    repetition is what makes step 7 possible and what lets a reader audit one slice without holding
    the others in their head.
@@ -58,10 +72,10 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    would settle it**. That is the only place a dependency between questions is written down.
 7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
    slices. A slice that reads like the milestone restated is bundling. A question written as a given
-   is a question — never a **Given**, whatever it is blocking. Check the two labels while you are
-   there: something listed as **Must answer** that has no options to choose between is research and
-   should be **Must establish**. Then count how many slices each question blocks: that orders the
-   slices, and says nothing about the order inside one.
+   is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask
+   whether it names a consequence for *this slice* or merely describes the question; the second is
+   the failure this audit is most likely to find, because it reads as a reason. Then count how many
+   slices each question blocks: that orders the slices, and says nothing about the order inside one.
 
 **Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
 smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
@@ -133,13 +147,14 @@ record is titled by what it settled, so the listing is the checklist of constrai
 1. **<A slice you can run and look at.>**
    - **Given:** `[<record-promise-or-constraint>](<its-path>)`
    - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
-     - **Must establish:** `[<question-filename>](<question-filename>.md)` — <a fact to find>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)` — <a door to close>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
 2. **<The next slice.>**
-   - **Must answer:** `[<question-filename>](<question-filename>.md)`
+   - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
 
-Questions are never "Given" — they are "Must answer" where an answer is chosen and "Must establish"
-where a fact is found and there was no choice. Where a slice rests on no given, its questions sit at
+Questions are always "Must answer", never "Given", whether the answer is a choice or a fact somebody
+has to find. Every one carries an "or else" clause naming what breaks in *this slice* without it —
+not what the question is about. Where a slice rests on no given, its questions sit at
 the top level. Link text is the filename, so the list reads without opening anything.
 -->
 
@@ -154,19 +169,15 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**Slice 1 is a chain, not a set, and the order inside it has been wrong twice.** The questions below
-it are listed in the order they must be worked, and the two things that make that order load bearing
-are worth stating here because both were discovered by getting them backwards. **Store locality
-constrains the runtime**, so a runtime chosen while the store is open can be reversed by it. And
-**the first three items are research rather than decisions** — they establish facts the shape
-question reasons from, and working the shape first would mean arguing it without them.
+**Slice 1 is a chain, not a set.** Its questions are listed in the order they must be worked. **Store
+locality constrains the runtime**, so a runtime chosen while the store is open can be reversed by it,
+and the first two questions establish facts the shape question reasons from.
 
-**Nothing in M1 is decided on the maintainer's current appetite for operating infrastructure.** That
-appetite is real and it is deliberately not being used as an input, because it is a short-term guess
-about a long-lived choice. What decides these is which option keeps the most technical properties
-reachable — performance, safety, portability — including the ones that are not obviously important
-yet. Where a question genuinely cannot be settled without a preference, it says so rather than
-inventing a derivation.
+**Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
+short-term guess against a long-lived choice. These are decided on which option keeps the most
+technical properties reachable — performance, safety, portability, and the ones not yet known to
+matter. A question that cannot be settled without a preference says so rather than inventing a
+derivation.
 
 1. **A server answers one route, observed with curl, locally.**
    - **Given:** [0006-one-language-across-every-deployable](../decisions/0006-one-language-across-every-deployable.md)
@@ -175,14 +186,14 @@ inventing a derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [../constraints.md](../constraints.md) — a 3g RTT floor near 270ms, and three to four round trips before payload on a fresh connection, which is the baseline any store latency is judged against
-     - **Must establish:** [what-does-a-player-wait-for](what-does-a-player-wait-for.md) — the moments the client blocks on the server, which is what decides whether store latency matters at all
-     - **Must establish:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — the enumeration only; verifying it by breaking things needs a system to break
-     - **Given:** [which-stores-can-run-inside-the-server-process](which-stores-can-run-inside-the-server-process.md) — closed 2026-09-02: in-process means SQLite. Listed as a given rather than omitted, because the two candidates dropped to get there are recorded there and should not be re-opened by someone who cannot see they were considered
-     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — only in the branch where the store is a file; it drops to M3 otherwise
-     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — resolves into three records: store locality, then runtime tier, then whether a process exists between requests
-     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
-     - **Must answer:** [which-package-manager](which-package-manager.md)
-     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md)
+     - **Given:** [which-stores-can-run-inside-the-server-process](which-stores-can-run-inside-the-server-process.md) — closed 2026-09-02: in-process means SQLite. Kept visible rather than omitted, because the two candidates dropped to get there are recorded there and an option nobody can see was considered gets re-opened
+     - **Must answer:** [what-does-a-player-wait-for](what-does-a-player-wait-for.md) — or else store locality is chosen without knowing whether a player ever waits on the store. Removing that wait later means moving the data
+     - **Must answer:** [what-fails-independently-and-would-we-know](what-fails-independently-and-would-we-know.md) — or else store locality rests on a simplicity claim with no comparison behind it
+     - **Must answer:** [are-puzzles-and-player-records-in-one-store](are-puzzles-and-player-records-in-one-store.md) — or else a local file puts the generator on the server's machine, and separating them means moving the catalogue. Costs nothing in the network branch, where this drops to M3
+     - **Must answer:** [what-execution-shape-does-the-server-have](what-execution-shape-does-the-server-have.md) — or else runtime, host and engine constrain each other by accident, and unwinding that once player data exists is a migration
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md), which constrains it in both directions
+     - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
+     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -461,11 +472,10 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
 [what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
 — research.
-[How long does a store round trip take?](how-long-does-a-store-round-trip-take.md) — opened as the
-blocking measurement for M1's store decision and moved here within a day, once asking what each
-number would change found that almost none of it changes that decision. Still worth running at some
-point to turn a *Reasoned* claim in [../constraints.md](../constraints.md) into a *Measured* one, and
-the file records why it stopped blocking so nobody re-promotes it.
+[How long does a store round trip take?](how-long-does-a-store-round-trip-take.md) — worth running to
+turn a *Reasoned* claim in [../constraints.md](../constraints.md) into a *Measured* one. The file
+records why the number decides nothing about store locality, so that it does not get promoted back
+into M1.
 
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
@@ -520,26 +530,16 @@ The last two grow. **Options** holds each candidate answer with its strongest ca
 
 ### While a question is being worked, its file is where the work goes
 
-**Findings are written into the file as they are established, not gathered up at the end.** A session
-that ends with its research only in the conversation has to be run again, and the second run does not
-reproduce the first — it reproduces whatever the summary said, which is the part that already lost
-the hedges and the sources. Anything worth having found is worth appending before moving to the next
-thing.
+Findings are written in as they are established, not gathered at the end. Research left in a
+conversation gets redone next session from a summary, and a summary is the part that has already
+lost its sources.
 
-That includes the results that changed nothing. **A candidate checked and eliminated, a claim checked
-and confirmed, and a claim checked and found unsupported are all findings**, and the last two are the
-ones a later session will otherwise redo. An option that was considered and dropped is
-indistinguishable from one nobody thought of unless the file says so.
+Results that changed nothing count. A candidate checked and dropped, a claim checked and confirmed,
+and a claim checked and found unsupported are all findings, and an option written down nowhere is
+indistinguishable from one nobody thought of.
 
-**Options and Findings take subheadings once they outgrow a flat list.** Both sections accumulate
-across sessions, and a wall of bold lead sentences stops being navigable at around a screenful. Group
-them by what they are about — the field, what it costs, what it forecloses, what is unverified — and
-keep the tier line on each claim. Nothing else about the format changes.
+Options and Findings take subheadings once they outgrow a flat list.
 
-**The file gets more organised as the answer gets closer, and then it is deleted.** Findings graduate
-to [../constraints.md](../constraints.md), reasoning graduates into whichever record it argues for,
-and the file goes once nothing is left in it that a record has not settled. Tidying it as you go is
-what makes that final pass a mining exercise rather than an archaeology one.
 
 ### Findings are evidence, not fact
 

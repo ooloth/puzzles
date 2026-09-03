@@ -85,6 +85,17 @@ because each needs a judgement rather than a lookup.
 category, add it here with what to look for and where it occurred if it cannot be mechanically
 detected by a lint script like `check-docs.py` instead.
 
+- **An "or else" clause that is not about the architecture.** Every entry in a milestone list in
+  `docs/questions/README.md` carries one, and it should name which *later decision in that slice*
+  would be taken blind without it, and how the architecture comes out wrong as a result. Three
+  substitutes all read as reasons and are not: a practical blocker ("or else nothing can be
+  installed" — the work cannot start, which is not the same as the architecture being wrong), a
+  comment on how the choice gets made ("or else it is picked by habit" — true of every unanswered
+  question, so it distinguishes nothing), and a restatement of the topic ("an input to the shape").
+  All three have appeared here. Then apply the test the list states: if you cannot complete "slice N
+  cannot be built without this because ___", the entry does not belong in slice N. This has happened
+  three times and every one moved a question *earlier* than it belonged — check the direction,
+  because the bias only runs one way.
 - **Questions that are answered but still open.** For each file in `docs/questions/`, check whether
   what it `resolves_into` now exists — a decision record, a line in `constraints.md`, or a change to
   a config file or skill. Where it does, the question is finished and nobody noticed. This is the

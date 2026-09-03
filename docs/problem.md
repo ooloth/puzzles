@@ -99,6 +99,42 @@ A small, genuinely public v1 within a few months.
 For the maintainer: an interface worth being proud of, a puzzle waiting each morning that this
 project generated, and a system whose operation is worth describing to someone hiring for it.
 
+## Where a player waits
+
+Item 5 above covers normal play, and normal play is where a player waits for nothing. Solving is
+local, because [ADR-0004](decisions/0004-the-client-holds-and-mutates-puzzle-state.md) puts state on
+the client and keeps the server off the path from input to paint. That leaves the edges of a session,
+and a player does wait there.
+
+- **The first time the app is opened on a device**, and again on an installed app's own first launch,
+  because a home-screen install starts with an empty store. Nothing is on the device yet to show.
+- **Opening a puzzle whose content has never reached this device.** Puzzle content is served rather
+  than shipped with the app
+  ([ADR-0012](decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md)), so a puzzle the
+  device has not fetched has to be fetched. This is the ordinary one, and the only one on this list
+  that is not an edge case: it happens to every active player, at minimum daily, for the life of the
+  product.
+- **Picking up a board on a second device**, which has to fetch what the other device wrote before it
+  can show a board that is not already stale.
+- **Coming back after the browser has cleared its storage**, where the only remaining copy is the one
+  off the device.
+
+**These cluster at the start of a session rather than running through it.** That is a consequence of
+the client owning solving, not of how much traffic there is, so it does not change as the audience
+grows.
+
+Four further moments depend on features nobody has committed to, and each is tracked against the
+question that decides whether the feature exists rather than here — because a wait for a feature that
+may never exist is not yet part of the vision: signing in
+([are there user accounts?](questions/are-there-user-accounts.md)), an entitlement check
+([is there a paid tier?](questions/is-there-a-paid-tier.md)), browsing an archive
+([can a player explore past puzzles?](questions/can-a-player-explore-past-puzzles.md)), and viewing a
+stats screen ([does a player see stats about their play?](questions/does-a-player-see-stats-about-their-play.md)).
+
+**No duration is attached to any of this, deliberately.** What a wait is allowed to cost is
+[what latency budget makes "immediately" checkable?](questions/what-latency-budget-makes-immediately-checkable.md).
+What is settled here is which waits exist.
+
 ## Not this
 
 - **Two devices editing the same puzzle at once.** Picking a puzzle up on another device is part

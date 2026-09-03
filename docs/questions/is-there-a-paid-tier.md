@@ -69,3 +69,12 @@ gameplay to solve a content-delivery problem.
 can be stale, usage can go unmeasured — all degrade gracefully. A paid tier enforced on the device
 is not enforced, because the device belongs to the person it would be charging. That is why the
 option must stay open rather than be settled by default — see [../problem.md](../problem.md).
+
+**An entitlement check would be a blocking wait, and a cold one.** The waiting-moment enumeration
+(2026-09-02, mined into [../problem.md](../problem.md) under "Where a player waits") found that a
+check before serving gated content would ride along with fetching a puzzle — the most frequent
+blocking moment in the product — and would therefore be first contact after a gap. That is a cost this
+option carries and nothing has priced.
+
+*Reasoned — from that enumeration and
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md), 2026-09-02.*

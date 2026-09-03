@@ -58,13 +58,15 @@ The first two steps are inputs. Only after them is anything decidable.
 
 1. **Redraw the field on the three axes below**, so that no argument reasons from a vendor name to a
    runtime constraint.
-2. **Run the one spike that blocks this, and no more of it than that.** Its scope is set below, and
-   the point of scoping it that tightly is that most of what looked worth measuring turns out not to
-   change this decision. Enumerate what can fail independently alongside it, per
-   [what fails independently, and would we know?](what-fails-independently-and-would-we-know.md) —
-   the enumeration blocks this; verifying it by breaking things does not, and waits for a system to
-   break. Whether any given platform offers a disk that survives a restart, a redeploy and a
-   scale-to-zero belongs to [where does this run?](where-does-this-run.md) and is tracked there.
+2. ~~**Enumerate what can fail independently, and what a player waits for.**~~ **Both are done**, and
+   their results are in the Findings below. The failure-domain comparison across all four cells and
+   the waiting-moment enumeration were completed 2026-09-02; the questions that held them are
+   resolved and deleted, with their durable output in [../problem.md](../problem.md) under "Where a
+   player waits" and in two new entries in [../failure-modes/](../failure-modes/). Verifying the
+   failure enumeration by breaking things did not block this and waits for a system to break, per
+   [can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md).
+   Whether any given platform offers a disk that survives a restart, a redeploy and a scale-to-zero
+   belongs to [where does this run?](where-does-this-run.md) and is tracked there.
 3. **Decide whether the store is in the process or over a network.** The trade is
    reasoning-simplicity against operational-simplicity, and it is decided on which option keeps the
    most technical properties reachable — latency, safety, portability, and the ones not yet known to
@@ -275,15 +277,19 @@ long enough that something falls off it.
 *Reasoned — from reading that material, which is non-authoritative and cited here for what it
 enumerates rather than for anything it concludes.*
 
-**The tooling around embedded SQLite is weaker than it was.** Litestream is disaster recovery rather
-than high availability, replicates asynchronously, and has a documented corruption report and a
-restore that refuses to overwrite a non-empty file. LiteFS Cloud was sunset in October 2024 and
-LiteFS itself is pre-1.0 and deprioritised. Fly volumes attach to exactly one machine with no
-replication, so the volume is a single point of failure.
+**The tooling around embedded SQLite is mixed, and an earlier version of this finding overstated the
+decay.** Litestream is disaster recovery rather than high availability and replicates asynchronously,
+but it is **actively maintained**: v0.5.17 shipped 2026-08-31, with v0.5.13 through v0.5.17 across
+June–August 2026, a release every two to four weeks. LiteFS is the deprioritised one — LiteFS Cloud
+was sunset in October 2024 and LiteFS itself is pre-1.0. Fly volumes attach to exactly one machine
+with no replication, so the volume is a single point of failure.
 
-*Sourced — vendor documentation and issue trackers read 2026-09-02 by research agents; the specific
-pages were not opened by me, so treat the individual claims as second-hand and re-check any that
-decide something.*
+The correction matters because Litestream is the piece that would actually be relied on, and
+"the tooling is weaker than it was" was being carried as though it applied to both.
+
+*Sourced — [Litestream releases](https://github.com/benbjohnson/litestream/releases) and
+[fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), both opened and read by me
+2026-09-02. The LiteFS Cloud sunset date is second-hand.*
 
 ### The Safari topology constraint does not discriminate between these cells
 
@@ -638,3 +644,96 @@ nowhere.** [../problem.md](../problem.md) names a demonstrable full-stack system
 separately ranks clarity over cleverness because one person maintains this. Those pull in opposite
 directions here, and the file does not resolve them. Deliberately left out of that file for now, and
 to be settled when this decision is taken rather than in advance.
+
+### Both blocking inputs are now answered, and they moved things
+
+*Mined 2026-09-02 from the two question files this one was waiting on, both now resolved and deleted.
+Their durable output is in [../problem.md](../problem.md) under "Where a player waits" and in two new
+entries in [../failure-modes/](../failure-modes/).*
+
+**Seven of the nine blocking moments are cold touches, and that is structural.** The enumeration found
+nine moments where the client is blocked on a response. Only two — browsing an uncached archive and
+viewing a stats screen — arrive mid-session with other requests flowing. The rest are first contact
+after a gap.
+
+It follows from [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeping
+solving local: the server is reached at the *edges* of a session rather than throughout it. And
+[../problem.md](../problem.md) makes the gaps long by design — sessions "resume anywhere from seconds
+to days later".
+
+> So anything on the request path that sleeps is cold for most waits in the product rather than a
+> minority of them. **This does not improve as the audience grows**, because it is a property of the
+> session shape rather than of traffic volume. It argues against scale-to-zero on both axes, and it
+> weakens the network store's own optionality case — keeping scale-to-zero reachable is worth less
+> than it looked, because the evidence says do not use it.
+
+*Reasoned — from the enumeration and the records named, 2026-09-02.*
+
+**Nothing on the list is sensitive to a millisecond, checked rather than assumed.** Every moment
+involves at least one fresh or resumed connection carrying a payload, against the 270ms 3g floor and
+three to four round trips in [../constraints.md](../constraints.md). An in-process read and a warm
+same-region network read are three orders of magnitude below the noise floor. This confirms the
+arithmetic already in this file rather than adding to it.
+
+**The most frequent blocking moment was missing from the earlier list, and it may put the store on
+the daily path.** Opening a puzzle whose content has never reached this device happens to every active
+player at least daily, because
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) rules out shipping
+content as static files. Whether it touches the *store* is undecided — that same record's closing
+line lists "what the catalogue is stored in" among what it deliberately does not settle.
+
+> So [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)'s "not on the
+> interaction path" is true of solving and not of session entry. If the catalogue lives in the store,
+> store availability becomes a daily concern rather than a background one, and a store outage means
+> nobody starts today's puzzle. That is the sharpest open sub-question under this one, and it is asked
+> at [are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md).
+
+*Reasoned — from the records named, each opened and checked 2026-09-02.*
+
+**A store opened as a file pins the generator to the server's machine, and that meets a stated
+ranking.** [../problem.md](../problem.md) ranks "the interactive path over batch throughput" third.
+Generation is search-heavy batch work; sharing one small machine with request serving is that ranking
+being violated as a consequence of a store choice rather than by anyone deciding it. Mitigable —
+scheduling, niceness, a larger machine — but it is a cost the network branch does not carry.
+
+*Reasoned — from [../problem.md](../problem.md)'s conflict ranking, 2026-09-02.*
+
+### The failure-domain comparison, and why it did not go where it was expected to
+
+**Counting independent failure domains: A ≈ 5, B ≈ 7, C ≈ 10, D ≈ 11** (cells 1, 2, 3 and 4 above).
+A's list is short structurally rather than through resilience — no network hop and no rotatable
+credential means two domains are absent rather than mitigated. C adds the platform scheduler as
+something that fails while process and store are both healthy. D adds connection-limit exhaustion
+under concurrency, which is probabilistic and does not reproduce at low traffic, plus the
+HTTP-to-Postgres proxy as a component that fails while the vendor's status page shows green.
+
+**Fewest-domains and fewest-silent-failures name the same cell, which was not expected.** The question
+that produced this predicted they would diverge, and that the divergence would be the finding. Both
+name cell 1, because with no monitoring built every failure everywhere is silent — the premise
+flattens the comparison. So "which fails more quietly" is currently a question about monitoring rather
+than about architecture.
+
+**The sharper asymmetry is which domains each cell removes.** The ones an embedded file removes — the
+network hop, the credential, the pool, the vendor — all fail loudly, in the sense that an operation
+throws. The domain it keeps and concentrates is the disk beneath the file, and that is where silent
+loss lives.
+
+> So the strongest argument on the embedded side — that a removed failure domain stays removed — holds
+> but buys less than it appeared to. What it removes is the noisy half.
+
+*Reasoned — from the enumeration across all four cells, 2026-09-02.*
+
+**Corruption detection under SQLite is opt-in, with a sixteen-year precedent.** SQLite's own
+documentation now carries a section titled "The WAL-Reset Bug": a checkpoint/write race present from
+3.7.0 (2010-07-21) through 3.51.2 (2026-01-09), fixed in 3.51.3 (2026-03-13), requiring "two or more
+database connections open on the same file" — which a connection pool or a backup process satisfies.
+Tailscale hit it 19 times in six months and saw nothing in application logs: "A write had vanished
+into thin air without raising an error." They found it by building transaction-replay tooling and
+running `PRAGMA integrity_check` against offsite backups.
+
+The bug is fixed and citing it as a live risk would be wrong. What it establishes is the shape:
+detection is tooling somebody chooses to build, and its absence is invisible.
+
+*Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html) §11 and
+[tailscale.com/blog/sqlite-wal-reset-bug](https://tailscale.com/blog/sqlite-wal-reset-bug), both
+opened and read by me 2026-09-02.*

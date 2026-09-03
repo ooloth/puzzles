@@ -170,3 +170,53 @@ whichever one it is handed.
 **[What the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md) would make
 this decision smaller.** Under its leading option the server checks that a payload is a well-formed
 board and never interprets its contents, which every option above does equally well.
+
+### Engine-level facts established while resolving the store's failure domains
+
+*Mined 2026-09-02 from [what fails independently, and would we know?](README.md), since resolved and
+deleted. Recorded here because they separate engines rather than localities, which is this question's
+job rather than the execution shape's.*
+
+**SQLite's corruption detection is opt-in, and its own documentation now says so by example.**
+[sqlite.org/wal.html](https://www.sqlite.org/wal.html) carries a section titled "The WAL-Reset Bug" —
+a checkpoint/write race present from 3.7.0 (2010-07-21) through 3.51.2 (2026-01-09), fixed in 3.51.3
+(2026-03-13). It requires "two or more database connections open on the same file, in separate threads
+or processes". Tailscale hit it 19 times over six months with no error raised, finding it only via
+`PRAGMA integrity_check` against offsite backups plus custom transaction-replay tooling.
+
+The bug is fixed. What survives is that nothing runs `integrity_check` unless somebody schedules it,
+and a corrupt page returns wrong data rather than an error until a read happens to touch it.
+
+*Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html) §11 and
+[tailscale.com/blog/sqlite-wal-reset-bug](https://tailscale.com/blog/sqlite-wal-reset-bug), opened and
+read by me 2026-09-02.*
+
+**Backing up a live SQLite file is conditionally unsafe, and the condition is easy to summarise
+wrongly.** The WAL file "is part of the persistent state of the database and should be kept with the
+database if the database is copied or moved. If a database file is separated from its WAL file, then
+transactions that were previously committed to the database might be lost, or the database file might
+become corrupted." SQLite names `sqlite3_rsync`, `VACUUM INTO` and the C backup API as the sanctioned
+alternatives.
+
+This resolves the contradiction noted in [../brainstorming/](../brainstorming/): both "copying the
+file is fine" and "copying the file is dangerous" are true, depending on which files travel together
+and whether a write is in flight.
+
+*Sourced — [sqlite.org/wal.html](https://www.sqlite.org/wal.html) §4 and
+[howtocorrupt.html](https://www.sqlite.org/howtocorrupt.html), read by me 2026-09-02.*
+
+**Postgres connection limits on the cheapest paid tiers, and the failure symptom.** All four reject
+new connections outright once the cap is reached — standard `FATAL: too many connections` — rather
+than queueing or degrading. Neon ~104 direct with 10,000 pooled via built-in PgBouncer; Supabase 60
+direct with 200 via Supavisor; Render 100 with no pooler by default; Railway ~100 with no pooler by
+default. Whether a pooler ships is the discriminator, not the raw number.
+
+*Sourced — second-hand from a research agent reading each provider's documentation 2026-09-02. Not
+opened by me; re-check before this decides anything.*
+
+**Turso's free tier advertises no sleeping**, which is unusual in the managed field and matters given
+the cold-touch finding recorded against
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md). Its
+embedded-replica feature is proprietary, so relying on it sets the exit cost.
+
+*Sourced — second-hand from a research agent, 2026-09-02.*

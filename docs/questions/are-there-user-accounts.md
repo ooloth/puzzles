@@ -106,3 +106,12 @@ gates the first puzzle behind a signup form contradicts the audience it describe
 no assumed technical sophistication, found rather than marketed. Whatever is decided here, the first
 play has to work without one, which is what makes the guest tier above a requirement rather than a
 tier.
+
+**Signing in is a blocking wait, and it is a cold one.** The waiting-moment enumeration
+(2026-09-02, mined into [../problem.md](../problem.md) under "Where a player waits") found nine
+moments where the client is blocked on a server response. Signing in is one of them, and it is
+first-contact-after-a-gap rather than mid-session, so it lands on whatever wake-up cost the
+infrastructure carries. It is listed as conditional there rather than committed to, because it exists
+only if this question answers yes.
+
+*Reasoned — from that enumeration, 2026-09-02.*

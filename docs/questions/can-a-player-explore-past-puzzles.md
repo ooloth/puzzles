@@ -92,3 +92,12 @@ produce a combination that retires a decision already made.
 
 **Nothing is promised.** [../guarantees/](../guarantees/) covers only the board in progress. Boards
 already finished have no promise, and neither does reaching a puzzle from a day the player missed.
+
+**Browsing an uncached archive is a blocking wait, and one of only two that are not cold.** The
+waiting-moment enumeration (2026-09-02, mined into [../problem.md](../problem.md) under "Where a
+player waits") found nine blocking moments, seven of which are first contact after a gap. This is one
+of the two exceptions: it happens mid-session, with other requests already flowing, so it pays no
+wake-up cost. That makes it cheaper than it looks, and it is a point in this option's favour that
+nothing had recorded.
+
+*Reasoned — from that enumeration, 2026-09-02.*

@@ -132,3 +132,94 @@ written and where the catalogue's shape is argued.
 [are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md),
 both open. A catalogue written once a day and a catalogue written per request are different
 problems.
+
+### The catalogue may be on the daily path, and that was not known when this was framed
+
+*Mined 2026-09-02 from [what does a player wait for?](README.md), since resolved and deleted.*
+
+**The most frequent blocking moment in the product is fetching a puzzle the device has never had.**
+It happens to every active player at least daily, because
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) rules out shipping
+content as static files. Every other blocking moment is either once per device, conditional on an
+unbuilt feature, or limited to players with two devices.
+
+**Whether that moment touches the store is exactly this question**, asked from the other side.
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) settles that a
+runtime serves puzzle content and its closing line lists "what the catalogue is stored in" among what
+it deliberately does not settle.
+
+> So the answer here decides whether store availability is a background concern or a daily one. If the
+> catalogue lives in the store, a store outage means nobody starts today's puzzle — and
+> [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)'s "not on the
+> interaction path" turns out to be true of solving and not of session entry.
+
+*Reasoned — from the records named, each opened and checked 2026-09-02.*
+
+### The queryability requirement does cover the catalogue — checked, not assumed
+
+**"What would settle it" flagged this as worth checking, and it checks out.**
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s Decision
+sentence is "Anything the server stores is stored so that it can be queried later". Not "player data".
+Anything.
+
+**Its rejected options confirm the reading rather than merely permitting it.** "An opaque blob store,
+queried never" was rejected because it "forecloses the generator's feedback loop" — and that loop is
+about whether generated puzzles are good, which is a question about the catalogue joined to play.
+
+> So a catalogue that is only ever fetched by key is ruled out, and the simpler storage it would have
+> allowed is not available. This removes the "much simpler" escape that file anticipated.
+
+*Sourced — [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md),
+opened and read 2026-09-03.*
+
+**One nuance the examples permit.** The three questions that record names — which puzzles get
+finished, where players stall, whether a difficulty grade predicts anything — need puzzle *metadata*
+joined to play data. None requires querying *into* the grid itself. So puzzle metadata being queryable while grid
+content sits in an opaque column satisfies [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md). That is a schema choice inside "one store"
+rather than a fourth answer to this question, and it belongs to
+[what is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md).
+
+### The pinning claim that promoted this to M1 rests on an unexamined assumption
+
+**"A store opened as a file pins the generator to the server's machine" is not true as stated.** It is
+true only if the generator writes into the store *directly*. A generator that publishes through the
+server's own API — sending a puzzle over HTTP and letting the server write it — runs anywhere,
+including a laptop, under a local file store exactly as it would under a network one.
+
+Nothing in [../decisions/](../decisions/) says the generator writes directly. The assumption was
+carried into
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) as "The
+generator must share the machine, because it writes to the same file", and nothing argued it.
+
+**What the publish-through-the-server route actually costs**, so this is a comparison rather than a
+dismissal: an endpoint, a credential for it, and a slower path for bulk writes. Against
+[../problem.md](../problem.md)'s ranking that "a player never waits on puzzle generation, which can be
+as slow as it needs to be", the slowness does not bind. The endpoint and credential are real work and
+are needed only in this branch.
+
+> So this question's M1 urgency was borrowed from a claim that does not hold. Even in the local-file
+> branch, one store does not pin the generator — it pins the *writer*, and the writer can be the
+> server. Both routes to M1 are now weak: this one is dissolved, and the daily-path route below
+> sharpens the shape argument without reversing it.
+
+*Reasoned — 2026-09-03, by asking what the pinning claim actually requires. This is a correction to a
+finding carried since 2026-09-02, and it weakens an argument that was being used against the
+local-file branch.*
+
+### What the unknowns would and would not change
+
+**The two things nothing has established do not plausibly flip one-versus-two.** The catalogue's
+schema is open until M3, and its write frequency depends on
+[is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) and
+[are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
+Neither bears on co-location: a daily puzzle for a deliberately small audience is small under every
+open answer, and [../problem.md](../problem.md) rules out designing for scale that does not exist.
+
+**The strongest case for two stores is one nothing has recorded, and it is not about scale.** A
+catalogue is public and immutable; a player record is private and may fall under obligations
+[do privacy regulations apply?](do-privacy-regulations-apply.md) has not researched. Keeping them
+apart means deleting a player never touches the catalogue. That is a real argument and it is
+satisfiable inside one store by keeping them in separate tables, so it argues for a schema boundary
+rather than a storage boundary.
+
+*Reasoned — 2026-09-03, from the records and open questions named.*

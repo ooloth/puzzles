@@ -163,3 +163,72 @@ that was considered and dropped.
 **A practice worth keeping from the previous decision.** It named its upgrade path and the conditions
 that would trigger it — generation outgrowing the compute ceiling, steal proving persistent, a
 genuinely multi-app future — rather than choosing a cheap option and leaving the exit undefined.
+
+### Platform facts established while enumerating failure domains and waiting moments
+
+*Mined 2026-09-02 from two question files since resolved and deleted. Each was verified at the tier
+stated; the ones marked second-hand were not opened by me.*
+
+**Whether a platform sleeps is now a first-order property rather than a detail.** The waiting-moment
+enumeration found that seven of nine blocking moments are first contact after a gap, and that this is
+structural rather than a consequence of low traffic — see
+[what execution shape does the server have?](what-execution-shape-does-the-server-have.md) for the
+derivation. So wake-up latency lands on most waits in the product, and it does not improve with growth.
+
+**Fly.io distinguishes suspend from stop, and only one of them is fast.** Resume from suspended is
+"a few hundred ms"; cold start from fully stopped is "~2+ seconds for common apps". Stopping a
+suspended machine invalidates its snapshot, forcing a cold boot next start. Fly's own docs warn that
+resuming from suspend can produce clock skew affecting JWT validation, cron and TLS checks, and
+recommend `stop` over `suspend` for clock-sensitive apps.
+
+*Sourced — [fly.io/docs/reference/suspend-resume](https://fly.io/docs/reference/suspend-resume/),
+second-hand from a research agent 2026-09-02.*
+
+**Fly volumes are not replicated, stated first-party.** "If your app needs a volume to function, and
+the NVMe drive hosting your volume fails, then that instance of your app goes down. There's no way
+around that." Also: "Fly.io does not automatically replicate data among the volumes on an app", and
+daily snapshots "shouldn't be your primary backup method."
+
+*Sourced — [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), opened and read by me
+2026-09-02.*
+
+**Cloud Run scales to zero at no cost, and its cold-start latency is not published by Google.**
+Min-instances defaults to 0 and costs nothing at rest; setting it above 0 "will incur cost even when
+the service is not actively serving requests." No official cold-start figure exists — Google's docs
+describe it as dependent on runtime and init code without giving a number. Third-party estimates
+cluster at 200ms–2s for Node, which is not a measurement.
+
+*Sourced for the cost claim — Google's instance-autoscaling documentation, second-hand from a research
+agent 2026-09-02. The latency figure is explicitly unverified.*
+
+**Vercel's free plan restriction is stricter than "do we charge users".** The pricing page says the
+Hobby plan "is for personal, non-commercial use", and the Fair Use Guidelines define commercial usage
+as "any Deployment that is used for the purpose of financial gain of anyone involved in any part of
+the production of the project, including a paid employee or consultant writing the code." Donations
+are named as commercial usage.
+
+*Sourced — Vercel's pricing and fair-use pages, second-hand from a research agent 2026-09-02.*
+
+**Cloudflare began hard-enforcing D1's free-tier daily limits on 2026-09-01.** Exceeding them returns
+errors rather than billing: "When your account hits the daily read and/or write limits, you will not be
+able to run queries against D1." Free plan is 5 GB storage, 5 million rows read/day, 100,000 rows
+written/day.
+
+*Sourced — [D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/) opened and read by me
+2026-09-02 for the limits and the failure behaviour. The 2026-09-01 enforcement date is second-hand
+from a research agent citing Cloudflare's changelog, and I did not open it.*
+
+**A managed platform's control plane can take its own backups down with it.** In May 2026 Google Cloud
+auto-suspended Railway's production GCP account; customer databases went offline and customers could
+not retrieve their backups, because backup storage sat behind the same control plane. Blast radius was
+set by a dependency the customer did not choose and could not see.
+
+*Sourced — second-hand from a research agent cross-referencing InfoQ and Railway's status history. Not
+opened by me; re-check before this decides anything.*
+
+**Free tiers behave like outage modes at this traffic level.** Supabase pauses free projects after
+7 days of low activity, restorable for up to a year; Render's free Postgres expires 30 days after
+creation with a 14-day grace period before deletion. Low traffic is this project's design point rather
+than a temporary condition, so both are live failure modes.
+
+*Sourced — second-hand from a research agent reading each vendor's documentation 2026-09-02.*

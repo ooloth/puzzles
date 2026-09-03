@@ -72,6 +72,10 @@ it usually matters more than the failure itself.>
   — the work is intact and unreachable, usually because two devices are running different versions.
 - [A player resumes from a board another device moved past](a-player-resumes-from-a-board-another-device-moved-past.md)
   — nothing is lost and nothing is wrong, and the player still watches their progress go backwards.
+- [The durable copy stops being written](the-durable-copy-stops-being-written.md)
+  — the write path has no human watching it, because the promise not to bother the player forbids one.
+- [The backup turns out not to restore](the-backup-turns-out-not-to-restore.md)
+  — a backup nobody has restored and a backup that cannot be restored look identical from outside.
 
 ### Threatening availability and cost
 

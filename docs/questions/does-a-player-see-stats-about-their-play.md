@@ -87,3 +87,12 @@ of play, and its durability theme says so explicitly: only the board in progress
 
 **Answering this "no" costs nothing today and closes little.** Nothing is built on it, and the
 storage shape that would make it possible is being secured for a different reason.
+
+**Viewing a stats screen is a blocking wait, and one of only two that are not cold.** The
+waiting-moment enumeration (2026-09-02, mined into [../problem.md](../problem.md) under "Where a
+player waits") found nine blocking moments, seven of them first contact after a gap. This is one of
+the two exceptions — it happens mid-session — so it pays no wake-up cost. It does require the store to
+answer an aggregate question, which is the requirement
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) already secured.
+
+*Reasoned — from that enumeration, 2026-09-02.*

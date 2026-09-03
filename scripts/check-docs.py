@@ -40,16 +40,22 @@ problems = []
 
 
 COMMENT_BLOCK = re.compile(r'<!--.*?-->', re.DOTALL)
+FENCED_BLOCK = re.compile(r'^```.*?^```', re.DOTALL | re.MULTILINE)
 
 
 def without_comments(text):
-    """Text with HTML comment blocks removed.
+    """Text with HTML comment blocks and fenced code blocks removed.
 
     Templates live in comments and contain placeholder links on purpose. Scanning them
     reports every placeholder as broken, which is noise that trains people to ignore the
     checker. A comment is not a claim about anything, so nothing in one is checked.
+
+    Fenced blocks are skipped for the same reason. A diagram labelling a box "ADR-0019"
+    is not a prose citation that could name the wrong record — it is a picture, and the
+    prose beneath it carries the real links. Requiring markdown links inside an ASCII
+    diagram would mean choosing between a readable diagram and a passing check.
     """
-    return COMMENT_BLOCK.sub('', text)
+    return FENCED_BLOCK.sub('', COMMENT_BLOCK.sub('', text))
 
 
 def links_in(path):
@@ -338,7 +344,8 @@ def check_adr_references():
             if not f.endswith('.md'):
                 continue
             path = os.path.join(root, f)
-            for n, line in enumerate(open(path), 1):
+            body = without_comments(open(path).read())
+            for n, line in enumerate(body.splitlines(), 1):
                 for m in ADR_LINK.finditer(line):
                     if m.group(1) != m.group(2):
                         problems.append(

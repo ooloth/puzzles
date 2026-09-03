@@ -9,8 +9,15 @@ resolves_into: decision
 ## Why it matters
 
 Running a server is not the same as choosing one. Something has to restart it when it dies, tell
-someone when it stops answering, keep it patched, and let the maintainer back in when they lock
-themselves out. None of that is covered by
+someone when it stops answering, and keep it patched.
+
+**Getting onto the machine is a separate question now.** Access, hardening and the lockout route split
+out to [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) on
+2026-09-03 and sit at M2, because that half is needed to *check* a change and this half is needed to
+*survive* one. What is left here is the ongoing operation of a machine that already exists and can
+already be reached.
+
+None of it is covered by
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) or
 [where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
 the answer to the second.

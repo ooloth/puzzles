@@ -169,11 +169,13 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**Slice 1's questions are a set rather than a chain.** They were ordered on the claim that store
-locality constrains the runtime, and that claim is false: Node, Bun and Deno all ship `node:sqlite`
-as a built-in, so the same data-access code runs on every runtime under either store answer. No
-question here is reversed by another, so the order below is build order rather than dependency order,
-and any of them can be worked first.
+**The store does not order slice 1's questions. The toolchain does.** They were once ordered on the
+claim that store locality constrains the runtime, and that claim is false: Node, Bun and Deno all ship
+`node:sqlite` as a built-in, so the same data-access code runs on every runtime under either store
+answer. What remains is a chain the question files state themselves — the runtime is answered together
+with the HTTP handler, the package manager may be settled by consequence if the runtime ships one, and
+the layout waits on whether that toolchain does workspaces. So the runtime is worked first, and not
+because it is built first.
 
 **Two of the three claims once bundled into the server's execution shape are settled.**
 [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) records that nothing on
@@ -300,36 +302,33 @@ board for six milestones and meeting the store for the first time with a finishe
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
 4. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
-5. [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) — the class was settled at M1 as part of the execution shape;
-   the engine waits until here, because choosing between them without an access pattern is choosing
-   by reputation.
-6. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
+5. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
    is where a backup stops being hypothetical. It sits at this milestone rather than later because
    setting it up alongside the store is when it is cheapest, and because the named precedent for
    deferring it is an operational inventory of roughly twenty-five tasks written for exactly this
    architecture with no backup or restore procedure in it. Distinct from
    [is the store's backup restorable?](is-the-stores-backup-restorable.md) at M11, which asks whether
    anyone has actually rehearsed one.
-7. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+6. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
    — journal mode, synchronous level and busy timeout decide whether a committed write survives a
    power cut, which [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left
    open. Answered here because the first row is the first thing that could be lost, and the question
    is framed to test whether the safest setting costs anything at all rather than to position a dial.
-8. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
+7. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
    data to lose is when it is cheapest, and
    [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) already schedules the change
    that forces one.
-9. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+8. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
    — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
    commits to surviving host replacement and the machine cannot deliver that alone. This is the main
    lever on how long an outage lasts, and it is ours rather than a provider's.
-10. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
+9. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
     there is no store at M1, so nothing can be disturbed there. What M1 owes this question is only
     that the host it picks *can* deploy without two processes holding one file, and that is recorded
     against [where does this run?](where-does-this-run.md) in that milestone. The rest —
     checkpointing on exit, replication across a restart, rolling back past a migration — is real from
     the first row.
-11. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+10. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
    none.
@@ -538,10 +537,6 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),
 [what do existing puzzle apps do about offline play?](what-do-existing-puzzle-apps-do-about-offline-play.md)
 — research.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — worth running to
-turn a *Reasoned* claim in [../constraints.md](../constraints.md) into a *Measured* one. The file
-records why the number decides nothing about store locality, so that it does not get promoted back
-into M1.
 
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
 [how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),

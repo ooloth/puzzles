@@ -19,23 +19,32 @@ when it'll finish, don't change what you should do right now.
 
 Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
 
-### The store is decided and the rest of the stack is not
+### The shape is settled on both sides and no tool has been chosen
 
-**You'll see** four recent records settling the store — a SQLite file, on the server's machine, on a
-disk that survives a redeploy — and a `docs/architecture.md` with a diagram in it. It reads as though
-the stack is largely chosen and someone is about to start typing.
+**You'll see** eight records settling the store and the browser's entry document — a SQLite file on
+the server's machine, a service worker answering navigations, a document produced by the build — and a
+`docs/architecture.md` with boxes on both sides of the network. It reads as though the stack is
+largely chosen and someone is about to start typing.
 
-**Actually** the store is the only part of the stack that is settled. What executes TypeScript, what
-handles HTTP, what renders the client, what builds it, where the machine is, and what deploys to it
-are all open, and they are the questions M1 actually turns on. The architecture diagram is deliberate
-about this: every box cites the record that fixed it, and the last section lists what is not decided,
-which is the longer list.
+**Actually** what those records settle is the shape, and none of the tools. On the server: the store
+is a file the process opens, on a machine whose disk survives a redeploy. In the browser: a service
+worker answers every navigation after the first, and the entry document is a build output rather than
+a per-request render. What executes TypeScript, what handles HTTP, what renders the client, what
+builds it, where the machine is and what deploys to it are all open, and they are the questions M1
+turns on. The architecture diagram is deliberate about this: every box cites the record that fixed it,
+and the last section lists what is not decided, which is the longer list.
 
-**So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. The store
-records constrain the hosting choice — an ordinary process with a local disk beside it — and they
-narrow nothing else. In particular they do **not** narrow the runtime: Node, Bun and Deno all ship
-`node:sqlite`, so anyone reasoning "SQLite, therefore runtime X" has inherited a claim that was
-checked and found false on 2026-09-03.
+**So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. Two claims
+that read as consequences of those records are not, and both have already been checked:
+
+- **The store does not narrow the runtime.** Node, Bun and Deno all ship `node:sqlite`, so anyone
+  reasoning "SQLite, therefore runtime X" has inherited a claim found false on 2026-09-03.
+- **The entry document being a build output does not exclude the meta-frameworks.**
+  [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) binds
+  how the document is produced and nothing else — not who builds the bundle, not what answers HTTP.
+  Prerendering a document while serving API routes from the same process is a live configuration. What
+  the record removes is the argument that would have forced a meta-framework, not the option of
+  choosing one.
 
 <!-- Template:
 

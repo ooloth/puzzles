@@ -18,5 +18,7 @@ with the system's evolving design and implementation choices, which are all docu
   milestone each unblocks (start here if you want to know what's coming next)
 - 🧭 [`docs/decisions/`](docs/decisions/) — the choices that have already been made, with their rationale,
   including why each was necessary, what options were rejected, and what trade-offs were accepted
+- 🗺️ [`docs/architecture.md`](docs/architecture.md) — what talks to what, and how much of the system is
+  still undecided (it's most of it)
 - 📚 [`docs/README.md`](/docs/README.md) — everything else: the constraints the platform imposes, the standards
   the project aims to uphold, and the known ways the system can fail, etc.

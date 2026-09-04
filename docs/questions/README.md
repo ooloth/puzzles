@@ -250,32 +250,38 @@ a player can see, which is why it has to be a milestone rather than a habit.
 1. [What runs the tests?](what-runs-the-tests.md) — likely answered by M1's runtime.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
-3. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
+3. [What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md)
+   — `check-docs.py` is Python, which no record sanctions and no record forbids.
+   [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) covers deployables, and a
+   script is not one — but its stated reason is avoiding a second toolchain, which is exactly what
+   a Python script in a TypeScript repository is. Sits beside the question above because they
+   decide the same artefacts.
+4. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This is where [../verification.md](../verification.md) gets its content.
-4. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+5. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
-5. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+6. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
-6. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+7. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
-7. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+8. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-8. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+9. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
    platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
    reproduced only on real iOS Safari over a real network.
-9. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
+10. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
    the machine, and the baseline that stops it being trivially compromised. It sits here because a
    restore drill, a look at a log and a check of what actually shipped all need access, and because
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) put the data on a
    machine rather than behind a vendor. Its size depends entirely on
    [where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a
    bare machine supplies none of it.
-10. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+11. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. It cannot be answered before
    the compatibility theme in [the guarantees README](../guarantees/README.md) says what the matrix
    is, and that theme holds no promises yet, admitting every promise in the folder is scoped to

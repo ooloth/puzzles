@@ -70,3 +70,18 @@ before anything is installed.
 repo's documentation work caught a dangling pointer to a deleted file, an index that had drifted
 from its folder, and a rewrite that produced a three-hundred-character line. All three would have
 been caught by a script that takes seconds to run.
+
+**If the checker stays Python, a PEP 723 header would pin its interpreter.** `uv run` fetches and
+manages the interpreter itself, so the check runs identically on a machine with no Python or the
+wrong Python. The header is a comment block, so `python3 scripts/check-docs.py` keeps working
+unchanged — it is additive rather than a switch, which is what makes it cheap.
+
+**Its value only lands once something automated runs the check**, which is what this question decides.
+A pinned interpreter buys nothing while the only caller is a person typing the command on the machine
+where it already works. So this is worth adopting alongside an answer here rather than ahead of one.
+
+**It is downstream of a question that did not exist until now.**
+[What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md) asks
+whether the checker should be Python at all, and if the answer is TypeScript this option disappears
+rather than being rejected. Considering the `uv` version first would be choosing between Pythons in a
+repository that has not decided it wants one.

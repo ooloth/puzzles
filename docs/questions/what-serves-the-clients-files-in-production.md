@@ -64,7 +64,10 @@ work, and it makes the arrangement the platform's rather than ours to reason abo
 question and [what builds and serves the client?](what-builds-the-client-and-serves-it-in-development.md) meet at
 the filenames.
 
-**This is only a question if the client is a set of files.** If the entry document is produced per
-request, the process producing it is already answering the browser, and this collapses into
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). See
-[is the entry document produced per request?](is-the-entry-document-produced-per-request.md).
+**The client is a set of files, so this is a real question rather than a collapsed one.**
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
+that the entry document is produced by the build. Had it gone the other way, the process producing the
+document would already be answering the browser and this would have folded into
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). It does not
+follow that a separate file host is required — the same process may serve both — only that something
+has to be chosen to serve files.

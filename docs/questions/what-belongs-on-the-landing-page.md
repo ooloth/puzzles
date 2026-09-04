@@ -55,11 +55,13 @@ Raised 2026-09-02 by the maintainer, alongside the browser testing question.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Whatever this is, it does not have to be part of the app.**
-[Is the entry document produced per request?](is-the-entry-document-produced-per-request.md) already records that
-"anything outside the game can be a separate static deploy or a separate server; it does not require
-the game itself to be rendered remotely." So the answer here cannot force the rendering decision, and
-should not be allowed to look as though it does.
+**Whatever this is, it does not have to be part of the app.** Anything outside the game can be a
+separate static deploy or a separate server; it does not require the game itself to be rendered
+remotely. So the answer here cannot force the rendering decision, and should not be allowed to look as
+though it does.
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
+the game's own document as a build output and explicitly preserves per-route rendering added later, so
+a landing page that wants markup a link-preview crawler can read is additive rather than a reopening.
 
 **Anything shown before a player can solve is on the offline path too.**
 [The app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) and

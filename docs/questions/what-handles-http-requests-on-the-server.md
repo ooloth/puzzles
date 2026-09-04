@@ -51,6 +51,16 @@ which is the property that decides whether an edge runtime stays reachable.
 documentation aimed at people who have not read this repo. Larger surface to keep patched, and
 several assume a long-lived process in ways that foreclose the edge tier.
 
+*A meta-framework's own server, serving API routes alongside a prerendered entry document.* This list
+omitted the option, and its absence read as a rejection nobody had argued.
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
+that the document is a build output and explicitly does *not* exclude the framework that builds it
+from also answering HTTP — SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's
+Node adapter with `output: 'static'`, and TanStack Start's `prerender` with server functions are all
+this shape. Next is the exception: its `output: 'export'` drops route handlers that read the request,
+so choosing Next means a separate API server. Weigh it here on its merits rather than treating it as
+already excluded.
+
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*

@@ -21,6 +21,16 @@ constraint from intention. The parts still open are listed at the end and are th
         ┌─────────────────────────────────────────┐
         │  browser                                │
         │  ┌───────────────────────────────────┐  │
+        │  │ service worker — answers every    │  │   not the HTTP cache,
+        │  │ navigation after the first        │  │   which cannot be
+        │  │ from a document on the device     │  │   inspected  ADR-0023
+        │  │                         ADR-0023  │  │   (holds 30 idle days
+        │  └───────────────────────────────────┘  │    on Safari)
+        │  ┌───────────────────────────────────┐  │
+        │  │ entry document — produced by the  │  │   so a renderer is not
+        │  │ build, not per request  ADR-0024  │  │   also a server
+        │  └───────────────────────────────────┘  │
+        │  ┌───────────────────────────────────┐  │
         │  │ client — owns board state,        │  │   solving never
         │  │ mutates it locally      ADR-0004  │  │   touches the network
         │  └───────────────────────────────────┘  │

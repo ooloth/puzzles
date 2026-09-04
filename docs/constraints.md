@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-31
+updated: 2026-09-03
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -248,6 +248,88 @@ engineer attributes it to exactly that. The bug was closed once and has been reo
 *Sourced — WebKit bug 229178, reopened, checked 2026-08-31. This is a defect rather than a
 design, so it may be fixed and stop being true. The mitigation is worth taking regardless,
 because it is free and the failure it avoids is a lost first write.*
+
+---
+
+## Browsers — the HTTP cache is not storage
+
+*These are about the browser's ordinary network cache, which is a different mechanism from the Cache
+API above and is governed by different rules. The two are easy to conflate, and the conflation
+suggests an offline mechanism that does not exist.*
+
+**The HTTP cache sits outside the Storage Standard entirely.** The specification separates "Network:
+HTTP cache, cookies, authentication entries, TLS client certificates" from "Storage: Indexed DB, Cache
+API, service worker registrations, `localStorage`, `sessionStorage`". Its registered storage endpoints
+are `caches`, `indexedDB`, `localStorage`, `serviceWorkerRegistrations` and `sessionStorage`. The HTTP
+cache is not one of them.
+
+> So `navigator.storage.persist()` does not cover it, and no API tests whether a URL is in it, places
+> one there, or reports an eviction. Nothing a page can execute establishes that a document is
+> available offline, and nothing can verify it afterwards. It is unusable as the mechanism behind a
+> promise, whatever it happens to do on any given device.
+
+*Sourced — the [WHATWG Storage Standard](https://storage.spec.whatwg.org/), "Lay of the land" and the
+storage endpoints table, read 2026-09-03.*
+
+**A cache may serve a stale response while disconnected, and is not required to.** RFC 9111 §4.2.4:
+"A cache MUST NOT generate a stale response unless it is disconnected or doing so is explicitly
+permitted by the client or origin server", where disconnected means it "cannot contact the origin
+server or otherwise find a forward path for a request".
+
+> So offline behaviour for an expired entry is at the browser's discretion. A design that needs a
+> document offline after its freshness lifetime has elapsed is relying on permission granted to the
+> implementation rather than on a behaviour anything guarantees.
+
+*Sourced — [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) §2 and §4.2.4, read 2026-09-03.*
+
+**`stale-if-error` does not cover a connection failure.** RFC 5861 defines the error it responds to as
+"any situation that would result in a 500, 502, 503, or 504 HTTP response status code being returned".
+A device with no network produces no status code.
+
+> So the directive that looks like it solves the case above does not reach it, and browser support for
+> it appears to be absent in any case.
+
+*Sourced — RFC 5861, read 2026-09-03 by a research agent. Browser support was investigated and not
+established either way: an archived compatibility table showed no support, and a current one could not
+be loaded.*
+
+**Safari's tracking-prevention deletion does not include the HTTP cache.** The data types it removes
+are Cookies, DOMCache, IndexedDBDatabases, LocalStorage, MediaKeys, SearchFieldRecentSearches,
+SessionStorage, ServiceWorkerRegistrations, FileSystem, ScreenTime and EnhancedSecurityRecord.
+`DiskCache` and `MemoryCache` are absent, and the branch that would delete the disk cache is gated on
+a type this path never sets.
+
+> So the HTTP cache outlives the service worker registration and the Cache API that the app itself
+> controls. This does not make it a durable mechanism — it is still evicted under size pressure with
+> no notice, and the entry above establishes that nothing can inspect or populate it. What it means is
+> narrower: after a 30-day wipe the app is rebuilding from nothing regardless, because the registration
+> that would have served a cached document is one of the things deleted.
+
+*Sourced — WebKit trunk, `Source/WebKit/NetworkProcess/Classifier/WebResourceLoadStatisticsStore.cpp`,
+`monitoredDataTypes()`, read 2026-09-03 by me. The claim that the disk-cache deletion branch in
+`NetworkProcess.cpp` is gated on `WebsiteDataType::DiskCache` is second-hand from a research agent and
+I did not open that file.*
+
+**WebKit evicts HTTP cache entries under size pressure, per entry and probabilistically.** Eviction
+runs only when the cache exceeds its capacity, and picks entries by a worth calculation over time
+since last access relative to age. There is no calendar-age cutoff.
+
+> So an entry's survival depends on what else the device has been browsing, which is outside our
+> influence and unobservable from the page.
+
+*Sourced — WebKit trunk, `NetworkCacheStorage.cpp`, read 2026-09-03 by a research agent. Not opened by
+me.*
+
+**HTTP cache entries evict independently of one another.** Nothing in the caching specification treats
+a document and the resources it references as a unit, and Chromium's disk cache documents per-entry
+eviction by last access.
+
+> So a surviving document can reference an evicted bundle, which is a blank screen, or a differently
+> versioned one, which is worse because it is silent. Any mechanism that has to deliver a document and
+> its assets together needs something that installs them as a set.
+
+*Reasoned from the specification's silence, plus Chromium's design documentation read 2026-09-03 by a
+research agent. Firefox and WebKit eviction granularity was not confirmed.*
 
 ---
 

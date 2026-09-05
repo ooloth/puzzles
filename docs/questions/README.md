@@ -338,26 +338,31 @@ board for six milestones and meeting the store for the first time with a finishe
    architecture with no backup or restore procedure in it. Distinct from
    [is the store's backup restorable?](is-the-stores-backup-restorable.md) at M11, which asks whether
    anyone has actually rehearsed one.
-6. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+6. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — before the
+   settings below, because journal mode and busy timeout are applied through whatever opens the file.
+   It sits here rather than at M1 because the first row is here, but its *openness* is a caveat on M1:
+   the argument that the store does not narrow the runtime runs entirely through `node:sqlite`, which
+   no record has chosen.
+7. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
    — journal mode, synchronous level and busy timeout decide whether a committed write survives a
    power cut, which [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left
    open. Answered here because the first row is the first thing that could be lost, and the question
    is framed to test whether the safest setting costs anything at all rather than to position a dial.
-7. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
+8. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
    data to lose is when it is cheapest, and
    [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) already schedules the change
    that forces one.
-8. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+9. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
    — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
    commits to surviving host replacement and the machine cannot deliver that alone. This is the main
    lever on how long an outage lasts, and it is ours rather than a provider's.
-9. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
+10. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
     there is no store at M1, so nothing can be disturbed there. What M1 owes this question is only
     that the host it picks *can* deploy without two processes holding one file, and that is recorded
     against [where does this run?](where-does-this-run.md) in that milestone. The rest —
     checkpointing on exit, replication across a restart, rolling back past a migration — is real from
     the first row.
-10. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+11. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
    real secret exists here, because this is where the store gains a row and, if it is reached over a
    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
    none.

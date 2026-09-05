@@ -222,6 +222,27 @@ without an npm specifier or a native addon to compile. Deno additionally require
 
 *Reasoned — 2026-09-03, from the driver facts above.*
 
+**That conclusion is conditional on `node:sqlite`, and nobody has chosen it.** The argument above runs:
+all three runtimes ship `node:sqlite`, therefore the same data-access code runs everywhere, therefore
+the store does not narrow the runtime. Every step holds *given* that `node:sqlite` is the driver. It
+is not a given. It is the option that happens to be common to all three, which is exactly what makes
+it attractive to an argument trying to show they are equivalent, and that is a reason to distrust the
+argument rather than to trust the driver.
+
+If the best driver differs by runtime, the runtimes are not equivalent on the store after all. Bun
+ships `bun:sqlite` natively; Node has `better-sqlite3` alongside its built-in; Deno has `@db/sqlite`
+over FFI. A WASM build runs anywhere. An ORM or query builder over any of them is a further layer
+nobody has considered. None of these has been weighed, and no record forecloses them.
+
+> So the honest statement is narrower: **under `node:sqlite`, no runtime is advantaged.** Whether a
+> runtime-specific driver would be preferable, and therefore whether driver quality belongs in this
+> decision at all, is [which driver reads and writes the
+> store?](which-driver-reads-and-writes-the-store.md). The driver itself is not needed until M3, but
+> its openness is a caveat on this question's central argument today.
+
+*Reasoned — 2026-09-04, on noticing that the equivalence argument assumes its own conclusion's
+premise.*
+
 **One incompatibility worth knowing early, stated more precisely than before.** `better-sqlite3` does
 not load under Bun out of the box: it is a native addon and fails with ABI mismatches
 (`ERR_DLOPEN_FAILED`, "compiled against different Node.js ABI version"). Recompiling against the

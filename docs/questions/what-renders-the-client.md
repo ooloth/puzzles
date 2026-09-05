@@ -50,9 +50,10 @@ below record both why that is evidence and why it is weak evidence.
 
 *A component framework.* The candidate field, given
 [ADR-0007](../decisions/0007-that-language-is-typescript.md), was React, Svelte, Solid, Vue
-and Preact. The research below narrows it to **React, Preact and Svelte**: Solid and Vue are out on
-their own merits, and Lit was considered and is out. React and Preact share a programming model, so
-that shortlist is two comparisons rather than three.
+and Preact. The research below drops Solid on timing and Lit on tooling decay, both with stated
+disqualifiers. **Vue is not dropped**: the findings record that it has no disqualifier and no
+advantage, which is a reason to leave it in the field rather than to narrow it out. React and Preact
+share a programming model, so comparing them is one comparison rather than two.
 
 *A framework for the shell with direct rendering for the board.* The pattern comparable projects
 converge on, and a genuine fourth option rather than a blend of the others.

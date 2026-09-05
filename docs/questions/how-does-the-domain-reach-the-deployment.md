@@ -20,9 +20,10 @@ A reverse proxy in front of the origin is exactly the topology that rule describ
 resolves is not cosmetic: it can cap the cookie at seven days, and the failure produces no error and
 no log line — the cookie simply expires alongside the storage it was meant to outlive.
 
-[../questions/README.md](README.md) holds same-origin as a constraint on M1's hosting choice for this
-reason. Same-origin does not rescue a cookie that fails the resolution test, so this has to be
-settled with the hosting choice rather than after it.
+Whether the system serves both halves from one origin is open, at
+[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md). Either way
+this question still bites: same-origin does not rescue a cookie that fails the resolution test, so
+what the domain resolves to has to be settled with the hosting choice rather than after it.
 
 The rest of it is ordinary and still has to be decided: whether the app answers on the apex or a
 subdomain, and where the certificate comes from.

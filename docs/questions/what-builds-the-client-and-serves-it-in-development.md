@@ -73,10 +73,9 @@ no way to configure or disable that.
 *Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-04 by me, against Bun
 1.4.1. Browserslist integration is requested and unimplemented in Bun issues 40133 and 40361.*
 
-**How much that costs is not established, because the browser matrix is not written.** This finding
-was previously recorded as deciding the question on its own. It cannot, because its consequence —
-"recent syntax reaches whatever device opens the app" — has no weight until something says which
-devices those are. See
+**How much that costs is not established, because the browser matrix is not written.** The finding
+above does not decide this question on its own: its consequence — "recent syntax reaches whatever
+device opens the app" — has no weight until something says which devices those are. See
 [which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md).
 
 **It cannot bundle web workers.** Issue 18601, "support bundling workers in bun build and dev
@@ -121,12 +120,12 @@ builds; the pattern is Bun as runtime or package manager underneath a Vite build
 path would be ours to find first, which is the opposite of what one maintainer wants.
 
 *Measured — GitHub code search hit counts, run 2026-09-04 by a research agent. Hits are files, not
-repositories or maintained projects, so these bound an order of magnitude rather than a ratio. The
-figure of "roughly eight hundred" previously recorded here has no source and is not reproducible.*
+repositories or maintained projects, so these bound an order of magnitude rather than a ratio. No
+published source states a precise ratio; treat any bare figure for it as unsourced.*
 
 **Its test runner has a watch mode.** `bun test --watch` is documented and works. It reruns the whole
 suite on any change rather than only affected tests (issues 4825 and 7546) and does not detect newly
-added test files (issue 8342), which is a smaller complaint than the absence previously recorded.
+added test files (issue 8342).
 
 *Sourced — [bun.com/docs/cli/test](https://bun.com/docs/cli/test), read 2026-09-04 by a research
 agent. I did not open it.*
@@ -177,16 +176,14 @@ acquisition rather than a pending one, which makes the roadmap risk assessable r
 release](https://www.cloudflare.com/press/press-releases/2026/cloudflare-acquires-voidzero-to-build-the-future-of-the-ai-native-web/),
 read 2026-09-04 by me.*
 
-**The AI-rewrite story is not a reason to decline Bun, and the numbers previously recorded here were
-invented.** Bun 1.4.0 was a rewrite from Zig to Rust, and Bun's own account of it is candid: the
-port ran as roughly 50 Claude Code workflows over 11 days, the branch was named `claude/phase-a-port`
-at 6,755 commits, and the stated motive was memory safety rather than performance. The claim recorded
-here that issue volume matched the previous major from near-identical baselines while crash reports
-fell more than threefold against a seven-times-larger install base has no source: a search found
-nothing publishing those comparisons, official or third-party. What can be established is thinner
-and points the other way. One patch release has followed in 15 days, and several regressions against
-1.4.0 are open, including issues 39768 and 40077 above.
+**The AI-rewrite story is not a reason to decline Bun.** Bun 1.4.0 was a rewrite from Zig to Rust,
+and Bun's own account of it is candid: the port ran as roughly 50 Claude Code workflows over 11 days,
+the branch was named `claude/phase-a-port` at 6,755 commits, and the stated motive was memory safety
+rather than performance. What can be established about the aftermath is thin. One patch release
+followed in 15 days, and several regressions against 1.4.0 are open, including issues 39768 and 40077
+above. The capability gaps above hold regardless of how the rewrite was done.
 
 *Sourced — [bun.com/blog/bun-in-rust](https://bun.com/blog/bun-in-rust), read 2026-09-04 by a
-research agent. The deleted statistics were tagged Measured in this file with no method and could
-not be found by search; treat any reappearance of them as fabricated.*
+research agent. No source, official or third-party, publishes comparative post-release stability
+statistics for 1.4.0; treat any figure claiming issue volume or crash rates against a prior major as
+unsourced.*

@@ -2,6 +2,7 @@
 number: 0020
 status: accepted
 date: 2026-09-03
+amended: 2026-09-04
 ---
 
 # 0020 — The store's engine is SQLite
@@ -29,9 +30,18 @@ invisible to anyone reading the listing, and because the alternatives below are 
 somebody will otherwise re-open them.
 
 **It is reachable from every candidate runtime without a native addon.** Node, Bun and Deno all ship
-`node:sqlite` as a built-in — Deno since v2.2 — so this settles nothing about
+`node:sqlite` without an npm specifier or an addon to compile — Deno since v2.2, and there it
+additionally needs `--allow-read` and `--allow-write` for a file-backed database. So this settles
+nothing about
 [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
 which stays open with its field intact.
+
+**That reasoning holds for `node:sqlite` and no record has chosen it.** `node:sqlite` is the driver
+common to all three candidates, which is what makes it convenient to an argument that they are
+equivalent — so the argument rests on the thing it concludes. If the best driver differs by runtime,
+the runtimes are not equivalent on the store. Which driver opens the file is
+[its own question](../questions/which-driver-reads-and-writes-the-store.md), and this record does not
+answer it.
 
 **It does not settle how the database is configured.** Journal mode, synchronous level and busy
 timeout determine whether a write survives a power cut, and they are durability decisions rather than
@@ -103,7 +113,8 @@ exist and narrow this. It is a standing cost at every write site rather than a o
       depends on them lives
 - [x] Nothing in `guarantees/` — this promises a player nothing
 - [x] `questions/what-runs-typescript-outside-the-browser.md` — unaffected, and that is worth stating:
-      all three candidate runtimes ship `node:sqlite`, so this record does not narrow that field
+      under `node:sqlite` this record narrows no runtime. Whether that driver is the one we want is
+      [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
 
 Deliberately not decided here: the journal mode, the synchronous level, the schema, how migrations
 run, and how the database is backed up.

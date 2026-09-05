@@ -27,13 +27,17 @@ which is why it sits ahead of the questions it would otherwise derive from.
 
 ## What would settle it
 
-**The store's shape is settled and it did not narrow this field.**
+**The store's shape is settled and it did not narrow this field, under one condition.**
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
 [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) settle a SQLite file
-on an ordinary always-on runtime. All three candidates here ship `node:sqlite` as a built-in, so none
-is advantaged or disqualified by the store. What those records do remove is the edge
-runtime, which is struck from the options below rather than weighed there.
+on an ordinary always-on runtime. All three candidates ship `node:sqlite`, so under that driver none
+is advantaged or disqualified by the store. **No record has chosen that driver**, and it is the option
+common to all three, so an equivalence argument running through it rests on its own conclusion — see
+the Findings below and
+[which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md). What those
+records do remove is the edge runtime, which is struck from the options below rather than weighed
+there.
 
 It is also answered together with
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) rather than
@@ -125,25 +129,23 @@ workflows over 11 days on a branch named `claude/phase-a-port`, and PR 30412 mer
 stated motive is memory safety: use-after-free, double-free and missed frees in error paths become
 compiler errors in safe Rust.
 
-What the earlier record got right is that memory safety, not a Claude Code production requirement, is
-the stated rationale. What it got wrong is the stronger claim that nothing connects the two, which
-one primary source refutes outright.
+So the rationale is memory safety rather than a Claude Code production requirement, and the rewrite
+is connected to both the owner and the tool. Read Bun's own post before restating either half.
 
 *Sourced — [bun.com/blog/bun-in-rust](https://bun.com/blog/bun-in-rust), fetched raw 2026-09-04 by a
-research agent that quoted the disclosure verbatim. I did not open it. The superseded claim was
-tagged Sourced against a Wikipedia article that does not carry the disclosure.*
+research agent that quoted the disclosure verbatim. I did not open it. A Wikipedia article does not
+carry the disclosure and cannot settle this either way.*
 
 > **A hedge is a request for work, not a finding.** Marking a claim "treat as false unless confirmed"
-> and leaving it there is how a caveat hardens into a verdict nobody tested. This entry is the second
-> time that has happened on this exact subject: the brainstorming document was right about the fact
-> and wrong about the reason, and the correction over-swung into a claim of no connection at all,
-> tagged Sourced, against a source that would not have shown one either way. Where a claim carries a
-> hedge, run the search or say plainly that nobody has.
+> and leaving it there is how a caveat hardens into a verdict nobody tested, and this subject
+> attracts it from both directions: an overstated causal story, then an overcorrection to no
+> connection at all. Where a claim here carries a hedge, run the search or say plainly that nobody
+> has.
 
-**The coupling to the database ran the other way and has now been cut.** The concern was that
-settling a runtime early would settle the store by convenience. The store is settled first
-([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), and it turned out not to advantage any
-runtime, so this is now a free choice rather than a constrained one.
+**The store does not constrain this choice.** The worry was that settling a runtime early would
+settle the store by convenience. The store is settled first
+([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)) and does not advantage any runtime
+under `node:sqlite`, so this is a free choice within the caveat recorded below.
 
 **Driver performance is a live input here, and it is this question's to weigh rather than the store's.**
 `node:sqlite` and `better-sqlite3` sit between 1.1x and 1.7x of each other depending on the query,
@@ -171,11 +173,11 @@ without a flag since v23.4.0 and v22.13.0. Bun's Node-compatibility documentatio
 "Fully implemented", noting only that `backup()` blocks the event loop where Node runs it on a worker
 thread. So the same data-access code runs on both runtimes unchanged.
 
-**Deno ships it too, with one asymmetry the earlier wording denied.** Deno's Node-built-in
+**Deno ships it too, with one asymmetry worth stating.** Deno's Node-built-in
 compatibility reference lists `node:sqlite` among its supported modules, added in Deno v2.2, with
 further APIs in 2.7. It is a genuine built-in in the senses that matter for packaging: no npm
-specifier, no `node_modules`, no native addon to compile. But it is **not** free of permission flags,
-as this file previously claimed. Any file-backed database needs `--allow-read` and `--allow-write`;
+specifier, no `node_modules`, no native addon to compile. But it is **not** free of permission flags:
+any file-backed database needs `--allow-read` and `--allow-write`, and
 only `:memory:` runs unflagged. That boundary is real enough to have had a bypass bug
 (GHSA-8vxj-4cph-c596, an `ATTACH DATABASE` escape from those checks).
 
@@ -243,15 +245,15 @@ nobody has considered. None of these has been weighed, and no record forecloses 
 *Reasoned — 2026-09-04, on noticing that the equivalence argument assumes its own conclusion's
 premise.*
 
-**One incompatibility worth knowing early, stated more precisely than before.** `better-sqlite3` does
+**One incompatibility worth knowing early.** `better-sqlite3` does
 not load under Bun out of the box: it is a native addon and fails with ABI mismatches
 (`ERR_DLOPEN_FAILED`, "compiled against different Node.js ABI version"). Recompiling against the
-matching ABI is a documented workaround, so "does not work" is too absolute, and the problem recurs
-across Bun releases rather than sitting in one long-open ticket — the tracker holds a cluster of
+matching ABI is a documented workaround, so it is not that the library cannot work, and the problem
+recurs across Bun releases rather than sitting in one long-open ticket — the tracker holds a cluster of
 issues of different ages (19328, 17255, 5187, 16050) rather than a single three-year-old one.
 Choosing that library still tilts toward Node quietly, in a file that looks like it is about the
 database. It is avoidable rather than decisive, since `node:sqlite` runs on all three.
 
 *Sourced — oven-sh/bun issues 19328, 17255, 5187 and 16050, surveyed 2026-09-04 by a research agent.
-I did not open them. The "three years" duration previously recorded here could not be attached to any
-single issue.*
+I did not open them. No single issue supports a duration for this; treat any stated one as
+unsourced.*

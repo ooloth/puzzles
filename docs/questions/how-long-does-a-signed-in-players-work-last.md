@@ -78,13 +78,11 @@ the same way, they collapse into a single question.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**This bound, once set to anything beyond the current session, forces a server.** the durability record's Risk
-section said so directly: the signed-in half cannot be delivered without something off-device, and
-that consequence was real enough that it was recorded before what the server holds had been argued.
-That consequence is
-already acted on — [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-records that a server exists — so nothing about answering this question re-opens whether to build
-one. What remains open is what that server holds and how it is operated, and
+**This bound, once set to anything beyond the current session, forces a server.** The signed-in half
+cannot be delivered without something off-device. That consequence is already acted on —
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) records that a
+server exists — so nothing about answering this question re-opens whether to build one. What remains
+open is what that server holds and how it is operated, and
 [how is the server operated?](how-is-the-server-operated.md) is the latter half.
 
 **[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) was reasoned entirely from the signed-in bound this question now reopens, and says so

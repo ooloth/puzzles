@@ -37,9 +37,9 @@ Anything asserted without one of the three doesn't belong here; it belongs in
 **A measurement is only worth more than a source when it measures the right thing.** Four ways one
 goes wrong here, and the first two have already been avoided by accident rather than by care:
 
-- **Measuring what does not bind.** Framework render throughput was dismissed as a criterion for an
-  81-cell grid because the whole budget is one percent of a frame. A real number about an irrelevant
-  quantity ends arguments it should not.
+- **Measuring what does not bind.** Framework render throughput is not a criterion for an 81-cell
+  grid, because the device section below leaves client CPU unconstrained by orders of magnitude for
+  this workload. A real number about an irrelevant quantity ends arguments it should not.
 - **Measuring where the failure cannot occur.** The storage failures below do not reproduce in a
   desktop browser, so a desktop measurement of them is a measurement of nothing. Measure on the
   device the constraint belongs to.

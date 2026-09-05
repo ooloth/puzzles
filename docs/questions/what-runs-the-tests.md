@@ -45,10 +45,9 @@ snapshots of anything DOM-shaped. See **Findings**.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The provenance previously recorded here was impossible.** Four gaps in `bun test` were tagged
-*Measured* against "this app's components". This app has no components and nothing is installed, so
-no such run happened. The claims are re-established below from Bun's documentation and issue tracker,
-and one of the four is refuted.
+**Nothing about `bun test` can be measured here yet.** This app has no components and nothing is
+installed, so any claim tagged *Measured* against its own code is impossible by construction. What
+follows is established from Bun's documentation and issue tracker instead.
 
 **`bun test` has a watch mode.** `bun test --watch` is documented and works. It reruns the whole suite
 on any change rather than only affected tests (issues 4825 and 7546) and does not pick up newly added
@@ -66,9 +65,8 @@ most wants measured, so this is the gap that bears hardest on
 shared module.
 
 *Sourced — [bun.com/docs/test/coverage](https://bun.com/docs/test/coverage) and oven-sh/bun issue
-7100, read 2026-09-04 by a research agent. I did not open them. The related claim that it reported
-full line coverage for a component whose keyboard handler never ran cannot be true for the same
-reason as above, and is dropped.*
+7100, read 2026-09-04 by a research agent. I did not open them. Any claim about what it reports for
+this app's own components is impossible for the reason above.*
 
 **Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, open, filed
 2026-08-20 and reproduced on 1.4.0 and 1.3.14, records a JSDOM fragment containing one `<button>`

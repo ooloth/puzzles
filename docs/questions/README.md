@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-09-04
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -177,8 +177,13 @@ claim that store locality constrains the runtime, and that claim is false: Node,
 `node:sqlite` as a built-in, so the same data-access code runs on every runtime under either store
 answer. What remains is a chain the question files state themselves — the runtime is answered together
 with the HTTP handler, the package manager may be settled by consequence if the runtime ships one, and
-the layout waits on whether that toolchain does workspaces. So the runtime is worked first, and not
-because it is built first.
+the layout waits on whether that toolchain does workspaces. So the runtime leads *this slice's*
+questions, and not because it is built first.
+
+**It does not lead M1.** The order across the whole milestone is the numbered plan in the working
+notes at the end of this section, which settles the browser matrix before any of the cluster above,
+because it is cheap and the build question cannot proceed without it. Read that plan before starting
+anything here.
 
 **That chain is three questions, not two, and it crosses slices 1 and 2.** One candidate answer to
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is a
@@ -218,7 +223,7 @@ derivation.
    - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
    - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
    - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
-   - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — and it narrows no runtime, since Node, Bun and Deno all ship `node:sqlite`
+   - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions

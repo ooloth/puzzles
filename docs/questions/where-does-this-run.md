@@ -14,9 +14,13 @@ most of what [how is the server operated?](how-is-the-server-operated.md) covers
 supplies none of it.
 
 Two things constrain the answer from outside. Same-origin serving keeps a server-set cookie inside
-Safari's first-party exemption, per [../constraints.md](../constraints.md), so a platform that
-cannot serve the client and the API from one origin is not a candidate. And whatever the browser
-resolves before it reaches the platform is its own question — see
+Safari's first-party exemption, per [../constraints.md](../constraints.md) — but **whether this
+system takes that exemption is open**, at
+[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md), which
+exists because same-origin had been asserted as a constraint without any record settling it. So the
+honest form is conditional: if that question lands on one origin, a platform that cannot serve both
+halves from one is not a candidate. And whatever the browser resolves before it reaches the platform
+is its own question — see
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
 ## What would settle it
@@ -63,7 +67,9 @@ decides anything until it has been re-checked against the vendor.
 
 *Fly.io.* Managed micro-VMs. TLS, health-checked restarts and Prometheus/Grafana without running any
 of it yourself. An optimised configuration — one `shared-cpu-1x`, 256MB, shared IPv4, scheduled
-volume snapshots disabled — was costed at roughly $2.40-3/month. Against it: shared-CPU steal,
+volume snapshots disabled — starts from $2.02/month for the instance, per
+[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md), which checked Fly's
+published prices against the vendor. Against it: shared-CPU steal,
 per-app billing that does not amortise across deployables, and volume snapshots billed with
 compounding retention.
 

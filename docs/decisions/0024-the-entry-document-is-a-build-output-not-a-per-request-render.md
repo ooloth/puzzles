@@ -1,6 +1,7 @@
 ---
 number: 0024
 status: accepted
+amended: 2026-09-04
 date: 2026-09-03
 ---
 
@@ -44,6 +45,17 @@ this record removes is the argument that would have *forced* one, not the option
 is the exception worth knowing, because its `output: 'export'` drops route handlers that read the
 request, so with Next specifically a prerendered document means a separate API server.
 
+*Sourced — each framework's own documentation, read 2026-09-03 by a research agent via direct fetch:
+[Next static exports](https://nextjs.org/docs/app/guides/static-exports) for the unsupported-features
+list including "Route Handlers that rely on Request",
+[SvelteKit `adapter-static`](https://svelte.dev/docs/kit/adapter-static) and
+[`adapter-node`](https://svelte.dev/docs/kit/adapter-node),
+[Astro on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) and its
+[Node adapter](https://docs.astro.build/en/guides/integrations-guide/node/), and
+[TanStack Start static prerendering](https://tanstack.com/start/latest/docs/framework/react/guide/static-prerendering).
+Not opened by me. Worth re-checking before one is adopted, since these are version-sensitive
+configuration flags rather than stable properties.*
+
 **The option preserved is per-route rendering, added later.** Astro's server islands and Next's partial
 prerendering are additive to a prerendered page, and
 [does any page need markup a crawler can read?](../questions/does-any-page-need-markup-a-crawler-can-read.md)
@@ -69,9 +81,10 @@ at M8 is where that gets asked. Nothing here forecloses it.
 
   **It was not chosen because it is not needed.** Given
   [ADR-0023](0023-a-service-worker-answers-every-navigation-after-the-first.md) the build-time
-  document exists anyway, so this buys one round trip, at most twice per player, in exchange for a second document and
-  a second code path maintained for the life of the product. Nothing in M1 needs that trade, and
-  everything learned before it has to be made is information it would otherwise be made without.
+  document exists anyway, so this buys one round trip, at most twice per player, in exchange for a
+  second document and a second code path maintained for the life of the product. Nothing in M1 needs
+  that trade, and everything learned before it has to be made is information it would otherwise be
+  made without.
   **Reverses if** a measurement shows the first-visit round trip is worth a second document — which
   becomes cheap to run once a renderer and a real puzzle exist, and is not runnable now.
 

@@ -1,6 +1,7 @@
 ---
 number: 0018
 status: accepted
+amended: 2026-09-04
 date: 2026-09-03
 ---
 
@@ -87,8 +88,20 @@ TypeScript, which is
   cannot run in an isolate, so this arrangement needs a container beside it — real, and survivable,
   because Cloudflare Containers exists. And the tier is narrowing: Vercel's own documentation
   recommends migrating off its Edge Runtime and Next.js 16.3 dropped `runtime = 'edge'`, while Deno
-  Deploy Classic shut down in July 2026, leaving Cloudflare Workers as the one healthy option. Also
+  Deploy Classic shut down on 20 July 2026, leaving Cloudflare Workers as the one healthy option. Also
   real, and also not disqualifying — one healthy vendor is a vendor.
+
+  *Sourced — all four checked 2026-09-04 by a research agent via direct fetch, none opened by me.
+  [Vercel's Edge Runtime docs](https://vercel.com/docs/functions/runtimes/edge): "We recommend
+  migrating from edge to Node.js for improved performance and reliability", with a separate page
+  titled "Do not use Edge Functions". [Next.js route segment config](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime)
+  marks `'edge'` deprecated and says "Remove the `runtime` export from your route files" — the
+  official wording is deprecated rather than removed, so "dropped" is a paraphrase.
+  [Deno Deploy Classic](https://docs.deno.com/deploy/classic/): "Deno Deploy Classic will be shut down
+  on July 20, 2026". [Cloudflare's changelog](https://developers.cloudflare.com/changelog/post/2026-04-13-containers-sandbox-ga/),
+  dated 13 April 2026: "Cloudflare Containers and Sandboxes are now generally available." One nuance
+  that cuts against the claim above: Vercel's deprecation is scoped to standalone Edge Functions, and
+  its docs say Routing Middleware "uses the edge runtime by default. This is expected and supported."*
 
 - **Run the server in an isolate and accept D1 as the store.** The version of the above that keeps the
   data local to the compute, which is the only arrangement where edge compute pays. Rejected because

@@ -1,7 +1,7 @@
 ---
 number: 0019
 status: accepted
-amended: 2026-09-03
+amended: 2026-09-04
 date: 2026-09-03
 ---
 
@@ -32,6 +32,18 @@ technical comparison is a tie and that is established rather than assumed — sc
 recently across twelve plausible future features at five scale tiers up to a million daily active
 users, with hosting held constant so that engine fit was isolated from operational outsourcing.
 Nothing in the product's access pattern reaches a limit either option clears.
+
+*Method — three independent analyses on 2026-09-03: a steelman for each engine, each required to argue
+against itself, plus a neutral comparator. Scored at 1k, 10k, 50k, 100k and 1M daily active users,
+against leaderboards, real-time collaborative solving, friend challenges, tournaments, a paid tier, an
+archive, stats and streaks, multiple game types, social features, push notifications, adaptive
+difficulty and live multiplayer racing. The three estimated peak write rates at 1M DAU as 694, 3,700
+and 5,333 per second — an eightfold spread, all far below SQLite's established ceiling, so the
+conclusion survives the disagreement. Eleven of the twelve features preserve the property that decides
+it: a player writes only their own rows. The full working survives only in git history, in the
+question file this record mined and deleted — read it with
+`git show 6636ed5^:docs/questions/is-the-store-a-file-or-a-service.md`. Recorded here because the
+summary above otherwise reads as an assertion with numbers in it.*
 
 So the choice was made on what each arrangement costs over years of operation. On one machine, a file
 has roughly five independent failure domains — the process, the host, the disk, the backup mechanism,

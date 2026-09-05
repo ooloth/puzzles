@@ -1,6 +1,7 @@
 ---
 number: 0017
 status: accepted
+amended: 2026-09-04
 date: 2026-09-03
 ---
 
@@ -59,6 +60,12 @@ player is blocked on and nothing else.
   whose answer would change the premise — or if a platform's wake-up drops below the noise floor of
   the network.
 
+  *Sourced — [Fly's suspend/resume reference](https://fly.io/docs/reference/suspend-resume/) and its
+  [long-running-tasks blueprint](https://fly.io/docs/blueprints/long-running-tasks/), read 2026-09-04
+  by a research agent: "a restart takes seconds (about 2s for a Rails app, less for a small binary)"
+  against resume taking "a few hundred milliseconds". Fly also caveats that a resume can fall back to
+  a cold start under host migration, so the suspended figure is a best case rather than a guarantee.*
+
 - **A store on a free tier that sleeps.** Neon suspends after five minutes of inactivity and free
   plans cannot disable it; Supabase pauses free projects after seven days. Rejected for the same
   reason as above, sharpened by stacking: a sleeping store behind sleeping compute pays the wake-up
@@ -77,8 +84,18 @@ player is blocked on and nothing else.
 
 **This is the worst ratio of cost to utilisation the system will ever have.** An always-on machine for
 an audience of almost nobody is capacity paid for and unused, and the argument gets *weaker* as
-traffic grows, because a busy service is warm anyway. About $5.17/month on Fly with a volume and an
-address, or €6.59–8.09 on Hetzner — small, and it is a standing cost rather than a one-off.
+traffic grows, because a busy service is warm anyway. The standing cost is a few dollars a month,
+which is small — but it is a recurring cost rather than a one-off, and that is the point rather than
+the figure.
+
+*No figure is given because two that circulate for this comparison do not survive checking, and an
+unsourced number reads exactly like a sourced one. Fly's published shared-cpu-1x prices are $2.02,
+$3.32, $5.92 and $11.11 for 256MB, 512MB, 1GB and 2GB; `$5.17` appears nowhere on
+[the pricing page](https://fly.io/docs/about/pricing/), which I opened and searched myself on
+2026-09-04. Hetzner Cloud's current small plans are CX23 at €5.49, CAX11 at €5.99 and CX33 at €8.49,
+so a range of €6.59–8.09 matches nothing they sell — it fits mid-tier plans priced before their
+15 June 2026 adjustment. Pricing the candidates properly belongs to
+[where does this run?](../questions/where-does-this-run.md).*
 
 **It forecloses the free tiers**, which is where the cheapest options live, and combined with
 [ADR-0006](0006-one-language-across-every-deployable.md)'s one-toolchain constraint it narrows the

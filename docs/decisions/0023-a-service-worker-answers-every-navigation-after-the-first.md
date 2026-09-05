@@ -1,6 +1,7 @@
 ---
 number: 0023
 status: accepted
+amended: 2026-09-04
 date: 2026-09-03
 ---
 
@@ -64,6 +65,13 @@ would otherwise be argued from an inference.
   **Reverses if**
   [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) is superseded and
   nothing else needs this premise early.
+
+  **This is a claim about timing, not about grounds, and the difference matters because the pair can
+  read as circular.** What makes the service worker the mechanism is the promise plus the HTTP cache
+  facts in [../constraints.md](../constraints.md), and neither mentions
+  [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md). So this record
+  stands whether or not that one does. What that record supplies is only the reason this was worth
+  settling now rather than at M9 — remove it and the decision is unchanged, while the schedule is not.
 
 - **Make no offline promise for the document.** Reversing
   [the guarantee](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) rather

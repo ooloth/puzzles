@@ -124,6 +124,9 @@ about what work exists and this file is right about why.
 [../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
 record has not settled; mine it first, since findings graduate to
 [../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
+**Mining moves a claim's tier and source with it**, or the record inherits a bare assertion and the
+evidence dies with the file. Where the working is too long to move, cite the commit that deleted it —
+`git show <commit>^:<path>` still reads it.
 **Promises are written as they fall out of records**, on the decision template's checklist, rather
 than committed to in advance.
 

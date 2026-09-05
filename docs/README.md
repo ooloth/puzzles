@@ -1,6 +1,6 @@
 ---
 updated: 2026-08-30
-update_when: a document is added to or removed from docs/
+update_when: this file's own content changes — a row is added to or removed from the table below
 decays: slow
 status: active
 ---

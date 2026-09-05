@@ -68,12 +68,16 @@ def links_in(path):
 
 
 def markdown_files():
-    """Every markdown file whose links are checked: all of docs/, plus CLAUDE.md.
+    """Every markdown file whose links are checked: all of docs/, plus the two at the root.
 
-    CLAUDE.md is included because it links into docs/decisions/ by number, and
-    decisions/README.md tells a renumbering author that this script catches every link a
-    renumber breaks. Walking docs/ alone left the one file outside it unchecked, so that
-    promise was false for exactly the links most likely to move.
+    Both root files link into docs/ and neither lives under it, so walking docs/ alone leaves
+    them unchecked. That matters most for CLAUDE.md, which links into docs/decisions/ by number:
+    decisions/README.md tells a renumbering author this script catches every link a renumber
+    breaks, and that is only true if CLAUDE.md is in this list. README.md is the repo's front
+    door and links to five doc paths, none of which anything else verifies.
+
+    Only check_links and check_backticked_paths consume this. check_frontmatter walks docs/
+    separately, which is why neither root file needs frontmatter to pass.
     """
     for root, _, files in os.walk('docs'):
         if any(skip in root for skip in SKIP_DIRS):
@@ -82,6 +86,7 @@ def markdown_files():
             if f.endswith('.md'):
                 yield root, os.path.join(root, f)
     yield '.', 'CLAUDE.md'
+    yield '.', 'README.md'
 
 
 def check_links():

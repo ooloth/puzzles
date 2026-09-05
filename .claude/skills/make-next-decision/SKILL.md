@@ -90,7 +90,47 @@ directs you to proceed anyway after hearing the above.
    sends a reader to re-open a settled argument.
 1. Confirm the question that would be most impactful to answer next
 
-### 2. Present the selected question
+### 2. Verify what the question files already claim, before relaying any of it
+
+**This is a blocking step. Nothing from a question file may be summarised, presented to the user, or
+reasoned from until it has been checked** — not the Findings, not the Options, not the sentence in
+**Why it matters** naming a disqualified candidate.
+
+**It is a step rather than a reminder because the reminder exists in three places and has failed
+twice.** The portable standard, step 4 below and `constraints.md` all say to treat an inherited claim
+as unverified, and question files were still written with invented tiers and later read without a
+source being opened. One pass over two of them refuted three of five findings against a single
+candidate, including a _Sourced_ claim asserting the opposite of its subject's own announcement.
+
+Do this:
+
+1. **List every claim about the world** in the question files you are about to work: version numbers,
+   capabilities, what a tool does or cannot do, adoption, governance, licensing, benchmark figures.
+   Include the ones tagged _Sourced_ and _Measured_. Those are the dangerous ones, because a tier is
+   what stops a reader checking.
+1. **Send them to parallel subagents to verify against today's sources**, bounded by file list, told
+   to open the sources themselves and not to spawn subagents. Ask each for a verdict per claim
+   (confirmed, refuted, partially confirmed, could not verify), the URL it opened, a direct quote,
+   and — where a claim was once true — the version or date it stopped being true.
+1. **Open the load-bearing ones yourself.** A claim that disqualifies an option, or that a whole
+   argument runs through, is read at its source by you rather than relayed from an agent. Say which
+   ones you opened and which you are passing on; silence implies you checked everything.
+1. **Check every tier against what could have produced it.** A _Measured_ claim names what was run,
+   on what, and when. Ask whether that run could have happened in this repository at all. A
+   _Sourced_ claim names a source that would actually show the thing asserted — a source that could
+   not have shown it either way is not a source for it.
+1. **Ask what the shared attribute is doing.** Where an argument concludes that several candidates
+   are equivalent, check whether it runs through an option common to all of them. That option was
+   selected for being shared, so an equivalence argument resting on it assumes its own premise. The
+   `node:sqlite` argument in `what-runs-typescript-outside-the-browser.md` is the worked example.
+1. **Write the corrections into the files before going further**, with provenance saying who opened
+   what and when. Delete a claim that has no source rather than softening it, and say in its place
+   that it was found unsourced, so it cannot quietly return.
+
+**Report what you deleted, not only what you corrected.** A removed claim is invisible in a way a
+changed one is not, and the user cannot overrule a deletion they never saw.
+
+### 3. Present the selected question
 
 1. Present your selected question to the user with your rationale, using formatting they can easily
    digest in 30 seconds
@@ -101,12 +141,12 @@ directs you to proceed anyway after hearing the above.
 
 **Say nothing about where the answer is leaning, and do not form a lean to keep to yourself.** At
 this point the options have not been researched, so any sense of the likely answer came from a
-question file's accumulated content rather than from evidence — which is exactly the thing step 3
+question file's accumulated content rather than from evidence — which is exactly the thing step 4
 exists to test. Naming a favourite here commits you to defending it and turns the research into
 confirmation. Flagging which findings are weakly sourced is not the same thing and is worth doing;
 saying which side they point to is.
 
-### 3. Look before you leap, then settle it by measuring
+### 4. Look before you leap, then settle it by measuring
 
 **Arrive at the question file as though it were blank.** Whatever Options and Findings you find
 there are claims to verify. They are not a head start, not a shortlist you are refining, and not a
@@ -126,7 +166,10 @@ choosing among their candidates. The three specific failures to watch for:
 - **A finding is evidence of what somebody believed, not of what is true.** Every Findings section
   in this repo says so in its first line. Check the tier on each one, and treat _Unverified_ and a
   vague source as equivalent to absent — an unsourced claim reads exactly like a sourced one and
-  nothing else tells them apart.
+  nothing else tells them apart. Step 2 has already checked the claims that were there; this is the
+  other half, which is the candidates and framing that were never written down at all. Neither
+  substitutes for the other: verifying a shortlist perfectly still leaves it somebody else's
+  shortlist.
 - **The framing is inherited too, and it is the part nobody checks.** "Which of these three?" may
   be the wrong question, and a file that asks it will never say so. Restate the problem without
   naming a solution before you accept the file's version of it.
@@ -199,14 +242,14 @@ decision turns on, that the environment resembles production, and that the diffe
 enough to matter against everything else in the budget. `docs/constraints.md` describes how to
 record what you find.
 
-### 4. Present the decision
+### 5. Present the decision
 
 1. Present your findings and rationale to the user using formatting they can digest in 30 seconds
 1. Discuss the user's feedback and questions
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to draft the ADR and wait for the user's approval
 
-### 5. Document the decision
+### 6. Document the decision
 
 1. **Re-invoke the `uphold-standards` skill for the portable decision-making standard, and re-read
    `docs/decisions/README.md`, now**, immediately before writing. Not at the start of the session —

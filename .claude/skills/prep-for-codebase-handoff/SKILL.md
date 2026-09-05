@@ -33,19 +33,14 @@ references. They are mechanical searches with a judgement call at the end, which
 model does well.
 
 **Give every agent an explicit, bounded file list, and tell it not to spawn subagents of its own.**
-This is what decides how long the check takes, and it is not obvious. On 2026-09-02 the whole run
-took 25 minutes because two agents nested: one was told to scan "every file in `docs/questions/`" —
-84 files — and one to check "every rule against everything it governs", and both fanned out
-internally rather than reading. They took 22.8 and 14.4 minutes. Meanwhile the agent carrying the
-_most_ scans and the _most_ tool calls finished in 6 minutes, because its scope was 14 decision
-records.
+This decides how long the check takes, and it is not obvious: the cost is unbounded scope, not scans
+per agent. Bundling several scans into one agent is fine and often better, since they share the
+reading. Handing one agent a whole directory is what makes a run slow, because an agent given
+"every file in `docs/questions/`" or "every rule against everything it governs" fans out internally
+rather than reading.
 
-So the cost is unbounded scope, not scans per agent. Bundling several scans into one agent is fine
-and often better, since they share the reading. What is not fine is handing one agent a whole
-directory:
-
-- **Split a large directory across agents by file list**, not by scan category. Three agents over 28
-  question files each run in roughly a third of the wall clock of one agent over 84.
+- **Split a large directory across agents by file list**, not by scan category. Three agents over a
+  third of the files each finish in roughly a third of the wall clock of one agent over all of them.
 - **Say "read these files yourself; do not spawn subagents."** A nested agent serialises — the parent
   waits on a child that waits on tool calls — and its report reaches you two relays from the source,
   which is also two chances for a claim to lose its hedges.
@@ -78,11 +73,11 @@ The cold read prompt, with the repo path filled in:
 
 ### 2. Scan for the staleness a stranger cannot see
 
-Each of these has been a real defect in this repo. None is detectable by `scripts/check-docs.py`,
-because each needs a judgement rather than a lookup.
+Each of these is a defect this repo produces. None is detectable by `scripts/check-docs.py`, because
+each needs a judgement rather than a lookup.
 
 **The list of scan categories below is intended to grow.** When a check discovers a new failure
-category, add it here with what to look for and where it occurred if it cannot be mechanically
+category, add it here with what to look for and where to look for it if it cannot be mechanically
 detected by a lint script like `check-docs.py` instead.
 
 - **An "or else" clause that is not about the architecture.** Every entry in a milestone list in
@@ -92,10 +87,9 @@ detected by a lint script like `check-docs.py` instead.
   installed" — the work cannot start, which is not the same as the architecture being wrong), a
   comment on how the choice gets made ("or else it is picked by habit" — true of every unanswered
   question, so it distinguishes nothing), and a restatement of the topic ("an input to the shape").
-  All three have appeared here. Then apply the test the list states: if you cannot complete "slice N
-  cannot be built without this because \_\_\_", the entry does not belong in slice N. This has happened
-  three times and every one moved a question _earlier_ than it belonged — check the direction,
-  because the bias only runs one way.
+  Then apply the test the list states: if you cannot complete "slice N cannot be built without this
+  because \_\_\_", the entry does not belong in slice N. Check the direction of any entry you move:
+  the bias runs one way, toward placing a question _earlier_ than it belongs.
 - **Questions that are answered but still open.** For each file in `docs/questions/`, check whether
   what it `resolves_into` now exists — a decision record, a line in `constraints.md`, or a change to
   a config file or skill. Where it does, the question is finished and nobody noticed. This is the
@@ -111,13 +105,11 @@ detected by a lint script like `check-docs.py` instead.
   Look for a claim in **Why it matters**, an **Options** entry or a cell description that a later
   **Findings** entry contradicts, and for the phrases that signal a layer rather than a fix: _an
   earlier version of this_, _that framing overstated_, _this was carried as though_, _turns out to
-  rest on_. On 2026-09-03 the pinning claim was asserted at line 102 of
-  `docs/questions/are-puzzles-and-player-records-in-one-store.md` and dismantled at line 184 of the
-  same file; `how-much-downtime-is-acceptable.md` opened with an over-general redundancy claim and
-  qualified it thirty lines later.
+  rest on_. The usual shape is an assertion near the top of a question file and its dismantling
+  under **Findings** eighty lines below.
   **The fix is to state the true thing where the topic is first raised**, not to add another
-  paragraph. Then check the rest of the repo, because a claim asserted once is usually asserted
-  several times — that one had six sites and only two were known before the scan.
+  paragraph. Then grep the rest of the repo for the same claim, because one asserted in a question
+  file is usually asserted in several other places that nobody has counted.
   Distinguish this from a correction that _quotes_ what it corrects. Naming a false claim inside the
   sentence that refutes it is how a future reader recognises it when they meet it elsewhere, and it
   is not this defect. The defect is asserting it in one place and refuting it in another.
@@ -143,63 +135,68 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
   There is no frontmatter marking a withheld promise, so this cannot be grepped; a scan that looks
   for one finds nothing and reports clean.
   Demoting a record leaves every citation of it behind, reading exactly as it did when the promise
-  was real. Splitting `guarantees/` into one file per promise on 2026-09-02 surfaced nine such
-  citations of a durability bound that had been demoted the day before — in question files, failure
-  modes, and a multi-paragraph argument that rested on it as its premise.
+  was real. Expect them in question files, in `docs/failure-modes/`, and inside multi-paragraph
+  arguments resting on the promise as a premise, which are the hardest to spot and the most costly
+  to leave.
 - **Docs narrating their own edit history.** A document describing how it got here rather than what is
-  true now. Search for dates attached to edits rather than to evidence — _corrected 2026-09-03_,
-  _updated once both analyses landed_, _rebuilt from scratch on_, _mined from X, since resolved and
-  deleted_ — and for strikethrough, which is always this defect. A question file's Findings should
-  read as the current best account of what is known, not as a changelog of how it was assembled.
-  _The test: would a reader who never saw the previous version want this sentence?_ If it only makes
-  sense as a diff against something they cannot see, it is narrating the work rather than stating the
-  finding, and the git history already holds it better.
-  \*Do not confuse this with provenance, which is required.**A tier tag and the date a claim was
-  established say how we know something and must stay. A **Source\*\* section says where a question came
-  from and must stay. A record's `amended:` frontmatter must stay. The line between them: evidence for
+  true now. Search for _used to_, _previously_, _no longer_, _has since_, _was changed to_, dates
+  attached to edits rather than to evidence, and strikethrough, which is always this defect. A
+  question file's Findings should read as the current best account of what is known, not as a
+  changelog of how it was assembled. The test: would a reader who never saw the previous version want
+  this sentence? If it only makes sense as a diff against something they cannot see, git history holds
+  it better, and the documentation standard forbids it outside the narrow case where a reader lacking
+  the history would do the wrong thing.
+  **Do not confuse this with provenance, which is required.** A tier tag and the date a claim was
+  established stay. A **Source** section stays. A record's `amended:` frontmatter stays. Evidence for
   a _claim_ is provenance; narration of edits to the _document_ is not.
-  This one is generated by the act of cleaning up, so it is worst immediately after a session that
-  corrected a lot — an agent replacing a false claim tends to leave a note saying it did. The session
-  on 2026-09-03 that produced the entry above also produced a dozen instances of this one.
-  Search for _used to_, _previously_, _no longer_, _has since_, _was changed to_, and dates used as
-  change markers. The documentation standard forbids these outside the narrow case where a reader
-  lacking the history would do the wrong thing.
+  Expect the highest density immediately after a session that corrected a lot, since an agent
+  replacing a false claim tends to leave a note saying it did.
 - **A doc contradicting a recorded decision.** The reverse direction from the check above: not an
   ADR against a later ADR, but any other file asserting something an ADR already settled. Take each
   record in `docs/decisions/` and search the rest of `docs/`, `CLAUDE.md` and the skills for claims
-  it makes false. `unfinished.md` listed the language as an open stack question for a day after
-  a record had already chosen TypeScript, in the file the repo itself calls its
-  highest-consequence one.
+  it makes false. Read `unfinished.md` hardest, since it is the file the repo calls its
+  highest-consequence one and the one most likely to still list a settled choice as open.
 - **A rule violated in the files it governs.** Take each Must in `docs/standards/`, each convention
   stated in an index README, and each claim a README makes about what a script checks, and go and
-  look at the files it claims authority over. `questions/README.md` said sequencing lives in that
-  file and nowhere else while twenty-one question files carried it under two bold headings, and it
-  described a milestone check `check-docs.py` did not implement. The two headings are now caught by
-  that script; a paraphrase is not, which is why this stays a scan.
+  look at the files it claims authority over. Two shapes to expect: a rule broken in the files it
+  names, and a README describing a check its script does not implement. `check-docs.py` catches a
+  violation that takes a fixed form, such as a banned heading, and cannot catch the same rule broken
+  as a paraphrase, which is why this stays a scan.
 - **An ADR resting on something not yet settled.** For each record, take every **Forced by** input
   and every **Rejected** reason and ask what it grounds in. A rejection reason that depends on an
   open question is the expensive one, because the option stays rejected and the reasoning is never
   revisited. **Check Rejected hardest**, because reality tests the option that was taken and never
-  the one that was not, so a rejection's stated reason is the last word on it permanently. The
-  durability record demoted on 2026-09-01 foreclosed the only free guest recovery mechanism on three
-  costs: two turned on questions still open, and the third was a routine cleanup job described as
-  structural. Watch for the signature — when the weak reasoning in a record all argues for the option
-  that lost and none of it for the option that won, the section was written to justify rather than to
-  evaluate. The portable decision-making standard calls this the failure that does not announce itself.
+  the one that was not, so a rejection's stated reason is the last word on it permanently. Watch for
+  a rejection resting on a stack of costs where no single one disqualifies, and for a routine job
+  described as structural. Watch for the signature too — when the weak reasoning in a record all
+  argues for the option that lost and none of it for the option that won, the section was written to
+  justify rather than to evaluate. The portable decision-making standard calls this the failure that
+  does not announce itself.
 - **A question whose premise a record has settled.** Read every question filename and its **Why it
-  matters** against `docs/decisions/`. A conditional that a record now answers is the clearest
-  signal — `what-runs-the-server-if-there-is-one` and `what-does-the-server-store-if-anything` both
-  outlived the records that answered "yes" and "something". Also look for Options that a record has
-  ruled out and Why-it-matters paragraphs that argue from a decision since superseded. A question
-  asking something already answered makes a reader re-open a settled argument.
-- **A rejection that reads as researched and is not.** The `check-docs.py` citation check was removed
-  because it could not do this: it passed ADR-0003, whose bullets cite `problem.md` for one thing and
-  then make five specific, checkable, unsourced claims about vendor policies and version numbers.
-  Read each **Rejected** bullet and ask three things. Does the citation support the claim it is
-  attached to, or merely sit near it? Are there specific-sounding details — versions, percentages,
-  dates, named policies — with no source? And if several reasons are given, is any one of them
-  disqualifying alone? Specific detail is the most convincing thing in a bad argument, which is why
-  this needs reading rather than matching.
+  matters** against `docs/decisions/`. A conditional in the filename is the clearest signal: _if
+  there is one_, _if anything_, _if at all_ — a record answering the conditional leaves the question
+  asking something settled. Also look for Options a record has ruled out and Why-it-matters
+  paragraphs arguing from a decision since superseded. A question asking something already answered
+  makes a reader re-open a settled argument.
+- **A rejection that reads as researched and is not.** No script can do this: a check answering "is
+  there a citation" cannot answer "does it support the claim beside it", and a record citing one
+  source for one bullet while making unsourced claims about vendor policies and version numbers in
+  the next will pass it. Read each **Rejected** bullet and ask three things. Does the citation
+  support the claim it is attached to, or merely sit near it? Are there specific-sounding details —
+  versions, percentages, dates, named policies — with no source? And if several reasons are given, is
+  any one of them disqualifying alone? Specific detail is the most convincing thing in a bad
+  argument, which is why this needs reading rather than matching.
+- **A tier whose source could not have produced the claim.** The tier is what stops a reader
+  checking, so a wrong one is worse than none. Ask of each whether its named source could produce
+  that specific claim: a _Measured_ tag names a run this repo can actually perform, and a _Sourced_
+  tag names a source that would settle the claim either way rather than one that merely sits near it.
+  Delete a figure whose source cannot be found rather than downgrading it, and say it was found
+  unsourced so it cannot return. Run this hardest on fast-moving subjects, where a finding can go
+  stale within days.
+- **`unfinished.md` carrying evidence rather than warnings.** Each entry says what will look true
+  that is not and what to do today; one that also explains _why_ has absorbed a finding, which then
+  lives in two places and goes stale in one. Cut it to a single line naming the inference not to
+  draw, plus a link to whichever file argues it.
 - **`unfinished.md` entries that are no longer live.** Each entry claims something in the repo will
   mislead a reader today. Check whether it still would. An entry describing a migration that
   finished, or a pattern that no longer exists, trains readers to skim the one file whose whole

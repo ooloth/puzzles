@@ -37,8 +37,10 @@ and the last section lists what is not decided, which is the longer list.
 **So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. Two claims
 that read as consequences of those records are not, and both have already been checked:
 
-- **The store does not narrow the runtime.** Node, Bun and Deno all ship `node:sqlite`, so anyone
-  reasoning "SQLite, therefore runtime X" has inherited a claim found false on 2026-09-03.
+- **The store does not narrow the runtime.** Node, Bun and Deno all ship `node:sqlite` without an npm
+  specifier or a native addon, so anyone reasoning "SQLite, therefore runtime X" has inherited a claim
+  found false on 2026-09-03. One asymmetry survives and is small: Deno needs `--allow-read` and
+  `--allow-write` for a file-backed database, which changes a run command and nothing else.
 - **The entry document being a build output does not exclude the meta-frameworks.**
   [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) binds
   how the document is produced and nothing else — not who builds the bundle, not what answers HTTP.

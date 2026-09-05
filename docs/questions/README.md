@@ -180,6 +180,21 @@ with the HTTP handler, the package manager may be settled by consequence if the 
 the layout waits on whether that toolchain does workspaces. So the runtime is worked first, and not
 because it is built first.
 
+**That chain is three questions, not two, and it crosses slices 1 and 2.** One candidate answer to
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is a
+meta-framework's own server, which only exists if
+[what renders the client?](what-renders-the-client.md) chose that meta-framework — and choosing a
+renderer that is not one removes the option from the other side. Both files now say so under **What
+would settle it**. The renderer stays listed in slice 2 because that is the slice it is built for; it
+is worked alongside slice 1's questions rather than after them.
+
+**Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
+Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
+is one: it does not narrow the runtime field, it removes a constraint on it, so it is something
+candidates are scored on rather than a gate. It is recorded under **Findings** in
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) with what the
+optionality is actually for.
+
 **The server's execution shape is fully settled and blocks nothing here.** Nothing on the request path
 scales to zero ([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md)), the
 server does not run in a constrained isolate
@@ -206,7 +221,7 @@ derivation.
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — and it narrows no runtime, since Node, Bun and Deno all ship `node:sqlite`
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above, which constrains it in both directions
+     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
 2. **A browser shows "Hello!" rendered by the client, locally.**
@@ -217,7 +232,8 @@ derivation.
    - **Given:** [the-app-never-opens-to-a-blank-screen-after-the-first-visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
    - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so the document is produced by the build, and a renderer is not also being chosen as a server
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
+     - **Must answer:** [which-browsers-and-versions-must-this-support](which-browsers-and-versions-must-this-support.md) — or else the build's syntax floor is set by a tool's default rather than by anyone, and the toolchains differ on whether they can lower it at all. It is an input to the question below rather than a consequence of it, and it fails silently: nothing in development reveals a floor that excludes a player's phone
      - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
@@ -289,9 +305,9 @@ a player can see, which is why it has to be a milestone rather than a habit.
    bare machine supplies none of it.
 11. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. It cannot be answered before
-   the compatibility theme in [the guarantees README](../guarantees/README.md) says what the matrix
-   is, and that theme holds no promises yet, admitting every promise in the folder is scoped to
-   something nobody has written down.
+   [which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md),
+   which is worked at M1 because the build toolchain needs it. This question is the second half: what
+   to run the matrix on, once there is a matrix.
 
 ## M3 — a puzzle comes from the store
 

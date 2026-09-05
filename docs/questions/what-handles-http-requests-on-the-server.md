@@ -33,6 +33,13 @@ Very little, once the runtime lands. The one criterion worth applying deliberate
 handle requests behind an interface thin enough that swapping what implements it is a small change
 rather than a rewrite.
 
+**This is also answered together with
+[what renders the client?](what-renders-the-client.md), and that coupling was previously unrecorded.**
+The fourth option below is a meta-framework's own server, and choosing it *is* choosing the renderer.
+Choosing a renderer that is not a meta-framework removes the option in the other direction. So the
+two constrain each other exactly as this question and the runtime do, and answering either alone
+risks settling the other by accident. That makes this a chain of three rather than a pair.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).
@@ -76,6 +83,25 @@ this choice a small change rather than a rewrite — and keeps the edge tier rea
 committing to it.
 
 *Reasoned — from the interfaces being defined by the Fetch specification rather than by any runtime.*
+
+**This is a property candidates are scored on, not a decision that gates the runtime.** Answering it
+does not narrow the runtime field; it removes a constraint on it, which is the opposite. And it costs
+one candidate slightly more than the others: `Bun.serve` and `Deno.serve` take a `Request` and return
+a `Response` natively, while `node:http` does not and needs a thin adapter. That is a thumb on the
+scale, not a disqualifier.
+
+**Naming what the optionality is for, since keeping an option open is not free.** Two of the three
+reasons are real here and one is weak.
+
+- **Testability.** A handler called with a `Request` and asserted on its `Response` needs no socket,
+  no port and no process. That holds whatever else is chosen.
+- **Alignment with the service worker.**
+  [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) puts a
+  service worker on every navigation after the first, and a service worker's fetch handler *is*
+  `Request` in, `Response` out. If it ever synthesises a response that mirrors a server route while
+  offline, the two are already the same shape.
+- **Runtime portability.** Weak. One runtime gets chosen and kept for years, so the ability to swap
+  is optionality nobody is likely to spend.
 
 **M1 needs one route returning a fixed string.** Nothing about that discriminates between the options
 above, so this must be decided on what the rest of the system will need rather than on what the first

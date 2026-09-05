@@ -24,6 +24,13 @@ pencil marks and highlights its peers — and comparing what the state layer loo
 board, its persistence and a deterministic merge all have to stay pure and testable with no
 browser.
 
+**It is answered together with
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), and that
+coupling was previously unrecorded here.** One of the candidate answers there is a meta-framework's
+own server, which only exists if the renderer is that meta-framework; and picking a renderer that is
+not one removes the option from the other side. Neither can be settled alone without deciding part of
+the other by accident.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).
@@ -95,14 +102,19 @@ to remember later.
 Researched 2026-08-31. Four independent investigations, two of which disagreed with each other
 in useful ways.
 
-**Render performance is not a criterion, and now there is a number.** Updating a cell in an
-81-cell React grid with no memoisation at all measured 0.368ms; memoising so only two cells
-re-render measured 0.185ms. The saving is roughly one percent of a frame. This retires the
-micro-benchmark point above from a suspicion to a measurement, and it kills two arguments at
-once — that a faster framework is worth choosing here, and that React's compiler is needed. It
-also means anything sold on rendering speed is selling something this app cannot spend.
+**Render performance is not a criterion.** The figures recorded here — 0.368ms to update a cell in an
+81-cell React grid unmemoised, 0.185ms memoised so only two cells re-render, a saving of roughly one
+percent of a frame — were tagged *Measured* with no method, and nothing is installed in this
+repository, so no such run happened here.
 
-*Measured — updating a cell in an 81-cell React grid, with and without memoisation.*
+The conclusion survives without them, which is why it is kept. An 81-cell grid updating one cell is
+trivial work against [../constraints.md](../constraints.md)'s finding that client CPU and memory are
+not constraints under any plausible data model for this app. So a faster framework buys something
+this app cannot spend, and anything sold on rendering speed is selling the wrong thing. That holds by
+arithmetic rather than by the numbers above.
+
+*Reasoned — 2026-09-04, from the device constraint. The two figures are **unverified**: no method,
+no hardware, no date, and no run in this repository that could have produced them.*
 
 **Accessibility does not discriminate between them either.** No ecosystem ships an editable 2D
 grid primitive: not React Aria, whose generic grid module is unexported and undocumented and
@@ -120,8 +132,9 @@ once and then never again once the app shell is cached. [../constraints.md](../c
 establishes that cold-load size matters on a degraded link, so this is real — but it is one
 payment against years of use, and it should not outrank anything structural.
 
-*Measured — React-to-Preact bundle size difference, brotli-compressed, projected on a slow-4G
-profile.*
+*Unverified — no method, no date, and nothing installed here that could have been built and measured.
+The direction is uncontroversial and the magnitude is not established. Re-measure it against the
+actual bundle before letting it weigh on anything.*
 
 **What actually separates them is where reactive state is allowed to live.** Vue and Preact
 expose their reactive primitive as a standalone package that runs in plain TypeScript under

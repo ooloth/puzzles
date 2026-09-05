@@ -165,7 +165,9 @@ folder is implicitly scoped to something, and until that scope is written down e
 more than it can deliver. This matters sooner than it looks: the storage behaviour shaping durability
 differs by browser and version, and only Safari's is written down.
 [How does Android evict stored data?](../questions/how-does-android-evict-stored-data.md) is
-unresearched, which is half the market with no stated position at all.
+unresearched, which is half the market with no stated position at all. The scope itself is
+[which browsers and versions must this support?](../questions/which-browsers-and-versions-must-this-support.md),
+which reached M1 because the client's build toolchain cannot pick a syntax floor without it.
 
 **Observability** — whether we would *know* a promise had been broken, for a failure that has already
 happened to a real player. The motivating case is lost progress, which produces no error, no crash and

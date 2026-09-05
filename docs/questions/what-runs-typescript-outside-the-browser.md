@@ -116,19 +116,29 @@ dependency that is safe because one corporation needs it is safe for exactly as 
 
 *Sourced — <https://bun.com/blog/bun-joins-anthropic>, read 2026-09-02.*
 
-**The document's causal story about the Rust rewrite is not supported.** It claimed the Zig-to-Rust
-rewrite was "a production requirement for Anthropic's flagship CLI". The rewrite is real and began in
-May 2026, and the stated rationale is memory safety. Neither Bun's announcement nor the public record
-connects it to Anthropic or to Claude Code.
+**The rewrite is connected to Anthropic and to Claude, by Bun's own disclosure.** The claim recorded
+here — that neither Bun's announcement nor the public record connects the Zig-to-Rust rewrite to
+Anthropic or Claude Code — is false. Bun's retrospective opens with: "Disclosure: Bun was acquired by
+Anthropic in December 2025. I and others on the Bun team work at Anthropic. I used a pre-release
+version of Claude Fable 5 for much of the Rust rewrite." The port ran as roughly 50 Claude Code
+workflows over 11 days on a branch named `claude/phase-a-port`, and PR 30412 merged 2026-05-14. The
+stated motive is memory safety: use-after-free, double-free and missed frees in error paths become
+compiler errors in safe Rust.
 
-*Sourced — <https://en.wikipedia.org/wiki/Bun_(software)>, read 2026-09-02. The rewrite's own
-announcement was not opened.*
+What the earlier record got right is that memory safety, not a Claude Code production requirement, is
+the stated rationale. What it got wrong is the stronger claim that nothing connects the two, which
+one primary source refutes outright.
 
-> **A hedge is a request for work, not a finding.** Marking this claim "treat as false unless
-> confirmed" and leaving it there is how a caveat hardens into a verdict nobody tested: the
-> brainstorming document turned out to be right about the fact and wrong about the reason, and both
-> halves were assumed rather than checked. Where a claim carries a hedge, run the search or say
-> plainly that nobody has.
+*Sourced — [bun.com/blog/bun-in-rust](https://bun.com/blog/bun-in-rust), fetched raw 2026-09-04 by a
+research agent that quoted the disclosure verbatim. I did not open it. The superseded claim was
+tagged Sourced against a Wikipedia article that does not carry the disclosure.*
+
+> **A hedge is a request for work, not a finding.** Marking a claim "treat as false unless confirmed"
+> and leaving it there is how a caveat hardens into a verdict nobody tested. This entry is the second
+> time that has happened on this exact subject: the brainstorming document was right about the fact
+> and wrong about the reason, and the correction over-swung into a claim of no connection at all,
+> tagged Sourced, against a source that would not have shown one either way. Where a claim carries a
+> hedge, run the search or say plainly that nobody has.
 
 **The coupling to the database ran the other way and has now been cut.** The concern was that
 settling a runtime early would settle the store by convenience. The store is settled first
@@ -136,16 +146,24 @@ settling a runtime early would settle the store by convenience. The store is set
 runtime, so this is now a free choice rather than a constrained one.
 
 **Driver performance is a live input here, and it is this question's to weigh rather than the store's.**
-The runtimes are not interchangeable on it: `node:sqlite` and `better-sqlite3` sit within about 1.5x
-either way on the one comparison with a disclosed method, Bun's larger published claim is a read-only
-benchmark from 2022 predating `node:sqlite`, and Deno's implementation is native Rust over rusqlite
-with no published numbers at all. Bun also ships a native Postgres client, `Bun.SQL`, which is not
-relevant to a SQLite store but is evidence about where its effort goes. Absolute throughput for single
-keyed inserts is in the tens of thousands per second, against a plausible load under a hundred — so
-none of this binds, and it should not be allowed to decide the runtime by itself.
+`node:sqlite` and `better-sqlite3` sit between 1.1x and 1.7x of each other depending on the query,
+with better-sqlite3 ahead on reads and `node:sqlite` ahead on inserts. Bun's own published claim —
+"roughly 3-6x faster than `better-sqlite3`" — is a read-only benchmark on the Northwind dataset run
+on an M1 MacBook Pro under macOS 12.3.1, which dates it to 2022 and therefore predates `node:sqlite`
+entirely; it is disputed on its own tracker as measuring JS object-conversion overhead rather than
+query performance, with a counter-benchmark showing better-sqlite3 ahead on a realistic query.
+Deno's implementation is widely described as native Rust over `rusqlite`, and that link is not
+confirmed from Deno's source. No published numbers exist for it.
 
-*Sourced — second-hand from a research agent, 2026-09-03; the Deno rusqlite basis is from a Deno
-GitHub discussion not opened by me.*
+Absolute throughput for single keyed inserts is in the tens of thousands per second, against a
+plausible load under a hundred, so none of this binds and it should not decide the runtime.
+
+*Sourced — [sqg.dev/blog/sqlite-driver-benchmark](https://sqg.dev/blog/sqlite-driver-benchmark/),
+2026-01-19, method disclosed: i9-12900K, 24 cores, 31GB RAM, Linux x64, Node v25.3.0, 10,000 users
+and 500,000 posts, WAL with 64MB cache. Iteration count is not disclosed, which is a real gap in the
+best-sourced number here. Bun's figure and its method are from
+[bun.com/docs/runtime/sqlite](https://bun.com/docs/runtime/sqlite); the dispute is oven-sh/bun issue
+4776. All read 2026-09-04 by a research agent; I did not open them.*
 
 **Writing data access against `node:sqlite` keeps that coupling loose, and this is now established.**
 Node's own documentation gives `node:sqlite` a stability of "1.2 - Release candidate", available
@@ -153,27 +171,48 @@ without a flag since v23.4.0 and v22.13.0. Bun's Node-compatibility documentatio
 "Fully implemented", noting only that `backup()` blocks the event loop where Node runs it on a worker
 thread. So the same data-access code runs on both runtimes unchanged.
 
-**Deno ships it too, so the coupling is not loose — it is absent.** Deno's own Node-built-in
-compatibility reference lists `node:sqlite` among its fully supported modules, added in Deno v2.2,
-with further APIs in 2.7. It is a genuine built-in: no npm specifier, no `node_modules`, no FFI
-permission flag, no native addon.
+**Deno ships it too, with one asymmetry the earlier wording denied.** Deno's Node-built-in
+compatibility reference lists `node:sqlite` among its supported modules, added in Deno v2.2, with
+further APIs in 2.7. It is a genuine built-in in the senses that matter for packaging: no npm
+specifier, no `node_modules`, no native addon to compile. But it is **not** free of permission flags,
+as this file previously claimed. Any file-backed database needs `--allow-read` and `--allow-write`;
+only `:memory:` runs unflagged. That boundary is real enough to have had a bypass bug
+(GHSA-8vxj-4cph-c596, an `ATTACH DATABASE` escape from those checks).
 
-> So no runtime is disadvantaged by an embedded store, and the store's locality does not narrow the
-> runtime field at all. The same data-access code runs unchanged on all three.
+> So the same data-access code runs unchanged on all three, and no runtime is disqualified by an
+> embedded store. The correct claim is narrower than "no runtime is advantaged": Deno asks for two
+> permission flags that Node and Bun do not. That is an ergonomic difference in the run command
+> rather than a difference in what can be built, and it should not by itself decide anything.
 
 *Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html) and
 [bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis) read 2026-09-02, and
 [Deno's Node API compatibility reference](https://docs.deno.com/runtime/reference/node_apis/) read
-2026-09-03. All three opened by me. A research agent reported `node:sqlite` as fully stable in
-Node 26; the documentation says release candidate, so that is what is recorded.*
+2026-09-03. All three opened by me. The permission-flag correction is from a research agent's review
+of Deno's permissions documentation 2026-09-04, which I did not open. Node's stability index was
+re-checked 2026-09-04 and still reads "1.2 - Release candidate"; a research agent reported it as
+fully stable in Node 26 and the documentation does not say so.*
+
+**The three runtimes' governance differs, and it is a live input for a solo maintainer on a
+multi-year horizon.** Node is governed by the OpenJS Foundation, with v24 in Active LTS since
+2025-10-28 (Maintenance from 2026-10-20), v22 in Maintenance until 2027-04-30, and v26 Current with
+LTS scheduled for 2026-10-28. Bun is owned by Anthropic and stays MIT with the same team. Deno is
+Deno Land Inc., a venture-funded company rather than a foundation, and its petition against Oracle
+over the "JavaScript" trademark is unresolved: the fraud claim was dismissed 2025-06-18, the
+genericness and abandonment claims remain active, and a decision is not expected before 2027.
+
+*Sourced — [Node's release schedule](https://raw.githubusercontent.com/nodejs/Release/main/README.md)
+fetched raw 2026-09-04 by a research agent, plus Bun's LICENSE.md and the acquisition post. Deno's
+version numbers and the trademark timeline come from search summaries the agent did not open
+directly, so treat the Deno specifics as the weakest claim in this paragraph.*
 
 ### The store was checked as an input here and is not one
 
 **Neither the engine nor the locality narrows this field.** The engine was the weaker candidate for
 mattering and never did: drivers are the runtime's business, not the engine's. Locality looked like it
 mattered — under a store opened as a file, a runtime's embedded-driver and native-addon story is on
-the path — and the finding above settles that it does not, because all three ship `node:sqlite` as a
-genuine built-in.
+the path — and the finding above settles that it does not, because all three ship `node:sqlite`
+without an npm specifier or a native addon to compile. Deno additionally requires `--allow-read` and
+`--allow-write`, which changes a run command and nothing else.
 
 > So the store questions are answered and they left three candidates standing. Nothing in
 > [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
@@ -183,8 +222,15 @@ genuine built-in.
 
 *Reasoned — 2026-09-03, from the driver facts above.*
 
-**One incompatibility worth knowing early.** `better-sqlite3` does not work under Bun and has not for
-three years. Choosing that library is therefore choosing Node, quietly, in a file that looks like it
-is about the database. It is avoidable rather than decisive, since `node:sqlite` runs on all three.
+**One incompatibility worth knowing early, stated more precisely than before.** `better-sqlite3` does
+not load under Bun out of the box: it is a native addon and fails with ABI mismatches
+(`ERR_DLOPEN_FAILED`, "compiled against different Node.js ABI version"). Recompiling against the
+matching ABI is a documented workaround, so "does not work" is too absolute, and the problem recurs
+across Bun releases rather than sitting in one long-open ticket — the tracker holds a cluster of
+issues of different ages (19328, 17255, 5187, 16050) rather than a single three-year-old one.
+Choosing that library still tilts toward Node quietly, in a file that looks like it is about the
+database. It is avoidable rather than decisive, since `node:sqlite` runs on all three.
 
-*Unverified — no source recorded.*
+*Sourced — oven-sh/bun issues 19328, 17255, 5187 and 16050, surveyed 2026-09-04 by a research agent.
+I did not open them. The "three years" duration previously recorded here could not be attached to any
+single issue.*

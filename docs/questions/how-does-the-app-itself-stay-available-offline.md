@@ -6,21 +6,39 @@ resolves_into: decision
 
 # How does the app itself stay available offline?
 
+**Narrowed by [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md)
+and [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md).**
+What answers a navigation after the first visit is settled: a service worker, serving a document the
+build produced, rather than the network or the browser's HTTP cache. So the question below is no
+longer whether a shell reaches the device or by what mechanism — it is everything around that.
+
 ## Why it matters
 
 [Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-promises exactly that. Every discussion of that promise so far has been about *data* — where
-progress lives and how it survives. None has been about the app: if the shell isn't already on
-the device, opening it with no network gives a player nothing to play with, and the promise is
-false no matter where state lives.
+promises exactly that, and
+[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+promises the floor beneath it. Every discussion of those promises has been about *data* — where
+progress lives and how it survives. The document is settled; what surrounds it is not, and a service
+worker that holds a document and nothing else keeps neither promise. A player who opens the app
+offline to a working shell with no puzzle in it has been given an empty room.
 
 It also decides what "already on the device" covers. The interface is one thing; the puzzles a
 player might start next are another.
 
 ## What would settle it
 
-Deciding what must be present before a player goes offline, then choosing a mechanism that puts
-it there and keeps it current without a player noticing either happening.
+Deciding what must be present before a player goes offline, and how it stays current without a player
+noticing either happening. Four things are open, none of which
+[ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) touches:
+
+- **What the precache holds besides the document** — the bundle, styles, fonts, and how much puzzle
+  content, which is where this meets
+  [what can a player do with no network?](what-can-a-player-do-with-no-network.md).
+- **How the manifest is generated**, which is a build output and so waits on
+  [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+- **What strategy anything other than a navigation uses** — the API, puzzle content, assets.
+- **How a bad service worker is recovered from**, since it fails by serving an old app indefinitely
+  rather than by crashing.
 
 ## Resolves into
 

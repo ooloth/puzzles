@@ -11,9 +11,14 @@ resolves_into: decision
 what sits on top of it to route a request and write a response — a framework, or the runtime's own
 server API and nothing else.
 
-The two constrain each other in both directions, which is why they are answered together rather than
-in sequence: an edge runtime rules out frameworks that assume a long-lived process, and a framework
-that assumes one rules out edge runtimes.
+**The two are still answered together, and the reason is no longer the edge tier.**
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) removed that
+runtime tier, so the old argument — an edge runtime rules out frameworks assuming a long-lived
+process, and vice versa — no longer distinguishes anything. What couples them now is narrower and
+runs one way more strongly than the other: two of the three candidate runtimes ship their own server
+API and their own bundled tooling, so choosing one of those partly answers this question by
+consequence, while choosing a framework that assumes Node's `http` module would rule that runtime out.
+Answering them in either order alone risks settling the second by accident.
 
 ## Why it matters
 

@@ -177,12 +177,15 @@ with the HTTP handler, the package manager may be settled by consequence if the 
 the layout waits on whether that toolchain does workspaces. So the runtime is worked first, and not
 because it is built first.
 
-**Two of the three claims once bundled into the server's execution shape are settled.**
-[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) records that nothing on
-the request path scales to zero, and
-[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) records that the
-server does not run in a constrained isolate. What is left of that question is store locality, which
-is why it now asks only that.
+**The server's execution shape is fully settled and blocks nothing here.** Nothing on the request path
+scales to zero ([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md)), the
+server does not run in a constrained isolate
+([ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)), and the store is
+a SQLite file the process opens on the same machine
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md),
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)). All three are **Given**
+below rather than open.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
@@ -476,7 +479,7 @@ players are losing work, and nothing currently could tell us either way.
     preserves are long reads, and a long read blocks WAL checkpointing. It sits here rather than at M3
     because there is nothing worth analysing until there is play to analyse, and because whatever the
     backup answer produces may already be the copy these reads should run against.
-12. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
+14. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
     has to end in something, and the player cannot be told, because
     [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
     forbids it. So a failed write exists only inside the client where nothing is watching, which is

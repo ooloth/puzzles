@@ -167,22 +167,24 @@ permission flag, no native addon.
 2026-09-03. All three opened by me. A research agent reported `node:sqlite` as fully stable in
 Node 26; the documentation says release candidate, so that is what is recorded.*
 
-### The store constrains this question through locality, not through engine
+### The store was checked as an input here and is not one
 
-**Which engine the store runs is not an input here; whether the store is a file or a service is.**
-Under a network-attached store the drivers are portable JavaScript and every candidate runtime is
-equal, so the coupling is severed. Under a store opened as a file the runtime's embedded-driver and
-native-addon story matters, and the field narrows — by one candidate, per the finding above, rather
-than to a single winner.
+**Neither the engine nor the locality narrows this field.** The engine was the weaker candidate for
+mattering and never did: drivers are the runtime's business, not the engine's. Locality looked like it
+mattered — under a store opened as a file, a runtime's embedded-driver and native-addon story is on
+the path — and the finding above settles that it does not, because all three ship `node:sqlite` as a
+genuine built-in.
 
-> So [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) has
-> to settle store locality *before* this question is answered, not after. Answering this first and
-> locality later risks a runtime chosen under an assumption that the later answer reverses.
+> So the store questions are answered and they left three candidates standing. Nothing in
+> [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
+> [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) or
+> [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) advantages or disqualifies
+> Node, Bun or Deno. Spike all three.
 
-*Reasoned — 2026-09-02, from the driver facts above.*
+*Reasoned — 2026-09-03, from the driver facts above.*
 
 **One incompatibility worth knowing early.** `better-sqlite3` does not work under Bun and has not for
 three years. Choosing that library is therefore choosing Node, quietly, in a file that looks like it
-is about the database.
+is about the database. It is avoidable rather than decisive, since `node:sqlite` runs on all three.
 
 *Unverified — no source recorded.*

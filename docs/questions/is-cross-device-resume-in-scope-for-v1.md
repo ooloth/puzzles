@@ -37,9 +37,15 @@ Ported from the legacy documentation review, 2026-08-30. Analysed in depth 2026-
 
 ## Options
 
-*No — progress is per device.* Nothing to build. No identity, no server state, no sync protocol,
-no conflict rule, no privacy obligations beyond what a static site incurs. A player who switches
-devices starts over, and a player whose browser clears storage loses everything with no recovery.
+*No — progress is per device.* **Ruled out** by
+[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md), which
+rejected keeping everything on the device and accepting the loss, and by
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), which commits to
+a server holding the durable copy. Its appeal was that it removed identity, server state, a sync
+protocol and a conflict rule at once — but the server exists regardless, so it no longer removes them.
+Kept in the list because it is the option somebody would otherwise reach for, and because what it
+would cost a player — switching devices starts over, a cleared browser loses everything with no
+recovery — is the thing those records were weighed against.
 
 *Yes, via accounts.* Email and a password or a magic link. Solves transfer and recovery together,
 and is the only option that also carries a subscription between devices. Costs a signup flow,

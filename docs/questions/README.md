@@ -258,6 +258,52 @@ derivation.
    - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the pipeline cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. Costs a re-scaffold of both the layout and the pipeline
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
+### Working notes — temporary, and deleted as its content finds permanent homes
+
+**This section is a scratchpad, and the only one.** M1's hardest questions constrain each other across
+several files, and a thought that spans three question files has nowhere else to live: a question file
+holds one question's working, [../constraints.md](../constraints.md) holds facts about the world, and
+neither holds "here is how these four fit together". That is what this is for. Everything here is
+provisional and moves out to a record, a constraint or a question file as soon as it has earned a
+permanent home. Delete what has moved rather than leaving a second copy.
+
+**The plan, in order.**
+
+1. **Settle the browser matrix.**
+   [Which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md)
+   Cheap, and the build question cannot proceed without it. Produces a record and the first promise in
+   the Compatibility theme.
+2. **Write the property list.** What the client and server halves must be *able to do*, derived from
+   [../problem.md](../problem.md), [../guarantees/](../guarantees/),
+   [../constraints.md](../constraints.md) and the records, citing the source of each property, with no
+   tool named anywhere in it. Everything after this is scored against it.
+3. **Populate candidates per property from registries rather than recall**, keeping the null option
+   ("write it ourselves", "use the platform") in every category. Whittle in one pass on binding
+   properties only. Write each elimination into the relevant question file with its reason and what
+   would reverse it.
+4. **Research only the axes that still separate survivors**, opening sources rather than inheriting
+   claims.
+5. **Spike what reading cannot settle.** First candidate: one rules module imported by a browser
+   build, a server process and a batch script under each surviving toolchain, which is
+   [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) as
+   running code rather than as a feature-list claim.
+6. **Record as a chain of small records in derivation order**, not one stack record.
+
+**Open, and spanning more than one question file.**
+
+- **Where the property list from step 2 lives is undecided.** It is not one question's working and not
+  a fact about the world. Until that is answered it lives here.
+- **The runtime, the HTTP handler and the renderer are one cluster**, for the reason given above the
+  slice list. Answering any one alone settles part of another by accident.
+- **`node:sqlite` is an assumption, not a choice.** Every argument in the repo that the store does not
+  narrow the runtime passes through it, and no record picks it. Tracked as
+  [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3. What
+  M1 owes it is only that the runtime record says whether driver quality was an input.
+- **Findings about this field go stale in days rather than months.** Re-checking the toolchain
+  findings on 2026-09-04 refuted three of five recorded a few days earlier, one of them in a release
+  that shipped that morning. Anything recorded here carries the date it was checked, and a candidate
+  list is re-checked rather than trusted.
+
 ## M2 — a change can be checked before it ships
 
 M1 is the first thing that exists and the first thing that can be wrong without anyone noticing.

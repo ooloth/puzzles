@@ -34,19 +34,16 @@ builds it, where the machine is and what deploys to it are all open, and they ar
 turns on. The architecture diagram is deliberate about this: every box cites the record that fixed it,
 and the last section lists what is not decided, which is the longer list.
 
-**So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. Two claims
-that read as consequences of those records are not, and both have already been checked:
+**So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. Two
+inferences those records invite do not hold, and each is argued where it belongs rather than here:
 
-- **The store does not narrow the runtime.** Node, Bun and Deno all ship `node:sqlite` without an npm
-  specifier or a native addon, so anyone reasoning "SQLite, therefore runtime X" has inherited a claim
-  found false on 2026-09-03. One asymmetry survives and is small: Deno needs `--allow-read` and
-  `--allow-write` for a file-backed database, which changes a run command and nothing else.
-- **The entry document being a build output does not exclude the meta-frameworks.**
-  [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) binds
-  how the document is produced and nothing else — not who builds the bundle, not what answers HTTP.
-  Prerendering a document while serving API routes from the same process is a live configuration. What
-  the record removes is the argument that would have forced a meta-framework, not the option of
-  choosing one.
+- **Do not infer the runtime from the store.** "SQLite, therefore runtime X" was checked and does not
+  follow. See
+  [what runs TypeScript outside the browser?](questions/what-runs-typescript-outside-the-browser.md).
+- **Do not read
+  [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) as
+  excluding the meta-frameworks.** It binds how the entry document is produced and nothing else. See
+  [what handles HTTP requests on the server?](questions/what-handles-http-requests-on-the-server.md).
 
 <!-- Template:
 

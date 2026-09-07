@@ -7,6 +7,9 @@ The goal is a delightful puzzle-solving UI that rivals the UX of any current alt
 supporting uninterrupted puzzling with or without internet connectivity. 📱 The puzzles themselves
 will be tuned to match the techniques a human would actually use to solve them. 🤖🙅
 
+**Current status:** Planning and design. I'm documenting the product and system decisions before
+implementation begins.
+
 ## 📖 Docs
 
 While this is currently a personal project and not seeking contributions, feel free to follow along

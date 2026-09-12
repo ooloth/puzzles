@@ -48,6 +48,14 @@ still open. What is settled is that whatever they choose, the keyboard reaches a
 archive listing — is not covered here. That is not a judgement that those may be pointer-only; it is
 that this record is about play and does not pretend to more reach than it argued for.
 
+## Enforced by
+
+**Nothing. Asserted only, and there is nothing to operate.** What would make it true is every solving
+action reachable without a pointer, which is checkable by driving the grid from the keyboard alone
+once [what interactions must the grid support?](../questions/what-interactions-must-the-grid-support.md)
+at M10 has enumerated the actions. The promise resting on it is
+[every action while solving is reachable from the keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboard.md).
+
 ## Rejected
 
 - **Keyboard support for the common actions, pointer for the rest.** The pragmatic version, and the

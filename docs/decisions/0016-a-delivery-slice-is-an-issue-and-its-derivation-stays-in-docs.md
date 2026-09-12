@@ -35,6 +35,13 @@ drifted title is a documentation bug by definition.
 
 **Neither restates the other's half.** No reasoning in an issue; no status in the docs.
 
+## Enforced by
+
+**Nothing, and no issue exists to test it against.** What would make it true is each slice in
+[../questions/README.md](../questions/README.md) appearing as one issue whose title matches, carrying
+no reasoning. The title is the only join between the two halves and nothing verifies it, which that
+file states plainly rather than leaving to be discovered.
+
 ## Rejected
 
 - **Put the derivation in the issue, and let the tracker hold everything.** One place, one habit,

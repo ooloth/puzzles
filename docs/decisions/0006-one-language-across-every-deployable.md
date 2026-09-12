@@ -35,6 +35,14 @@ there is one, which is a different question and the one that has to be answered 
 for sharing source rather than compiling an artifact is what makes any single language mandatory, and
 it holds whichever language wins.
 
+## Enforced by
+
+**Nothing. Asserted only, and no deployable exists.** It becomes checkable the moment there is more
+than one deployable, and mechanically so: a second language in a deployable's manifest is a violation
+anything could detect. Until then it constrains
+[what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md)
+rather than any code.
+
 ## Rejected
 
 - **Share the rules as a compiled artifact, and let each deployable pick its own language.** The

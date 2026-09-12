@@ -61,6 +61,14 @@ Puzzles whose marks live on the edges between cells rather than in the cells the
 is the common example — are not covered here, and a shape satisfying this decision may still fail to
 hold one. Claiming otherwise would be preserving an option nobody has costed.
 
+## Enforced by
+
+**Nothing. Asserted only, and no schema exists.** What would make it true is a stored puzzle whose row
+carries its dimensions, region map and cell vocabulary rather than inferring them from a game type.
+It arrives at M3 with the first row, and
+[how is the schema migrated?](../questions/how-is-the-schema-migrated.md) is what keeps it true as
+the second game type lands.
+
 ## Rejected
 
 - **Model sudoku directly: an eighty-one character string.** The universal sudoku interchange

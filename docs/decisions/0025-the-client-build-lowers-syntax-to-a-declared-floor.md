@@ -55,6 +55,20 @@ separate open questions — [what runs TypeScript outside the browser?](../quest
 three. Reading this record as "not Bun" would eliminate it from three decisions on evidence that
 bears on one.
 
+## Enforced by
+
+**Nothing. Asserted only, and no build exists.**
+
+What would make it true is a client build configured with a lowering target read from the declaration
+in [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md), which
+arrives at M1 with the client build, and a check over the emitted bundle confirming it, which arrives
+at M2.
+
+**The gap between those two is where this record is most likely to look honoured and not be.** A
+build configured with a target emits what the tool emits, and nothing between M1 and M2 compares that
+against the floor. The bundler choice is the only thing carrying this until the check exists, which
+is why it appears as a given on M1 slice 2 rather than only here.
+
 ## Rejected
 
 - **Let the emitted syntax be whatever the source happens to contain.** The case for it is that it is

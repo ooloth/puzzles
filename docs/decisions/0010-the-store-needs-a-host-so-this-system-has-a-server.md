@@ -53,6 +53,13 @@ background copy or a background check.
 live. Whether that is a relational database, a key-value store or a file is
 [ADR-0020](0020-the-stores-engine-is-sqlite.md), open.
 
+## Enforced by
+
+**Nothing to build here beyond what later records mandate.** This settles that a server exists;
+[ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md) through
+[ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) say what it must
+be, and M1 slice 1 is where one first answers a request.
+
 ## Rejected
 
 - **A static site with no server at all.** The genuine alternative, and before [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) a live one:

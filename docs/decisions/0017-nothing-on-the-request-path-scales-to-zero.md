@@ -46,6 +46,13 @@ at all between runs — [../problem.md](../problem.md) ranks "the interactive pa
 throughput" and says generation "can be as slow as it needs to be". This record is about the path a
 player is blocked on and nothing else.
 
+## Enforced by
+
+**Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment whose
+request-path components have no scale-to-zero configuration. It is settled at M1 slice 4 by
+[where does this run?](../questions/where-does-this-run.md) and is observable afterwards as a cold
+first request, which is the shape of the failure rather than an error anything reports.
+
 ## Rejected
 
 - **Scale-to-zero compute.** The strongest rejected option by some distance. It is free at rest, it is

@@ -240,6 +240,10 @@ date: YYYY-MM-DD
 ## Decision
 <what we're doing>
 
+## Enforced by
+<what must exist in the codebase for this to be true, and whether it does — "Nothing. Asserted
+only." where nothing does>
+
 ## Rejected
 - <Option A> — because <the actual disqualifying reason>
 - <Option B> — because <...>
@@ -264,6 +268,27 @@ date: YYYY-MM-DD
   X" tells a future reader nothing; "considered X, rejected because Y" does.
 - **Risk** is the section that keeps an ADR honest rather than a justification. If nothing
   is being knowingly accepted, either the decision was trivial or the risk hasn't been found.
+- **Enforced by** is borrowed from [../guarantees/](../guarantees/), and for the same reason. A
+  record that mandates a concrete artifact — a file, a setting, a tool in the pipeline — creates
+  work, and that obligation is invisible from the listing unless the record carries it. With this
+  line the folder is a backlog as well as a list of constraints, and a slice's definition of done
+  has somewhere to come from.
+
+  **Say plainly where nothing enforces it**, exactly as a guarantee does. "Nothing. Asserted only."
+  is the common answer here and it is the useful one, because a mandate nobody has built is
+  indistinguishable in the listing from one already honoured.
+
+  **Where a record settles a shape rather than mandating an artifact, say that instead.** Not every
+  decision has something to build — a scope, a ranking, or a constraint on a later choice is honoured
+  by the decision that obeys it rather than by code. Those say what would satisfy them, which is
+  usually a later record.
+
+  **Where the work spans milestones, say so.** A record whose consumers land at different times is
+  the one most likely to be half-built and read as finished, and the half that arrives second is
+  usually the half nothing breaks without.
+
+  Nothing checks this line, the same way nothing checks a guarantee's. It is a written rule and holds
+  only while it keeps being written.
 - **Revisit when** should name an observable condition, not a date. It's what lets a future
   reader tell whether circumstances have crossed the line — without it, every ADR reads as
   equally binding forever.

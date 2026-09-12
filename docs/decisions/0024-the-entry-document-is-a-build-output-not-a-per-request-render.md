@@ -61,6 +61,14 @@ prerendering are additive to a prerendered page, and
 [does any page need markup a crawler can read?](../questions/does-any-page-need-markup-a-crawler-can-read.md)
 at M8 is where that gets asked. Nothing here forecloses it.
 
+## Enforced by
+
+**Nothing. Asserted only, and no build exists.** What would make it true is an entry document emitted
+by the build rather than rendered per request. It arrives at M1 slice 2, and the same document is
+what carries the fallback
+[a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md)
+promises.
+
 ## Rejected
 
 - **Render the entry document per request, hydrating to a client application.** The case for it is

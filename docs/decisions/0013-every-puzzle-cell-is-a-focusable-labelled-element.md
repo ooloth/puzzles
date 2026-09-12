@@ -46,6 +46,13 @@ blocker, which is the part that is ours.
 findings intact. What this rules out is discovering the answer is yes after the renderer has made it
 a rewrite.
 
+## Enforced by
+
+**Nothing. Asserted only, and no grid exists.** What would make it true is each cell rendered as a
+focusable element carrying a name, a role and a state. It arrives at M4, and unusually for this
+folder it is mechanically checkable once it does — a test can assert focusability and the presence of
+an accessible name for every cell.
+
 ## Rejected
 
 - **Render the grid to a canvas.** The strongest rejected option and a real one: total control over

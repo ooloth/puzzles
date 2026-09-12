@@ -40,6 +40,13 @@ runtime constraint is making the error this record exists to stop.
 TypeScript, which is
 [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md).
 
+## Enforced by
+
+**Nothing. Asserted only, and no server runs.** What would make it true is a server process with full
+platform APIs available to it, which is decided together with the runtime at M1 slice 1. A violation
+surfaces as a missing API at the moment something needs it, so nothing reveals it until the code that
+needs it is written.
+
 ## Rejected
 
 - **Run the server in a constrained isolate.**

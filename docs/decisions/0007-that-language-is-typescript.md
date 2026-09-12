@@ -34,6 +34,14 @@ The rules are therefore shared as source. That is a consequence of the two recor
 than a separate choice: one language everywhere, and that language directly runnable in a browser,
 leaves nothing for a compiled artifact to do.
 
+## Enforced by
+
+**Nothing. Asserted only.** It follows
+[ADR-0006](0006-one-language-across-every-deployable.md) and is checkable on the same condition: once
+deployables exist, the language in each is observable.
+[What language are repo scripts written in?](../questions/what-language-are-repo-scripts-written-in.md)
+at M2 covers the gap this record leaves, since a script is not a deployable.
+
 ## Rejected
 
 - **A WebAssembly client — Rust with Leptos or Dioxus, or similar.** Not rejected on performance,

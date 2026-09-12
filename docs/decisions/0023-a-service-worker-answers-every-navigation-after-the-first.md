@@ -48,6 +48,15 @@ M9. What this record settles is only what answers a navigation, because
 [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) rests on it and
 would otherwise be argued from an inference.
 
+## Enforced by
+
+**Nothing. Asserted only, and no service worker exists.** What would make it true is a registered
+service worker answering navigations from a precached document. It arrives at M9 under
+[how does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md),
+and the precache manifest it needs is a build output, so M1's build choice constrains it.
+[The app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+rests on it.
+
 ## Rejected
 
 - **The browser's HTTP cache, with a long `max-age` on the document.** The strongest alternative and

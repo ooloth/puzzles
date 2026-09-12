@@ -57,6 +57,14 @@ replication and a restore drill is about as much work as standing up a database 
 story. Day-to-day attention is near-identical. What is actually saved is three failure domains and one
 recurring maintenance event a year, since a file has no major-version upgrade.
 
+## Enforced by
+
+**Nothing. Asserted only, and no store exists.** What would make it true is a server process opening a
+database file on its own filesystem. It arrives at M3 with the first row, alongside
+[which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
+and [what durability settings does the store run with?](../questions/what-durability-settings-does-the-store-run-with.md),
+which decide how that file is opened.
+
 ## Rejected
 
 - **A managed service reached over a network.** The strongest alternative, and the one most people

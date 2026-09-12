@@ -29,6 +29,14 @@ already decided this.
 The client holds a complete copy of the state for any puzzle in progress, and mutates it locally
 without waiting on anything remote. The rules needed to validate a move run on the client.
 
+## Enforced by
+
+**Nothing. Asserted only, and no client exists.** What would make it true is a client that holds the
+board and mutates it locally, with no server round trip between an input and a paint. It arrives
+across M5 and M6, and
+[input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
+is the promise that rests on it.
+
 ## Rejected
 
 - **The server holds state and the client renders it.** Fails both promises — [play continues

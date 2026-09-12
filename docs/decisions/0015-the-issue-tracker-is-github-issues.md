@@ -54,6 +54,13 @@ one grouping level M1 needs.
 **Issues carry no reasoning.** An issue that turns out to need a decision stops and points at the
 question, per [ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md).
 
+## Enforced by
+
+**Nothing, and the tracker is empty.** What would make it true is issues in this repository, one per
+slice, grouped by a milestone per M-number. Nothing checks it and nothing can, for the reason
+[ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md) gives: `scripts/check-docs.py`
+cannot see GitHub.
+
 ## Rejected
 
 - **Linear.** A better tracker on the merits — faster, keyboard-driven, real cycles and projects, and

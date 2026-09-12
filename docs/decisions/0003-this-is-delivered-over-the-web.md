@@ -42,6 +42,12 @@ This decides the delivery platform and nothing else. What renders the client, wh
 player's work, whether a server exists, and how the app stays available offline are each their own
 question, and this record deliberately does not answer them.
 
+## Enforced by
+
+**Nothing to build. This settles a delivery platform, and every record after it inherits the
+constraint rather than enforcing it.** What would violate it is a native client, and the browser
+facts in [../constraints.md](../constraints.md) are in scope only while it stands.
+
 ## Rejected
 
 - **One native codebase across iOS and Android (React Native + Expo).** The strongest rejected

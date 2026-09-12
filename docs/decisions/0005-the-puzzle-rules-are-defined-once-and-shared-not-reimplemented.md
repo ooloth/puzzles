@@ -59,6 +59,14 @@ first load. That is [ADR-0006](0006-one-language-across-every-deployable.md), an
 is the constraint it inherits: the rules must run in a browser and in a batch process, from one
 source.
 
+## Enforced by
+
+**Nothing. Asserted only, and no module exists.** What would make it true is one rules module imported
+by the client build, the server process and a batch script without a publish step between them. It
+depends on [how is the codebase laid out?](../questions/how-is-the-codebase-laid-out.md) at M1, and
+the working notes in [../questions/README.md](../questions/README.md) name a spike that would
+demonstrate it as running code rather than as a feature-list claim.
+
 ## Rejected
 
 - **Two implementations kept in agreement by differential testing.** The strongest rejected option,

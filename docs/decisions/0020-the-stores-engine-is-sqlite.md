@@ -47,6 +47,14 @@ answer it.
 timeout determine whether a write survives a power cut, and they are durability decisions rather than
 configuration details.
 
+## Enforced by
+
+**Nothing. Asserted only, and no database exists.** What would make it true is a SQLite file at M3.
+The record notes that its own reasoning runs through `node:sqlite`, which no record has chosen, so
+what it owes is tracked as
+[which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
+rather than settled here.
+
 ## Rejected
 
 - **An embedded key-value store** — LMDB, RocksDB, or a plain file format. Genuinely simpler, faster

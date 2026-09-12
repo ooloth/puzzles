@@ -19,6 +19,12 @@ validated.
 Launch with sudoku: select a cell, type a digit. Star battle second, once the surrounding
 machinery is proven. Types beyond those two are deliberately not chosen now.
 
+## Enforced by
+
+**Nothing to build. This is scope, honoured by what gets built rather than by code.** It is satisfied
+when the first two game types are these two and is violated by a third arriving before star battle
+ships.
+
 ## Rejected
 
 - **Star battle first** — it is the more interesting puzzle and the one the maintainer would

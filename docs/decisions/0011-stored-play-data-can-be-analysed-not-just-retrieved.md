@@ -43,6 +43,13 @@ remains open, and [do privacy regulations apply?](../questions/do-privacy-regula
 unresearched. Collecting anything about a player waits on both. What this settles is that the store
 will not be the reason they cannot be answered.
 
+## Enforced by
+
+**Nothing, deliberately.** The record preserves an option and schedules no work, which it says itself.
+What would violate it is a store shape that makes scanning across players impossible, so it is
+honoured by [how do analysis and play share one store?](../questions/how-do-analysis-and-play-share-one-store.md)
+at M11 and by the schema at M3 rather than by anything built for it.
+
 ## Rejected
 
 - **Deciding it when the analysis is wanted.** The honest "not yet", and it fails on the one thing

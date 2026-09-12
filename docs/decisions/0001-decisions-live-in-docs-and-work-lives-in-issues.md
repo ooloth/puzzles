@@ -38,6 +38,14 @@ need a decision stops and points at the question, rather than deciding inside it
 group.** Once implementation begins, whatever grouping the tracker offers becomes where issues are
 grouped, and that file links to it rather than restating it.
 
+## Enforced by
+
+**Partly, and the halves are uneven.** `scripts/check-docs.py` enforces the docs side: every question
+is referenced from the milestone list, no question file grows a sequencing section, and every link
+resolves. Nothing enforces the tracker side, and nothing can — the script cannot see GitHub, which
+[../questions/README.md](../questions/README.md) states where it names the slice title as the join
+key.
+
 ## Rejected
 
 - **Issues for everything, including decisions.** One tracker, one habit, nothing to keep in step.

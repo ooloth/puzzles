@@ -48,6 +48,13 @@ stated here rather than left to be discovered. The finding that ties the catalog
 rather than to delivery — an archive that might ever be gated cannot be static — is recorded in
 [../constraints.md](../constraints.md), so deciding one decides the other.
 
+## Enforced by
+
+**Nothing. Asserted only, and nothing is served.** What would make it true is puzzle content behind a
+route that can decline to answer, rather than files in the client bundle. It arrives at M8, and
+[../constraints.md](../constraints.md) records why it cannot be retrofitted: anything already
+delivered cannot be withdrawn.
+
 ## Rejected
 
 - **Ship puzzles as static files with the application.** The strongest option on every axis except

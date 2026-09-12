@@ -299,6 +299,7 @@ def decision_files():
 TEMPLATE_HEADINGS = [
     '## Forced by',
     '## Decision',
+    '## Enforced by',
     '## Rejected',
     '## Risk',
     '## Revisit when',

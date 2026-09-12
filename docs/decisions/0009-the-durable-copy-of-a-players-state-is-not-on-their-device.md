@@ -52,6 +52,13 @@ does, and whether the two records are one shape are three open questions —
 upstream of all three: it establishes that off-device durable state exists, and they decide who gets
 it and on what terms.
 
+## Enforced by
+
+**Nothing. Asserted only, and no durable copy exists.** What would make it true is state written
+somewhere other than the player's device and readable back from it. It needs the store at M3 and the
+sync path after that, and until then every durability promise in [../guarantees/](../guarantees/)
+rests on a device this record says is not authoritative.
+
 ## Rejected
 
 - **Keep everything on the device, and accept the loss.** A genuine option and by a wide margin the

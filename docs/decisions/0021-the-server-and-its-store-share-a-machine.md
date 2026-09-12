@@ -33,6 +33,13 @@ Lambda with EFS are all specific instances.
 [how is the store backed up?](../questions/how-is-the-store-backed-up.md) is where that is designed.
 What binds here is that the copy the process *writes* is local to it.
 
+## Enforced by
+
+**Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment placing
+the process and the file on one machine with a local filesystem. It is settled at M1 slice 4 by
+[where does this run?](../questions/where-does-this-run.md), and the failure it rules out is
+corruption rather than an error, per [../constraints.md](../constraints.md).
+
 ## Rejected
 
 - **A network filesystem, so that compute and storage can scale independently.** The arrangement that

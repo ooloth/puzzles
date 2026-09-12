@@ -65,6 +65,21 @@ research agent and not opened here. The design in question is
 work the offline promises in [../guarantees/](../guarantees/) imply; no application code exists, so
 this is the floor the committed design needs rather than a survey of a built app.*
 
+## Enforced by
+
+**Nothing. Asserted only, and its three consumers land in two different milestones.**
+
+The build's lowering target arrives with the client build at M1, and the build cannot lower without
+reading a floor from somewhere, so that consumer is self-enforcing once the build exists. The two
+checks arrive at M2, under
+[what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md), and
+neither is self-enforcing: nothing breaks if they are never built.
+
+**So the half most likely to be silently dropped is the half this record exists for.** Between the
+two milestones the floor is declared and honoured by the build, with nothing verifying that it is,
+while [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+rests on it.
+
 ## Rejected
 
 - **Let each tool carry its own number.** The case for it is that it is what happens by default, it

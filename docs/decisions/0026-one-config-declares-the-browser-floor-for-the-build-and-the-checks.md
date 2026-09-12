@@ -26,19 +26,23 @@ tools, which is the reason both have to read the same number rather than each ca
 
 ## Decision
 
-**One browserslist configuration declares the browser floor, and everything that depends on the floor
-reads it from there.** Three consumers: the build's lowering target, a check that the emitted bundle
-parses at the floor, and a check that source does not call APIs the floor lacks.
+**One configuration declares the browser floor, and everything that depends on the floor reads it
+from there.** Three consumers: the build's lowering target, a check that the emitted bundle parses at
+the floor, and a check that source does not call APIs the floor lacks.
+
+**The declaration names its versions rather than deriving them at read time.** A floor computed from
+the calendar or from current usage share targets different browsers each year with nobody deciding
+that, and a line that moves on its own cannot be the scope of a promise.
 
 **Lowering the floor later is the direction that needs the checks.** Raising it can only reduce what
 must be supported. Lowering it enlarges the set, and every API added while the floor was higher
 becomes a candidate failure — which is a lint result when both checks read one config, and a player's
 bug report otherwise.
 
-**The configuration pins its resolution rather than resolving against the calendar.** Queries like
-`defaults` and `last 2 versions` resolve against current usage share, so the same file targets
-different browsers each year without anyone deciding that, and a floor that moves on its own cannot
-be a promise. The declared versions are named explicitly.
+**What format that configuration takes is
+[ADR-0027](0027-the-floor-declaration-is-a-browserslist-config.md)**, which follows from this record
+but is separable from it: the shape here is one declaration with three readers, and more than one
+format could carry it.
 
 ### The value is not settled here
 
@@ -131,8 +135,10 @@ position than it reads as.
 
 ## Revisit when
 
-- **A check in the chain stops reading browserslist**, which would break the single-source property
-  this record exists for and force a different shared format.
+- **A consumer in the chain cannot read the shared declaration**, which would break the single-source
+  property this record exists for. Which format is shared is
+  [ADR-0027](0027-the-floor-declaration-is-a-browserslist-config.md); the failure here is a consumer
+  that reads no shared format at all.
 - **The syntax check has caught nothing over a long period**, which would suggest the floor sits
   below anything anyone writes and the lowering is buying nothing.
 - **Analytics exist**, at which point the value is argued against real players rather than against a

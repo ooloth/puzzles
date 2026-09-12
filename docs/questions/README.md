@@ -172,18 +172,18 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**The store does not order slice 1's questions. The toolchain does.** They were once ordered on the
-claim that store locality constrains the runtime, and that claim is false: Node, Bun and Deno all ship
-`node:sqlite` as a built-in, so the same data-access code runs on every runtime under either store
-answer. What remains is a chain the question files state themselves — the runtime is answered together
-with the HTTP handler, the package manager may be settled by consequence if the runtime ships one, and
-the layout waits on whether that toolchain does workspaces. So the runtime leads *this slice's*
+**The store does not order slice 1's questions. The toolchain does.** Store locality does not
+constrain the runtime: Node, Bun and Deno all ship `node:sqlite` as a built-in, so the same
+data-access code runs on every runtime under either store answer. What orders them instead is a
+chain the question files state themselves — the runtime is answered together with the HTTP
+handler, the package manager may be settled by consequence if the runtime ships one, and the
+layout waits on whether that toolchain does workspaces. So the runtime leads *this slice's*
 questions, and not because it is built first.
 
 **It does not lead M1.** The order across the whole milestone is the numbered plan in the working
-notes at the end of this section, which settles the browser matrix before any of the cluster above,
-because it is cheap and the build question cannot proceed without it. Read that plan before starting
-anything here.
+notes at the end of this section, which derives what both halves must be able to do before naming
+any tool, so the cluster above is scored against a written list rather than against recall. Read
+that plan before starting anything here.
 
 **That chain is three questions, not two, and it crosses slices 1 and 2.** One candidate answer to
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is a
@@ -303,10 +303,11 @@ permanent home. Delete what has moved rather than leaving a second copy.
   narrow the runtime passes through it, and no record picks it. Tracked as
   [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3. What
   M1 owes it is only that the runtime record says whether driver quality was an input.
-- **Findings about this field go stale in days rather than months.** Re-checking the toolchain
-  findings on 2026-09-04 refuted three of five recorded a few days earlier, one of them in a release
-  that shipped that morning. Anything recorded here carries the date it was checked, and a candidate
-  list is re-checked rather than trusted.
+- **Findings about this field go stale in days rather than months.** A toolchain claim can be
+  overtaken by a release that ships the same week, and the rate of change is high enough that
+  most of a batch can fall in one re-check. So anything recorded here carries the date it was
+  checked, a candidate list is re-checked rather than trusted, and an undated claim about a tool
+  is treated as unverified whatever it says.
 
 ## M2 — a change can be checked before it ships
 
@@ -675,7 +676,10 @@ A question that genuinely cannot be worked until another is answered says so und
 settle it**, in prose, as part of describing what an answer requires.
 **What would settle it** is the evidence, measurement, or event that would end the question — not
 another question. **Resolves into** names where the answer lands. **Source** records where the
-question came from, so provenance survives the deletion of whatever raised it.
+question came from, so provenance survives the deletion of whatever raised it. It is the one
+section here that is history by design, and the forward-only rule in the portable documentation
+standard does not reach it. That covers where the question came from and nothing else: a **Source**
+that grows into an account of how the work went has left its purpose rather than extended it.
 
 The last two grow. **Options** holds each candidate answer with its strongest case and its cost.
 

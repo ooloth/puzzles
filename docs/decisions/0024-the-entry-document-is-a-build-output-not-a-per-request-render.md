@@ -96,8 +96,8 @@ promises.
   **Reverses if** a measurement shows the first-visit round trip is worth a second document — which
   becomes cheap to run once a renderer and a real puzzle exist, and is not runnable now.
 
-- **Defer it, as [../questions/README.md](../questions/README.md) originally filed it at slice 2.**
-  Genuinely cheap, and the right answer for most questions at this stage. Rejected because the option
+- **Defer it.** Genuinely cheap, and the right answer for most questions at this stage. Rejected
+  because the option
   lists in [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
   [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)
   and [what renders the client?](../questions/what-renders-the-client.md) already exclude the

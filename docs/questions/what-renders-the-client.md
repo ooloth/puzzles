@@ -25,8 +25,8 @@ board, its persistence and a deterministic merge all have to stay pure and testa
 browser.
 
 **It is answered together with
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), and that
-coupling was previously unrecorded here.** One of the candidate answers there is a meta-framework's
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md).** One of
+the candidate answers there is a meta-framework's
 own server, which only exists if the renderer is that meta-framework; and picking a renderer that is
 not one removes the option from the other side. Neither can be settled alone without deciding part of
 the other by accident.

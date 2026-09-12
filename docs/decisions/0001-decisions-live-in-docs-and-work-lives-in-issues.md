@@ -53,8 +53,8 @@ key.
   `docs/questions/README.md` exists to carry — and because a closed issue is archived, while a
   decision has to stay legible for as long as anything rests on it.
 
-- **Docs for everything, including work.** Also one place, and it is what has happened so far
-  because everything so far has been documentation. Rejected because it has no notion of assignment,
+- **Docs for everything, including work.** Also one place, and the cheapest option for a repository
+  whose contents are entirely documentation. Rejected because it has no notion of assignment,
   state or done, and because a task with no reasoning attached is pure overhead in a format
   the portable decision-making standard says exists to carry a chain of reasoning.
 

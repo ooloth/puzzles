@@ -159,8 +159,8 @@ reason.
 
 - [x] `questions/README.md` — three questions were answered, mined and deleted: the store-locality
       question by this record, the engine question by
-      [ADR-0020](0020-the-stores-engine-is-sqlite.md), and the store round-trip measurement, which
-      measured a round trip that no longer exists. Five new questions follow from this chain and are
+      [ADR-0020](0020-the-stores-engine-is-sqlite.md), and the store round-trip measurement, whose
+      premise this record removes. Five new questions follow from this chain and are
       placed at M1, M3 and M11
 - [x] `constraints.md` — imports the fact that a volume attached to one machine is not replicated and
       its loss is unrecoverable without an off-machine copy

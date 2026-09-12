@@ -49,8 +49,8 @@ The legacy analysis asserted that "backtracking + uniqueness verification runs i
 on a JIT'd runtime (V8/JSC); plenty of production sudoku generators run this in-browser in plain
 JS". No benchmark, no named generator, no measurement on any runtime. The document it appears in
 says of itself: "Do not treat anything here as settled — it's the reasoning trail, not the
-destination." It had been imported into `constraints.md` as an established fact; it has been
-removed.
+destination." It does not belong in `constraints.md`, which is where a claim at this tier would be
+mistaken for an established fact.
 
 *Unverified — no source recorded.*
 

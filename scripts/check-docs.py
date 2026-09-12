@@ -97,14 +97,12 @@ def check_links():
                 problems.append(f'BROKEN LINK  {path} -> {link}')
 
 
-# A path in backticks is a reference that looks like a link and is checked like
-# prose. docs/decisions/README.md already warns that these "are invisible to
-# scripts/check-docs.py, which matches markdown links only" — and it was right:
-# on 2026-09-03 two dead ones were found by hand, both inside "Also update"
-# checkboxes that read as completed work. ADR-0008 pointed at a question file
-# deleted when the register of open doors was abolished, and ADR-0003 at two
-# guarantee files that stopped existing when that folder moved to one promise per
-# file. Neither is reachable by check_links, and both had been wrong for weeks.
+# A path in backticks is a reference that looks like a link and reads like prose,
+# so check_links cannot see it: that function matches markdown links only, which
+# is what docs/decisions/README.md warns about when it says backticked paths "are
+# invisible to scripts/check-docs.py". This closes that gap. The references most
+# at risk sit inside "Also update" checkboxes, where a dead path reads as
+# completed work and nothing about it looks wrong.
 #
 # Only paths ending in a file extension are checked. A backticked word is usually
 # a field name, and "N/A" contains a slash, so anything broader reports noise.

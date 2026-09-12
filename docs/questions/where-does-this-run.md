@@ -16,8 +16,8 @@ supplies none of it.
 Two things constrain the answer from outside. Same-origin serving keeps a server-set cookie inside
 Safari's first-party exemption, per [../constraints.md](../constraints.md) — but **whether this
 system takes that exemption is open**, at
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md), which
-exists because same-origin had been asserted as a constraint without any record settling it. So the
+[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md) — no
+record settles it, so it is an assumption wherever it appears as a given. So the
 honest form is conditional: if that question lands on one origin, a platform that cannot serve both
 halves from one is not a candidate. And whatever the browser resolves before it reaches the platform
 is its own question — see
@@ -60,10 +60,10 @@ Options and findings ported from legacy ADR-12 (host on Fly.io).
 
 ## Options
 
-**Everything below is prior research, not a shortlist.** It records what one round of comparison
-looked at, under an assumption no longer in force. Every figure dates from 2026 with no
-link recorded, and every reputational claim is sourced to unnamed community reports. None of it
-decides anything until it has been re-checked against the vendor.
+**Everything below is unverified research, not a shortlist.** Every figure dates from 2026 with no
+link recorded, every reputational claim is sourced to unnamed community reports, and the comparison
+assumes same-origin serving, which no record settles. None of it decides anything until it has been
+re-checked against the vendor.
 
 *Fly.io.* Managed micro-VMs. TLS, health-checked restarts and Prometheus/Grafana without running any
 of it yourself. An optimised configuration — one `shared-cpu-1x`, 256MB, shared IPv4, scheduled

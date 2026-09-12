@@ -33,7 +33,7 @@ handle requests behind an interface thin enough that swapping what implements it
 rather than a rewrite.
 
 **This is also answered together with
-[what renders the client?](what-renders-the-client.md), and that coupling was previously unrecorded.**
+[what renders the client?](what-renders-the-client.md).**
 The fourth option below is a meta-framework's own server, and choosing it *is* choosing the renderer.
 Choosing a renderer that is not a meta-framework removes the option in the other direction. So the
 two constrain each other exactly as this question and the runtime do, and answering either alone

@@ -66,6 +66,25 @@ answering it, since it needs to run on documentation rather than on code and the
 before anything is installed.
 
 
+**Two of the checks this has to run are already specified, and they are unequal.**
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
+commits to a syntax check over built output and an API check over source, both reading one
+browserslist config. The syntax check is a parse at a stated level, so it succeeds or fails with no
+judgement in between. The API check is static analysis that does not follow an aliased or computed
+global, does not read dependencies, and by default ignores usage inside a feature-detection guard. So
+whatever runs them must not present their results as equivalent: one is evidence and the other is a
+weak signal.
+
+*Sourced — [github.com/yowainwright/es-check](https://github.com/yowainwright/es-check) (9.7.1,
+published 2026-09-08) and
+[github.com/amilajack/eslint-plugin-compat](https://github.com/amilajack/eslint-plugin-compat) (7.0.2,
+published 2026-04-29), read 2026-09-12 by a research agent and not opened here. This field is
+perishable and the versions carry the date they were checked.*
+
+**The syntax check runs on built output rather than on source**, which means it cannot be a
+pre-commit hook over changed files the way a linter can. It needs a build to have happened, so
+whatever answers this question has to accommodate a check whose input is an artifact.
+
 **The documentation checks are not hypothetical.** Manual link and index checks during this
 repo's documentation work caught a dangling pointer to a deleted file, an index that had drifted
 from its folder, and a rewrite that produced a three-hundred-character line. All three would have

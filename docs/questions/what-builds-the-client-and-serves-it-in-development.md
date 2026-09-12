@@ -27,11 +27,12 @@ Measuring the thing the decision was made for: cold start, save-to-visible-resul
 server, and how both behave as the project grows past a handful of files. Ecosystem maturity
 matters too, since a toolchain that breaks on an ordinary dependency costs more than it saves.
 
-**The strongest finding below is conditional on a matrix nobody has written.** Bun's bundler does not
-down-convert syntax, and how much that costs depends entirely on which browsers and versions have to
-run this. That is
-[which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md),
-and it is an input here rather than a consequence.
+**The field is already narrowed, and the narrowing is a record rather than a finding here.**
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) requires the
+client build to lower syntax to a declared floor and
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
+requires that floor to be read from one browserslist config. Whatever is chosen here has to satisfy
+both, which disqualifies `bun build` for this job and says nothing about Bun elsewhere.
 
 ## Resolves into
 
@@ -47,9 +48,10 @@ The TypeScript toolchains, since
 [ADR-0007](../decisions/0007-that-language-is-typescript.md) settled the language — Vite and Bun being
 the obvious two, with a framework's own tooling a third where it has one.
 
-Bun remains a live option for the parts of the toolchain that are not the browser build, and those
-are separate choices. Whether it is disqualified for the browser build turns on the syntax finding
-below, which is conditional on the browser matrix.
+**`bun build` is disqualified for the browser build**, by
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md): it cannot lower
+syntax to a declared floor and exposes no setting that would make it. Bun remains a live option for
+every other part of the toolchain, and those are separate choices tracked in their own files.
 
 ## Findings
 
@@ -73,10 +75,13 @@ no way to configure or disable that.
 *Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-04 by me, against Bun
 1.4.1. Browserslist integration is requested and unimplemented in Bun issues 40133 and 40361.*
 
-**How much that costs is not established, because the browser matrix is not written.** The finding
-above does not decide this question on its own: its consequence — "recent syntax reaches whatever
-device opens the app" — has no weight until something says which devices those are. See
-[which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md).
+**That finding now disqualifies `bun build` here, and the reason is a record rather than this file.**
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) requires the
+build to lower to a declared floor, which this cannot do. The CSS half cuts the same way for a
+different reason: Bun downlevels CSS to a fixed baseline with no way to configure it, so the one
+thing it does lower is the one thing
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
+cannot point at a shared config.
 
 **It cannot bundle web workers.** Issue 18601, "support bundling workers in bun build and dev
 server", was opened 2025-03-28 and is open, with issues 17705 and 29478 merged into it 2026-08-13. A

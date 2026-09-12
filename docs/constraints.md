@@ -368,6 +368,58 @@ there is no public API for a page or an embedding app to opt in.
 
 ---
 
+## Browsers — a version floor is a device lifecycle, not a release history
+
+*These decide which engine binds a support floor. They are vendor lifecycle facts rather than
+storage behaviour, which is why they sit apart from the sections above.*
+
+**Safari's version is fixed by the OS version and Chrome's is not.** Safari updates only when iOS or
+macOS updates, so an iPhone that cannot take a newer iOS cannot take a newer Safari. Chrome on
+Android updates through the Play Store independently of the OS, and stops only when the OS falls
+below Chrome's own minimum.
+
+> So the oldest browser in any realistic population is a Safari rather than a Chrome, and an old
+> Android phone is not the same thing as an old browser. A support floor is decided on the Apple
+> side; the Android side decides only who is excluded by it.
+
+*Reasoned — from the two vendor facts below.*
+
+**Chrome on Android requires Android 10 or later.** Google states it directly: "To use Chrome browser
+on Android, you'll need: Android 10 or later." A device below that keeps whatever Chrome build it
+last received, permanently.
+
+> So what strands an Android user on an old browser is the OS falling below Chrome's minimum, not a
+> manufacturer failing to push updates. What share of devices that is could not be established, and
+> no figure should be cited for it.
+
+*Sourced — [support.google.com/chrome/a/answer/7100626](https://support.google.com/chrome/a/answer/7100626),
+read 2026-09-12.*
+
+**Apple publishes its own iOS adoption, and the tail is short.** 79% of all iPhones run iOS 26, and
+86% of those introduced in the last four years, "as measured by devices that transacted on the App
+Store on June 7, 2026". The oldest branch still receiving security fixes is iOS 15, with 15.8.8 and
+16.7.16 both released 2026-05-11, reaching back to the iPhone 6s.
+
+> So the widest defensible floor on the Apple side is the Safari shipping with iOS 15, and anything
+> below it belongs to a device Apple has stopped patching. This is a figure about the world rather
+> than about this app's players, of whom nothing is known and nothing may be claimed.
+
+*Sourced — [developer.apple.com/support/app-store](https://developer.apple.com/support/app-store/) and
+[support.apple.com/en-us/100100](https://support.apple.com/en-us/100100), read 2026-09-12. The first
+read here; the second by a research agent and not opened here.*
+
+**A syntax error in a script is total and happens before any of it runs.** A script the engine cannot
+parse executes nothing, so a single unsupported token costs the whole application rather than the
+feature that used it.
+
+> So a syntax floor is categorically different from the floor for any one API. A missing API fails at
+> the call site, where it can be detected and worked around at runtime; an unparseable bundle cannot
+> be. Anything a browser below the floor is meant to see has to reach it outside that bundle.
+
+*Reasoned — a property of how scripts are parsed and executed.*
+
+---
+
 ## Mobile networks — setup cost, not bandwidth
 
 **A fresh connection costs several round trips before any payload moves** — TCP's handshake

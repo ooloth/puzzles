@@ -237,8 +237,10 @@ derivation.
    - **Given:** [the-app-never-opens-to-a-blank-screen-after-the-first-visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
    - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so the document is produced by the build, and a renderer is not also being chosen as a server
+   - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
+   - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the target is read from one browserslist config, so the bundler must consume one
+   - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
-     - **Must answer:** [which-browsers-and-versions-must-this-support](which-browsers-and-versions-must-this-support.md) — or else the build's syntax floor is set by a tool's default rather than by anyone, and the toolchains differ on whether they can lower it at all. It is an input to the question below rather than a consequence of it, and it fails silently: nothing in development reveals a floor that excludes a player's phone
      - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
@@ -274,29 +276,25 @@ permanent home. Delete what has moved rather than leaving a second copy.
 
 **The plan, in order.**
 
-1. **Settle the browser matrix.**
-   [Which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md)
-   Cheap, and the build question cannot proceed without it. Produces a record and the first promise in
-   the Compatibility theme.
-2. **Write the property list.** What the client and server halves must be *able to do*, derived from
+1. **Write the property list.** What the client and server halves must be *able to do*, derived from
    [../problem.md](../problem.md), [../guarantees/](../guarantees/),
    [../constraints.md](../constraints.md) and the records, citing the source of each property, with no
    tool named anywhere in it. Everything after this is scored against it.
-3. **Populate candidates per property from registries rather than recall**, keeping the null option
+2. **Populate candidates per property from registries rather than recall**, keeping the null option
    ("write it ourselves", "use the platform") in every category. Whittle in one pass on binding
    properties only. Write each elimination into the relevant question file with its reason and what
    would reverse it.
-4. **Research only the axes that still separate survivors**, opening sources rather than inheriting
+3. **Research only the axes that still separate survivors**, opening sources rather than inheriting
    claims.
-5. **Spike what reading cannot settle.** First candidate: one rules module imported by a browser
+4. **Spike what reading cannot settle.** First candidate: one rules module imported by a browser
    build, a server process and a batch script under each surviving toolchain, which is
    [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) as
    running code rather than as a feature-list claim.
-6. **Record as a chain of small records in derivation order**, not one stack record.
+5. **Record as a chain of small records in derivation order**, not one stack record.
 
 **Open, and spanning more than one question file.**
 
-- **Where the property list from step 2 lives is undecided.** It is not one question's working and not
+- **Where the property list from step 1 lives is undecided.** It is not one question's working and not
   a fact about the world. Until that is answered it lives here.
 - **The runtime, the HTTP handler and the renderer are one cluster**, for the reason given above the
   slice list. Answering any one alone settles part of another by accident.
@@ -355,10 +353,12 @@ a player can see, which is why it has to be a milestone rather than a habit.
    [where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a
    bare machine supplies none of it.
 11. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
-   — how many devices and which, and what runs where. It cannot be answered before
-   [which browsers and versions must this support?](which-browsers-and-versions-must-this-support.md),
-   which is worked at M1 because the build toolchain needs it. This question is the second half: what
-   to run the matrix on, once there is a matrix.
+   — how many devices and which, and what runs where. The matrix itself is settled by
+   [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md);
+   this question is the other half, which is what to run it on. It carries more weight than it looks:
+   [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+   is promised against compatibility data rather than observation until this lands, and the API half
+   of the floor is only partly checkable by any tool.
 
 ## M3 — a puzzle comes from the store
 

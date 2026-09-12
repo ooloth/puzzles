@@ -119,6 +119,26 @@ argued, and they get written here if and when
 [what happens to a losing write when syncing?](../questions/what-happens-to-a-losing-write-when-syncing.md)
 settles.
 
+### Compatibility — which devices this works on, and what the rest are told
+
+Every other promise here is scoped to the first of these, so it is read before the rest of the folder
+rather than alongside it.
+
+- [The app runs on any device still receiving security updates](the-app-runs-on-any-device-still-receiving-security-updates.md)
+- [A device too old to run the app is told so rather than shown a blank screen](a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md)
+
+The line itself lives in one configuration file rather than in either promise, per
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md),
+so that the build, the checks and these files cannot disagree about where it is.
+
+**What is not promised is that a supported browser behaves identically to any other.** Compatibility
+data records whether an API exists, not how it behaves, and
+[../constraints.md](../constraints.md) already carries a bug that reproduced on one browser, one
+protocol and one proxy together. Storage is the live instance: the eviction behaviour shaping every
+durability promise differs by browser and only Safari's is written down, and
+[how does Android evict stored data?](../questions/how-does-android-evict-stored-data.md) is
+unresearched, which is most of the market with no stated position.
+
 ### Accessibility — who can play, and how
 
 Grid puzzles raise real keyboard-navigation and screen-reader questions — announcing cell position,
@@ -159,15 +179,6 @@ lives in [../standards/](../standards/). Likely candidates once there is code: a
 twice has the effect of applying it once; a partial write is never observable; the board on screen
 always matches the board in storage. The first is already implicated by
 [what happens to a losing write when syncing?](../questions/what-happens-to-a-losing-write-when-syncing.md).
-
-**Compatibility** — which browsers, which OS versions, which device classes. Every promise in this
-folder is implicitly scoped to something, and until that scope is written down each one quietly claims
-more than it can deliver. This matters sooner than it looks: the storage behaviour shaping durability
-differs by browser and version, and only Safari's is written down.
-[How does Android evict stored data?](../questions/how-does-android-evict-stored-data.md) is
-unresearched, which is half the market with no stated position at all. The scope itself is
-[which browsers and versions must this support?](../questions/which-browsers-and-versions-must-this-support.md),
-which reached M1 because the client's build toolchain cannot pick a syntax floor without it.
 
 **Observability** — whether we would *know* a promise had been broken, for a failure that has already
 happened to a real player. The motivating case is lost progress, which produces no error, no crash and

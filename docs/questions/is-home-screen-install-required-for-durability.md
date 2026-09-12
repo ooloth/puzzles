@@ -49,6 +49,24 @@ convenience feature with no durability role. Costs whatever
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Firefox on the desktop cannot install a web app at any version.** MDN's compatibility data records
+`version_added: false` rather than a version number for the Web App Manifest members that make a site
+installable — `name`, `short_name`, `start_url`, `display`, `icons` and `scope`. This is an absence
+rather than a version gap, so no floor reaches it. Any answer that requires install for durability
+therefore has no form at all on desktop Firefox, and that is a hole in the mitigation rather than a
+narrower version of it.
+
+*Sourced — `@mdn/browser-compat-data@8.1.1`, dataset timestamp 2026-09-10, queried 2026-09-12 by a
+research agent and not opened here. Mined from the browser-floor question, resolved by
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) and
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md).*
+
+**Firefox for Android's install behaviour after the Fenix rewrite is unverified.** The same dataset
+records support from version 79 with no removal, and reporting suggests it changed. Nobody has opened
+a source either way.
+
+*Unverified — searched 2026-09-12, nothing confirmed.*
+
 **Install is the mechanism; `navigator.storage.persist()` is not an alternative to it.** The API
 only grants persistence to origins already exempt, and an installed app's domain is one of them —
 so calling it changes nothing that installing did not already do, and in an ordinary tab it

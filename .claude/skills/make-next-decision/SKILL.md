@@ -257,7 +257,21 @@ record what you find.
    satisfies the format and breaks a Must, and the failure is invisible because the record looks
    complete.
 1. Author the ADR
-1. For any resolved question files, mine any valuable content and then delete them
+1. For any resolved question files, mine any valuable content and then delete them.
+
+   **Commit the worked question file before deleting it.** `docs/questions/README.md` says that where
+   the working is too long to move, you cite the commit that deleted it and `git show <commit>^:<path>`
+   still reads it. That recovery path exists only if the content was committed. A question worked and
+   resolved in one session has no such commit, so deleting it in the same uncommitted batch destroys
+   the research with nothing to recover it from, and the loss is silent because the file is simply
+   not there.
+
+   **`git rm` refusing on a modified file is the signal, not an obstacle.** Route around it with `rm`
+   and the protection is gone.
+
+   **Mining is not summarising, and a missed finding surfaces somewhere else.** It reappears as a
+   claim in the new record with no source, because the source was in the deleted file. So before
+   deleting, take every claim in the record and name where its evidence now lives.
 1. Update all other docs as needed based on the ADR's implications, including `questions/README.md`,
    `docs/problem.md`, `docs/architecture.md`, `docs/constraints.md`, `docs/guarantees/` and
    `docs/failure-modes/`

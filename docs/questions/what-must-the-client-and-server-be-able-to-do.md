@@ -215,12 +215,13 @@ only ever sees its own rows, so this is a property of how data is stored rather 
 
 **Set a cookie in a response header that the page's own scripts cannot write.**
 [../constraints.md](../constraints.md) records that such a cookie follows its declared lifetime while
-script-writable storage is deleted wholesale, which makes it usable as a recovery key. The stronger
-form of this claim, that it is the *only* identifier surviving the wipe unaided, appears in several
-files attributed to [../constraints.md](../constraints.md), which does not state it.
+script-writable storage is deleted wholesale, and that of the mechanisms it enumerates this is the
+only one carrying an identifier across the wipe with nothing asked of the player. That makes it the
+basis of any recovery for a lapsed player, and it is why the deployment topology is a product
+question rather than an operational one.
 
-*Unverified — the stronger form has no source recorded. The weaker form above is what
-[../constraints.md](../constraints.md) supports.*
+*Reasoned — per [../constraints.md](../constraints.md), which derives it from the storage and cookie
+facts it records rather than from an observation of a shipped browser.*
 
 ### What the code both halves use must be able to do
 

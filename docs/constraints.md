@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-09-16
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -181,6 +181,22 @@ threshold. In an ordinary Safari tab it returns `false` unconditionally.
 > signal than `display-mode: standalone`, which only reports how the page was launched.
 
 *Sourced — WebKit trunk, `NetworkStorageManager::persistOrigin`, read 2026-08-31.*
+
+**Of the mechanisms above, a server-set cookie is the only one that carries an identifier across the
+wipe without the player being asked to do anything.** Everything script-writable is deleted outright.
+A cookie written by JavaScript is separately capped at roughly seven days, so it is already gone
+before the thirty-day window closes. The HTTP cache survives the wipe, per the section below, but
+nothing a page can execute puts a value there or reads one back, so it cannot carry one. Installing
+to the home screen preserves the store and is the player doing something.
+
+> So any recovery that has to work for a lapsed player who is asked for nothing runs through a
+> `Set-Cookie` header, and the deployment topology above decides whether that cookie keeps its
+> declared lifetime or is capped to seven days. The claim is scoped to the mechanisms enumerated
+> here rather than to every mechanism that could exist, and it is what makes serving the client and
+> its API from one hostname a product decision rather than an operational one.
+
+*Reasoned — from the four facts above and the HTTP cache section below. Nothing new was checked to
+establish it, and nothing has observed a real Safari doing it.*
 
 **Chrome evicts whole origins, least-recently-used first**, when it is over its overall
 storage limit. An origin may use up to roughly 60% of disk, much less in Incognito.

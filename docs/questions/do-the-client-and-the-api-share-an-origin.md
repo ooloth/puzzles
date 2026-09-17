@@ -14,9 +14,9 @@ once it is — which moves both halves, not one.
 
 It also decides whether a mechanism recorded in [../constraints.md](../constraints.md) is available.
 Safari withdraws the first-party exemption for a server-set cookie when it judges the setting server
-not genuinely first-party, and a server-set cookie is the only identifier that survives Safari's
-storage wipe without asking the player for anything. Whether that mechanism is ever used is a later
-question; whether it can be is decided here.
+not genuinely first-party, and a server-set cookie is the only mechanism recorded there that carries
+an identifier across Safari's storage wipe without the player being asked to do anything. Whether
+that mechanism is ever used is a later question; whether it can be is decided here.
 
 ## What would settle it
 

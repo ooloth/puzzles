@@ -12,9 +12,10 @@ resolves_into: decision
 silently.** [../constraints.md](../constraints.md) records that Safari withdraws the first-party
 exemption for a server-set cookie in two cases: the setting server sits behind a CNAME resolving to a
 third-party host, or its A/AAAA record resolves to an IP address whose first half does not match the
-first half of the IP serving the site. A server-set cookie is the only identifier that survives
-Safari's storage wipe without asking the player for anything, which makes it the whole basis of the
-recovery mechanism [is guest recovery worth building?](is-guest-recovery-worth-building.md) turns on.
+first half of the IP serving the site. A server-set cookie is the only mechanism recorded there that
+carries an identifier across Safari's storage wipe without the player being asked to do anything,
+which makes it the whole basis of the recovery mechanism
+[is guest recovery worth building?](is-guest-recovery-worth-building.md) turns on.
 
 A reverse proxy in front of the origin is exactly the topology that rule describes. So how the domain
 resolves is not cosmetic: it can cap the cookie at seven days, and the failure produces no error and

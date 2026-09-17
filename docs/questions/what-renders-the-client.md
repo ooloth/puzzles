@@ -8,10 +8,12 @@ resolves_into: decision
 
 ## Why it matters
 
-No promise in [../guarantees/](../guarantees/) eliminates any of the options below: all of them
-can render an 81-cell grid, hold state locally and work offline. That makes this a weaker
-question than the ones above it, and means the rejected options stay genuinely live rather than
-formally acknowledged.
+One promise eliminates one class, and the rest of the field survives it. [Input registers without
+waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md), read
+alongside [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md), rules out the
+hypermedia class, whose state lives on the server and whose every update crosses the network.
+Everything else can render an 81-cell grid, hold state locally and work offline, so the promises do
+not separate them and the options below stay genuinely live rather than formally acknowledged.
 
 This asks both halves at once — framework, minimal library or neither, **and which one**. Nothing
 downstream turns on answering the class alone, and scaffolding needs the member, so separating them

@@ -714,6 +714,12 @@ Results that changed nothing count. A candidate checked and dropped, a claim che
 and a claim checked and found unsupported are all findings, and an option written down nowhere is
 indistinguishable from one nobody thought of.
 
+**Findings accumulate in passes, and each carries its own date.** A file worked more than once holds
+more than one pass, so an older entry sitting below a newer one is what was known then rather than a
+contradiction of what is known now. Read the dates. Where a later pass overturns an earlier one the
+earlier entry is replaced rather than left underneath it, which is what makes everything still
+present still believed.
+
 Options and Findings take subheadings once they outgrow a flat list.
 
 

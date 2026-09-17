@@ -107,11 +107,11 @@ Rspack (the same option), Rsbuild (its primary mechanism, defaulting to
 `browserslist` field in `package.json`), Next.js and the Angular CLI. Not reading one: Vite core,
 esbuild, Rollup, Rolldown, Bun and Farm.
 
-That split used to disqualify the second group, because a record fixed the declaration's format ahead
-of the bundler. It no longer does: the format is
-[open](what-format-declares-the-browser-floor.md) and is answered alongside this question, with the
-bundler leading, because the bundler's native format is the binding input and both checks read
-several. So a bundler is scored here on what it can build, and what carries the floor follows.
+That split does not disqualify the second group, and nothing here should be read as though it did. The
+floor's format is [open](what-format-declares-the-browser-floor.md) and is answered alongside this
+question, with the bundler leading, because the bundler's native format is the binding input and both
+checks read several formats. So a bundler is scored here on what it can build, and whatever carries
+the floor follows from that rather than constraining it.
 
 *Sourced — each tool's own documentation, read 2026-09-16 by a research agent, except Vite's and the
 legacy plugin's which I opened myself. The webpack, Rspack, Rsbuild and Parcel quotes are the agent's
@@ -156,8 +156,9 @@ found. `workbox-build`'s `injectManifest` and `generateSW` are bundler-agnostic 
 as a post-build step over Bun's output directory, so this is buildable, but it is a pipeline we
 would own alone.
 
-*Sourced — an absence established by direct documentation review and search 2026-09-04 by a research
-agent, which is weaker than a positive finding. Nothing states that no such tool exists.*
+*Unverified — an absence, searched for 2026-09-04 by a research agent and not found. No source states
+that no such tool exists, and no query was recorded that anyone could re-run, so this establishes
+nothing either way.*
 
 **Almost nobody ships a browser build with it.** GitHub code search returns 1,089,536 hits for
 `filename:vite.config.ts` and 855 for `"Bun.build(" language:javascript`, a ratio near 1,274:1;
@@ -193,8 +194,8 @@ Issue 40077, open, filed 2026-08-22, reports `toMatchSnapshot()` on a live DOM n
 ~30 GB allocation and dying with an uncatchable OOM. An 81-cell grid is exactly this shape.
 
 *Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-04 by a research agent. I did not open
-them. These replace an unreproducible anecdote about a six-second timeout that no issue in the
-tracker matches.*
+them. No issue in the tracker matches the six-second-timeout anecdote that circulates about Bun's
+snapshot serialisation, so treat that figure as unsourced wherever it turns up.*
 
 **None of this rules Bun out as a package manager, a test runner for non-browser code, or a
 server runtime.** Those are separate decisions, each reversible in about one line, and the

@@ -100,9 +100,9 @@ rests on it.
   The failure it permits is the one [ADR-0025](0025-the-client-build-lowers-syntax-to-a-declared-floor.md)
   exists to prevent, reintroduced one layer up: the build emits whatever it emits, and the record
   saying otherwise is true only while somebody remembers to check it by hand. **Reverses if** no tool
-  in the chain can read a machine-readable floor, which the Findings mined from
+  in the chain can read a machine-readable floor. The Findings in
   [what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md)
-  establish is not the case.
+  are evidence against that rather than a settled fact, so the condition is live rather than closed.
 
 - **Declare it later, when the build exists.** Genuinely cheap and the right answer for most
   questions at this stage, which is why it is listed. **Disqualified because

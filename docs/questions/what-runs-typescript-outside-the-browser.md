@@ -165,9 +165,8 @@ dependency that is safe because one corporation needs it is safe for exactly as 
 
 *Sourced — <https://bun.com/blog/bun-joins-anthropic>, read 2026-09-02.*
 
-**The rewrite is connected to Anthropic and to Claude, by Bun's own disclosure.** The claim recorded
-here — that neither Bun's announcement nor the public record connects the Zig-to-Rust rewrite to
-Anthropic or Claude Code — is false. Bun's retrospective opens with: "Disclosure: Bun was acquired by
+**The rewrite is connected to Anthropic and to Claude, by Bun's own disclosure.** Bun's retrospective
+opens with: "Disclosure: Bun was acquired by
 Anthropic in December 2025. I and others on the Bun team work at Anthropic. I used a pre-release
 version of Claude Fable 5 for much of the Rust rewrite." The port ran as roughly 50 Claude Code
 workflows over 11 days on a branch named `claude/phase-a-port`, and PR 30412 merged 2026-05-14. The

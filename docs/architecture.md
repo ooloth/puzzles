@@ -55,7 +55,7 @@ constraint from intention. The parts still open are listed at the end and are th
         │                   ▼         ADR-0019    │
         │  ┌───────────────────────────────────┐  │
         │  │ SQLite — the durable copy of a    │  │   queryable across
-        │  │ player's work, and the catalogue  │  │   players       ADR-0011
+        │  │ player's state, and the catalogue │  │   players       ADR-0011
         │  └───────────────────────────────────┘  │   (co-location of the two
         │                   │                     │    is open, M3)
         │  ┌────────────────▼──────────────────┐  │

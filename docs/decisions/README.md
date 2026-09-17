@@ -99,10 +99,10 @@ have to read.
 and in the rationale; the title belongs to whoever will have to abide by it and has not read the
 file.
 
-This is easy to get backwards, and three records here did. "The option to gate puzzle access is
-preserved" names a motive, and nobody looking for how puzzle content is delivered would open it. It
-is now "puzzle content is served by a runtime, not bundled" — the same record, titled by
-its conclusion. Records that exist to keep a future reachable are especially prone to this, because
+This is easy to get backwards. "The option to gate puzzle access is preserved" names a motive, and
+nobody looking for how puzzle content is delivered would open it; "puzzle content is served by a
+runtime, not bundled" is the same record titled by its conclusion. Records that exist to keep a
+future reachable are especially prone to this, because
 the option feels like the point. It is the reason; the constraint is the point.
 
 **A record that preserves an option says so in its Decision section**, so the reason is one line

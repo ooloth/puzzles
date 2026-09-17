@@ -1,7 +1,7 @@
 ---
 number: 0024
 status: accepted
-amended: 2026-09-04
+amended: 2026-09-16
 date: 2026-09-03
 ---
 
@@ -96,15 +96,15 @@ promises.
   **Reverses if** a measurement shows the first-visit round trip is worth a second document — which
   becomes cheap to run once a renderer and a real puzzle exist, and is not runnable now.
 
-- **Defer it.** Genuinely cheap, and the right answer for most questions at this stage. Rejected
-  because the option
-  lists in [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
+- **Defer it.** Genuinely cheap, and the right answer for most questions at this stage.
+  **Disqualified because deferring leaves the meta-framework class excluded by inference rather than
+  by argument.** A meta-framework rendering per request would settle
+  [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
   [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)
-  and [what renders the client?](../questions/what-renders-the-client.md) already exclude the
-  meta-framework class without argument, and a meta-framework rendering per request would settle all
-  three by consequence. Deferring keeps that exclusion as an unrecorded inference underneath three
-  decisions M1 has to take. **Reverses if** those three questions are settled some other way that
-  makes the exclusion explicit.
+  and [what renders the client?](../questions/what-renders-the-client.md) all at once, so an option
+  field that omits the class decides three M1 questions without saying so. This record is what those
+  fields are kept honest against. **Reverses if** those three questions are settled some other way
+  that makes the exclusion explicit.
 
 - **Multi-page hypermedia, where every document is produced per request.** htmx, Turbo, Datastar.
   Listed because it is a coherent architecture somebody would raise and its absence from a list is

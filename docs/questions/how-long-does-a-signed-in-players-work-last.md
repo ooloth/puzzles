@@ -25,14 +25,14 @@ device, so Safari's thirty-day window and Chrome's origin eviction do not apply 
 this question has to settle is not "how do we survive eviction" but "what do we actually promise,
 and to which devices."
 
-Answering this in the affirmative — any bound at all beyond the current session — has already forced
-a consequence: something off-device has to hold the record. That consequence was decided separately,
-in [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), "a server
-exists." [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) was reasoned entirely from the durability record demoted on 2026-09-01's signed-in bound and says explicitly that if
-that bound is ever dropped, [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) has no independent basis and should be superseded in the same
-change. Demoting the durability record does drop it — the signed-in bound is no longer a decided fact, it is this
-open question. Whether [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) should therefore also be revisited is a live question this record
-does not resolve; it is out of scope for this file, and is flagged here so it is not lost.
+Answering this in the affirmative — any bound at all beyond the current session — forces a
+consequence: something off-device has to hold the record. That consequence is decided separately, in
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), "a server
+exists." That record rests entirely on a signed-in bound that nothing now states, and it says
+explicitly that if the bound is ever dropped it has no independent basis and should be superseded in
+the same change. The bound is not a decided fact; it is this open question. So whether
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) should also be
+revisited is live, and it is flagged here rather than settled, because this file does not settle it.
 
 ## What would settle it
 

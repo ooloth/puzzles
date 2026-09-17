@@ -10,8 +10,8 @@ resolves_into: decision
 
 **The store is a SQLite file the server process opens**
 ([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), so this is no longer a comparison
-between arrangements. It is the narrower question of how a developer gets a database to work against:
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), so this is not a comparison between
+arrangements. It is the narrower question of how a developer gets a database to work against:
 where the file lives, what puts data in it, and whether the same file is reused between runs or made
 fresh.
 

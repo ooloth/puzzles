@@ -101,7 +101,7 @@ waits" fails while the server is down, and the most frequent of those moments is
 question would remove. A player who already has tomorrow's puzzle does not notice that the machine is
 being rebuilt.
 
-> So this is no longer only a latency question. It is also the cheapest available mitigation for the
+> So this is not only a latency question. It is also the cheapest available mitigation for the
 > downtime bet [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
 > takes, and it competes with recovery speed rather than depending on it.
 

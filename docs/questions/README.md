@@ -243,6 +243,7 @@ derivation.
    - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
      - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
+     - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the first call across the boundary is shaped by the handler rather than by the contract, which is the thing this slice exists to exercise. Costs a re-scaffold of the boundary
@@ -275,28 +276,39 @@ neither holds "here is how these four fit together". That is what this is for. E
 provisional and moves out to a record, a constraint or a question file as soon as it has earned a
 permanent home. Delete what has moved rather than leaving a second copy.
 
-**The plan, in order.**
+**The plan, in order. Each phase ends somewhere a session can be handed off**, because the cluster is
+larger than one context window and the expensive failure is a later session resuming from a summary
+rather than from the sourcing.
 
-1. **Write the property list.** What the client and server halves must be *able to do*, derived from
-   [../problem.md](../problem.md), [../guarantees/](../guarantees/),
-   [../constraints.md](../constraints.md) and the records, citing the source of each property, with no
-   tool named anywhere in it. Everything after this is scored against it.
-2. **Populate candidates per property from registries rather than recall**, keeping the null option
-   ("write it ourselves", "use the platform") in every category. Whittle in one pass on binding
+1. **Write the property list**, at
+   [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
+   What each half must be *able to do*, derived from [../problem.md](../problem.md),
+   [../guarantees/](../guarantees/), [../constraints.md](../constraints.md) and the records, citing the
+   source of each property, with no tool named anywhere in it. Everything after this is scored against
+   it. Ends when every property names the file that establishes it.
+2. **Rebuild the candidate fields from registries rather than recall**, per property, keeping the null
+   option ("write it ourselves", "use the platform") in every category. Whittle in one pass on binding
    properties only. Write each elimination into the relevant question file with its reason and what
-   would reverse it.
-3. **Research only the axes that still separate survivors**, opening sources rather than inheriting
-   claims.
+   would reverse it. A field assembled before this phase is somebody's shortlist rather than the
+   field: [what renders the client?](what-renders-the-client.md) carried no meta-framework, which
+   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
+   states it does not exclude. Ends when each question file's Options hold the whole field.
+3. **Verify what survives**, opening sources rather than inheriting claims. A claim that disqualifies
+   an option is read at its source rather than relayed from an agent. A claim with no source is
+   deleted and replaced by a line saying it was found unsourced, so it cannot return quietly. Ends
+   when every surviving finding carries a tier and a date.
 4. **Spike what reading cannot settle.** First candidate: one rules module imported by a browser
    build, a server process and a batch script under each surviving toolchain, which is
    [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) as
-   running code rather than as a feature-list claim.
-5. **Record as a chain of small records in derivation order**, not one stack record.
+   running code rather than as a feature-list claim. Budgeted in hours and deleted afterwards; the
+   observation is what survives. Ends with what was run, on what, how many times, and what was
+   observed, written into the question file.
+5. **Record as a chain of small records in derivation order**, not one stack record. Commit each
+   worked question file before mining and deleting it, or `git show <commit>^:<path>` has nothing to
+   recover and the research dies with the file.
 
 **Open, and spanning more than one question file.**
 
-- **Where the property list from step 1 lives is undecided.** It is not one question's working and not
-  a fact about the world. Until that is answered it lives here.
 - **The runtime, the HTTP handler and the renderer are one cluster**, for the reason given above the
   slice list. Answering any one alone settles part of another by accident.
 - **`node:sqlite` is an assumption, not a choice.** Every argument in the repo that the store does not

@@ -72,8 +72,10 @@ target-browser-version option, so the escape hatch is a separate transform pass.
 exception and cuts the other way: Bun downlevels it through Lightning CSS to a fixed baseline with
 no way to configure or disable that.
 
-*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-04 by me, against Bun
-1.4.1. Browserslist integration is requested and unimplemented in Bun issues 40133 and 40361.*
+*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-16 by me, against Bun
+1.4.2, released 2026-09-05. Browserslist integration is requested and unimplemented in Bun issue
+40361, which is open; issue 40133 is closed as a duplicate of it, read from the GitHub API
+2026-09-16 by a research agent and not opened by me.*
 
 **That finding now disqualifies `bun build` here, and the reason is a record rather than this file.**
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) requires the

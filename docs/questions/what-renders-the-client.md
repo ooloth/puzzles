@@ -55,6 +55,16 @@ disqualifiers. **Vue is not dropped**: the findings record that it has no disqua
 advantage, which is a reason to leave it in the field rather than to narrow it out. React and Preact
 share a programming model, so comparing them is one comparison rather than two.
 
+*A meta-framework.* SvelteKit, Astro, TanStack Start, Nuxt, Next, Remix and the rest of the class
+build the client bundle, produce the entry document and can answer HTTP from one project.
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) binds
+how the entry document is produced and says plainly that it does not exclude this class: prerendering
+the document while serving API routes from the same process is a supported configuration in several
+of them. Choosing one is also choosing the answer to
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), which is the
+coupling described under **What would settle it**. The findings below were gathered against a field
+that did not contain this class, so none of their eliminations reach it.
+
 *A framework for the shell with direct rendering for the board.* The pattern comparable projects
 converge on, and a genuine fourth option rather than a blend of the others.
 

@@ -64,12 +64,11 @@ the file that establishes it. A property with no citation is an assumption someb
 carrying, and there are none here on purpose: anything that could not name a source was left out
 rather than softened.
 
-**No tool is named in a property, and three are already fixed by record.** The language
-([ADR-0007](../decisions/0007-that-language-is-typescript.md)), the store's engine
-([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)) and the format the browser floor is
-declared in ([ADR-0027](../decisions/0027-the-floor-declaration-is-a-browserslist-config.md)) are
-settled choices, so citing them is citing a decision rather than leaking a candidate into a
-requirement. Every other property names a capability and leaves the technology open.
+**No tool is named in a property, and two are already fixed by record.** The language
+([ADR-0007](../decisions/0007-that-language-is-typescript.md)) and the store's engine
+([ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)) are settled choices, so citing them is
+citing a decision rather than leaking a candidate into a requirement. Every other property names a
+capability and leaves the technology open.
 
 **A property that no candidate fails is still a property.** Whittling to the ones that separate
 candidates is a later phase, and doing it here would mean the list was assembled with candidates in
@@ -269,13 +268,14 @@ is what needs it, and what goes in the document is
 **Lower emitted syntax to a declared floor rather than passing through whatever the source used.**
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md).
 
-**Read that floor from one declaration, in a format three consumers can each read without an
-adapter: the build's lowering target, a check that the emitted bundle parses at the floor, and a
-check that source does not call APIs the floor lacks.**
+**Read that floor from one declaration, shared by three consumers: the build's lowering target, a
+check that the emitted bundle parses at the floor, and a check that source does not call APIs the
+floor lacks.**
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-names the three consumers and
-[ADR-0027](../decisions/0027-the-floor-declaration-is-a-browserslist-config.md) fixes the format and
-requires explicit versions rather than a query that resolves against a changing dataset.
+names the three and requires that the declaration state its versions rather than derive them when it
+is read, because a line that moves on its own cannot be the scope of a promise. What format carries
+it is [open](what-format-declares-the-browser-floor.md), and so is how much adapting each consumer
+needs.
 
 **Emit content-hashed filenames.** [../constraints.md](../constraints.md) records that without them a
 browser revalidates every cached asset, which costs a round trip per load on the link

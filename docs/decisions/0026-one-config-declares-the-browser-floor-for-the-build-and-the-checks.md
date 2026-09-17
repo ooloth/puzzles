@@ -40,9 +40,9 @@ becomes a candidate failure — which is a lint result when both checks read one
 bug report otherwise.
 
 **What format that configuration takes is
-[ADR-0027](0027-the-floor-declaration-is-a-browserslist-config.md)**, which follows from this record
-but is separable from it: the shape here is one declaration with three readers, and more than one
-format could carry it.
+[open](../questions/what-format-declares-the-browser-floor.md)**, and is separable from this record:
+the shape here is one declaration with three readers, and more than one format could carry it. It is
+answered alongside the bundler, because the bundler is the consumer whose native formats differ.
 
 ### The value is not settled here
 
@@ -137,8 +137,8 @@ position than it reads as.
 
 - **A consumer in the chain cannot read the shared declaration**, which would break the single-source
   property this record exists for. Which format is shared is
-  [ADR-0027](0027-the-floor-declaration-is-a-browserslist-config.md); the failure here is a consumer
-  that reads no shared format at all.
+  [what format declares the browser floor?](../questions/what-format-declares-the-browser-floor.md);
+  the failure here is a consumer that reads no shared format at all.
 - **The syntax check has caught nothing over a long period**, which would suggest the floor sits
   below anything anyone writes and the lowering is buying nothing.
 - **Analytics exist**, at which point the value is argued against real players rather than against a

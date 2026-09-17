@@ -100,19 +100,18 @@ established.
 [github.com/vitejs/vite/tree/main/packages/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy),
 read 2026-09-16 by me. The `modernTargets` scope is the one part I could not settle from it.*
 
-**So the browserslist requirement narrows the bundler role and not only the check roles.** The tools
-that read a browserslist config natively, per their own documentation, are webpack (`target:
-"browserslist"`), Rspack (same option), Rsbuild (its primary mechanism, defaulting to
+**The bundlers split on whether they read a browserslist config, and the split does not decide this
+question.** Reading one natively, per their own documentation: webpack (`target: "browserslist"`),
+Rspack (the same option), Rsbuild (its primary mechanism, defaulting to
 `chrome >= 107, edge >= 107, firefox >= 104, safari >= 16` when none is given), Parcel (the
-`browserslist` field in `package.json`, its primary mechanism), Next.js and the Angular CLI. The tools
-that do not are Vite core, esbuild, Rollup, Rolldown, Bun and Farm.
+`browserslist` field in `package.json`), Next.js and the Angular CLI. Not reading one: Vite core,
+esbuild, Rollup, Rolldown, Bun and Farm.
 
-[ADR-0027](../decisions/0027-the-floor-declaration-is-a-browserslist-config.md) states the format is
-"the format the build tools and both classes of check read without an adapter", and its Risk section
-anticipates the narrowing reaching the two check roles. It reaches the bundler role as well, and
-Vite's default target value is `'baseline-widely-available'` — Baseline vocabulary, which is the
-option that record rejected as unable to express this floor. Its **Revisit when** already names "a
-consumer worth having reads only Baseline vocabulary".
+That split used to disqualify the second group, because a record fixed the declaration's format ahead
+of the bundler. It no longer does: the format is
+[open](what-format-declares-the-browser-floor.md) and is answered alongside this question, with the
+bundler leading, because the bundler's native format is the binding input and both checks read
+several. So a bundler is scored here on what it can build, and what carries the floor follows.
 
 *Sourced — each tool's own documentation, read 2026-09-16 by a research agent, except Vite's and the
 legacy plugin's which I opened myself. The webpack, Rspack, Rsbuild and Parcel quotes are the agent's

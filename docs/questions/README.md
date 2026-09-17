@@ -185,13 +185,22 @@ notes at the end of this section, which derives what both halves must be able to
 any tool, so the cluster above is scored against a written list rather than against recall. Read
 that plan before starting anything here.
 
-**That chain is three questions, not two, and it crosses slices 1 and 2.** One candidate answer to
+**That chain is five questions and it crosses slices 1 and 2**, because one choice sits at the centre
+of it. A candidate answer to
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is a
 meta-framework's own server, which only exists if
-[what renders the client?](what-renders-the-client.md) chose that meta-framework — and choosing a
-renderer that is not one removes the option from the other side. Both files now say so under **What
-would settle it**. The renderer stays listed in slice 2 because that is the slice it is built for; it
-is worked alongside slice 1's questions rather than after them.
+[what renders the client?](what-renders-the-client.md) chose that meta-framework, and choosing a
+renderer that is not one removes the option from the other side. A meta-framework brings its own
+build, so the same choice reaches
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md);
+and the bundler's own target format is the binding input to
+[what format declares the browser floor?](what-format-declares-the-browser-floor.md). Each file says
+so under **What would settle it**.
+
+**So the renderer is the widest choice in M1, and the order runs outward from it.** The last three
+stay listed in slice 2 because that is the slice they are built for; all of them are worked alongside
+slice 1's questions rather than after them. A format or a bundler settled ahead of the renderer
+decides the renderer by consequence, which is the smallest thing in the chain settling the largest.
 
 **Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
 Whether the server's handler is written against the web-standard `Request` and `Response` interfaces

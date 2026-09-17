@@ -28,6 +28,27 @@ the same record and should be made — a record carrying a number we know is wro
 that has been edited. The test is whether the reasoning would still read the same to someone who
 disagreed with it. Note substantive amendments with an `amended:` date in the frontmatter.
 
+**A record that never should have settled anything is demoted to a question, not superseded.** The two
+cases look alike and are opposites. A decision that *changed* is one where the question was real and
+the answer moved: it gets a new record, and the old one stays, because the earlier belief is worth
+preserving as a decision. A decision found to rest on something false is one where nothing was ever
+settled: its grounds do not hold, the option it rejected was never disqualified, and what is worth
+preserving is research rather than a conclusion. That one moves to [../questions/](../questions/) and
+the record is deleted.
+
+**The test is whether a reasonable person, knowing what we know now, would still have had a choice to
+make.** If yes, it changed. If no, it was never a decision.
+
+**Reasoning that was wrong still stays visible, by a different route.** Mine the record into the
+question's **Options** and **Findings** first, carrying its rejections and its reversal conditions,
+and say in **Source** what it claimed and which of its grounds failed — otherwise the same mistake is
+available to the next person, who never saw it. The record itself is then read with
+`git show <commit>^:<path>` against the commit that removed it.
+
+This is the portable decision-making standard's rule, and it prefers demotion to a caveat for a
+reason: a caveat leaves the record among the settled things, where the next reader cites the
+conclusion and misses the qualification.
+
 ## Before you decide
 
 **Start with a listing of this folder, and open what bears on your question.** That works because

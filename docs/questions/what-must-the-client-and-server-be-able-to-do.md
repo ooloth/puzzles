@@ -297,6 +297,25 @@ settles rather than a feature list.
 [ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) establishes the
 second one.
 
+### What anything adopted must be able to do
+
+**Carry a licence that permits use inside a hosted service without obliging us to release our own
+source, and that cannot be revoked.** [../constraints.md](../constraints.md) records that a network
+copyleft licence is disqualifying for anything linked into a hosted service, and that dependencies
+are audited for network copyleft rather than only for distribution copyleft. The same test reaches a
+source-available licence that reserves the right to withdraw permission, because the exposure is the
+same shape: the terms rather than the code decide whether the thing can keep being used.
+
+**Nothing in the repository supports a property about how well maintained a candidate is, and one is
+missing.** How many people author a project's commits, whether it has shipped in a year, and whether
+it is pre-1.0 all separate the surveyed candidates sharply, and none of them is derivable from
+[../problem.md](../problem.md), [../constraints.md](../constraints.md),
+[../guarantees/](../guarantees/) or any record. The nearest thing is the ranking in
+[../problem.md](../problem.md) that puts clarity over cleverness because one person maintains this,
+and that is about the code written here rather than what it depends on. Until it has a source, an
+elimination on maintenance is an elimination on taste, and this file's rule is that a property
+without a citation is an assumption somebody has been carrying.
+
 ### What must stay reachable rather than be delivered now
 
 These are not requirements. They are futures [../problem.md](../problem.md) or a record says are

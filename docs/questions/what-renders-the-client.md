@@ -72,6 +72,56 @@ converge on, and a genuine fourth option rather than a blend of the others.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**The field was rebuilt from registries on 2026-09-16, and it is far larger than five.** The
+js-framework-benchmark repository carries 175 implementation folders under `frameworks/keyed` and 66
+under `frameworks/non-keyed`. The State of JS 2025 roster names React, Vue, Angular, Preact, Svelte,
+Alpine, Lit, Solid, Qwik, Stencil and htmx, with Astro, Ember, Ripple, TanStack Start, Elm, Nuxt,
+Remix, Next, Aurelia and jQuery under "other". Thirty-eight distinct base projects were profiled
+across the four classes; the rest of the roster is a long tail of single-author entries recorded here
+as a tail rather than individually.
+
+*Sourced — the benchmark's own `frameworks/keyed` and `frameworks/non-keyed` directory listings via
+the GitHub API, the npm registry search API, GitHub topic search, and the State of JS 2025 roster, all
+read 2026-09-16 by a research agent. I did not open them.*
+
+**One binding property eliminates one class, and it is the hypermedia class.** htmx has no
+client-side reactive state primitive at all: its own documentation describes it as accessing browser
+features from HTML, and it swaps server-returned fragments into the DOM with state living on the
+server. That fails
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md), which puts a complete copy
+of puzzle state on the client and the rules that validate a move with it, and it fails [input
+registers without waiting for the
+network](../guarantees/input-registers-without-waiting-for-the-network.md), which forbids the path
+from input to paint touching the network. **Reverses if** either the client's authority over state or
+that promise is reversed, which would be reversing the architecture rather than adjusting it.
+
+*Sourced — [htmx.org/docs](https://htmx.org/docs/), read 2026-09-16 by a research agent. I did not
+open it.*
+
+**No other surveyed candidate is eliminated by a binding property.** Every profiled candidate renders
+to real DOM elements rather than a canvas, so
+[ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) does not separate
+them. Keyboard operability is a property of what gets built rather than of the library, so
+[ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md) does not either. The
+attributes that do separate them sharply — commit concentration, months since last release, pre-1.0
+status — have no source in this repository, which is recorded under [what must the client and the
+server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
+
+**Where a reactive primitive can live, established from each project's own documentation.** Usable
+outside a component as a runtime function: Vue's `ref()`, Preact's signals (shipped separately as
+`@preact/signals-core`), Angular's `signal()`, Ember's `@tracked`, Knockout's `ko.observable`, MobX,
+Valtio, alien-signals, Alpine's `Alpine.store()` and `Alpine.reactive()`, VanJS's `van.state()`,
+Aurelia's `@observable`. Compiler syntax with a file-extension condition: Svelte's `$state`, which
+works in `.svelte.js` and `.svelte.ts` files but not plain `.ts`, and only exports state that is not
+directly reassigned. Runtime function, scoping rule not established from the page read: Solid's
+`createSignal`. Labs-status only: Lit's signals package. Absent from core: React, where `useState` may
+only be called at the top level of a component or another Hook. Absent entirely: Mithril, Inferno,
+Riot, LWC, Qwik, where the one similarly-named function is marked a deprecated technology preview.
+
+*Sourced — each project's own documentation, read 2026-09-16 by a research agent, which flagged the
+Qwik and LWC entries as search synthesis rather than pages it opened. I opened none of them.*
+
+
 **Comparable applications converge on a pattern the demoted record did not consider.** tldraw keeps React
 and replaced its state layer wholesale. Excalidraw renders to canvas. Lichess's board component
 states its rationale as minimising DOM writes. SudokuPad — Cracking the Cryptic's client, the

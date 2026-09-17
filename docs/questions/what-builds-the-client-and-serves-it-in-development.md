@@ -77,6 +77,47 @@ no way to configure or disable that.
 40361, which is open; issue 40133 is closed as a duplicate of it, read from the GitHub API
 2026-09-16 by a research agent and not opened by me.*
 
+**Vite's bundler does not read a browserslist config either, and that is the same disqualifier.** Its
+`build.target` accepts `'baseline-widely-available'` (the default), `'esnext'`, an ES version such as
+`es2015`, a browser-and-version string such as `chrome58`, or an array of those. The word browserslist
+does not appear on the option's documentation page. The transform is performed by Oxc Transformer
+against an Oxc target option.
+
+*Sourced — [vite.dev/config/build-options.html](https://vite.dev/config/build-options.html), read
+2026-09-16 by me.*
+
+**`@vitejs/plugin-legacy` reads browserslist but does a different job.** Its `targets` option defaults
+to `'last 2 versions and not dead, > 0.3%, Firefox ESR'` and, when unset, "will load the browserslist
+config sources and then fallback to the default value". That value "is passed on to
+`@babel/preset-env` when rendering **legacy chunks**", and the plugin generates "a corresponding
+legacy chunk for every chunk in the final bundle". So it emits a second bundle beside the modern one
+rather than lowering one bundle to a declared floor, which is not the shape
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) describes. A
+`modernTargets` option exists and is documented as overriding `build.target`; what it governs was not
+established.
+
+*Sourced — the plugin's README at
+[github.com/vitejs/vite/tree/main/packages/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy),
+read 2026-09-16 by me. The `modernTargets` scope is the one part I could not settle from it.*
+
+**So the browserslist requirement narrows the bundler role and not only the check roles.** The tools
+that read a browserslist config natively, per their own documentation, are webpack (`target:
+"browserslist"`), Rspack (same option), Rsbuild (its primary mechanism, defaulting to
+`chrome >= 107, edge >= 107, firefox >= 104, safari >= 16` when none is given), Parcel (the
+`browserslist` field in `package.json`, its primary mechanism), Next.js and the Angular CLI. The tools
+that do not are Vite core, esbuild, Rollup, Rolldown, Bun and Farm.
+
+[ADR-0027](../decisions/0027-the-floor-declaration-is-a-browserslist-config.md) states the format is
+"the format the build tools and both classes of check read without an adapter", and its Risk section
+anticipates the narrowing reaching the two check roles. It reaches the bundler role as well, and
+Vite's default target value is `'baseline-widely-available'` — Baseline vocabulary, which is the
+option that record rejected as unable to express this floor. Its **Revisit when** already names "a
+consumer worth having reads only Baseline vocabulary".
+
+*Sourced — each tool's own documentation, read 2026-09-16 by a research agent, except Vite's and the
+legacy plugin's which I opened myself. The webpack, Rspack, Rsbuild and Parcel quotes are the agent's
+and I did not open them.*
+
 **That finding now disqualifies `bun build` here, and the reason is a record rather than this file.**
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) requires the
 build to lower to a declared floor, which this cannot do. The CSS half cuts the same way for a

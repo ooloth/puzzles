@@ -85,6 +85,51 @@ considered is worth more than a shorter list.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**The field was rebuilt from registries on 2026-09-16, and the three candidates were not the field.**
+The WinterTC runtime-keys registry lists 23 keys: andromeda, arvancloud, azion, bun, convex, deno,
+edge-light, edge-routine, electron, fastly, kiesel, lagon, moddable, netlify, node, quickjs,
+quickjs-ng, pythonmonkey, react-native, react-server, rhino, wasmer, workerd. Beyond it: LLRT, Elide,
+txiki.js, Sable and Nova, none of which appear in that registry or in JSR's five-runtime compatibility
+list.
+
+*Sourced — [runtime-keys.proposal.wintertc.org](https://runtime-keys.proposal.wintertc.org/), JSR's
+package documentation, and GitHub topic listings, read 2026-09-16 by a research agent. I did not open
+them.*
+
+**Most of that list is eliminated by records already in force, in three groups.** The
+constrained-isolate and edge tier goes to
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md): workerd,
+edge-light, fastly, azion, arvancloud, edge-routine, wasmer, convex and LLRT. Embeddable engines are
+not runtimes and have no process, package or server story of their own: quickjs, quickjs-ng, kiesel,
+moddable, rhino, pythonmonkey and Nova. Application shells are not servers: electron and react-native.
+`react-server` is not a runtime at all; it is a `package.json` export condition, which is a defect in
+the registry rather than a candidate. **Reverses if**
+[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) is reversed, for the
+first group only; the other three are category errors rather than judgements.
+
+**Two more go on the language.**
+[ADR-0007](../decisions/0007-that-language-is-typescript.md) requires TypeScript. Sable lists native
+TypeScript support as an explicit anti-goal in its own README, and LLRT states it will not support
+running TypeScript without transpilation. **Reverses if** either project adopts TypeScript execution.
+
+**Elide goes on its licence, and it is the only candidate any licence eliminates.** Its terms grant a
+"limited, non-exclusive, non-transferable... revocable license" and prohibit derivative works,
+redistribution and publishing benchmarks; free access is nightly-only with a thirty-day expiry and a
+stable build requires a purchase per major version. That fails the licence property in [what must the
+client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
+**Reverses if** Elide adopts an irrevocable open-source licence.
+
+*Sourced — Elide's own terms of service, read 2026-09-16 by a research agent from a search snippet
+rather than the page itself. I did not open it, and this is the weakest sourcing behind any
+elimination recorded here; re-check it before it decides anything.*
+
+**What survives is Node, Deno, Bun, Andromeda and txiki.js.** The first three are the incumbents.
+Andromeda is at 0.1.14, released 2026-06-13, under MPL-2.0, and ships a built-in HTTP server, bundler
+and SQLite support. txiki.js last released 2026-06-22 of the previous year and its TypeScript
+execution was not established. Neither is eliminated by a binding property, and the attribute that
+would separate them from the incumbents is maturity, which has no source here.
+
+
 **Nothing has been measured.** No candidate has been run here.
 
 **The intent is to spike this rather than research it**, and it is the first place in the project

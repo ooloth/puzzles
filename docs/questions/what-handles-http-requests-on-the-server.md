@@ -78,6 +78,34 @@ already excluded.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**The field was rebuilt from registries on 2026-09-16, and nothing in it is eliminated by a binding
+property.** The-benchmarker's `web-frameworks` repository carries roughly fifty JavaScript
+implementations; npm's keyword listings for `router`, `http-server` and `web-framework` return a long
+unfiltered tail beyond them. Profiled with download counts, release dates and licences: Express, Koa,
+Fastify, Hapi, Hono, h3, Restify, Restana, Polka, tinyhttp, NestJS, AdonisJS, Sails, Foal, Ts.ED,
+Feathers, Moleculer, Elysia, itty-router, worktop, find-my-way, trouter, hyper-express and
+ultimate-express, plus the meta-framework servers Next, Nuxt, React Router, SvelteKit, Astro, TanStack
+Start, Qwik City and Analog.
+
+That is the whole finding. [../problem.md](../problem.md) and the records ask this layer to route a
+handful of endpoints and write responses, and every candidate does that, so no property in [what must
+the client and the server each be able to
+do?](what-must-the-client-and-server-be-able-to-do.md) separates them. The question is decided on
+reversibility and on the coupling to the renderer, exactly as **What would settle it** says.
+
+*Sourced — the npm registry search API, the-benchmarker's `javascript/` directory listing, the
+WinterTC runtime-keys registry and each project's own documentation, read 2026-09-16 by a research
+agent. I did not open them. The agent flagged that it queried npm only and not JSR, so Deno-native
+packages distributed through JSR are absent from this field.*
+
+**There is no registry of runtimes a framework is compatible with, and the claim that one exists is
+wrong.** WinterTC maintains a registry of *runtime keys*, not of frameworks. A framework describing
+itself as WinterCG-compatible is self-declaring, and nothing lists or checks it.
+
+*Sourced — [runtime-keys.proposal.wintertc.org](https://runtime-keys.proposal.wintertc.org/) and the
+WinterTC admin repository, read 2026-09-16 by a research agent. I did not open them.*
+
+
 **Targeting the web-standard `Request` and `Response` interfaces is what keeps this reversible.**
 A handler written against them runs under every candidate runtime and under most routers, which makes
 this choice a small change rather than a rewrite.

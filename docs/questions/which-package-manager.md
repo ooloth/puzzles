@@ -41,13 +41,56 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Two Bun-specific hazards were found during the toolchain research, both silent.** Its lockfile
-is not forward-compatible, so an older Bun against a newer lockfile fails outright in continuous
-integration rather than degrading. And its `trustedDependencies` setting *replaces* the default
-allowlist rather than extending it, so trusting one package silently untrusts several hundred
-others, including ones that need install scripts to work at all.
+**`trustedDependencies` replaces the default allowlist rather than extending it, and Bun documents
+this itself.** Both its lifecycle-scripts page and its install guide say: "Defining
+`trustedDependencies` in your `package.json` replaces this default list rather than extending it, so
+also list any packages from the default list whose lifecycle scripts you still need." The default list
+is `src/install/default-trusted-dependencies.txt` in Bun's own repository and holds **367 entries**, so
+trusting one package does untrust several hundred others.
 
-*Unverified — no source recorded.*
+*Sourced — [bun.com/docs/pm/lifecycle](https://bun.com/docs/pm/lifecycle) and
+[bun.com/guides/install/trusted](https://bun.com/guides/install/trusted) for the quote, and the
+default-trusted-dependencies file read directly for the count. Read 2026-09-17 by a research agent. I
+did not open them.*
 
-**Neither is disqualifying, and both argue for deciding this deliberately rather than by
-habit** — which is the entire reason this file exists.
+*Upgraded 2026-09-17 from "Unverified — no source recorded", and it turned out to be documented
+behaviour rather than a discovered trap. That weakens the word "silent": Bun says so on the page you
+would be reading to set it.*
+
+**The lockfile claim is still undocumented, and the evidence for it is user reports.** Nothing on
+Bun's lockfile page, its `install` CLI page or its text-lockfile announcement addresses what happens
+when a lockfile was written by a different Bun version. What exists is issue reports of hard failures
+rather than graceful degradation, including oven-sh/bun 15288, where a `--frozen-lockfile` run against
+a lockfile from a different version fails with "error: lockfile had changes, but lockfile is frozen"
+and no explanation of why.
+
+*Unverified at its source, and corroborated by issue reports — three Bun documentation pages were
+searched on 2026-09-17 by a research agent and none addresses cross-version lockfile compatibility.
+Treat the behaviour as reported rather than specified, and note that an unspecified behaviour can
+change without a changelog entry.*
+
+**The comparison this file was built on has gone stale, and it is the most consequential finding
+here.** The Options above frame Bun as carrying footguns that pnpm and npm do not. Both of the others
+have since changed in the same direction:
+
+- **pnpm removed `onlyBuiltDependencies`, `onlyBuiltDependenciesFile`, `neverBuiltDependencies`,
+  `ignoredBuiltDependencies` and `ignoreDepScripts` in v11**, replacing all five with a single
+  `allowBuilds` map. Current pnpm is 12.4.2, published 2026-09-15. The default is still deny: "Packages
+  not listed in `allowBuilds` are disallowed by default and are treated as unreviewed."
+- **npm reversed its default in 12.0.0, released 2026-07-08**: "Dependency lifecycle scripts are now
+  blocked by default unless allowed by the root package's `allowScripts` policy." Current npm is
+  12.0.2.
+
+So all three now deny dependency install scripts by default, through three different mechanisms with
+three different configuration shapes. **The question is no longer whether a candidate has a trust
+footgun; it is which allowlist shape is least likely to be got wrong**, and nothing here has compared
+them on that. Whether an older toolchain is in use is worth checking separately: a machine still on
+npm 11 has the old permissive default and nothing announces it.
+
+*Sourced — [pnpm.io/settings/build](https://pnpm.io/settings/build) and
+[the npm 12.0.0 release notes](https://github.com/npm/cli/releases/tag/v12.0.0), plus registry metadata
+for both current versions, read 2026-09-17 by a research agent. I did not open them.*
+
+**So "neither is disqualifying" still holds, and the reason has changed.** It was that Bun's two
+hazards were survivable. It is now that every candidate has an install-script policy to configure and
+none of them has been compared on how easy it is to configure correctly.

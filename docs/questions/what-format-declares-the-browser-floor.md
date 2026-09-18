@@ -132,22 +132,58 @@ release. The same tier queried live resolves six versions higher, as measured ab
 "a line that moves on its own cannot be the scope of a promise" demonstrated rather than argued, and
 it applies to any tier query whatever format carries it.
 
-*Sourced for Vite's pinned list — a research agent reading
-[vite.dev/config/build-options.html](https://vite.dev/config/build-options.html) on 2026-09-16, which
-surfaced a resolved list that my own read of the same page did not. Treat the pinned list as the
-agent's and the live resolution as mine.*
+*Sourced for Vite's pinned list — [vite.dev/config/build-options.html](https://vite.dev/config/build-options.html),
+which states that the default "targets the minimum browser versions compatible with Baseline Widely
+Available as of a date fixed for each major release (`2026-01-01` for this major). Specifically, it is
+`['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`." Confirmed on the page by a second
+reader on 2026-09-17, settling a discrepancy recorded on 2026-09-16 where my own read of the page did
+not surface the resolved list and the agent's did. The list is there; the earlier disagreement was a
+reading failure rather than a difference in the page.*
+
+*Measured for the live resolution — by me, as recorded above.*
 
 **An adapter is one package or roughly sixty-five lines, not one per consumer.** `browserslist` exposes
 a programmatic API returning an array of `"<name> <version>"` strings. Converting those to the
-`name+version` form esbuild, Vite, Oxc and Rolldown accept is what `esbuild-plugin-browserslist`
-does — latest 4.0.0, last pushed 2026-09-08, around sixty-six thousand weekly downloads — and what
-`browserslist-to-esbuild` does in ninety-four lines, of which sixty-five are code, though that package
-has not released since 2024-01-08. The conversion is not a one-liner: it renames `ios_saf` to `ios` and
-`android` to `chrome`, truncates version ranges, drops engines the target format does not know, and
-collapses duplicates after renaming.
+`name+version` form esbuild, Vite, Oxc and Rolldown accept is what `esbuild-plugin-browserslist` does,
+at 4.0.0 published 2026-05-06 with roughly 87,000 weekly downloads, and what `browserslist-to-esbuild`
+does in ninety-four lines of which sixty-five are code, at 2.1.1 with no release since 2024-01-08. The
+conversion is not a one-liner: it renames `ios_saf` to `ios` and `android` to `chrome`, truncates
+version ranges, drops engines the target format does not know, and collapses duplicates to the oldest
+surviving version after renaming.
 
-*Sourced — the `browserslist` package's own type definitions and README, and each adapter's README and
-registry metadata, read 2026-09-16 by a research agent. I did not open them.*
+*Sourced — npm registry metadata for both packages and the npm downloads API, plus
+`browserslist-to-esbuild`'s `src/index.js` read directly and its line counts and conversion steps
+confirmed against the source. Read 2026-09-17 by a research agent. I did not open them.*
+
+*Corrected 2026-09-17, twice, both on `esbuild-plugin-browserslist`. It was recorded as "last pushed
+2026-09-08": that date is the GitHub repository's `pushed_at`, a commit rather than a release, and
+4.0.0 was published 2026-05-06. And weekly downloads were recorded as "around sixty-six thousand";
+the downloads API returns 87,429 for the week to 2026-09-16, with a trailing 30-day average near
+89,300. Neither correction changes what the adapter costs, which is what this finding is for.*
+
+**Re-checked on 2026-09-17 and unchanged, with two details added.** Every tool in the split above was
+re-read against its own documentation and every classification held. Two things worth recording that
+the first pass did not:
+
+- **Oxc's omission is deliberate rather than pending.** `oxc-browserslist` removed configuration-file
+  support in v3.0.0 "to reduce binary size", so `.browserslistrc` and the `package.json` field are
+  unsupported by design and aligned with Vite's approach. That is a stronger claim than "does not read
+  one" and it makes the split unlikely to close from this side.
+- **Rolldown's omission is pending rather than deliberate.** rolldown/rolldown issue 9152 is an open
+  request for browserslist support, recording that Rolldown "currently expects explicit targets such
+  as es2020, chrome61, or node18".
+- **Next.js reads a browserslist config when one exists but does not default to one**, falling back to
+  a fixed `["chrome 111", "edge 111", "firefox 111", "safari 16.4"]`. Angular CLI behaves the same way
+  with its own internal default. Neither changes which group they are in.
+- **browserslist is now at 4.29.0**, published 2026-09-15, which is the version the measurements below
+  were run against. Baseline query support landed in 4.26.0 on 2025-09-12 as recorded, confirmed
+  against the changelog entry "Added Baseline queries" and the registry's release timestamp.
+- **es-check is at 9.7.2** and `--checkBrowser` is documented as "Use browserslist configuration to
+  determine ES version (default: false)", introduced in v9 as recorded. `eslint-plugin-compat`'s README
+  still documents browserslist as its only configuration format.
+
+*Sourced — each tool's own documentation, README or changelog, plus npm registry metadata and
+rolldown/rolldown issue 9152, read 2026-09-17 by a research agent. I did not open them.*
 
 **Mined from the demoted record, and still standing.** The version data behind browserslist is a
 third-party dataset with its own release cadence, and naming versions explicitly limits the exposure

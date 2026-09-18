@@ -68,11 +68,11 @@ the server is one.
 omitted the option, and its absence read as a rejection nobody had argued.
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
 that the document is a build output and explicitly does *not* exclude the framework that builds it
-from also answering HTTP — SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's
-Node adapter with `output: 'static'`, and TanStack Start's `prerender` with server functions are all
-this shape. Next is the exception: its `output: 'export'` drops route handlers that read the request,
-so choosing Next means a separate API server. Weigh it here on its merits rather than treating it as
-already excluded.
+from also answering HTTP. SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's Node
+adapter with `output: 'static'` plus `export const prerender = false` on each API endpoint, and
+TanStack Start's `prerender` with server functions are all this shape. Next is the exception: under
+`output: 'export'` a route handler that reads the request is unsupported, so choosing Next means a
+separate API server. Weigh it here on its merits rather than treating it as already excluded.
 
 ## Findings
 
@@ -130,6 +130,63 @@ reasons are real here and one is weak.
   offline, the two are already the same shape.
 - **Runtime portability.** Weak. One runtime gets chosen and kept for years, so the ability to swap
   is optionality nobody is likely to spend.
+
+**The Next elimination holds exactly as stated, and it is the only elimination in this field.** Under
+`output: 'export'`, Next's own guide says "Only the `GET` HTTP verb is supported", that a handler must
+be marked `export const dynamic = 'force-static'`, and that "If you need to read dynamic values from
+the incoming request, you cannot use a static export". Its Unsupported Features list names "Route
+Handlers that rely on Request", along with Cookies, Headers, Rewrites, Redirects and Server Actions.
+
+So the precise claim is that a request-reading handler is unsupported, not that route handlers are
+dropped wholesale: a `GET` handler that reads nothing from the request still builds to a static file.
+That distinction does not rescue Next here, because the endpoints this system needs read the request.
+**Reverses if** Next supports request-reading handlers under a static export, or if this system's
+document stops being a build output, which would reverse
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md).
+
+*Sourced — [nextjs.org/docs/app/guides/static-exports](https://nextjs.org/docs/app/guides/static-exports),
+opened and quoted by me on 2026-09-17 against the page's stated version 16.3.5.*
+
+**Two corrections to the shapes named under Options, both from the 2026-09-17 pass.**
+
+- **Astro's coexistence mechanism is the per-route override, not the adapter.** `output: 'static'` is
+  still current and still the default, and `'hybrid'` no longer exists as a value. What makes an API
+  endpoint live alongside a prerendered document is `export const prerender = false` on that endpoint:
+  "In `static` mode, you must opt out of prerendering for each custom endpoint". The Node adapter's own
+  page does not state the combination, so naming the adapter alone was incomplete.
+- **TanStack Start is a release candidate, not a stable release.** Its overview says "TanStack Start is
+  currently in the **Release Candidate** stage! This means it is considered feature-complete and its
+  API is considered stable." The published version is `@tanstack/react-start@1.168.56`, with no 1.0 GA
+  cut. The prerender-plus-server-functions shape is real and documented; the stability caveat is new
+  information for a project weighing this field.
+
+*Sourced — Astro's configuration reference, on-demand-rendering guide and endpoints guide, and
+TanStack Start's overview plus npm registry metadata, read 2026-09-17 by a research agent. I did not
+open them.*
+
+**The field survey's npm-only gap is real, and two Deno-native frameworks fall in it.** `@oak/oak` at
+17.2.0 ("A middleware framework for handling HTTP with Deno, Node.js, Bun and Cloudflare Workers") and
+`@fresh/core` at 2.3.3 are published on JSR and absent from npm under those names. The unscoped npm
+packages `oak` and `fresh` are unrelated projects, an Electron kiosk framework and an HTTP
+freshness-header utility, so an npm-only survey searching by name would miss both or match the wrong
+thing. A broader JSR search surfaced mostly small utilities rather than further frameworks, so treat
+this as two verified examples rather than a complete list.
+
+*Sourced — [jsr.io/@oak/oak](https://jsr.io/@oak/oak), [jsr.io/@fresh/core](https://jsr.io/@fresh/core),
+and npm 404s for both scoped names, read 2026-09-17 by a research agent. I did not open them. This
+closes the gap the 2026-09-16 survey flagged about itself.*
+
+**Re-checked on 2026-09-17 and unchanged.** WinterTC's registry is still runtime keys only and
+describes its own purpose as "to prevent conflicts and provide a reliable, authoritative source of
+runtime identifiers", with nothing about frameworks. `Bun.serve` and `Deno.serve` still take a
+`Request` and return a `Response` natively, and `node:http` still passes `IncomingMessage` and
+`ServerResponse` with no Fetch-style server API anywhere in core, which is why adapters exist for it.
+Current versions and licences in the minimal-router class: Hono 4.13.8 MIT, Elysia 1.4.30 MIT with a
+v2 in beta, and h3 with npm's `latest` tag pointing at `2.0.1-rc.32` while the last stable major is
+`1.15.11` under the `1x` tag, so `npm install h3` today installs a release candidate.
+
+*Sourced — each project's own documentation and npm registry dist-tags, read 2026-09-17 by a research
+agent. I did not open them.*
 
 **M1 needs one route returning a fixed string.** Nothing about that discriminates between the options
 above, so this must be decided on what the rest of the system will need rather than on what the first

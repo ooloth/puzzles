@@ -107,27 +107,59 @@ the registry rather than a candidate. **Reverses if**
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) is reversed, for the
 first group only; the other three are category errors rather than judgements.
 
-**Two more go on the language.**
-[ADR-0007](../decisions/0007-that-language-is-typescript.md) requires TypeScript. Sable lists native
-TypeScript support as an explicit anti-goal in its own README, and LLRT states it will not support
-running TypeScript without transpilation. **Reverses if** either project adopts TypeScript execution.
+**Three go on the language.**
+[ADR-0007](../decisions/0007-that-language-is-typescript.md) requires TypeScript. Sable's README lists
+among its non-goals "Native support of TypeScript/TSX/JSX (maybe will be possible in the future with
+service workers)". LLRT's README states: "LLRT will not support running TypeScript without
+transpilation. This is by design for performance reasons." txiki.js documents the same:
+"txiki.js doesn't run TypeScript directly, `.ts` files need to be transpiled to JavaScript first."
+**Reverses if** any of the three adopts TypeScript execution.
 
-**Elide goes on its licence, and it is the only candidate any licence eliminates.** Its terms grant a
-"limited, non-exclusive, non-transferable... revocable license" and prohibit derivative works,
-redistribution and publishing benchmarks; free access is nightly-only with a thirty-day expiry and a
-stable build requires a purchase per major version. That fails the licence property in [what must the
-client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
+*Sourced — the Sable and LLRT READMEs fetched raw, and
+[txikijs.org/docs/typescript](https://txikijs.org/docs/typescript/), all read 2026-09-17 by a research
+agent quoting verbatim. I did not open them.*
+
+**Elide goes on its licence, and it is the only candidate any licence eliminates.** Section 4.1 of its
+terms grants "a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to:
+(a) install and use one object code copy of the Software Bundle on a device that you own or control;
+and (b) access and use the Service". Section 4.2 prohibits "reproduce, distribute, publicly display,
+publicly perform, or create derivative works of the Service" and "publish benchmarks or performance
+information about the Service". **The disqualifying word is "revocable"**, and it disqualifies alone:
+the licence property in [what must the client and the server each be able to
+do?](what-must-the-client-and-server-be-able-to-do.md) requires a licence that "cannot be revoked".
+The prohibitions are not load-bearing here and are recorded only so the terms are not re-read.
 **Reverses if** Elide adopts an irrevocable open-source licence.
 
-*Sourced — Elide's own terms of service, read 2026-09-16 by a research agent from a search snippet
-rather than the page itself. I did not open it, and this is the weakest sourcing behind any
-elimination recorded here; re-check it before it decides anything.*
+*Sourced — [elide.dev/legal/terms](https://elide.dev/legal/terms/), opened and quoted by me on
+2026-09-17.*
 
-**What survives is Node, Deno, Bun, Andromeda and txiki.js.** The first three are the incumbents.
-Andromeda is at 0.1.14, released 2026-06-13, under MPL-2.0, and ships a built-in HTTP server, bundler
-and SQLite support. txiki.js last released 2026-06-22 of the previous year and its TypeScript
-execution was not established. Neither is eliminated by a binding property, and the attribute that
-would separate them from the incumbents is maturity, which has no source here.
+**Deleted from the Elide finding on 2026-09-17: that free access is nightly-only with a thirty-day
+expiry and that a stable build requires a purchase per major version.** None of it appears on
+elide.dev today. The words "nightly", "major version" and "stable" are absent from the terms of
+service, and the live pricing page offers a "Free developer license" with "Full CLI and runtime
+access, source available on GitHub" alongside an enterprise tier, with no per-version purchase. A
+search snippet citing a one-time per-major-version price could not be located on the site. Recorded as
+deleted rather than removed silently so it cannot return: it was found unsourced, and the elimination
+never needed it.
+
+**What survives is Node, Deno, Bun and Andromeda.** The first three are the incumbents. Andromeda is
+at 0.1.14, released 2026-06-13, under MPL-2.0, with a built-in HTTP server and SQLite support; its
+bundler is a separate satellite tool rather than part of the core runtime binary. It is not eliminated
+by a binding property, and the attribute that would separate it from the incumbents is maturity, which
+has no source here and is asked at
+[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md).
+
+*Sourced — `gh release list --repo tryandromeda/andromeda` and the project's `Cargo.toml` and README,
+read 2026-09-17 by a research agent. I did not open them.*
+
+**txiki.js was a survivor on the 2026-09-16 pass and is not one now.** Two corrections from the
+2026-09-17 re-check: its last release `v26.6.0` is dated 2026-06-22, which is three months ago rather
+than "of the previous year" as recorded, and its TypeScript execution is not merely unestablished but
+documented as absent, which moves it into the language group above.
+
+*Sourced — `gh release list --repo saghul/txiki.js` for the date, which two separate summarisation
+passes over the same GitHub releases page had reported wrongly as 2025 and 2024. Read 2026-09-17 by a
+research agent; I did not open it.*
 
 
 **Nothing has been measured.** No candidate has been run here.
@@ -233,23 +265,39 @@ only `:memory:` runs unflagged. That boundary is real enough to have had a bypas
 *Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html) and
 [bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis) read 2026-09-02, and
 [Deno's Node API compatibility reference](https://docs.deno.com/runtime/reference/node_apis/) read
-2026-09-03. All three opened by me. The permission-flag correction is from a research agent's review
-of Deno's permissions documentation 2026-09-04, which I did not open. Node's stability index was
-re-checked 2026-09-04 and still reads "1.2 - Release candidate"; a research agent reported it as
-fully stable in Node 26 and the documentation does not say so.*
+2026-09-03. All three opened by me. Node's stability index was re-checked on 2026-09-17 and still
+reads "1.2 - Release candidate": the module went unflagged in v23.4.0 and v22.13.0 and reached
+release-candidate status in v25.7.0, and it has not been promoted to "2 - Stable". An earlier agent
+report that it was fully stable in Node 26 was wrong and the documentation has never said so.*
+
+*Weakened 2026-09-17 — the Deno permission-flag claim. A re-check could not find the
+`--allow-read`/`--allow-write` requirement stated on Deno's own `node:sqlite` or Node-compatibility
+pages; the agent found it only in a search summary it did not open. The claim is plausible and
+consistent with Deno's permissions model, and it is unverified at its source. It changes a run command
+rather than what can be built, so nothing here should turn on it either way.*
 
 **The three runtimes' governance differs, and it is a live input for a solo maintainer on a
 multi-year horizon.** Node is governed by the OpenJS Foundation, with v24 in Active LTS since
 2025-10-28 (Maintenance from 2026-10-20), v22 in Maintenance until 2027-04-30, and v26 Current with
 LTS scheduled for 2026-10-28. Bun is owned by Anthropic and stays MIT with the same team. Deno is
 Deno Land Inc., a venture-funded company rather than a foundation, and its petition against Oracle
-over the "JavaScript" trademark is unresolved: the fraud claim was dismissed 2025-06-18, the
-genericness and abandonment claims remain active, and a decision is not expected before 2027.
+over the "JavaScript" trademark is unresolved: the fraud claim was dismissed 2025-06-18, Oracle
+answered 2025-08-06, discovery opened 2025-09-06, and the genericness and abandonment claims remain
+active.
+
+**That horizon is the thing this paragraph rests on and no document states it.** See
+[what horizon is this built for?](what-horizon-is-this-built-for.md). Until it lands, this is a set of
+facts with no criterion attached to it.
 
 *Sourced — [Node's release schedule](https://raw.githubusercontent.com/nodejs/Release/main/README.md)
-fetched raw 2026-09-04 by a research agent, plus Bun's LICENSE.md and the acquisition post. Deno's
-version numbers and the trademark timeline come from search summaries the agent did not open
-directly, so treat the Deno specifics as the weakest claim in this paragraph.*
+re-fetched raw 2026-09-17 by a research agent and matching the figures above exactly, plus Bun's
+LICENSE.md (MIT confirmed) and [the acquisition post](https://bun.com/blog/bun-joins-anthropic), both
+opened by the agent. The Deno trademark dates are from search summaries the agent did not open
+directly and remain the weakest claim here.*
+
+**Deleted from the paragraph above on 2026-09-17: that a decision in the Oracle matter "is not
+expected before 2027".** A re-check found no source stating any expected decision date. Recorded as
+deleted rather than removed silently so it cannot return: it was found unsourced.
 
 ### The store was checked as an input here and is not one
 
@@ -289,15 +337,21 @@ nobody has considered. None of these has been weighed, and no record forecloses 
 *Reasoned — 2026-09-04, on noticing that the equivalence argument assumes its own conclusion's
 premise.*
 
-**One incompatibility worth knowing early.** `better-sqlite3` does
-not load under Bun out of the box: it is a native addon and fails with ABI mismatches
-(`ERR_DLOPEN_FAILED`, "compiled against different Node.js ABI version"). Recompiling against the
-matching ABI is a documented workaround, so it is not that the library cannot work, and the problem
-recurs across Bun releases rather than sitting in one long-open ticket — the tracker holds a cluster of
-issues of different ages (19328, 17255, 5187, 16050) rather than a single three-year-old one.
-Choosing that library still tilts toward Node quietly, in a file that looks like it is about the
-database. It is avoidable rather than decisive, since `node:sqlite` runs on all three.
+**One incompatibility worth knowing early, and it is weaker than it was recorded as being.**
+`better-sqlite3` has failed to load under Bun as a native addon with an ABI mismatch, reported across
+four issues of different ages rather than one long-open ticket: oven-sh/bun 5187 (2023-09-13), 16050
+(2024-12-29), 17255 (2025-02-11) and 19328 (2025-04-27). **All four are now closed.** Issue 19328 is
+titled "Better-sqlite3 fails to load: 'compiled against different Node.js ABI version' when using
+Bun", which is the failure mode. Recompiling against the matching ABI is a documented workaround, so
+it is not that the library cannot work. Choosing that library still tilts toward Node quietly, in a
+file that looks like it is about the database, but with every reported instance closed this is a
+historical note rather than a live hazard. It is avoidable either way, since `node:sqlite` runs on all
+three.
 
-*Sourced — oven-sh/bun issues 19328, 17255, 5187 and 16050, surveyed 2026-09-04 by a research agent.
-I did not open them. No single issue supports a duration for this; treat any stated one as
-unsourced.*
+*Sourced — the four issues read via `gh issue view` on 2026-09-17 by a research agent, which confirmed
+all four closed and quoted 19328's title. I did not open them. The agent did not see the literal
+string `ERR_DLOPEN_FAILED` in the portion of 19328 it read, so that error name is removed from this
+finding.*
+
+*Corrected 2026-09-17: recorded on 2026-09-04 as a problem that "recurs across Bun releases". The
+cluster of four issues is real and the dates hold; their all being closed was not checked then.*

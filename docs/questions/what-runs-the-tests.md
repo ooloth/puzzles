@@ -68,15 +68,21 @@ shared module.
 7100, read 2026-09-04 by a research agent. I did not open them. Any claim about what it reports for
 this app's own components is impossible for the reason above.*
 
-**Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, open, filed
-2026-08-20 and reproduced on 1.4.0 and 1.3.14, records a JSDOM fragment containing one `<button>`
-producing a 146,955-line, 7.5 MB snapshot against Jest's 9 lines and 4 KB, and a React suite growing
-past 40 GB. Issue 40077, open, filed 2026-08-22, records `toMatchSnapshot()` on a live DOM node
-attempting a ~30 GB allocation and dying with an uncatchable OOM. An 81-cell grid is exactly that
+**Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, filed
+2026-08-20, records a JSDOM fragment containing one `<button>` producing a 146,955-line, 7.5 MB
+snapshot against Jest 30.3.0's 9 lines and 4 KB. Issue 40077, open, filed 2026-08-22, records
+`toMatchSnapshot()` on a live DOM node attempting a ~30 GB allocation. An 81-cell grid is exactly that
 shape, so the conclusion the invented anecdote pointed at survives on real evidence.
 
-*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-04 by a research agent. I did not open
-them.*
+*Sourced — oven-sh/bun issues 39768 and 40077, re-read 2026-09-17 by a research agent which quoted
+39768's comparison table verbatim. I did not open them.*
+
+*Corrected 2026-09-17, matching the same finding in
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+**Issue 39768 is no longer open**: it was closed as a duplicate of issue 5540 on 2026-09-13, which
+moves where the defect is tracked rather than fixing it. **Issue 40077 is an omnibus report** bundling
+four findings, of which the ~30 GB allocation is the first. And the claim that a React suite grew
+"past 40 GB" is **deleted**: no source was recorded for it and the re-check did not carry it.*
 
 **Vitest under Bun is not a hedge.** It was shipped broken at the time of the research and is not
 covered by Vitest's own test matrix.

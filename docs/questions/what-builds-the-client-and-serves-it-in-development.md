@@ -72,10 +72,18 @@ target-browser-version option, so the escape hatch is a separate transform pass.
 exception and cuts the other way: Bun downlevels it through Lightning CSS to a fixed baseline with
 no way to configure or disable that.
 
-*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-16 by me, against Bun
-1.4.2, released 2026-09-05. Browserslist integration is requested and unimplemented in Bun issue
-40361, which is open; issue 40133 is closed as a duplicate of it, read from the GitHub API
-2026-09-16 by a research agent and not opened by me.*
+*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), re-opened and re-quoted by me on
+2026-09-17. The page still carries the sentence verbatim, `target` still accepts only the three
+values, and no browser-version or browserslist option has appeared. Bun's CSS baseline is documented
+at [bun.com/docs/bundler/css](https://bun.com/docs/bundler/css) as Edge 80+, Firefox 78+, Chrome 80+,
+Safari 14+ and Opera 67+, with no option to change it.*
+
+*Corrected 2026-09-17 on the issue numbers. Issue 40361 is open, and it is narrower than "browserslist
+integration": its title is "Bun.build has no way to set CSS browser targets, so oklch() is always
+downlevelled". Its body does record a browserslist config being set and ignored. Issue 40133 was
+closed as a duplicate of it on 2026-09-13, with the maintainer noting both "ask for the same feature:
+an option to set the CSS browser targets". Read from the GitHub API 2026-09-17 by a research agent; I
+did not open them.*
 
 **Vite's bundler does not read a browserslist config either, and that is the same disqualifier.** Its
 `build.target` accepts `'baseline-widely-available'` (the default), `'esnext'`, an ES version such as
@@ -93,12 +101,15 @@ config sources and then fallback to the default value". That value "is passed on
 legacy chunk for every chunk in the final bundle". So it emits a second bundle beside the modern one
 rather than lowering one bundle to a declared floor, which is not the shape
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) describes. A
-`modernTargets` option exists and is documented as overriding `build.target`; what it governs was not
-established.
+`modernTargets` defaults to `'edge>=105, firefox>=106, chrome>=105, safari>=16.4, chromeAndroid>=105,
+iOS>=16.4'` and "is passed on to `@babel/preset-env` when collecting polyfills for **modern chunks**",
+overriding `build.target` when set. So it governs which polyfills the modern chunks receive rather
+than being a second lowering target, which does not change the conclusion above.
 
 *Sourced — the plugin's README at
 [github.com/vitejs/vite/tree/main/packages/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy),
-read 2026-09-16 by me. The `modernTargets` scope is the one part I could not settle from it.*
+read 2026-09-16 by me. The `modernTargets` scope, left open then, was settled on 2026-09-17 by a
+research agent reading the same README from the `main` branch; I did not re-open it.*
 
 **The bundlers split on whether they read a browserslist config, and the split does not decide this
 question.** Reading one natively, per their own documentation: webpack (`target: "browserslist"`),
@@ -151,14 +162,20 @@ the gap is an entry-point inconsistency rather than plugins being absent from pr
 *Sourced — oven-sh/bun issue 20619, including a maintainer comment "bun build CLI does not yet
 support plugins", read 2026-09-04 by a research agent. I did not open it.*
 
-**No precache-manifest tooling is built for Bun's bundler.** No `bun-plugin-workbox` equivalent was
-found. `workbox-build`'s `injectManifest` and `generateSW` are bundler-agnostic and can be chained
-as a post-build step over Bun's output directory, so this is buildable, but it is a pipeline we
-would own alone.
+**No precache-manifest tooling is built for Bun's bundler.** No `bun-plugin-workbox` equivalent
+exists on npm. `workbox-build`'s `injectManifest` and `generateSW` are bundler-agnostic and can be
+chained as a post-build step over Bun's output directory, so this is buildable, but it is a pipeline
+we would own alone.
 
-*Unverified — an absence, searched for 2026-09-04 by a research agent and not found. No source states
-that no such tool exists, and no query was recorded that anyone could re-run, so this establishes
-nothing either way.*
+*Sourced as an absence, with re-runnable queries — four searches against the npm registry search API
+on 2026-09-17 returned no Bun-targeting precache or service-worker plugin, only webpack, Rspack and
+Parcel tooling: `registry.npmjs.org/-/v1/search?text=bun-plugin-workbox&size=10`,
+`?text=bun%20precache&size=10`, `?text=bun%20workbox&size=20` and
+`?text=bun-plugin%20service-worker&size=20`. Run by a research agent; I did not run them. This is what
+npm's search surfaces and does not rule out an unindexed package.*
+
+*Upgraded 2026-09-17 from "Unverified — no query was recorded that anyone could re-run". The queries
+are now recorded.*
 
 **Almost nobody ships a browser build with it.** GitHub code search returns 1,089,536 hits for
 `filename:vite.config.ts` and 855 for `"Bun.build(" language:javascript`, a ratio near 1,274:1;
@@ -186,16 +203,24 @@ pure rules module most wants measured.
 *Sourced — [bun.com/docs/test/coverage](https://bun.com/docs/test/coverage) and oven-sh/bun issue
 7100, read 2026-09-04 by a research agent. I did not open them.*
 
-**Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, open, filed
-2026-08-20 and reproduced on both 1.4.0 and 1.3.14, reports that snapshotting a JSDOM fragment
-containing a single `<button>` produced a 146,955-line, 7.5 MB snapshot file, against Jest's 9-line,
-4 KB output for the same input; a React suite grew past 40 GB and made the machine unresponsive.
-Issue 40077, open, filed 2026-08-22, reports `toMatchSnapshot()` on a live DOM node attempting a
-~30 GB allocation and dying with an uncatchable OOM. An 81-cell grid is exactly this shape.
+**Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, filed
+2026-08-20, reports that snapshotting a JSDOM fragment containing a single `<button>` produced a
+146,955-line, 7.5 MB snapshot file, against Jest 30.3.0's 9-line, 4 KB output for the same input.
+Issue 40077, open, filed 2026-08-22, includes a report of `toMatchSnapshot()` on a live DOM node
+attempting a ~30 GB allocation. An 81-cell grid is exactly this shape.
 
-*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-04 by a research agent. I did not open
-them. No issue in the tracker matches the six-second-timeout anecdote that circulates about Bun's
-snapshot serialisation, so treat that figure as unsourced wherever it turns up.*
+*Sourced — oven-sh/bun issues 39768 and 40077, re-read 2026-09-17 by a research agent which quoted
+39768's comparison table verbatim. I did not open them.*
+
+*Corrected 2026-09-17, twice. **Issue 39768 is no longer open**: it was closed as a duplicate of issue
+5540 on 2026-09-13, four days ago. The defect it describes is unchanged and 5540 is where it now
+lives, so this is a change in where the problem is tracked rather than a fix. And **issue 40077 is not
+about one bug**: it is an omnibus report bundling four separate findings, of which the ~30 GB
+allocation is the first. Describing it as the snapshot issue understates its scope.*
+
+*Deleted 2026-09-17: that a React suite "grew past 40 GB and made the machine unresponsive". The
+re-check quoted 39768's table and did not carry this figure, and no source for it was recorded. It was
+found unsourced.*
 
 **None of this rules Bun out as a package manager, a test runner for non-browser code, or a
 server runtime.** Those are separate decisions, each reversible in about one line, and the
@@ -235,3 +260,26 @@ above. The capability gaps above hold regardless of how the rewrite was done.
 research agent. No source, official or third-party, publishes comparative post-release stability
 statistics for 1.4.0; treat any figure claiming issue volume or crash rates against a prior major as
 unsourced.*
+
+**Re-checked on 2026-09-17 and unchanged.** Recorded because a result that changed nothing is still a
+result, and because this field was already flagged as perishable:
+
+- Bun's worker-bundling gap. Issue 18601 is **still open** with nothing checked off, so it is not
+  fixed. Issues 17705 and 29478 were closed as duplicates of it on 2026-08-13, and PR 23279 was closed
+  unmerged by `github-actions[bot]` on 2026-02-19 with "Closing this PR because it has been inactive
+  for more than 90 days". All four dates match what was recorded.
+- Bun's branch coverage. Issue 7100 is still open, and the coverage documentation still shows only
+  `% Funcs` and `% Lines`.
+- Vite's `build.target`. The word browserslist still does not appear on the option's page.
+- Vite's Baseline default. The resolved list `['chrome111', 'edge111', 'firefox114', 'safari16.4',
+  'ios16.4']` and its 2026-01-01 pin **are** on the page, which settles a discrepancy recorded in
+  [what format declares the browser floor?](what-format-declares-the-browser-floor.md) where my own
+  earlier read did not surface them.
+- Vite 8's GA on 2026-03-12 and Rolldown 1.0 on 2026-05-07, which is 56 days.
+- vitejs/vite issue 23377 is still open. Its "against Vite 8.2.2" detail was not re-checked.
+- Cloudflare's acquisition of VoidZero on 2026-06-04, the $1 million ecosystem fund and the MIT
+  licences, now also confirmed against
+  [blog.cloudflare.com/voidzero-joins-cloudflare](https://blog.cloudflare.com/voidzero-joins-cloudflare/).
+
+*Read 2026-09-17 by a research agent via the GitHub API and each tool's own documentation. I did not
+open them. The GitHub code-search ratio recorded above was not re-run and keeps its existing caveat.*

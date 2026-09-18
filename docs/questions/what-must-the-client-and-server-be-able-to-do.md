@@ -316,6 +316,15 @@ and that is about the code written here rather than what it depends on. Until it
 elimination on maintenance is an elimination on taste, and this file's rule is that a property
 without a citation is an assumption somebody has been carrying.
 
+**It cannot be closed by writing the property, because it is a choice rather than a derivation**, and
+it is asked at
+[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md). That
+question rests in turn on [what horizon is this built for?](what-horizon-is-this-built-for.md), which
+[../problem.md](../problem.md) does not currently answer. Whatever those settle is cited here rather
+than restated, in the same way every other property in this list cites its source. Where they settle
+that stewardship does not bind, this paragraph says so and the eliminations resting on it are reversed
+in the files that hold them.
+
 ### What must stay reachable rather than be delivered now
 
 These are not requirements. They are futures [../problem.md](../problem.md) or a record says are

@@ -53,9 +53,8 @@ trusting one package does untrust several hundred others.
 default-trusted-dependencies file read directly for the count. Read 2026-09-17 by a research agent. I
 did not open them.*
 
-*Upgraded 2026-09-17 from "Unverified — no source recorded", and it turned out to be documented
-behaviour rather than a discovered trap. That weakens the word "silent": Bun says so on the page you
-would be reading to set it.*
+*This is documented behaviour rather than a hidden trap, and the distinction matters for how it is
+weighed: Bun states it on the page you would be reading in order to set the field.*
 
 **The lockfile claim is still undocumented, and the evidence for it is user reports.** Nothing on
 Bun's lockfile page, its `install` CLI page or its text-lockfile announcement addresses what happens

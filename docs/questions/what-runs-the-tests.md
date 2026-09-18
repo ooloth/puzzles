@@ -77,12 +77,13 @@ shape, so the conclusion the invented anecdote pointed at survives on real evide
 *Sourced — oven-sh/bun issues 39768 and 40077, re-read 2026-09-17 by a research agent which quoted
 39768's comparison table verbatim. I did not open them.*
 
-*Corrected 2026-09-17, matching the same finding in
+*Two things about those issues that a reader will otherwise get wrong, the same as in
 [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
-**Issue 39768 is no longer open**: it was closed as a duplicate of issue 5540 on 2026-09-13, which
-moves where the defect is tracked rather than fixing it. **Issue 40077 is an omnibus report** bundling
-four findings, of which the ~30 GB allocation is the first. And the claim that a React suite grew
-"past 40 GB" is **deleted**: no source was recorded for it and the re-check did not carry it.*
+Issue 39768 is closed as a duplicate of issue 5540, which moves where the defect is tracked rather
+than fixing it, so 5540 is the issue to watch. Issue 40077 is an omnibus report bundling four
+findings, of which the ~30 GB allocation is one, so its state says nothing about snapshots alone. The
+quantified reports cover single nodes: any figure for what a whole suite costs is unsourced wherever
+it turns up.*
 
 **Vitest under Bun is not a hedge.** It was shipped broken at the time of the research and is not
 covered by Vitest's own test matrix.

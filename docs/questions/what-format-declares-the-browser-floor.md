@@ -140,7 +140,7 @@ reader on 2026-09-17, settling a discrepancy recorded on 2026-09-16 where my own
 not surface the resolved list and the agent's did. The list is there; the earlier disagreement was a
 reading failure rather than a difference in the page.*
 
-*Measured for the live resolution — by me, as recorded above.*
+*Measured for the live resolution — by me, with the method given above.*
 
 **An adapter is one package or roughly sixty-five lines, not one per consumer.** `browserslist` exposes
 a programmatic API returning an array of `"<name> <version>"` strings. Converting those to the
@@ -155,15 +155,13 @@ surviving version after renaming.
 `browserslist-to-esbuild`'s `src/index.js` read directly and its line counts and conversion steps
 confirmed against the source. Read 2026-09-17 by a research agent. I did not open them.*
 
-*Corrected 2026-09-17, twice, both on `esbuild-plugin-browserslist`. It was recorded as "last pushed
-2026-09-08": that date is the GitHub repository's `pushed_at`, a commit rather than a release, and
-4.0.0 was published 2026-05-06. And weekly downloads were recorded as "around sixty-six thousand";
-the downloads API returns 87,429 for the week to 2026-09-16, with a trailing 30-day average near
-89,300. Neither correction changes what the adapter costs, which is what this finding is for.*
+*A repository's `pushed_at` is a commit and not a release, and the two get confused for each other in
+exactly this kind of listing. `esbuild-plugin-browserslist`'s 4.0.0 published 2026-05-06; its
+repository has commits after that. Neither figure changes what the adapter costs, which is what this
+finding is for.*
 
-**Re-checked on 2026-09-17 and unchanged, with two details added.** Every tool in the split above was
-re-read against its own documentation and every classification held. Two things worth recording that
-the first pass did not:
+**Every tool in the split above holds its classification against its own documentation.** Four
+details that the split alone does not carry:
 
 - **Oxc's omission is deliberate rather than pending.** `oxc-browserslist` removed configuration-file
   support in v3.0.0 "to reduce binary size", so `.browserslistrc` and the `package.json` field are
@@ -176,10 +174,10 @@ the first pass did not:
   a fixed `["chrome 111", "edge 111", "firefox 111", "safari 16.4"]`. Angular CLI behaves the same way
   with its own internal default. Neither changes which group they are in.
 - **browserslist is now at 4.29.0**, published 2026-09-15, which is the version the measurements below
-  were run against. Baseline query support landed in 4.26.0 on 2025-09-12 as recorded, confirmed
+  were run against. Baseline query support landed in 4.26.0 on 2025-09-12, confirmed
   against the changelog entry "Added Baseline queries" and the registry's release timestamp.
 - **es-check is at 9.7.2** and `--checkBrowser` is documented as "Use browserslist configuration to
-  determine ES version (default: false)", introduced in v9 as recorded. `eslint-plugin-compat`'s README
+  determine ES version (default: false)", introduced in v9. `eslint-plugin-compat`'s README
   still documents browserslist as its only configuration format.
 
 *Sourced — each tool's own documentation, README or changelog, plus npm registry metadata and

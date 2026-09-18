@@ -80,7 +80,8 @@ which decide how that file is opened.
 
   Two smaller things pushed in the same direction without deciding it. Every managed vendor examined
   changed its terms within five years, and a forced migration arrives on somebody else's deadline —
-  PlanetScale gave thirty-two days — which is a different kind of risk for one person with a day job
+  PlanetScale announced its hobby tier's retirement on 2024-03-06 and retired it on 2024-04-08, a
+  little over a month — which is a different kind of risk for one person with a day job
   than for a team. And with continuous replication a file's recovery point is about a second, which
   beats a self-managed service with a nightly dump on the one failure that matters most here.
 

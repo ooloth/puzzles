@@ -79,6 +79,12 @@ first request, which is the shape of the failure rather than an error anything r
   twice on the first touch of the day, and free tiers are where both defaults live. **Reverses if** a
   free tier stops sleeping, or if the store leaves the request path entirely.
 
+  *Sourced — [Neon's autosuspend guide](https://neon.com/docs/guides/auto-suspend-guide), which gives
+  the Free plan a 5-minute idle timeout and states "Disabling scale to zero is only supported on paid
+  plans", and [Supabase's production guide](https://supabase.com/docs/guides/platform/going-into-prod):
+  "We may pause applications on the Free Plan that exhibit low activity in a 7-day period to save on
+  server resources." Neon opened by me 2026-09-18; Supabase read the same day by a research agent.*
+
 - **Not yet — leave it to whatever the first deployment happens to do.** The honest "not yet", and
   cheap to reverse on most platforms, since auto-stop is usually a flag. Rejected because the failure
   is silent: a player who waits three seconds for today's puzzle files no bug, and nothing in the

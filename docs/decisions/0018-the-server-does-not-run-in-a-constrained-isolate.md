@@ -56,7 +56,9 @@ needs it is written.
   manager, no patching. It is global by default. Crucially, it satisfies
   [ADR-0017](0017-nothing-on-the-request-path-scales-to-zero.md) for free rather than by paying: an
   isolate has no meaningful cold start, and Cloudflare's own documentation says one "can start around
-  a hundred times faster than a Node process on a container or virtual machine." So the wake-up
+  a hundred times faster than a Node process on a container or virtual machine"
+  ([how Workers works](https://developers.cloudflare.com/workers/reference/how-workers-works/), opened
+  by me 2026-09-18). So the wake-up
   argument that eliminates scale-to-zero containers and functions does not reach this tier at all —
   it is the one option that gets always-warm behaviour without an always-on bill. And Cloudflare
   Containers, generally available since April 2026, would give the generator a first-class home on the

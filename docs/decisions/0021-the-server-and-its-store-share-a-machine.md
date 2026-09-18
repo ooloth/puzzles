@@ -47,9 +47,16 @@ corruption rather than an error, per [../constraints.md](../constraints.md).
   makes an embedded database work on platforms with no local disk. Rejected on the single reason that
   SQLite's own maintainers advise against it, in the documentation, because the locking primitives it
   depends on are unreliable there — and the failure mode is corruption rather than an error.
-  AWS's Lambda-with-EFS pattern has documented reports of exactly that under concurrent writes.
   **Reverses if** SQLite's position on network filesystems changes, which would require the underlying
   locking behaviour to change rather than the advice.
+
+  *Sourced for the disqualifying reason — [SQLite on a network filesystem](https://www.sqlite.org/useovernet.html):
+  "SQLite relies on exclusive locks for write operations, and those have been known to operate
+  incorrectly for some network filesystems. This has led to database corruption." That page names no
+  vendor. **No vendor documentation confirms the failure on any specific network filesystem**: the
+  nearest thing found for Lambda over EFS is a single user report on AWS re:Post, with no AWS or
+  SQLite reply, so a claim that a named provider has documented reports of it is unsourced wherever it
+  turns up. The general warning disqualifies the option on its own and needs no such claim.*
 
 - **Multiple application machines sharing one file.** The horizontal-scaling version of the above, and
   rejected for the same reason plus a second: even with reliable locking, a single writer across

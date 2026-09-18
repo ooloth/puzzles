@@ -26,6 +26,21 @@ pencil marks and highlights its peers — and comparing what the state layer loo
 board, its persistence and a deterministic merge all have to stay pure and testable with no
 browser.
 
+**That comparison takes two candidates and the framework class holds six**, so something narrows the
+field before the spike is worth running. Stewardship does not do it:
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices a supply worry by what leaving the position costs, and a renderer swap is cheap enough relative
+to the runtime that no candidate here is removed by it.
+
+**What narrows it is where each candidate allows reactive state to live**, recorded under **Findings**
+from each project's own documentation. The three shapes are a primitive usable outside a component in
+plain TypeScript, compiler syntax that only works in files the compiler processes, and no primitive
+outside a component at all. That property is the one this question weights highest, because the board,
+its persistence and a deterministic merge all have to stay pure and testable with no browser, and it
+is the thing a state layer either survives or does not. It orders the field rather than eliminating
+from it: the Findings argue that the most restrictive of the three may push in the right direction
+rather than the wrong one, which is exactly the claim a spike is for.
+
 **It is answered together with
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md).** One of
 the candidate answers there is a meta-framework's

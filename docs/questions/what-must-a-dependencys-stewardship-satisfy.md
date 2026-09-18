@@ -126,6 +126,126 @@ Everything installed is a dependency, so a test written for a runtime also appli
 storage wrapper, a test library and whatever generates a precache manifest. A test scoped to "the big
 choices" has to say what makes a choice big, or it is a judgement wearing a test's clothes.
 
+### What the signals actually say, measured 2026-09-17
+
+**Raw top-author share is confounded by bots, and badly enough to invert a ranking.** The single most
+prolific committer over the last twelve months is an automation account in three of the four runtimes
+and in one of the six renderers: Bun's is `robobun` at 60.9%, Node's is `nodejs-github-bot` at 8.2%,
+and Vue's is `renovate[bot]` at 30.3%. The most prolific human is a different account with a
+materially different share: Bun's is Jarred-Sumner at 14.7%, Node's is aduh95 at 8.1%, Vue's is
+edison1105 at 28.8%. Read raw, Bun looks like the most concentrated project in the field; read for
+humans, it is among the least.
+
+**This is the most useful thing found today, because it is a property of the test rather than of any
+candidate.** Any threshold written against "top author share" measures release tooling unless it
+excludes bots, and no tool surveyed does that automatically. An option that fails this way fails
+silently, because the number looks like a measurement either way.
+
+*Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, counted and grouped by
+author, run 2026-09-17 by research agents which stated the command and identified the bot accounts by
+inspection. I did not run them. The distinction between bot and human was made by reading account
+names and sampling commits, which is judgement rather than measurement.*
+
+**The runtime field.** Commits and distinct authors over twelve months to 2026-09-17, releases in the
+same window, and governance:
+
+| | Commits | Distinct authors | Releases | Stable ≥1.0 | Licence | Governed by |
+|---|---|---|---|---|---|---|
+| Node | 3,496 | 428 | 59 | yes | MIT | OpenJS Foundation |
+| Deno | 3,055 | 200 | 47 | yes | MIT | Deno Land Inc. |
+| Bun | 4,610 | 103 | 19 | yes | MIT | Anthropic |
+| Andromeda | 89 | 7 | 26 | **no** | MPL-2.0 | no company or foundation found |
+
+Andromeda separates from the incumbents on every column, and on one of them categorically: no release
+has ever crossed 1.0, and its full tag history is 0.1.0 through 0.1.14. Deno's top human author holds
+36.8%, which is the highest human concentration among the three incumbents.
+
+**The renderer field**, same window and method. Lit is in the table because the verification pass
+returned it:
+
+| | Commits | Distinct authors | Release days | Latest stable | Governed by |
+|---|---|---|---|---|---|
+| React | 817 | 101 | 28 | 19.3.0 | React Foundation (Linux Foundation) |
+| Svelte | 846 | 135 | 120 | 5.57.0 | independent; creator employed by Vercel |
+| Vue | 423 | 106 | 51 | 3.5.43 | independent |
+| Preact | 300 | 20 | 21 | 10.29.8 | community, no foundation |
+| Solid | 85 | 20 | **8** | 1.9.15 | individual-led, Open Collective |
+| Lit | 46 | 19 | **1** | 3.3.3 | **OpenJS Foundation** |
+
+Solid and Lit are monorepos that tag every package per release, so the raw release-tag counts of 62
+and 8 overstate frequency; the column above is distinct publish days. Lit published on one day in
+twelve months, 2026-05-14, and nothing since.
+
+*Measured — as above, run 2026-09-17 by a research agent which reported the tag-versus-date
+distinction unprompted. I did not run it. Distinct-author counts are by GitHub login with a fallback
+to commit email, so one person committing under two unlinked addresses is counted twice.*
+
+**Governance quality and activity are separate signals, and in this field they disagree sharply.**
+Lit has the strongest governance structure of any renderer here and the least activity of any of them.
+It joined the OpenJS Foundation as an Impact Project on 2025-10-14, with "All of Lit's assets,
+including code, documentation, websites, and the Lit brand" transferred out of Google, and a Technical
+Steering Committee of six drawn from Google, Adobe, Reddit and independents. On governance it
+outranks Preact, Solid, Svelte and Vue; on activity it is last.
+
+So a test has to say which of the two it is testing. A test written for "will this be abandoned" and a
+test written for "is anyone working on it" point at different candidates here, and the repo's existing
+arguments have used the words interchangeably.
+
+*Sourced — [lit.dev/blog/2025-10-14-openjs](https://lit.dev/blog/2025-10-14-openjs/), opened and
+quoted by me on 2026-09-17.*
+
+**Two outliers worth recording before they surprise someone.** Parcel took **14 commits from 4
+authors** in twelve months, with its last release on 2026-02-02, which is the quietest project
+surveyed in any category and quieter than Lit. Rsbuild is 75.5% one author across 2,102 commits, which
+is the highest human concentration found anywhere in the field, inside a project backed by ByteDance's
+web infrastructure team. Corporate backing did not predict low concentration and foundation governance
+did not predict high activity.
+
+*Measured — Parcel's figure re-run by me on 2026-09-17 with
+`gh api --paginate repos/parcel-bundler/parcel/commits?since=2025-09-17` and confirmed at 14. The
+Rsbuild figure is a research agent's, which sampled the top author's commits to confirm they were not
+a bot. I did not run that one.*
+
+**React's repository moved.** `facebook/react` now redirects to `react/react`, confirmed by me against
+the GitHub API. Any link written against the old path still resolves but no longer names the owner.
+
+### Nothing off the shelf computes the signal this question most wants
+
+**Four runnable scoring systems exist and none of them measures authorship concentration.** OpenSSF
+Scorecard is the closest to off-the-shelf: twenty named checks, a weighted composite from 0 to 10,
+runnable as a CLI, a GitHub Action or a hosted API, actively maintained with v5.5.0 released
+2026-04-23. Its `Maintained` check measures commit frequency and its `Contributors` check measures the
+organisational diversity of recent contributors. Neither is a concentration ratio. Libraries.io
+SourceRank is zero-setup and its `Contributors` factor is a raw headcount. deps.dev aggregates
+Scorecard and vulnerability data into one lookup and adds no health metric of its own. OpenSSF
+Criticality Score measures blast radius rather than health, so a heavily depended-on but neglected
+project scores high, and its hosted dataset was discontinued after 2026-08-29.
+
+**The one framework that defines the signal precisely is a specification rather than a tool.** CHAOSS
+defines Contributor Absence Factor, formerly Bus Factor, as the smallest number of contributors
+responsible for 50% of contributions over a period, and it is one of four metrics in its Starter
+Project Health model. Its turnkey implementation, Augur, is archived: the repository reads "The Augur
+project is no longer part of CHAOSS. Use CollectOSS instead!" CollectOSS is early, and GrimoireLab,
+the other implementation, is a self-hosted analytics platform rather than a command.
+
+**So the choice is narrower than it looked.** Adopting an existing framework means adopting Scorecard
+and accepting that it does not measure the thing three question files are actually eliminating
+candidates on. Measuring concentration means computing it here, which is one `gh api` call and a sort,
+already done above for the whole field. The null option is unaffected by any of this.
+
+**The EU Cyber Resilience Act does not supply a criterion.** It mandates SBOMs in SPDX or CycloneDX
+with full compliance by 2027-12-11 and leaves the assessment of a dependency's health to the
+manufacturer. It is a disclosure mandate rather than a scoring system.
+
+*Sourced — [ossf/scorecard](https://github.com/ossf/scorecard) and its
+[checks documentation](https://github.com/ossf/scorecard/blob/main/docs/checks.md),
+[chaoss.community/starter-project-health-metrics-model](https://chaoss.community/starter-project-health-metrics-model/),
+[chaoss/augur](https://github.com/chaoss/augur), [ossf/criticality_score](https://github.com/ossf/criticality_score)
+and a live Libraries.io SourceRank breakdown, read 2026-09-17 by a research agent which listed each
+tool's signals from its own documentation rather than from summaries. I did not open them. The CRA
+wording is the agent's from secondary sources and it did not open the EUR-Lex text, so treat the legal
+phrasing as unverified.*
+
 **Replaceability and stewardship are not independent, which weakens the null option slightly.** What
 makes a dependency cheap to replace is usually that it is small and that its interface is standard, and
 both of those also correlate with there being less to maintain. So scoring replaceability alone may

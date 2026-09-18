@@ -270,9 +270,16 @@ problem, documented fix" holds only for Svelte.*
 
 **Solid's timing facts hold, with one number corrected, and the elimination they support does not
 stand on its own.** Solid 2.0 is at `solid-js@2.0.0-rc.8`, published 2026-09-11. The migration guide
-is 1033 lines. No codemod ships: the word appears in `CONTRIBUTING.md` and nowhere else in the
-repository. The only compatibility affordance in the guide is one opt-in line offering "old 'path
+is 1033 lines. The only compatibility affordance in the guide is one opt-in line offering "old 'path
 argument' ergonomics via storePath", which is an ergonomic rather than a 1.x compatibility layer.
+
+**A codemod does exist, and the earlier claim that none ships was wrong.**
+`solidjs-community/solid-migration-assistant` describes itself as a "Safe Solid 1.x to Solid 2
+migration codemod", was pushed 2026-09-14, and publishes as `solid-migration-assistant` at 0.2.1,
+released 2026-08-13. What is true is narrower than the original claim and narrower than its existence
+suggests: it sits in the `solidjs-community` organisation rather than in `solidjs`, it is at 0.2.1
+with 5 stars, and the migration guide states that it handles a subset of mechanical changes while
+batching semantics, effect and lifecycle changes and the `<For>`/`<Index>` changes remain manual.
 Authorship on the branch carrying 2.0 is **89.8%**, not "over ninety percent" as recorded: of the 1914
 commits `next` is ahead of `main`, ryansolid authored 1718.
 
@@ -286,11 +293,17 @@ the RC cadence above is plausible within this project's M1.
 
 *Measured — `gh api repos/solidjs/solid/compare/main...next` for the authorship split and
 `solid-js@2.0.0-rc.8`'s release metadata, plus a line count of
-`documentation/solid-2.0/MIGRATION.md` and a code search for "codemod" across the repository. Run
-2026-09-17 by a research agent, which stated its method. I did not run it.*
+`documentation/solid-2.0/MIGRATION.md`. Run 2026-09-17 by a research agent, which stated its method.
+I did not run it.*
 
-*Corrected 2026-09-17: "over ninety percent" was recorded 2026-08-31 with no source. The measured
-figure is 89.8% on the 2.0 branch, and 78.1% across `main` lifetime.*
+*Sourced for the codemod — `gh api repos/solidjs-community/solid-migration-assistant` and the npm
+registry, both run by me on 2026-09-17.*
+
+*Corrected 2026-09-17, twice. "Over ninety percent" was recorded 2026-08-31 with no source; the
+measured figure is 89.8% on the 2.0 branch and 78.1% across `main` lifetime. And "no codemod ships",
+written earlier the same day, was wrong: it rested on a code search of `solidjs/solid`, and the
+codemod lives in a different organisation, so the search could not have found it either way. A
+repository-scoped search is not evidence about an ecosystem.*
 
 **Lit's elimination does not stand. The disqualifying half of it is wrong.** The tooling-decay half
 holds: `lit-analyzer` is at 2.0.3, published 2024-01-09, and nothing has shipped since. The half that

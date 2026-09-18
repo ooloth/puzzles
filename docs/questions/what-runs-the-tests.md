@@ -51,8 +51,7 @@ follows is established from Bun's documentation and issue tracker instead.
 
 **`bun test` has a watch mode.** `bun test --watch` is documented and works. It reruns the whole suite
 on any change rather than only affected tests (issues 4825 and 7546) and does not pick up newly added
-test files (issue 8342). That is a real weakness and a much smaller one than the absence recorded
-before.
+test files (issue 8342). That is a real weakness and a small one.
 
 *Sourced — [bun.com/docs/cli/test](https://bun.com/docs/cli/test), read 2026-09-04 by a research
 agent. I did not open it.*
@@ -72,9 +71,10 @@ this app's own components is impossible for the reason above.*
 2026-08-20, records a JSDOM fragment containing one `<button>` producing a 146,955-line, 7.5 MB
 snapshot against Jest 30.3.0's 9 lines and 4 KB. Issue 40077, open, filed 2026-08-22, records
 `toMatchSnapshot()` on a live DOM node attempting a ~30 GB allocation. An 81-cell grid is exactly that
-shape, so the conclusion the invented anecdote pointed at survives on real evidence.
+shape, so the conclusion rests on the two issues above rather than on the anecdote that circulates
+about this defect, which matches nothing in the tracker.
 
-*Sourced — oven-sh/bun issues 39768 and 40077, re-read 2026-09-17 by a research agent which quoted
+*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent which quoted
 39768's comparison table verbatim. I did not open them.*
 
 *Two things about those issues that a reader will otherwise get wrong, the same as in
@@ -85,8 +85,8 @@ findings, of which the ~30 GB allocation is one, so its state says nothing about
 quantified reports cover single nodes: any figure for what a whole suite costs is unsourced wherever
 it turns up.*
 
-**Vitest under Bun is not a hedge.** It was shipped broken at the time of the research and is not
-covered by Vitest's own test matrix.
+**Vitest under Bun is not a hedge.** It is not covered by Vitest's own test matrix, and was broken
+under Bun when last checked.
 
-*Sourced — Vitest's own test matrix. Not re-checked in the 2026-09-04 pass, so its currency is
-unknown; every other claim in this section that was checked that day had changed or was wrong.*
+*Sourced — Vitest's own test matrix, read 2026-09-04. Its currency is unknown, and claims about this
+field go stale in days, so re-check it before it decides anything.*

@@ -31,11 +31,17 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 ## Options
 
-*pnpm.* Content-addressed store, strict by default, no surprises found.
+**All three deny dependency install scripts by default**, through three different configuration
+shapes, so none of them is the safe one and none is the hazardous one. What separates them is which
+allowlist is least likely to be got wrong, and nothing here has compared them on that.
 
-*npm.* Bundled with Node, slowest, most universally understood.
+*pnpm.* Content-addressed store, strict by default. Install scripts are governed by `allowBuilds`.
 
-*Bun.* Fastest by a wide margin, and carrying the two footguns below.
+*npm.* Bundled with Node, slowest, most universally understood. Install scripts are governed by an
+`allowScripts` policy on the root package.
+
+*Bun.* Fastest by a wide margin. Install scripts are governed by `trustedDependencies`, which replaces
+a default allowlist rather than extending it, and it carries the lockfile question below.
 
 ## Findings
 

@@ -141,6 +141,10 @@ per-major-version price do not correspond to anything on the site, so a nightly-
 or paid-per-major-version claim is unsourced wherever it turns up. The revocable licence disqualifies
 Elide on its own and needs none of it.
 
+*Sourced — the terms of service opened by me; the pricing page read 2026-09-17 by a research agent,
+which I did not open. The absence of those three words from the terms is mine; the pricing quotes are
+the agent's.*
+
 **What survives is Node, Deno and Bun, and Andromeda is eliminated on replacement cost.** Andromeda is
 at 0.1.14, released 2026-06-13, under MPL-2.0, with a built-in HTTP server and SQLite support; its
 bundler is a separate satellite tool rather than part of the core runtime binary. No release has ever
@@ -178,11 +182,11 @@ commits, which is judgement rather than measurement.*
 **txiki.js is eliminated on the language, not on age.** Its last release `v26.6.0` is dated
 2026-06-22, so it is a live project rather than a dormant one, and a claim placing that release in an
 earlier year is wrong. What removes it is the documentation above: its TypeScript execution is
-documented as absent rather than merely unestablished.
+documented as absent.
 
-*Sourced — `gh release list --repo saghul/txiki.js` for the date, which two separate summarisation
-passes over the same GitHub releases page had reported wrongly as 2025 and 2024. Read 2026-09-17 by a
-research agent; I did not open it.*
+*Sourced — `gh release list --repo saghul/txiki.js`, read 2026-09-17 by a research agent; I did not
+open it. Take the date from the release API rather than from a reading of the releases web page, which
+has produced wrong years more than once.*
 
 
 **Nothing has been measured.** No candidate has been run here.
@@ -290,8 +294,9 @@ only `:memory:` runs unflagged. That boundary is real enough to have had a bypas
 [Deno's Node API compatibility reference](https://docs.deno.com/runtime/reference/node_apis/) read
 2026-09-03. All three opened by me. Node's stability index was re-checked on 2026-09-17 and still
 reads "1.2 - Release candidate": the module went unflagged in v23.4.0 and v22.13.0 and reached
-release-candidate status in v25.7.0, and it has not been promoted to "2 - Stable". An earlier agent
-report that it was fully stable in Node 26 was wrong and the documentation has never said so.*
+release-candidate status in v25.7.0, and it has not been promoted to "2 - Stable". The documentation
+has never described it as stable, so a claim that it is, in Node 26 or any other version, is
+unsourced.*
 
 *Unverified at its source for the permission flags — the `--allow-read` and `--allow-write`
 requirement is not stated on Deno's own `node:sqlite` page or its Node-compatibility reference, and

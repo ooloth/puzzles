@@ -117,7 +117,7 @@ question.** Reading one natively, per their own documentation: webpack (`target:
 Rspack (the same option), Rsbuild (its primary mechanism, defaulting to
 `chrome >= 107, edge >= 107, firefox >= 104, safari >= 16` when none is given), Parcel (the
 `browserslist` field in `package.json`), Next.js and the Angular CLI. Not reading one: Vite core,
-esbuild, Rollup, Rolldown, Bun and Farm.
+esbuild, Rollup, Rolldown, Oxc, Bun and Farm.
 
 That split does not disqualify the second group, and nothing here should be read as though it did. The
 floor's format is [open](what-format-declares-the-browser-floor.md) and is answered alongside this
@@ -216,7 +216,7 @@ allocation is one, so it is not a snapshot issue and its state says nothing abou
 **The quantified reports cover single nodes, and no source quantifies a whole suite.** Any figure for
 what a full test run costs under this defect is unsourced wherever it turns up.
 
-*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent which quoted
+*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent that quoted
 39768's comparison table verbatim. I did not open them.*
 
 **None of this rules Bun out as a package manager, a test runner for non-browser code, or a
@@ -295,9 +295,8 @@ result in a field this perishable:
   `% Funcs` and `% Lines`.
 - Vite's `build.target`. The word browserslist still does not appear on the option's page.
 - Vite's Baseline default. The resolved list `['chrome111', 'edge111', 'firefox114', 'safari16.4',
-  'ios16.4']` and its 2026-01-01 pin **are** on the page, which settles a discrepancy noted in
-  [what format declares the browser floor?](what-format-declares-the-browser-floor.md) where my own
-  earlier read did not surface them.
+  'ios16.4']` and its 2026-01-01 pin **are** on the page. A read of that page that does not surface
+  them has missed them rather than found the page changed.
 - Vite 8's GA on 2026-03-12 and Rolldown 1.0 on 2026-05-07, which is 56 days.
 - vitejs/vite issue 23377 is still open. Its "against Vite 8.2.2" detail was not re-checked.
 - Cloudflare's acquisition of VoidZero on 2026-06-04, the $1 million ecosystem fund and the MIT

@@ -52,10 +52,11 @@ below record both why that is evidence and why it is weak evidence.
 
 *A component framework.* Given
 [ADR-0007](../decisions/0007-that-language-is-typescript.md), the field is React, Preact, Vue, Svelte,
-Solid and Lit. **Nothing in this class is eliminated**, and the Findings say per candidate why. Every
-concern raised against one of them has been a stewardship concern, and
+Solid and Lit. **Nothing in this class is eliminated**, and the Findings say per candidate why. Two of
+the concerns against candidates here are wrong on their facts; the rest are stewardship concerns,
+which
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-prices those by what leaving the position costs rather than treating them as disqualifiers. Vue has no
+prices by what leaving the position costs rather than treating as disqualifiers. Vue has no
 disqualifier and no advantage, which is a reason to leave it in rather than to narrow it out. React
 and Preact share a programming model, so comparing them is one comparison rather than two.
 
@@ -171,8 +172,8 @@ long-running codebase. Neither shape is this app, and neither one's reasons obvi
 survives is that the split is a real option that a serious project chose, not that it is correct here.
 
 *A judgement about how far the evidence above reaches, so it carries no tier. The projects and their
-architectures are sourced in the finding it comments on. **The Lichess example is deleted** along with
-the claim above it, and SudokuPad's "decade-old" was an unsourced age that nothing here established.*
+architectures are sourced in the finding it comments on. Nothing here establishes SudokuPad's age, so
+any figure for it is unsourced wherever it turns up.*
 
 **The surviving argument for a framework is not rendering.** It is the dev server, the state-to-DOM
 binding not being hand-maintained, and the ecosystem around the browser APIs this design leans on.
@@ -286,18 +287,18 @@ with `$state.snapshot(counter)` as the one-call fix.*
 and does not mention serialisation, so the behaviour is reproducible and the framing "identical
 problem, documented fix" holds only for Svelte.*
 
-**Solid's timing facts hold, with one number corrected, and the elimination they support does not
-stand on its own.** Solid 2.0 is at `solid-js@2.0.0-rc.8`, published 2026-09-11. The migration guide
+**Solid's timing facts hold, and the elimination they support does not stand on its own.** Solid 2.0
+is at `solid-js@2.0.0-rc.8`, published 2026-09-11. The migration guide
 is 1033 lines. The only compatibility affordance in the guide is one opt-in line offering "old 'path
 argument' ergonomics via storePath", which is an ergonomic rather than a 1.x compatibility layer.
 
-**A codemod does exist, and the earlier claim that none ships was wrong.**
+**A codemod exists, and it is thinner than its existence suggests.**
 `solidjs-community/solid-migration-assistant` describes itself as a "Safe Solid 1.x to Solid 2
 migration codemod", was pushed 2026-09-14, and publishes as `solid-migration-assistant` at 0.2.1,
-released 2026-08-13. What is true is narrower than the original claim and narrower than its existence
-suggests: it sits in the `solidjs-community` organisation rather than in `solidjs`, it is at 0.2.1
-with 5 stars, and the migration guide states that it handles a subset of mechanical changes while
-batching semantics, effect and lifecycle changes and the `<For>`/`<Index>` changes remain manual.
+released 2026-08-13. It sits in the `solidjs-community` organisation rather than in `solidjs`, it is
+at 0.2.1 with 5 stars, and the migration guide states that it handles a subset of mechanical changes
+while batching semantics, effect and lifecycle changes and the `<For>`/`<Index>` changes remain
+manual.
 Authorship on the branch carrying 2.0 is **89.8%**: of the 1914
 commits `next` is ahead of `main`, ryansolid authored 1718.
 
@@ -379,10 +380,9 @@ that does not re-render when written the same value, a case where React differs.
 the boolean `checked` attribute. A search of the repository for open checkbox and `checked` issues
 returns fifteen results, all closed.
 
-That removes the sharp edge of the original claim, which was that the defect is "precisely the shape
-of an 81-cell board with locked givens". A board of locked givens is a `readonly` or `disabled` value
-input rather than a set of checkboxes, so issue 1899 may still be on the path; what is now clear is
-that nobody has checked whether it is.
+**Whether it lands on this app's path is unchecked.** A board of locked givens is a `readonly` or
+`disabled` value input rather than a set of checkboxes, so issue 1899 may or may not be reachable
+here, and nobody has tried it.
 
 *Sourced — [preactjs/preact issue 1899](https://github.com/preactjs/preact/issues/1899) and a GitHub
 issue search for checkbox and `checked` in the same repository, read 2026-09-17 by a research agent. I
@@ -399,6 +399,6 @@ own `package.json` files. So apps with this app's persistence and sync shape are
 *Sourced — each project's `package.json` read via the GitHub API on 2026-09-17 by a research agent. I
 did not open them.*
 
-*This repeats the finding above and is kept only for the three projects it adds. **Deleted from it**:
-that the set is "near-unanimously React with Vite". Nothing checked which bundler any of them uses,
-and Logseq's core is ClojureScript with React only in the UI layer, which the original phrasing hid.*
+*This repeats the finding above and is kept only for the three projects it adds. Nothing here checked
+which bundler any of them uses, so a claim pairing this set with a named bundler is unsourced wherever
+it turns up. Logseq's core is ClojureScript with React only in the UI layer.*

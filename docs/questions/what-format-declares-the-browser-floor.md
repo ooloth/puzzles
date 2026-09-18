@@ -77,7 +77,8 @@ the others cannot.
 **The three consumers do not agree on a format, and the disagreement is inside the bundler role.**
 Reading a browserslist config natively, per their own documentation: webpack (`target: "browserslist"`),
 Rspack (the same option), Rsbuild (its primary mechanism), Parcel (the `browserslist` field in
-`package.json`), Next.js and the Angular CLI. Not reading one: Vite, esbuild, Rolldown and Oxc, all of
+`package.json`), Next.js and the Angular CLI. Not reading one: Vite core, esbuild, Rollup, Rolldown,
+Oxc, Bun and Farm, all of
 which take an environment-name-plus-version string such as `chrome58` or an ES-year string such as
 `es2020`. The split tracks tool generation rather than quality: the browserslist-native set is the
 webpack lineage and the other set is the esbuild and Oxc lineage.
@@ -135,10 +136,9 @@ it applies to any tier query whatever format carries it.
 *Sourced for Vite's pinned list — [vite.dev/config/build-options.html](https://vite.dev/config/build-options.html),
 which states that the default "targets the minimum browser versions compatible with Baseline Widely
 Available as of a date fixed for each major release (`2026-01-01` for this major). Specifically, it is
-`['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`." Confirmed on the page by a second
-reader on 2026-09-17, settling a discrepancy recorded on 2026-09-16 where my own read of the page did
-not surface the resolved list and the agent's did. The list is there; the earlier disagreement was a
-reading failure rather than a difference in the page.*
+`['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`." Confirmed on the page by two
+readers, 2026-09-16 and 2026-09-17. The list is on the page, so a read that does not surface it has
+missed it rather than found the page changed.*
 
 *Measured for the live resolution — by me, with the method given above.*
 

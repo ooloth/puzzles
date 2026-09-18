@@ -1,5 +1,5 @@
 ---
-number: 27
+number: 0027
 status: accepted
 date: 2026-09-17
 ---
@@ -72,8 +72,11 @@ reasoned rather than measured and says so.
   option above applies.
 
 - **Stewardship does not bind at all, and only replacement cost is scored** — because replacement cost
-  is identical across candidates for a given position, so alone it cannot separate a runtime at 0.1.14
-  with seven authors from one with 428. **Reverses if** every position becomes cheaply reversible.
+  is identical across candidates for a given position, so alone it cannot separate Andromeda, which has
+  never shipped a 1.0 and took 89 commits from seven authors in a year, from Node, which took 3,496
+  from 428. Those figures and their method are under **Findings** in
+  [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md).
+  **Reverses if** every position becomes cheaply reversible.
 
 - **Not yet** — because three question files were already eliminating candidates on stewardship, so
   deferring does not keep the option open. It moves the elimination to the spike, where it gets made

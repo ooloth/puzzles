@@ -35,16 +35,21 @@ question and is asked rather than assumed.
 
 ## Resolves into
 
-Unsettled, and deliberately left so. The three values this folder uses are `decision`, `constraint`
-and `problem`. This is none of them cleanly: it settles no choice, it records no fact about the
-world outside the repo, and it restates no part of the problem. What it produces is the scoring
-criteria that several records in [../decisions/](../decisions/) will each cite.
+Unsettled, and deliberately left so. Of the folder's other three values this is none of them cleanly:
+it settles no choice, it records no fact about the world outside the repo, and it restates no part of
+the problem. What it produces is the scoring criteria that several records in
+[../decisions/](../decisions/) will each cite.
 
-Two ways out, and neither has been argued: stretch one of the three, or let the folder carry a
-fourth. The frontmatter says `unsettled` until one is chosen, because a value picked to satisfy the
-checker would be a wrong answer to a question nobody asked. The research backlog is found by
-searching for `resolves_into: constraint` and the open choices by searching for
-`resolves_into: decision`, so a guess here would land this file in a query it does not belong in.
+Two ways out, and neither has been argued: stretch one of the three, or give this shape a value of its
+own. The frontmatter says `unsettled` until one is chosen, because a value picked to satisfy the
+checker would be a wrong answer to a question nobody asked. The research backlog is found by searching
+for `resolves_into: constraint` and the open choices by searching for `resolves_into: decision`, so a
+guess here would land this file in a query it does not belong in.
+
+**`unsettled` is now a documented value rather than a placeholder the checker happens to tolerate**,
+defined in [README.md](README.md) and enforced by `scripts/check-docs.py`, which rejects anything
+outside the four. That makes the state above visible instead of silent. It does not answer the
+question, and this file is the only one carrying the value.
 
 ## Source
 

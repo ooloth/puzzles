@@ -406,6 +406,18 @@ SCHEMAS = {
 }
 DEFAULT_SCHEMA = ('updated', 'update_when', 'decays')
 
+# Checking the key is present is not the same as checking it says something.
+# `resolves_into` partitions the questions folder: `rg 'resolves_into: constraint'`
+# is the research backlog and `resolves_into: decision` is the open choices. A
+# value outside this set silently drops a file out of both queries, which is how
+# a file goes missing from a list nobody knows to check. `unsettled` is a real
+# value rather than a placeholder, and questions/README.md says what it means.
+ENUMS = {
+    ('docs/questions', 'resolves_into'): (
+        'decision', 'constraint', 'problem', 'unsettled',
+    ),
+}
+
 
 def check_frontmatter():
     for root, dirs, files in os.walk('docs'):
@@ -425,12 +437,24 @@ def check_frontmatter():
                 problems.append(f'FRONTMATTER  {path} has none')
                 continue
             head = text.split('---\n', 2)[1]
-            keys = {l.split(':', 1)[0].strip() for l in head.split('\n') if ':' in l}
-            missing = [k for k in required if k not in keys]
+            fields = {}
+            for l in head.split('\n'):
+                if ':' in l:
+                    k, v = l.split(':', 1)
+                    fields[k.strip()] = v.strip()
+            missing = [k for k in required if k not in fields]
             if missing:
                 problems.append(
                     f'FRONTMATTER  {path} missing {", ".join(missing)}'
                 )
+            for (folder, key), allowed in ENUMS.items():
+                if root != folder or key not in fields:
+                    continue
+                if fields[key] not in allowed:
+                    problems.append(
+                        f'FRONTMATTER  {path} has {key}: {fields[key]!r}, '
+                        f'not one of {", ".join(allowed)}'
+                    )
 
 
 check_links()

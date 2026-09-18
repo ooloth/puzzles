@@ -693,9 +693,19 @@ recorded yet — the empty ones are the reminder of what hasn't been thought abo
 looked and there is nothing — no blockers, or no options because the question resolves into a
 fact rather than a choice.
 
-Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, or
-`problem`. That last one partitions the folder: `rg -l 'resolves_into: constraint'` is the
+Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, `problem`, or
+`unsettled`. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
 research backlog, and everything resolving into a decision is a choice waiting to be made.
+
+**`unsettled` means where the answer lands has not been argued**, not that the question is unanswered
+— `status` already says that. It exists because a value picked to satisfy the checker would be a wrong
+answer to a question nobody asked, and because a file given the wrong value silently drops out of both
+queries above, which is how a file goes missing from a list nobody knows to check. It is a real value
+rather than a placeholder, so a file carrying it says under **Resolves into** what the ways out are.
+It is also the one value that should be rare: exactly one file carries it today.
+
+`scripts/check-docs.py` rejects any other value, so a typo and an invented category both fail rather
+than passing quietly.
 
 The first six sections are stable and short. **Why it matters** is what's blocked or what gets
 expensive if we're wrong. **There are no Blocked by, Blocks, or What this decides beyond itself
@@ -778,7 +788,7 @@ question that was split says what it no longer covers so a reader does not go lo
 ---
 opened: YYYY-MM-DD
 status: open
-resolves_into: decision | constraint | problem
+resolves_into: decision | constraint | problem | unsettled
 ---
 
 # <The question, asked in plain words?>

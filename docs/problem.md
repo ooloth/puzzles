@@ -96,6 +96,14 @@ And every puzzle served has exactly one solution, reachable by logic alone.
 
 A small, genuinely public v1 within a few months.
 
+**And active attention for years after it.** The maintainer intends to keep building on this rather
+than to ship it and leave it running, so the system is worked on rather than merely maintained. That
+is a statement of intent and not a prediction, and it is here because decisions get made against it:
+it sets what being wrong about a dependency costs, which is
+[ADR-0027](decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
+Under a short horizon a dependency going bad is an outage nobody fixes; under this one it is work
+somebody is present for.
+
 For the maintainer: an interface worth being proud of, a puzzle waiting each morning that this
 project generated, and a system whose operation is worth describing to someone hiring for it.
 

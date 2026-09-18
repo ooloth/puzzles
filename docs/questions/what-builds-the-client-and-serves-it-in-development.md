@@ -60,10 +60,10 @@ every other part of the toolchain, and those are separate choices tracked in the
 **The tooling for generating a precache manifest exists for one toolchain and not the other.**
 See [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md).
 
-**This field is perishable, and the dates below are load-bearing.** Findings were first gathered
-2026-08-31 against Bun 1.4.0. On re-checking 2026-09-04, three of the five recorded against Bun's
-bundler had died or weakened, one of them in a release that shipped that same morning. A candidate
-list here carries an "as of" date or it misleads.
+**This field is perishable, and the dates below are load-bearing.** A claim about a bundler can be
+overtaken by a release that ships the same week, and a batch of five can lose three in one re-check.
+So every finding here carries the date it was checked, a candidate list is re-checked rather than
+trusted, and an undated claim about a tool is treated as unverified whatever it says.
 
 **Bun's bundler does not down-convert syntax.** Its `target` accepts only `browser`, `bun` or
 `node`, and the documentation states: "Bun does not down-convert syntax; if you use recent
@@ -72,18 +72,18 @@ target-browser-version option, so the escape hatch is a separate transform pass.
 exception and cuts the other way: Bun downlevels it through Lightning CSS to a fixed baseline with
 no way to configure or disable that.
 
-*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), re-opened and re-quoted by me on
-2026-09-17. The page still carries the sentence verbatim, `target` still accepts only the three
-values, and no browser-version or browserslist option has appeared. Bun's CSS baseline is documented
+*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), opened and quoted by me on
+2026-09-17. The page carries the sentence verbatim, `target` accepts only the three values, and it
+documents no browser-version or browserslist option. Bun's CSS baseline is documented
 at [bun.com/docs/bundler/css](https://bun.com/docs/bundler/css) as Edge 80+, Firefox 78+, Chrome 80+,
 Safari 14+ and Opera 67+, with no option to change it.*
 
-*Corrected 2026-09-17 on the issue numbers. Issue 40361 is open, and it is narrower than "browserslist
-integration": its title is "Bun.build has no way to set CSS browser targets, so oklch() is always
-downlevelled". Its body does record a browserslist config being set and ignored. Issue 40133 was
-closed as a duplicate of it on 2026-09-13, with the maintainer noting both "ask for the same feature:
-an option to set the CSS browser targets". Read from the GitHub API 2026-09-17 by a research agent; I
-did not open them.*
+*Sourced for the issues — Bun issue 40361 is open, and it is narrower than a general browserslist
+request: its title is "Bun.build has no way to set CSS browser targets, so oklch() is always
+downlevelled", though its body does record a browserslist config being set and ignored. Issue 40133 is
+closed as a duplicate of it, the maintainer noting that both "ask for the same feature: an option to
+set the CSS browser targets". Read from the GitHub API 2026-09-17 by a research agent; I did not open
+them.*
 
 **Vite's bundler does not read a browserslist config either, and that is the same disqualifier.** Its
 `build.target` accepts `'baseline-widely-available'` (the default), `'esnext'`, an ES version such as
@@ -100,16 +100,17 @@ config sources and then fallback to the default value". That value "is passed on
 `@babel/preset-env` when rendering **legacy chunks**", and the plugin generates "a corresponding
 legacy chunk for every chunk in the final bundle". So it emits a second bundle beside the modern one
 rather than lowering one bundle to a declared floor, which is not the shape
-[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) describes. A
-`modernTargets` defaults to `'edge>=105, firefox>=106, chrome>=105, safari>=16.4, chromeAndroid>=105,
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) describes.
+
+**`modernTargets` is a polyfill selector rather than a second lowering target.** It defaults to `'edge>=105, firefox>=106, chrome>=105, safari>=16.4, chromeAndroid>=105,
 iOS>=16.4'` and "is passed on to `@babel/preset-env` when collecting polyfills for **modern chunks**",
 overriding `build.target` when set. So it governs which polyfills the modern chunks receive rather
 than being a second lowering target, which does not change the conclusion above.
 
 *Sourced — the plugin's README at
 [github.com/vitejs/vite/tree/main/packages/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy),
-read 2026-09-16 by me. The `modernTargets` scope, left open then, was settled on 2026-09-17 by a
-research agent reading the same README from the `main` branch; I did not re-open it.*
+read 2026-09-16 by me. The `modernTargets` quotes are from the same README on the `main` branch,
+read 2026-09-17 by a research agent; I did not open that one.*
 
 **The bundlers split on whether they read a browserslist config, and the split does not decide this
 question.** Reading one natively, per their own documentation: webpack (`target: "browserslist"`),
@@ -174,8 +175,6 @@ Parcel tooling: `registry.npmjs.org/-/v1/search?text=bun-plugin-workbox&size=10`
 `?text=bun-plugin%20service-worker&size=20`. Run by a research agent; I did not run them. This is what
 npm's search surfaces and does not rule out an unindexed package.*
 
-*Upgraded 2026-09-17 from "Unverified — no query was recorded that anyone could re-run". The queries
-are now recorded.*
 
 **Almost nobody ships a browser build with it.** GitHub code search returns 1,089,536 hits for
 `filename:vite.config.ts` and 855 for `"Bun.build(" language:javascript`, a ratio near 1,274:1;
@@ -206,21 +205,19 @@ pure rules module most wants measured.
 **Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, filed
 2026-08-20, reports that snapshotting a JSDOM fragment containing a single `<button>` produced a
 146,955-line, 7.5 MB snapshot file, against Jest 30.3.0's 9-line, 4 KB output for the same input.
-Issue 40077, open, filed 2026-08-22, includes a report of `toMatchSnapshot()` on a live DOM node
-attempting a ~30 GB allocation. An 81-cell grid is exactly this shape.
+Issue 40077, open, includes a report of `toMatchSnapshot()` on a live DOM node attempting a ~30 GB
+allocation. An 81-cell grid is exactly this shape.
 
-*Sourced — oven-sh/bun issues 39768 and 40077, re-read 2026-09-17 by a research agent which quoted
+**Two things about those issues that a reader will otherwise get wrong.** Issue 39768 is closed as a
+duplicate of issue 5540, which moves where the defect is tracked rather than fixing it, so 5540 is the
+issue to watch. And 40077 is an omnibus report bundling four separate findings, of which the ~30 GB
+allocation is one, so it is not a snapshot issue and its state says nothing about snapshots alone.
+
+**The quantified reports cover single nodes, and no source quantifies a whole suite.** Any figure for
+what a full test run costs under this defect is unsourced wherever it turns up.
+
+*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent which quoted
 39768's comparison table verbatim. I did not open them.*
-
-*Corrected 2026-09-17, twice. **Issue 39768 is no longer open**: it was closed as a duplicate of issue
-5540 on 2026-09-13, four days ago. The defect it describes is unchanged and 5540 is where it now
-lives, so this is a change in where the problem is tracked rather than a fix. And **issue 40077 is not
-about one bug**: it is an omnibus report bundling four separate findings, of which the ~30 GB
-allocation is the first. Describing it as the snapshot issue understates its scope.*
-
-*Deleted 2026-09-17: that a React suite "grew past 40 GB and made the machine unresponsive". The
-re-check quoted 39768's table and did not carry this figure, and no source for it was recorded. It was
-found unsourced.*
 
 **None of this rules Bun out as a package manager, a test runner for non-browser code, or a
 server runtime.** Those are separate decisions, each reversible in about one line, and the
@@ -261,18 +258,44 @@ research agent. No source, official or third-party, publishes comparative post-r
 statistics for 1.4.0; treat any figure claiming issue volume or crash rates against a prior major as
 unsourced.*
 
-**Re-checked on 2026-09-17 and unchanged.** Recorded because a result that changed nothing is still a
-result, and because this field was already flagged as perishable:
+**The build field's activity, over the twelve months to 2026-09-17**, and what it is worth here.
+Commits, distinct authors, the share held by the most prolific human, and the latest release:
+
+- **Rspack** — 2,614 commits, 101 authors, top human 17.3%, v2.2.6 on 2026-09-17. ByteDance's web
+  infrastructure team.
+- **Rsbuild** — 2,102 commits, 50 authors, top human **75.5%**, v2.2.7 on 2026-09-16. Same team.
+- **webpack** — 1,498 commits, 51 authors, top human 54.9%, v5.111.0 on 2026-09-14. OpenJS Foundation.
+- **Vite** — 1,250 commits, 210 authors, top human 42.9%, v8.3.0 on 2026-09-10. Steward VoidZero
+  acquired by Cloudflare on 2026-06-04.
+- **Parcel** — **14 commits, 4 authors**, top human 71.4%, v2.16.4 on 2026-02-02. Individual-led.
+
+**Parcel is the quietest project surveyed in any category**, and a build pipeline is more expensive to
+leave than a router because the precache manifest, the lowering target and the dev server all hang off
+it. Under
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+that combination is where a supply concern carries real weight, so Parcel needs a reason to be chosen
+that the rest of the field does not.
+
+**Corporate backing did not predict many hands, and foundation governance did not predict activity.**
+Rsbuild is the most human-concentrated project found anywhere in the M1 field and it is corporate
+backed. That is why this list is recorded as facts rather than as a ranking.
+
+*Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, run
+by a research agent that sampled the top author's commits to confirm they were not a bot. Parcel's
+figure I re-ran myself and confirmed at 14.*
+
+**Confirmed against source, and worth recording because a result that changes nothing is still a
+result in a field this perishable:
 
 - Bun's worker-bundling gap. Issue 18601 is **still open** with nothing checked off, so it is not
   fixed. Issues 17705 and 29478 were closed as duplicates of it on 2026-08-13, and PR 23279 was closed
   unmerged by `github-actions[bot]` on 2026-02-19 with "Closing this PR because it has been inactive
-  for more than 90 days". All four dates match what was recorded.
+  for more than 90 days".
 - Bun's branch coverage. Issue 7100 is still open, and the coverage documentation still shows only
   `% Funcs` and `% Lines`.
 - Vite's `build.target`. The word browserslist still does not appear on the option's page.
 - Vite's Baseline default. The resolved list `['chrome111', 'edge111', 'firefox114', 'safari16.4',
-  'ios16.4']` and its 2026-01-01 pin **are** on the page, which settles a discrepancy recorded in
+  'ios16.4']` and its 2026-01-01 pin **are** on the page, which settles a discrepancy noted in
   [what format declares the browser floor?](what-format-declares-the-browser-floor.md) where my own
   earlier read did not surface them.
 - Vite 8's GA on 2026-03-12 and Rolldown 1.0 on 2026-05-07, which is 56 days.

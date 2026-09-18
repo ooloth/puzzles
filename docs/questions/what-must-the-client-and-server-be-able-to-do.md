@@ -311,24 +311,19 @@ are audited for network copyleft rather than only for distribution copyleft. The
 source-available licence that reserves the right to withdraw permission, because the exposure is the
 same shape: the terms rather than the code decide whether the thing can keep being used.
 
-**Nothing in the repository supports a property about how well maintained a candidate is, and one is
-missing.** How many people author a project's commits, whether it has shipped in a year, and whether
-it is pre-1.0 all separate the surveyed candidates sharply, and none of them is derivable from
+**How well maintained a candidate is, is not a property in this list, and that is settled rather than
+missing.** How many people author a project's commits, whether it has shipped in a year and whether it
+is pre-1.0 separate the surveyed candidates sharply, and none of them is derivable from
 [../problem.md](../problem.md), [../constraints.md](../constraints.md),
-[../guarantees/](../guarantees/) or any record. The nearest thing is the ranking in
-[../problem.md](../problem.md) that puts clarity over cleverness because one person maintains this,
-and that is about the code written here rather than what it depends on. Until it has a source, an
-elimination on maintenance is an elimination on taste, and this file's rule is that a property
-without a citation is an assumption somebody has been carrying.
+[../guarantees/](../guarantees/) or any record. They are not requirements a candidate either meets or
+fails.
 
-**It cannot be closed by writing the property, because it is a choice rather than a derivation**, and
-it is asked at
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md). That
-question rests in turn on [what horizon is this built for?](what-horizon-is-this-built-for.md), which
-[../problem.md](../problem.md) does not currently answer. Whatever those settle is cited here rather
-than restated, in the same way every other property in this list cites its source. Where they settle
-that stewardship does not bind, this paragraph says so and the eliminations resting on it are reversed
-in the files that hold them.
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+is what they feed instead: a candidate is scored on what replacing it would cost, and a stewardship
+fact is weighted by how expensive the position is to reverse. So the same fact disqualifies a runtime
+and disqualifies nothing about a router, which is why it could never have been written here as a
+property. **A record eliminating a candidate on stewardship names the replacement cost that made the
+concern binding**, and one that does not has made an elimination on taste.
 
 ### What must stay reachable rather than be delivered now
 

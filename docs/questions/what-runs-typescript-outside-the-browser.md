@@ -133,29 +133,52 @@ The prohibitions are not load-bearing here and are recorded only so the terms ar
 *Sourced — [elide.dev/legal/terms](https://elide.dev/legal/terms/), opened and quoted by me on
 2026-09-17.*
 
-**Deleted from the Elide finding on 2026-09-17: that free access is nightly-only with a thirty-day
-expiry and that a stable build requires a purchase per major version.** None of it appears on
-elide.dev today. The words "nightly", "major version" and "stable" are absent from the terms of
-service, and the live pricing page offers a "Free developer license" with "Full CLI and runtime
-access, source available on GitHub" alongside an enterprise tier, with no per-version purchase. A
-search snippet citing a one-time per-major-version price could not be located on the site. Recorded as
-deleted rather than removed silently so it cannot return: it was found unsourced, and the elimination
-never needed it.
+**Elide's commercial terms are not part of the elimination, and claims about them do not hold.** The
+words "nightly", "major version" and "stable" are absent from the terms of service, and the pricing
+page offers a "Free developer license" with "Full CLI and runtime access, source available on GitHub"
+alongside an enterprise tier, with no per-version purchase. Search snippets citing a one-time
+per-major-version price do not correspond to anything on the site, so a nightly-only, thirty-day-expiry
+or paid-per-major-version claim is unsourced wherever it turns up. The revocable licence disqualifies
+Elide on its own and needs none of it.
 
-**What survives is Node, Deno, Bun and Andromeda.** The first three are the incumbents. Andromeda is
+**What survives is Node, Deno and Bun, and Andromeda is eliminated on replacement cost.** Andromeda is
 at 0.1.14, released 2026-06-13, under MPL-2.0, with a built-in HTTP server and SQLite support; its
-bundler is a separate satellite tool rather than part of the core runtime binary. It is not eliminated
-by a binding property, and the attribute that would separate it from the incumbents is maturity, which
-has no source here and is asked at
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md).
+bundler is a separate satellite tool rather than part of the core runtime binary. No release has ever
+crossed 1.0 and the full tag history is 0.1.0 through 0.1.14.
 
-*Sourced — `gh release list --repo tryandromeda/andromeda` and the project's `Cargo.toml` and README,
-read 2026-09-17 by a research agent. I did not open them.*
+The disqualifying reason is the one
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+names: **the runtime is the least reversible position in the stack**, because the server, the
+generator, the test runner and every script sit on it, so leaving it means re-scaffolding all four
+rather than swapping a module behind an interface. A runtime whose supply rests on seven authors and
+89 commits a year is a bet taken in the one place with no cheap exit. The same facts about a router
+would disqualify nothing. **Reverses if** Andromeda reaches a stable release with a contributor base
+that does not depend on one person, or if the spike shows leaving a runtime is cheaper than assumed.
 
-**txiki.js was a survivor on the 2026-09-16 pass and is not one now.** Two corrections from the
-2026-09-17 re-check: its last release `v26.6.0` is dated 2026-06-22, which is three months ago rather
-than "of the previous year" as recorded, and its TypeScript execution is not merely unestablished but
-documented as absent, which moves it into the language group above.
+*Measured — over the twelve months to 2026-09-17, Node took 3,496 commits from 428 distinct authors
+across 59 releases; Deno 3,055 from 200 across 47; Bun 4,610 from 103 across 19; Andromeda 89 from 7
+across 26. Counted with `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by
+author, run by a research agent that stated its command. I did not run it. Distinct-author counts are
+by GitHub login falling back to commit email, so one person using two unlinked addresses counts twice.*
+
+*Sourced — `gh release list --repo tryandromeda/andromeda` and the project's `Cargo.toml` and README.*
+
+**Read raw, single-author concentration says the opposite of what it appears to say.** The most
+prolific committer across twelve months is an automation account in three of these four: Bun's is
+`robobun` at 60.9%, Node's is `nodejs-github-bot` at 8.2%. The most prolific human is a different
+account with a different share: Bun's is Jarred-Sumner at 14.7%, Node's is aduh95 at 8.1%, and Deno's
+is Bartek Iwańczuk at 36.8%, which makes Deno the most human-concentrated of the three incumbents.
+
+**Any argument reaching for this number excludes bots first**, and nothing does that automatically.
+The failure is silent, because the raw figure looks like a measurement either way.
+
+*Measured — as above. The bot-versus-human split was made by reading account names and sampling
+commits, which is judgement rather than measurement.*
+
+**txiki.js is eliminated on the language, not on age.** Its last release `v26.6.0` is dated
+2026-06-22, so it is a live project rather than a dormant one, and a claim placing that release in an
+earlier year is wrong. What removes it is the documentation above: its TypeScript execution is
+documented as absent rather than merely unestablished.
 
 *Sourced — `gh release list --repo saghul/txiki.js` for the date, which two separate summarisation
 passes over the same GitHub releases page had reported wrongly as 2025 and 2024. Read 2026-09-17 by a
@@ -270,14 +293,14 @@ reads "1.2 - Release candidate": the module went unflagged in v23.4.0 and v22.13
 release-candidate status in v25.7.0, and it has not been promoted to "2 - Stable". An earlier agent
 report that it was fully stable in Node 26 was wrong and the documentation has never said so.*
 
-*Weakened 2026-09-17 — the Deno permission-flag claim. A re-check could not find the
-`--allow-read`/`--allow-write` requirement stated on Deno's own `node:sqlite` or Node-compatibility
-pages; the agent found it only in a search summary it did not open. The claim is plausible and
-consistent with Deno's permissions model, and it is unverified at its source. It changes a run command
-rather than what can be built, so nothing here should turn on it either way.*
+*Unverified at its source for the permission flags — the `--allow-read` and `--allow-write`
+requirement is not stated on Deno's own `node:sqlite` page or its Node-compatibility reference, and
+turns up only in search summaries nobody has opened. It is plausible and consistent with Deno's
+permissions model. It changes a run command rather than what can be built, so nothing here should turn
+on it either way.*
 
 **The three runtimes' governance differs, and it is a live input for a solo maintainer on a
-multi-year horizon.** Node is governed by the OpenJS Foundation, with v24 in Active LTS since
+years of active attention.** Node is governed by the OpenJS Foundation, with v24 in Active LTS since
 2025-10-28 (Maintenance from 2026-10-20), v22 in Maintenance until 2027-04-30, and v26 Current with
 LTS scheduled for 2026-10-28. Bun is owned by Anthropic and stays MIT with the same team. Deno is
 Deno Land Inc., a venture-funded company rather than a foundation, and its petition against Oracle
@@ -285,9 +308,13 @@ over the "JavaScript" trademark is unresolved: the fraud claim was dismissed 202
 answered 2025-08-06, discovery opened 2025-09-06, and the genericness and abandonment claims remain
 active.
 
-**That horizon is the thing this paragraph rests on and no document states it.** See
-[what horizon is this built for?](what-horizon-is-this-built-for.md). Until it lands, this is a set of
-facts with no criterion attached to it.
+**What these facts are worth here is set by
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).**
+The runtime is the least reversible position in the stack, so supply risk is priced highest here of
+anywhere. That is what gives a governance difference weight in this file and almost none in
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). None of the
+three is disqualified by it: all three carry irrevocable MIT licences and stable releases, and the
+differences below are between kinds of backing rather than between backed and unbacked.
 
 *Sourced — [Node's release schedule](https://raw.githubusercontent.com/nodejs/Release/main/README.md)
 re-fetched raw 2026-09-17 by a research agent and matching the figures above exactly, plus Bun's
@@ -295,9 +322,8 @@ LICENSE.md (MIT confirmed) and [the acquisition post](https://bun.com/blog/bun-j
 opened by the agent. The Deno trademark dates are from search summaries the agent did not open
 directly and remain the weakest claim here.*
 
-**Deleted from the paragraph above on 2026-09-17: that a decision in the Oracle matter "is not
-expected before 2027".** A re-check found no source stating any expected decision date. Recorded as
-deleted rather than removed silently so it cannot return: it was found unsourced.
+**No source states when the Oracle matter will be decided.** Any expected-decision date attached to
+it is unsourced wherever it turns up.
 
 ### The store was checked as an input here and is not one
 
@@ -337,7 +363,7 @@ nobody has considered. None of these has been weighed, and no record forecloses 
 *Reasoned — 2026-09-04, on noticing that the equivalence argument assumes its own conclusion's
 premise.*
 
-**One incompatibility worth knowing early, and it is weaker than it was recorded as being.**
+**One incompatibility worth knowing early, and it is weaker than its reputation.**
 `better-sqlite3` has failed to load under Bun as a native addon with an ABI mismatch, reported across
 four issues of different ages rather than one long-open ticket: oven-sh/bun 5187 (2023-09-13), 16050
 (2024-12-29), 17255 (2025-02-11) and 19328 (2025-04-27). **All four are now closed.** Issue 19328 is
@@ -353,5 +379,3 @@ all four closed and quoted 19328's title. I did not open them. The agent did not
 string `ERR_DLOPEN_FAILED` in the portion of 19328 it read, so that error name is removed from this
 finding.*
 
-*Corrected 2026-09-17: recorded on 2026-09-04 as a problem that "recurs across Bun releases". The
-cluster of four issues is real and the dates hold; their all being closed was not checked then.*

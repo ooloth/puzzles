@@ -128,8 +128,12 @@ reasons are real here and one is weak.
   service worker on every navigation after the first, and a service worker's fetch handler *is*
   `Request` in, `Response` out. If it ever synthesises a response that mirrors a server route while
   offline, the two are already the same shape.
-- **Runtime portability.** Weak. One runtime gets chosen and kept for years, so the ability to swap
-  is optionality nobody is likely to spend.
+- **Runtime portability.** Weak, and weak for a reason worth stating precisely. It is not that the
+  runtime will never change; it is that
+  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+  makes the runtime the position whose replacement cost is priced highest, and a portable handler
+  lowers the cost of a swap that is expensive for reasons the handler does not touch. It buys a small
+  fraction of a large bill.
 
 **The Next elimination holds exactly as stated, and it is the only elimination in this field.** Under
 `output: 'export'`, Next's own guide says "Only the `GET` HTTP verb is supported", that a handler must
@@ -147,13 +151,13 @@ document stops being a build output, which would reverse
 *Sourced — [nextjs.org/docs/app/guides/static-exports](https://nextjs.org/docs/app/guides/static-exports),
 opened and quoted by me on 2026-09-17 against the page's stated version 16.3.5.*
 
-**Two corrections to the shapes named under Options, both from the 2026-09-17 pass.**
+**Two of the shapes named under Options need stating more precisely than the Options section does.**
 
 - **Astro's coexistence mechanism is the per-route override, not the adapter.** `output: 'static'` is
   still current and still the default, and `'hybrid'` no longer exists as a value. What makes an API
   endpoint live alongside a prerendered document is `export const prerender = false` on that endpoint:
   "In `static` mode, you must opt out of prerendering for each custom endpoint". The Node adapter's own
-  page does not state the combination, so naming the adapter alone was incomplete.
+  page does not state the combination, so the adapter alone does not describe it.
 - **TanStack Start is a release candidate, not a stable release.** Its overview says "TanStack Start is
   currently in the **Release Candidate** stage! This means it is considered feature-complete and its
   API is considered stable." The published version is `@tanstack/react-start@1.168.56`, with no 1.0 GA
@@ -176,8 +180,27 @@ this as two verified examples rather than a complete list.
 and npm 404s for both scoped names, read 2026-09-17 by a research agent. I did not open them. This
 closes the gap the 2026-09-16 survey flagged about itself.*
 
-**Re-checked on 2026-09-17 and unchanged.** WinterTC's registry is still runtime keys only and
-describes its own purpose as "to prevent conflicts and provide a reliable, authoritative source of
+**This is the cheapest position in the stack to leave, so stewardship carries almost no weight here.**
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices a supply concern by what replacing the thing costs, and a handler written against the
+web-standard `Request` and `Response` interfaces sits behind an interface thin enough that swapping
+what implements it is a small change. So the facts below are recorded and none of them eliminates
+anything: Hono is individual-led by Yusuke Wada with 414 commits from 132 authors; Elysia states on its
+own site that it is owned by no organisation, with 437 commits from 33 authors and its top human at
+69.6%; h3 is led by Pooya Parsa with 448 commits from 57 authors and npm's `latest` tag pointing at a
+release candidate. **A pre-1.0 or RC version number disqualifies nothing in this class**, which is the
+opposite of how the same fact reads in
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).
+
+The meta-framework servers are not in that class, because choosing one is also choosing the renderer
+and the build. There the replacement cost is the client half, and TanStack Start's release-candidate
+status is worth what it is worth for that reason rather than on its own.
+
+*Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17` over the twelve months to
+2026-09-17, grouped by author, run by a research agent that stated its command. I did not run it.*
+
+**Confirmed against source, and worth recording because a result that changes nothing is still a
+result.** WinterTC's registry is runtime keys only and describes its own purpose as "to prevent conflicts and provide a reliable, authoritative source of
 runtime identifiers", with nothing about frameworks. `Bun.serve` and `Deno.serve` still take a
 `Request` and return a `Response` natively, and `node:http` still passes `IncomingMessage` and
 `ServerResponse` with no Fetch-style server API anywhere in core, which is why adapters exist for it.

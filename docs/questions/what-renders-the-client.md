@@ -50,16 +50,14 @@ below record both why that is evidence and why it is weak evidence.
 
 *A minimal library*, for binding state to the DOM without a component model.
 
-*A component framework.* The candidate field, given
-[ADR-0007](../decisions/0007-that-language-is-typescript.md), was React, Svelte, Solid, Vue
-and Preact. **Nothing in this class is currently eliminated.** The 2026-08-31 research dropped Solid
-on timing and Lit on tooling decay; the 2026-09-17 verification pass found Lit's disqualifier false
-and returned it to the field, and found Solid's facts sound but resting on a threshold no document
-sets. Both eliminations wait on
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md).
-**Vue is not dropped**: the findings record that it has no disqualifier and no advantage, which is a
-reason to leave it in the field rather than to narrow it out. React and Preact share a programming
-model, so comparing them is one comparison rather than two.
+*A component framework.* Given
+[ADR-0007](../decisions/0007-that-language-is-typescript.md), the field is React, Preact, Vue, Svelte,
+Solid and Lit. **Nothing in this class is eliminated**, and the Findings say per candidate why. Every
+concern raised against one of them has been a stewardship concern, and
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices those by what leaving the position costs rather than treating them as disqualifiers. Vue has no
+disqualifier and no advantage, which is a reason to leave it in rather than to narrow it out. React
+and Preact share a programming model, so comparing them is one comparison rather than two.
 
 *A meta-framework.* SvelteKit, Astro, TanStack Start, Nuxt, Next, Remix and the rest of the class
 build the client bundle, produce the entry document and can answer HTTP from one project.
@@ -104,7 +102,28 @@ that promise is reversed, which would be reversing the architecture rather than 
 *Sourced — [htmx.org/docs](https://htmx.org/docs/), read 2026-09-16 by a research agent. I did not
 open it.*
 
-**No other surveyed candidate is eliminated by a binding property.** Every profiled candidate renders
+**The field's activity, over the twelve months to 2026-09-17.** Commits, distinct authors, and the
+number of days on which anything was published, which is the honest figure for a monorepo that tags
+every package on each release:
+
+- **Svelte** — 846 commits, 135 authors, 120 publish days. Latest stable 5.57.0. Independent; its
+  creator is employed by Vercel to work on it.
+- **React** — 817 commits, 101 authors, 28 publish days. Latest stable 19.3.0. React Foundation, under
+  the Linux Foundation since 2026-02-24, with eight platinum members. Its repository has moved from
+  `facebook/react` to `react/react`.
+- **Vue** — 423 commits, 106 authors, 51 publish days. Latest stable 3.5.43. Independent.
+- **Preact** — 300 commits, 20 authors, 21 publish days. Latest stable 10.29.8, with 11.0.0 in RC.
+  Community project with no foundation.
+- **Solid** — 85 commits, 20 authors, 8 publish days. Latest stable 1.9.15, with 2.0.0 in RC.
+  Individual-led, funded through Open Collective.
+- **Lit** — 46 commits, 19 authors, 1 publish day. Latest stable 3.3.3. OpenJS Foundation.
+
+*Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, and
+the releases API grouped by publish date. Run by a research agent that stated its commands and
+reported the tag-versus-date distinction unprompted. I did not run it. Governance lines are that
+agent's reading of each project's own announcements except Lit's, which I opened.*
+
+**No surveyed candidate is eliminated by a binding property.** Every profiled candidate renders
 to real DOM elements rather than a canvas, so
 [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) does not separate
 them. Keyboard operability is a property of what gets built rather than of the library, so
@@ -142,10 +161,9 @@ SudokuPad puzzle page serves over fifty plain `<script defer src>` tags with no 
 `type="module"` and no React, webpack, Vite or Rollup fingerprint in the markup. Read 2026-09-17 by a
 research agent, which fetched the SudokuPad page directly. I did not open them.*
 
-*Corrected 2026-09-17: "replaced its state layer wholesale" was the repo's paraphrase and is not
-tldraw's own framing, which puts React bindings on top of signals rather than replacing React. The
-Lichess claim is **deleted**: no source was recorded, none was found, and nothing here established
-what its board component's stated rationale is.*
+*tldraw's own framing puts React bindings on top of signals rather than replacing React, so "replaced
+its state layer wholesale" overstates it. No source establishes anything about Lichess's board
+component or its stated rationale, so any claim about it is unsourced wherever it turns up.*
 
 **That evidence is weaker than it first appears, and both halves should be recorded.** tldraw and
 Excalidraw are infinite canvases with thousands of objects, and SudokuPad is one developer's
@@ -229,9 +247,9 @@ implausible figure for `react-dom` and pkg-size.dev returned nothing. I did not 
 installed into this repository. A different minifier or entry surface would move this, and the figure
 has not been reproduced against a bundle of this app, which does not exist yet.*
 
-*Corrected 2026-09-17: recorded 2026-08-31 as "about 45KB brotli, roughly 300ms on a slow-4G profile",
-unsourced. The measurement above is about 20% higher. **The 300ms figure is deleted**: no method, no
-network profile and no source, and nothing was run that could have produced it.*
+*No source converts that size into a load time. Any figure for what it costs in milliseconds on a
+named network profile is unsourced wherever it turns up, and producing one needs a bundle of this app,
+which does not exist yet.*
 
 **What actually separates them is where reactive state is allowed to live.** Vue and Preact
 expose their reactive primitive as a standalone package that runs in plain TypeScript under
@@ -280,16 +298,15 @@ released 2026-08-13. What is true is narrower than the original claim and narrow
 suggests: it sits in the `solidjs-community` organisation rather than in `solidjs`, it is at 0.2.1
 with 5 stars, and the migration guide states that it handles a subset of mechanical changes while
 batching semantics, effect and lifecycle changes and the `<For>`/`<Index>` changes remain manual.
-Authorship on the branch carrying 2.0 is **89.8%**, not "over ninety percent" as recorded: of the 1914
+Authorship on the branch carrying 2.0 is **89.8%**: of the 1914
 commits `next` is ahead of `main`, ryansolid authored 1718.
 
-So choosing 1.x means adopting a branch about to become legacy and choosing 2.0 means an RC. **What
-is not established is the threshold at which that disqualifies anything**, which is
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md), and
-the duration the original wording appealed to is
-[what horizon is this built for?](what-horizon-is-this-built-for.md). Until those land this is a fact
-about Solid rather than a reason against it. **Reverses if** 2.0 reaches a stable release, which on
-the RC cadence above is plausible within this project's M1.
+So choosing 1.x means adopting a branch about to become legacy and choosing 2.0 means an RC. **That
+does not disqualify Solid.**
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices a stewardship concern by what leaving the position costs, and what a migration costs here is a
+migration guide, a partial codemod and manual work on batching and lifecycle semantics, against a
+project that gets active attention. That is work somebody is present for. Solid is in the field.
 
 *Measured — `gh api repos/solidjs/solid/compare/main...next` for the authorship split and
 `solid-js@2.0.0-rc.8`'s release metadata, plus a line count of
@@ -299,11 +316,10 @@ I did not run it.*
 *Sourced for the codemod — `gh api repos/solidjs-community/solid-migration-assistant` and the npm
 registry, both run by me on 2026-09-17.*
 
-*Corrected 2026-09-17, twice. "Over ninety percent" was recorded 2026-08-31 with no source; the
-measured figure is 89.8% on the 2.0 branch and 78.1% across `main` lifetime. And "no codemod ships",
-written earlier the same day, was wrong: it rested on a code search of `solidjs/solid`, and the
-codemod lives in a different organisation, so the search could not have found it either way. A
-repository-scoped search is not evidence about an ecosystem.*
+*Authorship is 89.8% on the 2.0 branch and 78.1% across `main` lifetime, so a figure above ninety
+percent is unsourced wherever it turns up. And **a repository-scoped search is not evidence about an
+ecosystem**: the codemod sits in `solidjs-community`, so any search of `solidjs/solid` will report it
+missing however it is phrased.*
 
 **Lit's elimination does not stand. The disqualifying half of it is wrong.** The tooling-decay half
 holds: `lit-analyzer` is at 2.0.3, published 2024-01-09, and nothing has shipped since. The half that
@@ -313,17 +329,24 @@ imports. The *type-checking* rules for binding expressions are errors by default
 `no-incompatible-type-binding`, `no-nullable-attribute-binding` and `no-invalid-directive-binding`.
 
 The stated reason for rejecting Lit was "an unchecked string boundary in the view layer", and the
-boundary is checked out of the box. An unmaintained checker is a real concern and it is a stewardship
-concern, which is
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md)
-rather than a property of Lit's type story. **Lit returns to the field** pending that question.
+boundary is checked out of the box. **Lit is in the field.**
+
+**Lit also has the strongest governance of any candidate here and the least activity**, which is the
+clearest case in this repo that the two are separate signals. It joined the OpenJS Foundation as an
+Impact Project on 2025-10-14, with "All of Lit's assets, including code, documentation, websites, and
+the Lit brand" transferred out of Google and a Technical Steering Committee of six drawn from Google,
+Adobe, Reddit and independents. Over the twelve months to 2026-09-17 it took 46 commits from 19
+authors and published on one day, 2026-05-14.
+
+*Sourced — [lit.dev/blog/2025-10-14-openjs](https://lit.dev/blog/2025-10-14-openjs/), opened and
+quoted. Measured for the activity, by the method below.*
 
 *Sourced — [the lit-analyzer rules documentation](https://raw.githubusercontent.com/runem/lit-analyzer/master/docs/readme/rules.md),
 opened and quoted by me on 2026-09-17, and the package's npm registry metadata for the release date,
 read by a research agent.*
 
-*Corrected 2026-09-17: recorded 2026-08-31 as "its useful rules are off by default", unsourced. That
-is true of the linting rules and false of the type-checking rules the argument depended on.*
+*"Its useful rules are off by default" is true of the linting rules and false of the type-checking
+rules, so the distinction is the whole finding and a claim that collapses the two is wrong.*
 
 **Vue has no disqualifier and no advantage here.** Recorded because "nothing is wrong with it" is
 a finding, and because absence of a reason to choose something is easy to mistake for absence of
@@ -337,11 +360,12 @@ rather than core. React is governed by the React Foundation, announced 2025-10-0
 the Linux Foundation on 2026-02-24 with eight platinum members (Amazon, Callstack, Expo, Huawei, Meta,
 Microsoft, Software Mansion, Vercel) and a technical governance layer separate from the funding board.
 
-**What does not follow from any of that is that concentration outranks the bundle difference.** That
-comparison is the one this finding actually made, and it needs both
-[what must a dependency's stewardship satisfy?](what-must-a-dependencys-stewardship-satisfy.md) and
-[what horizon is this built for?](what-horizon-is-this-built-for.md) before it can be argued either
-way. The facts are recorded; the ranking is not.
+**Concentration does not outrank the bundle difference here, and Preact is in the field.**
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices a stewardship concern by what leaving costs. React and Preact share a programming model, so
+moving between them is the cheapest swap available anywhere in this question, which puts the
+concentration concern near the bottom of what it could be worth. The measured 54KB is the input that
+survives; the concentration figure is a fact with little weight attached to it.
 
 *Measured — `gh api --paginate repos/preactjs/preact/commits?since=2025-09-17` for the authorship
 split and the founder's last commit, run 2026-09-17 by a research agent which stated its method.
@@ -364,9 +388,9 @@ that nobody has checked whether it is.
 issue search for checkbox and `checked` in the same repository, read 2026-09-17 by a research agent. I
 did not open them.*
 
-*Corrected 2026-09-17: recorded 2026-08-31 as a defect "where a checked input is treated as
-uncontrolled", unsourced. The open issue is about controlled text inputs; every `checked` issue found
-is closed.*
+*The open issue is about controlled text inputs. Every issue found about the boolean `checked`
+attribute is closed, so a claim that Preact has an open defect affecting checked inputs is unsourced
+wherever it turns up.*
 
 **The React half of that convergence extends past the two drawing apps.** Actual Budget is on React
 19.2.7, Notesnook's web app on React 18.3.1, and Logseq on React 19.2.6, all read from the projects'

@@ -226,16 +226,38 @@ nothing.
    nothing separates the three candidates on a binding property, so there is no bad answer to be
    stuck with; reversing is a run command, a package manager and a lockfile. It also unblocks the
    most, so both criteria agree.
-2. **The package manager.** Derives from the runtime, and may not survive it.
+2. **The package manager.** Derives from the runtime, and may not survive it. Its Options hold
+   only pnpm, npm and Bun, so that field was never rebuilt: Deno's own package manager and yarn
+   are missing from a list that reads as complete. Rebuild it before deciding, or the decision
+   is made over somebody's shortlist.
 3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
    file move and a configuration change.
 4. **The HTTP handler.** Derives from the runtime, whose own server API is one of the candidates.
    Nothing separates the rest, and it sits behind a thin interface.
 5. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
-   be written at any point after that record lands.
+   be written at any point after that record lands. **This is where two answered question files
+   get mined and deleted**, because this record is the last one that cites findings living only
+   in them: [does one tool build the client and answer
+   HTTP?](does-one-tool-build-the-client-and-answer-http.md), answered by
+   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
+   [what builds the client and serves it in
+   development?](what-builds-the-client-and-serves-it-in-development.md), answered by
+   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before deleting it or
+   `git show <commit>^:<path>` has nothing to recover. **The build file additionally carries
+   findings that belong to another question**, about Bun's test runner, its branch coverage and
+   its snapshot serialisation; those move to [what runs the
+   tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
+   that was deleted for an unrelated reason.
 6. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
-   with whatever the scaffold has shown by then.
+   with whatever the scaffold has shown by then. **Check
+   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
+   rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue,
+   so choosing Vue here removes its grounds and reopens that record. Reopening it needs one fact
+   nobody has established, which is whether Nuxt can lower the client bundle to a named floor;
+   its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
+   are supported. That check is a build and an inspection, and it is only worth running if Vue
+   wins.
 7. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
@@ -371,6 +393,30 @@ against a named falsifier rather than selecting.
   a single interactive surface, whether the renderer locks in Nuxt and SvelteKit bite equally given
   where each renderer allows a reactive primitive to live, and whether the Vite-based field runs
   under Bun and Deno or only under Node.
+
+**Owed, with no position in the order above.** Each is a chore or an unasked question rather than a
+decision, so none of them blocks a slice, and each is here because nothing else would surface it.
+
+- **The one invariant recorded so far has no check.**
+  [The shared rules module holds no framework-reactive
+  state](../invariants/the-shared-rules-module-holds-no-framework-reactive-state.md) says plainly
+  that nothing enforces it and names the two checks it should have: a test importing the module under
+  a bare runtime with no bundler and no renderer installed, and a lint rule forbidding renderer
+  imports from that directory. Whichever slice first creates the rules module is where they belong,
+  and [what proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
+  at M2 is where the runner is chosen.
+- **Nothing asks what shape the M1 deployable is** — a directory of files, a container image, or a
+  single compiled executable. Bun and Deno both compile to one and Node does not in the same way, so
+  it is an input to [where does this run?](where-does-this-run.md) and
+  [what deploys the code?](what-deploys-the-code.md) at slices 4 and 6. It may be inside
+  [where does this run?](where-does-this-run.md) already rather than missing; that is what to check
+  before writing a file for it.
+- **[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+  names a spike in its own Revisit when, and that spike is not being run.** It was to measure the
+  ordering of replacement costs across positions. The survey has since made that ordering doubtful
+  from a different direction, recorded in the bullet below, so the record's reversal condition points
+  at work nobody intends to do. Either the condition is rewritten or the ordering is argued rather
+  than measured, and saying which is owed.
 
 **Open, and spanning more than one question file.**
 

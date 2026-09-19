@@ -41,17 +41,16 @@ is the thing a state layer either survives or does not. It orders the field rath
 from it: the Findings argue that the most restrictive of the three may push in the right direction
 rather than the wrong one, which is exactly the claim a spike is for.
 
-**It is answered together with
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md).** One of
-the candidate answers there is a meta-framework's
-own server, which only exists if the renderer is that meta-framework; and picking a renderer that is
-not one removes the option from the other side. Neither can be settled alone without deciding part of
-the other by accident.
+**It was coupled to
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and is no
+longer.** The coupling was that a meta-framework's own server exists only if the renderer is that
+meta-framework, so neither could be settled without deciding part of the other.
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) broke it by
+settling that no single tool owns both, which means this question now chooses a renderer and nothing
+else.
 
-**The choice underneath both is
-[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
-and it is answered first.** It is wider than either, because it decides whether this question and that
-one resolve into one record or two. A renderer settled ahead of it answers it by consequence.
+**One condition still ties them.** That record rejects Nuxt for closing the renderer to Vue, so
+choosing Vue here removes its grounds and reopens it. Check that before assuming it holds.
 
 ## Resolves into
 
@@ -80,15 +79,11 @@ prices by what leaving the position costs rather than treating as disqualifiers.
 disqualifier and no advantage, which is a reason to leave it in rather than to narrow it out. React
 and Preact share a programming model, so comparing them is one comparison rather than two.
 
-*A meta-framework.* SvelteKit, Astro, TanStack Start, Nuxt, Next, Remix and the rest of the class
-build the client bundle, produce the entry document and can answer HTTP from one project.
-[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) binds
-how the entry document is produced and says plainly that it does not exclude this class: prerendering
-the document while serving API routes from the same process is a supported configuration in several
-of them. Choosing one is also choosing the answer to
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), which is the
-coupling described under **What would settle it**. No finding below evaluates this class, so none of
-their eliminations reach it.
+*A meta-framework.* **Out**, by [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), which settles that the client build and the HTTP
+server are separate tools, and by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), which names the bundler. SvelteKit, Astro,
+TanStack Start, Nuxt, Next, Remix and the rest of the class each bundle a renderer with a build and a
+server, and that bundle is what those records reject. The individual grounds are in the first of
+them. **Reverses if** either record does.
 
 *A framework for the shell with direct rendering for the board.* The pattern comparable projects
 converge on, and a genuine fourth option rather than a blend of the others.

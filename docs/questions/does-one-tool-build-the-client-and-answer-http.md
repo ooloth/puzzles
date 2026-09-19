@@ -1,10 +1,17 @@
 ---
 opened: 2026-09-18
-status: open
+status: answered
 resolves_into: decision
 ---
 
 # Does one tool build the client and answer HTTP?
+
+**Answered, by [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md): no single tool owns both the client build and the HTTP request path.**
+The question as posed was also the wrong one, because no property in
+[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
+is about how many tools there are, so the list every M1 toolchain choice is scored against could not
+score it. This file is kept only until the floor-format record has taken what it needs, then deleted.
+Do not work it.
 
 ## Why it matters
 

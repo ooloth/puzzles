@@ -32,17 +32,10 @@ Very little, once the runtime lands. The one criterion worth applying deliberate
 handle requests behind an interface thin enough that swapping what implements it is a small change
 rather than a rewrite.
 
-**This is also answered together with
-[what renders the client?](what-renders-the-client.md).**
-The fourth option below is a meta-framework's own server, and choosing it *is* choosing the renderer.
-Choosing a renderer that is not a meta-framework removes the option in the other direction. So the
-two constrain each other exactly as this question and the runtime do, and answering either alone
-risks settling the other by accident. That makes this a chain of three rather than a pair.
-
-**The choice underneath that pair is
-[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
-and it is answered first.** It is wider than either, because it decides whether this question and the
-renderer resolve into one record or two. A handler settled ahead of it answers it by consequence.
+**It was coupled to [what renders the client?](what-renders-the-client.md) and is no longer.** The
+coupling was a meta-framework's own server, choosing which was also choosing the renderer.
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) settles that no single tool owns both the client build and the HTTP request path, so
+that option is gone and this question now chooses a handler and nothing else.
 
 ## Resolves into
 
@@ -74,9 +67,11 @@ the server is one.
 that the document is a build output and explicitly does *not* exclude the framework that builds it
 from also answering HTTP. SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's
 `output: 'static'` with `export const prerender = false` on each API endpoint, and
-TanStack Start's `prerender` with server functions are all this shape. Next is the exception: under
-`output: 'export'` a route handler that reads the request is unsupported, so choosing Next means a
-separate API server. Weigh it here on its merits rather than treating it as already excluded.
+TanStack Start's `prerender` with server functions are all this shape. **The whole class is out**, by
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md): a tool that builds the client and answers HTTP is what that record rejects. The class
+is kept in this list because its eliminations are worth not re-deriving, and because Next was out on
+its own separate grounds before that record existed — under `output: 'export'` a route handler that
+reads the request is unsupported. **Reverses if** [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) does.
 
 ## Findings
 

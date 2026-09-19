@@ -1,10 +1,15 @@
 ---
 opened: 2026-08-31
-status: open
+status: answered
 resolves_into: decision
 ---
 
 # What builds the client and serves it in development?
+
+**Answered, by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md): Vite builds the client bundle and serves it in development.** This
+file is kept only until the floor-format record has taken what it needs, then deleted. Do not work
+it. Its findings about Bun's test runner belong to
+[what runs the tests?](what-runs-the-tests.md), which already holds them.
 
 **Not cleanly a client-side question, despite the name.** A dev server usually proxies the API as
 well, and under some runtimes one tool builds both halves — so an answer here can reach across the

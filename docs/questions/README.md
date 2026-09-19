@@ -200,12 +200,6 @@ it open. That is the only place in this cluster where a choice removes options f
 question. The toolchain therefore holds both the only discriminator and the only foreclosure, which
 is what puts it first — not that it is the client's half.
 
-**Whether the toolchain also bounds the runtime is open and is checked rather than assumed.** Every
-surviving candidate is Vite-based, and Vite under Deno or Bun is a less-trodden path than Vite under
-Node. If the field turns out to run cleanly only on Node, the runtime is settled by consequence and
-is recorded as a consequence with its reason, per
-[../decisions/README.md](../decisions/README.md) on recording what follows necessarily.
-
 **What breaks a tie between two questions that do not derive from each other is which one is
 cheaper to get wrong.** Not which unblocks the most. That was the rule this list was built on and it
 measures how the work was planned rather than anything about the system, so redrawing the milestones
@@ -233,12 +227,18 @@ say why it died. What remains:
    rebuilt — Bun is out by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
    and yarn is missing from a list that reads as complete. Rebuild it before deciding, or the
    decision is made over somebody's shortlist. It is the only one of these still needing research.
-2. **The layout.** Derives from the package manager. Its own file records that being wrong is a
+2. **[Which Node version line does this track?](which-node-version-line-does-this-track.md)**
+   Derives from nothing, and the cheapest thing here to get wrong: a version number in one file and a
+   reinstall. It is in the list because
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) named a floor and
+   declined to name a line, and because left unstated it resolves differently on a contributor's
+   machine, in a container and on CI.
+3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
    file move and a configuration change.
-3. **The HTTP handler.** `node:http` is now one of the candidates by
+4. **The HTTP handler.** `node:http` is now one of the candidates by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
-4. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+5. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -252,7 +252,7 @@ say why it died. What remains:
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-5. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+6. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -262,12 +262,12 @@ say why it died. What remains:
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-6. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+7. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Steps 2 to 4 are write-ups rather than research.
+Steps 2 to 5 are write-ups rather than research.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -278,7 +278,8 @@ it. The coupling it was opened for is real and is handled instead by working the
 handler and the build as one field of candidate toolchains, where a bundled framework and an
 assembled set are both points in the field. How many records fall out is decided by the separability
 test in [../decisions/README.md](../decisions/README.md) when the records are written. The file
-stays until it is mined, and it says all of this at its head.
+stays until it is mined, and says so under **Findings** rather than at its head, so a reader who
+stops at **Why it matters** will not learn it there.
 
 **Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
 Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
@@ -390,13 +391,17 @@ against a named falsifier rather than selecting.
 - **The runtime is settled** at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md),
   whose Rejected section carries the whole field it was chosen from, each elimination with its source
   and its reversal condition.
-- **The toolchain field was cut on the precache manifest on 2026-09-19**, removing TanStack Start,
-  React Router in SPA mode and Qwik City. Survivors: plain Vite with a renderer, Astro, Nuxt, and
-  SvelteKit with a hand-written service worker.
-- **Three checks are outstanding before anything is scaffolded**: whether Astro's islands model fits
-  a single interactive surface, whether the renderer locks in Nuxt and SvelteKit bite equally given
-  where each renderer allows a reactive primitive to live, and whether the Vite-based field runs
-  under Bun and Deno or only under Node.
+- **The toolchain field is settled**, at
+  [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
+  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md): the precache manifest removed TanStack
+  Start, React Router in SPA mode and Qwik City, and Astro, Nuxt and SvelteKit each lost on their own
+  grounds in that first record. The bundler is Vite and the renderer is still open.
+- **The three checks that were outstanding have all run.** Astro's own documentation positions it
+  against this application's shape; the renderer locks do not bite, because a renderer's reactive
+  primitive constrains the module that calls it and no other; and the Vite-based field runs under all
+  three runtimes, so the toolchain never bounded the runtime and
+  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) decided it on its own
+  grounds. Each result is in the record it fed.
 
 **Owed, with no position in the order above.** Each is a chore or an unasked question rather than a
 decision, so none of them blocks a slice, and each is here because nothing else would surface it.
@@ -805,7 +810,9 @@ looked and there is nothing — no blockers, or no options because the question 
 fact rather than a choice.
 
 Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, `problem`, or
-`unsettled`. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
+`unsettled`. `status` is `open`, or `answered` for a file whose record has landed and which is
+waiting only to be mined and deleted; nothing else should carry `answered`, because a question that
+is answered and not being deleted is one nobody finished. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
 research backlog, and everything resolving into a decision is a choice waiting to be made.
 
 **`unsettled` means where the answer lands has not been argued**, not that the question is unanswered

@@ -26,10 +26,10 @@ format is the smallest thing in that chain and it was settling the largest.
 
 ## What would settle it
 
-Knowing which bundler reads the declaration, which is
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
-The two are answered together and the bundler leads, because its native format is the binding input
-and the two checks are more flexible than it is.
+**The binding input has landed.** The bundler is Vite, by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and Vite takes an ES
+version or a browser-and-version string and does not read a browserslist configuration. So what is
+open is no longer which bundler leads; it is which format carries the declaration and what the
+adapter between it and Vite costs.
 
 What to weigh: whether each of the three consumers reads the format without an adapter, what an
 adapter costs where one is needed, and whether the declaration still names its versions rather than

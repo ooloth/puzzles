@@ -17,6 +17,8 @@ with the system's evolving design and implementation choices, which are all docu
 
 - ⭐ [`docs/problem.md`](docs/problem.md) — who this is for, and what success will look like
 - 👍 [`docs/guarantees/`](docs/guarantees/) — the promises made to players
+- 🧱 [`docs/invariants/`](docs/invariants/) — what holds without exception, and what checks it; the
+  sibling of the promises above, for the things a player would never see break but the system would
 - 🤔 [`docs/questions/README.md`](docs/questions/README.md) — the queue of decisions needing to be made, grouped by the
   milestone each unblocks (start here if you want to know what's coming next)
 - 🧭 [`docs/decisions/`](docs/decisions/) — the choices that have already been made, with their rationale,

@@ -244,7 +244,7 @@ derivation.
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered together with the fork above, which bounds which runtimes remain available
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
-     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
+     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected; the decision itself waits on [which-package-manager](which-package-manager.md) above
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -280,7 +280,7 @@ derivation.
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the platform's own hostname is what the browser resolves, and the first-party test in the given above turns on exactly that. Costs a redeploy, and the failure is silent
      - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md) — or else a proxy or CDN in front changes what the browser treats as the origin, which is the same silent Safari failure reached by a different route. Costs a redeploy plus whatever sits in front
 6. **A change made locally reaches the deployment.**
-   - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the deploy is built against a platform whose deploy model it does not have; a managed platform supplies most of this and a bare machine supplies none of it. Costs a re-scaffold of the pipeline
+   - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else [what-deploys-the-code](what-deploys-the-code.md) below has nothing to target and no way to know what it has to supply: a managed platform brings most of a pipeline and a bare machine brings none of it, so the same answer there means two different amounts of work. Costs a re-scaffold of the pipeline
    - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the pipeline cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. Costs a re-scaffold of both the layout and the pipeline
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
@@ -519,8 +519,9 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    route are both additive. The record that settles M1's rendering shape should say so explicitly.
 6. [Do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
    the assumption in play is one host with everything under paths, and it is an assumption rather
-   than a decision. M1 already places the client and the API on one origin, so what is open here is
-   only whether a third kind of route joins them.
+   than a decision. Whether the client and the API share one origin is itself open at M1, under
+   [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md), so what
+   is open here is only whether a third kind of route joins whatever that settles.
 
 ## M9 — it works with no network
 

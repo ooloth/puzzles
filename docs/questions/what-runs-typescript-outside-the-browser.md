@@ -543,3 +543,230 @@ synchronous SQLite write latency, for a minimal server close in shape to the rea
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeps this server thin by
 design. It does not settle throughput, which does not bind, and it cannot settle the Vite interop or
 porting questions, which are judgements about upstream bugs and future work rather than observations.
+
+### Measured, 2026-09-19
+
+*Method — Apple M2, 24GB, macOS 26.6.2, arm64. Node v26.7.0, Bun 1.4.2, Deno 2.7.14. One identical
+TypeScript source per test, run unmodified under all three through `node:sqlite` and `node:http`,
+WAL journal mode, `synchronous=NORMAL` unless stated. Latency: 2,000 warmup then 20,000 timed
+operations, three runs per runtime per mode, percentiles over the timed set. RSS from
+`process.memoryUsage().rss`. Commands and scaffolds were deleted after the run; the numbers below are
+what survives.*
+
+**`node:sqlite` requires Bun 1.4 or later, and this file has been asserting it unversioned.** Bun
+1.3.13 answers `No such built-in module: node:sqlite` and fails to resolve the import. Bun 1.4.2
+runs the same file unchanged and exposes `database.function()`. Node and Deno both ran it. So the
+equivalence this question has leaned on is real and carries a version floor that was never stated,
+and a machine with an older Bun is a machine where the shared data-access code does not load at all.
+
+**Write and read latency do not separate the runtimes, which is what was predicted.** At
+`synchronous=NORMAL` the p50 write is 0.024 to 0.026 ms under Deno, 0.031 to 0.035 ms under Node and
+0.035 to 0.038 ms under Bun. Reads are under 0.005 ms everywhere. Against the plausible load under a
+hundred writes per second in [../constraints.md](../constraints.md), none of this binds. Bun's p99
+write is about 0.7 ms against Node's 0.07 ms, a tenfold tail difference that is still 0.7 ms.
+
+**Full durability costs roughly double on the write and is affordable.** p50 write at
+`synchronous=FULL` against `NORMAL`: Node 0.056 against 0.033, Deno 0.061 against 0.025, Bun 0.066
+against 0.036. This is an input to
+[what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+at M3, and it says the safest setting is close to free at this load.
+
+**At `synchronous=FULL`, Node and Deno each showed one stall of 283 to 421 ms per 20,000 writes.
+Bun's worst was 14 ms.** Reproduced on all three runs of each. Not explained, and recorded because a
+single sub-half-second stall in a request path is the kind of thing that is easier to find now than
+after it is reported.
+
+**Memory separates them, by less than macOS suggested.** Measured again inside Linux arm64 containers
+capped at 256 MB, which is the deployment shape. Idle server RSS: Bun 29.7 MB, Deno 48.0 MB, Node
+62.4 MB. Under this system's plausible load of ten requests per second for 90 seconds: Bun 56.1 MB,
+Deno 86.3 MB, Node 91.6 MB. Under a 20,000-request burst: Bun 60.9 MB, Node 93.1 MB, Deno 96.2 MB.
+
+**The same measurement on macOS overstates the gap by roughly double, and the macOS figures should
+not be used.** There it read Bun 21.9 MB, Deno 54.4 MB and Node 90.3 MB idle, and under a burst Bun
+66.8 MB against Node 163.9 MB and Deno 207 MB. On Linux the spread under load is Node 91.6 against
+Bun 56.1, about 1.6 times rather than the 2.4 times macOS showed, and all three leave over 150 MB
+free on a 256 MB machine. The host operating system was the larger variable, which is the reason to
+measure on the platform that ships.
+
+**The remaining gap is structural rather than a default anyone can tune.** Capping V8's old space at
+96 MB and at 48 MB left Node's RSS unchanged, so the memory is not old-space heap a ceiling would
+constrain.
+
+**Startup to the listening callback: Bun 20 ms, Deno 25 ms, Node 63 ms**, p50 of fifteen runs after
+three warmups. It does not bind on the request path, because
+[ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) keeps the process up. It
+is felt by every repo script, batch run and test process instead.
+
+**Three limits on all of the above, and the first is the one that matters.** This ran on macOS and
+this system deploys to Linux; Docker was unavailable on the machine, so the deployment platform is
+unmeasured. A 150-second run cannot see the multi-hour growth the open Bun issues describe, so those
+are neither confirmed nor refuted here. And Bun's `node:http` is a compatibility layer over its own
+server, so a Bun-native server was not what was measured.
+
+### Measured on Linux, 2026-09-19: how each runtime fails when it runs out of memory
+
+*Method — Docker 29.0.1, linux/arm64, containers capped with `--memory=256m --memory-swap=256m` on
+the same Apple M2. Images `node:26-slim`, `oven/bun:1.4.2-slim`, `denoland/deno:2.9.7`. A script
+allocates 200,000-element arrays of small objects on the JS heap until the process dies, with a
+`try`/`catch` around every allocation. Exit 137 is the kernel's SIGKILL; a V8 abort exits 133 after
+printing to stderr.*
+
+**Bun cannot bound its heap, and the consequence is a silent kill.** With
+`--max-old-space-size=128`, Node exited 133 and Deno exited 133, both after printing GC diagnostics
+and `FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out
+of memory` followed by a native stack trace. Bun given the same flag exited 137 with no output at
+all. Bun's own mechanisms do no better: `--smol`, `BUN_JSC_forceRAMSize=134217728`,
+`BUN_JSC_gcMaxHeapSize=134217728` and `--smol` combined with `forceRAMSize` each exited 137 silently,
+every one of them reaching the same 30 chunks as an unbounded run. The flag is accepted and ignored.
+
+This reproduces oven-sh/bun#34917, open since 2026-07-21 with four comments and no fix. Two issues
+cited alongside it, oven-sh/bun#25487 and denoland/deno#30043, are both closed and should not be
+carried as corroboration.
+
+**Without a ceiling below the container limit, all three die silently**, which is ordinary and is the
+operator's problem to configure rather than a property of any runtime. Node and Deno can be
+configured out of it. Bun cannot.
+
+**No heap ceiling protects against off-heap allocation on any of them.** The same test allocating
+through `Buffer.alloc` rather than on the JS heap exited 137 under all three, with and without a cap,
+because the flag bounds V8's old space and a buffer is not in it. So a heap ceiling is worth setting
+and is not a guarantee.
+
+**What this is worth here.** [../problem.md](../problem.md) ranks clarity for a solo maintainer, and
+[../guarantees/README.md](../guarantees/README.md) records observability as a theme with no promises
+yet, whose motivating case is a failure that produces no error and no complaint. A runtime that can
+be made to say why it died is worth more to one person operating this than a runtime that is lighter,
+and the portable standards rank a loud failure over a silent one directly. **Reverses if** Bun ships
+a working heap bound.
+
+### Measured on Linux, 2026-09-19: best driver per environment
+
+*Same containers and method as the latency test above, 2,000 warmup and 20,000 timed operations.*
+
+**Bun's own driver is indistinguishable from the portable one, so there is no speed being left on the
+table by either choice.** Under Bun, `bun:sqlite` wrote at p50 0.0115 ms and read at 0.0020 ms;
+`node:sqlite` under the same Bun wrote at 0.0114 ms and read at 0.0020 ms. Bun's published claim of
+being three to six times faster is made against `better-sqlite3` on read queries, benchmarked on
+macOS 12.3.1 and therefore predating `node:sqlite` entirely, so it is not a claim about this
+comparison and this measurement does not contradict it.
+
+**Across runtimes on their own best built-in, the spread is under twenty percent and does not bind.**
+Write p50: Node with `node:sqlite` 0.0112 ms, Bun with `node:sqlite` 0.0114 ms, Bun with `bun:sqlite`
+0.0115 ms, Deno with `node:sqlite` 0.0132 ms. Reads 0.0019 to 0.0025 ms. The macOS run had shown Bun
+roughly ten percent slower on writes and with a tenfold worse tail; on Linux that difference is gone,
+which is a second reason to treat the macOS figures as an artifact of the host.
+
+### Developer ergonomics, Node against Deno, 2026-09-19
+
+Bun is out of this comparison. Scored on writing TypeScript, interoperating with the Vite dev server
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) settled, and not being interrupted.
+
+**Node's TypeScript setup is a six-line config written once, not a tooling problem.** Its own
+documentation recommends `noEmit`, `target: esnext`, `module: nodenext`,
+`rewriteRelativeImportExtensions`, `erasableSyntaxOnly` and `verbatimModuleSyntax` against TypeScript
+5.8 or newer. `rewriteRelativeImportExtensions` is what lets `tsc` accept the literal `.ts` specifiers
+Node requires, and `erasableSyntaxOnly` turns the unsupported constructs into compile errors rather
+than runtime surprises. Path aliases work through `package.json` `imports`, which TypeScript resolves
+by default under `nodenext`, so aliases need no added tool either. `.tsx` is unsupported and
+`--experimental-transform-types` was removed in v26, so the erasable subset is the whole story and
+there is no flag to escape it.
+
+*Sourced — [nodejs.org/api/typescript.html](https://nodejs.org/api/typescript.html), opened and quoted
+by me on 2026-09-19.*
+
+**Deno removes three or four installs and Node does not.** `deno fmt`, `deno lint`, `deno check` and
+`deno test` replace Prettier, ESLint, `tsc` and a test runner. Deno can also typecheck and run in one
+command, `deno run --check`, where Node has `--watch` but no typecheck-on-save, so continuous checking
+under Node is `tsc --noEmit --watch` in a second terminal. That is the one daily ergonomic difference
+in Deno's favour and it is real.
+
+**Two of those built-ins are not parity.** `deno lint` has no type-aware rules, and Deno's own
+documentation says to add typescript-eslint for them, which reintroduces what the built-in was meant
+to remove. And `deno test` lacks module mocking, which a Deno maintainer has said is not planned,
+lacks `test.each`, and parallelises across files rather than within one. Mocking, snapshots and fake
+timers come from `@std/testing` rather than the runtime. Vitest cannot substitute: running it under
+Deno is an open tracking issue with a panic regression against Vitest 4.0.10.
+
+**The Vite interoperation is where Node is clearly better, and it lands on this project's exact
+shape.** denoland/deno#28850, open since 2025-04-11, reports that every request proxied from the Vite
+dev server to a `Deno.serve` backend logs `[vite] ws proxy error: AbortError`. A contributor first
+attributed it to Node parity and then retracted: "Indeed, I got my node testing wrong, sorry.
+Something is not right." The documented workaround is `logLevel: "silent"`, which suppresses all of
+Vite's output rather than that error. A client proxying to a separately-run server is precisely what
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) settled, so
+this fires on the daily loop.
+
+Alongside it, denoland/deno#35942 remains open, and Deno's Node-API layer broke Rolldown twice in five
+months, at denoland/deno#33137 and #33787. **Both of those are closed**, in seven weeks and one day
+respectively, so the pattern is regress-and-repair rather than an outstanding defect. Roughly ten
+open issues in denoland/deno touch Vite.
+
+**In fairness, Vite 8 on Rolldown is churning under Node too**, so some of what a Deno user would
+attribute to Deno is Vite's own instability. What is not symmetric is that Deno carries the burden of
+keeping the pairing working, and its compatibility layer is the part that has regressed.
+
+*Sourced — issue states, dates and comment threads read by me with `gh` on 2026-09-19. The Deno
+tooling comparisons are a research agent's reading of Deno's own documentation; I did not open those
+pages.*
+
+### Measured, 2026-09-19: Node's `node_modules` restriction does not reach the shared rules module
+
+Node's documentation states: "To discourage package authors from publishing packages written in
+TypeScript, Node.js refuses to handle TypeScript files inside folders under a `node_modules` path."
+That reads as a threat to
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md),
+because a workspace package is symlinked into `node_modules` and the rules module is imported by
+three consumers with no publish step. It is not.
+
+Built as an npm workspace with a `packages/rules` exporting `./index.ts` and an `apps/server`
+importing it by bare specifier, Node v26.7.0 ran it: **`workspace import OK`**. Node resolves the
+symlink to its real path, which is not under `node_modules`, so the restriction never fires. A
+relative import across packages worked identically. Creating a genuine, non-symlinked `.ts` file
+under `node_modules` and importing it failed as documented, with
+`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`.
+
+**So the boundary is consuming a published package that ships TypeScript, which is the thing the
+restriction exists to discourage, and not a workspace.**
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) is
+satisfiable under Node with no build step and no extra tooling. **Reverses if** a dependency this
+project needs ships `.ts` source.
+
+### Deno's developer-experience claims, checked against Node plus its best ecosystem tool
+
+**Genuinely better under Deno, and it is two things.** Its standard library covers YAML, TOML, CSV,
+UUID, ULID and formatting as first-party, independently versioned, mostly stable packages, and Node
+has no equivalent or plan for one. And its OpenTelemetry support is one environment variable against
+assembling several npm packages and initialising them before anything else loads.
+
+**The OpenTelemetry win is narrower than it sounds**, because Deno's own page lists what is
+auto-instrumented as incoming `Deno.serve` requests, outgoing `fetch`, `node:http2` traffic and
+`Deno.cron` invocations. **Database calls are not on that list**, so the SQLite work this server
+mostly does needs hand-written spans on either runtime.
+
+*Sourced — [docs.deno.com/runtime/fundamentals/open_telemetry](https://docs.deno.com/runtime/fundamentals/open_telemetry/),
+opened by me on 2026-09-19. That page carries no stability warning; a claim that the feature is
+unstable came from an agent's search summary and I could not confirm it.*
+
+**Closed, or never a runtime difference at all.** Web-standard APIs are the pitch Deno was founded on
+and Node has caught up: `fetch`, `WebSocket`, Web Streams, Web Crypto and `BroadcastChannel` are all
+stable in Node 26, leaving only `URLPattern` at experimental and `localStorage` at release candidate,
+neither of which a server needs. Safe-by-default package installation is Deno against npm rather than
+Deno against Node, and pnpm has blocked build scripts by default since v10 in January 2025.
+
+**Node is ahead on diagnostics**, which matters here because the memory-legibility finding above is
+what disqualified Bun. Node has `--cpu-prof` and `--heap-prof` both stable, plus
+`--heapsnapshot-near-heap-limit`, which writes a snapshot as the process approaches its ceiling.
+Deno's documentation describes `--cpu-prof` with nicer flamegraph and Markdown output and no
+`--heap-prof` equivalent.
+
+**Deno's workspace support is the weak point for this architecture.** denoland/deno#31077 is open and
+reports that import maps do not merge, so a workspace root's `deno.json` can silently remove a
+member's path aliases. One shared module with three consumers on different build targets is exactly
+that shape, and pnpm workspaces have carried it for years.
+
+**Deno Desktop is a different product**, three months old, for packaging native desktop binaries. It
+bears on nothing here.
+
+*Sourced — a research agent's reading of Deno's and Node's documentation on 2026-09-19, except the
+OpenTelemetry page and the `node_modules` test above, which are mine. The pnpm, npm and workspace
+issue claims are the agent's and I did not open them.*

@@ -98,13 +98,13 @@ promises.
 
 - **Defer it.** Genuinely cheap, and the right answer for most questions at this stage.
   **Disqualified because deferring leaves the meta-framework class excluded by inference rather than
-  by argument.** A meta-framework rendering per request would settle
-  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md),
+  by argument.** A meta-framework rendering per request would have settled the runtime,
   [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)
   and [what renders the client?](../questions/what-renders-the-client.md) all at once, so an option
-  field that omits the class decides three M1 questions without saying so. This record is what those
-  fields are kept honest against. **Reverses if** those three questions are settled some other way
-  that makes the exclusion explicit.
+  field that omits the class decides several M1 questions without saying so. The runtime has since
+  closed at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md), on grounds unrelated to
+  rendering. The other two are open, and this record is what their option fields are kept honest
+  against. **Reverses if** both are settled some other way that makes the exclusion explicit.
 
 - **Multi-page hypermedia, where every document is produced per request.** htmx, Turbo, Datastar.
   Listed because it is a coherent architecture somebody would raise and its absence from a list is

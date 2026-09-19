@@ -70,7 +70,7 @@ constraint from intention. The parts still open are listed at the end and are th
                    │ machine           │   (M3, open)
                    └───────────────────┘
 
-        generator — batch, search-heavy, runs anywhere.
+        generator — batch, search-heavy, runs on Node.
         Writes the catalogue either directly or through the
         server's API; which is open.        problem.md, ADR-0012
 ```
@@ -97,8 +97,8 @@ reason outage length is a product question rather than only an operational one.
 
 ## What is not decided
 
-Larger than the list above, and deliberately. The runtime that executes TypeScript, what handles HTTP,
-what renders the client, what builds it, where the machine is, what the domain resolves to, what
-deploys the code, how the schema migrates, what the store is backed up by, which client storage
-mechanism holds a board, and what a puzzle actually looks like. All of it is in
+Larger than the list above, and deliberately. What handles HTTP, what renders the client, where the
+machine is, what the domain resolves to, what deploys the code, how the schema migrates, what the
+store is backed up by, which client storage mechanism holds a board, and what a puzzle actually
+looks like. All of it is in
 [questions/](questions/), ordered by the milestone that first needs it.

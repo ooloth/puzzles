@@ -59,8 +59,8 @@ reasoned rather than measured and says so.
   **Reverses if** a signal is found that tracks the outcome across a whole field rather than on the
   examples chosen to support it.
 
-  *Measured for the five inversions, with the commands and their caveats under **Findings** in
-  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md),
+  *Measured for the five inversions, with the commands and their caveats recorded in
+  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) and under **Findings** in
   [what renders the client?](../questions/what-renders-the-client.md) and
   [what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md).
   Sourced for the frameworks — each tool's own documentation and published check list, read by a
@@ -74,7 +74,7 @@ reasoned rather than measured and says so.
 - **Stewardship does not bind at all, and only replacement cost is scored** — because replacement cost
   is identical across candidates for a given position, so alone it cannot separate Andromeda, which has
   never shipped a 1.0 and took 89 commits from seven authors in a year, from Node, which took 3,496
-  from 428. Those figures and their method are under **Findings** in
+  from 428. Those figures and their method are recorded in
   [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md).
   **Reverses if** every position becomes cheaply reversible.
 

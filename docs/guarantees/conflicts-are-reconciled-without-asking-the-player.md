@@ -19,7 +19,9 @@ about, and whichever they pick, they lose something.
 
 **Bearing on this** [What happens to a losing write when syncing?](../questions/what-happens-to-a-losing-write-when-syncing.md)
 is unresolved, and it matters here: last-write-wins reconciles silently by *discarding* a write, which
-sits badly beside the intent that a player's work is never lost.
+sits badly beside the intent in [../problem.md](../problem.md) that in-progress work is never lost.
+That is an intent rather than a promise: [README.md](README.md) records that no move being lost when a
+connection fails is one of the claims deliberately not promised here.
 [How does a device know its board is behind?](../questions/how-does-a-device-know-its-board-is-behind.md)
 is the case this promise is quietest about — a device that resumed from an older board has created a
 divergence nobody chose, and reconciling it silently is exactly what this promise asks for.

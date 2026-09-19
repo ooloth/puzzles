@@ -312,8 +312,8 @@ Commits, distinct authors, the share held by the most prolific human, and the la
 
 - **Rspack** — 2,614 commits, 101 authors, top human 17.3%, v2.2.6 on 2026-09-17. ByteDance's web
   infrastructure team.
-- **Rsbuild** — 2,102 commits, 50 authors, top human **75.5%**, v2.2.7 on 2026-09-16. Same team.
-- **webpack** — 1,498 commits, 51 authors, top human 54.9%, v5.111.0 on 2026-09-14. OpenJS Foundation.
+- **Rsbuild** — 2,102 commits, 50 authors, top human **75.5%**, v2.2.8 on 2026-09-18. Same team.
+- **webpack** — 1,498 commits, 51 authors, top human 54.9%, v5.111.1 on 2026-09-18. OpenJS Foundation.
 - **Vite** — 1,250 commits, 210 authors, top human 42.9%, v8.3.0 on 2026-09-10. Steward VoidZero
   acquired by Cloudflare on 2026-06-04.
 - **Parcel** — **14 commits, 4 authors**, top human 71.4%, v2.16.4 on 2026-02-02. Individual-led.
@@ -329,9 +329,14 @@ that the rest of the field does not.
 Rsbuild is the most human-concentrated project found anywhere in the M1 field and it is corporate
 backed. That is why this list is recorded as facts rather than as a ranking.
 
-*Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, run
-by a research agent that sampled the top author's commits to confirm they were not a bot. Parcel's
-figure I re-ran myself and confirmed at 14.*
+*Measured — commit and author counts from `gh api --paginate
+repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, run by a research agent that
+sampled the top author's commits to confirm they were not a bot; Parcel's I re-ran myself and
+confirmed at 14. Release versions and dates are from `gh api repos/<owner>/<repo>/releases/latest`,
+run by me on 2026-09-18, and it is the source for Rspack, Rsbuild, webpack and Parcel as listed
+above. Vite's is the exception: that
+call returns `create-vite@9.2.1`, because the repository tags every package on each release, so a
+package-scoped lookup is what would confirm v8.3.0 and nothing here has run one.*
 
 **Confirmed against source, and worth recording because a result that changes nothing is still a
 result in a field this perishable:

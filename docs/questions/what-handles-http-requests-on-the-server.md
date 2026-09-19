@@ -69,12 +69,11 @@ several assume a long-lived process — which costs nothing here, since
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) already settles that
 the server is one.
 
-*A meta-framework's own server, serving API routes alongside a prerendered entry document.* This list
-omitted the option, and its absence read as a rejection nobody had argued.
+*A meta-framework's own server, serving API routes alongside a prerendered entry document.*
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
 that the document is a build output and explicitly does *not* exclude the framework that builds it
-from also answering HTTP. SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's Node
-adapter with `output: 'static'` plus `export const prerender = false` on each API endpoint, and
+from also answering HTTP. SvelteKit's `adapter-node` with `prerender` on the root layout, Astro's
+`output: 'static'` with `export const prerender = false` on each API endpoint, and
 TanStack Start's `prerender` with server functions are all this shape. Next is the exception: under
 `output: 'export'` a route handler that reads the request is unsupported, so choosing Next means a
 separate API server. Weigh it here on its merits rather than treating it as already excluded.

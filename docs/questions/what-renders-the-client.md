@@ -87,8 +87,8 @@ how the entry document is produced and says plainly that it does not exclude thi
 the document while serving API routes from the same process is a supported configuration in several
 of them. Choosing one is also choosing the answer to
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), which is the
-coupling described under **What would settle it**. The findings below were gathered against a field
-that did not contain this class, so none of their eliminations reach it.
+coupling described under **What would settle it**. No finding below evaluates this class, so none of
+their eliminations reach it.
 
 *A framework for the shell with direct rendering for the board.* The pattern comparable projects
 converge on, and a genuine fourth option rather than a blend of the others.
@@ -376,8 +376,8 @@ analysis.
 **The maintenance-concentration facts hold and are now measured. What outranks what is not
 established.** Over the twelve months to 2026-09-17, Preact took 300 commits, of which JoviDeCroock
 authored 249, or 83%; the next most frequent contributor authored 11. Jason Miller's most recent
-commit to the repository is `2e2b239`, dated 2025-07-24, touching `debug/src/component-stack.js`
-rather than core. React is governed by the React Foundation, announced 2025-10-07 and launched under
+commit to the repository is `2e2b239`, dated 2025-07-24, a `debug` fix rather than a change to core.
+React is governed by the React Foundation, announced 2025-10-07 and launched under
 the Linux Foundation on 2026-02-24 with eight platinum members (Amazon, Callstack, Expo, Huawei, Meta,
 Microsoft, Software Mansion, Vercel) and a technical governance layer separate from the funding board.
 
@@ -388,8 +388,13 @@ moving between them is the cheapest swap available anywhere in this question, wh
 concentration concern near the bottom of what it could be worth. The measured 54KB is the input that
 survives; the concentration figure is a fact with little weight attached to it.
 
-*Measured — `gh api --paginate repos/preactjs/preact/commits?since=2025-09-17` for the authorship
-split and the founder's last commit, run 2026-09-17 by a research agent which stated its method.
+*Measured — the authorship split is from `gh api --paginate
+repos/preactjs/preact/commits?since=2025-09-17`, run 2026-09-17 by a research agent which stated its
+method. The founder's last commit is from `gh api
+'repos/preactjs/preact/commits?author=developit&per_page=1'`, which I ran on 2026-09-18: `2e2b239`,
+2025-07-24, "fix(debug): fix memory leak in VNode owner tracking (#4850)". A `since=2025-09-17` query
+cannot return it, because that window opens after the commit, so the unfiltered author query is what
+establishes this and any citation of the `since=` query for it is wrong.
 Sourced for the foundation from
 [react.dev/blog/2025/10/07/introducing-the-react-foundation](https://react.dev/blog/2025/10/07/introducing-the-react-foundation).
 I did not run the query or open the post.*

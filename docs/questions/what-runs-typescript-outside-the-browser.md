@@ -65,8 +65,8 @@ separately while nothing asked what executes TypeScript outside the browser at a
 *Node.* The default assumption of the ecosystem, and the one every host supports. Brings nothing
 else, so package manager, test runner and bundler stay separate decisions.
 
-*Bun.* Runtime, package manager, test runner and bundler in one. Fastest to scaffold and the
-strongest simplification if the bundled parts hold up. Younger, and host support is narrower.
+*Bun.* Runtime, package manager, test runner and bundler in one. The strongest simplification if the
+bundled parts hold up. Younger, and host support is narrower.
 
 *Deno.* Runtime with tooling included and a different module and permissions model. Strong
 TypeScript story natively.
@@ -167,9 +167,12 @@ that does not depend on one person, or if the spike shows leaving a runtime is c
 
 *Measured — over the twelve months to 2026-09-17, Node took 3,496 commits from 428 distinct authors
 across 59 releases; Deno 3,055 from 200 across 47; Bun 4,610 from 103 across 19; Andromeda 89 from 7
-across 26. Counted with `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by
-author, run by a research agent that stated its command. I did not run it. Distinct-author counts are
-by GitHub login falling back to commit email, so one person using two unlinked addresses counts twice.*
+across 26. Commit and author counts are from `gh api --paginate
+repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, run by a research agent that stated
+its command; I did not run it. The release counts are from `gh api --paginate
+repos/<owner>/<repo>/releases` filtered to `published_at >= 2025-09-17`, which I ran on 2026-09-18 and
+which returns 59, 47, 19 and 26 in that order. Distinct-author counts are by GitHub login falling back
+to commit email, so one person using two unlinked addresses counts twice.*
 
 *Sourced — `gh release list --repo tryandromeda/andromeda`, `gh api --paginate
 repos/tryandromeda/andromeda/tags`, and the repository's `Cargo.toml` and metadata through

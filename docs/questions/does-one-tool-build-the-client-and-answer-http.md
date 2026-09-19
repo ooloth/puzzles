@@ -64,6 +64,12 @@ meta-framework's own server as a candidate, and each defers the choice to the ot
 
 ## Options
 
+**This is not the field.** The candidates below were profiled as HTTP handlers under
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and have
+never been scored against
+[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
+Narrowing from this list means scoring against criteria this question did not set.
+
 *One tool.* A meta-framework builds the client bundle, produces the entry document and answers
 HTTP from one project. Carried in from
 [what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md):

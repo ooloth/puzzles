@@ -44,14 +44,52 @@ Split out of the rendering question.
 
 ## Options
 
-The TypeScript toolchains, since
-[ADR-0007](../decisions/0007-that-language-is-typescript.md) settled the language — Vite and Bun being
-the obvious two, with a framework's own tooling a third where it has one.
+The field the Findings surveyed. It splits on one property — whether the bundler reads a browserslist
+configuration natively — and the split is not a ranking. The floor's format is
+[open](what-format-declares-the-browser-floor.md) and is answered alongside this question with the
+bundler leading, and that file prices an adapter for the second group at one package or roughly
+sixty-five lines.
 
-**`bun build` is disqualified for the browser build**, by
-[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md): it cannot lower
-syntax to a declared floor and exposes no setting that would make it. Bun remains a live option for
-every other part of the toolchain, and those are separate choices tracked in their own files.
+**Most entries below have no case written for them.** The Findings establish the browserslist split
+and measure activity; beyond that, only Vite and `bun build` have been examined. A candidate with no
+case is in the field and unargued, which is different from one that was weighed and found wanting.
+
+*webpack.* Reads a browserslist configuration through `target: "browserslist"`. OpenJS Foundation
+governance. No case written.
+
+*Rspack.* The same option. The most commits and the lowest concentration of the tools measured below.
+Its cost is that it is one vendor's team. No further case written.
+
+*Rsbuild.* Browserslist is its primary mechanism rather than one option among several, and it declares
+a default floor when none is given. Same team as Rspack. Its cost is measured below: the most
+human-concentrated project found anywhere in the M1 field.
+
+*Parcel.* Reads the `browserslist` field in `package.json`. Its cost is measured below and it is the
+largest in this class — the quietest project surveyed in any category, in a position that is expensive
+to leave because the precache manifest, the lowering target and the dev server all hang off it. Under
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+it needs a reason to be chosen that the rest of the field does not.
+
+*Vite.* Takes an ES version, a browser-and-version string or an array, so it satisfies
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) and needs an
+adapter to read a browserslist declaration for
+[ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md).
+The most authors of the tools measured below, and the build every surveyed framework sits on. Its cost
+is recorded below: an open defect omitting an imported worker from the build manifest, which is the
+machinery a precache manifest reads.
+
+*esbuild, Rollup, Rolldown, Oxc and Farm.* Established only as not reading a browserslist
+configuration. Nothing else about any of them has been checked — not what each can lower to, not
+activity, not governance.
+
+*`bun build`.* **Disqualified for the browser build** by
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md): it does not
+down-convert syntax and exposes no setting that would. Bun remains live for every other part of the
+toolchain, tracked in its own files.
+
+*A framework's own tooling.* Next.js and the Angular CLI read a browserslist configuration. Choosing
+one of these is choosing more than a bundler, which is
+[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md).
 
 ## Findings
 

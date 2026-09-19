@@ -313,11 +313,14 @@ release-candidate status in v25.7.0, and it has not been promoted to "2 - Stable
 has never described it as stable, so a claim that it is, in Node 26 or any other version, is
 unsourced.*
 
-*Unverified at its source for the permission flags — the `--allow-read` and `--allow-write`
-requirement is not stated on Deno's own `node:sqlite` page or its Node-compatibility reference, and
-turns up only in search summaries nobody has opened. It is plausible and consistent with Deno's
-permissions model. It changes a run command rather than what can be built, so nothing here should turn
-on it either way.*
+*Sourced as an example rather than as a rule, re-checked 2026-09-19 — Deno's own `node:sqlite` API
+reference still says nothing about permissions, which I confirmed by opening
+[docs.deno.com/api/node/sqlite](https://docs.deno.com/api/node/sqlite/) myself. What does show the
+flags is Deno's own v2.2 announcement, whose file-backed example is followed by
+`deno run --allow-read --allow-write db.ts`; a research agent opened that post and quoted the command
+and I did not. So the requirement is Deno's own documented example rather than a normative statement,
+which is better than the search summaries this claim previously rested on and still short of a rule.
+It changes a run command rather than what can be built, so nothing here should turn on it either way.*
 
 **The three runtimes' governance differs, and it is a live input for a solo maintainer on a
 years of active attention.** Node is governed by the OpenJS Foundation, with v24 in Active LTS since
@@ -399,3 +402,53 @@ all four closed and quoted 19328's title. I did not open them. The agent did not
 string `ERR_DLOPEN_FAILED` in the portion of 19328 it read, so that error name is removed from this
 finding.*
 
+
+### The equivalence under `node:sqlite` is narrower than this file has been stating
+
+**Bun does implement `node:sqlite`, and one of its own reference pages says otherwise.** Bun's
+Node-compatibility page for v1.4.2 marks the module fully implemented, and oven-sh/bun#20412, "Add
+support for node:sqlite", closed as completed on 2026-07-17. Bun's separate API reference at
+`bun.com/reference/node/sqlite` still reads "Not implemented. Consider using `bun:sqlite` for Bun's
+built-in high-performance SQLite driver", and is stale. A reader landing on that page first will
+conclude the opposite of what is true, which is worth recording because it has already happened once
+here.
+
+*Sourced — [bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis) and
+[bun.com/reference/node/sqlite](https://bun.com/reference/node/sqlite) opened by me on 2026-09-19,
+and the issue state read by me with `gh issue view`.*
+
+**The compatibility entry carries four caveats, and one of them reaches back into `bun:sqlite`.**
+Quoted from that page: `backup()` "runs synchronously and blocks the event loop for the duration of
+the copy (Node runs it on a worker thread)"; a Buffer or Uint8Array database path "must be valid
+UTF-8"; "On macOS, Bun uses the system libsqlite3.dylib"; and `loadExtension()` "requires a full
+SQLite build, and so do `createSession()`/`applyChangeset()` on older macOS releases", for which the
+documented remedy is to call `require("bun:sqlite").Database.setCustomSQLite(path)` before opening a
+database.
+
+**That last caveat is what narrows the equivalence claim.** The argument this file has been making is
+that the same data-access code runs unchanged on all three runtimes, so the store advantages none of
+them. Under Bun, reaching a full SQLite build means importing `bun:sqlite` to configure the engine
+that `node:sqlite` then runs on. That is runtime-specific code in the data-access path, which is the
+thing the equivalence was claiming there would not be. It is a small amount of code and it is
+avoidable if no extension, session or changeset is ever needed. It is not nothing.
+
+**The blocking `backup()` is the caveat most likely to bind.**
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+commits to a copy off the machine, and a server that stops answering for the duration of a copy is a
+different operational proposition from one that does not.
+[How is the store backed up?](how-is-the-store-backed-up.md) at M3 is where that lands, and what M1
+owes it is only that the runtime record says whether it was an input. **Reverses if** Bun moves
+`backup()` off the event loop, or if the backup mechanism turns out not to use the driver's API at
+all.
+
+*Sourced — the caveat text quoted verbatim from Bun's Node-compatibility page, opened by me on
+2026-09-19. The implication for
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) is
+mine and is reasoning rather than a finding.*
+
+**So the honest statement is narrower again.** Under `node:sqlite`, no runtime is disqualified and all
+three run the same API. What is no longer true is that the code is identical everywhere: Deno adds two
+permission flags to the run command, and Bun adds a `bun:sqlite` call if the full SQLite build is ever
+needed. Neither is a disqualifier and neither should decide this on its own. Both belong in
+[which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md), which is
+where the remaining driver differences are now recorded.

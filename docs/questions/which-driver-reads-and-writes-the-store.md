@@ -94,3 +94,62 @@ The numbers and their methods are recorded in
 "1.2 - Release candidate" and available without a flag since v23.4.0 and v22.13.0.
 
 *Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html), re-checked 2026-09-04.*
+
+**The drivers differ on features, not only on speed, and the differences run the opposite way to the
+usual framing.** Checked 2026-09-19 as part of the M1 runtime work, because the assumption that
+`node:sqlite` is the driver everywhere was challenged rather than confirmed.
+
+- **`node:sqlite`** is synchronous except for `backup()`, offers prepared statements, user-defined SQL
+  functions through `database.function()`, `loadExtension()` with an `allowExtension` option, a
+  constructor `timeout` option documented as the busy timeout, and `createSession()` for changesets.
+  It has no `.transaction()` helper; transactions are driven through `exec()` with
+  `database.isTransaction` reporting state.
+- **`bun:sqlite`** has a `.transaction()` helper with nested support, `.serialize()`/`.deserialize()`,
+  and `loadExtension()`. Its current API reference lists no `.function()`, so **no user-defined SQL
+  functions**, and documents no dedicated busy-timeout option. On macOS it uses the system
+  `libsqlite3.dylib`.
+- **`better-sqlite3`** is at 13.0.3, published 2026-08-05, and is actively maintained. It has both the
+  `.transaction()` helper and `.function()`.
+- **`@db/sqlite`** on JSR is at 0.13.0, published 2025-11-18, with nothing shipped in ten months. It
+  wraps a native SQLite build over FFI and downloads a prebuilt shared library.
+
+**Nothing here disqualifies a driver for this system today.** Nothing in
+[../problem.md](../problem.md) or any record needs a user-defined SQL function, and the analysis
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves is
+plain SQL. The gap is recorded so that it is not discovered later as a surprise, and because it is the
+first thing found that makes the runtimes non-interchangeable on storage.
+
+*Sourced — Bun's Node-compatibility page and `bun:sqlite` API reference opened by me on 2026-09-19;
+Node's `node:sqlite` documentation, the `better-sqlite3` npm metadata and the `@db/sqlite` JSR
+metadata read the same day by a research agent, which I did not open.*
+
+**Using `node:sqlite` under Bun does not fully avoid `bun:sqlite`.** Bun's compatibility entry states
+that `loadExtension()` "requires a full SQLite build, and so do `createSession()`/`applyChangeset()`
+on older macOS releases", and that reaching a full build means calling
+`require("bun:sqlite").Database.setCustomSQLite(path)` before opening a database. So under Bun the
+data-access path acquires a runtime-specific line the moment extensions or changesets are needed.
+That is the concrete form of the coupling this question was opened to check. **Reverses if** Bun ships
+a full SQLite build by default on every platform.
+
+*Sourced — [bun.com/docs/runtime/nodejs-apis](https://bun.com/docs/runtime/nodejs-apis), opened and
+quoted by me on 2026-09-19.*
+
+**One of Bun's own pages contradicts the other, and the wrong one is the more findable.**
+`bun.com/reference/node/sqlite` reads "Not implemented. Consider using `bun:sqlite`", while the
+Node-compatibility page marks the module fully implemented for v1.4.2 and oven-sh/bun#20412 closed as
+completed on 2026-07-17. Anyone checking Bun's `node:sqlite` support should read the compatibility
+page, not the reference page.
+
+*Sourced — both pages opened by me on 2026-09-19, and the issue state read with `gh issue view`.*
+
+**The only benchmark with a disclosed method is the vendor's own and does not measure the comparison
+that matters.** Bun's docs claim `bun:sqlite` is "roughly 3-6x faster than better-sqlite3 and 8-9x
+faster than deno.land/x/sqlite for read queries", benchmarked on the Northwind Traders dataset on an
+M1 MacBook Pro running macOS 12.3.1, which dates it to 2022. It does not compare against
+`node:sqlite`, and `deno.land/x/sqlite` is not Deno's current option. A figure of "10,000 rows in 12ms
+for Bun against 45ms for Deno and 88ms for Node" circulates in secondary commentary with no hardware,
+dataset or iteration count anywhere, and is unsourced wherever it turns up. No independent,
+method-disclosed benchmark comparing the three current drivers was found.
+
+*Sourced — Bun's SQLite documentation, read 2026-09-19 by a research agent; I did not open it. The
+absence of an independent benchmark is that agent's search result rather than a proof of absence.*

@@ -452,3 +452,94 @@ permission flags to the run command, and Bun adds a `bun:sqlite` call if the ful
 needed. Neither is a disqualifier and neither should decide this on its own. Both belong in
 [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md), which is
 where the remaining driver differences are now recorded.
+
+### The criteria this is scored against, derived rather than inherited
+
+The properties below are derived from what this server actually does rather than from what earlier
+passes of this file happened to discuss. Three earlier rounds scored only behavioural capabilities,
+licensing, stewardship and hosting availability, and never asked what the thing costs to run.
+
+**Binds, and is unmeasured.**
+
+- **Baseline and drifting memory.** It sets the hosting tier and therefore a recurring bill, and
+  [../problem.md](../problem.md) rules out a decision that makes growing expensive. No published
+  figure survives a method check: the blog comparisons disclose no hardware, tool or iteration count
+  and do not agree on direction; the one benchmark with disclosed hardware is Bun's own ecosystem
+  repo comparing Bun's server against Node running `uws` rather than stock Node; the one
+  disclosed-method startup benchmark is Deno measuring Deno and shows Deno winning every case.
+- **Latency of one synchronous SQLite write.** `node:sqlite` is synchronous on every runtime, so a
+  write blocks the event loop for its duration, and this server's whole job is small reads and
+  writes. Nobody has measured whether the duration differs by runtime.
+
+**Does not bind, and here is why rather than silence.**
+
+- **Request throughput.** [../constraints.md](../constraints.md) puts plausible load under a hundred
+  writes per second against driver throughput in the tens of thousands.
+- **Network bandwidth.** Payloads are small and [../constraints.md](../constraints.md) records that
+  transfer time is not the bottleneck once a connection is warm.
+- **Storage capacity.** A SQLite file of puzzles and player state is small, and the disk is sized by
+  the host rather than by the runtime.
+- **Object-storage interaction.** All three upload a backup file to an S3-compatible endpoint today.
+  Bun ships `Bun.s3` and needs no dependency; Node and Deno use `@aws-sdk/client-s3`, which Deno's
+  own documentation demonstrates against R2 directly, and which is replaceable under either by
+  `aws4fetch` at 2.5 kB gzipped with no dependencies. What this did **not** examine is recorded in
+  [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md).
+
+**Judgement rather than measurement.**
+
+- **Vite interop.** [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) chose Vite on the
+  development loop. Under Deno, denoland/deno#35942 is open and reports Rolldown's vendored signal
+  handler killing every Vite 8 dev server under `deno run --watch`. Under Bun, oven-sh/bun#29368 is
+  open and reports Bun workspaces breaking the Vite dev server. Under Node there is no equivalent.
+  Both are conditional and both are upstream, so neither disqualifies.
+- **Porting cost if the runtime changes later.** Source written to the subset all three execute ports
+  by changing a run command. Source using one runtime's conveniences does not.
+- **Tooling absorbed.** Bun brings a package manager and test runner, Deno those plus a formatter and
+  linter, Node neither. Discounted for Bun by its test runner's documented gaps, recorded in
+  [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md),
+  and unknown for Deno, which has not been researched.
+- **Governance and supply.** Priced low by
+  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md),
+  because nothing separates the three on a binding property, so there is no bad answer to be stuck
+  with and the position is cheap to leave.
+
+### TypeScript ergonomics: Node's are the narrowest of the three, and the gap does not bite here
+
+**Node runs TypeScript at "Stability: 2 - Stable", by stripping types rather than transpiling.** It
+has been on by default since v22.18.0 and v23.6.0. Enums, `namespace` with runtime code, parameter
+properties and import aliases each error. Decorators "are not transformed and will result in a parser
+error". "Node.js ignores `tsconfig.json` files and therefore features that depend on settings within
+`tsconfig.json`, such as paths... are intentionally unsupported." File extensions "are mandatory in
+`import` statements", so `import './file.ts'` rather than `./file`. No type checking is performed.
+
+*Sourced — [nodejs.org/api/typescript.html](https://nodejs.org/api/typescript.html), opened and quoted
+by me on 2026-09-19.*
+
+**Bun's and Deno's are supersets.** Bun reads `tsconfig.json`, honours `paths`, transpiles rather than
+strips, and supports every construct above. Deno supports the same language features natively and
+replaces `paths` with an `imports` map in `deno.json`. Deno's own friction is at the other end, where
+`tsc --noEmit` does not resolve `npm:` and `jsr:` specifiers, so CI type checking is `deno check`
+rather than the command used everywhere else.
+
+*Sourced — Bun's and Deno's TypeScript documentation, read 2026-09-19 by a research agent. I did not
+open them.*
+
+**"Ignores tsconfig" is narrower than it reads.** Type checking under all three is `tsc --noEmit`,
+which reads `tsconfig.json` normally, so `strict`, `target` and every type-level setting still govern
+the codebase. What Node ignoring the file costs at runtime is path mapping and syntax downleveling,
+and downleveling is irrelevant for a runtime we choose. The remaining loss is path aliases, for which
+Node's answer is `package.json` subpath imports, a different syntax for the same capability.
+
+**The constructs Node cannot run are ones this project does not want.** Enums, decorators, namespaces
+with runtime code and parameter properties are each declined rather than sacrificed, and no record or
+promise needs any of them. `erasableSyntaxOnly` in `tsconfig.json` makes staying inside that subset a
+compiler error at write time rather than a discipline anyone has to remember. **Reverses if** this
+codebase adopts a library whose API requires decorators.
+
+### What a spike would settle, and what it would not
+
+It settles the two binding properties above and nothing else: baseline and drifting memory, and
+synchronous SQLite write latency, for a minimal server close in shape to the real one, since
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeps this server thin by
+design. It does not settle throughput, which does not bind, and it cannot settle the Vite interop or
+porting questions, which are judgements about upstream bugs and future work rather than observations.

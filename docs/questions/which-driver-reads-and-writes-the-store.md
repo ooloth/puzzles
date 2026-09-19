@@ -153,3 +153,42 @@ method-disclosed benchmark comparing the three current drivers was found.
 
 *Sourced — Bun's SQLite documentation, read 2026-09-19 by a research agent; I did not open it. The
 absence of an independent benchmark is that agent's search result rather than a proof of absence.*
+
+### Every moment this system touches storage, and what is unexamined about each
+
+Enumerated 2026-09-19, because asking about "storage" in the abstract returned nothing and asking
+where the system actually touches it returned a list. Most of these are cheap to investigate and none
+should delay a decision; they are here so the investigation is a choice rather than an omission.
+
+- **The request path reads a puzzle row.** Synchronous under `node:sqlite` on every runtime, so it
+  blocks the event loop for its duration. **Unexamined:** whether that duration differs by runtime,
+  and what it is for a row of realistic size.
+- **The request path writes player state.** Same synchronicity. How durably it lands is
+  [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+  at M3. **Unexamined:** write latency per runtime, and how much the durability setting changes it.
+  [../constraints.md](../constraints.md) puts plausible load under a hundred writes per second
+  against driver throughput in the tens of thousands, so this is very unlikely to bind, and that is a
+  reason to check it cheaply rather than to skip it.
+- **A backup is copied off the machine.** Three mechanisms exist and nobody has compared them: the
+  driver's own `backup()`, a `VACUUM INTO`, and a filesystem copy of a WAL-mode database. Under Bun
+  `backup()` blocks the event loop where Node runs it on a worker thread, which is recorded above.
+  **Unexamined:** how long each takes at a realistic database size, and whether the server can keep
+  answering throughout. [How is the store backed up?](how-is-the-store-backed-up.md) at M3 owns the
+  choice; what is unexamined here is the cost of each option.
+- **That backup is streamed to object storage.** All three runtimes can upload to an S3-compatible
+  endpoint, which is established. **Unexamined:** memory during a multi-megabyte streamed upload. One
+  open Bun issue reports an out-of-memory failure on streamed chunks above 500KB, which is a hint
+  rather than a finding and has not been reproduced here.
+- **WAL checkpointing.** Blocked by a long read, which is
+  [how do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) at M11.
+  **Unexamined:** nothing additional; that question owns it.
+- **A migration rewrites a table.** [How is the schema migrated?](how-is-the-schema-migrated.md) at
+  M3 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the
+  server to need taking out of service, which decides whether a migration is a deploy step or an
+  outage.
+
+**Two of these bear on the runtime choice and the rest do not.** Read and write latency are the ones
+a runtime could plausibly change, and they are recorded as binding in
+[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md). Everything
+else here is a property of the driver, the settings or the mechanism rather than of what executes
+them.

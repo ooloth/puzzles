@@ -222,19 +222,23 @@ field and the only choice that foreclosed another question:
 [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). What is left derives from those, or from
 nothing.
 
-1. **The runtime.** Derives from nothing. The cheapest substantive one to get wrong, because
-   nothing separates the three candidates on a binding property, so there is no bad answer to be
-   stuck with; reversing is a run command, a package manager and a lockfile. It also unblocks the
-   most, so both criteria agree.
-2. **The package manager.** Derives from the runtime, and may not survive it. Its Options hold
-   only pnpm, npm and Bun, so that field was never rebuilt: Deno's own package manager and yarn
-   are missing from a list that reads as complete. Rebuild it before deciding, or the decision
-   is made over somebody's shortlist.
-3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
+**The runtime is settled too**, at
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which was step 1. It
+was expected to come down to preference because nothing separated the candidates on a binding
+property; a measurement found one, which is that Bun cannot bound its heap and so cannot be made to
+say why it died. What remains:
+
+1. **The package manager.** It survived the runtime: Node ships npm and does not require it, so
+   this is still a choice. Its Options hold only pnpm, npm and Bun, so that field was never
+   rebuilt — Bun is out by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
+   and yarn is missing from a list that reads as complete. Rebuild it before deciding, or the
+   decision is made over somebody's shortlist. It is the only one of these still needing research.
+2. **The layout.** Derives from the package manager. Its own file records that being wrong is a
    file move and a configuration change.
-4. **The HTTP handler.** Derives from the runtime, whose own server API is one of the candidates.
-   Nothing separates the rest, and it sits behind a thin interface.
-5. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+3. **The HTTP handler.** `node:http` is now one of the candidates by
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
+   the rest, and it sits behind a thin interface.
+4. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -248,7 +252,7 @@ nothing.
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-6. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+5. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -258,12 +262,12 @@ nothing.
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-7. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+6. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Steps 2 to 5 are write-ups rather than research.
+Steps 2 to 4 are write-ups rather than research.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -309,7 +313,7 @@ derivation.
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
    - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so this slice's server is chosen on its own and a toolchain that also answers HTTP is not a candidate
-     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Nothing surveyed separates the three candidates on a binding property, so what decides this is whether the toolchain above runs on all of them; where it does, this is a free choice and the record says so
+   - **Given:** [0030-typescript-outside-the-browser-runs-on-node](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) — so the package manager and the HTTP handler below are chosen against Node, and source stays inside the syntax it can strip
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected; the decision itself waits on [which-package-manager](which-package-manager.md) above

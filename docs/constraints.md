@@ -616,6 +616,29 @@ which is why it bears on
 [how much downtime is acceptable?](questions/how-much-downtime-is-acceptable.md) without being
 answered by a hosting choice.
 
+## Runtimes — a heap ceiling does not bound a process
+
+**A JavaScript runtime's heap limit governs the JS heap and nothing else, so a process can exceed its
+container's memory while staying inside its configured ceiling.** Measured on 2026-09-19 in Linux
+arm64 containers capped at 256 MB: a script allocating through `Buffer.alloc` exited 137, killed by
+the kernel with no output, under Node, Bun and Deno alike, with and without a heap ceiling set,
+because a buffer is not in the space the ceiling bounds. The same script allocating on the JS heap
+exited 133 under Node and Deno after printing GC diagnostics and a native stack trace, once a ceiling
+below the container limit was set.
+
+*Measured — Docker 29.0.1, linux/arm64, `node:26-slim`, `oven/bun:1.4.2-slim`, `denoland/deno:2.9.7`,
+run by me. The full method is under **Findings** in
+[what runs TypeScript outside the browser?](questions/what-runs-typescript-outside-the-browser.md).*
+
+**So two things follow for anything that has to notice its own failure.** A ceiling set below the
+container limit is what converts a JS-heap exhaustion from a silent kill into a logged abort, and
+nothing sets one by default. And no ceiling helps against off-heap growth, so a buffer or native
+allocation leak is invisible on every runtime and has to be caught by watching the process from
+outside rather than by configuring it. That is an input to
+[what are the server's vitals, and who watches them?](questions/what-are-the-servers-vitals-and-who-watches-them.md)
+and to [how would we notice a problem nobody predicted?](questions/how-would-we-notice-a-problem-nobody-predicted.md),
+both at M11.
+
 ## Databases — SQLite is not safe on a network filesystem
 
 **SQLite's maintainers advise against it, and the failure is corruption rather than an error.** From

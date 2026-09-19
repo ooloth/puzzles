@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-09-19
 update_when: this file's own content changes — a row is added to or removed from the table below
 decays: slow
 status: active
@@ -17,6 +17,7 @@ Full context: [problem.md](problem.md).
 | [decisions/](decisions/)         | Choices already made, and why           |
 | [failure-modes/](failure-modes/) | Ways it can fail, and whether we'd know |
 | [guarantees/](guarantees/)       | Promises to players we must never break, one per file |
+| [invariants/](invariants/)       | What holds without exception, one per file |
 | [questions/](questions/)         | Decisions not yet made, in order        |
 | [standards/](standards/)         | What correct work looks like here       |
 | [architecture](architecture.md)  | Where code lives and what calls what    |
@@ -54,9 +55,12 @@ Three of these are easy to confuse:
 - Can't change it → [constraints](constraints.md)
 - Chose it, could choose otherwise → [decisions/](decisions/)
 - Promised it, and breaking it is our bug → [guarantees/](guarantees/)
+- Always true, and a player would never see it break → [invariants/](invariants/)
 
 A constraint forces a decision; a decision commits us to a guarantee; a guarantee is only
-real once something checks it.
+real once something checks it. An invariant usually falls out of a decision rather than being
+chosen, and the difference from a guarantee is who notices: a guarantee is what a player would see
+break, an invariant is what only the system would.
 
 ## Conventions
 

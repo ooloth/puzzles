@@ -28,6 +28,7 @@ INDEXES = [
     ('docs/guarantees/README.md', 'docs/guarantees'),
     ('docs/failure-modes/README.md', 'docs/failure-modes'),
     ('docs/standards/README.md', 'docs/standards'),
+    ('docs/invariants/README.md', 'docs/invariants'),
 ]
 
 # docs/decisions/ has no index — its README describes the format, and the

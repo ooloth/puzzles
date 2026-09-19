@@ -49,6 +49,86 @@ breaks when Node is what executes it.
 
 ## Rejected
 
+**The field was rebuilt from registries on 2026-09-16 rather than from recall, and the three
+familiar names were not the field.** The WinterTC runtime-keys registry lists 23 keys: andromeda,
+arvancloud, azion, bun, convex, deno, edge-light, edge-routine, electron, fastly, kiesel, lagon,
+moddable, netlify, node, quickjs, quickjs-ng, pythonmonkey, react-native, react-server, rhino,
+wasmer, workerd. Beyond it: LLRT, Elide, txiki.js, Sable and Nova.
+
+*Sourced — [runtime-keys.proposal.wintertc.org](https://runtime-keys.proposal.wintertc.org/), JSR's
+package documentation and GitHub topic listings, read 2026-09-16 by a research agent. I did not open
+them.*
+
+Most of that list falls to records already in force, in four groups.
+
+- **The constrained-isolate and edge tier** — workerd, edge-light, fastly, azion, arvancloud,
+  edge-routine, wasmer, convex and LLRT — because
+  [ADR-0018](0018-the-server-does-not-run-in-a-constrained-isolate.md) rules the tier out and
+  [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md) puts the store on a local disk,
+  so edge compute reading a central store adds a network hop rather than removing one.
+  **Reverses if** [ADR-0018](0018-the-server-does-not-run-in-a-constrained-isolate.md) is reversed.
+- **Embeddable engines** — quickjs, quickjs-ng, kiesel, moddable, rhino, pythonmonkey and Nova —
+  because they are engines rather than runtimes and have no process, package or server story.
+  **Reverses if** one of them grows those, which would make it a different thing.
+- **Application shells** — electron and react-native — because they are not servers. Same reversal.
+- **`react-server`** is not a runtime at all; it is a `package.json` export condition, which is a
+  defect in the registry rather than a candidate.
+
+The first group is a judgement that follows from a record. The other three are category errors, and
+they are listed so that nobody re-derives them.
+
+- **Sable, LLRT and txiki.js** — because
+  [ADR-0007](0007-that-language-is-typescript.md) requires TypeScript and each documents that it
+  does not execute it. Sable's README lists among its non-goals "Native support of TypeScript/TSX/JSX
+  (maybe will be possible in the future with service workers)". LLRT's states: "LLRT will not support
+  running TypeScript without transpilation. This is by design for performance reasons." txiki.js
+  documents: "txiki.js doesn't run TypeScript directly, `.ts` files need to be transpiled to
+  JavaScript first." That reason disqualifies each alone. **Reverses if** any of them adopts
+  TypeScript execution. txiki.js is otherwise live — its `v26.6.0` released 2026-06-22 — so it is out
+  on the language and not on age.
+
+  *Sourced — the Sable and LLRT READMEs fetched raw and
+  [txikijs.org/docs/typescript](https://txikijs.org/docs/typescript/), read 2026-09-17 by a research
+  agent quoting verbatim; the txiki.js release date from `gh release list`. I did not open them.*
+
+- **Elide** — because its licence can be withdrawn, and it is the only candidate any licence removes.
+  Section 4.1 of its terms grants "a limited, non-exclusive, non-transferable, non-sublicensable,
+  revocable license". The disqualifying word is "revocable", and it disqualifies alone: the licence
+  property in [what must the client and the server each be able to
+  do?](../questions/what-must-the-client-and-server-be-able-to-do.md) requires one that cannot be
+  revoked, because the terms rather than the code then decide whether the thing can keep being used.
+  **Reverses if** Elide adopts an irrevocable open-source licence.
+
+  *Sourced — [elide.dev/legal/terms](https://elide.dev/legal/terms/), opened and quoted by me on
+  2026-09-17. Claims circulating about nightly-only builds, thirty-day expiry or per-major-version
+  pricing correspond to nothing on the site and are unsourced wherever they turn up; the revocable
+  licence needs none of them.*
+
+- **Andromeda** — because the runtime is the position with no cheap exit, and its supply rests on
+  seven authors. It is at 0.1.14 under MPL-2.0 with a built-in HTTP server and SQLite support, has
+  never crossed 1.0, and its repository was last pushed 2026-06-15. Over the twelve months to
+  2026-09-17 it took 89 commits from 7 distinct authors, against Node's 3,496 from 428, Deno's 3,055
+  from 200 and Bun's 4,610 from 103.
+  [ADR-0027](0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+  requires an elimination on stewardship to name the replacement cost that made the concern binding:
+  here the server, the generator and every script sit on the runtime, so leaving means re-scaffolding
+  all four rather than swapping a module behind an interface. The same figures about a router would
+  disqualify nothing. **Reverses if** Andromeda reaches a stable release with a contributor base that
+  does not depend on one person.
+
+  *Measured — commit and author counts from `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`
+  grouped by author, run by a research agent that stated its command; release counts from the releases
+  API, and Andromeda's version, licence and `pushed_at` from `gh api`, both run by me on 2026-09-18.
+  Distinct authors are counted by GitHub login falling back to commit email, so one person using two
+  addresses counts twice. **Any argument reaching for these numbers excludes bots first and nothing
+  does that automatically**: the most prolific committer is an automation account in three of the four
+  — Bun's `robobun` at 60.9%, Node's `nodejs-github-bot` at 8.2% — while the most prolific human is a
+  different account with a different share, Bun's at 14.7%, Node's at 8.1% and Deno's at 36.8%, which
+  makes Deno the most human-concentrated of the incumbents. The raw figure looks like a measurement
+  either way, which is what makes the omission silent.*
+
+**That left Node, Bun and Deno**, and the rest of this section is why the two that lost, lost.
+
 - **Bun** — its case is the strongest on measurement. In a Linux container it held 56 MB under this
   system's plausible load against Node's 92 MB, started in 20 ms against 63 ms, absorbs the package
   manager and test runner, and its own SQLite driver measured no faster than the portable one, so
@@ -59,8 +139,12 @@ breaks when Node is what executes it.
   137, killed by the kernel with no output, every one of them reaching the same allocation count as
   an unbounded run. Node and Deno given an equivalent flag exited 133 after printing GC diagnostics
   and `FATAL ERROR: ... JavaScript heap out of memory` with a native stack trace. This reproduces
-  oven-sh/bun#34917, open since 2026-07-21. The method and figures are under **Findings** in
-  [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md).
+  oven-sh/bun#34917, open since 2026-07-21.
+
+  *Measured — Docker 29.0.1, linux/arm64 containers capped with `--memory=256m --memory-swap=256m` on
+  an Apple M2, images `node:26-slim`, `oven/bun:1.4.2-slim` and `denoland/deno:2.9.7`. A script
+  allocated 200,000-element arrays of small objects on the JS heap until the process died, with a
+  `try`/`catch` around every allocation. Run by me on 2026-09-19.*
 
   That reason disqualifies alone: a runtime that cannot be made to say why it died turns every
   memory bug into the failure the observability theme above names, and the portable decision-making
@@ -103,6 +187,15 @@ breaks when Node is what executes it.
 under load, and 63 ms to listening against 20 ms. All three fit a 256 MB machine with over 150 MB
 free, so the cost is headroom and a few dollars rather than a tier, but it is a standing cost and it
 grows with the app rather than shrinking.
+
+*Measured — the same Linux containers as above, running a `node:http` server over `node:sqlite` in
+WAL with `synchronous=NORMAL`, RSS from `process.memoryUsage().rss` at idle, after a 20,000-request
+burst, and under ten requests per second for 90 seconds. Startup is the p50 of fifteen runs to the
+listening callback after three warmups. Write and read latency did not separate the candidates: p50
+write fell between 0.011 and 0.013 ms across all three, against the plausible load under a hundred
+writes per second in [../constraints.md](../constraints.md). The same measurements on macOS
+overstated the memory spread by roughly double and should not be used; the host was the larger
+variable, which is why these were re-run on the platform that ships.*
 
 **The heap-legibility advantage is a capability, not a default.** Measured: with no ceiling set below
 the container limit, Node is SIGKILLed exactly as silently as Bun. The advantage exists only if

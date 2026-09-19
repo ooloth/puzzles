@@ -74,8 +74,10 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    slices. A slice that reads like the milestone restated is bundling. A question written as a given
    is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask
    whether it names a consequence for *this slice* or merely describes the question; the second is
-   the failure this audit is most likely to find, because it reads as a reason. Then count how many
-   slices each question blocks: that orders the slices, and says nothing about the order inside one.
+   the failure this audit is most likely to find, because it reads as a reason. Then read the
+   cross-references: a choice that several files each defer to the others is a question, and it is
+   usually wider than any of them. Then count how many slices each question blocks: that orders the
+   slices, and says nothing about the order inside one.
 
 **Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
 smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a

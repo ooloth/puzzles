@@ -48,6 +48,11 @@ own server, which only exists if the renderer is that meta-framework; and pickin
 not one removes the option from the other side. Neither can be settled alone without deciding part of
 the other by accident.
 
+**The choice underneath both is
+[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
+and it is answered first.** It is wider than either, because it decides whether this question and that
+one resolve into one record or two. A renderer settled ahead of it answers it by consequence.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -39,6 +39,11 @@ Choosing a renderer that is not a meta-framework removes the option in the other
 two constrain each other exactly as this question and the runtime do, and answering either alone
 risks settling the other by accident. That makes this a chain of three rather than a pair.
 
+**The choice underneath that pair is
+[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
+and it is answered first.** It is wider than either, because it decides whether this question and the
+renderer resolve into one record or two. A handler settled ahead of it answers it by consequence.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

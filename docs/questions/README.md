@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-04
+updated: 2026-09-19
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -206,21 +206,42 @@ Node. If the field turns out to run cleanly only on Node, the runtime is settled
 is recorded as a consequence with its reason, per
 [../decisions/README.md](../decisions/README.md) on recording what follows necessarily.
 
-**The order, and what each step costs:**
+**What breaks a tie between two questions that do not derive from each other is which one is
+cheaper to get wrong.** Not which unblocks the most. That was the rule this list was built on and it
+measures how the work was planned rather than anything about the system, so redrawing the milestones
+changes it while the cost of being wrong does not. The two usually agree, because the thing
+everything waits on is often the cheap one, and they agree on the order below. Where they disagree
+the cost of being wrong decides. The portable decision-making standard now carries this, including
+the part that matters most here: cheapest to get wrong counts discovery, so a question whose wrong
+answer nobody would notice moves earlier rather than later, while the thing it affects is still
+small enough to inspect.
 
-1. **The build and toolchain.** Only discriminator, only foreclosure.
-2. **The renderer.** Settled by step 1 where the toolchain bundles one, otherwise opened by it and
-   decided on where a reactive primitive can live.
-3. **The runtime.** Bounded by step 1 only if the field is Node-only; otherwise a free choice.
-4. **The HTTP handler.** Nothing separates the candidates. A write-up once the runtime is known.
-5. **The package manager.** Absorbed by the runtime where it ships one.
-6. **The layout.** Decided by scaffolding it; its own file records that being wrong is a file move.
-7. **The floor format.** Follows the bundler, and the adapter where one is needed is priced at one
-   package or roughly sixty-five lines.
+**The build and the toolchain came first and are settled**, on the only property that separated the
+field and the only choice that foreclosed another question:
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). What is left derives from those, or from
+nothing.
 
-Steps 4 to 7 are write-ups rather than research.
-[What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) sits outside
-this order entirely: nothing above bears on it, its file is empty, and it blocks slice 2.
+1. **The runtime.** Derives from nothing. The cheapest substantive one to get wrong, because
+   nothing separates the three candidates on a binding property, so there is no bad answer to be
+   stuck with; reversing is a run command, a package manager and a lockfile. It also unblocks the
+   most, so both criteria agree.
+2. **The package manager.** Derives from the runtime, and may not survive it.
+3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
+   file move and a configuration change.
+4. **The HTTP handler.** Derives from the runtime, whose own server API is one of the candidates.
+   Nothing separates the rest, and it sits behind a thin interface.
+5. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+   be written at any point after that record lands.
+6. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+   it is the only one that accumulates code written against the choice. So it waits, and is made
+   with whatever the scaffold has shown by then.
+7. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+   no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
+   It is last in the list and it does not drift, because it is the one question here whose wrong
+   answer is invisible: every browser above the floor shows the app either way.
+
+Steps 2 to 5 are write-ups rather than research.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -265,7 +286,7 @@ derivation.
    - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
-     - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else a standalone router is adopted while the toolchain's own server was going to answer HTTP, and the router, its middleware and the boundary they shape are discarded. Costs a re-scaffold of the server half. It is listed in this slice as well as slice 2 because a toolchain that answers HTTP makes this slice's server the same choice as that slice's build
+   - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so this slice's server is chosen on its own and a toolchain that also answers HTTP is not a candidate
      - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Nothing surveyed separates the three candidates on a binding property, so what decides this is whether the toolchain above runs on all of them; where it does, this is a free choice and the record says so
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
@@ -281,9 +302,9 @@ derivation.
    - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
    - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the target is read from one shared declaration rather than set on the bundler directly
    - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. Answered after the build below, which forecloses it where the toolchain bundles a renderer: Nuxt means Vue and SvelteKit means Svelte, while plain Vite and Astro leave it open
-     - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
-     - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Answered together with [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md), whose native format is the binding input
+   - **Given:** [0029-the-client-bundler-is-vite](../decisions/0029-the-client-bundler-is-vite.md) — the precache manifest and content-hashed filenames are this bundler's outputs, and whether it emits a manifest containing the entry document is what that record names as unproven
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. The build is settled and forecloses nothing here, so the field is open. Before assuming [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) still holds, check its Nuxt rejection: that rejection is that Nuxt closes the renderer to Vue, so choosing Vue here removes its grounds and reopens that record
+     - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Its binding input has landed: [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) takes a browser-and-version string and does not read browserslist, so what is open is the declaration's format and the adapter between them
      - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)

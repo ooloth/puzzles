@@ -427,3 +427,36 @@ did not open them.*
 *This repeats the finding above and is kept only for the three projects it adds. Nothing here checked
 which bundler any of them uses, so a claim pairing this set with a named bundler is unsourced wherever
 it turns up. Logseq's core is ClojureScript with React only in the UI layer.*
+
+### The criterion this file weights highest does not bind, checked 2026-09-19
+
+**Where a renderer allows a reactive primitive to live constrains the state-holding module and not
+the domain-logic module.** The restriction was read as reaching the shared puzzle rules, and it does
+not. Svelte's `$state` is compiler syntax: it compiles only in `.svelte`, `.svelte.js` and
+`.svelte.ts`, and the only file that needs the Svelte compiler in its path is the one that calls it.
+A module of pure functions over plain objects that never calls `$state` is an ordinary `.ts` file,
+importable unchanged by a browser build, a server process and a batch script run directly under a
+bare runtime. Vue's case is looser still: `@vue/reactivity` is published standalone at 3.5.43 and
+`ref()`, `reactive()` and `computed()` are ordinary functions needing no component, no app instance
+and no bundler. Only `watch()` and `watchEffect()` want an `effectScope()` to avoid leaking, and pure
+rules use neither.
+
+**So no renderer here is disadvantaged on sharing the rules**, which is what
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) is
+for. The criterion still separates the candidates on how pleasant the *view-state* layer is to write.
+It does not separate them on anything a record requires, and it was being treated as though it did.
+
+**What follows is a rule rather than an elimination.** The shared rules module never declares
+`$state` and never wraps its inputs in `reactive()` or `ref()`. Where the view layer hands data to
+it, it passes `$state.snapshot(x)` under Svelte or `toRaw(x)` under Vue, so the rules only ever see
+plain data. Svelte's own docs give the reason: a snapshot is "handy when you want to pass some state
+to an external library or API that doesn't expect a proxy, such as `structuredClone`". This is a
+candidate invariant rather than a finding, and it holds under every renderer surveyed.
+
+**Reverses if** the board's mutable state cannot be kept separate from the rules that read it, which
+would be a design failure rather than a renderer's fault.
+
+*Sourced — [svelte.dev/docs/svelte/$state](https://svelte.dev/docs/svelte/$state) opened and quoted by
+me on 2026-09-19, and confirmed that the page places no restriction on a separate plain `.ts` module.
+Vue's `effectScope` and `toRaw` references and the `@vue/reactivity` version were read the same day by
+a research agent; I did not open them.*

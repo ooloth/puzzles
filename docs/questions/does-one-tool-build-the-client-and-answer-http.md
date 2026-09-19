@@ -140,3 +140,48 @@ the gap: the ordering "assumed here" may turn out different once something has b
 has been run.
 
 *Unverified — no source recorded for the ordering in any of the three files.*
+
+**The property list cannot score this question, and that is a defect in the question rather than in
+the list.** [What must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
+holds eight toolchain properties: emit the entry document as a build output, put content in it the
+bundle does not deliver, lower emitted syntax to a declared floor, read that floor from one
+declaration with three readers, emit content-hashed filenames, emit a manifest, resolve the shared
+rules import from a browser entry point and a process outside the browser with no publish step, and
+build two deployables. None of them says anything about how many tools do the work. So the thing this
+file asks is not a property the system has, and **What would settle it** above proposes scoring
+against a list that has nothing to score.
+
+**The coupling this file was opened for is real; the framing is what fails.** Adopting SvelteKit is
+adopting Svelte and Vite and SvelteKit's server in one act, and three question files each deferring to
+the others is the failure the portable decision-making standard names. What follows from that is that
+the renderer, the HTTP handler and the build are worked as one field of candidate toolchains, where a
+bundled framework and an assembled set are both points in the field, scored against the same
+properties. How many records fall out is then decided by the separability test in
+[../decisions/README.md](../decisions/README.md) when the records are written, rather than announced
+in advance.
+
+**Whether this file is mined and deleted, or rewritten as the toolchain question, is undecided.** It
+is recorded here so that a reader does not work the question as posed.
+
+**The lowering-target check was run on 2026-09-19 and removed nobody.** All seven meta-frameworks
+listed under **Options** build on Vite, and SvelteKit, Astro and React Router are plain Vite projects
+with a plugin added, so `build.target` is set the ordinary way. The unchecked claim recorded above —
+whether each framework exposes it at all — is now checked for those three and found not to
+discriminate. A report that Nuxt cannot set it does not hold: the evidence was nuxt/nuxt#20065, filed
+and closed as not planned within four hours on 2023-04-04 against Nuxt 3, and Nuxt is now 4.5.2 on
+Vite 8 with an `esbuild.options.target` option. The full result, including the caveat that Nuxt
+remains unverified rather than cleared, is in
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+
+*Sourced — nuxt/nuxt#20065 and Nuxt's current configuration reference opened by me on 2026-09-19; the
+Vite peer dependencies and `build.target` reference read the same day by a research agent I did not
+follow to source.*
+
+**What does discriminate is the precache manifest, and it removes three candidates from the "one
+tool" option.** TanStack Start, React Router in SPA mode and Qwik City cannot today produce a precache
+manifest naming the entry document, which
+[ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
+[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+between them require. The issue numbers, their states and their reversal conditions are recorded in
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
+rather than duplicated here.

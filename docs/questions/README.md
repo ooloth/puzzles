@@ -174,39 +174,64 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**The store does not order slice 1's questions. The toolchain does.** Store locality does not
-constrain the runtime: Node, Bun and Deno all ship `node:sqlite` as a built-in, so the same
-data-access code runs on every runtime under either store answer. What orders them instead is a
-chain the question files state themselves — the runtime is answered together with the HTTP
-handler, the package manager may be settled by consequence if the runtime ships one, and the
-layout waits on whether that toolchain does workspaces. So the runtime leads *this slice's*
-questions, and not because it is built first. The fork below constrains it in the other direction,
-because a meta-framework ships adapters for some runtimes and not others, so neither is answered ahead
-of the other.
+**One question in M1's toolchain cluster has a property that separates its candidates. Five do
+not.** That is the result of the survey run to 2026-09-19, and it is what orders everything below.
 
-**It does not lead M1.** The order across the whole milestone is the numbered plan in the working
-notes at the end of this section, which derives what both halves must be able to do before naming
-any tool, so the cluster above is scored against a written list rather than against recall. Read
-that plan before starting anything here.
+The one that separates is the build, on the precache manifest: TanStack Start, React Router in SPA
+mode and Qwik City cannot today emit a manifest naming the entry document, which
+[ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
+[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+between them require. The issue numbers and reversal conditions are in
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
 
-**That chain is six questions and it crosses slices 1 and 2**, because one fork sits above the rest of
-it. [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
-asks whether one toolchain produces the entry document, builds the client bundle and answers HTTP, or
-whether those are separate tools. One answer collapses
-[what renders the client?](what-renders-the-client.md),
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
-into one record; the other leaves all three standing. Beneath the fork those three constrain each
-other in every direction, and the bundler's own target format is the binding input to
-[what format declares the browser floor?](what-format-declares-the-browser-floor.md). Each of those
-files says so under **What would settle it**, and the fork says it under **Why it matters**.
+The five that do not separate are the renderer, the runtime, the HTTP handler, the package manager
+and the layout. Every surveyed candidate in each satisfies what the records require. The differences
+found are operational frictions rather than disqualifiers, and they are recorded in each file.
 
-**So the fork is the widest choice in M1, and the order runs outward from it.** It decides how many
-records get written, which nothing else here does. The renderer is the widest of what remains once the
-fork lands. The last three stay listed in slice 2 because that is the slice they are built for; all of
-them are worked alongside slice 1's questions rather than after them. A format, a bundler or a
-renderer settled ahead of the fork decides the fork by consequence, which is the smallest thing in the
-chain settling the largest.
+**That dissolves most of the sequencing problem rather than solving it.** The fear this section used
+to be built around was that answering a narrow question would settle a wide one by accident. That
+fear assumes each question holds an answer capable of constraining its neighbours. Where nothing
+separates the candidates there is nothing to settle by accident, because there is nothing in the
+question to settle.
+
+**One coupling does have teeth, and it is the reason the toolchain leads.** A toolchain can
+foreclose the renderer: Nuxt means Vue and SvelteKit means Svelte, while plain Vite and Astro leave
+it open. That is the only place in this cluster where a choice removes options from another
+question. The toolchain therefore holds both the only discriminator and the only foreclosure, which
+is what puts it first — not that it is the client's half.
+
+**Whether the toolchain also bounds the runtime is open and is checked rather than assumed.** Every
+surviving candidate is Vite-based, and Vite under Deno or Bun is a less-trodden path than Vite under
+Node. If the field turns out to run cleanly only on Node, the runtime is settled by consequence and
+is recorded as a consequence with its reason, per
+[../decisions/README.md](../decisions/README.md) on recording what follows necessarily.
+
+**The order, and what each step costs:**
+
+1. **The build and toolchain.** Only discriminator, only foreclosure.
+2. **The renderer.** Settled by step 1 where the toolchain bundles one, otherwise opened by it and
+   decided on where a reactive primitive can live.
+3. **The runtime.** Bounded by step 1 only if the field is Node-only; otherwise a free choice.
+4. **The HTTP handler.** Nothing separates the candidates. A write-up once the runtime is known.
+5. **The package manager.** Absorbed by the runtime where it ships one.
+6. **The layout.** Decided by scaffolding it; its own file records that being wrong is a file move.
+7. **The floor format.** Follows the bundler, and the adapter where one is needed is priced at one
+   package or roughly sixty-five lines.
+
+Steps 4 to 7 are write-ups rather than research.
+[What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) sits outside
+this order entirely: nothing above bears on it, its file is empty, and it blocks slice 2.
+
+**The fork question is retired and its file is not worked as posed.**
+[Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
+asked how many tools do the work, and no property in
+[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
+says anything about tool count, so the list every M1 toolchain choice is scored against cannot score
+it. The coupling it was opened for is real and is handled instead by working the renderer, the HTTP
+handler and the build as one field of candidate toolchains, where a bundled framework and an
+assembled set are both points in the field. How many records fall out is decided by the separability
+test in [../decisions/README.md](../decisions/README.md) when the records are written. The file
+stays until it is mined, and it says all of this at its head.
 
 **Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
 Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
@@ -240,8 +265,8 @@ derivation.
    - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
-     - **Must answer:** [does-one-tool-build-the-client-and-answer-http](does-one-tool-build-the-client-and-answer-http.md) — or else a standalone router is adopted while a meta-framework's own server was the answer, and the router, its middleware and the boundary they shape are discarded. Costs a re-scaffold of the server half. Answered together with the runtime below, whose adapters a meta-framework ships for some runtimes and not others
-     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered together with the fork above, which bounds which runtimes remain available
+     - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else a standalone router is adopted while the toolchain's own server was going to answer HTTP, and the router, its middleware and the boundary they shape are discarded. Costs a re-scaffold of the server half. It is listed in this slice as well as slice 2 because a toolchain that answers HTTP makes this slice's server the same choice as that slice's build
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Nothing surveyed separates the three candidates on a binding property, so what decides this is whether the toolchain above runs on all of them; where it does, this is a free choice and the record says so
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected; the decision itself waits on [which-package-manager](which-package-manager.md) above
@@ -256,8 +281,7 @@ derivation.
    - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
    - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the target is read from one shared declaration rather than set on the bundler directly
    - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
-     - **Must answer:** [does-one-tool-build-the-client-and-answer-http](does-one-tool-build-the-client-and-answer-http.md) — or else the renderer and the build are chosen separately while one tool was going to supply both, and the bundler configuration, the dev server and the entry-document pipeline are rebuilt around whatever that tool brings. Costs a re-scaffold of the client half
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create below the fork above. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. Answered after the build below, which forecloses it where the toolchain bundles a renderer: Nuxt means Vue and SvelteKit means Svelte, while plain Vite and Astro leave it open
      - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
      - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Answered together with [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md), whose native format is the binding input
      - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
@@ -293,62 +317,64 @@ neither holds "here is how these four fit together". That is what this is for. E
 provisional and moves out to a record, a constraint or a question file as soon as it has earned a
 permanent home. Delete what has moved rather than leaving a second copy.
 
-**The plan, in order. Each phase ends somewhere a session can be handed off**, because the cluster is
-larger than one context window and the expensive failure is a later session resuming from a summary
-rather than from the sourcing.
+**A cut is made by whichever of research and running is faster and reliable for that cut.** Research
+is preferred where a property is a documented capability a candidate either has or lacks, because it
+costs an hour rather than a day and a negative result costs nothing. Running is preferred where the
+question is whether a property holds in practice. Neither is the default. What is forbidden is
+running a comparison a document would have settled, and asserting from a document what only running
+can show.
 
-1. **Write the property list**, at
-   [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
-   What each half must be *able to do*, derived from [../problem.md](../problem.md),
-   [../guarantees/](../guarantees/), [../constraints.md](../constraints.md) and the records, citing the
-   source of each property, with no tool named anywhere in it. Everything after this is scored against
-   it. Ends when every property names the file that establishes it.
-2. **Rebuild the candidate fields from registries rather than recall**, per property, keeping the null
-   option ("write it ourselves", "use the platform") in every category. Whittle in one pass on binding
-   properties only. Write each elimination into the relevant question file with its reason and what
-   would reverse it. A field assembled before this phase is somebody's shortlist rather than the
-   field: [what renders the client?](what-renders-the-client.md) carried no meta-framework, which
-   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
-   states it does not exclude. Ends when each question file's Options hold the whole field.
-3. **Verify what survives**, opening sources rather than inheriting claims. A claim that disqualifies
-   an option is read at its source rather than relayed from an agent. A claim with no source is
-   deleted and replaced by a line saying it was found unsourced, so it cannot return quietly. Ends
-   when every surviving finding carries a tier and a date.
-4. **Spike what reading cannot settle.** First candidate: one rules module imported by a browser
-   build, a server process and a batch script under each surviving toolchain, which is
-   [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) as
-   running code rather than as a feature-list claim. Budgeted in hours and deleted afterwards; the
-   observation is what survives. Ends with what was run, on what, how many times, and what was
-   observed, written into the question file.
-5. **Record as a chain of small records in derivation order**, not one stack record. Commit each
-   worked question file before mining and deleting it, or `git show <commit>^:<path>` has nothing to
-   recover and the research dies with the file.
+**A cut earns its place only if it can name the property, the record that binds it, and what leaves
+the field in each outcome.** A check that eliminates nobody is not wasted where it was cheap and its
+outcome was genuinely open — the lowering-target check on 2026-09-19 removed nobody and stopped a
+day of scaffolding on a property nothing fails. It is wasted where the outcome was known.
+
+**A single scaffold cannot choose between candidates.** It can show whether the properties are
+reachable at all, which is worth knowing, and a failure is informative. It cannot show that what was
+built is better than what was not, and the choice of which one to build becomes the decision. So one
+scaffold is built only where research has already reduced the field to one, and then it confirms
+against a named falsifier rather than selecting.
+
+**What has been run, and what it left:**
+
+- **The property list is written**, at
+  [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md),
+  with every property naming the file that establishes it and no tool named anywhere in it.
+- **The runtime field was rebuilt from registries on 2026-09-16** and reduced to Node, Bun and Deno,
+  with every elimination and its reversal condition in
+  [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).
+- **The toolchain field was cut on the precache manifest on 2026-09-19**, removing TanStack Start,
+  React Router in SPA mode and Qwik City. Survivors: plain Vite with a renderer, Astro, Nuxt, and
+  SvelteKit with a hand-written service worker.
+- **Three checks are outstanding before anything is scaffolded**: whether Astro's islands model fits
+  a single interactive surface, whether the renderer locks in Nuxt and SvelteKit bite equally given
+  where each renderer allows a reactive primitive to live, and whether the Vite-based field runs
+  under Bun and Deno or only under Node.
 
 **Open, and spanning more than one question file.**
 
-- **The fork, the runtime, the HTTP handler and the renderer are one cluster**, for the reason given
-  above the slice list. Answering any one alone settles part of another by accident, and the fork is
-  the widest of the four. Phases 2 and 3 below have not been run on it: the candidates in
-  [does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
-  were profiled as HTTP handlers rather than against the property list, so that Options section is a
-  previous survey's by-product rather than the field.
 - **The ordering of replacement costs across positions is asserted in two directions and unmeasured.**
   [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) puts the
   runtime at the bottom as "the least reversible position in the stack";
   [what renders the client?](what-renders-the-client.md) puts the renderer below it, as a swap "cheap
   enough relative to the runtime" that stewardship removes no candidate.
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  prices every stewardship concern by that ordering and names the gap in its own reversal condition,
-  so phase 4 measures it rather than arguing it.
+  prices every stewardship concern by that ordering and names the gap in its own reversal condition.
+  **It matters less than it did.** Replacement cost prices the risk of being wrong, and where no
+  binding property separates the candidates in a position there is no way to be wrong in that
+  position that this ordering would protect against. It stays open because it is cited, not because
+  anything in M1 now turns on it.
 - **A stewardship concern is priced rather than treated as a disqualifier**, by
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
   What it is worth depends on how expensive the position is to reverse, so the same fact removes a
-  runtime and removes nothing about a router. Two things follow for the phases below. The spike's
-  candidate list is not narrowed on maturity, because the narrowing happens on replacement cost and
-  that is what the spike measures. And a record here eliminating a candidate on stewardship names the
-  replacement cost that made the concern binding, or it has made the elimination on taste.
-- **`node:sqlite` is an assumption, not a choice.** Every argument in the repo that the store does not
-  narrow the runtime passes through it, and no record picks it. Tracked as
+  runtime and removes nothing about a router. A record here eliminating a candidate on stewardship
+  names the replacement cost that made the concern binding, or it has made the elimination on taste.
+- **`node:sqlite` is an assumption, not a choice, and the equivalence it carried is narrower than it
+  was stated.** Every argument in the repo that the store does not narrow the runtime passes through
+  it, and no record picks it. As of 2026-09-19 the same data-access code is no longer identical
+  across the three: Deno adds two permission flags to the run command, and Bun requires a
+  `bun:sqlite` call to reach a full SQLite build if an extension, session or changeset is ever
+  needed. Neither disqualifies anything. Tracked as
   [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3. What
   M1 owes it is only that the runtime record says whether driver quality was an input.
 - **Findings about this field go stale in days rather than months.** A toolchain claim can be

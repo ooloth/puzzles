@@ -42,8 +42,10 @@ inferences those records invite do not hold, and each is argued where it belongs
   [what runs TypeScript outside the browser?](questions/what-runs-typescript-outside-the-browser.md).
 - **Do not read
   [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) as
-  excluding the meta-frameworks.** It binds how the entry document is produced and nothing else. See
-  [what handles HTTP requests on the server?](questions/what-handles-http-requests-on-the-server.md).
+  excluding the meta-frameworks.** It binds how the entry document is produced and nothing else.
+  Whether one tool builds the client and answers HTTP is
+  [its own question](questions/does-one-tool-build-the-client-and-answer-http.md), and it is the
+  widest one open in M1.
 
 <!-- Template:
 

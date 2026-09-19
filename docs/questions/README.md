@@ -178,29 +178,33 @@ data-access code runs on every runtime under either store answer. What orders th
 chain the question files state themselves — the runtime is answered together with the HTTP
 handler, the package manager may be settled by consequence if the runtime ships one, and the
 layout waits on whether that toolchain does workspaces. So the runtime leads *this slice's*
-questions, and not because it is built first.
+questions, and not because it is built first. The fork below constrains it in the other direction,
+because a meta-framework ships adapters for some runtimes and not others, so neither is answered ahead
+of the other.
 
 **It does not lead M1.** The order across the whole milestone is the numbered plan in the working
 notes at the end of this section, which derives what both halves must be able to do before naming
 any tool, so the cluster above is scored against a written list rather than against recall. Read
 that plan before starting anything here.
 
-**That chain is five questions and it crosses slices 1 and 2**, because one choice sits at the centre
-of it. A candidate answer to
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is a
-meta-framework's own server, which only exists if
-[what renders the client?](what-renders-the-client.md) chose that meta-framework, and choosing a
-renderer that is not one removes the option from the other side. A meta-framework brings its own
-build, so the same choice reaches
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md);
-and the bundler's own target format is the binding input to
-[what format declares the browser floor?](what-format-declares-the-browser-floor.md). Each file says
-so under **What would settle it**.
+**That chain is six questions and it crosses slices 1 and 2**, because one fork sits above the rest of
+it. [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
+asks whether one toolchain produces the entry document, builds the client bundle and answers HTTP, or
+whether those are separate tools. One answer collapses
+[what renders the client?](what-renders-the-client.md),
+[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
+into one record; the other leaves all three standing. Beneath the fork those three constrain each
+other in every direction, and the bundler's own target format is the binding input to
+[what format declares the browser floor?](what-format-declares-the-browser-floor.md). Each of those
+files says so under **What would settle it**, and the fork says it under **Why it matters**.
 
-**So the renderer is the widest choice in M1, and the order runs outward from it.** The last three
-stay listed in slice 2 because that is the slice they are built for; all of them are worked alongside
-slice 1's questions rather than after them. A format or a bundler settled ahead of the renderer
-decides the renderer by consequence, which is the smallest thing in the chain settling the largest.
+**So the fork is the widest choice in M1, and the order runs outward from it.** It decides how many
+records get written, which nothing else here does. The renderer is the widest of what remains once the
+fork lands. The last three stay listed in slice 2 because that is the slice they are built for; all of
+them are worked alongside slice 1's questions rather than after them. A format, a bundler or a
+renderer settled ahead of the fork decides the fork by consequence, which is the smallest thing in the
+chain settling the largest.
 
 **Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
 Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
@@ -234,7 +238,8 @@ derivation.
    - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
-     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration
+     - **Must answer:** [does-one-tool-build-the-client-and-answer-http](does-one-tool-build-the-client-and-answer-http.md) — or else a standalone router is adopted while a meta-framework's own server was the answer, and the router, its middleware and the boundary they shape are discarded. Costs a re-scaffold of the server half. Answered together with the runtime below, whose adapters a meta-framework ships for some runtimes and not others
+     - **Must answer:** [what-runs-typescript-outside-the-browser](what-runs-typescript-outside-the-browser.md) — or else tooling is added that the runtime already supplies, or a host is chosen that will not run it. Costs a re-scaffold, not a migration. Answered together with the fork above, which bounds which runtimes remain available
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
      - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the rules module sits where one consumer needs a publish step to import it, and two copies drift until a legal move reads as illegal. [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids it
@@ -249,7 +254,8 @@ derivation.
    - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
    - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the target is read from one shared declaration rather than set on the bundler directly
    - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
+     - **Must answer:** [does-one-tool-build-the-client-and-answer-http](does-one-tool-build-the-client-and-answer-http.md) — or else the renderer and the build are chosen separately while one tool was going to supply both, and the bundler configuration, the dev server and the entry-document pipeline are rebuilt around whatever that tool brings. Costs a re-scaffold of the client half
+     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold, and it is the largest one M1 can create below the fork above. Answered together with [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) in slice 1, which it constrains in both directions
      - **Must answer:** [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md) — or else the toolchain does not emit a precache manifest or content-hashed filenames, and both are build outputs rather than things that can be added later: [../constraints.md](../constraints.md) records that without hashed filenames a browser revalidates every cached asset. Costs a re-scaffold of the build
      - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Answered together with [what-builds-the-client-and-serves-it-in-development](what-builds-the-client-and-serves-it-in-development.md), whose native format is the binding input
      - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
@@ -318,8 +324,20 @@ rather than from the sourcing.
 
 **Open, and spanning more than one question file.**
 
-- **The runtime, the HTTP handler and the renderer are one cluster**, for the reason given above the
-  slice list. Answering any one alone settles part of another by accident.
+- **The fork, the runtime, the HTTP handler and the renderer are one cluster**, for the reason given
+  above the slice list. Answering any one alone settles part of another by accident, and the fork is
+  the widest of the four. Phases 2 and 3 below have not been run on it: the candidates in
+  [does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
+  were profiled as HTTP handlers rather than against the property list, so that Options section is a
+  previous survey's by-product rather than the field.
+- **The ordering of replacement costs across positions is asserted in two directions and unmeasured.**
+  [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) puts the
+  runtime at the bottom as "the least reversible position in the stack";
+  [what renders the client?](what-renders-the-client.md) puts the renderer below it, as a swap "cheap
+  enough relative to the runtime" that stewardship removes no candidate.
+  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+  prices every stewardship concern by that ordering and names the gap in its own reversal condition,
+  so phase 4 measures it rather than arguing it.
 - **A stewardship concern is priced rather than treated as a disqualifier**, by
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
   What it is worth depends on how expensive the position is to reverse, so the same fact removes a

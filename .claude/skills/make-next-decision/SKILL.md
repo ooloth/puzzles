@@ -83,8 +83,9 @@ directs you to proceed anyway after hearing the above.
    often as it answers them, and a question nobody has posed is invisible in a folder organised by
    filename. Two passes: read the last few records and ask what each made newly askable or newly
    urgent, then read the next milestone's description and ask what reaching it requires that no file
-   in `docs/questions/` covers. Write the missing ones before choosing what to answer — six questions
-   in one session came from this, and one of them closed at the second milestone.
+   in `docs/questions/` covers. Write the missing ones before choosing what to answer, because a
+   question that exists nowhere cannot be deferred deliberately — it is simply absent, and the work
+   it blocks gets done without it.
 1. **Ask what the records have made stale.** For each question in the current and next milestone,
    check its premise against `docs/decisions/`. A question whose conditional a record has answered
    sends a reader to re-open a settled argument.
@@ -96,18 +97,26 @@ directs you to proceed anyway after hearing the above.
 reasoned from until it has been checked** — not the Findings, not the Options, not the sentence in
 **Why it matters** naming a disqualified candidate.
 
-**It is a step rather than a reminder because the reminder exists in three places and has failed
-twice.** The portable standard, step 4 below and `constraints.md` all say to treat an inherited claim
-as unverified, and question files were still written with invented tiers and later read without a
-source being opened. One pass over two of them refuted three of five findings against a single
-candidate, including a _Sourced_ claim asserting the opposite of its subject's own announcement.
+**It is a step rather than a reminder because a reminder does not survive a file that reads as
+settled.** The portable standard, step 4 below and `constraints.md` all say to treat an inherited
+claim as unverified. A tier written into a question file is the thing that stops the next reader
+asking what produced it, so a tier nothing produced is indistinguishable from one that was earned.
 
 Do this:
 
-1. **List every claim about the world** in the question files you are about to work: version numbers,
-   capabilities, what a tool does or cannot do, adoption, governance, licensing, benchmark figures.
-   Include the ones tagged _Sourced_ and _Measured_. Those are the dangerous ones, because a tier is
-   what stops a reader checking.
+1. **Read the tier and the date on each claim before listing it.** A claim carrying a tier, a date
+   and who opened the source has been verified, and what this step owes it is a judgement about
+   whether the date is still inside its decay window — not a re-run. Where the file states a window,
+   that is the window; some say plainly that a claim about a tool can be overtaken by a release
+   shipping the same week. Where it states none, the judgement is yours and it is stated rather than
+   assumed, because a window nobody wrote down reads exactly like one somebody did. So
+   re-verify what is undated, untiered, tagged _Unverified_, or older than its window, and list the
+   rest as already checked with their dates. Say which is which, because passing on a dated claim and
+   re-establishing one are different acts and only one of them is yours.
+1. **List every claim about the world that survived that filter**: version numbers, capabilities,
+   what a tool does or cannot do, adoption, governance, licensing, benchmark figures. A tier is not a
+   reason to skip a claim and not a reason to include one; what decides it is whether anything could
+   have produced the tier, which is the sub-step below.
 1. **Send them to parallel subagents to verify against today's sources**, bounded by file list, told
    to open the sources themselves and not to spawn subagents. Ask each for a verdict per claim
    (confirmed, refuted, partially confirmed, could not verify), the URL it opened, a direct quote,

@@ -21,9 +21,9 @@ those is a narrower choice deciding a wider one, and each reads as ordinary prog
 happens.
 
 It reaches the runtime too, in the other direction. A meta-framework ships adapters for some
-runtimes and not others, so an answer here bounds
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md), and a
-runtime settled first bounds which tools remain.
+runtimes and not others, so an answer here bounds the runtime, and a
+runtime settled first bounds which tools remain. Neither bounded the other in the end: the field ran
+under all three, and [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) chose Node on other grounds.
 
 **What it does not decide is whether the entry document is produced at build time.**
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
@@ -128,8 +128,9 @@ opened by me on 2026-09-18. The framework-to-Vite pairing is recorded in
 from a GitHub code search run 2026-09-04 by a research agent; I did not run it.*
 
 **The replacement cost of this position is not established, and two files order it differently.**
-[What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) holds
-that "the runtime is the least reversible position in the stack".
+The runtime question held
+that "the runtime is the least reversible position in the stack", which
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) went on to contradict.
 [What renders the client?](what-renders-the-client.md) holds that "a renderer swap is cheap
 enough relative to the runtime that no candidate here is removed by it", while
 [README.md](README.md) records the renderer as the largest re-scaffold M1 can create. Those

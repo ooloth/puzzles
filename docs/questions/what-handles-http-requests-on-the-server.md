@@ -6,8 +6,8 @@ resolves_into: decision
 
 # What handles HTTP requests on the server?
 
-**Scoped to the HTTP layer, not the runtime.** Which runtime executes the code is
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md); this is
+**Scoped to the HTTP layer, not the runtime.** Which runtime executes the code was settled by
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) as Node; this is
 what sits on top of it to route a request and write a response — a framework, or the runtime's own
 server API and nothing else.
 
@@ -193,8 +193,8 @@ anything: Hono is individual-led by Yusuke Wada with 414 commits from 132 author
 own site that it is owned by no organisation, with 437 commits from 33 authors and its top human at
 69.6%; h3 is led by Pooya Parsa with 448 commits from 57 authors and npm's `latest` tag pointing at a
 release candidate. **A pre-1.0 or RC version number disqualifies nothing in this class**, which is the
-opposite of how the same fact reads in
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).
+opposite of how the same fact read for the runtime, which
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) settled.
 
 The meta-framework servers are not in that class, because choosing one is also choosing the renderer
 and the build. There the replacement cost is the client half, and TanStack Start's release-candidate

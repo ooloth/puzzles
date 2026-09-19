@@ -32,9 +32,8 @@ somebody will otherwise re-open them.
 **It is reachable from every candidate runtime without a native addon.** Node, Bun and Deno all ship
 `node:sqlite` without an npm specifier or an addon to compile — Deno since v2.2, and there it
 additionally needs `--allow-read` and `--allow-write` for a file-backed database. So this settles
-nothing about
-[what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
-which stays open with its field intact.
+nothing about which runtime
+executes the code; that was settled separately and later, at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md).
 
 **That reasoning holds for `node:sqlite` and no record has chosen it.** `node:sqlite` is the driver
 common to all three candidates, which is what makes it convenient to an argument that they are
@@ -120,7 +119,7 @@ exist and narrow this. It is a standing cost at every write site rather than a o
       [how is the store backed up?](../questions/how-is-the-store-backed-up.md), where the design that
       depends on them lives
 - [x] Nothing in `guarantees/` — this promises a player nothing
-- [x] `questions/what-runs-typescript-outside-the-browser.md` — unaffected, and that is worth stating:
+- [x] the runtime question, now [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) — unaffected, and that is worth stating:
       under `node:sqlite` this record narrows no runtime. Whether that driver is the one we want is
       [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
 

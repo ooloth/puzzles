@@ -13,8 +13,8 @@ resolves_into: decision
 says what opens the file, and the gap has been filled by assumption.
 
 **`node:sqlite` has been treated as the answer without being chosen.** The argument that the store
-does not narrow the runtime, in
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md), runs
+does not narrow the runtime, which
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) settled, runs
 entirely through it: all three runtimes ship it, so the same data-access code runs everywhere, so
 no runtime is advantaged. That holds only if `node:sqlite` is what we want. It is the option common
 to all three candidates, which is what makes it convenient to an argument for their equivalence, and
@@ -85,7 +85,7 @@ rather than from recall.
 **Absolute throughput is very unlikely to decide this.** Single keyed inserts run in the tens of
 thousands per second across every candidate measured so far, against a plausible load under a hundred.
 The numbers and their methods are recorded in
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
 
 *Reasoned — 2026-09-04, from that question's driver figures and
 [../constraints.md](../constraints.md) on how often a player acts.*
@@ -188,7 +188,7 @@ should delay a decision; they are here so the investigation is a choice rather t
   outage.
 
 **Two of these bear on the runtime choice and the rest do not.** Read and write latency are the ones
-a runtime could plausibly change, and they are recorded as binding in
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md). Everything
+a runtime could plausibly change, and both were measured for
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which found neither separates the candidates. Everything
 else here is a property of the driver, the settings or the mechanism rather than of what executes
 them.

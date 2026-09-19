@@ -40,8 +40,7 @@ it holds whichever language wins.
 **Nothing. Asserted only, and no deployable exists.** It becomes checkable the moment there is more
 than one deployable, and mechanically so: a second language in a deployable's manifest is a violation
 anything could detect. Until then it constrains
-[what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md)
-rather than any code.
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) rather than any code, which is where it was applied.
 
 ## Rejected
 

@@ -33,13 +33,22 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 ## Options
 
-*Vitest.* Shares configuration and transforms with Vite, has watch mode, branch coverage, and a
-real-browser mode. The default if the build question lands where its research points.
+**Two of the three inputs this question was waiting on have landed.**
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) chose Vite, and [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) chose Node. What that changes is below.
 
-*`bun test`.* Fast, and materially weaker for this app specifically on branch coverage and on
-snapshots of anything DOM-shaped. See **Findings**.
+*Vitest.* Shares configuration and transforms with the bundler [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) chose, has watch mode,
+branch coverage and a real-browser mode, and would cover the client and the server with one runner
+and one idiom. That last point is new: it was worth little while the runtime was open, because the
+runner had to work on whatever was chosen, and it is worth a lot now that both halves run on tools
+that already share a config.
 
-*Node's built-in test runner.* No extra dependency; least support for component testing.
+*`bun test`.* **Out**, by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which did not choose its runtime. The findings below are
+kept because they are the evidence that it would have lost here anyway, on branch coverage and on
+DOM-shaped snapshots, and because a future reader should not have to re-establish that.
+
+*Node's built-in test runner.* No extra dependency, and stronger than this list assumed: the runner
+has been stable since v20 and gained snapshot testing in v23.4.0. Still the weakest for driving a
+rendered grid, which is the half of this question Vitest is built for.
 
 ## Findings
 
@@ -90,3 +99,8 @@ under Bun when last checked.
 
 *Sourced — Vitest's own test matrix, read 2026-09-04. Its currency is unknown, and claims about this
 field go stale in days, so re-check it before it decides anything.*
+
+**The `bun test` findings above are duplicated in
+[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
+and this file is the one that keeps them.** That file is answered by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) and scheduled for
+deletion, and the duplication ends there rather than needing an edit now.

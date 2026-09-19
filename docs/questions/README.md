@@ -387,9 +387,9 @@ against a named falsifier rather than selecting.
 - **The property list is written**, at
   [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md),
   with every property naming the file that establishes it and no tool named anywhere in it.
-- **The runtime field was rebuilt from registries on 2026-09-16** and reduced to Node, Bun and Deno,
-  with every elimination and its reversal condition in
-  [what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).
+- **The runtime is settled** at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md),
+  whose Rejected section carries the whole field it was chosen from, each elimination with its source
+  and its reversal condition.
 - **The toolchain field was cut on the precache manifest on 2026-09-19**, removing TanStack Start,
   React Router in SPA mode and Qwik City. Survivors: plain Vite with a renderer, Astro, Nuxt, and
   SvelteKit with a hand-written service worker.
@@ -424,17 +424,16 @@ decision, so none of them blocks a slice, and each is here because nothing else 
 
 **Open, and spanning more than one question file.**
 
-- **The ordering of replacement costs across positions is asserted in two directions and unmeasured.**
-  [What runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) puts the
-  runtime at the bottom as "the least reversible position in the stack";
-  [what renders the client?](what-renders-the-client.md) puts the renderer below it, as a swap "cheap
-  enough relative to the runtime" that stewardship removes no candidate.
+- **The ordering of replacement costs across positions was asserted and is now partly settled.**
+  The runtime was long described as "the least reversible position in the stack", while
+  [what renders the client?](what-renders-the-client.md) puts the renderer below it as a swap cheap
+  enough that stewardship removes no candidate.
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
   prices every stewardship concern by that ordering and names the gap in its own reversal condition.
-  **It matters less than it did.** Replacement cost prices the risk of being wrong, and where no
-  binding property separates the candidates in a position there is no way to be wrong in that
-  position that this ordering would protect against. It stays open because it is cited, not because
-  anything in M1 now turns on it.
+  **The runtime half is answered and the answer inverts it.** Nothing separated the three finalists
+  on a binding property, so there was no bad answer to be stuck with, and the position was cheap to
+  leave rather than expensive. What remains open is the renderer's place in the ordering, which the
+  renderer record will have to state.
 - **A stewardship concern is priced rather than treated as a disqualifier**, by
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
   What it is worth depends on how expensive the position is to reverse, so the same fact removes a

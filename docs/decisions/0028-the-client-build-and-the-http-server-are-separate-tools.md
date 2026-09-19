@@ -30,8 +30,7 @@ and emits the entry document; a separately chosen server answers HTTP. Each is r
 
 This preserves two options deliberately. The renderer stays an open choice, which a bundled framework
 would close. So does the runtime, which
-[what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md)
-decides on its own merits.
+[ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) went on to decide on its own merits.
 
 ## Enforced by
 

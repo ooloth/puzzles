@@ -627,8 +627,8 @@ exited 133 under Node and Deno after printing GC diagnostics and a native stack 
 below the container limit was set.
 
 *Measured — Docker 29.0.1, linux/arm64, `node:26-slim`, `oven/bun:1.4.2-slim`, `denoland/deno:2.9.7`,
-run by me. The full method is under **Findings** in
-[what runs TypeScript outside the browser?](questions/what-runs-typescript-outside-the-browser.md).*
+run by me. The comparative figures and their method are in
+[ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md).*
 
 **So two things follow for anything that has to notice its own failure.** A ceiling set below the
 container limit is what converts a JS-heap exhaustion from a silent kill into a logged abort, and

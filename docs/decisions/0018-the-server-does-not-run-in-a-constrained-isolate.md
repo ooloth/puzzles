@@ -37,8 +37,8 @@ runtime constraint is making the error this record exists to stop.
 
 **It does not settle where the server runs**, which is
 [where does this run?](../questions/where-does-this-run.md), nor which ordinary runtime executes the
-TypeScript, which is
-[what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md).
+TypeScript, which
+[ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) settled on Node.
 
 ## Enforced by
 
@@ -163,8 +163,9 @@ observable about the edge.
 - [x] `questions/README.md` — this is one of the records
       [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
       resolves into; that question stays open for store locality
-- [x] `questions/what-runs-typescript-outside-the-browser.md` — the isolate tier is out of its field,
-      which leaves ordinary runtimes only
+- [x] the runtime question — the isolate tier is out of its field, which leaves ordinary runtimes
+      only. That question is now settled at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md), whose Rejected section carries the
+      eliminations this record caused
 - [x] `constraints.md` — nothing to import. The D1 limits and the Vercel and Deno retreats are facts
       about specific vendors rather than about the world, and they sit with
       [where does this run?](../questions/where-does-this-run.md)

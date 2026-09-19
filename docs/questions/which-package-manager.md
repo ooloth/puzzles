@@ -13,10 +13,14 @@ typing whatever came to mind, and because two of its failure modes are quiet rat
 
 ## What would settle it
 
-**This may not survive
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md).** Two of the
-candidate runtimes ship a package manager, and adopting one of those answers this question by
-consequence rather than by argument. Deciding first means deciding twice.
+**It survived the runtime.** Two of the candidate runtimes shipped a package manager and would have
+answered this by consequence, but [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) chose Node, which ships npm without requiring it. So
+this is still a choice, and it is now the first open question in M1's order.
+
+**The field below is not the field.** It holds pnpm, npm and Bun. Bun is out as a package manager for
+the same reason it is out as a runtime — adopting its installer means adopting its runtime — and yarn
+was never listed at all. Rebuild it from the registry before deciding, or the decision is made over a
+shortlist somebody assembled for a different question.
 
 Install speed matters least. What matters is whether the lockfile stays readable to whatever
 tooling runs in continuous integration, and whether the trust model has surprises.
@@ -40,8 +44,12 @@ allowlist is least likely to be got wrong, and nothing here has compared them on
 *npm.* Bundled with Node, slowest, most universally understood. Install scripts are governed by an
 `allowScripts` policy on the root package.
 
-*Bun.* Fastest by a wide margin. Install scripts are governed by `trustedDependencies`, which replaces
-a default allowlist rather than extending it, and it carries the lockfile question below.
+*Bun.* **Out**, by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md): its installer is part of its runtime and that runtime is not this
+one. Its install-script model is recorded under **Findings** because the comparison of allowlist
+designs is still useful, not because it is a candidate.
+
+*yarn.* Missing from this list until 2026-09-19 and unexamined. Its presence here is a marker that the
+field needs rebuilding rather than a case for it.
 
 ## Findings
 

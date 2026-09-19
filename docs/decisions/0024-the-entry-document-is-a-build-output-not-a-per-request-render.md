@@ -99,7 +99,7 @@ promises.
 - **Defer it.** Genuinely cheap, and the right answer for most questions at this stage.
   **Disqualified because deferring leaves the meta-framework class excluded by inference rather than
   by argument.** A meta-framework rendering per request would settle
-  [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
+  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md),
   [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)
   and [what renders the client?](../questions/what-renders-the-client.md) all at once, so an option
   field that omits the class decides three M1 questions without saying so. This record is what those

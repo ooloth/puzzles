@@ -49,7 +49,7 @@ conditions rather than setting a syntax level.
 2026-09-12 here.*
 
 **It says nothing about Bun as a runtime, a package manager or a test runner.** Those are three
-separate open questions — [what runs TypeScript outside the browser?](../questions/what-runs-typescript-outside-the-browser.md),
+separate questions — the runtime, settled at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md),
 [which package manager?](../questions/which-package-manager.md) and
 [what runs the tests?](../questions/what-runs-the-tests.md) — and Bun remains a live candidate in all
 three. Reading this record as "not Bun" would eliminate it from three decisions on evidence that

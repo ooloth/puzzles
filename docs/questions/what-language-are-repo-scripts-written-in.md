@@ -33,9 +33,9 @@ exception worth keeping, or the start of a pattern.
 ## What would settle it
 
 Naming what each option costs on the factors below, once M1's runtime is known. It is deliberately at
-M2 rather than M1: a script language chosen before
-[what runs TypeScript outside the browser?](what-runs-typescript-outside-the-browser.md) would be
-choosing a toolchain before knowing what the repository already has.
+M2 rather than M1: a script language chosen before the runtime would have been
+choosing a toolchain before knowing what the repository already has. That runtime is now Node, per
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which also settles that repo scripts run on it.
 
 The factors that could matter, none of which is obviously decisive yet:
 

@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-09-19
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -7,53 +7,37 @@ status: active
 
 # Unfinished
 
-Where the codebase would mislead you right now: migrations part-way through, two patterns
-coexisting, a path that looks live but isn't.
+Heads-ups about half-built or misleading states. Nothing here tells you what you may not do.
 
-**Highest-consequence file in `docs/`.** An agent that misses it sees two patterns, picks
-the dead one, and confidently spreads it.
+Entries are deleted the moment they stop being true. Stale guidance here is worse than none.
 
-Each entry answers one question: *what will look true that isn't, and what should I do
-instead today.* Nothing here tracks progress or schedules — how far along the work is, and
-when it'll finish, don't change what you should do right now.
+### More is settled than is built, and less is settled than it looks
 
-Durable quirks that aren't going to change → [gotchas.md](gotchas.md).
+**You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
+`docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-### The shape is settled on both sides and no tool has been chosen
+**Actually** no code exists, and what runs TypeScript, what renders the client, what handles HTTP,
+where it runs and what deploys it are all open. Settled so far: the store is a SQLite file the server
+process opens, a service worker answers navigations, the entry document is a build output, the client
+build and the HTTP server are separate tools, and the bundler is Vite.
 
-**You'll see** eight records settling the store and the browser's entry document — a SQLite file on
-the server's machine, a service worker answering navigations, a document produced by the build — and a
-`docs/architecture.md` with boxes on both sides of the network. It reads as though the stack is
-largely chosen and someone is about to start typing.
+**So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
-**Actually** what those records settle is the shape, and none of the tools. On the server: the store
-is a file the process opens, on a machine whose disk survives a redeploy. In the browser: a service
-worker answers every navigation after the first, and the entry document is a build output rather than
-a per-request render. What executes TypeScript, what handles HTTP, what renders the client, what
-builds it, where the machine is and what deploys to it are all open, and they are the questions M1
-turns on. The architecture diagram is deliberate about this: every box cites the record that fixed it,
-and the last section lists what is not decided, which is the longer list.
+### A retired question file is still on disk
 
-**So** install nothing yet, and work [questions/README.md](questions/README.md) from M1. Two
-inferences those records invite do not hold, and each is argued where it belongs rather than here:
+**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md).
 
-- **Do not infer the runtime from the store.** "SQLite, therefore runtime X" was checked and does not
-  follow. See
-  [what runs TypeScript outside the browser?](questions/what-runs-typescript-outside-the-browser.md).
-- **Do not read
-  [ADR-0024](decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) as
-  excluding the meta-frameworks.** It binds how the entry document is produced and nothing else.
-  Whether one tool builds the client and answers HTTP is
-  [its own question](questions/does-one-tool-build-the-client-and-answer-http.md), and it is the
-  widest one open in M1.
+**Actually** it is answered and its framing was wrong; it says so at its head.
+
+**So** don't work it. It is deleted once the floor-format record lands.
 
 <!-- Template:
 
-### <What you'll run into that looks contradictory>
+### <What looks contradictory>
 
-**You'll see** <the misleading thing — two patterns, a dead path, a step that no longer works>
+**You'll see** <the misleading thing>
 
-**Actually** <which one is current, which is dead, and why both are still here>
+**Actually** <which is current and why both are here>
 
 **So** <what to do today>
 -->

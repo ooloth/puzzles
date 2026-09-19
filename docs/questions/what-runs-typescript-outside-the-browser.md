@@ -148,7 +148,13 @@ the agent's.*
 **What survives is Node, Deno and Bun, and Andromeda is eliminated on replacement cost.** Andromeda is
 at 0.1.14, released 2026-06-13, under MPL-2.0, with a built-in HTTP server and SQLite support; its
 bundler is a separate satellite tool rather than part of the core runtime binary. No release has ever
-crossed 1.0 and the full tag history is 0.1.0 through 0.1.14.
+crossed 1.0: the releases run 0.1.0 to 0.1.14 with 0.1.11 absent, preceded by a 0.1.0 draft series.
+The repository carries 68 tags, most of them `0.1.0-draft1` through `0.1.0-draft52`, so a count of
+tags is not a count of releases here and the two should not be read for each other.
+
+**Its repository has been quiet for three months**, with the most recent push on 2026-06-15. That is
+a different fact from the commit count below, which averages a year, and it is the one that bears on
+whether the supply exists at all.
 
 The disqualifying reason is the one
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
@@ -165,7 +171,13 @@ across 26. Counted with `gh api --paginate repos/<owner>/<repo>/commits?since=20
 author, run by a research agent that stated its command. I did not run it. Distinct-author counts are
 by GitHub login falling back to commit email, so one person using two unlinked addresses counts twice.*
 
-*Sourced — `gh release list --repo tryandromeda/andromeda` and the project's `Cargo.toml` and README.*
+*Sourced — `gh release list --repo tryandromeda/andromeda`, `gh api --paginate
+repos/tryandromeda/andromeda/tags`, and the repository's `Cargo.toml` and metadata through
+`gh api repos/tryandromeda/andromeda`. Run and read by me on 2026-09-18. Latest release 0.1.14,
+`version = "0.1.14"`, `license = "Mozilla Public License 2.0"`, `pushed_at` 2026-06-15.*
+
+*The **Reverses if** clause above has been checked against these and has not fired: there is no
+stable release. Re-running those three commands is what checks it again, and it takes a minute.*
 
 **Read raw, single-author concentration says the opposite of what it appears to say.** The most
 prolific committer across twelve months is an automation account in three of these four: Bun's is

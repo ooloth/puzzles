@@ -13,13 +13,24 @@ boundary. What serves the client once deployed is
 
 ## Why it matters
 
-[What renders the client?](what-renders-the-client.md) rests primarily on the
-inner loop being fast, and this is the component that delivers it. If the loop is slow, the
-decision's main justification is not met by whatever implements it.
+Two of its outputs cannot be added afterwards. A precache manifest naming the document and every
+asset it needs is what lets them be installed together, because
+[../constraints.md](../constraints.md) records that cache entries evict independently and a surviving
+document can reference an evicted bundle. Content-hashed filenames are the other: without them a
+browser revalidates every cached asset, at a round trip per load on the link
+[../problem.md](../problem.md) names as the modal case. Both fall out of the build or they do not
+exist, which is why this sits in M1 while
+[how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+at M9 waits on it.
 
-It is a separate question from which framework, because the two are less coupled than they appear:
-most frameworks run under several toolchains, and a toolchain choice can be revisited without
-rewriting the interface.
+**The inner loop is the maintainer's cost here**, and it is real: this is the component a change is
+checked through every day. It is a cost of this choice rather than a justification for another one,
+and nothing in [what renders the client?](what-renders-the-client.md) rests on it.
+
+**How coupled this is to the renderer depends on an answer nobody has given.** Under separate tools
+most renderers run under several bundlers, and either can be revisited without rewriting the other.
+Under one tool they are the same choice, made once. Which holds is
+[does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md).
 
 ## What would settle it
 

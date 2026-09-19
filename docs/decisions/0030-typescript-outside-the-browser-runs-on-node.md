@@ -2,6 +2,7 @@
 number: 0030
 status: accepted
 date: 2026-09-19
+amended: 2026-09-19
 ---
 
 # 30 — TypeScript outside the browser runs on Node
@@ -28,11 +29,15 @@ yet, whose motivating case is a failure that produces no error, no crash and no 
 
 ## Decision
 
-**The server, the generator and every repo script run on Node.** Source stays inside the syntax Node
-can strip, which `erasableSyntaxOnly` in `tsconfig.json` makes a compile error rather than a
-discipline, so no transpiler sits between the source and the runtime.
+**The server, the generator and every repo script run on Node.** That is the whole of it.
 
-**What this does not settle.** Node ships npm but does not require it, so
+**What this does not settle.** Whether anything transpiles the TypeScript before Node runs it is
+[its own question](../questions/is-server-typescript-transpiled-or-stripped.md). Node strips types
+natively and strips only erasable syntax, but a transpiler in front restores the rest, and a
+reasonable person could choose this runtime and either answer. Nothing in **Rejected** below rests
+on which one, so reading this record as settling it would be reading in a decision it does not make.
+
+Node ships npm but does not require it, so
 [which package manager?](../questions/which-package-manager.md) stays open. So does
 [what runs the tests?](../questions/what-runs-the-tests.md) and
 [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md).
@@ -41,11 +46,10 @@ line this project tracks is not settled here.
 
 ## Enforced by
 
-Nothing in code, because there is no code. Two artifacts would satisfy it: a field naming the Node
-version so a contributor cannot silently run one below the floor, and `erasableSyntaxOnly` in
-`tsconfig.json` so the subset is checked rather than remembered. Neither exists yet, and the second
-is the one that fails quietly, because source using an enum runs fine under a transpiler and only
-breaks when Node is what executes it.
+Nothing in code, because there is no code. One artifact would satisfy it: a field naming the Node
+version, so a contributor cannot silently run one below the floor that
+[which Node version line does this track?](../questions/which-node-version-line-does-this-track.md)
+will set. It does not exist yet.
 
 ## Rejected
 
@@ -202,10 +206,11 @@ the container limit, Node is SIGKILLed exactly as silently as Bun. The advantage
 something sets `--max-old-space-size`, and nothing does yet. **No heap ceiling bounds off-heap
 allocation on any runtime**, so a buffer leak is silent under all three regardless.
 
-**The erasable subset is a real constraint with no escape hatch.** Enums, decorators, namespaces with
-runtime code, parameter properties and `.tsx` are all unavailable, and
-`--experimental-transform-types` was removed in v26. A dependency whose API requires decorators would
-force a transpiler back into the toolchain.
+**Node's own type stripping handles only erasable syntax**, so enums, decorators, namespaces with
+runtime code, parameter properties and `.tsx` do not run under it, and
+`--experimental-transform-types` was removed in v26 so the runtime offers no way round that. This is
+a property of the runtime rather than a constraint this record imposes: it is the cost of taking
+Node's stripping, and whether to take it is [open](../questions/is-server-typescript-transpiled-or-stripped.md).
 
 **Continuous type checking is a second process.** Node has `--watch` but no typecheck-on-save, so
 `tsc --noEmit --watch` runs beside it. Deno does this in one command.
@@ -213,9 +218,6 @@ force a transpiler back into the toolchain.
 ## Revisit when
 
 Bun ships a working heap bound, which removes the only disqualification in this record.
-
-A dependency this project needs requires decorators, or ships TypeScript source inside
-`node_modules`, either of which breaks the no-transpiler premise.
 
 denoland/deno#28850 closes and Vitest becomes usable under Deno, which removes most of what decided
 against Deno.

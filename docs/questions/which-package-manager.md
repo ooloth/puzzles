@@ -44,10 +44,10 @@ Nothing here has compared them on either.
 *pnpm.* Content-addressed store, strict by default. Install scripts are governed by `allowBuilds`.
 
 *npm.* Bundled with Node, slowest, most universally understood. **The bundled one runs dependency
-install scripts by default.** The `allowScripts` policy that blocks them arrived in npm 12, and
-every currently supported Node line ships npm 11.19.x — so taking npm means either that default or
-installing npm 12 over the top, which is the same class of chore that counts against the others.
-Sourced under **Findings**.
+install scripts by default.** The `allowScripts` policy that blocks them arrived in npm 12, and the
+Node line [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) selects
+ships npm 11.19.1 — so taking npm means either that default or installing npm 12 over the top, which
+is the same class of chore that counts against the others. Sourced under **Findings**.
 
 *Bun.* **Out**, by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md): its installer is part of its runtime and that runtime is not this
 one. Its install-script model is recorded under **Findings** because the comparison of allowlist
@@ -117,18 +117,23 @@ none of them has been compared on how easy it is to configure correctly.
 
 **npm's two merits do not arrive together, and the finding above reads as though they do.** The entry
 above is correct that npm 12.0.0 blocks dependency lifecycle scripts by default. It is the npm you
-would not have. Every currently supported Node line bundles npm **11.19.x** — v24.21.0 ships npm
-11.19.0 and v26.9.0 ships npm 11.19.1 — and npm 11 has the old permissive default. So npm's headline
-case, that it comes with Node and needs no installing, and npm's safety posture are two different
-versions of npm. Taking npm means either accepting the permissive default or installing npm 12 over
-the bundled one, and the second is the same class of chore that counts against the others.
+would not have. **No released Node line bundles npm 12.** The line
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) selects is 26, and
+v26.9.0 ships npm **11.19.1**, which has the old permissive default. So npm's headline case, that it
+comes with Node and needs no installing, and npm's safety posture are two different versions of npm.
+Taking npm means either accepting the permissive default or installing npm 12 over the bundled one,
+and the second is the same class of chore that counts against the others.
 
 The earlier entry gestures at this as an edge case — "a machine still on npm 11 has the old
 permissive default and nothing announces it" — and it is not an edge case. It is what every machine
 has by default today.
 
-*Sourced — the `npm` field per release in <https://nodejs.org/dist/index.json>, parsed by me on
-2026-09-19.*
+*Measured — the `npm` field per release in <https://nodejs.org/dist/index.json>, parsed by me on
+2026-09-19: v26.9.0 → 11.19.1, v24.21.0 → 11.19.0, v22.23.2 → 10.9.8.*
+
+*An earlier version of this entry said "every currently supported Node line bundles npm 11.19.x".
+That is false and has been replaced: v22 is supported until 2027-04-30 per Node's `schedule.json`
+and ships npm 10.9.8. The part that decides anything survives, because this project runs 26.*
 
 **Corepack was removed in Node v25, and nothing in this file had noticed.** It is how a
 `packageManager` field turned into an installed binary, and it was the answer to "how does pnpm or
@@ -165,10 +170,75 @@ separately**, at
 Corepack's removal is why it needs an owner: it was the mechanism, it is gone, and the same
 mechanism has to pin Node too.
 
-**The field still has not been rebuilt from the registry.** Yarn now has verified numbers but has not
-been argued: Yarn Modern is `@yarnpkg/cli` 4.18.0, published 2026-07-29, while the classic `yarn`
-package sits at 1.22.22 from 2024-03-09. Current pnpm is 12.4.2, published 2026-09-15. Whether
-anything else belongs in the field is still unchecked, and the warning under **What would settle it**
-stands until it is.
+**The field still has not been argued, and as of the pass below it has at least been enumerated.**
+Yarn Modern is `@yarnpkg/cli` 4.18.0, published 2026-07-29, while the classic `yarn` package sits at
+1.22.22 from 2024-03-09.
 
-*Sourced — npm registry metadata, read 2026-09-19 by a research agent. I did not open it.*
+*Sourced — npm registry metadata, read 2026-09-19 by a research agent, and re-read by me the same
+day.*
+
+### Verification pass of 2026-09-19
+
+**Every claim in this file was re-checked. Two were wrong and are corrected in place above**: the
+npm-bundling claim overstated its scope, and pnpm's current version had moved. Nothing was deleted,
+because nothing here turned out to be unsourced.
+
+**Current versions, read by me from the npm registry on 2026-09-19.** pnpm **12.5.1**, published
+2026-09-18 — the earlier entry's 12.4.2 was correct when written on 2026-09-15 and is now two
+releases behind, which is this folder's stated decay rate arriving on schedule. npm **12.0.2**,
+published 2026-07-29. `@yarnpkg/cli` **4.18.0**, 2026-07-29. `yarn` (classic) **1.22.22**,
+2024-03-09. `corepack` **0.36.0**, 2026-08-28, so it is still published as well as still installable.
+
+*Measured — `registry.npmjs.org` metadata for each package, parsed by me on 2026-09-19.*
+
+**Yarn Modern blocks third-party install scripts by default, and the config shape is a boolean plus
+a per-package override.** `enableScripts` is documented as: "Define whether to run postinstall
+scripts or not. If false (the default), Yarn will not execute the `postinstall` scripts from
+third-party packages when installing the project (workspaces will still see their postinstall scripts
+evaluated, as they're assumed to be safe if you're running an install within them)." Re-enabling one
+package is `dependenciesMeta.<pkg>.built` in `package.json`.
+
+*Sourced — <https://yarnpkg.com/configuration/yarnrc>, opened by me on 2026-09-19.*
+
+**Yarn's only documented bootstrap path is Corepack.** The installation page's first instruction is
+`npm install -g corepack`, followed by `yarn init -2`. The other two paths it documents —
+`yarn set version stable` and `yarn set version from sources` — are commands run with Yarn already
+present, so neither gets Yarn onto a bare machine. The second carries Yarn's own warning that it
+"can't leverage Corepack and will need to store the Yarn binary inside the `.yarn/releases` folder".
+So on a Node that no longer ships Corepack, adopting Yarn means installing Corepack from the registry
+first.
+
+*Sourced — <https://yarnpkg.com/getting-started/install>, opened by me on 2026-09-19.*
+
+**npm 12 runs on Node 26, so upgrading over the bundled npm is available rather than blocked.** Its
+`engines` field is `^22.22.2 || ^24.15.0 || >=26.0.0`. What that costs is a step every machine has to
+take and nothing enforces, which is the thing to weigh rather than whether it is possible.
+
+*Sourced — `registry.npmjs.org/npm/12.0.2` metadata, read 2026-09-19 by a research agent. I did not
+re-open this one.*
+
+**Three candidates this file never listed exist on the registry today, and none of them has been
+argued.** Registry facts below are mine; everything about what they are for is not.
+
+- **`vlt`** — 1.1.0, published 2026-09-18, BSD-2-Clause-Patent, first published 2022, 127 versions.
+- **`@endevco/aube`** — 2.2.4, published 2026-08-31, MIT, first published 2026-04-18, 66 versions.
+  Its own site was reported to show 2.2.17 while the registry shows 2.2.4, which would mean npm is
+  not its primary distribution channel. Unverified and worth resolving before it is scored.
+- **`@nubjs/nub`** — 0.9.3, published 2026-09-19, MIT, first published 2026-05-27, 200 versions in
+  under four months. Pre-1.0.
+
+*Measured for the versions, dates, licences and publication history — `registry.npmjs.org` metadata,
+parsed by me on 2026-09-19. Everything else reported about these three — who maintains them, what
+they do, whether they support workspaces, their install-script defaults — came from a research agent
+and I opened none of it. Treat all of it as unverified until it is.*
+
+**`orogene` was checked and is out.** Its last crates.io release is 0.3.34 from 2023-10-09 and its
+README describes a move to closed source with paid licences. A package manager that has not shipped a
+public release in three years is not a candidate.
+
+*Sourced — crates.io and the project README, read 2026-09-19 by a research agent. I did not open
+either, and nothing turns on it: no reading of these facts puts orogene back in the field.*
+
+**Wrappers are not field members.** `ni` and its forks detect a lockfile and shell out to a real
+package manager, so they are a convenience over whatever this question answers rather than an answer
+to it.

@@ -49,7 +49,11 @@ line this project tracks is not settled here.
 Nothing in code, because there is no code. One artifact would satisfy it: a field naming the Node
 version, so a contributor cannot silently run one below the floor that
 [which Node version line does this track?](../questions/which-node-version-line-does-this-track.md)
-will set. It does not exist yet.
+will set. It does not exist yet. **Which artifact, and what reads it, is decided at
+[what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md)**
+— that question was split out on 2026-09-19 because the same mechanism has to pin the package
+manager too, and a mechanism chosen inside the version-line record would have been chosen without
+that half in view.
 
 ## Rejected
 

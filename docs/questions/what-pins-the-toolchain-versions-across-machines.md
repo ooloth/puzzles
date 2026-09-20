@@ -1,0 +1,76 @@
+---
+opened: 2026-09-19
+status: open
+resolves_into: decision
+---
+
+# What pins the toolchain versions across machines?
+
+## Why it matters
+
+**Three machines resolve a version from somewhere, and where nothing states it they resolve three
+different ones.** A contributor's laptop, a container and a CI runner each need to agree on which
+Node they run and which package manager they install with.
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) names the Node half
+under **Enforced by** and records that the artifact does not exist.
+
+**It covers both tools, which is why it is its own file.** The Node half lived inside
+[which Node version line does this track?](which-node-version-line-does-this-track.md) until
+2026-09-19. It was moved out because a reasonable person could pick a line and pick any of several
+mechanisms to state it in, so it is a second decision, and one settled inside another question's
+record rides along on reasoning that was never about it.
+
+**The failure it prevents is two mechanisms nobody compared.** Left unowned, the version-line record
+states the Node version in whatever field its author reaches for and the package-manager record
+states its own version somewhere else. Each looks complete on its own. The repo then has two pinning
+mechanisms, chosen separately, neither argued.
+
+**Corepack is why the package-manager half is newly open.** It turned a `packageManager` field into
+an installed binary, and it stopped shipping with Node at v25 —
+[which package manager?](which-package-manager.md) records the sources. So the mechanism that used
+to answer this question for two of the three candidates is no longer on the machine by default.
+
+**Being wrong is cheap and the cost of silence is not.** Changing the mechanism is a file and a
+line in a setup document. Having no mechanism is three machines disagreeing about which Node ran,
+which is the kind of difference that surfaces as a bug nobody can reproduce.
+
+## What would settle it
+
+It derives from both tool choices and cannot be answered before them. A pin names a tool and a
+version, so
+[which Node version line does this track?](which-node-version-line-does-this-track.md) and
+[which package manager?](which-package-manager.md) are both inputs. Ordered after both.
+
+What to establish once they have landed: which mechanisms can pin both tools rather than one, since
+one mechanism is the whole point of asking this separately; whether the mechanism has to be
+installed itself, and what pins *that*; whether it is advisory or enforced, because a field nothing
+reads is documentation rather than a pin; and whether
+[where does this run?](where-does-this-run.md) and
+[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 can both
+consume whatever is chosen, since they are two of the three machines that have to agree.
+
+## Resolves into
+
+A decision record in [../decisions/](../decisions/), and the artifact
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed.
+
+## Source
+
+Raised 2026-09-19, while ordering M1's remaining toolchain questions. Two things surfaced it: the
+Node half was bundled inside the version-line question and failed the separability test in
+[../decisions/README.md](../decisions/README.md), and Corepack's removal in Node v25 left the
+package-manager half with no owner at all.
+
+## Options
+
+...
+
+## Findings
+
+*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Corepack is no longer distributed with Node from v25 onward.** It remains installable from the
+registry. The sources are recorded against
+[which package manager?](which-package-manager.md) rather than duplicated here.
+
+*Sourced — checked by me on 2026-09-19; see that file for the URLs.*

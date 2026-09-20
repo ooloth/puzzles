@@ -107,3 +107,63 @@ for both current versions, read 2026-09-17 by a research agent. I did not open t
 **So "neither is disqualifying" still holds, and the reason has changed.** It was that Bun's two
 hazards were survivable. It is now that every candidate has an install-script policy to configure and
 none of them has been compared on how easy it is to configure correctly.
+
+### Pass of 2026-09-19
+
+**npm's two merits do not arrive together, and the finding above reads as though they do.** The entry
+above is correct that npm 12.0.0 blocks dependency lifecycle scripts by default. It is the npm you
+would not have. Every currently supported Node line bundles npm **11.19.x** — v24.21.0 ships npm
+11.19.0 and v26.9.0 ships npm 11.19.1 — and npm 11 has the old permissive default. So npm's headline
+case, that it comes with Node and needs no installing, and npm's safety posture are two different
+versions of npm. Taking npm means either accepting the permissive default or installing npm 12 over
+the bundled one, and the second is the same class of chore that counts against the others.
+
+The earlier entry gestures at this as an edge case — "a machine still on npm 11 has the old
+permissive default and nothing announces it" — and it is not an edge case. It is what every machine
+has by default today.
+
+*Sourced — the `npm` field per release in <https://nodejs.org/dist/index.json>, parsed by me on
+2026-09-19.*
+
+**Corepack was removed in Node v25, and nothing in this file had noticed.** It is how a
+`packageManager` field turned into an installed binary, and it was the answer to "how does pnpm or
+Yarn get onto this machine" for as long as the question has existed.
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) is what made this
+relevant, by choosing the runtime that dropped it. Node's Corepack repository states it "is
+distributed with Node.js from version 14.19.0 up to (but not including) 25.0.0", v24's documentation
+page carries "Corepack will no longer be distributed starting with Node.js v25", and v26 has no such
+page — the URL 404s. It is still installable from the registry.
+
+*Sourced — <https://github.com/nodejs/corepack> README, <https://nodejs.org/docs/latest-v24.x/api/corepack.html>,
+and the 404 from <https://nodejs.org/docs/latest-v26.x/api/corepack.html>, all checked by me on
+2026-09-19.*
+
+**So how each candidate is delivered is now a property that separates them, and it is scored here
+rather than deferred.** It cannot be settled after this question, because how awkward a tool is to
+install is part of what ranks it.
+
+- *pnpm* documents three Corepack-free paths — `pnpm self-update`, a standalone script from
+  `get.pnpm.io`, and `npx get-pnpm` — and its installation page does not mention Corepack at all.
+  It also states "pnpm 12 is a native executable and does not require Node.js after it is installed."
+- *Yarn* still opens its install instructions with `npm install -g corepack`, so on a current Node it
+  requires installing the thing Node removed before it can install itself.
+- *npm* arrives bundled, at a version whose default this project would not want, per the finding
+  above.
+
+*Sourced — <https://pnpm.io/installation> and <https://yarnpkg.com/getting-started/install>, read
+2026-09-19 by a research agent. I did not open either; the Corepack and bundled-npm claims they sit
+beside are ones I did check.*
+
+**What *pins* a package manager version across machines is a different question and is tracked
+separately**, at
+[what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md).
+Corepack's removal is why it needs an owner: it was the mechanism, it is gone, and the same
+mechanism has to pin Node too.
+
+**The field still has not been rebuilt from the registry.** Yarn now has verified numbers but has not
+been argued: Yarn Modern is `@yarnpkg/cli` 4.18.0, published 2026-07-29, while the classic `yarn`
+package sits at 1.22.22 from 2024-03-09. Current pnpm is 12.4.2, published 2026-09-15. Whether
+anything else belongs in the field is still unchecked, and the warning under **What would settle it**
+stands until it is.
+
+*Sourced — npm registry metadata, read 2026-09-19 by a research agent. I did not open it.*

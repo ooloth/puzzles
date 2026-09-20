@@ -42,14 +42,16 @@ Node ships npm but does not require it, so
 [what runs the tests?](../questions/what-runs-the-tests.md) and
 [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md).
 A version floor exists — type stripping is unflagged from v22.18.0 and v23.6.0 — but which version
-line this project tracks is not settled here.
+this project runs is not settled here.
+[ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) gives the rule that selects it.
 
 ## Enforced by
 
 Nothing in code, because there is no code. One artifact would satisfy it: a field naming the Node
-version, so a contributor cannot silently run one below the floor that
-[which Node version line does this track?](../questions/which-node-version-line-does-this-track.md)
-will set. It does not exist yet. **Which artifact, and what reads it, is decided at
+version, so a contributor cannot silently run one below the floor.
+[ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) gives the rule that says which
+version goes in it, and the artifact itself still does not exist. **Which artifact, and what reads
+it, is decided at
 [what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md)**
 — that question was split out on 2026-09-19 because the same mechanism has to pin the package
 manager too, and a mechanism chosen inside the version-line record would have been chosen without

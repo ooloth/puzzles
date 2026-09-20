@@ -95,6 +95,23 @@ The numbers and their methods are recorded in
 
 *Sourced — [nodejs.org/api/sqlite.html](https://nodejs.org/api/sqlite.html), re-checked 2026-09-04.*
 
+**Still a release candidate on the version this project runs, re-checked 2026-09-19.** The marker
+reads "Stability: 1.2 - Release candidate" on both the v24 and v26 documentation trees, so
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) did not change it in either direction.
+v26 adds four `StatementSync` methods that v24 lacks — `close()`, `resetStats()`, `stat()` and
+`[Symbol.dispose]()` — none of which anything here currently needs.
+
+*Sourced — the stability marker grepped from <https://nodejs.org/docs/latest-v24.x/api/sqlite.html>
+and <https://nodejs.org/docs/latest-v26.x/api/sqlite.html> by me on 2026-09-19. The API-difference
+list is second-hand from a research agent diffing the two pages.*
+
+**Opening a database, preparing statements and reading rows back works unflagged on Node 26.** A
+single `.ts` file importing `node:sqlite`, run directly with no transpiler, created a table, ran
+prepared statements and returned rows. This says the module is reachable, not that it is the right
+driver — it eliminates nobody.
+
+*Measured — by me on 2026-09-19, Apple M2, macOS 26.6.2, Node v26.9.0.*
+
 **The drivers differ on features, not only on speed, and the differences run the opposite way to the
 usual framing.** Checked 2026-09-19 as part of the M1 runtime work, because the assumption that
 `node:sqlite` is the driver everywhere was challenged rather than confirmed.

@@ -14,9 +14,8 @@ Node they run and which package manager they install with.
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) names the Node half
 under **Enforced by** and records that the artifact does not exist.
 
-**It covers both tools, which is why it is its own file.** The Node half lived inside
-[which Node version line does this track?](which-node-version-line-does-this-track.md) until
-2026-09-19. It was moved out because a reasonable person could pick a line and pick any of several
+**It covers both tools, which is why it is its own file.** The Node half lived inside the
+version-line question until 2026-09-19. It was moved out because a reasonable person could pick a line and pick any of several
 mechanisms to state it in, so it is a second decision, and one settled inside another question's
 record rides along on reasoning that was never about it.
 
@@ -37,9 +36,9 @@ which is the kind of difference that surfaces as a bug nobody can reproduce.
 ## What would settle it
 
 It derives from both tool choices and cannot be answered before them. A pin names a tool and a
-version, so
-[which Node version line does this track?](which-node-version-line-does-this-track.md) and
-[which package manager?](which-package-manager.md) are both inputs. Ordered after both.
+version. The Node half is settled at
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md); the other input,
+[which package manager?](which-package-manager.md), is still open. Ordered after it.
 
 What to establish once they have landed: which mechanisms can pin both tools rather than one, since
 one mechanism is the whole point of asking this separately; whether the mechanism has to be
@@ -74,3 +73,24 @@ registry. The sources are recorded against
 [which package manager?](which-package-manager.md) rather than duplicated here.
 
 *Sourced — checked by me on 2026-09-19; see that file for the URLs.*
+
+**The Node half of this now has a rule, and the rule yields a number.**
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) says Node runs on the
+newest released line that is in Active LTS or committed to becoming it, which as of 2026-09-19 is
+**26** — v26 is released and carries an LTS date of 2026-10-28, and nothing newer exists. **The
+concrete version belongs in this question's artifact rather than in that record**, which is why its
+title is the rule and not a version. So one of the two inputs has landed and the other,
+[which package manager?](which-package-manager.md), has not.
+
+**That record asks for a check, and it lands here.** Its **Enforced by** notes that the rule is
+mechanical — compare the pinned version against Node's published schedule — so a script can assert
+it rather than anyone remembering. Whatever artifact this question chooses is what such a check
+would read, so the two arrive together or the check has nothing to read.
+
+**The maintainer's machine already runs Node v26.7.0 with npm 11.19.0, managed by `fnm`, and `mise`
+is also installed.** Recorded as the starting state rather than as a candidate: what one machine
+happens to have is not an argument for what three machines should agree through, and the failure
+this question exists to prevent is precisely the one where the answer is whatever was already on the
+laptop.
+
+*Measured — `node -v`, `npm -v` and `command -v` on the maintainer's machine, 2026-09-19.*

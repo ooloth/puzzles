@@ -27,9 +27,9 @@ script executes the source directly. Under a transpiler it does not. So this que
 constraint on the most-shared code in the repo.
 
 **The runtime offers no middle any more.** `--experimental-transform-types` was Node's own way to
-run enums and namespaces without a separate tool, and it was removed in v26. On the version line
-[which Node version line does this track?](which-node-version-line-does-this-track.md) is likely to
-land on, the choice is stripping or a real transpiler, with nothing in between.
+run enums and namespaces without a separate tool, and it was removed in v26.
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) put this project on 26, so the choice
+is stripping or a real transpiler, with nothing in between.
 
 ## What would settle it
 
@@ -123,3 +123,26 @@ Node's native support.
 
 *Sourced — npm registry metadata, read 2026-09-19 by a research agent. I did not open it, and the
 `ts-node` characterisation is secondary reporting rather than a maintainer statement.*
+
+### Mined from the version-line question when it resolved, 2026-09-19
+
+**There is no middle, and that is now settled rather than likely.** This file previously said the
+choice would be stripping or a real transpiler "on the version line [the version question] is likely
+to land on". [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) landed on 26, so the
+conditional is discharged: `--experimental-transform-types` does not exist here. The field is two
+options and the third was never available.
+
+**Measured rather than read.** A file containing `enum Mark { Empty, Star }` run under Node v26.9.0
+with `--experimental-transform-types` exits with `bad option:`. The same file under v24.21.0 runs
+and prints. Run plainly, both fail with `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`.
+
+*Measured — by me on 2026-09-19, Apple M2, macOS 26.6.2, both versions installed into a throwaway
+`FNM_DIR` and deleted afterwards.*
+
+**`@swc-node/register` may be disqualified by TypeScript's current major.** Its
+`peerDependencies.typescript` is `>= 4.3 < 7`, and the current published TypeScript is 7.0.2. If
+that range still reads this way when this question is worked, the option is out rather than
+merely awkward. **Check it directly before relying on it** — this is a research agent's reading of
+registry metadata that I did not open, and a peer range is one publish away from changing.
+
+*Sourced — npm registry metadata, read 2026-09-19 by a research agent. I did not open it.*

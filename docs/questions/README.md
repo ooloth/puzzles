@@ -222,19 +222,20 @@ was expected to come down to preference because nothing separated the candidates
 property; a measurement found one, which is that Bun cannot bound its heap and so cannot be made to
 say why it died. What remains:
 
-1. **[Which Node version line does this track?](which-node-version-line-does-this-track.md)** The
-   root of this chain, and the cheapest thing here to get wrong: a version number in one file and a
-   reinstall. Both of the criteria above agree on putting it first, which is the easy case.
-   It derives from nothing — [where does this run?](where-does-this-run.md) never mentions a Node
-   version, so the two do not defer to each other — and two things derive from it. It decides how
-   many options the transpiler question has, because `--experimental-transform-types` exists on v24
-   and was removed on v26. And it decides whether Corepack is on the machine, because Node stopped
-   shipping it at v25, which raises a cost on the package manager below. Both are checked and
-   sourced in its file. It is also in the list because
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) named a floor and
-   declined to name a line, and because left unstated it resolves differently on a contributor's
-   machine, in a container and on CI.
-2. **The package manager.** It survived the runtime: Node ships npm and does not require it, so
+**The Node version is settled too**, at
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), which was the root
+of this chain and was answered first. **It is a rule rather than a number** — the newest released
+line that is in Active LTS or committed to becoming it — because a record titled with a version
+expires on a schedule and has to be re-argued each time. The number the rule yields today is 26, and
+it belongs in the pin artifact rather than in a record. No follow-up question was opened, because
+the rule answers both which line and when it moves.
+
+Two things that derived from it are now discharged: the transpiler question has two options rather
+than three, because `--experimental-transform-types` does not exist on the line the rule selects;
+and Corepack is not on the machine, because Node stopped shipping it at v25, which raises a cost on
+the package manager below. What remains:
+
+1. **The package manager.** It survived the runtime: Node ships npm and does not require it, so
    this is still a choice, and it is the only one of these still needing research. Its Options hold
    only pnpm, npm and Bun, so that field was never rebuilt — Bun is out by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) and yarn is missing
@@ -244,25 +245,27 @@ say why it died. What remains:
    by default, so npm's "comes with Node" merit and its safety posture are two different versions of
    npm; and Corepack's removal makes how each candidate is *delivered* a property that separates
    them, scored inside that question rather than deferred.
-3. **[Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md)**
-   Derives from the version line above, which is what decides whether this has two options or three:
-   `--experimental-transform-types` is documented on v24 and documented as removed on v26, so an
-   older line keeps a middle between stripping and a real transpiler and a current one does not.
-   Beyond that the reversible direction is clear rather than the answer being clear: adding a
-   transpiler later is a dependency and a script change, while removing one means finding and
-   rewriting whatever constructs needed it, unbounded because nothing marks them.
-4. **The layout.** Derives from the package manager. Its own file records that being wrong is a
+2. **[Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md)**
+   Derives from nothing still open. Its field is now two options rather than three, because
+   [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) selects a line
+   where `--experimental-transform-types` does not exist — measured, not just documented. The reversible
+   direction is clear rather than the answer being clear: adding a transpiler later is a dependency
+   and a script change, while removing one means finding and rewriting whatever constructs needed
+   it, unbounded because nothing marks them.
+3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
    file move and a configuration change.
-5. **[What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)**
-   Derives from both tool choices, because a pin names a tool and a version. It carries the artifact
+4. **[What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)**
+   Derives from the package manager, which is the last of its two inputs still open — the other
+   landed at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), whose
+   rule yields the number this artifact has to hold. It carries the artifact
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, which
    sat inside the version-line question until 2026-09-19 and was moved out because a reasonable
-   person could pick a line and pick any of several mechanisms to state it in. Left unowned it gets
-   answered twice, once by each tool's record, with neither comparing the two.
-6. **The HTTP handler.** `node:http` is now one of the candidates by
+   person could pick a version and pick any of several mechanisms to state it in. Left unowned it
+   gets answered twice, once by each tool's record, with neither comparing the two.
+5. **The HTTP handler.** `node:http` is now one of the candidates by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
-7. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+6. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -276,7 +279,7 @@ say why it died. What remains:
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-8. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+7. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -286,13 +289,12 @@ say why it died. What remains:
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-9. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+8. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Only steps 1 and 2 need research, and step 1's half of it is done and recorded in its file. Steps 3
-to 7 are write-ups.
+Only step 1 needs research. Steps 2 to 6 are write-ups.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)

@@ -639,6 +639,31 @@ outside rather than by configuring it. That is an input to
 and to [how would we notice a problem nobody predicted?](questions/how-would-we-notice-a-problem-nobody-predicted.md),
 both at M11.
 
+## Runtimes — type stripping stops at `node_modules`
+
+**Node refuses to strip types from a TypeScript file under a `node_modules` path, and the refusal is
+deliberate rather than a gap.** From its type-stripping documentation: "To discourage package authors
+from publishing packages written in TypeScript, Node.js refuses to handle TypeScript files inside
+folders under a `node_modules` path." An import that resolves there throws
+`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`.
+
+*Sourced — [nodejs.org type stripping](https://nodejs.org/docs/latest-v26.x/api/typescript.html),
+read 2026-09-19. Measured — reproduced on Node v26.7.0 by packing a workspace package into an
+artifact's `node_modules` and importing it.*
+
+**So a TypeScript module shared as source runs while it resolves outside `node_modules` and stops
+the moment anything packs it inside one.** Inside a workspace the sibling is a symlink whose real
+path is the source directory, so Node strips it and it runs. A step that copies the package into
+`node_modules` to build a deployable produces an artifact that fails at its first import, and it
+fails at run time rather than at build time.
+
+That is what [ADR-0005](decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+runs into: either the shared rules module is compiled before it ships, or the deployable keeps it
+outside `node_modules`. It is an input to
+[how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md),
+[what shape is the deployable?](questions/what-shape-is-the-deployable.md) and
+[is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md).
+
 ## Databases — SQLite is not safe on a network filesystem
 
 **SQLite's maintainers advise against it, and the failure is corruption rather than an error.** From

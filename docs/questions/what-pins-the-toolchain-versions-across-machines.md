@@ -35,9 +35,9 @@ which is the kind of difference that surfaces as a bug nobody can reproduce.
 ## What would settle it
 
 It derives from both tool choices and cannot be answered before them. A pin names a tool and a
-version. The Node half is settled at
-[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md); the other input,
-[which package manager?](which-package-manager.md), is still open. Ordered after it.
+version. **Both are now settled**: Node at
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) and the package
+manager at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md). So this is unblocked.
 
 What to establish once they have landed: which mechanisms can pin both tools rather than one, since
 one mechanism is the whole point of asking this separately; whether the mechanism has to be
@@ -78,8 +78,7 @@ registry. The sources are recorded against
 newest released line that is in Active LTS or committed to becoming it, which as of 2026-09-19 is
 **26** — v26 is released and carries an LTS date of 2026-10-28, and nothing newer exists. **The
 concrete version belongs in this question's artifact rather than in that record**, which is why its
-title is the rule and not a version. So one of the two inputs has landed and the other,
-[which package manager?](which-package-manager.md), has not.
+title is the rule and not a version.
 
 **That record asks for a check, and it lands here.** Its **Enforced by** notes that the rule is
 mechanical — compare the pinned version against Node's published schedule — so a script can assert
@@ -93,3 +92,28 @@ this question exists to prevent is precisely the one where the answer is whateve
 laptop.
 
 *Measured — `node -v`, `npm -v` and `command -v` on the maintainer's machine, 2026-09-19.*
+
+**pnpm reads a version pin and switches itself to it, with no Corepack.** The binary installed from
+`get.pnpm.io` reports `12.5.1` in an unpinned directory and `12.4.2` in one whose `package.json`
+carries `"packageManager": "pnpm@12.4.2"`. The setting is `pmOnFail`, whose default is `download`.
+So one mechanism for the package-manager half is already present in the tool
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) chose, and what is left to weigh is
+whether it or an external manager should own both tools rather than one.
+
+*Measured — `pnpm --version` in a pinned and an unpinned directory, by me on 2026-09-19. The
+`pmOnFail` default is Sourced from <https://pnpm.io/settings/cli>, opened by me the same day.*
+
+**npm enforces a pin by refusing rather than by correcting.** With `devEngines.packageManager`
+requiring `^12.0.0`, npm 11.19.0 stops with `EBADDEVENGINES` and names both the version found and
+the version required. Recorded because it is the shape of the alternative: a mechanism that detects
+a mismatch is not the same as one that resolves it, and this question has to choose which it wants.
+
+*Measured — by me on 2026-09-19.*
+
+**`mise` can pin npm, pnpm and Node from a checked-in config, through a backend independent of Node
+and Corepack, and `fnm` cannot pin a package manager at all.** The maintainer's machine has both.
+This is the main alternative to the mechanisms above, and the reason this question is not answered
+by [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) as a side effect.
+
+*Sourced — <https://mise.jdx.dev/registry.html> and an fnm issue reporting its Corepack path broken
+on Node 25+, read 2026-09-19 by a research agent. I did not open either.*

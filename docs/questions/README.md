@@ -194,11 +194,19 @@ Bun cannot bound its heap and so cannot be made to say why it died, which is wha
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
 
 **So "nothing separates these candidates" means "no survey has found a separator", and the runtime
-is the standing proof those are different claims.** The four still open on it are the renderer, the
-HTTP handler, the package manager and the layout. Every surveyed candidate in each satisfies what
-the records require, and the differences found are operational frictions rather than disqualifiers.
-Read that as a result about the searching rather than about the candidates: a question that looks
-like a coin toss is one nobody has run yet, and the cheap thing is usually to run it.
+is the standing proof those are different claims.** The three still open on it are the renderer, the
+HTTP handler and the layout. Every surveyed candidate in each satisfies what the records require,
+and the differences found are operational frictions rather than disqualifiers. Read that as a result
+about the searching rather than about the candidates: a question that looks like a coin toss is one
+nobody has run yet, and the cheap thing is usually to run it.
+
+**The package manager is the second question here to be settled by running rather than surveying.**
+A survey found all its candidates equivalent on safety; running them found that an undeclared import
+resolves under one and fails under the others, which is what decided
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md). It also found a limit that belongs to
+three other questions: Node will not strip types under `node_modules`, so a shared TypeScript module
+works in a workspace and fails once anything packs it into a deployable. That is in
+[../constraints.md](../constraints.md).
 
 **That dissolves much of the sequencing problem rather than solving it.** The fear this list was
 built around was that answering a narrow question would settle a wide one by accident. That fear
@@ -248,36 +256,35 @@ than three, because `--experimental-transform-types` does not exist on the line 
 and Corepack is not on the machine, because Node stopped shipping it at v25, which raises a cost on
 the package manager below. What remains:
 
-1. **The package manager.** It survived the runtime: Node ships npm and does not require it, so
-   this is still a choice, and it is the only one of these still needing research. Its Options hold
-   only pnpm, npm and Bun, so that field was never rebuilt — Bun is out by
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) and yarn is missing
-   from a list that reads as complete. Rebuild it before deciding, or the decision is made over
-   somebody's shortlist. Two findings landed on 2026-09-19 that change what it is choosing between:
-   every supported Node line bundles npm 11.19.x rather than the npm 12 that blocks install scripts
-   by default, so npm's "comes with Node" merit and its safety posture are two different versions of
-   npm; and Corepack's removal makes how each candidate is *delivered* a property that separates
-   them, scored inside that question rather than deferred.
-2. **The layout.** Derives from the package manager. Its own file records that being wrong is a
-   file move and a configuration change.
-3. **The HTTP handler.** `node:http` is now one of the candidates by
+1. **The layout.** Its input has landed:
+   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
+   workspace mechanics it was waiting on are known. Its own file records that being wrong is a file
+   move and a configuration change. **Two things now bear on it that its file does not yet carry**:
+   pnpm needs `workspace:*` rather than a plain range for a sibling, and
+   [../constraints.md](../constraints.md) records that Node will not strip types under
+   `node_modules`, which decides whether a single package with relative imports beats workspaces for
+   the shared rules module.
+2. **The HTTP handler.** `node:http` is now one of the candidates by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
-4. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
-   be written at any point after that record lands. **This is where two answered question files
+3. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+   be written at any point after that record lands. **This is where three answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
    HTTP?](does-one-tool-build-the-client-and-answer-http.md), answered by
-   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
+   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md),
    [what builds the client and serves it in
    development?](what-builds-the-client-and-serves-it-in-development.md), answered by
-   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before deleting it or
+   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and
+   [which package manager?](which-package-manager.md), answered by
+   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) and
+   [ADR-0033](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md). Commit each before deleting it or
    `git show <commit>^:<path>` has nothing to recover. **The build file additionally carries
    findings that belong to another question**, about Bun's test runner, its branch coverage and
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-5. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+4. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -287,12 +294,12 @@ the package manager below. What remains:
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-6. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+5. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Only step 1 needs research. Steps 2 to 4 are write-ups. Steps 5 and 6 are open questions that
+Nothing left here needs research. Steps 1 to 3 are write-ups. Steps 4 and 5 are open questions that
 wait on purpose — the renderer for whatever the scaffold shows, and the last because its file
 is empty.
 
@@ -341,10 +348,12 @@ derivation.
    - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
    - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so this slice's server is chosen on its own and a toolchain that also answers HTTP is not a candidate
-   - **Given:** [0030-typescript-outside-the-browser-runs-on-node](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) — so the package manager and the HTTP handler below are chosen against Node, and source stays inside the syntax it can strip
+   - **Given:** [0030-typescript-outside-the-browser-runs-on-node](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) — so the HTTP handler below is chosen against Node, and source stays inside the syntax it can strip
+   - **Given:** [0032-the-package-manager-is-pnpm](../decisions/0032-the-package-manager-is-pnpm.md) — so the layout below is chosen against pnpm's workspace mechanics, and a sibling is named with `workspace:*` rather than a version range
+   - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
+   - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
-     - **Must answer:** [which-package-manager](which-package-manager.md) — or else the layout assumes workspaces the toolchain lacks. Costs a re-scaffold, and may not be a separate decision if the runtime ships one
-     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected; the decision itself waits on [which-package-manager](which-package-manager.md) above
+     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected. Its input has landed at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and [../constraints.md](../constraints.md)'s type-stripping limit is what decides whether the rules module can be a workspace sibling at all
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -459,7 +468,10 @@ a player can see, which is why it has to be a milestone rather than a habit.
    pin with only one machine to bind is a file nothing reads. It carries the artifact
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, and
    the rule at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
-   supplies the Node value it has to hold.
+   supplies the Node value it has to hold. **Both its inputs have now landed**: the package manager
+   is settled at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), whose own spike found
+   that pnpm reads a `packageManager` field and switches itself to the declared version with no
+   Corepack involved, which is one of the mechanisms this question has to weigh.
 6. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This is where [../verification.md](../verification.md) gets its content.

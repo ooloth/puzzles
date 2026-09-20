@@ -53,12 +53,17 @@ was chosen, so it survives the renderer decision. A lint rule forbidding rendere
 rules directory catches the same thing earlier and more cheaply, and the two together catch what
 either alone would miss.
 
-Neither exists, because no code exists. Whichever slice first creates the rules module is where this
-check belongs, and
+Neither exists, because no code exists. Whichever slice first creates the rules module is where
+these checks belong, and
 [what proves a vertical slice works end to end?](../questions/what-proves-a-vertical-slice-works-end-to-end.md)
-at M2 is where the runner for it gets decided. **The work is tracked at
-[issue #1](https://github.com/ooloth/puzzles/issues/1)**, so this line stops being the only place it
-is owed.
+at M2 is where the runner for them gets decided.
+
+**Both checks are part of that slice's definition of done, and this file is what says so.** They
+were briefly filed as their own issue and it was closed as mis-scoped: its QA plan required adding
+a renderer import to a rules directory, and neither the renderer nor the directory exists, so
+nothing about it could be run or observed. An issue whose evidence cannot be collected is not
+scoped yet. So the obligation lives here until there is a slice to attach it to, and whoever writes
+that slice's issue carries these two checks into its done-when.
 
 ## Where it came from
 

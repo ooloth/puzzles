@@ -24,21 +24,16 @@ browser runs on Node, and the package manager is pnpm.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
-### Two answered question files are still on disk
+### An answered question file is still on disk
 
-**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md)
-and [questions/which-package-manager.md](questions/which-package-manager.md), both carrying full
-working as though they were live.
+**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md),
+carrying full working as though it were live.
 
-**Actually** both are answered — the first by
-[ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), where the
-question as posed turned out to be unanswerable, and the second by
-[ADR-0032](decisions/0032-the-package-manager-is-pnpm.md) and
-[ADR-0033](decisions/0033-an-import-of-an-undeclared-dependency-fails.md). Their frontmatter says
-`status: answered`.
+**Actually** it is answered, by
+[ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and the
+question as posed was unanswerable. Its frontmatter says `status: answered`.
 
-**So** don't work either. Both are deleted once the floor-format record lands and their findings
-have been mined.
+**So** don't work it. It is deleted once the floor-format record lands and its findings are mined.
 
 <!-- Template:
 

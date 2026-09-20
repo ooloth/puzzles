@@ -52,9 +52,9 @@ conditions rather than setting a syntax level.
 even though Bun has since lost all three. The runtime went to Node at
 [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) on a heap-bounding failure that has
 nothing to do with syntax lowering, and
-[which package manager?](../questions/which-package-manager.md) and
-[what runs the tests?](../questions/what-runs-the-tests.md) each record Bun as out by that record
-rather than by this one. Reading this record as "not Bun" would still be the same mistake: it is
+[ADR-0032](0032-the-package-manager-is-pnpm.md) and
+[what runs the tests?](../questions/what-runs-the-tests.md) each put Bun out by that record rather
+than by this one. Reading this record as "not Bun" would still be the same mistake: it is
 evidence about a bundler, and the other three were decided on their own.
 
 ## Enforced by

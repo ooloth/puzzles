@@ -20,10 +20,9 @@ and a batch process without a publish step between them. Whatever shape is chose
 
 ## What would settle it
 
-**Whether the toolchain does workspaces is an input, so this waits on
-[which package manager?](which-package-manager.md)** — which in turn waits on the runtime. A layout
-chosen before the toolchain is a layout the toolchain may not support, and the shape is what
-everything installed afterwards sits inside.
+**Its toolchain input has landed.**
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
+workspace mechanics this was waiting on are known and recorded under **Findings**.
 
 Scaffolding it. Create the shape, import the rules module from a browser entry point and from a
 batch script, and see whether the tooling complains. What to check while doing it: whether the
@@ -106,3 +105,33 @@ runtimes it implies rather than from taste.
 **The structural criteria hold whichever option wins**, so they are not inputs to the choice: where
 a package boundary is earned, when repetition is acceptable, and domain logic staying free of I/O.
 They live in the portable standards described in [../standards/README.md](../standards/README.md).
+
+**pnpm does workspaces, and names a sibling differently from npm.** The glob list lives in
+`pnpm-workspace.yaml` rather than the root `package.json`, and a sibling dependency is written
+`workspace:*` — a plain `"*"` sends pnpm to the registry and fails with `ERR_PNPM_FETCH_404`. It also
+has catalogs, one declared version of a dependency shared across packages, which is the thing that
+stops four manifests drifting apart, and filters expressive enough to select a package's dependents
+or only what changed since a git ref.
+
+*Measured for the `"*"` failure, on 2026-09-19. The catalog and filter capabilities are Sourced from
+pnpm's own docs via a research agent; I did not open them.*
+
+**Node will not strip types under `node_modules`, and that is the finding this question turns on.**
+[../constraints.md](../constraints.md) records it. A shared rules module exporting `.ts` source
+works as a workspace sibling, because the symlink resolves to a path outside `node_modules`, and
+fails the moment anything packs it inside one to build a deployable. **So the sketch's assumption of
+workspaces is not free**: it buys real boundaries and it puts the rules module one packaging step
+away from being unrunnable. A single package with relative imports never meets the limit at all.
+
+That does not settle the question in favour of one package. It says the comparison is between real
+boundaries plus a packaging constraint, and no boundaries plus no constraint — which is a sharper
+trade than "configuration versus none", and it is the same trade
+[what shape is the deployable?](what-shape-is-the-deployable.md) has to make.
+
+**Running one script across every package differs between the tools, and not by enough to matter
+here.** All of npm, pnpm and Yarn exit non-zero when one package's script fails. npm runs them
+serially and continues past a failure, Yarn stops at the first, pnpm runs them in parallel in
+dependency order and reports each. Recorded so nobody re-runs the comparison: it discriminates
+nothing, and the tool is settled regardless.
+
+*Measured on 2026-09-19 with three packages whose middle one exits 1.*

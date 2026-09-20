@@ -24,9 +24,8 @@ states its own version somewhere else. Each looks complete on its own. The repo 
 mechanisms, chosen separately, neither argued.
 
 **Corepack is why the package-manager half is newly open.** It turned a `packageManager` field into
-an installed binary, and it stopped shipping with Node at v25 —
-[which package manager?](which-package-manager.md) records the sources. So the mechanism that used
-to answer this question for two of the three candidates is no longer on the machine by default.
+an installed binary, and it stopped shipping with Node at v25, so the mechanism that used to answer
+this question for two of the three candidates is no longer on the machine by default.
 
 **Being wrong is cheap and the cost of silence is not.** Changing the mechanism is a file and a
 line in a setup document. Having no mechanism is three machines disagreeing about which Node ran,
@@ -67,11 +66,19 @@ package-manager half with no owner at all.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Corepack is no longer distributed with Node from v25 onward.** It remains installable from the
-registry. The sources are recorded against
-[which package manager?](which-package-manager.md) rather than duplicated here.
+**Corepack is no longer distributed with Node from v25 onward.** Its repository states it "is
+distributed with Node.js from version 14.19.0 up to (but not including) 25.0.0", v24's documentation
+page carries "Corepack will no longer be distributed starting with Node.js v25", and v26 has no such
+page. It remains installable from the registry and is still published, at 0.36.0 on 2026-08-28.
 
-*Sourced — checked by me on 2026-09-19; see that file for the URLs.*
+Node's TSC chose this deliberately over keeping it: the winning option was to "stop distributing
+Corepack (i.e. the distribution will no longer contain a `corepack` executable) on future (i.e. 25+)
+release lines of Node.js". So a mechanism built on Corepack is building on something being removed
+on purpose.
+
+*Sourced — <https://github.com/nodejs/corepack> README, <https://nodejs.org/docs/latest-v24.x/api/corepack.html>,
+the 404 from <https://nodejs.org/docs/latest-v26.x/api/corepack.html>, the npm registry, and
+<https://github.com/nodejs/TSC/pull/1697> for the vote. All checked by me on 2026-09-19.*
 
 **The Node half of this now has a rule, and the rule yields a number.**
 [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) says Node runs on the

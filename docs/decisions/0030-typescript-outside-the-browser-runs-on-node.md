@@ -37,8 +37,8 @@ natively and strips only erasable syntax, but a transpiler in front restores the
 reasonable person could choose this runtime and either answer. Nothing in **Rejected** below rests
 on which one, so reading this record as settling it would be reading in a decision it does not make.
 
-Node ships npm but does not require it, so
-[which package manager?](../questions/which-package-manager.md) stays open. So does
+Node ships npm but does not require it, so the package manager stayed a choice and was settled
+separately at [ADR-0032](0032-the-package-manager-is-pnpm.md). Still open are
 [what runs the tests?](../questions/what-runs-the-tests.md) and
 [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md).
 A version floor exists — type stripping is unflagged from v22.18.0 and v23.6.0 — but which version

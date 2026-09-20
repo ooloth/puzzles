@@ -96,8 +96,8 @@ Nothing yet, and nothing can be until the rule has somewhere to write its answer
 file or field naming the version, read by the laptop, the container and CI — is chosen at
 [what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md),
 which is downstream of this record and of
-[which package manager?](../questions/which-package-manager.md) because one mechanism should pin
-both tools. Until that lands this is asserted only, and a machine running something else will not be
+[ADR-0032](0032-the-package-manager-is-pnpm.md) because one mechanism should pin both tools. Both
+inputs have now landed. Until that lands this is asserted only, and a machine running something else will not be
 told.
 
 **A check could enforce it and none exists.** The rule is mechanical — compare the pinned version

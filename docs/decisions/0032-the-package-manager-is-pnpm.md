@@ -32,7 +32,14 @@ chosen implementation a cost to state rather than a reason to refuse it.
 that artifact is
 [what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md).
 
-**Nothing in the field was disqualified, and this record is a preference resting on measured
+**The field was bounded at four before the search, and the bound is part of the decision.** npm 12,
+pnpm 12, Yarn Modern 4 and Yarn Classic 1, each at its best available version. A registry sweep also
+turned up `vlt`, `@endevco/aube` and `@nubjs/nub`, all actively published; **none was scored**, at the
+maintainer's direction, so this record rejects them on nothing and a reader should not read their
+absence as a judgement. Scoring at best-available is what removed Yarn Classic, since it is not the
+best Yarn.
+
+**Nothing in the remaining field was disqualified, and this record is a preference resting on measured
 differences rather than a derivation.** npm 12 and Yarn 4 each satisfy every requirement this
 project has. A competent maintainer could take either and nothing here would break. The portable
 decision-making standard requires a search that found no disqualifier to say so plainly instead of
@@ -59,6 +66,13 @@ pnpm's `minimumReleaseAge` defaults to one day; npm's `min-release-age` defaults
 the mitigation against installing a compromised release in the hours after it is published, and a
 default that holds is worth more here than a setting somebody has to remember.
 
+**The axis this question was originally framed on turned out not to discriminate, and that is worth
+stating so nobody re-runs it.** All three block a dependency's install scripts by default. Measured
+against `esbuild`, with an `--ignore-scripts` control to show what a blocked build looks like on
+disk: npm 12 and Yarn 4 block and warn at exit 0, pnpm blocks and exits 1. No untrusted code runs
+under any of them, so what is left is whether a pipeline stops. That is a much smaller difference
+than the framing implied, and it is why no part of this decision rests on it.
+
 **Every figure above was measured or read by the author of this record**, on macOS arm64 under Node
 v26.7.0, against npm 12.0.2, pnpm 12.5.1 and Yarn 4.18.0, each installed into an isolated prefix.
 The install timings are one run per candidate with isolated caches, so they carry no variance and
@@ -66,8 +80,10 @@ the cold-cache column was discarded as implausible; the warm and relink figures 
 The defaults come from
 [pnpm's dependency-resolution settings](https://pnpm.io/settings/dependency-resolution) and
 [npm's config reference](https://docs.npmjs.com/cli/v12/using-npm/config). The full method, the
-results that changed nothing, and the figures taken from a research agent rather than established
-here are in [which package manager?](../questions/which-package-manager.md) until it is mined.
+results that changed nothing, the eliminated candidates and the figures taken from a research agent
+rather than established here were mined into this record, into
+[../constraints.md](../constraints.md) and into the question files named under **Also update**. The
+working they came from reads at `git show f182e0b:docs/questions/which-package-manager.md`.
 
 ## Enforced by
 
@@ -153,11 +169,16 @@ deploy a symlinked tree, since the workaround there removes the main reason this
 
 ## Also update
 
-- [x] questions/README.md — closes [which package manager?](../questions/which-package-manager.md),
-      unblocks [how is the codebase laid out?](../questions/how-is-the-codebase-laid-out.md), and
-      supplies one of the two inputs
+- [x] questions/README.md — the package-manager question is mined and deleted, which unblocks
+      [how is the codebase laid out?](../questions/how-is-the-codebase-laid-out.md) and supplies the
+      second of the two inputs
       [what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md)
-      was waiting on
+      was waiting on. Findings also went to
+      [what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md)
+      and [where does this run?](../questions/where-does-this-run.md)
+- [x] invariants/ — [no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md),
+      which is what [ADR-0033](0033-an-import-of-an-undeclared-dependency-fails.md) protects and
+      where its owed check lives
 - [x] architecture.md — nothing moved; this defines no boundary between parts of the system
 - [x] constraints.md — carries the Node type-stripping limit the spike behind this record found,
       which constrains the layout and the deployable rather than this choice

@@ -292,3 +292,28 @@ finding it later is not mistaken for new information.
 
 *Sourced — a research agent searched for each of these 2026-09-02 and reported the absence. I did not
 repeat the searches.*
+
+### Facts established while settling the package manager
+
+**Build-from-repo platforms do not favour one lockfile over another as much as assumed.** Heroku's
+Node support documents `package-lock.json`, `pnpm-lock.yaml` and `yarn.lock` as equal triggers, and
+states that only one package manager may be used per application. Railway's builders detect the
+`packageManager` field first and a lockfile second. Render and Fly could not be established: Render
+appears to want an explicit build command rather than inferring one, and no Fly document was found
+describing lockfile precedence.
+
+*Sourced — the Heroku and Railway/Railpack documentation, read 2026-09-19 by a research agent. I did
+not open them, and the two gaps are recorded as gaps rather than guesses.*
+
+**A host that cannot deploy symlinks is now a real constraint on this choice rather than a
+preference.** [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) chose pnpm, whose default
+layout symlinks into a content-addressed store, and pnpm's own docs name "deployment to serverless
+providers that don't support symlinks" as the reason its hoisted mode exists. Taking that escape
+hatch withdraws
+[no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md).
+
+**So this question can make that record uncomfortable**, and
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) names it under **Revisit when** for
+exactly that reason. A host that runs an ordinary process on an ordinary disk — which
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) already requires — does not
+have this problem, so the two constraints point the same way.

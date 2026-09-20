@@ -104,3 +104,23 @@ where it already works. So this is worth adopting alongside an answer here rathe
 whether the checker should be Python at all, and if the answer is TypeScript this option disappears
 rather than being rejected. Considering the `uv` version first would be choosing between Pythons in a
 repository that has not decided it wants one.
+
+**`actions/setup-node` caches all three package managers, and pnpm has an ordering requirement.**
+Its supported `cache` values are npm, yarn and pnpm. For pnpm the setup action that installs it has
+to run *before* `actions/setup-node`, because `setup-node`'s cache step shells out to the pnpm
+binary. Getting the order wrong is a failing workflow rather than a silent miss, so it is a
+first-run annoyance rather than a hazard.
+
+This matters here because [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settled the
+package manager on pnpm, and the runner this question chooses is the second of the machines
+[what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+has to make agree.
+
+*Sourced — the `actions/setup-node` README and pnpm's own action README, read 2026-09-19 by a
+research agent. I did not open either.*
+
+**This question also owes a check to an invariant.**
+[No package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md)
+is enforced today only by pnpm's default linker, and a single line in `pnpm-workspace.yaml` would
+withdraw it with nothing reporting. The check it needs is that a known transitive dependency is
+unreachable from a package that has not declared it, and this is where its runner gets decided.

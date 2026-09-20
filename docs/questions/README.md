@@ -178,70 +178,46 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**Two questions in M1's toolchain cluster turned out to have a property that separates their
-candidates. Four have not.** That is what orders everything below.
+**Three of M1's toolchain questions turned out to have a property that separates their candidates,
+and two of those three were found by running rather than by reading.**
 
-The first is the build, on the precache manifest: TanStack Start, React Router in SPA mode and Qwik
-City cannot today emit a manifest naming the entry document, which
-[ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
-[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-between them require. The issue numbers and reversal conditions are in
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+- **The build**, found by survey. TanStack Start, React Router in SPA mode and Qwik City cannot emit
+  a precache manifest naming the entry document, which
+  [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
+  [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
+  between them require. Settled at
+  [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
+  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md); the reversal conditions are in
+  [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+- **The runtime**, found by measuring after a survey concluded nothing separated the finalists. Bun
+  cannot bound its heap and so cannot be made to say why it died. Settled at
+  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
+- **The package manager**, also found by measuring after a survey found every candidate equivalent
+  on the axis the question was framed on. An import of an undeclared transitive dependency resolves
+  under a hoisted layout and throws under an isolated one. Settled at
+  [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) and
+  [ADR-0033](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md).
 
-**The second is the runtime, and it was found by measuring rather than by surveying.** A survey to
-2026-09-16 concluded nothing separated the finalists on a binding property. Running them found one:
-Bun cannot bound its heap and so cannot be made to say why it died, which is what decided
-[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
+**So "nothing separates these candidates" means "no survey has found a separator", and two of the
+three above are the standing proof that those are different claims.** The three still open — the
+renderer, the HTTP handler and the layout — each have a field where every surveyed candidate
+satisfies what the records require, and the differences found so far are operational frictions.
+Read that as a result about the searching rather than about the candidates. A question that looks
+like a coin toss is usually one nobody has run yet, and running it is the cheap thing.
 
-**So "nothing separates these candidates" means "no survey has found a separator", and the runtime
-is the standing proof those are different claims.** The three still open on it are the renderer, the
-HTTP handler and the layout. Every surveyed candidate in each satisfies what the records require,
-and the differences found are operational frictions rather than disqualifiers. Read that as a result
-about the searching rather than about the candidates: a question that looks like a coin toss is one
-nobody has run yet, and the cheap thing is usually to run it.
-
-**The package manager is the second question here to be settled by running rather than surveying.**
-A survey found all its candidates equivalent on safety; running them found that an undeclared import
-resolves under one and fails under the others, which is what decided
-[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md). It also found a limit that belongs to
-three other questions: Node will not strip types under `node_modules`, so a shared TypeScript module
-works in a workspace and fails once anything packs it into a deployable. That is in
+**Running one also turns up limits that belong to other questions.** The package-manager spike found
+that Node refuses to strip types under `node_modules`, which constrains the layout, the deployable
+and the transpiler rather than the tool that was being chosen. It is in
 [../constraints.md](../constraints.md).
 
-**That dissolves much of the sequencing problem rather than solving it.** The fear this list was
-built around was that answering a narrow question would settle a wide one by accident. That fear
-assumes each question holds an answer capable of constraining its neighbours. Where nothing
-separates the candidates there is less to settle by accident — but the runtime is the reminder that
-this is provisional, because a measurement can put a separator back into a question that read as
-empty.
-
-**One coupling does have teeth, and it is the reason the toolchain leads.** A toolchain can
-foreclose the renderer: Nuxt means Vue and SvelteKit means Svelte, while plain Vite and Astro leave
-it open. That is the only place in this cluster where a choice removes options from another
-question. The toolchain therefore holds both the only discriminator and the only foreclosure, which
-is what puts it first — not that it is the client's half.
-
 **What breaks a tie between two questions that do not derive from each other is which one is
-cheaper to get wrong.** Not which unblocks the most. That was the rule this list was built on and it
-measures how the work was planned rather than anything about the system, so redrawing the milestones
-changes it while the cost of being wrong does not. The two usually agree, because the thing
-everything waits on is often the cheap one, and they agree on the order below. Where they disagree
-the cost of being wrong decides. The portable decision-making standard now carries this, including
-the part that matters most here: cheapest to get wrong counts discovery, so a question whose wrong
-answer nobody would notice moves earlier rather than later, while the thing it affects is still
-small enough to inspect.
-
-**The build and the toolchain came first and are settled**, on the only property that separated the
-field and the only choice that foreclosed another question:
-[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
-[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). What is left derives from those, or from
-nothing.
-
-**The runtime is settled too**, at
-[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which was step 1. It
-was expected to come down to preference because nothing separated the candidates on a binding
-property; a measurement found one, which is that Bun cannot bound its heap and so cannot be made to
-say why it died.
+cheaper to get wrong.** Not which unblocks the most. That measures how the work was planned rather
+than anything about the system, so redrawing the milestones changes it while the cost of being wrong
+does not. The two usually agree, because the thing everything waits on is often the cheap one. Where
+they disagree the cost of being wrong decides. The portable decision-making standard carries this,
+including the part that matters most here: cheapest to get wrong counts discovery, so a question
+whose wrong answer nobody would notice moves earlier rather than later, while the thing it affects
+is still small enough to inspect.
 
 **The Node version is settled too**, at
 [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), which was the root
@@ -253,8 +229,9 @@ the rule answers both which line and when it moves.
 
 Two things that derived from it are now discharged: the transpiler question has two options rather
 than three, because `--experimental-transform-types` does not exist on the line the rule selects;
-and Corepack is not on the machine, because Node stopped shipping it at v25, which raises a cost on
-the package manager below. What remains:
+and Corepack is not on the machine, because Node stopped shipping it at v25, which is scored inside
+[what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+at M2. What remains:
 
 1. **The layout.** Its input has landed:
    [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
@@ -268,17 +245,14 @@ the package manager below. What remains:
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
 3. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
-   be written at any point after that record lands. **This is where three answered question files
+   be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
    HTTP?](does-one-tool-build-the-client-and-answer-http.md), answered by
-   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md),
+   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
    [what builds the client and serves it in
    development?](what-builds-the-client-and-serves-it-in-development.md), answered by
-   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and
-   [which package manager?](which-package-manager.md), answered by
-   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) and
-   [ADR-0033](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md). Commit each before deleting it or
+   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before deleting it or
    `git show <commit>^:<path>` has nothing to recover. **The build file additionally carries
    findings that belong to another question**, about Bun's test runner, its branch coverage and
    its snapshot serialisation; those move to [what runs the
@@ -418,6 +392,11 @@ permanent home. Delete what has moved rather than leaving a second copy.
   were separated on grounds that record states. The position had bad answers available and the
   argument that it was cheap to leave rests on nothing. **So the runtime's place in the reversal
   ordering is still open, and so is the renderer's**, which the renderer record will have to state.
+  **One position now has a stated cost**:
+  [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) prices leaving the package manager at
+  a lockfile swap and an edit to every manifest naming a sibling, which is what let it accept a
+  three-week-old implementation. That is the first point on this ordering established rather than
+  asserted, and the renderer and runtime records can be checked against it.
 - **A stewardship concern is priced rather than treated as a disqualifier**, by
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
   What it is worth depends on how expensive the position is to reverse, so the same fact removes a

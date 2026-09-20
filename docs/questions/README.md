@@ -31,10 +31,14 @@ the rest are bare question lists on purpose, for the reason given below.
 Seven steps. Each one exists because skipping it produced a list that had to be rebuilt.
 
 1. **Write the milestone's end state in one sentence.**
-2. **List the observable slices between nothing and that end state.** Each is one product change you
-   can run and look at. Build order, not risk order — the thing that renders before the thing that is
-   served, the thing that is served before the thing that is deployed. Deploying is the last slice: a
-   hosting choice made before anything exists to host is made against an imagined system.
+2. **List the observable slices between nothing and that end state.** Each is one change you can run
+   and look at — something true of the system afterwards that was not true before. **Observable does
+   not mean a player can see it**: a check that fails on a bad import and a script that reproduces a
+   bug are both observable, and M2 is an entire milestone of them. The test is whether you can name
+   what you would run and what you would expect to see. Build order, not risk order — the thing that
+   renders before the thing that is served, the thing that is served before the thing that is
+   deployed. Deploying is the last slice: a hosting choice made before anything exists to host is
+   made against an imagined system.
 3. **Under each slice, list the givens** — the records, promises and constraints already established
    that bear on *that* slice. Link each one. Where the link is to a large file, name the single
    invariant being relied on, one bullet per invariant.
@@ -389,24 +393,6 @@ neither holds "here is how these four fit together". That is what this is for. E
 provisional and moves out to a record, a constraint or a question file as soon as it has earned a
 permanent home. Delete what has moved rather than leaving a second copy.
 
-**A cut is made by whichever of research and running is faster and reliable for that cut.** Research
-is preferred where a property is a documented capability a candidate either has or lacks, because it
-costs an hour rather than a day and a negative result costs nothing. Running is preferred where the
-question is whether a property holds in practice. Neither is the default. What is forbidden is
-running a comparison a document would have settled, and asserting from a document what only running
-can show.
-
-**A cut earns its place only if it can name the property, the record that binds it, and what leaves
-the field in each outcome.** A check that eliminates nobody is not wasted where it was cheap and its
-outcome was genuinely open — the lowering-target check on 2026-09-19 removed nobody and stopped a
-day of scaffolding on a property nothing fails. It is wasted where the outcome was known.
-
-**A single scaffold cannot choose between candidates.** It can show whether the properties are
-reachable at all, which is worth knowing, and a failure is informative. It cannot show that what was
-built is better than what was not, and the choice of which one to build becomes the decision. So one
-scaffold is built only where research has already reduced the field to one, and then it confirms
-against a named falsifier rather than selecting.
-
 **Open, and spanning more than one question file.**
 
 - **The ordering of replacement costs across positions was asserted and is now partly settled.**
@@ -436,11 +422,6 @@ against a named falsifier rather than selecting.
   needed. Neither disqualifies anything. Tracked as
   [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3. What
   M1 owes it is only that the runtime record says whether driver quality was an input.
-- **Findings about this field go stale in days rather than months.** A toolchain claim can be
-  overtaken by a release that ships the same week, and the rate of change is high enough that
-  most of a batch can fall in one re-check. So anything recorded here carries the date it was
-  checked, a candidate list is re-checked rather than trusted, and an undated claim about a tool
-  is treated as unverified whatever it says.
 
 ## M2 — a change can be checked before it ships
 
@@ -864,6 +845,20 @@ present still believed.
 
 Options and Findings take subheadings once they outgrow a flat list.
 
+
+### A claim about a tool decays in days, not months
+
+A toolchain claim can be overtaken by a release that ships the same week, and the rate of change is
+high enough that most of a batch can fall in one re-check. So a finding about a tool carries the
+date it was checked, a candidate list is re-checked rather than trusted, and **an undated claim
+about a tool is treated as unverified whatever it says**.
+
+Where a claim decays on a known date rather than gradually — a support window ending, a version
+reaching end of life — the finding says so and names the date, because that is cheaper to act on
+than a general warning.
+
+Nothing enforces any of this. `scripts/check-docs.py` checks that a tier is present and cannot
+check whether the claim behind it is still true.
 
 ### Findings are evidence, not fact
 

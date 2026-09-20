@@ -26,9 +26,22 @@ downstream is derived from them, and a sequence argued without them is argued fr
 
 ## Where work lives, and where thinking lives
 
-**Work is GitHub Issues in this repository.** One issue per delivery slice, grouped by a GitHub
-milestone matching M1, M2 and so on. The title is the slice's observable and the definition of done
-is that the observable is true. The tracker is where you read what exists and what state it is in.
+**Work is GitHub Issues in this repository.** One issue per observable change: something is true of
+the system after it that was not true before, and you can go and look. Grouped by a GitHub milestone
+matching M1, M2 and so on. The title names what becomes true; the definition of done is that it is.
+The tracker is where you read what exists and what state it is in.
+
+**"Observable" does not mean "a player can see it".** A check that fails on a bad import, a script
+that reproduces a bug, a pin that makes two machines agree — each changes what the system does, and
+each can be demonstrated before and after. M2 is an entire milestone of them. Nothing here is
+excluded for being infrastructure, and there is no second category of work that issues do not cover.
+
+**The scoping test is whether you can name what you would run and what you would expect to see.**
+That is the QA plan the `write-ticket-description` skill asks for, and it is the thing that makes an
+issue well formed: one move from a current state to a better one, with evidence you can go and
+collect. If you cannot say what you would observe, the issue is not scoped yet — split it or work
+out what it is actually for. That is the signal to keep thinking, never a reason to decide the work
+does not belong in the tracker.
 
 **Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
 which questions block it. `docs/decisions/` holds what has been settled and why.

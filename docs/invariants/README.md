@@ -49,3 +49,4 @@ a check does not exist yet, the file names the check it should have.
 ## The invariants
 
 - [The shared rules module holds no framework-reactive state](the-shared-rules-module-holds-no-framework-reactive-state.md)
+- [No package imports what it does not declare](no-package-imports-what-it-does-not-declare.md)

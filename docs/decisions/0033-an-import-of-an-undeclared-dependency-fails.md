@@ -32,14 +32,12 @@ what makes it worth writing down separately.
 
 ## Enforced by
 
-`node-linker` staying absent from `pnpm-workspace.yaml`, which is its default. **Nothing checks
-this**, and a single line added to that file during a deployment problem would silently reverse it.
+`node-linker` staying absent from `pnpm-workspace.yaml`, which is its default.
 
-A check is available and does not exist yet: an installed tree can be asserted against by importing
-a known transitive dependency and requiring the import to fail. It belongs with
-[what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M2,
-because M1 has no runner to put it in. Until it lands, this record is the only thing standing
-between the property and a one-line reversal.
+**The property this protects is an invariant, and it carries its own owed check**:
+[no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md).
+That file holds the distinction this record would otherwise blur — the linker enforces the property
+itself, loudly, at import time, so what is unchecked is the configuration rather than the code.
 
 ## Rejected
 

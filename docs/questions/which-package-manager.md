@@ -35,14 +35,19 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 ## Options
 
-**All three deny dependency install scripts by default**, through three different configuration
-shapes, so none of them is the safe one and none is the hazardous one. What separates them is which
-allowlist is least likely to be got wrong, and nothing here has compared them on that.
+**Each candidate has an install-script policy, and they do not all default to denying.** pnpm and
+Yarn deny by default in the versions you would install; npm denies from 12 but ships 11 with Node,
+which does not. So there are two things to compare rather than one: which allowlist shape is least
+likely to be got wrong, and what each candidate's default actually is *on the machine as it arrives*.
+Nothing here has compared them on either.
 
 *pnpm.* Content-addressed store, strict by default. Install scripts are governed by `allowBuilds`.
 
-*npm.* Bundled with Node, slowest, most universally understood. Install scripts are governed by an
-`allowScripts` policy on the root package.
+*npm.* Bundled with Node, slowest, most universally understood. **The bundled one runs dependency
+install scripts by default.** The `allowScripts` policy that blocks them arrived in npm 12, and
+every currently supported Node line ships npm 11.19.x — so taking npm means either that default or
+installing npm 12 over the top, which is the same class of chore that counts against the others.
+Sourced under **Findings**.
 
 *Bun.* **Out**, by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md): its installer is part of its runtime and that runtime is not this
 one. Its install-script model is recorded under **Findings** because the comparison of allowlist

@@ -126,11 +126,9 @@ Node's native support.
 
 ### Mined from the version-line question when it resolved, 2026-09-19
 
-**There is no middle, and that is now settled rather than likely.** This file previously said the
-choice would be stripping or a real transpiler "on the version line [the version question] is likely
-to land on". [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) landed on 26, so the
-conditional is discharged: `--experimental-transform-types` does not exist here. The field is two
-options and the third was never available.
+**There is no middle.** [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
+selects a line where `--experimental-transform-types` does not exist, so the field is two options:
+stripping, or a real transpiler.
 
 **Measured rather than read.** A file containing `enum Mark { Empty, Star }` run under Node v26.9.0
 with `--experimental-transform-types` exits with `bad option:`. The same file under v24.21.0 runs

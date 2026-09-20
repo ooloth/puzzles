@@ -1,6 +1,7 @@
 ---
 number: 0027
 status: accepted
+amended: 2026-09-19
 date: 2026-09-17
 ---
 
@@ -97,9 +98,6 @@ replacement as small. This asks for an argument rather than a measurement until 
 A dependency here stops being maintained and swapping it costs materially more than the record that
 chose it estimated. The estimate is what this rests on, and a miss is what shows it cannot carry the
 weight.
-
-Also when the spike has run, since it may show the ordering of replacement costs across positions is
-different from the one assumed here.
 
 ## Also update
 

@@ -14,10 +14,9 @@ Node they run and which package manager they install with.
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) names the Node half
 under **Enforced by** and records that the artifact does not exist.
 
-**It covers both tools, which is why it is its own file.** The Node half lived inside the
-version-line question until 2026-09-19. It was moved out because a reasonable person could pick a line and pick any of several
-mechanisms to state it in, so it is a second decision, and one settled inside another question's
-record rides along on reasoning that was never about it.
+**It covers both tools, which is why it is its own file.** A reasonable person could pick a Node
+version and pick any of several mechanisms to state it in, so the mechanism is a second decision.
+Settled inside either tool's record it would ride along on reasoning that was never about it.
 
 **The failure it prevents is two mechanisms nobody compared.** Left unowned, the version-line record
 states the Node version in whatever field its author reaches for and the package-manager record

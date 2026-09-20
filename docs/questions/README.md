@@ -174,25 +174,34 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**One question in M1's toolchain cluster has a property that separates its candidates. Five do
-not.** That is the result of the survey run to 2026-09-19, and it is what orders everything below.
+**Two questions in M1's toolchain cluster turned out to have a property that separates their
+candidates. Four have not.** That is what orders everything below.
 
-The one that separates is the build, on the precache manifest: TanStack Start, React Router in SPA
-mode and Qwik City cannot today emit a manifest naming the entry document, which
+The first is the build, on the precache manifest: TanStack Start, React Router in SPA mode and Qwik
+City cannot today emit a manifest naming the entry document, which
 [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
 [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
 between them require. The issue numbers and reversal conditions are in
 [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
 
-The five that do not separate are the renderer, the runtime, the HTTP handler, the package manager
-and the layout. Every surveyed candidate in each satisfies what the records require. The differences
-found are operational frictions rather than disqualifiers, and they are recorded in each file.
+**The second is the runtime, and it was found by measuring rather than by surveying.** A survey to
+2026-09-16 concluded nothing separated the finalists on a binding property. Running them found one:
+Bun cannot bound its heap and so cannot be made to say why it died, which is what decided
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
 
-**That dissolves most of the sequencing problem rather than solving it.** The fear this section used
-to be built around was that answering a narrow question would settle a wide one by accident. That
-fear assumes each question holds an answer capable of constraining its neighbours. Where nothing
-separates the candidates there is nothing to settle by accident, because there is nothing in the
-question to settle.
+**So "nothing separates these candidates" means "no survey has found a separator", and the runtime
+is the standing proof those are different claims.** The four still open on it are the renderer, the
+HTTP handler, the package manager and the layout. Every surveyed candidate in each satisfies what
+the records require, and the differences found are operational frictions rather than disqualifiers.
+Read that as a result about the searching rather than about the candidates: a question that looks
+like a coin toss is one nobody has run yet, and the cheap thing is usually to run it.
+
+**That dissolves much of the sequencing problem rather than solving it.** The fear this list was
+built around was that answering a narrow question would settle a wide one by accident. That fear
+assumes each question holds an answer capable of constraining its neighbours. Where nothing
+separates the candidates there is less to settle by accident — but the runtime is the reminder that
+this is provisional, because a measurement can put a separator back into a question that read as
+empty.
 
 **One coupling does have teeth, and it is the reason the toolchain leads.** A toolchain can
 foreclose the renderer: Nuxt means Vue and SvelteKit means Svelte, while plain Vite and Astro leave
@@ -220,7 +229,7 @@ nothing.
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which was step 1. It
 was expected to come down to preference because nothing separated the candidates on a binding
 property; a measurement found one, which is that Bun cannot bound its heap and so cannot be made to
-say why it died. What remains:
+say why it died.
 
 **The Node version is settled too**, at
 [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), which was the root
@@ -245,27 +254,12 @@ the package manager below. What remains:
    by default, so npm's "comes with Node" merit and its safety posture are two different versions of
    npm; and Corepack's removal makes how each candidate is *delivered* a property that separates
    them, scored inside that question rather than deferred.
-2. **[Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md)**
-   Derives from nothing still open. Its field is now two options rather than three, because
-   [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) selects a line
-   where `--experimental-transform-types` does not exist — measured, not just documented. The reversible
-   direction is clear rather than the answer being clear: adding a transpiler later is a dependency
-   and a script change, while removing one means finding and rewriting whatever constructs needed
-   it, unbounded because nothing marks them.
-3. **The layout.** Derives from the package manager. Its own file records that being wrong is a
+2. **The layout.** Derives from the package manager. Its own file records that being wrong is a
    file move and a configuration change.
-4. **[What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)**
-   Derives from the package manager, which is the last of its two inputs still open — the other
-   landed at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), whose
-   rule yields the number this artifact has to hold. It carries the artifact
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, which
-   sat inside the version-line question until 2026-09-19 and was moved out because a reasonable
-   person could pick a version and pick any of several mechanisms to state it in. Left unowned it
-   gets answered twice, once by each tool's record, with neither comparing the two.
-5. **The HTTP handler.** `node:http` is now one of the candidates by
+3. **The HTTP handler.** `node:http` is now one of the candidates by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
-6. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+4. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -279,7 +273,7 @@ the package manager below. What remains:
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-7. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+5. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -289,12 +283,14 @@ the package manager below. What remains:
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-8. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+6. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Only step 1 needs research. Steps 2 to 6 are write-ups.
+Only step 1 needs research. Steps 2 to 4 are write-ups. Steps 5 and 6 are open questions that
+wait on purpose — the renderer for whatever the scaffold shows, and the last because its file
+is empty.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -374,6 +370,7 @@ derivation.
      - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md) — or else the deployment topology caps or destroys the only mechanism that carries an identifier across Safari's storage wipe unaided, per the givens above, and [is guest recovery worth building?](is-guest-recovery-worth-building.md) at M12 finds the mechanism already gone. It fails silently, and unwinding it is a redeploy plus a topology change
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else assets ship without content-hashed filenames and every cached asset is revalidated on every visit, on the network [../problem.md](../problem.md) names as the modal case. Costs a re-scaffold of the build and the serving path together
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the host cannot deploy without briefly running two processes against one volume, and some deploy models cannot be made single-writer-safe at all. Discovering that at M3 is a change of host rather than of configuration
+     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else the host above is chosen against an imagined artifact, and slice 6's pipeline then builds whatever the host turned out to want. Costs a redeploy and a pipeline change. Answered together with the host, which is its main input
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the platform's own hostname is what the browser resolves, and the first-party test in the given above turns on exactly that. Costs a redeploy, and the failure is silent
@@ -410,50 +407,6 @@ built is better than what was not, and the choice of which one to build becomes 
 scaffold is built only where research has already reduced the field to one, and then it confirms
 against a named falsifier rather than selecting.
 
-**What has been run, and what it left:**
-
-- **The property list is written**, at
-  [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md),
-  with every property naming the file that establishes it and no tool named anywhere in it.
-- **The runtime is settled** at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md),
-  whose Rejected section carries the whole field it was chosen from, each elimination with its source
-  and its reversal condition.
-- **The toolchain field is settled**, at
-  [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
-  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md): the precache manifest removed TanStack
-  Start, React Router in SPA mode and Qwik City, and Astro, Nuxt and SvelteKit each lost on their own
-  grounds in that first record. The bundler is Vite and the renderer is still open.
-- **The three checks that were outstanding have all run.** Astro's own documentation positions it
-  against this application's shape; the renderer locks do not bite, because a renderer's reactive
-  primitive constrains the module that calls it and no other; and the Vite-based field runs under all
-  three runtimes, so the toolchain never bounded the runtime and
-  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) decided it on its own
-  grounds. Each result is in the record it fed.
-
-**Owed, with no position in the order above.** Each is a chore or an unasked question rather than a
-decision, so none of them blocks a slice, and each is here because nothing else would surface it.
-
-- **The one invariant recorded so far has no check.**
-  [The shared rules module holds no framework-reactive
-  state](../invariants/the-shared-rules-module-holds-no-framework-reactive-state.md) says plainly
-  that nothing enforces it and names the two checks it should have: a test importing the module under
-  a bare runtime with no bundler and no renderer installed, and a lint rule forbidding renderer
-  imports from that directory. Whichever slice first creates the rules module is where they belong,
-  and [what proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
-  at M2 is where the runner is chosen.
-- **Nothing asks what shape the M1 deployable is** — a directory of files, a container image, or a
-  single compiled executable. Bun and Deno both compile to one and Node does not in the same way, so
-  it is an input to [where does this run?](where-does-this-run.md) and
-  [what deploys the code?](what-deploys-the-code.md) at slices 4 and 6. It may be inside
-  [where does this run?](where-does-this-run.md) already rather than missing; that is what to check
-  before writing a file for it.
-- **[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  names a spike in its own Revisit when, and that spike is not being run.** It was to measure the
-  ordering of replacement costs across positions. The survey has since made that ordering doubtful
-  from a different direction, recorded in the bullet below, so the record's reversal condition points
-  at work nobody intends to do. Either the condition is rewritten or the ordering is argued rather
-  than measured, and saying which is owed.
-
 **Open, and spanning more than one question file.**
 
 - **The ordering of replacement costs across positions was asserted and is now partly settled.**
@@ -462,10 +415,14 @@ decision, so none of them blocks a slice, and each is here because nothing else 
   enough that stewardship removes no candidate.
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
   prices every stewardship concern by that ordering and names the gap in its own reversal condition.
-  **The runtime half is answered and the answer inverts it.** Nothing separated the three finalists
-  on a binding property, so there was no bad answer to be stuck with, and the position was cheap to
-  leave rather than expensive. What remains open is the renderer's place in the ordering, which the
-  renderer record will have to state.
+  **The runtime half is answered and it did not invert the ordering.** An earlier reading here said
+  nothing separated the finalists, so there was no bad answer to be stuck with and the position was
+  cheap. That reading is wrong:
+  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) eliminated Bun on a
+  measured property, the heap bound, and decided against Deno on a named one, so two of the three
+  were separated on grounds that record states. The position had bad answers available and the
+  argument that it was cheap to leave rests on nothing. **So the runtime's place in the reversal
+  ordering is still open, and so is the renderer's**, which the renderer record will have to state.
 - **A stewardship concern is priced rather than treated as a disqualifier**, by
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
   What it is worth depends on how expensive the position is to reverse, so the same fact removes a
@@ -505,32 +462,49 @@ a player can see, which is why it has to be a milestone rather than a habit.
    script is not one — but its stated reason is avoiding a second toolchain, which is exactly what
    a Python script in a TypeScript repository is. Sits beside the question above because they
    decide the same artefacts.
-4. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
+4. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
+   moved here from M1 on 2026-09-19, because this is the first point it cannot be deferred further.
+   Nothing in M1 needs a construct Node cannot strip, and
+   [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) means the runtime
+   enforces the erasable subset for free: anything else fails at execution, so the constructs cannot
+   spread unnoticed while this is open. What changes here is that a test runner and the repo scripts
+   start executing the same source, and a second executor is the thing that makes "what transforms
+   it" a real choice rather than a default. Sits after the three above because they name the
+   executors.
+5. [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+   — moved here from M1 on 2026-09-19 for the same reason. M1 runs on one machine, where an unstated
+   version is a fact rather than a disagreement. The second machine is the CI runner that
+   [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) creates, and a
+   pin with only one machine to bind is a file nothing reads. It carries the artifact
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, and
+   the rule at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
+   supplies the Node value it has to hold.
+6. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This is where [../verification.md](../verification.md) gets its content.
-5. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+7. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
-6. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+8. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
-7. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+9. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
-8. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+10. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-9. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+11. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
    platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
    reproduced only on real iOS Safari over a real network.
-10. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
+12. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
    the machine, and the baseline that stops it being trivially compromised. It sits here because a
    restore drill, a look at a log and a check of what actually shipped all need access, and because
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) put the data on a
    machine rather than behind a vendor. Its size depends entirely on
    [where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a
    bare machine supplies none of it.
-11. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+13. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. The matrix itself is settled by
    [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md);
    this question is the other half, which is what to run it on. It carries more weight than it looks:

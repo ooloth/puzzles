@@ -4,7 +4,10 @@ This will evolve eventually into an app serving logic puzzles (think grid-fillin
 sudoku, star battle, etc) plus a pipeline for generating them. The site will eventually have
 users whose progress must be reliably saved and restored.
 
-The stack and codebase layout is currently being decided, which is why nothing is installed yet.
+Nothing is installed yet. Much of the stack is settled on paper — see `docs/decisions/` for the
+language, the store engine, the client bundler and the runtime — and what remains open in the
+toolchain is listed under M1 in `docs/questions/README.md`. The codebase layout is among the open
+ones.
 
 ## Uphold requirements
 

@@ -56,7 +56,9 @@ either alone would miss.
 Neither exists, because no code exists. Whichever slice first creates the rules module is where this
 check belongs, and
 [what proves a vertical slice works end to end?](../questions/what-proves-a-vertical-slice-works-end-to-end.md)
-at M2 is where the runner for it gets decided.
+at M2 is where the runner for it gets decided. **The work is tracked at
+[issue #1](https://github.com/ooloth/puzzles/issues/1)**, so this line stops being the only place it
+is owed.
 
 ## Where it came from
 

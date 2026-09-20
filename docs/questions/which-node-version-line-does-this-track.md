@@ -146,3 +146,127 @@ reason to forgo the updates without one. **Set aside for the research phase on 2
 maintainer's direction**, so the field is rebuilt and argued without it. It is kept rather than
 deleted because it is a legitimate input and will be weighed once there is something to weigh it
 against; it is not deleted quietly and it is not treated as the answer.
+
+### Pass of 2026-09-19, second: the question's framing is expiring
+
+**Node is moving to one major release a year, and every release will become LTS.** The
+announcement, dated 2026-03-10, says "Starting with 27.x, Node.js will move from two major releases
+per year to one", "**Every release becomes LTS**. No more odd/even distinction - Node.js 27 will
+become LTS", "**One major release per year** (April), with LTS promotion in October", and "Version
+numbers align with the calendar year of their initial Current release: 27.0.0 in 2027, 28.0.0 in
+2028." Support duration "remains similar (30 months)". It states plainly that "Node.js 26 follows
+the existing schedule. This is the last release line under the current model."
+
+**This is the finding that reshapes the question.** "Current" and "Active LTS" are about to stop
+naming two different lines. From v27 they name the same version six months apart — Current in April,
+LTS in October — so a policy of tracking one or the other stops being a choice between release
+trains and becomes a choice about how long to wait before adopting the only train there is. Any
+argument here framed as Current-versus-LTS is arguing about a distinction with roughly one release
+left in it.
+
+*Sourced — <https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule>, fetched
+as raw markdown and quoted by me on 2026-09-19.*
+
+**The new policy lives in exactly one place, and Node's own canonical documents contradict it.**
+`README.md` in `nodejs/Release` still states the superseded rule verbatim — "New even-numbered
+versions are released in April and odd-numbered versions in October" and "Odd-numbered release lines
+are not promoted to LTS" — six months after the announcement. `schedule.json` encodes `v27` with a
+`maintenance` key and no `lts` key, which is the shape it uses for a line that never becomes LTS.
+So the data this file's table above is built from does not yet know about the change. The table's
+dates are still right; what it cannot tell you is what comes after v27.
+
+*Sourced — <https://raw.githubusercontent.com/nodejs/Release/main/README.md> and the `v27` entry in
+`schedule.json`, both read by me on 2026-09-19. The README quote is second-hand from a research
+agent; the `schedule.json` shape I parsed myself.*
+
+**The ecosystem encodes the old rule in `engines.node` fields, and they are enforced at install
+time.** Both Vitest and npm exclude the odd lines outright: Vitest 5.0.1 declares
+`^22.12.0 || ^24.0.0 || >=26.0.0` and npm 12.0.2 declares `^22.22.2 || ^24.15.0 || >=26.0.0`. Each
+admits v22, v24 and v26 and refuses v23 and v25. Vite 8.3.0 (`^20.19.0 || >=22.12.0`), TypeScript
+7.0.2 (`>=16.20.0`), tsx 4.23.13 (`>=18.0.0`) and pnpm 12.5.1 (`>=18.*`) impose no such carve-out.
+
+Two things follow. Neither of the lines in play today is excluded by anything, so this does not
+discriminate between v24 and v26. And the risk that "track Current" used to carry — that Current is
+an odd line half the time and parts of the ecosystem will refuse it — is a risk the new release
+model removes rather than one this decision has to price.
+
+*Sourced — the `engines.node` field from `https://registry.npmjs.org/<pkg>/latest` for each package,
+fetched and parsed by me on 2026-09-19.*
+
+**`node:sqlite` does not discriminate between the lines, and it is not Stable on either.** Both v24
+and v26 mark it "Stability: 1.2 - Release candidate", and neither requires a flag — it came out from
+behind `--experimental-sqlite` in v22.13.0 and v23.4.0. v26 adds four `StatementSync` methods that
+v24 lacks (`close()`, `resetStats()`, `stat()`, `[Symbol.dispose]()`), none of which anything here
+needs. This matters beyond this question: every argument in the repo that the store does not narrow
+the runtime passes through `node:sqlite`, and nothing had recorded that it sits below Stable. That
+belongs to [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md).
+
+*Sourced — the stability marker grepped from
+<https://nodejs.org/docs/latest-v24.x/api/sqlite.html> and
+<https://nodejs.org/docs/latest-v26.x/api/sqlite.html> by me on 2026-09-19. The API-difference list
+is second-hand from a research agent diffing the two pages.*
+
+**The maintainer's machine already runs v26.7.0 with npm 11.19.0, managed by `fnm`.** `mise` is also
+installed. This is context for
+[what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+rather than an argument here — what one machine happens to have is not a reason.
+
+*Measured — `node -v`, `npm -v` and `command -v` on the maintainer's machine, 2026-09-19.*
+
+### Pass of 2026-09-19, third: what running both lines showed
+
+Method for everything below: `fnm` installed v24.21.0 and v26.9.0 into a throwaway `FNM_DIR`, each
+binary was invoked by absolute path, and the directory was deleted afterwards. Apple M2, macOS
+26.6.2, 2026-09-19. Each probe ran once; these are pass/fail observations rather than timings, so
+variance does not arise.
+
+**Both lines run the shape this project actually has, identically.** One `.ts` file importing
+`node:sqlite` and `node:http`, executed directly with no flags and no transpiler: it created a table,
+prepared and ran statements, served the rows over HTTP and fetched them back. Output was
+`OK sqlite+http+strip -> [{"row":0,"col":0,"value":5}]` on both. So type stripping, the store's
+driver and the HTTP server all work unflagged on either line, and nothing in the combination
+separates them.
+
+*Measured — as above.*
+
+**The escape hatch is real on v24 and really gone on v26.** A file containing `enum Mark { Empty,
+Star }` fails on both with `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX` when run plainly. Adding
+`--experimental-transform-types` makes it run on v24.21.0 and makes v26.9.0 exit with `bad option:`.
+This is the one capability difference found between the lines, and it is the documented one rather
+than a new discovery — what the run adds is that it is confirmed behaviour rather than a changelog
+entry.
+
+*Measured — as above.*
+
+**The toolchain resolves on both with engine checking turned on.** `npm install --dry-run
+--engine-strict vite vitest typescript` added the same 40 packages under both lines with no
+`EBADENGINE`. So the `engines.node` fields recorded above are not merely permissive on paper.
+
+*Measured — as above.*
+
+**[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)'s deciding property
+holds on both.** That record chose Node because it can bound its heap
+and say why it died. `node --max-old-space-size=64` against an allocation loop produced
+`FATAL ERROR` and "JavaScript heap out of memory" on v24.21.0 and v26.9.0 alike, so the reason the
+runtime was chosen does not depend on the line.
+
+*Measured — as above.*
+
+**Nothing else was examined, and this is what that leaves open.** The probes asked whether each line
+*can* do what this project needs, not how fast, at what memory cost, or with what failure mode under
+load. No throughput, latency or resident-memory figure was taken, because nothing in
+[../problem.md](../problem.md) puts the server on the path from input to paint — the client owns
+solving, per [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) — so CPU and
+network do not bind this choice and a number would have been measuring something the decision does
+not turn on. Storage does not bind either: the store is one SQLite file
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)) and its size does not
+vary by runtime version. Memory binds only through the heap bound, which is checked above.
+
+**No host in [where does this run?](where-does-this-run.md) constrains the line.** Its surviving
+candidates are Fly.io micro-VMs, a Hetzner VPS, a Google Compute Engine e2-micro, DigitalOcean or
+Linode, and Coolify on a VPS. Each runs an ordinary container or an ordinary Linux machine, so the
+Node version comes from the image this project builds rather than from the platform. That closes
+the second of the two checks this file's **What would settle it** asks for.
+
+*Reasoned — from the candidate list in that file, each of which is a container or a VM. Not checked
+against any provider's documentation, because none of them supplies the runtime.*

@@ -1,6 +1,6 @@
 ---
 number: 0031
-status: proposed
+status: accepted
 date: 2026-09-19
 ---
 

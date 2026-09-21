@@ -1,7 +1,7 @@
 ---
 number: 0027
 status: accepted
-amended: 2026-09-19
+amended: 2026-09-20
 date: 2026-09-17
 ---
 
@@ -92,6 +92,11 @@ expensive would have had its supply risk priced at nearly zero.
 
 **"Concrete work" is a softer bar than a threshold**, and a determined reader can describe almost any
 replacement as small. This asks for an argument rather than a measurement until the spike runs.
+
+**One position on the ordering is now established rather than estimated.**
+[ADR-0032](0032-the-package-manager-is-pnpm.md) prices leaving the package manager at a lockfile swap
+and an edit to every manifest naming a sibling, which is what let it accept a three-week-old
+implementation. The runtime's and the renderer's places remain estimates.
 
 ## Revisit when
 

@@ -24,16 +24,32 @@ browser runs on Node, and the package manager is pnpm.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
-### An answered question file is still on disk
+### Two answered question files are still on disk
 
-**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md),
-carrying full working as though it were live.
+**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md)
+and [questions/what-language-are-repo-scripts-written-in.md](questions/what-language-are-repo-scripts-written-in.md),
+both carrying full working as though they were live.
 
-**Actually** it is answered, by
-[ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and the
-question as posed was unanswerable. Its frontmatter says `status: answered`.
+**Actually** both are answered — the first by
+[ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), the second by
+[ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md), whose Decision covers
+every repo script. Both say `status: answered`.
 
-**So** don't work it. It is deleted once the floor-format record lands and its findings are mined.
+**So** don't work either. They are deleted once their findings are mined.
+
+### The doc checker is written in a language no record sanctions
+
+**You'll see** `scripts/check-docs.py`, in Python, referenced from
+[questions/README.md](questions/README.md) and run as the repository's only check.
+
+**Actually** [ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every
+repo script runs on Node, so this file contradicts a settled record. It is the only artifact in the
+repository that does.
+
+**So** don't add a second Python script. Rewriting this one is an M2 job, tracked against
+[what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md), and it
+carries a real cost that record accepted: a TypeScript checker cannot run until the toolchain is
+installed.
 
 <!-- Template:
 

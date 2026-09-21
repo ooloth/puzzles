@@ -11,13 +11,16 @@ resolves_into: decision
 what sits on top of it to route a request and write a response — a framework, or the runtime's own
 server API and nothing else.
 
-**The two are answered together, and the coupling runs one way more strongly than the other.** Two of
-the three candidate runtimes ship their own server API and their own bundled tooling, so choosing one
-of those partly answers this question by consequence, while choosing a framework that assumes Node's
-`http` module would rule that runtime out. Answering them in either order alone risks settling the
-second by accident. The edge tier does not enter it:
+**`node:http` is a candidate here, and a framework assuming it is no longer a constraint on
+anything.** The runtime is settled, so every option below is scored against Node and nothing here can
+settle a runtime by accident. The edge tier does not enter it either:
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) removes that
-runtime for every option below, so nothing here is chosen or rejected on whether it would run there.
+runtime for every option below, so nothing is chosen or rejected on whether it would run there.
+
+**The coupling that does remain is with the renderer.** A handler and a renderer can each be chosen
+on their own, and a toolchain that answers both would settle one by consequence. That is why
+[../questions/README.md](README.md) answers this alongside
+[what renders the client?](what-renders-the-client.md) rather than before it.
 
 ## Why it matters
 
@@ -54,7 +57,9 @@ more than that stops being one.
 
 *A minimal router.* Hono, itty-router and similar: routing, middleware and a request/response
 abstraction, in a few kilobytes. Most of them target the web-standard `Request`/`Response` interface,
-which is what makes a handler portable across the candidate runtimes.
+which keeps a handler portable across runtimes. That is worth something after
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) rather than nothing: it
+is what this record's own **Findings** call optionality retained, not a live requirement.
 
 *A full framework.* Express, Fastify and similar. Conventions, middleware ecosystems, and
 documentation aimed at people who have not read this repo. Larger surface to keep patched, and

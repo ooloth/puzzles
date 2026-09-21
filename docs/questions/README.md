@@ -327,7 +327,7 @@ derivation.
    - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
    - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
-     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else slice 6's pipeline inherits a shape that cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. It is listed here because the first files go down in this slice and every import added after them moves when the shape is corrected. Its input has landed at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and [../constraints.md](../constraints.md)'s type-stripping limit is what decides whether the rules module can be a workspace sibling at all
+     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the first files go down in a shape nobody chose, and every import written against it moves when the shape is corrected. Costs a file move and a configuration change, which is cheap, and it rises with every file added before it is settled. Its input has landed at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and [../constraints.md](../constraints.md)'s type-stripping limit is what decides whether the rules module can be a workspace sibling at all
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -378,38 +378,24 @@ permanent home. Delete what has moved rather than leaving a second copy.
 
 **Open, and spanning more than one question file.**
 
-- **The ordering of replacement costs across positions was asserted and is now partly settled.**
-  The runtime was long described as "the least reversible position in the stack", while
-  [what renders the client?](what-renders-the-client.md) puts the renderer below it as a swap cheap
-  enough that stewardship removes no candidate.
+- **The ordering of replacement costs across positions is reasoned, and one point on it is now
+  measured.**
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  prices every stewardship concern by that ordering and names the gap in its own reversal condition.
-  **The runtime half is answered and it did not invert the ordering.** An earlier reading here said
-  nothing separated the finalists, so there was no bad answer to be stuck with and the position was
-  cheap. That reading is wrong:
-  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) eliminated Bun on a
-  measured property, the heap bound, and decided against Deno on a named one, so two of the three
-  were separated on grounds that record states. The position had bad answers available and the
-  argument that it was cheap to leave rests on nothing. **So the runtime's place in the reversal
-  ordering is still open, and so is the renderer's**, which the renderer record will have to state.
-  **One position now has a stated cost**:
-  [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) prices leaving the package manager at
-  a lockfile swap and an edit to every manifest naming a sibling, which is what let it accept a
-  three-week-old implementation. That is the first point on this ordering established rather than
-  asserted, and the renderer and runtime records can be checked against it.
-- **A stewardship concern is priced rather than treated as a disqualifier**, by
-  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
-  What it is worth depends on how expensive the position is to reverse, so the same fact removes a
-  runtime and removes nothing about a router. A record here eliminating a candidate on stewardship
-  names the replacement cost that made the concern binding, or it has made the elimination on taste.
-- **`node:sqlite` is an assumption, not a choice, and the equivalence it carried is narrower than it
-  was stated.** Every argument in the repo that the store does not narrow the runtime passes through
-  it, and no record picks it. As of 2026-09-19 the same data-access code is no longer identical
-  across the three: Deno adds two permission flags to the run command, and Bun requires a
-  `bun:sqlite` call to reach a full SQLite build if an extension, session or changeset is ever
-  needed. Neither disqualifies anything. Tracked as
-  [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3. What
-  M1 owes it is only that the runtime record says whether driver quality was an input.
+  prices every stewardship concern by that ordering, states it as runtime-most-expensive down to
+  router-cheapest, and names in its own Risk section that the ordering is an estimate made before
+  anything is built. [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) is the first record
+  to establish a point on it rather than assume one: leaving the package manager costs a lockfile
+  swap and an edit to every manifest naming a sibling.
+  **The runtime's and the renderer's places are still estimates.** The runtime's is load-bearing,
+  because [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) separated the
+  candidates on measured grounds, so that position had bad answers available and is not cheap to
+  leave for the reason an equivalence argument would have given. The renderer record has to state its
+  own place rather than inherit one.
+- **Nothing currently spans more than one question file.** The two bullets this section held were
+  absorbed by
+  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+  and by [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md). The
+  section stays because the next cross-cutting thought needs somewhere to go.
 
 ## M2 — a change can be checked before it ships
 
@@ -425,14 +411,16 @@ a player can see, which is why it has to be a milestone rather than a habit.
 1. [What runs the tests?](what-runs-the-tests.md) — likely answered by M1's runtime.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
-3. [What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md)
-   — `check-docs.py` is Python, which no record sanctions and no record forbids.
-   [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) covers deployables, and a
-   script is not one — but its stated reason is avoiding a second toolchain, which is exactly what
-   a Python script in a TypeScript repository is. Sits beside the question above because they
-   decide the same artefacts.
+3. **Rewriting `check-docs.py` in TypeScript.** Not a question:
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every repo
+   script runs on Node, so the Python checker is the one artifact in the repository contradicting a
+   settled record. Its answered question file is
+   [what language are repo scripts written in?](what-language-are-repo-scripts-written-in.md), kept
+   until it is mined. It sits beside the item above because they decide the same artefact, and it
+   carries a cost that record accepted: a TypeScript checker cannot run until the toolchain is
+   installed, so the documentation checks stop being available on a bare machine.
 4. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
-   moved here from M1 on 2026-09-19, because this is the first point it cannot be deferred further.
+   It sits here rather than at M1 because this is the first point it cannot be deferred further.
    Nothing in M1 needs a construct Node cannot strip, and
    [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) means the runtime
    enforces the erasable subset for free: anything else fails at execution, so the constructs cannot
@@ -441,7 +429,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
    it" a real choice rather than a default. Sits after the three above because they name the
    executors.
 5. [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
-   — moved here from M1 on 2026-09-19 for the same reason. M1 runs on one machine, where an unstated
+   — here rather than at M1 for the same reason. M1 runs on one machine, where an unstated
    version is a fact rather than a disagreement. The second machine is the CI runner that
    [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) creates, and a
    pin with only one machine to bind is a file nothing reads. It carries the artifact

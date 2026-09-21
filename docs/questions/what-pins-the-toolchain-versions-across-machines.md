@@ -118,9 +118,14 @@ a mismatch is not the same as one that resolves it, and this question has to cho
 *Measured — by me on 2026-09-19.*
 
 **`mise` can pin npm, pnpm and Node from a checked-in config, through a backend independent of Node
-and Corepack, and `fnm` cannot pin a package manager at all.** The maintainer's machine has both.
-This is the main alternative to the mechanisms above, and the reason this question is not answered
-by [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) as a side effect.
+and Corepack.** The maintainer's machine has it. This is the main alternative to the mechanisms
+above, and the reason this question is not answered by
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) as a side effect.
+
+**`fnm`'s package-manager path runs through Corepack, and that path is reported broken on Node 25 and
+later.** Whether `fnm` offers any other way to pin a package manager is unestablished; the source
+below settles only that this one does not work. The machine has `fnm` too, which is how it ends up
+running Corepack shims.
 
 *Sourced — <https://mise.jdx.dev/registry.html> and an fnm issue reporting its Corepack path broken
 on Node 25+, read 2026-09-19 by a research agent. I did not open either.*

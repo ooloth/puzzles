@@ -1,6 +1,6 @@
 ---
 opened: 2026-09-03
-status: open
+status: answered
 resolves_into: decision
 ---
 
@@ -14,46 +14,40 @@ which is [what runs the checks on every change?](what-runs-the-checks-on-every-c
 
 ## Why it matters
 
-**No record settles it, and it is easy to believe one does.**
+**A record settles it, and not the one a reader would expect.**
 [ADR-0006](../decisions/0006-one-language-across-every-deployable.md) covers "every deployable in this
-project" and a check script is not a deployable, so its letter does not reach here. Adopting
-TypeScript for scripts by assuming that record covers them would be a real choice resting on an
-unrecorded inference, which is the failure the portable decision-making standard names first.
+project" and a check script is not a deployable, so its letter does not reach here. The record that
+does reach here is
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which says every repo
+script runs on Node.
 
-**Its reasoning does reach here, and it argues in the same direction the letter does not.** That
-record's stated reason is "a second toolchain for one maintainer, not a technical incompatibility",
-and its **Revisit when** names "a deployable that would not add one" as outside its scope. A script in
-a second language is exactly the second toolchain the record exists to avoid — so the argument
-applies while the rule does not.
+**That record's reasoning points the same way its letter does not.** [ADR-0006](../decisions/0006-one-language-across-every-deployable.md)'s stated reason is "a second
+toolchain for one maintainer, not a technical incompatibility", and its **Revisit when** names "a
+deployable that would not add one" as outside its scope. A script in a second language is exactly the
+second toolchain that record exists to avoid.
 
-**The repository already has the thing that argument warns about.** `scripts/check-docs.py` is
-Python. So this question is not hypothetical tidying: it asks whether that was a mistake, an
-exception worth keeping, or the start of a pattern.
+**The repository still contains the thing both arguments rule out.** `scripts/check-docs.py` is
+Python. That is now a known violation of a settled record rather than an open question, and it is
+work rather than a decision.
 
 ## What would settle it
 
-Naming what each option costs on the factors below, once M1's runtime is known. It is deliberately at
-M2 rather than M1: a script language chosen before the runtime would have been
-choosing a toolchain before knowing what the repository already has. That runtime is now Node, per
-[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which also settles that repo scripts run on it.
+**Settled by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)**, whose
+Decision reads "the server, the generator and every repo script run on Node. That is the whole of
+it." Node runs the language [ADR-0007](../decisions/0007-that-language-is-typescript.md) chose, so
+repo scripts are TypeScript and the Python and shell options below are foreclosed.
 
-The factors that could matter, none of which is obviously decisive yet:
+**What that creates is work rather than a further question.** `scripts/check-docs.py` is Python, so
+it is now the one artifact in the repository contradicting a settled record. Rewriting it is an M2
+job, tracked against
+[what runs the checks on every change?](what-runs-the-checks-on-every-change.md), and
+[../unfinished.md](../unfinished.md) carries the warning until it lands.
 
-- **What a contributor or agent must install to run a check.** Today `python3 scripts/check-docs.py`
-  needs nothing that is not already on a developer machine. A TypeScript script needs whatever M1
-  chooses, which is a larger prerequisite before anything is installed.
-- **What the continuous integration image already carries.** If M1 lands on Bun or Deno, the natural
-  base image is a JavaScript runtime image and Python becomes an extra layer. If it lands on Node, the
-  same holds.
-- **Whether a script ever wants to share types with the application.** A script that reads the store,
-  validates a puzzle, or asserts something about a data shape benefits from importing the real types.
-  A script that reads markdown does not, and `check-docs.py` is the second kind.
-- **What happens the first time a script wants a dependency.** This is where a single-file script
-  stops being free in either language, and it is worth deciding the answer before it happens rather
-  than after.
-- **Startup cost, since these run on every commit** if
-  [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) puts them in a
-  hook.
+**The cost the options below name is real and was accepted rather than overlooked.** A Python checker
+runs on a bare machine with nothing installed; a TypeScript one cannot run until the toolchain is
+installed, which means the documentation checks stop being available before an install. That is a
+consequence of [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), and
+whoever rewrites the checker meets it on the day.
 
 ## Resolves into
 
@@ -68,21 +62,22 @@ file exists so that presumption is argued rather than assumed, since no record c
 
 ## Options
 
-*TypeScript, matching the deployables.* One toolchain, one set of habits, one dependency story, and
-the option of importing real types where a script wants them. Ties every check to M1's runtime,
-including the documentation checks that currently run before anything is installed.
+*TypeScript, matching the deployables.* **Chosen, by consequence of
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).** One toolchain, one set
+of habits, one dependency story, and the option of importing real types where a script wants them.
+Ties every check to the runtime, including the documentation checks that currently run before
+anything is installed.
 
-*Python, as today.* Needs no runtime this project chose, which is exactly why the existing checker
-could be wired up before the stack was. Keeps a second toolchain that
-[ADR-0006](../decisions/0006-one-language-across-every-deployable.md)'s reasoning argues against, and
-its cost is invisible until somebody without a working Python tries to run a check.
+*Python, as today.* **Foreclosed.** It needs no runtime this project chose, which is exactly why the
+existing checker could be wired up before the stack was, and it keeps the second toolchain
+[ADR-0006](../decisions/0006-one-language-across-every-deployable.md)'s reasoning argues against.
 
-*Shell.* Worth listing rather than assuming away: for scripts that only orchestrate other commands it
-adds no toolchain at all. It stops being reasonable the moment a script needs to parse anything, and
-`check-docs.py` parses markdown.
+*Shell.* **Foreclosed.** For scripts that only orchestrate other commands it adds no toolchain at
+all, and it stops being reasonable the moment a script needs to parse anything. `check-docs.py`
+parses markdown.
 
-*Whatever each script needs, decided per script.* The honest "not yet", and the state the repository
-is in today by default rather than by choice. Cheap until there are five scripts in three languages.
+*Whatever each script needs, decided per script.* **Foreclosed**, and it is the state the repository
+is in today by default rather than by choice.
 
 ## Findings
 

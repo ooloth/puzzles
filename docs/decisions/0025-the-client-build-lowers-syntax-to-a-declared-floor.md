@@ -1,6 +1,7 @@
 ---
 number: 0025
 status: accepted
+amended: 2026-09-20
 date: 2026-09-12
 ---
 

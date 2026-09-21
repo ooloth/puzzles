@@ -480,8 +480,10 @@ adapters page names only cloudflare, netlify, node, static and vercel. Astro's D
 maintained by the Deno team and its docs say so; Astro has no official Bun adapter and the most
 visible community one last published in 2023. Nuxt reaches both through built-in Nitro presets.
 
-**So the runtime is a free choice under every survivor, and Node is the trodden path.** A record
-choosing Bun or Deno names this friction rather than discovering it later.
+**So adapter coverage discriminates nothing here.** Node is the runtime
+([ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)), and every survivor
+ships an official Node adapter. The divergence recorded above is about runtimes this project cannot
+choose, and it is kept only so nobody re-runs the comparison.
 
 *Sourced — the three issue numbers, titles, states and creation dates read by me with `gh issue view`
 on 2026-09-19. Bun's and Deno's Vite guides, SvelteKit's adapters page, Astro's Deno adapter page and

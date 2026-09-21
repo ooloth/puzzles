@@ -1,6 +1,7 @@
 ---
 number: 0032
 status: accepted
+amended: 2026-09-20
 date: 2026-09-19
 ---
 
@@ -73,13 +74,16 @@ disk: npm 12 and Yarn 4 block and warn at exit 0, pnpm blocks and exits 1. No un
 under any of them, so what is left is whether a pipeline stops. That is a much smaller difference
 than the framing implied, and it is why no part of this decision rests on it.
 
-**Every figure above was measured or read by the author of this record**, on macOS arm64 under Node
-v26.7.0, against npm 12.0.2, pnpm 12.5.1 and Yarn 4.18.0, each installed into an isolated prefix.
-The install timings are one run per candidate with isolated caches, so they carry no variance and
-the cold-cache column was discarded as implausible; the warm and relink figures are the ones cited.
-The defaults come from
+**Every figure in this record, here and under Rejected and Risk, was measured or read by its
+author** on 2026-09-19, on macOS arm64 under Node v26.7.0, against npm 12.0.2, pnpm 12.5.1 and Yarn
+4.18.0, each installed into an isolated prefix. The install timings are one run per candidate with
+isolated caches, so they carry no variance and the cold-cache column was discarded as implausible;
+the warm and relink figures are the ones cited. The defaults come from
 [pnpm's dependency-resolution settings](https://pnpm.io/settings/dependency-resolution) and
-[npm's config reference](https://docs.npmjs.com/cli/v12/using-npm/config). The full method, the
+[npm's config reference](https://docs.npmjs.com/cli/v12/using-npm/config). The Corepack vote is
+[nodejs/TSC#1697](https://github.com/nodejs/TSC/pull/1697); Yarn Classic's freeze and its last
+release date are its [own repository](https://github.com/yarnpkg/yarn) and the npm registry; the
+release counts are registry metadata. The full method, the
 results that changed nothing, the eliminated candidates and the figures taken from a research agent
 rather than established here were mined into this record, into
 [../constraints.md](../constraints.md) and into the question files named under **Also update**. The

@@ -78,6 +78,19 @@ blocking. Reading "the cap does not apply" as safety is the trap this entry exis
 
 *Sourced — per [../constraints.md](../constraints.md).*
 
+### What the local setup can settle by accident
+
+**Development can answer this question before production does, in the direction that hides the
+mistake.** M1's third slice has the client calling the API locally, where they are separate
+processes on separate ports unless something proxies them into one origin, a cost
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) records and
+accepts. Proxy locally and split in production, and nothing cross-origin fails until it is deployed.
+So whichever answer this question takes, the local arrangement matches it rather than being wired for
+convenience. The mechanism is
+[how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
+
+*Reasoned — 2026-09-20.*
+
 ### What is still open
 
 **Whether a CDN or reverse proxy in front of two different backends rescues a split topology.** If

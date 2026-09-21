@@ -38,3 +38,18 @@ had asked about were enumerated.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**The first instance of this gap exists already, and a record names it.**
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) puts the
+client build and the HTTP server in separate tools, and says under Risk that "the dev server does not
+proxy the API for free". So from M1's third slice onward the client is served by one local process
+and the API answers on another port, and to the browser those are two origins unless something
+proxies them into one. Whatever closes that gap decides whether local development is same-origin,
+which is the arrangement
+[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md) settles
+for production. Proxied in development and split in production is parity failing in the direction
+that hides the fault: everything cross-origin works locally and shows up for the first time once
+deployed.
+
+*Reasoned — from [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)
+and M1's slices in [README.md](README.md), 2026-09-20.*

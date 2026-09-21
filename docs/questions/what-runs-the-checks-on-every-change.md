@@ -119,6 +119,18 @@ has to make agree.
 *Sourced — the `actions/setup-node` README and pnpm's own action README, read 2026-09-19 by a
 research agent. I did not open either.*
 
+**Type-aware linting and a current TypeScript cannot both be installed, and pinning TypeScript is
+the cheap way out.** [../constraints.md](../constraints.md) carries the fact. What it means here is
+that the type-aware rules are worth more than the newer compiler: 7.x exists to check large
+codebases faster, and a few thousand lines will not notice, so pinning TypeScript to 6.x costs this
+project nothing it would have used. The alternatives are worse for stated reasons — running 7.x for
+the type check and a pinned 6.x for the lint step is two versions to keep in step for no gain here,
+linting without type information gives up the rules worth having, and deferring type-aware linting
+leaves the check this milestone exists to build half-made.
+
+That makes it a pin with an expiry rather than a standing choice, so whichever record settles this
+says what lifts it: `typescript-eslint` accepting a 7.x peer.
+
 **This question also owes a check to an invariant.**
 [No package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md)
 is enforced today only by pnpm's default linker, and a single line in `pnpm-workspace.yaml` would

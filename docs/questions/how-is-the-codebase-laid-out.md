@@ -287,23 +287,9 @@ them.
 *Sourced — the TypeScript handbook's Project References page, read 2026-09-20 by a research agent. I
 did not open it.*
 
-**TypeScript 7 has shipped, it is what a fresh install gets, and the type-aware lint ecosystem has
-not caught up.** `typescript@7.0.2` is npm's `latest`. Its root export is `./lib/version.cjs` alone,
-with the compiler surface under `./unstable/*` subpaths, so the programmatic API earlier tooling was
-built on is not there. `typescript-eslint@8.70.0` declares a peer range of
-`typescript >=4.8.4 <6.1.0`, so it does not install against it. **This binds more than this
-question** — it reaches
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md),
-[what runs the tests?](what-runs-the-tests.md) and
-[is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md), and
-it likely belongs in [../constraints.md](../constraints.md) rather than here. It decays fast in one
-direction only: the lint side gets fixed, the API stabilises, and this entry stops being true
-without anything announcing it.
-
-*Measured — `npm view typescript dist-tags`, `npm view typescript@7.0.2 exports` and
-`npm view typescript-eslint@8.70.0 peerDependencies`, run by me on 2026-09-20. The GA date of
-2026-07-08 and the Go-native port's history are a research agent's, from the TypeScript devblog; I
-did not open it.*
+**The TypeScript version the measurements below ran against is 7.0.2, and what that implies for
+tooling is in [../constraints.md](../constraints.md)** rather than here, because it binds the M2
+check questions rather than this one.
 
 **The workspace shapes carry a failure the single-package shapes cannot have.** A sibling reached
 through a `node_modules` symlink can resolve a shared dependency to a different physical copy than

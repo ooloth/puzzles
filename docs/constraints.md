@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-16
+updated: 2026-09-21
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -663,6 +663,25 @@ outside `node_modules`. It is an input to
 [how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md),
 [what shape is the deployable?](questions/what-shape-is-the-deployable.md) and
 [is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md).
+
+## Toolchain — TypeScript's compiler API moved out of its root export
+
+**A tool that loads TypeScript as a library, rather than shelling out to `tsc`, cannot use a current
+release.** `typescript@7.0.2` is npm's `latest`, and its `exports` map sends the root specifier to
+`./lib/version.cjs`, leaving the compiler surface reachable only under `./unstable/*`. The
+type-aware linter in widest use states the consequence in its own manifest:
+`typescript-eslint@8.70.0` declares a peer range of `typescript >=4.8.4 <6.1.0`.
+
+*Measured — `npm view typescript dist-tags`, `npm view typescript@7.0.2 exports` and
+`npm view typescript-eslint@8.70.0 peerDependencies`, run 2026-09-20.*
+
+> So this binds checking and not running. Node strips types without consulting TypeScript and Vite
+> transforms them with esbuild, so no execution path touches it. What it reaches is the step that
+> lints with type information, and what to do about that is
+> [what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M2.
+
+*Unlike the rest of this file, a claim about a tool can be overtaken by a release shipping the same
+week. Re-run the three commands above before building on it.*
 
 ## Databases — SQLite is not safe on a network filesystem
 

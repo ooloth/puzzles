@@ -234,18 +234,10 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-1. **The layout.** Its input has landed:
-   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
-   workspace mechanics it was waiting on are known. Its own file records that being wrong is a file
-   move and a configuration change. **Two things now bear on it that its file does not yet carry**:
-   pnpm needs `workspace:*` rather than a plain range for a sibling, and
-   [../constraints.md](../constraints.md) records that Node will not strip types under
-   `node_modules`, which decides whether a single package with relative imports beats workspaces for
-   the shared rules module.
-2. **The HTTP handler.** `node:http` is now one of the candidates by
+1. **The HTTP handler.** `node:http` is now one of the candidates by
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
    the rest, and it sits behind a thin interface.
-3. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+2. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -259,7 +251,7 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-4. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+3. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -269,14 +261,13 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-5. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+4. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
    It is last in the list and it does not drift, because it is the one question here whose wrong
    answer is invisible: every browser above the floor shows the app either way.
 
-Nothing left here needs research. Steps 1 to 3 are write-ups. Steps 4 and 5 are open questions that
-wait on purpose — the renderer for whatever the scaffold shows, and the last because its file
-is empty.
+Nothing left here needs research. Steps 1 and 2 are write-ups. Steps 3 and 4 wait on purpose, the
+renderer for whatever the scaffold shows and the last because its file is empty.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -328,7 +319,7 @@ derivation.
    - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
    - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
      - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. **It is now answered on its own.** The runtime is settled at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), and the coupling to [what-renders-the-client](what-renders-the-client.md) was a meta-framework owning both, which [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) removed as a class
-     - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the first files go down in a shape nobody chose, and every import written against it moves when the shape is corrected. Costs a file move and a configuration change, which is cheap, and it rises with every file added before it is settled. Its input has landed at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and [../constraints.md](../constraints.md)'s type-stripping limit is what decides whether the rules module can be a workspace sibling at all
+   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the first manifest sits at the root, the client, server, generator and rules are directories under `src/`, and each carries its own tsconfig scoping `lib` and `types`
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -365,7 +356,7 @@ derivation.
      - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md) — or else a proxy or CDN in front changes what the browser treats as the origin, which is the same silent Safari failure reached by a different route. Costs a redeploy plus whatever sits in front
 6. **A change made locally reaches the deployment.**
    - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else [what-deploys-the-code](what-deploys-the-code.md) below has nothing to target and no way to know what it has to supply: a managed platform brings most of a pipeline and a bare machine brings none of it, so the same answer there means two different amounts of work. Costs a re-scaffold of the pipeline
-   - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the pipeline cannot build two deployables from one repository without a publish step between them, which [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) forbids for the rules module. Costs a re-scaffold of both the layout and the pipeline
+   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the pipeline builds every deployable from one install with no publish step between the rules module and its consumers, which is what [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) requires of it
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
 ### Working notes — temporary, and deleted as its content finds permanent homes
@@ -565,8 +556,14 @@ The first durability promise anything actually keeps.
 
 Illegal moves are recognised, and a finished board is recognised as finished.
 
-- [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — the full answer,
-  now that something depends on it.
+1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — the full answer,
+   now that something depends on it.
+2. [How is the codebase laid out?](how-is-the-codebase-laid-out.md) — what remains of it after
+   [ADR-0034](../decisions/0034-the-repository-is-one-package.md) settled the package count. Two
+   parts land here: how the rules module is reached, decided by the first import of it, which is
+   this milestone; and what lives inside `src/rules/`, decided once there are rules to organise.
+   Its third part, whether the generator is a third deployable, waits for M8. Nothing before this
+   milestone imports the rules module, which is why none of it blocks M1.
 
 ## M8 — the puzzles are real
 

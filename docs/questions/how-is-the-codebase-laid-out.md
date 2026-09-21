@@ -6,12 +6,30 @@ resolves_into: decision
 
 # How is the codebase laid out?
 
+**The package count is settled and the rest of this is not.**
+[ADR-0034](../decisions/0034-the-repository-is-one-package.md) makes the repository one package,
+with the client, the server, the generator and the rules as directories under `src/`, and per-area
+tsconfigs scoping `lib` and `types`. Three things this file asks are untouched by it: how the rules
+module is reached, what lives inside `src/rules/`, and whether the generator is a third deployable
+at all. The **Options** and **Findings** below are kept because they hold the evidence that record
+cites and the field the remaining questions are chosen from.
+
 ## Why it matters
 
-Nothing can be scaffolded until files have somewhere to go, so some answer is needed for M1. Not all
-of it: how many packages there are and where the shared rules module sits are needed to put the
-first file down, while what a directory is named for and how deep the tree goes can settle once
-there are modules to organise.
+Nothing can be scaffolded until files have somewhere to go, which is what
+[ADR-0034](../decisions/0034-the-repository-is-one-package.md) answered. What is left is not needed
+to put the first file down, and none of it is needed for M1 at all, because nothing in M1 imports
+the rules module: the first slice returns a hard-coded string and the second and third render and
+fetch it. Each part becomes real at a different point, so each waits for its own.
+
+**How the rules module is reached** — a named specifier through the manifest's `imports` field, or
+a relative path — is decided the first time anything imports it. Measured below to work either way,
+so the cost of waiting is nil and the cost of choosing early is a door closed for nothing.
+
+**What lives inside `src/rules/`** — one module for every game or one per game, named by domain or
+by technical layer — is decided when there are rules to organise, at M7.
+
+**Whether the generator is a third deployable** is decided at M8 when it exists.
 
 [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) and
 [ADR-0007](../decisions/0007-that-language-is-typescript.md) together set the one hard
@@ -20,18 +38,21 @@ and a batch process without a publish step between them. Whatever shape is chose
 
 ## What would settle it
 
-**Its toolchain input has landed.**
-[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
-workspace mechanics this was waiting on are known and recorded under **Findings**.
+**For how the rules module is reached:** the first import of it. Both forms are measured below to
+work under Node, Vite and `tsc`, so nothing remains to establish and the choice is between a stable
+specifier and no manifest entry. It is settled by writing that import rather than by further
+research.
 
-Scaffolding it. Create the shape, import the rules module from a browser entry point and from a
-batch script, and see whether the tooling complains. What to check while doing it: whether the
-browser build resolves the import without a publish step, whether type checking works across the
-boundary, and whether the batch script can run the same source the browser bundles.
+**For what lives inside `src/rules/`:** having more than one game's rules written, so the question
+is whether a second game wants its own module rather than whether it might. M7 is where the first
+game's rules run and M15 is where the second arrives.
 
-Being wrong here is cheap, which is unusual for an M1 decision. Moving between one package and
-several is a file move and a configuration change — no data migration, nothing a player sees. That
-is an argument for the simpler option and letting the need appear.
+**For whether the generator is a third deployable:** knowing whether it writes the catalogue
+directly or through the server's API, which
+[../architecture.md](../architecture.md) records as open.
+
+Being wrong on any of these is cheap. Moving files and rewriting specifiers is a change of
+configuration and a find-and-replace, with no data migration and nothing a player sees.
 
 ## Resolves into
 

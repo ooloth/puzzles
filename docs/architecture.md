@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-09-20
 update_when: a module boundary moves, or something new starts talking to something else
 decays: fast
 status: active
@@ -74,6 +74,29 @@ constraint from intention. The parts still open are listed at the end and are th
         Writes the catalogue either directly or through the
         server's API; which is open.        problem.md, ADR-0012
 ```
+
+## Where the code lives
+
+One package, by [ADR-0034](decisions/0034-the-repository-is-one-package.md). One `package.json` at
+the root and no workspace, with each part of the system a directory beneath `src/`:
+
+```
+package.json        one manifest, every dependency
+tsconfig.base.json  the compiler options
+src/rules/          shared by the client and the generator   lib esnext   types none
+src/client/         bundled by Vite                 ADR-0029  lib esnext + dom
+src/server/         run by Node                     ADR-0030  lib esnext   types node
+src/generator/      run by Node; nothing here until M8
+```
+
+Each directory carries a short `tsconfig.json` differing only in `lib` and `types`, which is what
+keeps DOM globals out of the server and Node globals out of the client. Nothing else enforces the
+boundary between these four: a cross-boundary import is refused by the type check and waved through
+by the bundler with a warning, and nothing runs the type check until M2.
+
+How the rules module is reached, what is inside `src/rules/`, and whether the generator is a
+deployable of its own are open at
+[how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md).
 
 ## What fixed it
 

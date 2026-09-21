@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-19
+updated: 2026-09-20
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -229,9 +229,10 @@ the rule answers both which line and when it moves.
 
 Two things that derived from it are now discharged: the transpiler question has two options rather
 than three, because `--experimental-transform-types` does not exist on the line the rule selects;
-and Corepack is not on the machine, because Node stopped shipping it at v25, which is scored inside
-[what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
-at M2. What remains:
+and Corepack no longer arrives with Node, because Node stopped bundling it at v25, which is scored
+inside [what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
+runs whatever Corepack hands back rather than a version any record chose. What remains:
 
 1. **The layout.** Its input has landed:
    [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) settles the package manager, so the
@@ -326,7 +327,7 @@ derivation.
    - **Given:** [0032-the-package-manager-is-pnpm](../decisions/0032-the-package-manager-is-pnpm.md) — so the layout below is chosen against pnpm's workspace mechanics, and a sibling is named with `workspace:*` rather than a version range
    - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
    - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. Answered together with the runtime above *and* with [what-renders-the-client](what-renders-the-client.md) in slice 2, both of which constrain it in both directions
+     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. **It is now answered on its own.** The runtime is settled at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), and the coupling to [what-renders-the-client](what-renders-the-client.md) was a meta-framework owning both, which [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) removed as a class
      - **Must answer:** [how-is-the-codebase-laid-out](how-is-the-codebase-laid-out.md) — or else the first files go down in a shape nobody chose, and every import written against it moves when the shape is corrected. Costs a file move and a configuration change, which is cheap, and it rises with every file added before it is settled. Its input has landed at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and [../constraints.md](../constraints.md)'s type-stripping limit is what decides whether the rules module can be a workspace sibling at all
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)

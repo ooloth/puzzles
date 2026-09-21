@@ -80,6 +80,17 @@ on purpose.
 the 404 from <https://nodejs.org/docs/latest-v26.x/api/corepack.html>, the npm registry, and
 <https://github.com/nodejs/TSC/pull/1697> for the vote. All checked by me on 2026-09-19.*
 
+**Corepack is on the development machine regardless, and it is already deciding which pnpm runs
+there.** `corepack@0.35.0` is installed as a global npm package under Node v26.7.0, and `pnpm` on
+`PATH` is its shim, which resolves to 7.27.0 while the current pnpm release is 12.5.1. So the
+mechanism this question is weighing is not absent here, it is unconfigured and silently five majors
+behind. Two consequences: any measurement of pnpm behaviour taken on this machine states the version
+it ran under or it means nothing, and whatever this question chooses has to say what happens to an
+existing Corepack shim rather than assuming a bare machine.
+
+*Measured — `npm ls -g`, `corepack --version`, `pnpm --version` and `npm view pnpm version`, run by
+me on 2026-09-20.*
+
 **The Node half of this now has a rule, and the rule yields a number.**
 [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) says Node runs on the
 newest released line that is in Active LTS or committed to becoming it, which as of 2026-09-19 is

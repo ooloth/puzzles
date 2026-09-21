@@ -17,10 +17,11 @@ settle a runtime by accident. The edge tier does not enter it either:
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md) removes that
 runtime for every option below, so nothing is chosen or rejected on whether it would run there.
 
-**The coupling that does remain is with the renderer.** A handler and a renderer can each be chosen
-on their own, and a toolchain that answers both would settle one by consequence. That is why
-[../questions/README.md](README.md) answers this alongside
-[what renders the client?](what-renders-the-client.md) rather than before it.
+**No coupling to the renderer remains either.** The coupling was a toolchain owning both the client
+build and the request path, so that choosing one settled the other by consequence, and
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) removed that
+class. This question now chooses a handler and nothing else, and it is answered on its own rather
+than alongside [what renders the client?](what-renders-the-client.md).
 
 ## Why it matters
 

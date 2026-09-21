@@ -46,10 +46,9 @@ every repo script. Both say `status: answered`.
 repo script runs on Node, so this file contradicts a settled record. It is the only artifact in the
 repository that does.
 
-**So** don't add a second Python script. Rewriting this one is an M2 job, tracked against
-[what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md), and it
-carries a real cost that record accepted: a TypeScript checker cannot run until the toolchain is
-installed.
+**So** don't add a second Python script. Rewriting this one needs nothing else to land first —
+Node 26 runs TypeScript unflagged, so a dependency-free checker runs with nothing installed, exactly
+as the Python one does.
 
 <!-- Template:
 

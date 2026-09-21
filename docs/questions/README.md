@@ -416,9 +416,10 @@ a player can see, which is why it has to be a milestone rather than a habit.
    script runs on Node, so the Python checker is the one artifact in the repository contradicting a
    settled record. Its answered question file is
    [what language are repo scripts written in?](what-language-are-repo-scripts-written-in.md), kept
-   until it is mined. It sits beside the item above because they decide the same artefact, and it
-   carries a cost that record accepted: a TypeScript checker cannot run until the toolchain is
-   installed, so the documentation checks stop being available on a bare machine.
+   until it is mined. It sits beside the item above because they decide the same artefact. **It
+   depends on neither of them and could be done at any point**: Node 26 runs TypeScript unflagged, so
+   a checker that keeps no dependencies runs with nothing installed, exactly as the Python one does
+   today.
 4. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
    It sits here rather than at M1 because this is the first point it cannot be deferred further.
    Nothing in M1 needs a construct Node cannot strip, and

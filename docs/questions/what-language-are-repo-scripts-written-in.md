@@ -43,11 +43,17 @@ job, tracked against
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md), and
 [../unfinished.md](../unfinished.md) carries the warning until it lands.
 
-**The cost the options below name is real and was accepted rather than overlooked.** A Python checker
-runs on a bare machine with nothing installed; a TypeScript one cannot run until the toolchain is
-installed, which means the documentation checks stop being available before an install. That is a
-consequence of [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), and
-whoever rewrites the checker meets it on the day.
+**The cost the options below name does not exist.** They say a Python checker runs on a bare machine
+while a TypeScript one waits for an install. That was written before the runtime was settled.
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) puts Node 26 on every
+machine and [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) records that
+type stripping runs unflagged, so `node scripts/check-docs.ts` needs no `package.json`, no
+`node_modules` and no install — the same standing as `python3 scripts/check-docs.py` today. **What
+the rewrite requires is that the checker keeps no dependencies**, which the current one already
+manages: it imports `os`, `re` and `sys` and nothing else.
+
+*Measured — a TypeScript file executed with `node` on v26.7.0 in an empty directory, with no
+`package.json` and no `node_modules` present, on 2026-09-20.*
 
 ## Resolves into
 

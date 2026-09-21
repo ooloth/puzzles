@@ -235,8 +235,12 @@ at M2. **It is installed on this machine anyway**, as a global npm package, so a
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
 1. **The HTTP handler.** `node:http` is now one of the candidates by
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). Nothing separates
-   the rest, and it sits behind a thin interface.
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). No survey has
+   separated the rest, and it sits behind a thin interface. **Read that as the paragraph above says
+   to read it**: the axis the survey scored on was whether each candidate can route a handful of
+   endpoints, which nothing fails. Two axes it never examined are named in its own Findings —
+   serving the client's files with a cache header per asset class, and draining in-flight requests
+   before the store's file handle goes.
 2. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
@@ -262,12 +266,18 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
 4. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
-   no decision, only by a document existing to put it in. Its file is empty and it blocks slice 2.
-   It is last in the list and it does not drift, because it is the one question here whose wrong
-   answer is invisible: every browser above the floor shows the app either way.
+   no decision, only by a document existing to put it in. It blocks slice 2, and it is last because
+   what would settle it — opening the built document in a browser below the floor — needs the
+   document slice 2 produces. **That is a reason to answer it during slice 2, not a reason to let it
+   drift.** Its wrong answer is invisible, since every browser above the floor shows the app either
+   way, and the portable decision-making standard moves a silently-failing decision earlier rather
+   than later.
 
-Nothing left here needs research. Steps 1 and 2 are write-ups. Steps 3 and 4 wait on purpose, the
-renderer for whatever the scaffold shows and the last because its file is empty.
+Step 2 is a write-up. **Step 1 is not**, and the paragraph above says why: its survey found no
+separator by reading, which is a result about the searching. Two of M1's three settled toolchain
+questions were separated by running after a survey had found their candidates equivalent, and what
+that survey left unscored is named in the question's own Findings. Steps 3 and 4 wait on purpose, the
+renderer for whatever the scaffold shows and the last for the document slice 2 produces.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)

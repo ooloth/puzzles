@@ -220,3 +220,135 @@ agent. I did not open them.*
 above, so this must be decided on what the rest of the system will need rather than on what the first
 endpoint needs. What crosses the boundary is settled at M3 — see
 [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md).
+
+**Every version, licence and quoted claim above still held on 2026-09-21.** Re-checked: Hono 4.13.8
+MIT, Elysia 1.4.30 MIT, Fastify 5.12.5 MIT, Express 5.2.1 MIT, Koa 3.2.1 MIT, Polka 0.5.2 MIT,
+itty-router 5.0.24 MIT. h3's `latest` dist-tag still points at `2.0.1-rc.32` with `1x` at `1.15.11`,
+so `npm install h3` still installs a release candidate. Next's static-export quotes and TanStack
+Start's release-candidate wording are unchanged, and `@tanstack/react-start` is still `1.168.56`.
+Astro still has `'static'` as the default and still has no `'hybrid'` value.
+
+*Sourced — the npm registry API and each project's own documentation, read 2026-09-21 by a research
+agent. Of this batch I opened only the registry JSON for `srvx` and `@hono/node-server` myself; the
+rest are the agent's and I did not open them.*
+
+**`node:http` still has no Fetch-style server API, and what supplies one is a maintained package
+rather than code we would write.** Node 26.9.0's `http` documentation still gives
+`http.createServer([options][, requestListener])` with an `IncomingMessage` and a `ServerResponse`,
+and nothing on that page accepts a `Request` or returns a `Response`. Four packages close the gap and
+they are not equally alive: `srvx` 1.0.5 published 2026-09-14 MIT, `@hono/node-server` 2.1.1 published
+2026-08-14 MIT, `@remix-run/node-fetch-server` 0.14.1 published 2026-08-14, and
+`@mjackson/node-fetch-server` 0.7.0 published 2025-06-06, which is the stale one. So the finding above
+that `node:http` "needs a thin adapter" is confirmed and now priced: the thumb on the scale is one
+dependency, not a piece of work.
+
+*Sourced — [nodejs.org/api/http.html](https://nodejs.org/api/http.html) at v26.9.0, and the npm
+registry JSON for `srvx` and `@hono/node-server`, opened by me on 2026-09-21. The two Remix-lineage
+packages' versions and dates are a research agent's and I did not open them.*
+
+**The axis the survey scored on cannot discriminate, and two axes it did not examine might.** The
+equivalence finding above concludes that every candidate routes a handful of endpoints and writes
+responses. That is true, and it is the whole content of the equivalence. It runs through
+[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md),
+whose eight server properties say nothing about either of these:
+
+- **Serving the client's files, and setting a cache header per asset class.**
+  [What serves the client's files in production?](what-serves-the-clients-files-in-production.md)
+  lists *the same process that answers the API* as a live option, so that option's cost is set by
+  whatever is chosen here. `node:http` has no static file serving at all; Hono, Fastify and Express
+  each ship a maintained one.
+- **Draining in-flight requests on shutdown.** [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
+  and [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) put a SQLite file
+  beside the process, and M1 slice 4 already requires a host that can deploy without two processes
+  holding one file. What closes the listener and waits for open requests before the file handle goes
+  is a property of this layer.
+
+**Neither turns this into a gate, and neither is a door.** No candidate forecloses any of the three
+options in [what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+because a handler can always serve no files and a static middleware can always be added. That file
+also says its own binding input is what the chosen host offers, and
+[where does this run?](where-does-this-run.md) is open at slice 4 — so deciding static serving here
+would settle it ahead of its input. Both axes are therefore scored, not gated, in the same sense this
+file already uses for `Request`/`Response`.
+
+*Reasoned — from the three question files and two records linked above, read 2026-09-21 by me.*
+
+**Path-routing the API under the app's own hostname discriminates nothing, and is recorded so a later
+reader can see it was checked.** [../constraints.md](../constraints.md) makes that arrangement the one
+that skips Safari's first-party test entirely, and a second hostname caps the cookie at seven days.
+Every candidate in this field can path-route, so nothing leaves the field on it.
+
+*Reasoned — 2026-09-21.*
+
+### Pass of 2026-09-21 — the field rebuilt, and the first binding elimination in it
+
+**A whole class is eliminated, and the earlier survey missed it: the decorator-based frameworks
+cannot run on the line [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
+selects.** Node 26's own TypeScript page says decorators "are not transformed and will result in a
+parser error", and that the escape hatch is gone: its history table reads "v26.0.0 — Removed
+`--experimental-transform-types` flag." NestJS, Ts.ED and Foal each require decorators to declare a
+route — Ts.ED: "In order to create a basic controller, we use classes and decorators"; Foal: "These
+methods must be decorated by one of these decorators Get, Post, Patch, Put, Delete, Head or Options."
+So each is a parse error under Node's native type stripping rather than a preference.
+
+**The elimination is conditional, and the condition is what makes it safe to apply now.** It holds
+while server TypeScript is stripped rather than transpiled, which is open at
+[is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) at M2.
+Choosing one of these frameworks here would answer that M2 question by consequence — it would force a
+transpiler at M1 — which is the out-of-order move the portable decision-making standard forbids.
+Eliminating them here assumes only what M1 already does. **Reverses if** that M2 question lands on
+transpilation.
+
+*Sourced — [nodejs.org/api/typescript.html](https://nodejs.org/api/typescript.html) at v26.9.0,
+opened and quoted by me on 2026-09-21. The Ts.ED and Foal quotes are a research agent's and I did not
+open them.*
+
+**AdonisJS is not eliminated with them, and the reason is worth keeping.** Its routing binds
+controllers as plain classes with the route declared separately, so no decorator is required to serve
+a request. Its bundled ORM, Lucid, does use `@column` decorators — which matters only if that ORM is
+used, and [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) at M3
+is where that would be decided.
+
+*Sourced — AdonisJS and Lucid documentation, read 2026-09-21 by a research agent. I did not open them.*
+
+**Draining in-flight requests separates the field, which is the second axis nothing had scored.**
+Fastify documents the most: `forceCloseConnections` taking `true`, `false` or `"idle"` — the last
+"will iterate the current persistent connections which are not sending a request or waiting for a
+response and destroy their sockets" — plus `return503OnClosing` and a `keepAliveTimeout` defaulting to
+72000. `srvx` documents the distinction as one argument: "By default, calling close does not cancel
+in-flight requests or websockets", with `server.close(true)` to terminate them. **Elysia carries an
+open defect here**: elysiajs/elysia issue 1214, "SIGINT during in-flight request causes abrupt
+termination in Elysia (pending handlers are aborted)", still open, filed against 1.3.1, reporting that
+the process "exits instantly" where Bun's native server waits. Koa has no first-party shutdown API at
+all. Bare `node:http`, Hono, Polka, h3 and itty-router all reduce to `server.close()`.
+
+*Sourced — [fastify.dev/docs/latest/Reference/Server/](https://fastify.dev/docs/latest/Reference/Server/)
+and [github.com/elysiajs/elysia/issues/1214](https://github.com/elysiajs/elysia/issues/1214), opened
+and quoted by me on 2026-09-21. The srvx, Koa, Hono, Polka, h3 and itty-router readings are a research
+agent's and I did not open them.*
+
+**Static serving separates the field as well, and not in the direction the class names suggest.** Of
+the candidates with a first-party or de-facto static solution, `srvx` and `@fastify/static` are the
+only two a research agent could confirm implement all of ETag conditional requests, Range, traversal
+protection and precompressed `.br`/`.gz` lookup. Hono's `serveStatic` sets `Last-Modified` but the
+agent found no conditional-request handling in its source; h3's has no Range handling in its source;
+`@elysiajs/static` has no Range handling and applies one flat header object to every file, with no
+per-extension callback. Express and bare `node:http` both reach `serve-static`, which documents ETag,
+Last-Modified and Range but no precompressed variants. Only Express, `node:http`, Fastify, Koa and
+Polka expose a `setHeaders`-style per-file callback; `srvx` and Elysia require a second mount at a
+second prefix to give the entry document a different `Cache-Control` from the hashed assets.
+
+*Sourced — each project's documentation and, where the documentation was silent, its source, read
+2026-09-21 by a research agent. I did not open any of these. Treat the source readings as the weakest
+of them: an absence found by reading code is easier to get wrong than a presence.*
+
+**The earlier field survey was incomplete, and the gap was structural rather than careless.** Options
+it did not list, each invisible to an npm keyword search for `router`, `http-server` or
+`web-framework`: `srvx` and `@trpc/server` and `encore.dev` all publish with empty or unrelated
+`keywords`; uWebSockets.js is not published to npm at all under its real name, and the `uwebsockets.js`
+that is there is a deprecated 2021 fork; `graphql-yoga` is keyworded only for GraphQL. Also absent and
+ordinary: `find-my-way`, `tinyhttp`, `restana`, `0http`, `rou3`, `hyper-express`, `ultimate-express`,
+`@hapi/hapi`, `restify` and `node:http2`.
+
+*Sourced — the npm registry API's `keywords` fields, JSR, and the-benchmarker/web-frameworks'
+`javascript/` listing, read 2026-09-21 by a research agent. I did not open them.*

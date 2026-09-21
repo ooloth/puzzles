@@ -420,6 +420,37 @@ ENUMS = {
 }
 
 
+# docs/guarantees/README.md and docs/invariants/README.md both say the filename is
+# the claim and the H1 restates it in full. So the H1 may carry words the filename
+# drops — "a player takes", "alone" — but every word in the filename has to appear
+# in the H1, in order. That permits a faithful abbreviation and catches a title
+# that has drifted from its slug, which nothing else reports: a renamed file keeps
+# its old H1, and a reworded H1 keeps its old filename, and both read as correct.
+CLAIM_FOLDERS = ('docs/guarantees', 'docs/invariants')
+
+
+def check_h1_matches_filename():
+    for directory in CLAIM_FOLDERS:
+        for f in sorted(os.listdir(directory)):
+            if not f.endswith('.md') or f == 'README.md':
+                continue
+            path = os.path.join(directory, f)
+            with open(path) as fh:
+                h1 = next(
+                    (l[2:].strip() for l in fh if l.startswith('# ')), None
+                )
+            if h1 is None:
+                problems.append(f'NO H1        {path} has no H1 to check against its filename')
+                continue
+            words = iter(re.sub(r'[^a-z0-9]+', '-', h1.lower()).strip('-').split('-'))
+            missing = [w for w in f[:-3].split('-') if w not in words]
+            if missing:
+                problems.append(
+                    f'TITLE DRIFT  {path} — H1 "{h1}" does not contain, in order: '
+                    + ', '.join(missing)
+                )
+
+
 def check_frontmatter():
     for root, dirs, files in os.walk('docs'):
         if any(skip in root for skip in SKIP_DIRS):
@@ -470,6 +501,7 @@ check_decision_headings()
 check_adr_references()
 check_provenance_tiers()
 check_frontmatter()
+check_h1_matches_filename()
 
 for p in problems:
     print(p)

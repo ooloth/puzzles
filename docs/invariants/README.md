@@ -36,6 +36,9 @@ links here, and the file says which record it came from.
 The filename is the claim, and the H1 restates it in full. Both are something you could hold against
 the code and mark true or false.
 
+`scripts/check-docs.py` checks that each filename's words appear in its H1, in order, so the two
+cannot drift apart unnoticed. It checks nothing else about an invariant's content.
+
 **Every file names what enforces it, and says plainly where nothing does.** This is borrowed from
 [../guarantees/](../guarantees/) and it does the same job: the folder is a backlog as well as a list,
 and an invariant nobody has built a check for is indistinguishable in a listing from one already

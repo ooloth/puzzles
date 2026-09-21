@@ -71,6 +71,8 @@ Related promises group themselves by sharing an opening phrase — `every-puzzle
 - Present tense, unconditional within the caveat the name states.
 - Every qualifier is measurable or enumerable. If a claim needs "immediately", "several", or "normal
   play", either replace it or the guarantee isn't written yet.
+- `scripts/check-docs.py` checks that each filename's words appear in its H1, in order, so a
+  renamed file or a reworded title cannot drift from the other unnoticed.
 - Frontmatter carries `theme` and `enforced`. Nothing reads either field and nothing checks that
   `enforced` agrees with the **Enforced by** line, so both are descriptive rather than load bearing.
 

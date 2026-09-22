@@ -751,3 +751,41 @@ output above I produced myself.*
 `AsyncLocalStorage` for it and does not need to, because `request.log` is threaded through handler
 arguments. Hono offers `hono/context-storage`, a real `AsyncLocalStorage`, for code that does not
 receive the context.
+
+### Pass of 2026-09-21 — TypeScript, measured with the compiler
+
+**Method.** The same four deliberate mistakes written into three setups and compiled with
+`tsc` 7.0.2 under `--strict`: read a body field that exists, read one that does not, return a value
+violating the declared response schema, and read a route parameter that is not in the path. Fastify
+5.12.5 plain, Fastify with `@fastify/type-provider-typebox` 6.1.0 and `@sinclair/typebox` 0.34.52,
+and Hono 4.13.8 with `@hono/zod-validator` 0.9.1 and `zod` 4.6.5.
+
+**Fastify's out-of-the-box TypeScript is unusable, and the escape from it is the dangerous one.**
+With no type provider, `req.body` and `req.params` are `unknown`, so `error TS18046` fires on
+*correct* code as readily as on wrong code. The obvious fix a newcomer reaches for is `as any`, which
+discards every check at once. This matters more here than it would elsewhere, because
+[../problem.md](../problem.md) ranks clarity over cleverness on the grounds that one person maintains
+this, and the default configuration is the one that misleads.
+
+**With a type provider Fastify catches something Hono structurally cannot.** Returning
+`{ completelyWrong: true }` against a declared `response` schema is `error TS2345`. Hono declares no
+response contract, so nothing checks the return value at all. Combined with the runtime stripping
+measured in the validation pass above, **Fastify enforces the response shape at compile time and at
+run time, and Hono enforces it at neither.**
+
+**Hono's route-parameter typing has a trap, and the ergonomic form is the unchecked one.**
+`c.req.param('notInThePath')` compiles clean whether the app is built with a separate `const` or with
+the chained builder. Destructuring the no-argument call does catch it —
+`const { notInThePath } = c.req.param()` is `error TS2339: Property 'notInThePath' does not exist on
+type '{ id: string; }'`. So the inference exists and the single-argument overload does not consult
+it. Fastify does not type parameters either without a `params` schema, so nothing separates them on
+the outcome; what differs is that Hono looks as though it has checked and has not.
+
+**Two smaller results.** Hono's types compile with no `@types/node` at all, where Fastify's require
+it — the Fetch-native and Node-native split showing up in the type layer. And neither framework's
+idiomatic API needs syntax Node cannot strip, so the elimination recorded against the
+decorator-based frameworks does not touch either of these.
+
+*Measured — by me on 2026-09-21, every error code above copied from compiler output. Note for anyone
+re-running this: `tsc` 7 refuses to take files on the command line while a `tsconfig.json` is present
+unless `--ignoreConfig` is passed.*

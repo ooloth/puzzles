@@ -352,3 +352,68 @@ ordinary: `find-my-way`, `tinyhttp`, `restana`, `0http`, `rou3`, `hyper-express`
 
 *Sourced — the npm registry API's `keywords` fields, JSR, and the-benchmarker/web-frameworks'
 `javascript/` listing, read 2026-09-21 by a research agent. I did not open them.*
+
+### Pass of 2026-09-21 — the shutdown axis, measured
+
+**Method.** A throwaway spike, since deleted, outside this repository. For each candidate: a server
+opening a SQLite file through `node:sqlite` in WAL mode, one route that writes a row, sleeps 3000ms,
+writes a second row and responds; a driver that fires that route on its own non-keep-alive socket,
+sends `SIGTERM` 500ms in, awaits the candidate's documented graceful close, then closes the database
+handle and lets the process drain with no `process.exit`. Recorded per run: whether the client
+received its response, how long the close took to resolve, how many requests were still running when
+the handle was released, and which rows survived. Node v26.7.0, macOS Darwin 25.6.0, Apple M2 arm64,
+against `hono` 4.13.8, `@hono/node-server` 2.1.1, `fastify` 5.12.5, `express` 5.2.1 and `srvx` 1.0.5.
+Two repeats per candidate without an idle keep-alive socket parked, one with.
+
+**Seven of eight configurations drain correctly, and the differences between them are noise.** Bare
+`node:http`, Express, Hono, `srvx` with its shutdown plugin disabled, and Fastify bound to an explicit
+host all resolved their close at 2502–2522ms — the 2500ms the handler had left — with zero requests
+in flight when the handle was released, the client holding a 200, and both rows in the store. `srvx`
+with its default plugin took 3010–3028ms because that plugin polls in one-second ticks. **So this axis
+does not separate the field on the thing the documentation made it look like it would.** Every
+candidate reduces to `server.close()`, and `server.close()` works.
+
+**Fastify on its default `listen({ port })` does not drain, and the way it fails is the problem.**
+Across three runs its close resolved in 2, 3 and 4ms with the request still running. The database
+handle was then released under the live handler; the handler resumed 2.5 seconds later, and
+`insert.run(...)` threw `ERR_INVALID_STATE: statement has been finalized`. The client received
+**HTTP 500** carrying that internal message, and the store kept the first row with no second —
+**a half-written record, produced by an ordinary deploy, with nothing logged.** `forceCloseConnections:
+'idle'` and `return503OnClosing` changed none of it.
+
+**The cause is dual-stack listening, and it is one option to avoid.** Fastify's default listen binds
+both stacks by creating a main server and a secondary one. `app.server` is only the main one, so a
+request arriving over IPv4 lands on a listener that `close()` never awaits, and `app.server.
+getConnections()` reports **0 while that request is being handled** — where bare `node:http`, Express
+and Hono all report 1. Varying the bind host and the client's address family isolates it completely:
+default bind with an IPv4 client is the only combination that fails, and `host: '0.0.0.0'`,
+`host: '::'`, or an IPv6 client all wait the full 2300ms.
+
+*Measured — by me on 2026-09-21, method and versions above, three runs of the failing case and five
+runs of the bind-host matrix. This contradicts the shutdown lifecycle in Fastify 5.12.5's own bundled
+`docs/Reference/Server.md`, which states at step 5 that when the promise resolves "All in-flight
+requests have completed and the server is no longer listening."*
+
+**What this does and does not settle.** It does not disqualify Fastify: binding explicitly is one
+option, and a deployed server names its host anyway. What it establishes is that the graceful-shutdown
+axis separates candidates by whether a framework's own default configuration keeps its server object
+in sync with the sockets it accepted — not by which of them documents a shutdown API. It is also a
+worked instance of the correctness promise
+[../guarantees/README.md](../guarantees/README.md) lists as a candidate but has not made, that a
+partial write is never observable.
+
+**An idle keep-alive socket blocked nothing, for any candidate.** This was expected to be the trap and
+is not one on this Node line: `server.close()` reaps idle connections by itself since Node 19, and
+parking an idle keep-alive socket changed no timing anywhere in the matrix. Recorded because a
+negative result stops the next reader spending the same hours.
+
+*Measured — same method and runs as above, the keep-alive variant.*
+
+**`srvx` installs a SIGTERM handler of its own, which is worth knowing before adopting it.** Its
+`gracefulShutdownPlugin` registers on SIGINT and SIGTERM by default — it is skipped only when `CI` or
+`TEST` is set in the environment — closes the server with a five-second budget, and prints progress to
+stderr. A hand-rolled handler races it rather than replacing it. Turning it off is
+`gracefulShutdown: false`.
+
+*Measured — read from `srvx` 1.0.5's own `dist/_chunks/_plugins.mjs` and confirmed by running both
+settings, by me on 2026-09-21.*

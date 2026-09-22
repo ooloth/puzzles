@@ -512,3 +512,61 @@ path from input to paint, so no candidate's routing overhead is on a path a play
 would measure a quantity nothing in the problem asks about.
 
 *Reasoned — 2026-09-21.*
+
+### Pass of 2026-09-21 — validation at the boundary, measured
+
+**Method.** The contract is the one
+[the server hands back state the client will not accept](../failure-modes/the-server-hands-back-state-the-client-will-not-accept.md)
+names as its own mitigation — an explicit schema version carried with every record —
+`{schemaVersion: number, puzzleId: string, cells: number[]}` on a `POST /board`. Each candidate
+declared it the way that candidate declares things, and the handler always returned the valid board
+**plus an `internalOwnerEmail` field that must never reach a client**. Three requests: one missing
+`schemaVersion`, one carrying an extra inbound field, one valid. Then a fourth question asked of the
+type system rather than the wire. Node v26.7.0, `fastify` 5.12.5, `hono` 4.13.8,
+`@hono/zod-validator` 0.9.1, `zod` 4.6.5, `express` 5.2.1, `typescript` 7.0.2. Express stands in for
+every candidate with no validation of its own — it, srvx and `node:http` all reduce to calling a
+validator by hand, and that is why they are one row rather than three.
+
+**Rejecting a bad write is not a discriminator. Every candidate returns 400.** What differs is what
+the 400 says. Fastify's built-in JSON Schema gives `body must have required property
+'schemaVersion'`. `@hono/zod-validator` serialises the **entire `ZodError`** into the response body,
+internal validator structure and all, which is a leak of the same kind as the error-containment
+finding above. A hand-written zod check says whatever you write.
+
+**What the response is allowed to contain is the discriminator, and only Fastify enforces it.** Given
+a declared `response` schema, Fastify serialises only the declared properties, so
+`internalOwnerEmail` **never left the process**. Hono and the hand-rolled zod route both returned it
+to the client verbatim. That is a by-construction guarantee against a discipline, which the security
+standard prefers explicitly, and it reaches the privacy theme in
+[../guarantees/README.md](../guarantees/README.md) as much as it reaches the failure mode above.
+
+**It cuts both ways, and the record should say so.** The same mechanism silently drops a field a
+handler adds and a schema does not know about. The failure is a missing field rather than a leaked
+one, and it is equally quiet.
+
+*Measured — by me on 2026-09-21, method above.*
+
+**Hono's typed client works, and catches both directions at compile time.** `hc<AppType>` under
+`tsc` 7.0.2 with `strict`: reading a field the server never returns is `TS2339`, and sending
+`schemaVersion: 'not-a-number'` is `TS2322`. It also types the validation-failure branch, so the
+success shape is unreachable until the call is narrowed on `ok.ok` — the 400 cannot be ignored by
+accident. Fastify ships no client; its type story is typed handlers through a type provider, and it
+stops at the network boundary.
+
+*Measured — by me on 2026-09-21, three deliberate errors compiled and the narrowed version compiled
+clean.*
+
+**But a compile-time client cannot address the failure mode that motivated this axis, and that is
+the finding.** The version-skew case in
+[the server hands back state the client will not accept](../failure-modes/the-server-hands-back-state-the-client-will-not-accept.md)
+is explicitly the ordinary one — "a web client updates whenever the player loads it", and
+[ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) plus the offline guarantee mean "an
+installed or cached client can be arbitrarily old while its data is current." **The two halves are
+therefore routinely not compiled together**, so a guarantee established at compile time does not hold
+at the moment the mismatch happens. It remains real value while developing and it does not reach the
+failure mode.
+
+Fastify's response serialisation is the opposite shape: a runtime guarantee that holds whatever
+version of the client is asking.
+
+*Reasoned — from the failure mode and the delivery record both linked above, 2026-09-21.*

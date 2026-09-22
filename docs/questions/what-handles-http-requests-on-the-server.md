@@ -676,3 +676,78 @@ weaker than written.** Runtime portability it already called weak. Testability i
 `inject`, leaving ergonomics. Service-worker symmetry is undemonstrated and possibly unwanted here.
 What survives is that a handler written against `Request` and `Response` is cheap to move, which is
 the reversibility argument on its own rather than three arguments.
+
+### Pass of 2026-09-21 — sharing a handler, code size, and telemetry
+
+**Correction, and it reverses the entry immediately above: one handler really does run on the server
+and inside a browser service worker, and building it took about twenty lines.** The pass above called
+this undemonstrated on the grounds that neither project's examples show it. That was a claim about
+the examples, and it was allowed to stand as a claim about the thing.
+
+What was built: one module exporting a Hono app with `GET /api/board/:id`, imported unchanged by a
+Node entry point using `@hono/node-server` and by a service-worker entry point using
+`hono/service-worker`'s `handle`, bundled with esbuild and registered in headless Chromium. The
+browser's fetch returned `{"schemaVersion":1,"puzzleId":"p7","cells":[9,7,5,3,1,8,6,4,2]}` with the
+`x-served-by: service-worker` header the worker entry point adds, and the Node server returned a
+byte-identical body for the same route. **The server logs every `/api` request it sees, and the
+browser's fetch added nothing to that log**, while a control request issued afterwards did — so the
+worker answered from its own copy rather than the network. `handle(app)` falls back to the network on
+a 404, so an app scoped to `/api/*` composes with everything else the page loads.
+
+This project has no established need for it: [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
+has the client reading its own storage, so the board in play never needs a synthesised response. The
+candidate use is [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+at M9, where [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md)
+serves puzzle content from a runtime and a worker answering those routes from cache is the shape that
+milestone is about.
+
+*Measured — by me on 2026-09-21. Node v26.7.0, `hono` 4.13.8, `@hono/node-server` 2.1.1, esbuild
+0.28.2, Chrome for Testing 151 headless. The spike is deleted.*
+
+**Simplicity favours Hono at hello-world and roughly neither once the app is real.** The same
+endpoint in both — validated in and out, a `node:sqlite` write, structured request-correlated logs,
+a safe shutdown — came to **25 significant lines under Fastify and 35 under Hono**, and both behaved
+identically on the wire, stripping the internal field and rejecting a missing one with 400.
+
+**Nine of the ten extra lines are fixed cost rather than per route**: a `hono/request-id` middleware
+and a child-logger middleware, written once. Per route the only extra is one `Board.parse(...)` on
+the way out, so at twenty routes the difference is noise. What differs more than length is kind.
+Fastify's per-route contract is a JSON Schema object literal, which is verbose and does not flow into
+the handler's types without a type provider; Hono's is a zod schema, which is typed and composable
+and whose inferred type reaches `c.req.valid('json')` for free.
+
+*Measured — by me on 2026-09-21, both run and both asserted against the same three requests.*
+
+**Telemetry is the clearest thing Fastify does better, and it is not close.** `{ logger: true }` is
+one line and no new dependency, because pino is already in Fastify's tree. It generates a request id,
+creates a pino **child logger** bound to it, exposes it as `request.log`, and emits `incoming
+request`, `request completed` with `responseTime`, and an error line — with no application code. The
+run above produced `{"level":30,…,"reqId":"req-1","puzzleId":"p1","msg":"board saved"}` from a
+handler containing one `req.log.info` call.
+
+**Hono's `hono/logger` is not a competitor to that.** Its source builds a formatted string —
+`<-- GET /foo 200 12ms` — and passes it to `console.log`. It is unstructured, has no fields, and has
+no request-id or child-logger concept. Matching Fastify means `hono/request-id`, which is core, plus
+bare pino, plus the middleware counted above, or `@hono/structured-logger` at 1.0.0 with roughly
+11,800 weekly downloads, which still has the caller write the logger and the message text.
+
+This bears on [what are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
+and [how is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md)
+at M11, where [../constraints.md](../constraints.md) records that a stalled connection throws no
+error, so slowness is invisible unless something instrumented it beforehand.
+
+**OpenTelemetry is much closer to even.** `@fastify/otel` 0.21.0, official, instruments every
+lifecycle hook individually. `@hono/otel` 1.1.2, official, instruments the middleware chain as a
+single span and documents that it cannot go finer. An OTel-org `@opentelemetry/instrumentation-fastify`
+exists and no Hono equivalent does. `srvx`'s `./tracing` export is not OpenTelemetry at all — it
+publishes to two `node:diagnostics_channel` channels and its own source marks it experimental.
+
+*Sourced — Fastify's logging reference and its `lib/log-controller.js` and `lib/logger-factory.js` at
+the 5.12.5 tag, Hono's logger middleware source, the `@hono` scope listing and npm download counts,
+and both OTel packages' READMEs, read 2026-09-21 by a research agent. I did not open them; the pino
+output above I produced myself.*
+
+**A correction to something this file implied about correlation.** Fastify does not use
+`AsyncLocalStorage` for it and does not need to, because `request.log` is threaded through handler
+arguments. Hono offers `hono/context-storage`, a real `AsyncLocalStorage`, for code that does not
+receive the context.

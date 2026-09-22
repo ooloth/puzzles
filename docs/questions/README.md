@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-20
+updated: 2026-09-22
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -109,12 +109,18 @@ When a milestone becomes the next one, run the seven steps on it. Not before.
 
 ## This file and the issue tracker
 
-**Each slice below is one GitHub issue**, per
+**Each slice below becomes one GitHub issue when it becomes workable**, not in advance, per
 [../decisions/0015-the-issue-tracker-is-github-issues.md](../decisions/0015-the-issue-tracker-is-github-issues.md)
 and
 [../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
 The tracker holds what work exists and what state it is in. This file holds why — what each slice
 rests on, what blocks it, and why they are in this order.
+
+**So the tracker is deliberately shorter than this list, and a slice with no issue is normal.** An
+issue is filed once nothing in its entry is still a **Must answer**, because an issue written
+earlier would carry a definition of done that the unanswered question is about to change. Read a
+missing issue as "not workable yet", not as "not planned" — this file is the plan and the tracker is
+the work.
 
 **So nothing here records status.** No checkboxes, no "done", no "in progress". Those change daily,
 this file is already the fastest-decaying document in `docs/`, and a stale checkbox in a file whose
@@ -327,9 +333,9 @@ derivation.
    - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so this slice's server is Fastify, and three things it mandates land here: an explicit `host` on `listen`, an error handler that keeps `err.message` out of the body, and `logger: true`
    - **Given:** [0036-request-and-response-bodies-are-described-with-zod](../decisions/0036-request-and-response-bodies-are-described-with-zod.md) — so the validator and serializer compilers are wired here even though no route declares a schema until M3, because a route written against an unwired serializer is unchecked and nothing reports it
+   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the first manifest sits at the root, the client, server, generator and rules are directories under `src/`, and each carries its own tsconfig scoping `lib` and `types`
 
    Nothing is left to answer in this slice.
-   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the first manifest sits at the root, the client, server, generator and rules are directories under `src/`, and each carries its own tsconfig scoping `lib` and `types`
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)

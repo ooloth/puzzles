@@ -47,8 +47,11 @@ matters too, since a toolchain that breaks on an ordinary dependency costs more 
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) requires the
 client build to lower syntax to a declared floor and
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-requires that floor to be read from one browserslist config. Whatever is chosen here has to satisfy
-both, which disqualifies `bun build` for this job and says nothing about Bun elsewhere.
+requires that floor to be read from one shared declaration, whatever format that declaration turns
+out to take — [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
+leaves the format open and it is decided at [what format declares the browser
+floor?](what-format-declares-the-browser-floor.md). Whatever is chosen here has to satisfy both,
+which disqualifies `bun build` for this job and says nothing about Bun elsewhere.
 
 ## Resolves into
 

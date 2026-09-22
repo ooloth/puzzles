@@ -108,10 +108,24 @@ Nothing yet. No code exists. What must be true when it does, and the milestone e
   which makes it a discipline that has to hold across every route ever added. Everything else Hono
   lacked did close: `hono/body-limit`, `hono/etag`, and roughly nine lines of middleware over
   `hono/request-id` and pino.
+
+  *Measured — by me on 2026-09-21 against `hono` 4.13.8 and `@hono/zod-openapi` 1.6.3. A route
+  declaring `Board` as its 200 response returned
+  `{"schemaVersion":1,"puzzleId":"p1","cells":"not-an-array","internalOwnerEmail":"LEAKED@example.com"}`
+  with status 200. The same handler is `error TS2345` under `tsc` 7.0.2, which is what makes the gap
+  compile-time-only. `hono-openapi`'s `describeRoute` was read at source and is a pass-through.*
 - **Bare `node:http`** — because a throwing async handler sends no response at all. The throw becomes
-  an unhandled rejection, the process keeps serving, and the client's socket hangs;
-  [../constraints.md](../constraints.md) records that a stalled connection throws no error, so the
-  failure is invisible at both ends.
+  an unhandled rejection, the process keeps serving, and the client's socket stays open until the
+  client gives up. The server sees an unhandled rejection rather than a failed request, and the
+  client sees a connection that is still open rather than an error, which is the same shape
+  [../constraints.md](../constraints.md) records for a transit stall: it "reports as connected"
+  rather than surfacing anything to catch. How long a client waits before calling it is
+  [how long until a stalled connection surfaces as an error?](../questions/how-long-until-a-stalled-connection-surfaces-as-an-error.md),
+  still open.
+
+  *Measured — by me on 2026-09-21, Node v26.7.0: a `throw` inside an async `createServer` handler
+  left the request open until the client's own 15s timeout, with `UNHANDLED` on the server's stdout
+  and no response on the wire.*
 - **NestJS, Ts.ED and FoalTS** — because each requires decorators to declare a route, and Node's
   TypeScript page states decorators "are not transformed and will result in a parser error", with
   `--experimental-transform-types` removed in v26.0.0. On the line
@@ -125,8 +139,14 @@ Nothing yet. No code exists. What must be true when it does, and the milestone e
   uWebSockets.js wrappers** — none is disqualified, and saying so is more useful than inventing a
   reason. Each was dropped on the comparison rather than on a defect: none declares a response
   contract, and Express additionally emits a stack trace by default outside production. Where a
-  candidate was not measured it is named as such — Elysia's recorded shutdown defect is filed against
-  its Bun path and was not reproduced on its Node adapter, so it is unpursued rather than eliminated.
+  candidate was not measured it is named as such — Elysia's shutdown defect is elysiajs/elysia issue
+  1214, filed against its Bun path, and it was not reproduced on its Node adapter here, so Elysia is
+  unpursued rather than eliminated.
+
+  *Measured for Express — by me on 2026-09-21: a throwing handler returned a 500 whose HTML body
+  contained the thrown message and stack with `NODE_ENV` unset, and a clean `Internal Server Error`
+  with `NODE_ENV=production`. Sourced for Elysia — the issue's own text, read by a research agent on
+  2026-09-21; I did not open it.*
 
 ## Risk
 

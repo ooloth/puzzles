@@ -6,8 +6,9 @@ users whose progress must be reliably saved and restored.
 
 Nothing is installed yet. Much of the stack is settled on paper — see `docs/decisions/` for the
 language, the store engine, the client bundler and the runtime — and what remains open in the
-toolchain is listed under M1 in `docs/questions/README.md`. The codebase layout is among the open
-ones.
+toolchain is listed under M1 in `docs/questions/README.md`. The repository is one package
+([ADR-0034](docs/decisions/0034-the-repository-is-one-package.md)); what remains of the codebase
+layout is what lives inside `src/`, and that waits for M7.
 
 ## Uphold requirements
 

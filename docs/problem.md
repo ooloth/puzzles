@@ -64,7 +64,8 @@ recognising which one it is at the time is much easier than unpicking it later.
 ## What success looks like
 
 The product this is aiming at, not a release plan. Which parts arrive first, and in which order,
-is a roadmap question settled in [decisions/](decisions/). What belongs here is the direction
+is a roadmap question, and the milestone ordering that answers it is in
+[questions/README.md](questions/README.md). What belongs here is the direction
 those decisions should not quietly close off — so a feature described below arriving later than
 another is normal, and a decision that makes one of them expensive to add is not.
 

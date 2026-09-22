@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-09-22
 update_when: a new way to run or observe the system exists, or an old one breaks
 decays: fast
 status: stub
@@ -15,7 +15,10 @@ a recorded gap is a gap someone can close.
 
 Test conventions go in [standards/](standards/).
 
-_Nothing runnable yet._
+_The only thing runnable today is `python3 scripts/check-docs.py`, which checks the documentation
+rather than the system. Nothing of the system exists to run; the first thing that will is
+[issue #3](https://github.com/ooloth/puzzles/issues/3), whose QA plan is the shape this file grows
+into._
 
 <!-- Template:
 

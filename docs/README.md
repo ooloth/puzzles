@@ -50,7 +50,7 @@ and hope.
 
 ## Where a new fact goes
 
-Three of these are easy to confuse:
+Four of these are easy to confuse:
 
 - Can't change it → [constraints](constraints.md)
 - Chose it, could choose otherwise → [decisions/](decisions/)

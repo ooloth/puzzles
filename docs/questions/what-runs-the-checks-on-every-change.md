@@ -68,8 +68,9 @@ before anything is installed.
 
 **Two of the checks this has to run are already specified, and they are unequal.**
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-commits to a syntax check over built output and an API check over source, both reading one
-browserslist config. The syntax check is a parse at a stated level, so it succeeds or fails with no
+commits to a syntax check over built output and an API check over source, both reading one shared
+declaration of the floor. That record leaves the declaration's format open, and it is decided at
+[what format declares the browser floor?](what-format-declares-the-browser-floor.md). The syntax check is a parse at a stated level, so it succeeds or fails with no
 judgement in between. The API check is static analysis that does not follow an aliased or computed
 global, does not read dependencies, and by default ignores usage inside a feature-detection guard. So
 whatever runs them must not present their results as equivalent: one is evidence and the other is a

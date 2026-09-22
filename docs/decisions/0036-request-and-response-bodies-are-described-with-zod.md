@@ -29,10 +29,17 @@ the supply risk, and a schema library sits in every route, so leaving it is not 
 
 **Of CPU, memory, storage and network, only CPU is touched by this choice and it does not bind.**
 Validating and serialising a body is per-request work, and giving up `fast-json-stringify` makes it
-slower by an amount the headroom in [../constraints.md](../constraints.md) swallows about twelve
-hundred times over. Memory is unaffected: a schema is built once at startup. Storage and network are
-unaffected entirely — the same bytes are written and the same bytes are sent, and what changes is
-only whether a mismatched shape is allowed to become either.
+slower by an amount nobody has measured. What is measured is the whole request:
+[../constraints.md](../constraints.md) records roughly a thousandfold of headroom on a route that
+reads the store, and serialisation is one part of that request rather than an addition to it, so the
+part cannot exceed the whole. That bounds the cost from above without pricing it. Memory is
+unaffected: a schema is built once at startup. Storage and network are unaffected entirely — the
+same bytes are written and the same bytes are sent, and what changes is only whether a mismatched
+shape is allowed to become either.
+
+*Reasoned — 2026-09-22. The thousandfold figure is measured and is about total request throughput;
+the inference that it bounds serialisation is not a measurement, and no comparison of zod's encode
+against `fast-json-stringify` has been run here.*
 
 ## Decision
 
@@ -41,7 +48,9 @@ through `fastify-type-provider-zod`'s validator and serializer compilers.
 
 The serializer half is the point. A handler returning a value that does not match its declared
 response schema produces `FST_ERR_RESPONSE_SERIALIZATION` rather than a response, so a shape that was
-never promised cannot reach a client. The validator half rejects a malformed body with a 400 naming
+never promised cannot reach a client. *Measured — by me on 2026-09-21 against
+`fastify-type-provider-zod` 7.0.0: a handler returning an undeclared field and a wrong type answered
+`500 {"code":"FST_ERR_RESPONSE_SERIALIZATION","message":"Response doesn't match the schema"}`.* The validator half rejects a malformed body with a 400 naming
 the field. Both descriptions also type the handler, so a body field that does not exist and a return
 value violating the response schema are compile errors as well.
 
@@ -58,15 +67,27 @@ Nothing yet. No code exists. What must be true when it does:
 
 ## Rejected
 
-- **TypeBox** — because it is pre-1.0 after years, carries 798 commits from its author against five
-  from the next contributor, and ships under a non-standard licence, which is the stewardship profile
+- **TypeBox** — because it strips an undeclared field silently where zod rejects loudly, and this
+  record exists to stop a shape that was never promised reaching a client. A mechanism that removes
+  the offending field and returns 200 does prevent the leak, and it does so without telling anyone,
+  so a handler quietly returning the wrong shape stays quiet. That is the one reason, and it
+  disqualifies on its own: the portable decision-making standard prefers an option that fails loudly
+  to one that fails silently, and the failure mode this record serves is already invisible.
+
+  Two other differences were weighed and neither disqualifies. TypeBox is JSON Schema natively, so
+  it keeps Fastify's `fast-json-stringify` path that zod gives up — a real advantage, costing an
+  amount the headroom above bounds without pricing. And its stewardship profile is the weaker of the
+  two: pre-1.0 after years, most commits from a single author, under a licence npm reports as
+  "Other" rather than a standard identifier, which is what
   [ADR-0027](0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  warns about for a dependency that sits in every route. Its real advantage is genuine and was
-  weighed: it is JSON Schema natively, so it keeps Fastify's `fast-json-stringify` path, which zod
-  gives up. That path does not bind — the measured headroom on this workload is roughly twelve
-  hundredfold. A second difference points the other way: TypeBox strips an undeclared field silently
-  where zod rejects loudly, and the portable decision-making standard prefers the option that fails
-  loudly.
+  prices for something sitting in every route. Recorded as a cost rather than a reason, because on
+  its own it would not have decided this.
+
+  *Measured for the silent strip — by me on 2026-09-21: a handler returning an internal field
+  alongside a valid board answered 200 with the field removed under TypeBox and a declared response
+  schema, where `fastify-type-provider-zod` returned `500 FST_ERR_RESPONSE_SERIALIZATION`. Sourced
+  for the stewardship figures — each project's npm registry metadata and the GitHub API, read
+  2026-09-21 by a research agent; I did not run the queries.*
 - **Plain JSON Schema object literals** — because `req.body` is then `unknown` and correct code fails
   to compile, so the reachable escape is a cast that discards every check at once.
 - **No schema, validating by hand** — because both failure modes above name a described shape as the
@@ -105,7 +126,8 @@ told about, and nothing reports a route that declared nothing.
       boundary?](../questions/what-crosses-the-client-server-boundary.md) at M3, which inherits the
       shape this record describes rather than choosing one
 - [x] architecture.md — no boundary or relationship changes; the shape crossing the boundary is M3's
-- [x] constraints.md — carries the measurement behind giving up the serialisation fast path
+- [x] constraints.md — nothing added. It carries the total-throughput headroom this record reasons
+      from, and deliberately not a serialisation measurement, because none was taken
 - [x] glossary.md — no new domain terminology
 - [x] guarantees/ — no promise to players falls out of this yet. The correctness theme in
       [../guarantees/README.md](../guarantees/README.md) lists "a partial write is never observable"

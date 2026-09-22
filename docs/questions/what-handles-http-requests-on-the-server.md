@@ -570,3 +570,109 @@ Fastify's response serialisation is the opposite shape: a runtime guarantee that
 version of the client is asking.
 
 *Reasoned — from the failure mode and the delivery record both linked above, 2026-09-21.*
+
+### Pass of 2026-09-21 — throughput, the store, and re-pricing two claimed benefits
+
+**The headline comparison found by searching is "Fastify is faster and Node-focused, Hono is
+cross-platform and slower". The first half is true, stale in magnitude, and does not bind here.**
+Measured on this hardware — Apple M2, Node v26.7.0, autocannon at 50 connections for 10s after a 5s
+warmup, `fastify` 5.12.5 against `hono` 4.13.8 with `@hono/node-server` 2.1.1:
+
+| route | Fastify | `node:http` | Hono | Fastify ahead |
+| --- | --- | --- | --- | --- |
+| `/hello`, JSON only | 87,072 req/s | 83,593 | 76,256 | 14.2% |
+| `/board`, a `node:sqlite` row read plus JSON | 58,960 req/s | 56,455 | 54,151 | 8.9% |
+
+Two things the published numbers cannot show. **The gap narrows once real work is attached**, from
+14.2% to 8.9%, because the store starts to dominate and every published benchmark measures the first
+row only — Fastify's own benchmark page says so of itself: "This is a synthetic 'hello world'
+benchmark that aims to evaluate the framework overhead." And **bare `node:http` is slower than
+Fastify on the first row**, which is worth keeping as a caution: less abstraction is not
+automatically faster.
+
+*Measured — by me on 2026-09-21, method above, one 10s run per cell after a warmup, on a laptop with
+other processes running. The margin needed for this to change any conclusion is roughly three orders
+of magnitude, so the noise does not matter.*
+
+**The arithmetic that makes it not bind.** Mean service time on the realistic route is 0.848ms for
+Fastify against 0.923ms for Hono, a difference of **0.075ms** — 0.028% of the 270ms 3G round-trip
+floor [../constraints.md](../constraints.md) records, and below the resolution of the p50 and p99 this
+run reported. On the load side, a deliberately generous model of ten thousand daily players making
+twenty server requests each is 2.3 req/s, or 46 req/s at a twentyfold morning peak, which is **0.08%
+of measured capacity and about 1,200 times of headroom**. The Fastify surplus on its own, 4,809 req/s,
+is 104 times the entire projected peak. For 8.9% to matter the server would have to run above 91% of
+capacity, around a thousand times this project's size, and
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeps it off the path a
+player waits on in any case.
+
+*Sourced for the external numbers — Fastify's own benchmark page dated 2026-09-02 (Fastify 97,595
+req/s against Hono 88,525), Hono's benchmarks page, honojs/discussions 1483 and the maintainer's Zenn
+article on the 2.3x Node adapter rewrite, read 2026-09-21 by a research agent. I did not open them.
+The agent found no primary source showing Hono ahead of Fastify on Node, and found that the large gap
+still repeated in blog posts predates that adapter rewrite.*
+
+**Neither framework offers anything for this store, and that is the whole answer on that axis.**
+There is no `@fastify/sqlite`; the registry returns not-found. The community plugins are
+`fastify-sqlite`, last published 2022-09-18, and `fastify-sqlite-typed`, and both wrap `sqlite3` or
+its relatives rather than Node's built-in module. `fastify-better-sqlite3` is listed on Fastify's
+ecosystem page and does not exist on npm. Across all thirty-five packages in the `@hono` scope there
+is nothing database-related at all. **No plugin in either ecosystem supports `node:sqlite`**, so the
+store is opened by hand under either, and this axis eliminates nobody.
+
+*Sourced — the npm registry API for each name, Fastify's ecosystem page and the `@hono` scope
+listing, read 2026-09-21 by a research agent. I did not open them.*
+
+**What does differ is the lifecycle pattern, and Fastify's documented one is the pattern the
+shutdown defect breaks.** Fastify documents `decorate` plus an `onClose` hook, and its official
+Postgres plugin closes its pool exactly that way. Its hooks reference says of `onClose`: "By the time
+`onClose` hooks execute, the HTTP server has already stopped listening, all in-flight HTTP requests
+have been completed, and connections have been drained. This makes `onClose` the safe place for
+plugins to release resources such as database connection pools, as no new requests will arrive."
+
+Running that exact pattern — `decorate('db', …)` plus an `onClose` that calls `db.close()`, nothing
+hand-rolled — on Fastify's default `listen({ port })` with an IPv4 client and a request in flight:
+`onClose` fired reporting **one request still running**, the handle was released, and the client
+received **`500 ERR_INVALID_STATE: database is not open`** with the store holding a half-written
+record. With `host: '0.0.0.0'` the same code reports zero in flight, returns 200 and writes both
+rows. So the earlier finding understated itself: this is not a hand-rolled shutdown going wrong, it
+is **the framework's own documented safe place for releasing a database, on the framework's own
+default listen**.
+
+Hono documents no resource-lifecycle hook at all — its Node guide covers closing the server and says
+"closing it is up to you", so the store is closed in a signal handler you write, which is what the
+earlier pass measured working.
+
+*Measured — by me on 2026-09-21, both binds. The `onClose` quote is a research agent's reading of
+Fastify's hooks reference and I did not open that page, though the behaviour it describes is what I
+falsified.*
+
+**Correction: the testability advantage was overstated, including by me.** Both frameworks exercise a
+route with no socket, no port and no process. Hono's `app.request('/board/p7')` and Fastify's
+`app.inject({ method, url })` both work. What remains is smaller and real: Hono returns a genuine
+`Response` (`instanceof Response` is true, headers are a real `Headers`) and accepts a raw `Request`,
+while Fastify returns a plain object that is neither, and requires `await app.ready()` first. That is
+an ergonomic difference — one response API rather than two, and fixtures that are web-standard
+objects — not the capability difference the bullet above implies.
+
+*Measured — by me on 2026-09-21, both asserted in one script.*
+
+**Re-pricing the service-worker symmetry, which is weaker than this file implies.** Hono's service
+worker adapter is real and documented, and its stated purpose is running Hono as a `FetchEvent`
+handler inside a browser service worker for things like offline caching. What is **not** documented
+by Hono, and not demonstrated in either project's examples, is the thing this file's optimism rests
+on: one handler deployed both to the Node server and to the service worker. srvx's service-worker
+adapter comes closer, detecting whether it is running in the page or the worker, but its examples
+still target one runtime at a time. So the symmetry is a shape the architecture permits rather than a
+pattern anyone ships, and this system may never want it —
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) has the client reading its
+own storage directly, so there is no established need for the worker to synthesise an API response at
+all.
+
+*Sourced — Hono's service worker guide and srvx's service-worker adapter and example, read 2026-09-21
+by a research agent. I did not open them.*
+
+**So of the three reasons this file gives for wanting Fetch-native handlers, all three are now
+weaker than written.** Runtime portability it already called weak. Testability is matched by
+`inject`, leaving ergonomics. Service-worker symmetry is undemonstrated and possibly unwanted here.
+What survives is that a handler written against `Request` and `Response` is cheap to move, which is
+the reversibility argument on its own rather than three arguments.

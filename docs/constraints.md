@@ -702,7 +702,36 @@ Fastify's hooks reference calls `onClose` the safe place to release a resource b
 HTTP requests have been completed"; under the default listen it fires with a request still running,
 and a store handle released there produces a 500 reading `database is not open` over a half-written
 row. [ADR-0035](decisions/0035-the-http-handler-is-fastify.md) makes an explicit `host` part of the
-decision for this reason, and it is the one part whose absence fails silently.
+decision for this reason, and it is the one part whose absence fails silently. Reported as
+[fastify/fastify#7043](https://github.com/fastify/fastify/issues/7043), so this entry may stop being
+true.
+
+## Dependencies — a connection going idle mid-shutdown is never reaped
+
+**Node's `server.close()` collects connections that are already idle when it is called, and nothing
+collects one that falls idle afterwards.** A keep-alive client whose request is still in flight when
+shutdown begins therefore holds the close open until `keepAliveTimeout` expires. Measured with the
+request finishing 1,100ms into a shutdown: bare `node:http` closed after 7,110ms against its 5,000ms
+default, and Fastify after 74,111ms against the 72,000ms it sets. Neither `forceCloseConnections`
+value helps — `'idle'` produced 74,113ms because the branch implementing it is unreachable without a
+user-supplied `serverFactory`, and `true` returned in 4ms by destroying the in-flight request rather
+than draining it.
+
+*Measured — Node v26.7.0, `fastify` 5.12.5, macOS Darwin 25.6.0, Apple M2, 2026-09-22. The
+unreachable branch is at `fastify.js:392` of the v5.12.5 tag, and the default that cannot reach it at
+`lib/server.js:136`; both carry `istanbul ignore` comments. Reported as
+[fastify/fastify#7044](https://github.com/fastify/fastify/issues/7044).*
+
+**So a graceful shutdown has to reap repeatedly rather than once, and a deploy that does not is
+slow rather than broken — which is the worse failure here.** Calling `closeIdleConnections()` on an
+interval while the close is in progress drains in roughly 1,100ms with the handler completing and
+the client receiving its response. Without it the process lingers for over a minute holding the
+store open, which is long enough for a deploy to run two processes against one file — the situation
+[ADR-0021](decisions/0021-the-server-and-its-store-share-a-machine.md) and
+[how does a deploy avoid disturbing the store?](questions/how-does-a-deploy-avoid-disturbing-the-store.md)
+are both about. The remedy is part of
+[ADR-0035](decisions/0035-the-http-handler-is-fastify.md)'s decision rather than an operational
+detail, because it is not visible in any single route.
 
 ## Servers — framework throughput is three orders of magnitude above this workload
 

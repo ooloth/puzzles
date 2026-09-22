@@ -2,6 +2,7 @@
 number: 0035
 status: accepted
 date: 2026-09-22
+amended: 2026-09-22
 ---
 
 # 0035 — The HTTP handler is Fastify
@@ -69,6 +70,13 @@ plus an automatic line for each request and each error, which is what
 [the durable copy stops being written](../failure-modes/the-durable-copy-stops-being-written.md) asks
 for and what nothing else in the field supplies without assembly.
 
+**Its shutdown reaps connections that fall idle while it is closing.** An explicit host is necessary
+and not sufficient. A keep-alive connection that becomes idle after `close()` has begun is never
+collected, so the close waits out `keepAliveTimeout`, which Fastify sets to 72,000ms against Node's
+own 5,000. Neither `forceCloseConnections` setting helps: `'idle'` is inert and `true` destroys the
+request instead of draining it. Reaping while the close runs drains in about 1,100ms with the
+handler completing and the client receiving its response.
+
 ## Enforced by
 
 Nothing yet. No code exists. What must be true when it does, and the milestone each part lands in:
@@ -76,6 +84,11 @@ Nothing yet. No code exists. What must be true when it does, and the milestone e
 - The server calls `listen` with an explicit `host`, never the bare `{ port }` form. **M1 slice 1.**
   This is the one item whose absence fails silently, so it is worth a check rather than a habit.
 - An error handler is registered that does not place `err.message` in a response body. **M1 slice 1.**
+- The shutdown path reaps connections that become idle while it runs, rather than relying on
+  `forceCloseConnections`. **M1 slice 1.** Without it a deploy stalls for 72 seconds per shutdown,
+  which is visible rather than silent but is long enough to overlap two processes on one store —
+  the thing [how does a deploy avoid disturbing the
+  store?](../questions/how-does-a-deploy-avoid-disturbing-the-store.md) at M3 exists to prevent.
 - The server is constructed with `logger: true`. **M1 slice 1.**
 - Routes declare a body schema and a response schema. **M3**, where the first response with content
   in it exists — see [what crosses the client/server
@@ -129,8 +142,14 @@ Hono's one, and [../problem.md](../problem.md) ranks clarity over cleverness bec
 maintains this. The `onClose` failure above was found by running a spike built to look for it, not by
 reading, and it broke a guarantee the framework's own documentation makes.
 
-**Two defaults are wrong and the record depends on remembering to correct them.** An explicit host and
-a replacement error handler are one line each and neither is the out-of-the-box behaviour.
+**Three defaults have to be corrected and the record depends on remembering all of them.** They are
+not the same kind of thing. The dual-stack listen and the unreachable `'idle'` setting are defects,
+filed upstream as fastify/fastify#7043 and fastify/fastify#7044, and they may be fixed. The error
+body is not a defect: Fastify's errors documentation states the message is "`error.message`
+verbatim… This applies to every status code, including `500`", warns that "a database driver error,
+for example, can leak schema details and query text", and recommends `setErrorHandler` — so it is a
+deliberate default with a documented remedy rather than something to report. What the three share is
+that the out-of-the-box configuration is the wrong one here, and nothing catches any of them.
 
 **A community package in a load-bearing position.** `fastify-type-provider-zod` is not maintained in
 the `fastify` organisation, and [ADR-0036](0036-request-and-response-bodies-are-described-with-zod.md)

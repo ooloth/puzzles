@@ -417,3 +417,98 @@ stderr. A hand-rolled handler races it rather than replacing it. Turning it off 
 
 *Measured — read from `srvx` 1.0.5's own `dist/_chunks/_plugins.mjs` and confirmed by running both
 settings, by me on 2026-09-21.*
+
+### Pass of 2026-09-21 — the axes derived from the failure modes, measured
+
+**Where these axes came from.** Not from the candidates and not from this file. Enumerating the
+moments the server touches CPU, memory, storage and network, then reading
+[../failure-modes/](../failure-modes/) for what is already known to go wrong here, produces axes the
+earlier survey had no reason to look for. Two failure modes supplied most of them:
+[the write endpoint becomes free storage](../failure-modes/the-write-endpoint-becomes-free-storage.md),
+whose named mitigation is "size limits per object", and which states that it produces "no error and no
+failed request"; and
+[the server hands back state the client will not accept](../failure-modes/the-server-hands-back-state-the-client-will-not-accept.md),
+whose mitigations are validation and an explicit schema version.
+
+**Method.** Same machine and Node as the previous pass — Node v26.7.0, macOS Darwin 25.6.0, Apple M2
+arm64 — against `hono` 4.13.8, `@hono/node-server` 2.1.1, `fastify` 5.12.5, `express` 5.2.1,
+`srvx` 1.0.5, `serve-static` 2.2.1 and `@fastify/static` 10.1.4. Each candidate served its own
+routes using **its default body parser rather than a hand-written one**, which matters: a first
+attempt wrote a custom Fastify content-type parser and a raw Express parser, and both bypassed the
+very defaults being measured. Static serving used a directory shaped like the real build output — a
+content-hashed asset, an entry document and a service worker script. The spike is deleted.
+
+**A default request body limit is the sharpest discriminator found in this field.** Posting a 1MB,
+20MB and 200MB JSON body:
+
+- **Fastify** refuses all three with `413 FST_ERR_CTP_BODY_TOO_LARGE`. Its `bodyLimit` defaults to
+  1 MiB and applies without being asked for.
+- **Express** refuses all three with 413, because `express.json()` defaults to a 100kb limit.
+- **Hono**, **srvx** and bare **`node:http`** accept all three, including 200MB. Each has a facility
+  and none of it is on: Hono ships a `hono/body-limit` middleware, srvx takes a
+  `maxRequestBodySize` option that its adapter treats as unlimited while undefined, and `node:http`
+  has nothing at all.
+
+**What being wrong here costs is measurable, and it is not the bandwidth.** After one 200MB request
+the process sat at 953MB resident under `node:http` and 1346MB under both Hono and srvx, still
+unreclaimed when the run ended. [../constraints.md](../constraints.md) records at the *Measured*
+tier that a runtime's heap limit governs the JS heap only, so a process exceeding its container's
+memory is killed by the kernel with exit 137 and no output. So the chain is one unauthenticated
+request to an OOM kill of the process holding the store open, and the failure mode above already says
+nobody would see an error.
+
+*Measured — by me on 2026-09-21, method above, one run per candidate per body size.*
+
+**What reaches the client when a handler throws separates them too, and bare `node:http` is worst.**
+Throwing inside an async handler:
+
+- **`node:http`** sends **no response at all**. The throw becomes an unhandled rejection, the process
+  survives and keeps serving, and the client's socket simply hangs — the request was still open when
+  the client gave up at 15 seconds. [../constraints.md](../constraints.md) records that a stalled
+  connection throws no error, so this is invisible on both ends.
+- **Express** returns 500 with a full stack trace rendered into HTML by default, and returns a clean
+  `Internal Server Error` under `NODE_ENV=production`.
+- **Fastify** returns 500 with `err.message` in the JSON body — `{"statusCode":500,"error":"Internal
+  Server Error","message":"kaboom: secret internal detail"}` — and **setting `NODE_ENV=production`
+  does not change it**. This is the same leak the shutdown spike produced, where the message handed to
+  the client was `statement has been finalized`.
+- **Hono** returns 500 with `Internal Server Error`, and **srvx** returns 500 with an empty body.
+  Neither leaks.
+
+*Measured — by me on 2026-09-21, each candidate run with `NODE_ENV` unset and Express and Fastify run
+again with `NODE_ENV=production`.*
+
+**On static serving the earlier documentation reading was right about Hono and wrong about Fastify
+and srvx.** Serving the build-shaped directory with `immutable` on the hashed asset and `no-cache` on
+the document and the service worker: `node:http` with `serve-static`, Express, Fastify with
+`@fastify/static`, and srvx all set a different `Cache-Control` per class and answer both
+`If-None-Match` and `If-Modified-Since` with a 304, out of the box. **Hono is the exception**: its
+`serveStatic` emits no `ETag` and ignores `If-Modified-Since`, so every revalidation is a full
+re-download on the weak mobile link [../problem.md](../problem.md) names as the modal case. Adding
+Hono's own `hono/etag` middleware restores `ETag` and the 304; `If-Modified-Since` still returns 200.
+srvx needed two mounts and a wrapper because its `maxAge` and `immutable` are per-mount rather than
+per-file, which is roughly twenty lines against five.
+
+*Measured — by me on 2026-09-21. Two earlier readings of this were my own instrument's fault rather
+than the candidates': a Node-style `setHeader` call in `@fastify/static`'s `setHeaders`, which hands
+back a Fastify `Reply`, and an import of `serveStatic` from `srvx/static`, which exports
+`staticMiddleware`. Both scored full marks once corrected, so the documentation-derived table in the
+pass above understates them.*
+
+**Memory and startup do not discriminate, and are recorded so nobody measures them again.** Boot
+resident set ranged from 66.1MB (`node:http`) to 77.9MB (Fastify) and grew by five to seven megabytes
+across four hundred requests for every candidate. Startup from spawn to first served response ranged
+from 54ms (`node:http`, srvx) to 86ms (Fastify). Nothing in
+[../problem.md](../problem.md) or the records makes a twelve-megabyte or thirty-millisecond spread
+matter.
+
+*Measured — by me on 2026-09-21, with the large-body tests disabled, since buffering a 200MB body is
+what produced the earlier gigabyte figures and would otherwise be read as a per-request cost.*
+
+**Per-request CPU is not binding, and no measurement was taken.**
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeps the server off the
+path from input to paint, so no candidate's routing overhead is on a path a player waits on, and
+[../problem.md](../problem.md) sizes launch at a small number of people. A throughput benchmark here
+would measure a quantity nothing in the problem asks about.
+
+*Reasoned — 2026-09-21.*

@@ -931,3 +931,67 @@ Hono app is 60,554 bytes against 114 bytes for the pure function underneath it.*
 
 *Measured — by me on 2026-09-22, esbuild 0.28.2 with `--platform=browser` against `fastify` 5.12.5
 and `hono` 4.13.8.*
+
+### Pass of 2026-09-22 — how the code reads, and what the projects are
+
+**The verbosity in Fastify's examples is JSON Schema, not Fastify, and it goes away.** The same two
+routes written as cleanly as each allows, both run and both returning byte-identical responses, come
+to **sixteen significant lines each** — Hono with `@hono/zod-validator`, Fastify with
+`fastify-type-provider-zod`. The Fastify version additionally has its response enforced at compile
+time and run time and its structured logger on. So a preference formed from reading examples is
+tracking the schema format rather than the framework, and the schema format is a separate choice.
+
+*Measured — by me on 2026-09-22.*
+
+**Fastify publishes a support window and Hono publishes none.** Fastify's `docs/Reference/LTS.md`
+commits to "a minimum period of six months from their release date" plus "security updates for an
+additional six months from the release of the next major release", with an end-of-LTS date given for
+every past major. Its 5.0.0 row lists Node 26 — the line
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) selects — and a 6.0.0
+row already exists. Hono's migration document is a per-version changelog with no support-window
+language anywhere. [../problem.md](../problem.md) states the maintainer's intent to give this
+"active attention for years", which is the horizon
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices against.
+
+*Sourced — [the LTS document](https://github.com/fastify/fastify/blob/main/docs/Reference/LTS.md),
+opened and quoted by me on 2026-09-22. Hono's absence of an equivalent is a research agent's search
+of its docs, which I did not repeat.*
+
+**The bus factors differ by roughly a factor of two and the governance by more.** Over the twelve
+months to 2026-09-22, Hono's top contributor holds 47.9% of commits and the top two hold 65.4%; the
+`honojs` organisation has two public members. Fastify's top holds 19.4% and its top five about 56%,
+its organisation has thirty public members, and the project sits in the OpenJS Foundation's At-Large
+tier rather than its top Impact tier.
+
+*Sourced — the GitHub API for both repositories, read 2026-09-22 by a research agent. I did not run
+the queries.*
+
+**The dependency surfaces are the sharpest difference found in this pass, and they favour Hono.**
+Hono declares **no dependencies at all** and installs as one package; Fastify declares fifteen and
+installs thirty-nine. The fair qualification is that most of Fastify's are `@fastify/*` or pino,
+whose author leads Fastify, so the third-party surface is narrower than thirty-nine suggests.
+
+*Measured — by me on 2026-09-22, fresh installs of each.*
+
+**Two ecosystem facts that bear on recorded risk.** Rate limiting, which
+[the write endpoint becomes free storage](../failure-modes/the-write-endpoint-becomes-free-storage.md)
+names among its mitigations, is an official `@fastify/rate-limit` on one side and a single-maintainer
+community package on the other. Against that, Hono carries JWT, signed cookies, CORS, CSRF, SSE and
+multipart **in core**, where Fastify has each as a separate official plugin — the same coverage with
+fewer moving parts.
+
+**The conceptual surface runs the other way, and this file has already paid for it once.** Fastify
+asks a reader to hold encapsulation contexts, decorators, hooks, avvio's load ordering and the cases
+where `fastify-plugin` is needed to escape encapsulation deliberately. Hono asks them to mount a
+sub-app. The `onClose` failure recorded above is an instance of the first model biting: the
+framework's own documented pattern for releasing a database, wrong under the framework's own default
+listen. [../problem.md](../problem.md) ranks clarity over cleverness on the grounds that one person
+maintains this.
+
+*Sourced — both projects' own documentation on composition, read 2026-09-22 by a research agent; the
+`onClose` behaviour is mine and measured.*
+
+**Hono documents no pattern for holding a resource across requests**, since `c.set` and `c.get` are
+request-scoped by design, so a module-level singleton is the convention rather than a documented
+answer. For one SQLite handle that is adequate and is noted rather than counted against it.

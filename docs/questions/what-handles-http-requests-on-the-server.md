@@ -841,3 +841,60 @@ the server write path. And [../guarantees/README.md](../guarantees/README.md) li
 **Privacy** as themes holding no promises yet, which is exactly where an error response leaking an
 internal message would land, so the candidate difference measured on error containment is real risk
 in an area this table scores as empty.
+
+### Pass of 2026-09-21 — composing Hono up to parity, and the schema library
+
+**Four of the five gaps close with packages, and the fifth does not.** Built and run: `hono/body-limit`
+refuses an oversized body with 413, `hono/request-id` with pino and roughly nine lines of middleware
+produces the same correlated structured line Fastify emits for free, `hono/etag` restores conditional
+requests on static files, and error containment was already better than Fastify's. What does not
+close is the response contract.
+
+**The response gap fails in a way that is worse than having no declaration.** With a response schema
+declared on the route through `@hono/zod-openapi` 1.6.3, a handler returning an undeclared field and
+a wrong type produced `{"schemaVersion":1,"puzzleId":"p1","cells":"not-an-array","internalOwnerEmail":"LEAKED@example.com"}`
+with status 200. The generated OpenAPI document states `cells` is an array of integers while the wire
+carries a string, **so a client generated from that document would be wrong**. The community
+alternative is no better: `hono-openapi`'s `describeRoute` is a pass-through that awaits `next()` and
+attaches metadata. The gap is closable by hand — one `Board.parse(...)` on the way out per route, as
+counted in the code-size pass — but not declaratively.
+
+*Measured — by me on 2026-09-21, the response body above copied from curl.*
+
+**Correction to the pass above: Hono does check the response at compile time.** `@hono/zod-openapi`
+rejects the same handler with `error TS2345`. The earlier statement that Hono enforces the response
+"at neither" was wrong on the first half; the gap is runtime only.
+
+**Correction to what "Fastify enforces the response" means, because it covers two different
+behaviours.** With plain JSON Schema or TypeBox, Fastify **silently strips** the offending fields.
+With `fastify-type-provider-zod` it **rejects loudly**:
+`500 FST_ERR_RESPONSE_SERIALIZATION, "Response doesn't match the schema"`. The portable
+decision-making standard prefers an option that fails loudly, so the silent strip this file recorded
+as a two-edged cost is avoidable rather than inherent.
+
+*Measured — by me on 2026-09-21, both compilers and both servers run.*
+
+**The schema library is a real choice and it does not follow from the framework.** TypeBox produces
+JSON Schema objects natively, so it feeds ajv and `fast-json-stringify` with no conversion. Zod
+builds its own validator; `z.toJSONSchema()` exists in v4 but throws by default on `z.date()`,
+`z.map()`, `z.set()`, `z.transform()` and `z.bigint()`, so the two do not converge. Against that,
+the stewardship comparison [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+asks for is lopsided: TypeBox is at 0.34.52 and still pre-1.0 after years, with 798 commits from its
+author and five from the next contributor, releasing at three-to-four-month intervals under a
+non-standard licence; Zod is at 4.6.5, MIT, with a broad contributor base and several releases a
+week.
+
+*Sourced — both projects' registry metadata, GitHub API and documentation, read 2026-09-21 by a
+research agent. I did not open them. The `z.toJSONSchema()` limitation list is quoted from zod.dev.*
+
+**So the combination worth weighing is Fastify with zod rather than Fastify with TypeBox.**
+`fastify-type-provider-zod` 7.0.0 gives compile-time and run-time enforcement of the response, and
+the run-time half rejects rather than strips. Its documented cost is that it replaces
+`fast-json-stringify` with zod's encode and plain `JSON.stringify`, giving up Fastify's serialisation
+fast path — **which does not bind here**, since the throughput pass measured about 1,200 times of
+headroom. What it does cost is a third-party dependency in a load-bearing position: it is
+community-maintained rather than in the `fastify` organisation.
+
+*Measured for the enforcement behaviour — by me on 2026-09-21. Sourced for the ownership and the
+serialiser substitution — the package's registry metadata and its own `src/core.ts`, read by a
+research agent; I did not open them.*

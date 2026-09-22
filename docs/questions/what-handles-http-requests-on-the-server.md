@@ -898,3 +898,36 @@ community-maintained rather than in the `fastify` organisation.
 *Measured for the enforcement behaviour — by me on 2026-09-21. Sourced for the ownership and the
 serialiser substitution — the package's registry metadata and its own `src/core.ts`, read by a
 research agent; I did not open them.*
+
+### Pass of 2026-09-22 — the handler-sharing result solves a problem this project does not have
+
+**Retracting the weight put on it, though not the result.** The demonstration stands: one module does
+serve the same route from Node and from inside a browser service worker. What it does not have is a
+use here, and the earlier pass recorded it as an M9 candidate without checking what M9 actually
+needs.
+
+**The worker caches responses; it does not compute them.** Answering navigations after the first
+([ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md)) is a
+precache lookup. Serving puzzle content offline
+([ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md), M9) is
+`caches.match(request)` against a response the server already produced. Sharing a handler would only
+pay where the worker must **synthesise** a response that was never fetched, and
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) removes the one candidate:
+the client reads its own storage for the board in play, so it never issues a request for it.
+
+**What genuinely gets shared with the worker is client-side, and no HTTP framework is involved.** The
+board's shape, the cache-key construction that makes the client's request match what the worker
+stored, and serialisation. Client and worker are both build outputs of
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md)'s bundler, and
+[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
+already establishes the shared-module pattern this would use.
+
+**Fastify cannot run in a service worker, and it does not need to.** Bundling it for a browser target
+fails at `Could not resolve "node:http"` and `node:diagnostics_channel`. The pattern with Fastify is
+to put the domain logic in a module both the route and the worker import, so the framework never
+crosses — which is the better layering under either candidate, because sharing a handler means
+shipping a router into the worker to dispatch routes it does not serve. **Bundled for a browser, a
+Hono app is 60,554 bytes against 114 bytes for the pure function underneath it.**
+
+*Measured — by me on 2026-09-22, esbuild 0.28.2 with `--platform=browser` against `fastify` 5.12.5
+and `hono` 4.13.8.*

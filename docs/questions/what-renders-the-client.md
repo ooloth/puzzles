@@ -41,9 +41,8 @@ is the thing a state layer either survives or does not. It orders the field rath
 from it: the Findings argue that the most restrictive of the three may push in the right direction
 rather than the wrong one, which is exactly the claim a spike is for.
 
-**It was coupled to
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and is no
-longer.** The coupling was that a meta-framework's own server exists only if the renderer is that
+**It was coupled to the HTTP handler, settled at
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md), and is no longer.** The coupling was that a meta-framework's own server exists only if the renderer is that
 meta-framework, so neither could be settled without deciding part of the other.
 [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) broke it by
 settling that no single tool owns both, which means this question now chooses a renderer and nothing

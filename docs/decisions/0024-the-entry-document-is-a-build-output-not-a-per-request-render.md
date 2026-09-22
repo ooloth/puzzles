@@ -34,8 +34,8 @@ built, not rendered per request.**
 build the client bundle, produce the entry document, answer HTTP requests. This record binds only the
 second. It does not decide who builds the bundle
 ([what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md))
-and it does not decide what answers HTTP
-([what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)).
+and it does not decide what answers HTTP, which was settled afterwards at
+[ADR-0035](0035-the-http-handler-is-fastify.md).
 
 **So the meta-frameworks are not excluded, and the option lists that already assumed they were should
 be corrected rather than trusted.** Prerendering the entry document while serving API routes from the
@@ -98,8 +98,8 @@ promises.
 
 - **Defer it.** Genuinely cheap, and the right answer for most questions at this stage.
   **Disqualified because deferring leaves the meta-framework class excluded by inference rather than
-  by argument.** A meta-framework rendering per request would have settled the runtime,
-  [what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md)
+  by argument.** A meta-framework rendering per request would have settled the runtime, what
+  handles HTTP — since settled at [ADR-0035](0035-the-http-handler-is-fastify.md) —
   and [what renders the client?](../questions/what-renders-the-client.md) all at once, so an option
   field that omits the class decides several M1 questions without saying so. The runtime has since
   closed at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md), on grounds unrelated to
@@ -150,9 +150,9 @@ separate API server is needed — work the alternative would not have required.
 - [x] `questions/README.md` — `is-the-entry-document-produced-per-request` is resolved and retired
       from M1 slice 2, and slice 1's entry now says what field it has rather than assuming a narrower
       one
-- [x] `questions/what-handles-http-requests-on-the-server.md` — its option list omitted a framework
-      that serves API routes alongside a prerendered document, which this record establishes is
-      available
+- [x] the HTTP handler question — its option list omitted a framework that serves API routes
+      alongside a prerendered document, which this record establishes is available. That question is
+      now settled at [ADR-0035](0035-the-http-handler-is-fastify.md) and its file is deleted
 - [x] `architecture.md` — the entry document is named as a build output in the browser box
 - [x] `constraints.md` — the round-trip figures cited here were already recorded; nothing new imported
 - [x] Nothing in `guarantees/` — this promises a player nothing beyond what

@@ -17,7 +17,7 @@ Do not work it.
 
 It decides how many records get written, which nothing else open in M1 does. One answer
 collapses [what renders the client?](what-renders-the-client.md),
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and
 [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
 into a single choice. The other leaves all three standing, each with its own field.
 
@@ -49,7 +49,7 @@ document and every asset it needs.
 
 **The field has not been built and the properties have not been applied to it.** The candidates
 under **Options** are carried in from
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md), where
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md), where
 they were surveyed as HTTP handlers rather than as answers to this question, so that list is a
 starting point and not the field.
 
@@ -66,20 +66,20 @@ A decision record in [../decisions/](../decisions/).
 Raised 2026-09-18. Three question files describe this fork as coupling between them and none of
 them asks it. [What renders the client?](what-renders-the-client.md) lists a meta-framework as a
 class of answer,
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) lists a
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) lists a
 meta-framework's own server as a candidate, and each defers the choice to the other.
 
 ## Options
 
 **This is not the field.** The candidates below were profiled as HTTP handlers under
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) and have
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and have
 never been scored against
 [what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md).
 Narrowing from this list means scoring against criteria this question did not set.
 
 *One tool.* A meta-framework builds the client bundle, produces the entry document and answers
 HTTP from one project. Carried in from
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md):
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md):
 SvelteKit, Astro, TanStack Start, Nuxt, React Router, Qwik City and Analog, with Next eliminated
 there because a request-reading handler is unsupported under a static export. One toolchain to
 configure, one dev server, one build. Its cost is that this answer also chooses the renderer and
@@ -115,7 +115,7 @@ supports request-reading handlers under a static export.
 
 *Sourced — Astro's configuration, on-demand-rendering and endpoints guides and TanStack Start's
 overview, read 2026-09-17 by a research agent, recorded in
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). Next's
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). Next's
 static export guide was opened and quoted there on 2026-09-17 against the page's stated version
 16.3.5.*
 

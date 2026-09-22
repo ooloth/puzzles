@@ -17,8 +17,7 @@ out to [how is the server reached and hardened?](how-is-the-server-reached-and-h
 *survive* one. What is left here is the ongoing operation of a machine that already exists and can
 already be reached.
 
-None of it is covered by
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) or
+None of it is covered by [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) or
 [where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
 the answer to the second.
 

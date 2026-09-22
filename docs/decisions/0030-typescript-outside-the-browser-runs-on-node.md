@@ -38,9 +38,9 @@ reasonable person could choose this runtime and either answer. Nothing in **Reje
 on which one, so reading this record as settling it would be reading in a decision it does not make.
 
 Node ships npm but does not require it, so the package manager stayed a choice and was settled
-separately at [ADR-0032](0032-the-package-manager-is-pnpm.md). Still open are
-[what runs the tests?](../questions/what-runs-the-tests.md) and
-[what handles HTTP requests on the server?](../questions/what-handles-http-requests-on-the-server.md).
+separately at [ADR-0032](0032-the-package-manager-is-pnpm.md). Still open is
+[what runs the tests?](../questions/what-runs-the-tests.md); the HTTP handler has since been settled
+at [ADR-0035](0035-the-http-handler-is-fastify.md).
 A version floor exists — type stripping is unflagged from v22.18.0 and v23.6.0 — but which version
 this project runs is not settled here.
 [ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) gives the rule that selects it.

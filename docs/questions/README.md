@@ -198,12 +198,17 @@ and two of those three were found by running rather than by reading.**
   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) and
   [ADR-0033](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md).
 
-**So "nothing separates these candidates" means "no survey has found a separator", and two of the
-three above are the standing proof that those are different claims.** The three still open — the
-renderer, the HTTP handler and the layout — each have a field where every surveyed candidate
-satisfies what the records require, and the differences found so far are operational frictions.
-Read that as a result about the searching rather than about the candidates. A question that looks
-like a coin toss is usually one nobody has run yet, and running it is the cheap thing.
+**So "nothing separates these candidates" means "no survey has found a separator", and the records
+above are the standing proof that those are different claims.** The HTTP handler is the fourth and
+sharpest instance: a survey had found its field equivalent, and running it turned up a class that
+cannot parse under this Node line at all, a framework whose own documented pattern for releasing a
+database is unsafe under its own default listen, and a response contract that only one candidate
+enforces. Settled at [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and
+[ADR-0036](../decisions/0036-request-and-response-bodies-are-described-with-zod.md).
+**The renderer is the one still in that position.** Every surveyed candidate satisfies what the
+records require and the differences found so far are operational frictions, which is a result about
+the searching rather than about the candidates. A question that looks like a coin toss is usually
+one nobody has run yet, and running it is the cheap thing.
 
 **Running one also turns up limits that belong to other questions.** The package-manager spike found
 that Node refuses to strip types under `node_modules`, which constrains the layout, the deployable
@@ -234,14 +239,7 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-1. **The HTTP handler.** `node:http` is now one of the candidates by
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). No survey has
-   separated the rest, and it sits behind a thin interface. **Read that as the paragraph above says
-   to read it**: the axis the survey scored on was whether each candidate can route a handful of
-   endpoints, which nothing fails. Two axes it never examined are named in its own Findings —
-   serving the client's files with a cache header per asset class, and draining in-flight requests
-   before the store's file handle goes.
-2. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
+1. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
    be written at any point after that record lands. **This is where two answered question files
    get mined and deleted**, because this record is the last one that cites findings living only
    in them: [does one tool build the client and answer
@@ -255,7 +253,7 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    its snapshot serialisation; those move to [what runs the
    tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
    that was deleted for an unrelated reason.
-3. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
+2. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
    it is the only one that accumulates code written against the choice. So it waits, and is made
    with whatever the scaffold has shown by then. **Check
    [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
@@ -265,7 +263,7 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
    are supported. That check is a build and an inspection, and it is only worth running if Vue
    wins.
-4. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
+3. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
    no decision, only by a document existing to put it in. It blocks slice 2, and it is last because
    what would settle it — opening the built document in a browser below the floor — needs the
    document slice 2 produces. **That is a reason to answer it during slice 2, not a reason to let it
@@ -273,11 +271,8 @@ runs whatever Corepack hands back rather than a version any record chose. What r
    way, and the portable decision-making standard moves a silently-failing decision earlier rather
    than later.
 
-Step 2 is a write-up. **Step 1 is not**, and the paragraph above says why: its survey found no
-separator by reading, which is a result about the searching. Two of M1's three settled toolchain
-questions were separated by running after a survey had found their candidates equivalent, and what
-that survey left unscored is named in the question's own Findings. Steps 3 and 4 wait on purpose, the
-renderer for whatever the scaffold shows and the last for the document slice 2 produces.
+Step 1 is a write-up. Steps 2 and 3 wait on purpose, the renderer for whatever the scaffold shows
+and the last for the document slice 2 produces.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -291,12 +286,14 @@ test in [../decisions/README.md](../decisions/README.md) when the records are wr
 stays until it is mined, and says so under **Findings** rather than at its head, so a reader who
 stops at **Why it matters** will not learn it there.
 
-**Two things in that cluster are properties rather than decisions, and are not tracked as questions.**
+**One thing in that cluster was a property rather than a decision, and it has been discharged.**
 Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
-is one: it does not narrow the runtime field, it removes a constraint on it, so it is something
-candidates are scored on rather than a gate. It is recorded under **Findings** in
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) with what the
-optionality is actually for.
+never narrowed the runtime field; it was something candidates were scored on.
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) settles the handler on one that uses
+Node's own request and response objects, having found that the three reasons for wanting the
+web-standard shape were each weaker than they read: portability was already priced low, socketless
+testing turned out to be available either way, and running one handler in both the server and a
+service worker solves a problem this architecture does not have.
 
 **The server's execution shape is fully settled and blocks nothing here.** Nothing on the request path
 scales to zero ([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md)), the
@@ -328,7 +325,10 @@ derivation.
    - **Given:** [0032-the-package-manager-is-pnpm](../decisions/0032-the-package-manager-is-pnpm.md) — so the layout below is chosen against pnpm's workspace mechanics, and a sibling is named with `workspace:*` rather than a version range
    - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
    - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the shape of a response is set by whatever the handler makes easiest, and [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 inherits a contract nobody argued. Costs a re-scaffold of both halves' boundary. **It is now answered on its own.** The runtime is settled at [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), and the coupling to [what-renders-the-client](what-renders-the-client.md) was a meta-framework owning both, which [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) removed as a class
+   - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so this slice's server is Fastify, and three things it mandates land here: an explicit `host` on `listen`, an error handler that keeps `err.message` out of the body, and `logger: true`
+   - **Given:** [0036-request-and-response-bodies-are-described-with-zod](../decisions/0036-request-and-response-bodies-are-described-with-zod.md) — so the validator and serializer compilers are wired here even though no route declares a schema until M3, because a route written against an unwired serializer is unchecked and nothing reports it
+
+   Nothing is left to answer in this slice.
    - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the first manifest sits at the root, the client, server, generator and rules are directories under `src/`, and each carries its own tsconfig scoping `lib` and `types`
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
@@ -347,7 +347,7 @@ derivation.
      - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
 3. **The client calls that route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
-     - **Must answer:** [what-handles-http-requests-on-the-server](what-handles-http-requests-on-the-server.md) — or else the first call across the boundary is shaped by the handler rather than by the contract, which is the thing this slice exists to exercise. Costs a re-scaffold of the boundary
+   - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else the renderer is chosen without knowing it has to fetch and display asynchronously, which is the one thing this slice adds over the last. Costs a re-scaffold of the client half
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player

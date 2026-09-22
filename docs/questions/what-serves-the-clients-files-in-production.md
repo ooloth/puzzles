@@ -14,8 +14,8 @@ They are the same job in two environments, and the gap between them is
 ## Why it matters
 
 Something has to answer the browser when it asks for the client, and nothing currently says what.
-[What handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md) is about the
-layer answering API requests and says nothing about static assets.
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) settles the layer answering API requests
+and says nothing about static assets.
 [Where does this run?](where-does-this-run.md) picks a host, not what the host serves with.
 
 It is what makes an origin arrangement achievable or not. The same process can serve both the
@@ -67,7 +67,10 @@ the filenames.
 **The client is a set of files, so this is a real question rather than a collapsed one.**
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
 that the entry document is produced by the build. Had it gone the other way, the process producing the
-document would already be answering the browser and this would have folded into
-[what handles HTTP requests on the server?](what-handles-http-requests-on-the-server.md). It does not
+document would already be answering the browser and this would have folded into the HTTP handler
+choice, since settled at [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). It does not
 follow that a separate file host is required — the same process may serve both — only that something
-has to be chosen to serve files.
+has to be chosen to serve files. What that record leaves for this one is unchanged: Fastify serves
+static files through `@fastify/static`, which was measured setting a different `Cache-Control` per
+asset class and answering both conditional-request headers with a 304, so the same process remains a
+live option here rather than a foregone one.

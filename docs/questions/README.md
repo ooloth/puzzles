@@ -24,154 +24,13 @@ well as in [../README.md](../README.md).
 
 **Then work M1 from the top.** Its slices are things you can run and look at, in the order you would
 build them, each with the questions that block it. Only the current milestone is laid out that way —
-the rest are bare question lists on purpose, for the reason given below.
+the rest are bare question lists on purpose, for the reason given under
+**Milestones below the current one stay unplanned**.
 
-## Building a milestone's list
-
-Seven steps. Each one exists because skipping it produced a list that had to be rebuilt.
-
-1. **Write the milestone's end state in one sentence.**
-2. **List the observable slices between nothing and that end state.** Each is one change you can run
-   and look at — something true of the system afterwards that was not true before. **Observable does
-   not mean a player can see it**: a check that fails on a bad import and a script that reproduces a
-   bug are both observable, and M2 is an entire milestone of them. The test is whether you can name
-   what you would run and what you would expect to see. Build order, not risk order — the thing that
-   renders before the thing that is served, the thing that is served before the thing that is
-   deployed. Deploying is the last slice: a hosting choice made before anything exists to host is
-   made against an imagined system.
-3. **Under each slice, list the givens** — the records, promises and constraints already established
-   that bear on *that* slice. Link each one. Where the link is to a large file, name the single
-   invariant being relied on, one bullet per invariant.
-4. **Under the givens, list the questions that must be worked.** A question blocks a slice if
-   building without it would be **reversed**, not only if the work is impossible. Choosing a package
-   manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
-   are few; the reversal risks are what decide the order.
-
-   **One label: Must answer**, whether the answer is a choice or a fact to go and find. A research
-   question earns its own entry only where nothing else tracks it — where the question it informs
-   records it under **Findings**, that is where it lives.
-
-   **Every entry carries an "or else" clause: which later decision in this slice comes out wrong, and
-   what unwinding it costs.** Two costs exist here. A **re-scaffold** is a day. A **migration of live
-   player data** is not, and it is the only irreversible thing M1 can create. A question whose wrong
-   answer costs a re-scaffold does little work at the front of a slice.
-
-   Three things read as clauses and are not: that work cannot start, that the choice might be made
-   carelessly, and a restatement of the topic. Each is true of every open question, so none
-   distinguishes anything. Where a clause names a mechanism rather than a cost — "whichever is built
-   first fixes the other two" — ask "so what?" until it reaches one.
-
-   **If you cannot complete "slice N cannot be built without this because ___", it does not block
-   slice N.**
-
-   **Defer.** Every sequencing error in this file has moved a question earlier than it belonged, never
-   later. An open question keeps its options and costs nothing. Where it is unclear whether something
-   blocks a slice, it does not.
-
-5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
-   repetition is what makes step 7 possible and what lets a reader audit one slice without holding
-   the others in their head.
-6. **Order the questions within a slice** by what has to be answered first. Where two constrain each
-   other in both directions they are answered together, and each question file says so under **What
-   would settle it**. That is the only place a dependency between questions is written down.
-7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
-   slices. A slice that reads like the milestone restated is bundling. A question written as a given
-   is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask
-   whether it names a consequence for *this slice* or merely describes the question; the second is
-   the failure this audit is most likely to find, because it reads as a reason. Then read the
-   cross-references: a choice that several files each defer to the others is a question, and it is
-   usually wider than any of them. Then count how many slices each question blocks: that orders the
-   slices, and says nothing about the order inside one.
-
-**Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
-smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
-category: if a choice would be redone shortly after the milestone, it is missing an input or the
-milestone is drawn in the wrong place. Placeholder *values* are fine; placeholder *choices* are not.
-
-**Deferring is the default, and it is the point.** An unanswered question is optionality retained,
-and everything learned before it must be answered is information the answer would otherwise be made
-without. The skill this list is trying to capture is spotting the moment a question can no longer be
-put off, and making it as narrow as possible when that moment arrives. Closing a door is clarifying
-and irreversible, so the record that closes one says which one.
-
-## Milestones below the current one stay unplanned
-
-They are a list of questions grouped by the milestone that first needs them, and nothing more.
-**Expanding one into slices and givens before it is next is planning against a system that does not
-exist yet** — the slices are only knowable once the preceding milestone's decisions have landed, and
-a plan built earlier gets rewritten rather than followed. It is the same argument as deferring a
-decision: plan it when you know the most, which is as late as possible.
-
-**Adding a question to a future milestone is not expanding it**, and is always welcome. A question
-discovered now and parked where it belongs is what this file is for.
-
-When a milestone becomes the next one, run the seven steps on it. Not before.
-
-## This file and the issue tracker
-
-**Each slice below becomes one GitHub issue when it becomes workable**, not in advance, per
-[../decisions/0015-the-issue-tracker-is-github-issues.md](../decisions/0015-the-issue-tracker-is-github-issues.md)
-and
-[../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
-The tracker holds what work exists and what state it is in. This file holds why — what each slice
-rests on, what blocks it, and why they are in this order.
-
-**So the tracker is deliberately shorter than this list, and a slice with no issue is normal.** An
-issue is filed once nothing in its entry is still a **Must answer**, because an issue written
-earlier would carry a definition of done that the unanswered question is about to change. Read a
-missing issue as "not workable yet", not as "not planned" — this file is the plan and the tracker is
-the work.
-
-**So nothing here records status.** No checkboxes, no "done", no "in progress". Those change daily,
-this file is already the fastest-decaying document in `docs/`, and a stale checkbox in a file whose
-value is being trusted is worse than no checkbox.
-
-**The slice title is the join key.** It appears here and in the issue, and nothing checks that the two
-still match — `scripts/check-docs.py` cannot see the tracker. If they disagree, the tracker is right
-about what work exists and this file is right about why.
-
-## Housekeeping
-
-**A question resolves into as many records as it contains decisions** — the separability test in
-[../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
-record has not settled; mine it first, since findings graduate to
-[../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
-**Mining moves a claim's tier and source with it**, or the record inherits a bare assertion and the
-evidence dies with the file. Where the working is too long to move, cite the commit that deleted it —
-`git show <commit>^:<path>` still reads it.
-**Promises are written as they fall out of records**, on the decision template's checklist, rather
-than committed to in advance.
-
-`scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
-is referenced at least once from the lists below, no link points at a heading, no question file has
-grown a sequencing section. A question deliberately appears under more than one milestone where it is
-needed twice, so nothing checks for a single appearance.
-It does not check the ordering, because a check that passed it would only make a wrong order look
-verified.
-
-**[../decisions/](../decisions/) is the list of what is settled, and it is not repeated here.** Every
-record is titled by what it settled, so the listing is the checklist of constraints in force.
-
-<!-- Template for a milestone. Links are shown as backticked pseudo-syntax so the checker does not
-     try to resolve them; write them as real markdown links.
-
-## M<N> — <the end state, in a few words>
-
-<One sentence: what exists when this is done, and what deliberately does not.>
-
-1. **<A slice you can run and look at.>**
-   - **Given:** `[<record-promise-or-constraint>](<its-path>)`
-   - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-2. **<The next slice.>**
-   - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-
-Questions are always "Must answer", never "Given", whether the answer is a choice or a fact somebody
-has to find. Every one carries an "or else" clause naming what breaks in *this slice* without it —
-not what the question is about. Where a slice rests on no given, its questions sit at
-the top level. Link text is the filename, so the list reads without opening anything.
--->
+**The milestones come first here, and the conventions follow them**, because deciding what to work
+on is the daily reason to open this file and the conventions are read when maintaining it. Below the
+lists: how a milestone's list is built, why lower milestones stay unplanned, how this file relates to
+the issue tracker, and what goes in a question file.
 
 ## M1 — "Hello!" is live
 
@@ -775,6 +634,153 @@ foreclosing them without noticing. The archive question is the nearer of the two
 and [what can a player do with no network?](what-can-a-player-do-with-no-network.md) at M6, and
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) has already
 constrained how an archive would be delivered.
+
+## Building a milestone's list
+
+Seven steps. Each one exists because skipping it produced a list that had to be rebuilt.
+
+1. **Write the milestone's end state in one sentence.**
+2. **List the observable slices between nothing and that end state.** Each is one change you can run
+   and look at — something true of the system afterwards that was not true before. **Observable does
+   not mean a player can see it**: a check that fails on a bad import and a script that reproduces a
+   bug are both observable, and M2 is an entire milestone of them. The test is whether you can name
+   what you would run and what you would expect to see. Build order, not risk order — the thing that
+   renders before the thing that is served, the thing that is served before the thing that is
+   deployed. Deploying is the last slice: a hosting choice made before anything exists to host is
+   made against an imagined system.
+3. **Under each slice, list the givens** — the records, promises and constraints already established
+   that bear on *that* slice. Link each one. Where the link is to a large file, name the single
+   invariant being relied on, one bullet per invariant.
+4. **Under the givens, list the questions that must be worked.** A question blocks a slice if
+   building without it would be **reversed**, not only if the work is impossible. Choosing a package
+   manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
+   are few; the reversal risks are what decide the order.
+
+   **One label: Must answer**, whether the answer is a choice or a fact to go and find. A research
+   question earns its own entry only where nothing else tracks it — where the question it informs
+   records it under **Findings**, that is where it lives.
+
+   **Every entry carries an "or else" clause: which later decision in this slice comes out wrong, and
+   what unwinding it costs.** Two costs exist here. A **re-scaffold** is a day. A **migration of live
+   player data** is not, and it is the only irreversible thing M1 can create. A question whose wrong
+   answer costs a re-scaffold does little work at the front of a slice.
+
+   Three things read as clauses and are not: that work cannot start, that the choice might be made
+   carelessly, and a restatement of the topic. Each is true of every open question, so none
+   distinguishes anything. Where a clause names a mechanism rather than a cost — "whichever is built
+   first fixes the other two" — ask "so what?" until it reaches one.
+
+   **If you cannot complete "slice N cannot be built without this because ___", it does not block
+   slice N.**
+
+   **Defer.** Every sequencing error in this file has moved a question earlier than it belonged, never
+   later. An open question keeps its options and costs nothing. Where it is unclear whether something
+   blocks a slice, it does not.
+
+5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
+   repetition is what makes step 7 possible and what lets a reader audit one slice without holding
+   the others in their head.
+6. **Order the questions within a slice** by what has to be answered first. Where two constrain each
+   other in both directions they are answered together, and each question file says so under **What
+   would settle it**. That is the only place a dependency between questions is written down.
+7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
+   slices. A slice that reads like the milestone restated is bundling. A question written as a given
+   is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask
+   whether it names a consequence for *this slice* or merely describes the question; the second is
+   the failure this audit is most likely to find, because it reads as a reason. Then read the
+   cross-references: a choice that several files each defer to the others is a question, and it is
+   usually wider than any of them. Then count how many slices each question blocks: that orders the
+   slices, and says nothing about the order inside one.
+
+**Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
+smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
+category: if a choice would be redone shortly after the milestone, it is missing an input or the
+milestone is drawn in the wrong place. Placeholder *values* are fine; placeholder *choices* are not.
+
+**Deferring is the default, and it is the point.** An unanswered question is optionality retained,
+and everything learned before it must be answered is information the answer would otherwise be made
+without. The skill this list is trying to capture is spotting the moment a question can no longer be
+put off, and making it as narrow as possible when that moment arrives. Closing a door is clarifying
+and irreversible, so the record that closes one says which one.
+
+## Milestones below the current one stay unplanned
+
+They are a list of questions grouped by the milestone that first needs them, and nothing more.
+**Expanding one into slices and givens before it is next is planning against a system that does not
+exist yet** — the slices are only knowable once the preceding milestone's decisions have landed, and
+a plan built earlier gets rewritten rather than followed. It is the same argument as deferring a
+decision: plan it when you know the most, which is as late as possible.
+
+**Adding a question to a future milestone is not expanding it**, and is always welcome. A question
+discovered now and parked where it belongs is what this file is for.
+
+When a milestone becomes the next one, run the seven steps on it. Not before.
+
+## This file and the issue tracker
+
+**Each slice above becomes one GitHub issue when it becomes workable**, not in advance, per
+[../decisions/0015-the-issue-tracker-is-github-issues.md](../decisions/0015-the-issue-tracker-is-github-issues.md)
+and
+[../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
+The tracker holds what work exists and what state it is in. This file holds why — what each slice
+rests on, what blocks it, and why they are in this order.
+
+**So the tracker is deliberately shorter than this list, and a slice with no issue is normal.** An
+issue is filed once nothing in its entry is still a **Must answer**, because an issue written
+earlier would carry a definition of done that the unanswered question is about to change. Read a
+missing issue as "not workable yet", not as "not planned" — this file is the plan and the tracker is
+the work.
+
+**So nothing here records status.** No checkboxes, no "done", no "in progress". Those change daily,
+this file is already the fastest-decaying document in `docs/`, and a stale checkbox in a file whose
+value is being trusted is worse than no checkbox.
+
+**The slice title is the join key.** It appears here and in the issue, and nothing checks that the two
+still match — `scripts/check-docs.py` cannot see the tracker. If they disagree, the tracker is right
+about what work exists and this file is right about why.
+
+## Housekeeping
+
+**A question resolves into as many records as it contains decisions** — the separability test in
+[../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
+record has not settled; mine it first, since findings graduate to
+[../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
+**Mining moves a claim's tier and source with it**, or the record inherits a bare assertion and the
+evidence dies with the file. Where the working is too long to move, cite the commit that deleted it —
+`git show <commit>^:<path>` still reads it.
+**Promises are written as they fall out of records**, on the decision template's checklist, rather
+than committed to in advance.
+
+`scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
+is referenced at least once from the lists above, no link points at a heading, no question file has
+grown a sequencing section. A question deliberately appears under more than one milestone where it is
+needed twice, so nothing checks for a single appearance.
+It does not check the ordering, because a check that passed it would only make a wrong order look
+verified.
+
+**[../decisions/](../decisions/) is the list of what is settled, and it is not repeated here.** Every
+record is titled by what it settled, so the listing is the checklist of constraints in force.
+
+<!-- Template for a milestone. Links are shown as backticked pseudo-syntax so the checker does not
+     try to resolve them; write them as real markdown links.
+
+## M<N> — <the end state, in a few words>
+
+<One sentence: what exists when this is done, and what deliberately does not.>
+
+1. **<A slice you can run and look at.>**
+   - **Given:** `[<record-promise-or-constraint>](<its-path>)`
+   - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
+     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
+2. **<The next slice.>**
+   - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
+
+Questions are always "Must answer", never "Given", whether the answer is a choice or a fact somebody
+has to find. Every one carries an "or else" clause naming what breaks in *this slice* without it —
+not what the question is about. Where a slice rests on no given, its questions sit at
+the top level. Link text is the filename, so the list reads without opening anything.
+-->
 
 ## What goes in a question file
 

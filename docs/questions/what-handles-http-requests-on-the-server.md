@@ -789,3 +789,55 @@ decorator-based frameworks does not touch either of these.
 *Measured — by me on 2026-09-21, every error code above copied from compiler output. Note for anyone
 re-running this: `tsc` 7 refuses to take files on the command line while a `tsconfig.json` is present
 unless `--ignoreConfig` is passed.*
+
+### Pass of 2026-09-21 — which risks this layer actually carries
+
+**The question this answers**, because it is the one the accumulated measurements kept deferring to:
+does this project's risk sit in what the server does with a request, or in what crosses the boundary
+and what happens offline? Every file in [../guarantees/](../guarantees/) and
+[../failure-modes/](../failure-modes/) was classified into request handling, the boundary, offline
+and the device, or none of those.
+
+| | request handling | the boundary | offline and the device | other |
+| --- | --- | --- | --- | --- |
+| Guarantees (11) | **0** | 1 | **6** | 4 |
+| Failure modes (9) | 2 | 4 | 1 | 2 |
+
+**No promise this project has made to a player is about request handling**, and that follows from
+[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) rather than from how the
+folder was written: state lives on the client, so the server is off the path from input to paint, and
+[../problem.md](../problem.md) needs it only at the four session edges it lists.
+
+**The obvious inference from that table is wrong, and it is worth writing down because it is the one
+a reader will draw.** The largest group is offline and the device, and almost none of it is the HTTP
+layer's business. Input registering without the network, the board continuing through a loss of
+connectivity, the player never being asked to reconnect and the board coming back on reopen are kept
+by client code and by client storage. The app never opening to a blank screen is kept by the service
+worker's precache and the build's manifest,
+[ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). **Not one of them is kept or broken by
+whatever answers HTTP**, so a candidate that is strong offline wins nothing here — including the
+handler-sharing result recorded above, which is load-bearing for none of these promises and
+speculative for the one milestone it might serve.
+
+**Where the layer does meet recorded risk it is a short list, and it concentrates.** The write
+endpoint becoming free storage wants a default body size limit. The durable copy silently ceasing to
+be written is a failure that "nothing reports… because nothing is watching", which wants automatic
+request logging. A corrupt board becoming canonical names "validation at the write boundary" as its
+own remedy. The server handing back state the client will not accept wants the response to match a
+declared contract. The remaining boundary failures — a cell edit overwritten by an older one, a
+device resuming from a board another moved past — are sync logic that no framework supplies.
+
+**So the two axes are not a proxy for the two candidates**, which is the trap this analysis was
+opened to check. The strongest thing Fastify does, enforcing a response contract, serves the
+*boundary* group rather than the request-handling group.
+
+*Reasoned — by me on 2026-09-21, from a classification of all twenty files in those two folders.*
+
+**Two things the table under-weights, stated so it is not read as more than it is.** It counts
+recorded risk, and nothing is built yet, so the server side is plausibly under-recorded — partly
+self-correcting, since the failure-modes folder is a deliberate enumeration and one of its nine is
+the server write path. And [../guarantees/README.md](../guarantees/README.md) lists **Security** and
+**Privacy** as themes holding no promises yet, which is exactly where an error response leaking an
+internal message would land, so the candidate difference measured on error containment is real risk
+in an area this table scores as empty.

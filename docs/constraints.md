@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-21
+updated: 2026-09-22
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -663,6 +663,81 @@ outside `node_modules`. It is an input to
 [how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md),
 [what shape is the deployable?](questions/what-shape-is-the-deployable.md) and
 [is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md).
+
+## Runtimes — decorators do not run, and the flag that transformed them is gone
+
+**Node parses decorators as a syntax error rather than ignoring or transforming them.** From its
+type-stripping documentation: "Since Decorators are currently a TC39 Stage 3 proposal, they are not
+transformed and will result in a parser error. Node.js does not provide polyfills and thus will not
+support decorators until they are supported natively in JavaScript." The same page's history table
+reads "v26.0.0 — Removed `--experimental-transform-types` flag", so the escape hatch that once
+transformed decorators, enums, parameter properties and import aliases no longer exists on this line.
+
+*Sourced — [nodejs.org type stripping](https://nodejs.org/api/typescript.html) at v26.9.0, read
+2026-09-21.*
+
+**So a library whose ordinary use requires a decorator cannot be run by Node directly, and this
+eliminates rather than inconveniences.** It is why
+[ADR-0035](decisions/0035-the-http-handler-is-fastify.md) removes the decorator-based server
+frameworks as a class rather than scoring them, and it reaches any later choice whose idiomatic API
+is decorator-driven — an ORM as readily as a router. The condition that would lift it is a
+transpilation step ahead of Node, which is
+[is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md)
+at M2.
+
+## Dependencies — Fastify's default listen hides a second listener from `close()`
+
+**Fastify's `listen({ port })` binds both stacks by creating a main server and a secondary one, and
+only the main one is `app.server`.** A request arriving over IPv4 lands on the secondary listener,
+`app.server.getConnections()` reports zero while that request is being handled, and `close()`
+therefore returns immediately. Bare `node:http`, Express and Hono all report one connection under
+the same conditions and wait.
+
+*Measured — on Node v26.7.0 with `fastify` 5.12.5, 2026-09-21. Varying the bind host and the client's
+address family isolates it: the default bind with an IPv4 client is the only failing combination, and
+`host: '0.0.0.0'`, `host: '::'` or an IPv6 client all wait for the request to finish.*
+
+**So the framework's own documented pattern for releasing a database is unsafe under its own default.**
+Fastify's hooks reference calls `onClose` the safe place to release a resource because "all in-flight
+HTTP requests have been completed"; under the default listen it fires with a request still running,
+and a store handle released there produces a 500 reading `database is not open` over a half-written
+row. [ADR-0035](decisions/0035-the-http-handler-is-fastify.md) makes an explicit `host` part of the
+decision for this reason, and it is the one part whose absence fails silently.
+
+## Servers — framework throughput is three orders of magnitude above this workload
+
+**The whole JavaScript server field answers tens of thousands of requests a second on one core, and
+the spread between candidates is single-digit percent once real work is attached.** Serving a route
+that reads a row through `node:sqlite` and returns JSON: Fastify 58,960 requests a second, bare
+`node:http` 56,455, Hono 54,151. On a JSON-only route the same three reach 87,072, 83,593 and 76,256,
+so the gap narrows as soon as the store is involved — which is what published benchmarks, measuring
+the JSON-only case, cannot show.
+
+*Measured — autocannon at 50 connections for 10 seconds after a 5 second warmup, Node v26.7.0, macOS
+Darwin 25.6.0, Apple M2, 2026-09-21.*
+
+**So per-request framework overhead does not bind, and a decision taken on it is taken on noise.**
+The difference between the fastest and slowest of those is 0.075ms per request, which is 0.028% of
+the 270ms 3G round-trip floor recorded above. Against a deliberately generous model — ten thousand
+daily players making twenty requests each, concentrated twentyfold into a morning peak — the peak is
+46 requests a second, roughly 0.08% of measured capacity. For an 8.9% difference to matter the server
+would have to run above 91% of capacity, about a thousand times this workload, and
+[ADR-0004](decisions/0004-the-client-holds-and-mutates-puzzle-state.md) keeps it off the path a
+player waits on regardless. This is why
+[ADR-0036](decisions/0036-request-and-response-bodies-are-described-with-zod.md) can give up
+Fastify's `fast-json-stringify` path for a schema library that fails loudly, and why a throughput
+benchmark is not among the things worth running here.
+
+**Two neighbouring quantities were measured and do not bind either, which is worth recording so the
+measurement is not repeated.** Resident memory at boot ranged from 66.1MB to 77.9MB across bare
+`node:http`, Express, Fastify, Hono and srvx, and grew five to seven megabytes over four hundred
+requests for every one of them. Startup from process spawn to first served response ranged from 54ms
+to 86ms. Nothing in [problem.md](problem.md) or the records makes a twelve-megabyte or
+thirty-millisecond spread matter.
+
+*Measured — same machine and date as above, with the large-body tests disabled, since buffering a
+200MB request body is what produces gigabyte-scale figures and would otherwise be read as a
+per-request cost.*
 
 ## Toolchain — TypeScript's compiler API moved out of its root export
 

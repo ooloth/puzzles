@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-20
+updated: 2026-09-22
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -16,12 +16,12 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-**Actually** no code exists, and what renders the client, what handles HTTP, where it runs and what
-deploys it are all open. Settled so far: the store is a SQLite file the server process opens, a
-service worker answers navigations, the entry document is a build output, the client build and the
-HTTP server are separate tools, the bundler is Vite, everything outside the browser runs on Node,
-the package manager is pnpm, and the repository is one package with each part of the system a
-directory under `src/`.
+**Actually** no code exists, and what renders the client, where it runs and what deploys it are all
+open. Settled so far: the store is a SQLite file the server process opens, a service worker answers
+navigations, the entry document is a build output, the client build and the HTTP server are separate
+tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is
+pnpm, the repository is one package with each part of the system a directory under `src/`, and
+Fastify answers HTTP with request and response bodies described in zod.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 

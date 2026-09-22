@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-20
+updated: 2026-09-22
 update_when: a module boundary moves, or something new starts talking to something else
 decays: fast
 status: active
@@ -48,9 +48,9 @@ constraint from intention. The parts still open are listed at the end and are th
         │  one machine                    ADR-0021│
         │                                         │
         │  ┌───────────────────────────────────┐  │
-        │  │ server — ordinary runtime,        │  │   not an isolate  ADR-0018
+        │  │ server — Fastify on Node,         │  │   not an isolate  ADR-0018
         │  │ always on, never scales to zero   │  │   on the request path ADR-0017
-        │  └────────────────┬──────────────────┘  │
+        │  └────────────────┬──────────────────┘  │   the handler     ADR-0035
         │                   │ opens as a file     │
         │                   ▼         ADR-0019    │
         │  ┌───────────────────────────────────┐  │
@@ -120,7 +120,7 @@ reason outage length is a product question rather than only an operational one.
 
 ## What is not decided
 
-Larger than the list above, and deliberately. What handles HTTP, what renders the client, where the
+Larger than the list above, and deliberately. What renders the client, where the
 machine is, what the domain resolves to, what deploys the code, how the schema migrates, what the
 store is backed up by, which client storage mechanism holds a board, and what a puzzle actually
 looks like. All of it is in

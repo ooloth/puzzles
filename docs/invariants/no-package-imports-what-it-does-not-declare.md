@@ -44,7 +44,7 @@ live alternative rather than a formality.
 at import time, loudly: an undeclared import throws `ERR_MODULE_NOT_FOUND` rather than resolving. No
 test is needed to catch a violation in application code, because the runtime is the test.
 
-**What nothing enforces is the configuration.** Setting `node-linker: hoisted` in
+**What nothing enforces is the configuration.** Setting `nodeLinker: hoisted` in
 `pnpm-workspace.yaml` withdraws this invariant in one line, and that line looks exactly like a fix
 when somebody is debugging a deployment that cannot follow symlinks. Nothing would report it, and
 every undeclared import written afterwards would resolve quietly.

@@ -2,6 +2,7 @@
 number: 0033
 status: accepted
 date: 2026-09-19
+amended: 2026-09-22
 ---
 
 # 33 — an import of an undeclared dependency fails
@@ -32,7 +33,14 @@ what makes it worth writing down separately.
 
 ## Enforced by
 
-`node-linker` staying absent from `pnpm-workspace.yaml`, which is its default.
+The linker setting staying unset, which leaves it at its default. From pnpm 11 a project's settings
+live in `pnpm-workspace.yaml`, written there as `nodeLinker` even in a single-package repository, so
+that file is where this would be withdrawn. Its absence today is incidental rather than the
+guarantee: the file will exist as soon as the project needs any pnpm setting.
+
+*Measured — `pnpm config set node-linker hoisted --location project` under pnpm 12.5.1, in a
+directory holding only a `package.json`, created `pnpm-workspace.yaml` containing
+`nodeLinker: hoisted`. By me on 2026-09-22.*
 
 **The property this protects is an invariant, and it carries its own owed check**:
 [no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md).

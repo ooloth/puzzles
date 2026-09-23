@@ -2,6 +2,7 @@
 number: 0034
 status: accepted
 date: 2026-09-20
+amended: 2026-09-22
 ---
 
 # 34 — the repository is one package
@@ -34,7 +35,7 @@ each forecloses rather than by which is better today.
 
 ## Decision
 
-**The repository is one package.** One `package.json` at the root, no `pnpm-workspace.yaml`, and no
+**The repository is one package.** One `package.json` at the root, no workspace declared, and no
 per-deployable manifests. The client, the server, the generator and the shared rules are directories
 under `src/`.
 
@@ -53,7 +54,9 @@ or the deployable to be built by copying the tree.
 
 ## Enforced by
 
-The absence of `pnpm-workspace.yaml` and of any manifest below the root.
+No `packages` field in `pnpm-workspace.yaml`, and no manifest below the root. The file itself may
+exist: from pnpm 11 it is where a project's pnpm settings live, even in a repository that declares
+no workspace, so its absence is not the test.
 
 **What is not enforced is the boundary between the four directories**, and that is the substance of
 what this record gives up rather than an incidental gap. A client module importing a server module

@@ -53,8 +53,8 @@ issue means one should have been filed and was not. Offer `write-ticket-descript
 
 ## Where each route goes
 
-- **A question** — name the file and hand off to `make-next-decision`, which does the `problem.md`
-  and `guarantees/` reading this skill skipped.
+- **A question** — name the slice's open questions and hand off to `make-next-decision`, which
+  picks among them and does the `problem.md` and `guarantees/` reading this skill skipped.
 - **An issue that exists** — name its number and title. The user decides whether this session
   starts it.
 - **A workable slice with no issue** — offer to file it.

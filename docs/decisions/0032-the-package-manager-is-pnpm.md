@@ -91,8 +91,10 @@ working they came from reads at `git show f182e0b:docs/questions/which-package-m
 
 ## Enforced by
 
-`pnpm-lock.yaml` and a `pnpm-workspace.yaml`, neither of which exists, because no code has been
-scaffolded. **Nothing. Asserted only**, until M1's first slice lands.
+`pnpm-lock.yaml` at the root, which only pnpm writes, and the `packageManager` field in
+`package.json`, which makes pnpm switch itself to the version it names. That field is an interim
+pin rather than the settled artifact, which is still
+[what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md).
 
 Two obligations fall out of it and land elsewhere. The concrete version belongs to the pin artifact
 named above. And

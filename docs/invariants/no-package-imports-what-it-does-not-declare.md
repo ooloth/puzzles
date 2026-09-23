@@ -54,7 +54,7 @@ is not hoisted, or equivalently that a known transitive dependency is unreachabl
 that has not declared it. The second is better, because it tests the property rather than the
 setting that currently provides it, and so survives a change of package manager.
 
-Neither exists, because no code exists.
+Neither exists yet.
 [What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M2
 is where the runner gets decided, and this check is part of that slice's definition of done. This
 file is what says so.

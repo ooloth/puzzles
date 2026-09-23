@@ -2,7 +2,7 @@
 updated: 2026-09-22
 update_when: a new way to run or observe the system exists, or an old one breaks
 decays: fast
-status: stub
+status: active
 ---
 
 # Verification
@@ -15,10 +15,32 @@ a recorded gap is a gap someone can close.
 
 Test conventions go in [standards/](standards/).
 
-_The only thing runnable today is `python3 scripts/check-docs.py`, which checks the documentation
-rather than the system. Nothing of the system exists to run; the first thing that will is
-[issue #3](https://github.com/ooloth/puzzles/issues/3), whose QA plan is the shape this file grows
-into._
+## The server answers a route
+
+Run: `pnpm start`, which runs `node src/server/main.ts`. `HOST` defaults to `127.0.0.1` and `PORT`
+to `3000`.
+Look at: stdout, and `curl -i http://127.0.0.1:3000/hello`.
+Correct looks like: every stdout line is JSON. The first reads
+`"msg":"Server listening at http://127.0.0.1:3000"`. The curl gets `200` and `Hello!` as
+`text/plain`, and stdout gains an `incoming request` line and a `request completed` line sharing a
+`reqId`, the second carrying `responseTime`. `HOST=localhost` exits 1 with a `"level":60` line whose
+`problems` name `HOST`.
+
+## The server shuts down without cutting a request off
+
+Run: `pnpm start`, then add a route that waits three seconds, curl it, and send the server's `node`
+process `SIGTERM` half a second in. Use `/bin/kill` if your shell wraps `kill`.
+Look at: the curl output, and how long the process takes to exit.
+Correct looks like: the curl gets its full response with `200`. The process logs `shutting down`,
+then `request completed`, then `shut down`, and exits 0 within a few milliseconds of the request
+finishing. Exiting after about 72 seconds means idle connections are no longer being reaped.
+
+## Automated checks
+
+Run: `pnpm test` for the server's tests, `pnpm typecheck` for the server's types, and
+`python3 scripts/check-docs.py` for the documentation.
+Can't observe: nothing runs any of these on its own. That is
+[what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M2.
 
 <!-- Template:
 

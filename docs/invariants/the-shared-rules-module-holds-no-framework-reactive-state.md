@@ -53,7 +53,7 @@ was chosen, so it survives the renderer decision. A lint rule forbidding rendere
 rules directory catches the same thing earlier and more cheaply, and the two together catch what
 either alone would miss.
 
-Neither exists, because no code exists. Whichever slice first creates the rules module is where
+Neither exists yet, because the rules module does not. Whichever slice first creates the rules module is where
 these checks belong, and
 [what proves a vertical slice works end to end?](../questions/what-proves-a-vertical-slice-works-end-to-end.md)
 at M2 is where the runner for them gets decided.

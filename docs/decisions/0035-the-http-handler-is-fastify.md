@@ -79,17 +79,23 @@ handler completing and the client receiving its response.
 
 ## Enforced by
 
-Nothing yet. No code exists. What must be true when it does, and the milestone each part lands in:
+The four M1 items are enforced in `src/server/`, each by an assertion or a test named below. The two
+later items are not built yet.
 
 - The server calls `listen` with an explicit `host`, never the bare `{ port }` form. **M1 slice 1.**
   This is the one item whose absence fails silently, so it is worth a check rather than a habit.
+  `startServer` in `src/server/app.ts` asserts after `listen` that exactly one address is bound, and
+  `src/server/config.ts` accepts only an IP literal as `HOST`, so `localhost` is refused at startup.
 - An error handler is registered that does not place `err.message` in a response body. **M1 slice 1.**
+  `src/server/errors.ts` gives a server error no message field; `src/server/app.test.ts` checks the body.
 - The shutdown path reaps connections that become idle while it runs, rather than relying on
   `forceCloseConnections`. **M1 slice 1.** Without it a deploy stalls for 72 seconds per shutdown,
   which is visible rather than silent but is long enough to overlap two processes on one store —
   the thing [how does a deploy avoid disturbing the
   store?](../questions/how-does-a-deploy-avoid-disturbing-the-store.md) at M3 exists to prevent.
-- The server is constructed with `logger: true`. **M1 slice 1.**
+  `closeGracefully` in `src/server/shutdown.ts`; `src/server/shutdown.test.ts` fails without the reaping.
+- The server is constructed with `logger: true`. **M1 slice 1.** `buildServer` in `src/server/app.ts`;
+  tests may redirect where lines go and cannot turn the logger off.
 - Routes declare a body schema and a response schema. **M3**, where the first response with content
   in it exists — see [what crosses the client/server
   boundary?](../questions/what-crosses-the-client-server-boundary.md). Until then there is no contract

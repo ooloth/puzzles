@@ -54,6 +54,17 @@ rendered grid, which is the half of this question Vitest is built for.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**The server's tests already run on `node:test`, as an interim choice this question may reverse.**
+M1's first slice needed tests before this was answered, so `src/server/*.test.ts` run under
+`node --test` with `fast-check` 4.10.2 for the property tests. Node's runner needed no dependency and
+no transform, because Node strips the types itself. Moving them to another runner is mechanical:
+they use `test`, `assert` and `fc.assert` and nothing runner-specific. `fast-check` stays whichever
+runner wins, because no maintained alternative exists on npm (`jsverify` and `testcheck` are
+abandoned, and `@effect/vitest` re-exports `fast-check`).
+
+*Measured — 31 tests in about 1.5s under Node v26.7.0, by me on 2026-09-22. The alternatives'
+status is from `npm view`, run the same day.*
+
 **Nothing about `bun test` can be measured here yet.** This app has no components and nothing is
 installed, so any claim tagged *Measured* against its own code is impossible by construction. What
 follows is established from Bun's documentation and issue tracker instead.

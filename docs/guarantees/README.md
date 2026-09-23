@@ -16,7 +16,7 @@ players, the same way a listing of [../decisions/](../decisions/) is the list of
 implementation. A theme file holding four promises hides four separate enforcement states behind one
 filename, and the thing that gets violated is a promise rather than a theme.
 
-Nothing here is enforced yet, because there is no application code yet. Each file says so under
+Nothing here is enforced yet, because nothing a player touches has been built yet. Each file says so under
 **Enforced by**, and carries an `enforced` field saying the same thing — so the folder is the backlog,
 and it is short enough to read.
 

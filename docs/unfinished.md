@@ -16,9 +16,9 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-**Actually** no code exists, and what renders the client, where it runs and what deploys it are all
-open. Settled so far: the store is a SQLite file the server process opens, a service worker answers
-navigations, the entry document is a build output, the client build and the HTTP server are separate
+**Actually** the only code is a server under `src/server/` that answers one route, and what renders
+the client, where it runs and what deploys it are all open. Settled so far: the store is a SQLite
+file the server process opens, a service worker answers navigations, the entry document is a build output, the client build and the HTTP server are separate
 tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is
 pnpm, the repository is one package with each part of the system a directory under `src/`, and
 Fastify answers HTTP with request and response bodies described in zod.
@@ -56,6 +56,18 @@ repository that does.
 **So** don't add a second Python script. Rewriting this one needs nothing else to land first —
 Node 26 runs TypeScript unflagged, so a dependency-free checker runs with nothing installed, exactly
 as the Python one does.
+
+### The test runner and the pnpm pin look chosen and are not
+
+**You'll see** `src/server/*.test.ts` running under `node --test`, and `"packageManager":
+"pnpm@12.5.1"` in `package.json`.
+
+**Actually** both were put in place so M1's first slice could be installed and tested. They are
+interim, and they come ahead of [what runs the tests?](questions/what-runs-the-tests.md) and
+[what pins the toolchain versions across machines?](questions/what-pins-the-toolchain-versions-across-machines.md)
+at M2, each of which may replace them.
+
+**So** follow them for now, and don't cite either one as settled.
 
 <!-- Template:
 

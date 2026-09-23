@@ -121,6 +121,15 @@ whether it or an external manager should own both tools rather than one.
 *Measured — `pnpm --version` in a pinned and an unpinned directory, by me on 2026-09-19. The
 `pmOnFail` default is Sourced from <https://pnpm.io/settings/cli>, opened by me the same day.*
 
+**The repository already carries `"packageManager": "pnpm@12.5.1"`, as an interim pin.** M1's first
+slice needed an install, and a bare `pnpm` on the maintainer's machine is a Corepack shim resolving
+to 7.27.0, which predates the release cooldown
+[ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) counts on. The shim honoured the field:
+it downloaded 12.5.1 and the install reported `Done … using pnpm v12.5.1`. The field pins only pnpm,
+so Node is still unpinned, and this question may replace the field with whatever it chooses.
+
+*Measured — `pnpm --version` and `pnpm add` in the repository root, by me on 2026-09-22.*
+
 **npm enforces a pin by refusing rather than by correcting.** With `devEngines.packageManager`
 requiring `^12.0.0`, npm 11.19.0 stops with `EBADDEVENGINES` and names both the version found and
 the version required. Recorded because it is the shape of the alternative: a mechanism that detects

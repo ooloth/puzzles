@@ -56,11 +56,12 @@ value violating the response schema are compile errors as well.
 
 ## Enforced by
 
-Nothing yet. No code exists. What must be true when it does:
+The compilers are wired; no route declares a body yet. What must be true:
 
 - The server calls `setValidatorCompiler` and `setSerializerCompiler` with the provider's compilers.
   Without the second, a declared response schema is documentation. **M1 slice 1**, so that no route is
-  ever written against an unwired serializer.
+  ever written against an unwired serializer. Done in `buildServer` in `src/server/app.ts`, and
+  `src/server/app.test.ts` checks that a mismatched response is not sent.
 - Every route that accepts or returns a body declares the corresponding schema. **M3 onward**, where
   the first response with content exists. A route declaring no response schema is not checked, and
   nothing reports that, so this is the half most likely to be half-built and read as finished.

@@ -41,9 +41,10 @@ list whose entries carry **Given** and **Must answer** bullets. Count only those
 
 **Which milestone is current cannot be read off either source alone.** The docs record no status,
 deliberately, and the tracker is shorter than the slice list because issues are filed just-in-time.
-Join them on the slice title, which the README names as the join key: a milestone is finished when
-every slice in its list has a closed issue, so the current one is the lowest where that is not yet
-true.
+Join them on the slice title, which the README names as the join key. A slice's entry is deleted
+when its issue closes and the rest keep their numbers, so a milestone is finished when its list is
+empty, and the current one is the lowest with a slice still listed. A listed slice whose issue is
+closed means the deletion was missed: offer to delete it, then keep looking.
 
 **Most slices have no issue, and that is the intended state rather than drift.** The README's "read
 a missing issue as not workable yet" describes a slice that still has **Must answer** bullets. The

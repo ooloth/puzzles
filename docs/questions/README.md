@@ -167,8 +167,7 @@ server does not run in a constrained isolate
 a SQLite file the process opens on the same machine
 ([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
 [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md),
-[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)). All three are **Given**
-below rather than open.
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)). None of it is open.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
@@ -176,25 +175,6 @@ technical properties reachable — performance, safety, portability, and the one
 matter. A question that cannot be settled without a preference says so rather than inventing a
 derivation.
 
-1. **A server answers one route, observed with curl, locally.**
-   - **Given:** [0006-one-language-across-every-deployable](../decisions/0006-one-language-across-every-deployable.md)
-   - **Given:** [0007-that-language-is-typescript](../decisions/0007-that-language-is-typescript.md)
-   - **Given:** [0010-the-store-needs-a-host-so-this-system-has-a-server](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md)
-   - **Given:** [0011-stored-play-data-can-be-analysed-not-just-retrieved](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-   - **Given:** [0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
-   - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
-   - **Given:** [0020-the-stores-engine-is-sqlite](../decisions/0020-the-stores-engine-is-sqlite.md) — under `node:sqlite` it narrows no runtime, and whether that is the driver we want is [which-driver-reads-and-writes-the-store](which-driver-reads-and-writes-the-store.md) at M3
-   - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so nothing forces a meta-framework's server here, and nothing excludes one either: the questions below choose on their own merits
-   - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so this slice's server is chosen on its own and a toolchain that also answers HTTP is not a candidate
-   - **Given:** [0030-typescript-outside-the-browser-runs-on-node](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) — so the HTTP handler below is chosen against Node, and source stays inside the syntax it can strip
-   - **Given:** [0032-the-package-manager-is-pnpm](../decisions/0032-the-package-manager-is-pnpm.md) — so the layout below is chosen against pnpm's workspace mechanics, and a sibling is named with `workspace:*` rather than a version range
-   - **Given:** [0033-an-import-of-an-undeclared-dependency-fails](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md) — so every package here declares what it imports, and `node-linker` stays at its default
-   - **Given:** [../constraints.md](../constraints.md) — Node will not strip types under `node_modules`, so the shared rules module either stays outside one or is compiled before it ships
-   - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so this slice's server is Fastify, and three things it mandates land here: an explicit `host` on `listen`, an error handler that keeps `err.message` out of the body, and `logger: true`
-   - **Given:** [0036-request-and-response-bodies-are-described-with-zod](../decisions/0036-request-and-response-bodies-are-described-with-zod.md) — so the validator and serializer compilers are wired here even though no route declares a schema until M3, because a route written against an unwired serializer is unchecked and nothing reports it
-   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the first manifest sits at the root, the client, server, generator and rules are directories under `src/`, and each carries its own tsconfig scoping `lib` and `types`
-
-   Nothing is left to answer in this slice.
 2. **A browser shows "Hello!" rendered by the client, locally.**
    - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
    - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
@@ -210,7 +190,7 @@ derivation.
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. The build is settled and forecloses nothing here, so the field is open. Before assuming [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) still holds, check its Nuxt rejection: that rejection is that Nuxt closes the renderer to Vue, so choosing Vue here removes its grounds and reopens that record
      - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Its binding input has landed: [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) takes a browser-and-version string and does not read browserslist, so what is open is the declaration's format and the adapter between them
      - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
-3. **The client calls that route and shows the answer, locally.**
+3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else the renderer is chosen without knowing it has to fetch and display asynchronously, which is the one thing this slice adds over the last. Costs a re-scaffold of the client half
@@ -741,6 +721,11 @@ value is being trusted is worse than no checkbox.
 **The slice title is the join key.** It appears here and in the issue, and nothing checks that the two
 still match — `scripts/check-docs.py` cannot see the tracker. If they disagree, the tracker is right
 about what work exists and this file is right about why.
+
+**A slice's entry is deleted once its issue closes.** What it rested on is in the records it cited,
+and its definition of done is in the issue, so what would be left here is history. The slices that
+remain keep their numbers, because records cite slices by number, so a gap at the front of a list
+means those slices are finished rather than missing. A milestone is finished when its list is empty.
 
 ## Housekeeping
 

@@ -62,7 +62,7 @@ they use `test`, `assert` and `fc.assert` and nothing runner-specific. `fast-che
 runner wins, because no maintained alternative exists on npm (`jsverify` and `testcheck` are
 abandoned, and `@effect/vitest` re-exports `fast-check`).
 
-*Measured — 31 tests in about 1.5s under Node v26.7.0, by me on 2026-09-22. The alternatives'
+*Measured — 32 tests in about 1.5s under Node v26.7.0, by me on 2026-09-22. The alternatives'
 status is from `npm view`, run the same day.*
 
 **Nothing about `bun test` can be measured here yet.** This app has no components and nothing is

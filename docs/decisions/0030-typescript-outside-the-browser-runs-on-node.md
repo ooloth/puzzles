@@ -2,7 +2,7 @@
 number: 0030
 status: accepted
 date: 2026-09-19
-amended: 2026-09-19
+amended: 2026-09-22
 ---
 
 # 30 — TypeScript outside the browser runs on Node
@@ -39,7 +39,7 @@ on which one, so reading this record as settling it would be reading in a decisi
 
 Node ships npm but does not require it, so the package manager stayed a choice and was settled
 separately at [ADR-0032](0032-the-package-manager-is-pnpm.md). Still open is
-[what runs the tests?](../questions/what-runs-the-tests.md); the HTTP handler has since been settled
+[what runs the tests?](../questions/what-runs-the-tests.md); the HTTP handler is settled
 at [ADR-0035](0035-the-http-handler-is-fastify.md).
 A version floor exists — type stripping is unflagged from v22.18.0 and v23.6.0 — but which version
 this project runs is not settled here.
@@ -47,7 +47,7 @@ this project runs is not settled here.
 
 ## Enforced by
 
-Nothing in code, because there is no code. One artifact would satisfy it: a field naming the Node
+Nothing: no file names the Node version. One artifact would satisfy it: a field naming the Node
 version, so a contributor cannot silently run one below the floor.
 [ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) gives the rule that says which
 version goes in it, and the artifact itself still does not exist. **Which artifact, and what reads

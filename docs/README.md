@@ -40,7 +40,8 @@ the same as having read them, and the difference has cost this project real work
 [questions/](questions/) and [decisions/](decisions/) hold the same set of choices at two stages.
 A question is a decision not yet made; a decision is a question answered. What matters is that
 they are worked **in order**: [questions/README.md](questions/README.md) holds that order, with
-each entry naming what it derives from.
+each entry naming what it derives from. That file is too large to read in one pass, so find the
+milestone you need with `grep -n '^## ' docs/questions/README.md` and read that section.
 
 A decision recorded before the things it derives from are settled does not stay visible as a
 guess. It becomes an assumption nobody remembers making, and it keeps looking right because the

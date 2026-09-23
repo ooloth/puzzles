@@ -608,6 +608,9 @@ before signing in because the whole question is what a guest gets _without_ an a
 
 Real, and nothing is waiting on them. Several are research rather than choices.
 
+[How is the questions index kept readable in one pass?](how-is-the-questions-index-kept-readable-in-one-pass.md)
+— this file is past what an agent can read at once, and nothing stops it growing.
+
 [How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 [how does Android evict stored data?](how-does-android-evict-stored-data.md),
 [what are the real network conditions on transit routes?](what-are-the-real-network-conditions-on-transit-routes.md),

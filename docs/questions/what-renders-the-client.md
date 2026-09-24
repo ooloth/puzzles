@@ -607,3 +607,116 @@ Whether drag-selection exists is open in
 [what interactions must the grid support?](what-interactions-must-the-grid-support.md), and the grid
 sizes after sudoku in [which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md).
 No floor-class device is available here, and nothing has been measured.*
+
+### Reading the worst-case paths and the floor, 2026-09-24
+
+**A patched iOS 15 device runs iOS 15.8.8, whose Safari reports itself as 15.6.x.** Apple shipped
+iOS 15.8.8 on 2026-05-11 for the iPhone 6s, iPhone 7 and first-generation iPhone SE, and iOS 16.7.16
+the same day for the iPhone 8 and X. Security updates to iOS 15 keep Safari's version at 15.6.x. So
+every device that is actually receiving updates on the iOS 15 branch has the APIs Safari added at
+15.4, and a floor of 15.0 is stricter than
+[the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+needs, unless the promise is read as covering devices that never installed the updates. Which reading
+the promise means has not been decided.
+*Sourced — [Apple security releases](https://support.apple.com/en-us/100100), opened by me
+2026-09-24. The Safari version is from user-agent strings recorded by user-agents.net and
+useragents.io for iOS 15.8 (`Version/15.6.6`) and 15.8.4 (`Version/15.6.7`), seen by me in search
+results; no Apple source states it.*
+
+**Five candidates ship an unguarded call to an API Safari 15.0 lacks.** The published tarballs of 28
+packages were scanned for APIs and syntax added after Safari 15.0.
+
+- **Marko 6.3.53** calls `Array.prototype.at` (15.4) in the branch-adoption loop of its browser
+  runtime, which is not something the app opts into.
+- **uhtml 5.0.9** calls `String.prototype.at` (15.4) while parsing each distinct template.
+- **ember-source 7.3.0** calls `.at` (15.4) in Glimmer's rendering internals, and ships 26 class
+  static blocks, which are syntax Safari added at 16.4.
+- **Vue 3.5.43**, through `@vue/reactivity`, and **Alpine 3.17.4**, a fork of it, define proxy
+  handlers for `toSorted`, `toReversed` and `toSpliced` (16.0). They only run if app code calls those
+  methods on a reactive array.
+- **Ripple 0.4.7** calls `Array.fromAsync` (16.4), only from a helper the app would have to call.
+- **Svelte 5.57.1** calls `structuredClone` (15.4) without a guard only when `$state.snapshot` meets a
+  `Date`.
+
+The other 20 packages had no hits: React, React DOM, Preact, Lit, lit-html, Qwik, Inferno, Mithril,
+MobX, Hyperapp, Crank, RE:DOM, Sinuous, Solid, VanJS and its extension, Arrow.js, alien-signals,
+`@preact/signals-core`, and petite-vue apart from one `new Function`. Alpine evaluates every directive
+through `new Function`, and Ember's runtime template compiler does too.
+*Measured — `npm pack` of each package's `latest`, extracted to a scratch directory, and scanned with
+`grep -E` over the shipped browser files, run by a research agent 2026-09-23, with its method stated.
+I re-ran the grep for Marko and uhtml and saw the same lines. A grep finds candidate code paths and
+does not prove they run.*
+
+**js-framework-benchmark gives relative costs, on desktop Chrome only.** The snapshot tagged
+`chrome152`, commit `21d7204d` of 2026-09-01, is one desktop machine running Chrome, with 4× CPU
+throttling on partial update, select and swap and none on the create benchmarks. It has no Safari
+numbers and no longer measures script bootup. Figures here are ratios to its vanilla implementation.
+
+- **Cold launch (path 1).** React ships 51.4KB brotli against 2.5KB for vanilla, with first paint at
+  221ms against 53ms. Ember ships 38.4KB and Qwik 30.6KB. Solid, lit-html, Marko, VanJS, Hyperapp,
+  RE:DOM and Sinuous ship under 5KB.
+- **Resident memory (path 2).** Ember holds 5.37MB when ready, 9.4× vanilla. After five
+  create-and-clear cycles Qwik holds 14.4× and Alpine 2.5×; most others sit between 1.1× and 2×.
+- **Bulk updates (paths 4 and 5).** Swapping rows costs React 8.2× and Alpine 2.3×, and selecting a
+  row costs Alpine 12.8×, Preact with hooks 5.0× and Mithril 4.6×. Qwik runs at about 3.7× across the
+  board. Solid, Svelte, Vue Vapor, Marko, Ripple, Inferno and Sinuous stay within 1.3× on every CPU
+  benchmark.
+
+*Sourced — `webdriver-ts-results/src/results.ts` at that commit, extracted by a research agent
+through the GitHub API on 2026-09-23. I checked React's record in the extracted data against the
+agent's figures and they match. Desktop Chrome ratios are hypotheses about a phone running WebKit,
+not observations of one.*
+
+**V8 compiles scripts eagerly into its code cache only when they are classic scripts cached during
+the service worker's install.** A module script loses that cache and falls back to the normal one,
+which compiles lazily and caches on later loads. Vite emits module scripts, so under Chrome the cold
+launch pays the ordinary path. Whether Safari persists compiled bytecode for page scripts at all is
+not documented anywhere found.
+*Sourced — [v8.dev/blog/code-caching-for-devs](https://v8.dev/blog/code-caching-for-devs), opened by
+me 2026-09-24: "If the page ends up loading it as an ES module instead then the code cache will be
+discarded and replaced with a 'normal' code cache." The Safari half is a research agent's report of
+finding nothing.*
+
+**Neither platform publishes when it discards a backgrounded page.** WebKit's memory-pressure
+handler releases memory in stages, and iOS kills the page's process under memory pressure with no
+published threshold. `document.wasDiscarded` exists only in Chrome. So path 2 can only be observed
+on a device.
+*Sourced by a research agent from WebKit's `MemoryPressureHandler.cpp` and caniuse, both opened by
+it on 2026-09-23. I did not open them.*
+
+**Low-end Android runs single-threaded code roughly 9× slower than a current iPhone.** Alex Russell
+puts low-end Android at 9× slower and mid-tier at 3.5× by Geekbench 6 single-core, and says budget
+device CPUs have not meaningfully improved since 2022.
+*Sourced — "The Performance Inequality Gap, 2026" on infrequently.org, opened by a research agent
+2026-09-23. Per-device Geekbench figures it gave for the iPhone 7, the Galaxy A06 and M-series Macs
+came from search snippets, because the Geekbench pages refused the fetch, so they are not recorded
+here.*
+
+### The field narrowed, and how it is measured, agreed 2026-09-24
+
+**Eight more candidates are removed, one reason each, agreed by the maintainer.**
+
+- **Markup is not checked when the code is built**, which the criterion carried above requires: Lit
+  and lit-html, whose only checker is `lit-analyzer` with no release since 2024-01-09; uhtml;
+  Arrow.js; Alpine; and petite-vue.
+- **It does not build inside Vite without Babel or a custom transformer wired by hand**, against
+  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md): Inferno, Sinuous, and MobX's JSX
+  renderer. MobX as a state store paired with another renderer stays in.
+- **Its cost on the benchmarks sits far outside the field**: Qwik, at 14.4× vanilla's memory after
+  five create-and-clear cycles and about 3.7× on every CPU benchmark; and Ember, at 9.4× vanilla's
+  memory when ready. Both figures are desktop Chrome, and a gap that size is judged unlikely to
+  close on a phone rather than shown not to.
+
+**Still in the field:** React, Preact, Vue (3.5, and 3.6 with Vapor), Svelte, Solid, Mithril,
+Crank, VanJS, RE:DOM, Hyperapp, Marko, Ripple, a signal store with hand-written DOM, the DOM directly,
+and the split.
+
+**No floor-class device is available, so the worst-case paths are estimated rather than observed.**
+Each finalist's work on each path is counted on the maintainer's Mac: DOM mutations per action,
+objects allocated per pointer event, heap retained after load, and bytes shipped with the time to
+evaluate them. Those counts vary little by machine. Time on a floor device is then estimated by
+scaling with a published slowdown ratio. Two limits come with it: the ratios describe Chrome's
+engine while the iPhone floor runs Safari's, and background eviction cannot be estimated at all.
+So the record that settles this question names a measurement on a floor device as the condition
+that reopens it, and that measurement happens before M4, while a renderer swap still costs little.
+The maintainer intends to buy floor-class devices later.

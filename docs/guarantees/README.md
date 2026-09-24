@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-02
+updated: 2026-09-24
 update_when: a promise is made to players, a promise is withdrawn, or a theme is added
 decays: slow
 status: active

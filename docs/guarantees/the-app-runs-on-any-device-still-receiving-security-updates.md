@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-12
+updated: 2026-09-24
 update_when: the declared floor moves, or a vendor changes what it patches
 decays: slow
 status: active
@@ -44,7 +44,9 @@ assumed technical sophistication, so the failure is indistinguishable from the a
 because [../constraints.md](../constraints.md) records that a syntax error runs none of the script,
 the most likely form of the violation shows nothing at all.
 
-**Bearing on this** [How is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
+**Bearing on this** [Does the floor cover iOS 15 devices that never installed their updates?](../questions/does-the-floor-cover-ios-15-devices-that-never-installed-their-updates.md)
+decides whether this promise covers a device that stopped installing updates, which sets the floor
+at Safari 15.0 or 15.6. [How is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
 at M2 is what would give this promise observation rather than compatibility data, and until it lands
 this rests on what a database says a browser supports rather than on anyone having run the app there.
 [../constraints.md](../constraints.md) records a bug that reproduced only on real iOS Safari over a

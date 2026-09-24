@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-22
+updated: 2026-09-24
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -139,7 +139,10 @@ design might lean on arrive above a Safari 15.0 floor: Web Locks, `BroadcastChan
 15.2. A design built on one of them would have to be redone when old-browser support lands, so any
 question choosing storage or cross-tab coordination states the floor it was checked against.
 [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) at M6 is
-the first.
+the first. **Which floor that is, 15.0 or 15.6, is open** at
+[does the floor cover iOS 15 devices that never installed their updates?](does-the-floor-cover-ios-15-devices-that-never-installed-their-updates.md),
+because a patched iOS 15 device runs Safari 15.6. It bears on the renderer too, since Marko and
+Svelte's `$state.snapshot` call APIs Safari added at 15.4.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)

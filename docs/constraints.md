@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-22
+updated: 2026-09-24
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active

@@ -1,7 +1,7 @@
 ---
 number: 0024
 status: accepted
-amended: 2026-09-16
+amended: 2026-09-22
 date: 2026-09-03
 ---
 

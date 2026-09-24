@@ -65,8 +65,8 @@ Split out of the rendering question.
 
 The field the Findings surveyed. It splits on one property — whether the bundler reads a browserslist
 configuration natively — and the split is not a ranking. The floor's format is
-[open](what-format-declares-the-browser-floor.md) and is answered alongside this question with the
-bundler leading, and that file prices an adapter for the second group at one package or roughly
+[open until M2](what-format-declares-the-browser-floor.md), where the check tools that also read it
+are chosen, and that file prices an adapter for the second group at one package or roughly
 sixty-five lines.
 
 **Most entries below have no case written for them.** The Findings establish the browserslist split
@@ -177,9 +177,8 @@ Rspack (the same option), Rsbuild (its primary mechanism, defaulting to
 esbuild, Rollup, Rolldown, Oxc, Bun and Farm.
 
 That split does not disqualify the second group, and nothing here should be read as though it did. The
-floor's format is [open](what-format-declares-the-browser-floor.md) and is answered alongside this
-question, with the bundler leading, because the bundler's native format is the binding input and both
-checks read several formats. So a bundler is scored here on what it can build, and whatever carries
+floor's format is [open until M2](what-format-declares-the-browser-floor.md), where the check tools
+that also read it are chosen. So a bundler is scored here on what it can build, and whatever carries
 the floor follows from that rather than constraining it.
 
 *Sourced — each tool's own documentation, read 2026-09-16 by a research agent, except Vite's and the

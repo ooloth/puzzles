@@ -104,10 +104,11 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-**The renderer.** Derives from nothing, and is the most expensive M1 question to get wrong, because
-it is the only one that accumulates code written against the choice. So it waits, and is made with
-whatever the scaffold has shown by then. **Check
-[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
+**The renderer is M1's one open question, and it is next.** It derives from nothing, and it is the
+most expensive M1 question to get wrong, because it is the only one that accumulates code written
+against the choice. So it is settled by running candidates rather than by reading, as
+[what renders the client?](what-renders-the-client.md) describes under **What would settle it**.
+**Check [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
 rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue, so
 choosing Vue here removes its grounds and reopens that record. Reopening it turns on whether Nuxt
 lowers the client bundle to a named floor. Nuxt's own docs say it respects `vite.build.target`, per

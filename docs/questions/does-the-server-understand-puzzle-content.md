@@ -76,8 +76,7 @@ client holding state it cannot sync, indefinitely, with
 [the network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
 forbidding that from becoming the player's problem.
 
-**Validation and arbitration are different powers and only one is ruled out.** A previous record
-concluded the server validates puzzle state but does not arbitrate it. Checking a shape is not the
-same as deciding which of two boards is correct, and
+**Validation and arbitration are different powers and only one is ruled out.** Checking a shape is
+not the same as deciding which of two boards is correct, and
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) forbids the second rather than the
 first.

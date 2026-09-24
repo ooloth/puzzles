@@ -104,9 +104,12 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-**The renderer is M1's one open question, and it is next.** It derives from nothing, and it is the
-most expensive M1 question to get wrong, because it is the only one that accumulates code written
-against the choice. So it is settled by running candidates rather than by reading, as
+**The renderer is the next M1 question.** It is the only open one slice 2 needs, and it derives
+from nothing. The other open M1 questions sit under slices 4 to 6, and none of them derives from it
+either. It goes first because its wrong answer is cheapest now and grows fastest: it is the only M1
+question that accumulates code written against the choice, so a wrong pick costs a re-scaffold of a
+page saying "Hello!" today and a rewrite of the grid after M4 and M5. It is settled by running
+candidates rather than by reading, as
 [what renders the client?](what-renders-the-client.md) describes under **What would settle it**.
 **Check [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
 rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue, so

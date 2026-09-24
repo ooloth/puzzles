@@ -32,14 +32,17 @@ field before the spike is worth running. Stewardship does not do it:
 prices a supply worry by what leaving the position costs, and a renderer swap is cheap enough relative
 to the runtime that no candidate here is removed by it.
 
-**What narrows it is where each candidate allows reactive state to live**, recorded under **Findings**
-from each project's own documentation. The three shapes are a primitive usable outside a component in
-plain TypeScript, compiler syntax that only works in files the compiler processes, and no primitive
-outside a component at all. That property is the one this question weights highest, because the board,
-its persistence and a deterministic merge all have to stay pure and testable with no browser, and it
-is the thing a state layer either survives or does not. It orders the field rather than eliminating
-from it: the Findings argue that the most restrictive of the three may push in the right direction
-rather than the wrong one, which is exactly the claim a spike is for.
+**Nothing narrows it yet.** Where each candidate lets reactive state live does not do it: the
+finding dated 2026-09-19 below shows that property shapes the view-state layer and not the shared
+rules, so it binds nothing a record requires. So the field is rebuilt from nothing, and the properties
+that actually differ between candidates are derived from what the client has to do before any spike
+is designed. A spike then measures only those properties, on whatever survives them.
+
+**The analysis is purely technical.** The maintainer's experience in any ecosystem is not an input,
+as a cost or otherwise, by the maintainer's own direction. Candidates are scored against the
+product's characteristics and the capabilities the client needs, as derived in
+[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
+and the records it cites.
 
 **It was coupled to the HTTP handler, settled at
 [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md), and is no longer.** The coupling was that a meta-framework's own server exists only if the renderer is that
@@ -91,6 +94,17 @@ converge on, and a genuine fourth option rather than a blend of the others.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Whether each candidate's own runtime runs at the declared floor is unexamined, and it can
+eliminate.** The build lowers syntax to the floor under
+[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md), but it cannot
+supply a browser API the floor lacks. A renderer whose runtime calls such an API breaks
+[the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+however its syntax is lowered. The floor currently sits at the Safari shipping with iOS 15, per that
+guarantee. No candidate has been checked against it.
+
+*Reasoned — from the record and the guarantee named above. No candidate's runtime has been read or
+run.*
+
 **The field was rebuilt from registries on 2026-09-16, and it is far larger than five.** The
 js-framework-benchmark repository carries 175 implementation folders under `frameworks/keyed` and 66
 under `frameworks/non-keyed`. The State of JS 2025 roster names React, Vue, Angular, Preact, Svelte,
@@ -121,22 +135,36 @@ open it.*
 number of days on which anything was published, which is the honest figure for a monorepo that tags
 every package on each release:
 
-- **Svelte** — 846 commits, 135 authors, 120 publish days. Latest stable 5.57.0. Independent; its
-  creator is employed by Vercel to work on it.
-- **React** — 817 commits, 101 authors, 28 publish days. Latest stable 19.3.0. React Foundation, under
-  the Linux Foundation since 2026-02-24, with eight platinum members. Its repository has moved from
-  `facebook/react` to `react/react`.
-- **Vue** — 423 commits, 106 authors, 51 publish days. Latest stable 3.5.43. Independent.
-- **Preact** — 300 commits, 20 authors, 21 publish days. Latest stable 10.29.8, with 11.0.0 in RC.
-  Community project with no foundation.
-- **Solid** — 85 commits, 20 authors, 8 publish days. Latest stable 1.9.15, with 2.0.0 in RC.
-  Individual-led, funded through Open Collective.
-- **Lit** — 46 commits, 19 authors, 1 publish day. Latest stable 3.3.3. OpenJS Foundation.
+- **Svelte** — 846 commits, 135 authors, 120 publish days. Independent; its creator is employed by
+  Vercel to work on it.
+- **React** — 817 commits, 101 authors, 28 publish days. React Foundation, under the Linux Foundation
+  since 2026-02-24, with eight platinum members. Its repository has moved from `facebook/react` to
+  `react/react`.
+- **Vue** — 423 commits, 106 authors, 51 publish days. Independent.
+- **Preact** — 300 commits, 20 authors, 21 publish days. Community project with no foundation.
+- **Solid** — 85 commits, 20 authors, 8 publish days. Individual-led, funded through Open Collective.
+- **Lit** — 46 commits, 19 authors, 1 publish day. OpenJS Foundation.
 
 *Measured — `gh api --paginate repos/<owner>/<repo>/commits?since=2025-09-17`, grouped by author, and
 the releases API grouped by publish date. Run by a research agent that stated its commands and
 reported the tag-versus-date distinction unprompted. I did not run it. Governance lines are that
 agent's reading of each project's own announcements except Lit's, which I opened.*
+
+**Versions, read from the npm registry on 2026-09-23.** Three of the six have a new major or minor
+in release candidate, so a version claim here decays within the week.
+
+- **Svelte** — `latest` 5.57.1, published 2026-09-18.
+- **React** — `latest` 19.3.0 for `react` and `react-dom`, published 2026-09-09.
+- **Vue** — `latest` 3.5.43, published 2026-09-17, and `rc` 3.6.0-rc.9, published 2026-09-18.
+  `@vue/reactivity` is published standalone at the same versions.
+- **Preact** — `latest` 10.29.8, published 2026-08-01, and `rc` 11.0.0-rc.2, published 2026-09-08.
+  `@preact/signals-core` is published standalone at 1.14.4.
+- **Solid** — `latest` 1.9.15, published 2026-08-17, and `next` 2.0.0-rc.9, published 2026-09-18.
+- **Lit** — `latest` 3.3.3, published 2026-05-14, with nothing of any version published since.
+
+*Sourced — `curl -s https://registry.npmjs.org/<package>`, reading `dist-tags` and `time`, run by a
+research agent on 2026-09-23. I re-ran it for `svelte`, `vue` and `solid-js` the same day and got the
+same values. What Vue 3.6 changes has not been read.*
 
 **No surveyed candidate is eliminated by a binding property.** Every profiled candidate renders
 to real DOM elements rather than a canvas, so
@@ -193,10 +221,6 @@ any figure for it is unsourced wherever it turns up.*
 binding not being hand-maintained, and the ecosystem around the browser APIs this design leans on.
 Those are real; they were just not the arguments the demoted record made.
 
-**The risk the demoted record named about itself still stands.** The maintainer's existing strength in one
-ecosystem is a legitimate cost input and never a merit, and this is the decision most likely to be
-familiarity wearing a reason's clothes.
-
 Two criteria carried over from earlier analysis, both of which apply to any candidate.
 
 **Escaping is the default rather than something opted into**, so the failure mode is a deliberate
@@ -214,27 +238,20 @@ to remember later.
 Researched 2026-08-31. Four independent investigations, two of which disagreed with each other
 in useful ways.
 
-**Render performance is not a criterion.** The figures recorded here — 0.368ms to update a cell in an
-81-cell React grid unmemoised, 0.185ms memoised so only two cells re-render, a saving of roughly one
-percent of a frame — were tagged *Measured* with no method, and nothing is installed in this
-repository, so no such run happened here.
+**Render performance is not a criterion.** An 81-cell grid updating one cell is trivial work against
+[../constraints.md](../constraints.md)'s finding that client CPU and memory are not constraints under
+any plausible data model for this app. So a faster framework buys something this app cannot spend,
+and anything sold on rendering speed is selling the wrong thing.
 
-The conclusion survives without them, which is why it is kept. An 81-cell grid updating one cell is
-trivial work against [../constraints.md](../constraints.md)'s finding that client CPU and memory are
-not constraints under any plausible data model for this app. So a faster framework buys something
-this app cannot spend, and anything sold on rendering speed is selling the wrong thing. That holds by
-arithmetic rather than by the numbers above.
-
-*Reasoned — 2026-09-04, from the device constraint. The two figures are **unverified**: no method,
-no hardware, no date, and no run in this repository that could have produced them.*
+*Reasoned — 2026-09-04, from the device constraint. Per-cell update timings for a React grid were
+found unsourced, with no method, hardware or run behind them, and were deleted. Any millisecond
+figure for rendering this grid is unsourced wherever it turns up.*
 
 **Accessibility does not discriminate between them either.** No ecosystem ships an editable 2D
 grid primitive: not React Aria, whose generic grid module is unexported and undocumented and
 whose list component would announce a sudoku board as 81 rows of one cell, and not Zag, Kobalte,
-Melt, Reka, Ark or Base UI. Every accessible sudoku found in the wild hand-rolled it. The realistic
-cost is one to two hundred lines of ordinary TypeScript plus a day of screen-reader testing, and
-it is the same work in every candidate. This removes what looked like the strongest reason to
-prefer the largest ecosystem.
+Melt, Reka, Ark or Base UI. The grid's accessibility is hand-written work in every candidate. This
+removes what looked like the strongest reason to prefer the largest ecosystem.
 
 *Sourced for React Aria and two of the six — `react-aria.adobe.com/Grid` returns 404, so no Grid
 primitive is documented; `useGrid` exists only in the undocumented `@react-aria/grid` package, which
@@ -243,10 +260,10 @@ data in a single column and enables a user to navigate its contents via directio
 which is the 81-rows-of-one-cell shape. Kobalte's and Zag's own component listings were read and
 contain no grid. Read 2026-09-17 by a research agent; I did not open them.*
 
-*Unverified for the rest — Melt, Reka, Ark and Base UI were not checked, and neither was the
-"one to two hundred lines plus a day" estimate, which has no method behind it and nothing here that
-could have produced one. The claim that every accessible sudoku found in the wild hand-rolled it has
-no recorded search and cannot be re-run.*
+*Unverified for the rest — Melt, Reka, Ark and Base UI were not checked. An estimate of the grid's
+accessibility work in lines and days, and a claim that every accessible sudoku in the wild
+hand-rolled its grid, were found unsourced and deleted: neither had a method or a recorded search
+behind it. Either figure is unsourced wherever it turns up.*
 
 **Bundle size is a first-visit cost only, which halves its weight rather than removing it.** The
 React-to-Preact difference is about 54KB brotli, paid once and then never again once the app shell is
@@ -302,7 +319,7 @@ and does not mention serialisation, so the behaviour is reproducible and the fra
 problem, documented fix" holds only for Svelte.*
 
 **Solid's timing facts hold, and the elimination they support does not stand on its own.** Solid 2.0
-is at `solid-js@2.0.0-rc.8`, published 2026-09-11. The migration guide
+is in release candidate, at the version given under **Versions** above. The migration guide
 is 1033 lines. The only compatibility affordance in the guide is one opt-in line offering "old 'path
 argument' ergonomics via storePath", which is an ergonomic rather than a 1.x compatibility layer.
 
@@ -454,3 +471,98 @@ would be a design failure rather than a renderer's fault.
 me on 2026-09-19, and confirmed that the page places no restriction on a separate plain `.ts` module.
 Vue's `effectScope` and `toRaw` references and the `@vue/reactivity` version were read the same day by
 a research agent; I did not open them.*
+
+### The field rebuilt from nothing, 2026-09-23
+
+**Three research agents surveyed three classes with fixed candidate lists**: component frameworks,
+minimal libraries and standalone signal stores, and no library or a split between shell and board.
+Each was given the settled constraints and told that familiarity is not an input. Unless marked
+otherwise, what follows is their reading, and most of it came from search results rather than pages
+they opened. The claims that would eliminate a candidate were checked by me, and each one says so.
+
+**Candidates in the field.** Component frameworks: React, Preact, Vue (3.5, with 3.6 in RC), Svelte
+5, Solid (1.x, with 2.0 in RC), Lit, Qwik used client-only, Inferno, Mithril, Ember, Marko, Ripple.
+Minimal libraries: lit-html, uhtml, VanJS, Alpine, petite-vue, Arrow.js, Hyperapp, Crank, RE:DOM,
+Sinuous. Signal stores paired with hand-written DOM: `@preact/signals-core`, alien-signals,
+`@vue/reactivity`, MobX. No library: the DOM directly, with templates typed through a hand-written
+`jsx` factory under TypeScript's `jsxImportSource` or through typed element-builder functions. And
+the split, with a framework for the shell and a board module that owns its own subtree.
+
+**Proposed for removal, one reason each, not yet agreed:**
+
+- **Angular** — its published support covers only browsers from the last 30 months under Baseline
+  "widely available", which excludes the Safari shipping with iOS 15 and so cannot satisfy
+  [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md).
+  *Sourced — [angular.dev/reference/versions](https://angular.dev/reference/versions), opened by me
+  2026-09-23: "The 'widely available' Baseline includes browsers released less than 30 months (2.5
+  years)". The agent's other reason, that no Vite plugin exists, is wrong:
+  `@analogjs/vite-plugin-angular` is at 2.7.2, published 2026-09-08, per the npm registry read by me
+  the same day. It is community-maintained rather than first-party.*
+- **Stencil** — it compiles components with its own Rollup-based compiler, and its Vite plugin is
+  for consuming Stencil output rather than for building it. That is a second build beside the one
+  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) settles. *Sourced by an agent from a
+  search result; I did not open it.*
+- **htm** — a markup syntax that needs a renderer under it, so it is not a candidate on its own.
+- **lighterhtml** — nothing published since 4.2.0 on 2021-02-17. *Sourced — npm registry, read by
+  me 2026-09-23.*
+- **The `signal-polyfill` reference implementation** — it tracks a TC39 proposal at Stage 1 rather
+  than shipping as a library. *Sourced by an agent; I did not open it.*
+
+**Not removed, though an agent proposed it:** Qwik, whose resumability needs server-rendered HTML
+and so buys nothing here; that loses it the reason to choose it without disqualifying it. Ripple,
+which is pre-1.0 at 0.4.7; that is a stewardship concern, which
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices rather than treats as a disqualifier. Alpine, whose default build evaluates attribute
+expressions with `new Function()` and so needs `unsafe-eval` under a Content Security Policy; no
+record or question here sets a CSP, so that reason is conditional on a question nobody has asked.
+petite-vue (last publish 2022-01-18), Hyperapp (2022-03-25) and Sinuous (2023-07-01) are stale by
+the registry, which the same record also prices rather than eliminates on.
+
+**Svelte's runtime clears the floor and one of its APIs does not.** Its core supports Safari 14,
+and `$state.snapshot`, the documented way to hand reactive state to `structuredClone` and so to
+IndexedDB, needs Safari 15.4. So under Svelte the persistence boundary needs another way to produce
+plain data at the floor.
+*Sourced — [svelte.dev/docs/svelte/browser-support](https://svelte.dev/docs/svelte/browser-support),
+opened by me 2026-09-23: Safari 14 baseline, and "`$state.snapshot`: Chrome/Edge 98, Firefox 94,
+Safari 15.4".*
+
+**Vue 3 needs ES2016 and a native `Proxy`**, which the floor has. Solid needs a native `Proxy`. Lit
+ships ES2021 with native custom elements and shadow DOM. React, Preact and the minimal libraries do
+not state a floor. *Sourced by agents; Vue's FAQ was opened by an agent, the rest are search
+results.*
+
+**Two browser facts constrain every option, whatever renders it.** Customized built-in elements
+(`is=`) are not supported in Safari and will not be, and `ElementInternals` arrives at Safari 16.4.
+ARIA ID references such as `aria-activedescendant` do not cross a shadow root, so a grid whose cells
+sit in separate shadow roots cannot label or point at them. Lit and Stencil default to shadow DOM,
+and Lit can render into light DOM instead.
+*Sourced — MDN's `is` attribute page and caniuse's `ElementInternals` form entry, and
+[Nolan Lawson on shadow DOM and ARIA](https://nolanlawson.com/2022/11/28/shadow-dom-and-accessibility-the-trouble-with-aria/),
+all opened by an agent 2026-09-23. I did not open them.*
+
+**The split has weaker precedent than the finding above records.** One agent reports that tldraw
+renders shapes through React and Excalidraw renders to canvas end to end, so neither splits
+ownership at a shell/board seam, and that lichess's board and its shell both use snabbdom, one
+renderer throughout. The clearest example of the split it found is an editor such as Monaco embedded
+in React, and the evidence there is about the seam's cost: lifecycle races where effect cleanup
+disposes an editor the wrapper still holds. *Search results only; nobody opened these pages. It
+contradicts the tldraw reading above, and neither has been settled.*
+
+**Escaping is not a differentiator.** Every candidate whose docs were found escapes by default and
+opts out through a named unsafe API. Angular additionally sanitises. Escaping was not found stated
+for Inferno, Stencil, Ripple, Marko or Crank.
+
+**Properties the survey found that do differ, not yet weighed or agreed as criteria:**
+
+- Whether the runtime and the APIs used run at the floor.
+- Whether it builds as a plugin inside Vite or brings a compiler of its own.
+- How markup is type-checked: by plain `tsc` through JSX, by a separate checker (`vue-tsc`,
+  `svelte-check`, Glint, `@marko/type-check`), by a lint tool with no release since 2024
+  (`lit-analyzer`), or not at all (tagged-template and attribute-string libraries).
+- Whether state is a proxy that must be unwrapped before every IndexedDB write (Vue, Svelte, Solid's
+  stores, MobX) or plain data already (React, Preact signals, Lit, Mithril).
+- Whether DOM element identity, and so focus, survives an update to the grid.
+- Whether a major version is in release candidate now (Vue, Preact, Solid, and Mithril's 3.0 in
+  `next`).
+- Whether shadow DOM is the default.
+- First-visit bundle size.

@@ -488,7 +488,7 @@ Sinuous. Signal stores paired with hand-written DOM: `@preact/signals-core`, ali
 `jsx` factory under TypeScript's `jsxImportSource` or through typed element-builder functions. And
 the split, with a framework for the shell and a board module that owns its own subtree.
 
-**Proposed for removal, one reason each, not yet agreed:**
+**Removed, one reason each, agreed by the maintainer 2026-09-23:**
 
 - **Angular** — its published support covers only browsers from the last 30 months under Baseline
   "widely available", which excludes the Safari shipping with iOS 15 and so cannot satisfy
@@ -513,8 +513,9 @@ and so buys nothing here; that loses it the reason to choose it without disquali
 which is pre-1.0 at 0.4.7; that is a stewardship concern, which
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
 prices rather than treats as a disqualifier. Alpine, whose default build evaluates attribute
-expressions with `new Function()` and so needs `unsafe-eval` under a Content Security Policy; no
-record or question here sets a CSP, so that reason is conditional on a question nobody has asked.
+expressions with `new Function()` and so needs `unsafe-eval` under a Content Security Policy; that
+reason is conditional on
+[does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md).
 petite-vue (last publish 2022-01-18), Hyperapp (2022-03-25) and Sinuous (2023-07-01) are stale by
 the registry, which the same record also prices rather than eliminates on.
 

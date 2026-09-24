@@ -629,6 +629,11 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
 
+[Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
+— one part of it separates renderer candidates, because a policy without `unsafe-eval` removes
+Alpine's default build. It blocks [what renders the client?](what-renders-the-client.md) only if a
+candidate that needs `eval` or injected inline styles is still in the field when the spike is chosen.
+
 [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — nothing waits on it, and
 it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here
 rather than at a milestone because no milestone in this list is the one where somebody arrives.

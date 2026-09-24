@@ -1,7 +1,7 @@
 ---
 number: 0025
 status: accepted
-amended: 2026-09-20
+amended: 2026-09-23
 date: 2026-09-12
 ---
 
@@ -62,10 +62,12 @@ evidence about a bundler, and the other three were decided on their own.
 
 **Nothing. Asserted only, and no build exists.**
 
-What would make it true is a client build configured with a lowering target read from the declaration
-in [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md), which
-arrives at M1 with the client build, and a check over the emitted bundle confirming it, which arrives
-at M2.
+What would make it true is a client build configured with a lowering target that names the floor's
+versions, which arrives at M1 with the client build, and a check over the emitted bundle confirming
+it, which arrives at M2. At M1 the build is the floor's only reader and names the versions in its
+own config; the shared declaration in
+[ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) takes over
+when the check arrives.
 
 **The gap between those two is where this record is most likely to look honoured and not be.** A
 build configured with a target emits what the tool emits, and nothing between M1 and M2 compares that

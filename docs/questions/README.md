@@ -104,40 +104,38 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-1. **The floor format.** Derives from the bundler, which is settled, so it is unblocked now and can
-   be written at any point after that record lands. **This is where two answered question files
-   get mined and deleted**, because this record is the last one that cites findings living only
-   in them: [does one tool build the client and answer
-   HTTP?](does-one-tool-build-the-client-and-answer-http.md), answered by
-   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
-   [what builds the client and serves it in
-   development?](what-builds-the-client-and-serves-it-in-development.md), answered by
-   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before deleting it or
-   `git show <commit>^:<path>` has nothing to recover. **The build file additionally carries
-   findings that belong to another question**, about Bun's test runner, its branch coverage and
-   its snapshot serialisation; those move to [what runs the
-   tests?](what-runs-the-tests.md) at M2 with their tiers and sources, or they die with a file
-   that was deleted for an unrelated reason.
-2. **The renderer.** Derives from nothing, and is the most expensive of these to get wrong, because
-   it is the only one that accumulates code written against the choice. So it waits, and is made
-   with whatever the scaffold has shown by then. **Check
-   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
-   rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue,
-   so choosing Vue here removes its grounds and reopens that record. Reopening it needs one fact
-   nobody has established, which is whether Nuxt can lower the client bundle to a named floor;
-   its docs expose `esbuild.options.target` defaulting to `esnext` and say not all Vite options
-   are supported. That check is a build and an inspection, and it is only worth running if Vue
-   wins.
-3. **[What a browser below the floor sees.](what-does-a-browser-below-the-floor-see.md)** Blocked by
-   no decision, only by a document existing to put it in. It blocks slice 2, and it is last because
-   what would settle it — opening the built document in a browser below the floor — needs the
-   document slice 2 produces. **That is a reason to answer it during slice 2, not a reason to let it
-   drift.** Its wrong answer is invisible, since every browser above the floor shows the app either
-   way, and the portable decision-making standard moves a silently-failing decision earlier rather
-   than later.
+**The renderer.** Derives from nothing, and is the most expensive M1 question to get wrong, because
+it is the only one that accumulates code written against the choice. So it waits, and is made with
+whatever the scaffold has shown by then. **Check
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
+rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue, so
+choosing Vue here removes its grounds and reopens that record. Reopening it turns on whether Nuxt
+lowers the client bundle to a named floor. Nuxt's own docs say it respects `vite.build.target`, per
+the findings in
+[what format declares the browser floor?](what-format-declares-the-browser-floor.md), and nobody
+here has built one to confirm it. That check is a build and an inspection, and it is only worth
+running if Vue wins.
 
-Step 1 is a write-up. Steps 2 and 3 wait on purpose, the renderer for whatever the scaffold shows
-and the last for the document slice 2 produces.
+**The two browser-floor questions are not M1's.** Old-browser support is work that can land later
+without breaking what the guarantees promise, because no player exists before launch and the build
+lowers syntax to whatever target it is given. At M1 the build is the floor's only reader, so it
+names the floor's versions in its own config, and there is nothing for a shared declaration to keep
+in step.
+
+- [What format declares the browser floor?](what-format-declares-the-browser-floor.md) sits at M2,
+  where the checks that read the floor are chosen, so the format is decided with those tools in
+  hand rather than guessed ahead of them.
+- [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) sits at
+  M10, with the finished guest game, because a fallback in the entry document is cheap to add and
+  has nobody to reach until players exist.
+
+**What is not deferred is the floor's value, as an input.** Several APIs a storage or cross-tab
+design might lean on arrive above a Safari 15.0 floor: Web Locks, `BroadcastChannel` and
+`structuredClone` at 15.4, and `navigator.storage.persist()` and the origin private file system at
+15.2. A design built on one of them would have to be redone when old-browser support lands, so any
+question choosing storage or cross-tab coordination states the floor it was checked against.
+[Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) at M6 is
+the first.
 
 **The fork question is retired and its file is not worked as posed.**
 [Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
@@ -184,12 +182,9 @@ derivation.
    - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
    - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so the document is produced by the build, and a renderer is not also being chosen as a server
    - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
-   - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the target is read from one shared declaration rather than set on the bundler directly
-   - **Given:** [a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) — the entry document carries a fallback the bundle cannot deliver, because a browser below the floor never runs it
+   - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the build is the floor's only reader until the checks arrive at M2, so `build.target` names the floor's versions in the build's own config and never falls through to the bundler's default
    - **Given:** [0029-the-client-bundler-is-vite](../decisions/0029-the-client-bundler-is-vite.md) — the precache manifest and content-hashed filenames are this bundler's outputs, and whether it emits a manifest containing the entry document is what that record names as unproven
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. The build is settled and forecloses nothing here, so the field is open. Before assuming [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) still holds, check its Nuxt rejection: that rejection is that Nuxt closes the renderer to Vue, so choosing Vue here removes its grounds and reopens that record
-     - **Must answer:** [what-format-declares-the-browser-floor](what-format-declares-the-browser-floor.md) — or else whichever target format the bundler happens to take becomes the declaration by default, which is the duplication [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rejects, and the two checks at M2 inherit a format nobody chose. Costs rewiring the build's target and both checks. Its binding input has landed: [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) takes a browser-and-version string and does not read browserslist, so what is open is the declaration's format and the adapter between them
-     - **Must answer:** [what-does-a-browser-below-the-floor-see](what-does-a-browser-below-the-floor-see.md) — or else the entry document ships as an empty root element the bundle fills in, and a browser below the floor gets the blank screen [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md) exists to prevent. Costs a rebuild of the document the build emits, and it fails invisibly, because every browser above the floor shows the app either way
 3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
@@ -319,6 +314,24 @@ a player can see, which is why it has to be a milestone rather than a habit.
    [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
    is promised against compatibility data rather than observation until this lands, and the API half
    of the floor is only partly checkable by any tool.
+14. [What format declares the browser floor?](what-format-declares-the-browser-floor.md) — the
+   checks above are the floor's second and third readers, which is when
+   [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)'s
+   single declaration starts to matter. It comes after
+   [what runs the checks on every change?](what-runs-the-checks-on-every-change.md), which chooses
+   the linter and the syntax check, and after the cross-browser question above, which chooses the
+   test matrix, because the format has to suit the tools that read it and choosing it first would
+   choose them. **This is where two answered question files get mined and deleted**, because this
+   record is the last one that cites findings living only in them:
+   [does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
+   answered by
+   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
+   [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md),
+   answered by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before
+   deleting it or `git show <commit>^:<path>` has nothing to recover. **The build file additionally
+   carries findings that belong to another question**, about Bun's test runner, its branch coverage
+   and its snapshot serialisation; those move to [what runs the tests?](what-runs-the-tests.md)
+   with their tiers and sources, or they die with a file that was deleted for an unrelated reason.
 
 ## M3 — a puzzle comes from the store
 
@@ -472,6 +485,15 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    [ADR-0013](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md) and
    [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md); what is left is
    what a cell announces.
+6. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
+   keeps
+   [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md).
+   The fallback is carried by the entry document the build already produces, per
+   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md),
+   so adding it here costs no more than adding it at M1. It sits here because nobody is below the
+   floor until there are players. Its wrong answer is invisible, since every browser above the
+   floor shows the app either way, so it is settled by opening the built document in a browser
+   below the floor rather than by reading.
 
 ## M11 — the running system reports its own failures
 

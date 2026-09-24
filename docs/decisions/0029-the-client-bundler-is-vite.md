@@ -1,6 +1,7 @@
 ---
 number: 0029
 status: accepted
+amended: 2026-09-23
 date: 2026-09-19
 ---
 
@@ -27,18 +28,19 @@ and every asset with a revision each, per
 **Vite builds the client bundle and serves it in development.** Its `build.target` takes a
 browser-and-version string, which satisfies
 [ADR-0025](0025-the-client-build-lowers-syntax-to-a-declared-floor.md). It does not read a
-browserslist declaration, so
-[ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) is met through
-an adapter, and what format carries the declaration is
-[still open](../questions/what-format-declares-the-browser-floor.md).
+browserslist declaration, so if the shared declaration
+[ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) requires is
+written in browserslist, Vite reads it through an adapter. What format carries the declaration is
+[open until M2](../questions/what-format-declares-the-browser-floor.md).
 
 ## Enforced by
 
-Nothing yet. It is satisfied by a `vite.config.ts` existing, by that config reading its target from
-the shared declaration rather than naming versions inline, and by the build emitting a precache
-manifest that contains the entry document. The third is the one worth checking directly, because
-[ADR-0028](0028-the-client-build-and-the-http-server-are-separate-tools.md) rejects three candidates
-for failing it and nothing here proves this one succeeds.
+Nothing yet. It is satisfied by a `vite.config.ts` existing, by that config setting `build.target`
+to the floor's named versions rather than leaving Vite's default in place, by that target coming
+from the shared declaration once M2 adds the checks that also read it, and by the build emitting a
+precache manifest that contains the entry document. The third is the one worth checking directly,
+because [ADR-0028](0028-the-client-build-and-the-http-server-are-separate-tools.md) rejects three
+candidates for failing it and nothing here proves this one succeeds.
 
 ## Rejected
 
@@ -76,9 +78,9 @@ reader should treat this section as covering six candidates rather than eleven.
 
 ## Risk
 
-**Vite is the one survivor that needs an adapter for the floor declaration**, where three rejected
-candidates read browserslist natively. That is a cost taken knowingly, and it is the clearest place
-this record could be wrong.
+**Vite is the one survivor that would need an adapter if the floor is declared in browserslist**,
+where three rejected candidates read it natively. That is a cost taken knowingly, and it is the
+clearest place this record could be wrong.
 
 **Vite 8 sits on Rolldown, which reached 1.0 fifty-six days before Vite 8 went generally available.**
 The build's foundation is newer than the build. An open defect omits an imported worker from the

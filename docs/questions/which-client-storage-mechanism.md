@@ -29,6 +29,16 @@ A prototype writing and reading real board state on a real iPhone is worth more 
 because the failure modes recorded in [../constraints.md](../constraints.md) do not reproduce on a
 desktop browser.
 
+**The answer states the browser floor it was checked against.**
+[The app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+reaches Safari 15, and several APIs a storage or cross-tab design might lean on arrive above 15.0:
+Web Locks, `BroadcastChannel` and `structuredClone` at 15.4, and `navigator.storage.persist()` and
+the origin private file system at 15.2. A design built on one of them has to be redone when
+old-browser support lands, so each candidate's dependence on them is part of the comparison.
+
+*Sourced — `@mdn/browser-compat-data` on `main`, `version_added` for Safari read from the raw JSON by
+me on 2026-09-23.*
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

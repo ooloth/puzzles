@@ -29,11 +29,20 @@ default.
 ## What would settle it
 
 Opening the built document in a browser below the floor and seeing what it shows. That is the whole
-test, and it is available from M1 slice 2 onward because the document exists from then.
+test. It is possible from M1 slice 2 onward, because the document exists from then, and it is worked
+at M10, because nobody is below the floor until there are players and adding the fallback later
+costs no more than adding it now.
 
 What is open is what markup sits in that document, and how the build keeps it there without it
 appearing twice or flashing on a browser that does run the bundle. Both are properties of the build
 output, so this is checkable against the artifact rather than argued.
+
+**The shape chosen here decides whether the entry document reads the floor.** A message shown by
+default and removed by the bundle needs no knowledge of the floor. A script in the document that
+tests the browser against the floor has to read the same declaration as the build, which makes it
+one more reader for [what format declares the browser
+floor?](what-format-declares-the-browser-floor.md) to serve. That question is answered first and
+prices both shapes, so the answer here is free to take either.
 
 ## Resolves into
 

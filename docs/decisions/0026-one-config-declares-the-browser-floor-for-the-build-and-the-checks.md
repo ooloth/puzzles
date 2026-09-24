@@ -1,6 +1,7 @@
 ---
 number: 0026
 status: accepted
+amended: 2026-09-23
 date: 2026-09-12
 ---
 
@@ -42,7 +43,8 @@ bug report otherwise.
 **What format that configuration takes is
 [open](../questions/what-format-declares-the-browser-floor.md)**, and is separable from this record:
 the shape here is one declaration with three readers, and more than one format could carry it. It is
-answered alongside the bundler, because the bundler is the consumer whose native formats differ.
+answered at M2, alongside the tools that run the two checks, because the format has to suit every
+reader and the checks are the readers not yet chosen.
 
 ### The value is not settled here
 
@@ -74,10 +76,15 @@ this is the floor the committed design needs rather than a survey of a built app
 **Nothing. Asserted only, and its three consumers land in two different milestones.**
 
 The build's lowering target arrives with the client build at M1, and the build cannot lower without
-reading a floor from somewhere, so that consumer is self-enforcing once the build exists. The two
-checks arrive at M2, under
-[what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md), and
-neither is self-enforcing: nothing breaks if they are never built.
+reading a floor from somewhere, so that consumer is self-enforcing once the build exists. **Until
+the checks arrive it is the only reader**, so it names the floor's versions in its own config rather
+than reading a separate declaration: one reader cannot disagree with itself, which is the failure
+this record exists to prevent. The value moves into the shared declaration when the second reader
+arrives, and it must never fall through to the bundler's own default, which
+[ADR-0025](0025-the-client-build-lowers-syntax-to-a-declared-floor.md) rejects. The two checks
+arrive at M2, under [what runs the checks on every
+change?](../questions/what-runs-the-checks-on-every-change.md), and neither is self-enforcing:
+nothing breaks if they are never built.
 
 **So the half most likely to be silently dropped is the half this record exists for.** Between the
 two milestones the floor is declared and honoured by the build, with nothing verifying that it is,

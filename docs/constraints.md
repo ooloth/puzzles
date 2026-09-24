@@ -37,9 +37,10 @@ Anything asserted without one of the three doesn't belong here; it belongs in
 **A measurement is only worth more than a source when it measures the right thing.** Four ways one
 goes wrong here, and the first two have already been avoided by accident rather than by care:
 
-- **Measuring what does not bind.** Framework render throughput is not a criterion for an 81-cell
-  grid, because the device section below leaves client CPU unconstrained by orders of magnitude for
-  this workload. A real number about an irrelevant quantity ends arguments it should not.
+- **Measuring what does not bind.** The time to update one cell of an 81-cell grid is the example:
+  it is a few elements changed once per input, whatever renders them. A real number about an
+  irrelevant quantity ends arguments it should not. Which client paths do bind is open, per the
+  device section below.
 - **Measuring where the failure cannot occur.** The storage failures below do not reproduce in a
   desktop browser, so a desktop measurement of them is a measurement of nothing. Measure on the
   device the constraint belongs to.
@@ -526,12 +527,27 @@ measurement of anyone.*
 generous per-puzzle working set — full grid, notes, long undo history — lands in the tens to
 hundreds of kilobytes.
 
-> So client CPU and memory are not constraints under any plausible data model. We must not
-> optimise for them, and must not cite them to justify anything.
+> So the size of a puzzle's data does not bind: no plausible data model holds enough to strain the
+> memory of such a phone.
 
 *Reasoned — the legacy source states plainly that this is an order-of-magnitude bound rather
 than a measured benchmark. It clears by several orders of magnitude, which is why the bound is
 enough.*
+
+**That bound covers the size of the data and nothing else, and it is taken on the wrong device.**
+[The app runs on any device still receiving security updates](guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
+reaches phones well below mid-range. And what the client spends CPU and memory on is mostly not its
+data: parsing and running the app's code on every cold launch, work and allocation on each update
+during high-frequency input, updates that touch hundreds of elements at once, grids much larger than
+81 cells, and a resident heap large enough that the operating system discards a backgrounded page.
+
+> So whether client CPU and memory bind on those paths is open, and nothing may cite this section to
+> say they do not. They are worked as criteria in
+> [what renders the client?](questions/what-renders-the-client.md), because the renderer is the
+> choice that most changes what each of them costs.
+
+*Reasoned — from the floor guarantee and from what a renderer spends CPU and memory on. Nothing here
+has been measured.*
 
 ---
 

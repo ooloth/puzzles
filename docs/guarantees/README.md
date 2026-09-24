@@ -191,7 +191,8 @@ the player has to deal with.
 
 **Performance** — what the app costs the device it runs on: battery, memory, storage, bundle size, and
 how long generation takes. Two constraints will shape whatever lands here: mobile radios are expensive
-to wake regardless of payload size, and client CPU and memory are not scarce for this workload. See
+to wake regardless of payload size, and the size of a puzzle's data does not strain a phone's memory,
+while whether client CPU and memory bind on a floor device's worst paths is open. See
 [../constraints.md](../constraints.md).
 
 **Privacy** — what we know about a player, what we keep, how long we keep it, and what we never send

@@ -238,12 +238,14 @@ to remember later.
 Researched 2026-08-31. Four independent investigations, two of which disagreed with each other
 in useful ways.
 
-**Render performance is not a criterion.** An 81-cell grid updating one cell is trivial work against
-[../constraints.md](../constraints.md)'s finding that client CPU and memory are not constraints under
-any plausible data model for this app. So a faster framework buys something this app cannot spend,
-and anything sold on rendering speed is selling the wrong thing.
+**The time to update one cell is not a criterion.** One input on an 81-cell grid changes a few
+elements, which is trivial work under any candidate, so a benchmark sold on it measures something
+this app cannot spend. The worst-case paths are a different matter and are criteria, under
+**Performance on the worst-case paths** below.
 
-*Reasoned — 2026-09-04, from the device constraint. Per-cell update timings for a React grid were
+*Reasoned — for the single-cell case only. The device section of
+[../constraints.md](../constraints.md) covers data size on a mid-range phone, not CPU on a floor
+device. Per-cell update timings for a React grid were
 found unsourced, with no method, hardware or run behind them, and were deleted. Any millisecond
 figure for rendering this grid is unsourced wherever it turns up.*
 
@@ -265,11 +267,16 @@ accessibility work in lines and days, and a claim that every accessible sudoku i
 hand-rolled its grid, were found unsourced and deleted: neither had a method or a recorded search
 behind it. Either figure is unsourced wherever it turns up.*
 
-**Bundle size is a first-visit cost only, which halves its weight rather than removing it.** The
-React-to-Preact difference is about 54KB brotli, paid once and then never again once the app shell is
-cached. [../constraints.md](../constraints.md) establishes that cold-load size matters on a degraded
-link, so this is real. It is one payment against the life of the app, and it should not outrank
-anything structural.
+**Bundle size costs a download once and a parse and run on every cold launch.** The React-to-Preact
+difference is about 54KB brotli. The download is paid once, because the service worker caches the app
+shell, and [../constraints.md](../constraints.md) establishes that cold-load size matters on a
+degraded link. The CPU is paid again each time the app starts from nothing, which on a phone includes
+every time the system has discarded the page in the background. How much engine code caching reduces
+that is unchecked. So this is path 1 under **Performance on the worst-case paths** below, not a
+one-time cost.
+
+*Reasoned — the parse and run cost follows from how scripts load. Whether Safari or Chrome cache
+compiled code for a service-worker-cached script, and how much that saves, has not been read.*
 
 *Measured — `react@19.3.0` plus `react-dom@19.3.0` against `preact@10.29.8`, each bundled from a
 realistic entry point with `esbuild --bundle --minify` and compressed with brotli at quality 11:
@@ -567,3 +574,36 @@ for Inferno, Stencil, Ripple, Marko or Crank.
   `next`).
 - Whether shadow DOM is the default.
 - First-visit bundle size.
+
+### Performance on the worst-case paths, agreed as criteria 2026-09-23
+
+**Five client paths are criteria, measured as far as the available devices allow.** Each is a place
+where a floor device under worst-case conditions could expose a cost that a different renderer would
+have avoided. The device section of [../constraints.md](../constraints.md) leaves them open rather
+than settled.
+
+1. **Cold launch.** Parsing, compiling and running the renderer and the app on every start from
+   nothing, on the path that restores the board a player left.
+2. **Background eviction.** The resident heap while the page is hidden, which bears on how often the
+   system discards it and so how often path 1 is paid in full.
+3. **High-frequency input.** Work and allocation per event while a drag crosses cells at 60 to 120
+   events a second, and the collection pauses that allocation causes.
+4. **Bulk updates.** One action changing hundreds of elements: filling every candidate note, noting
+   across a multi-cell selection, or highlighting peers and conflicts across the board.
+5. **Larger grids.** The same paths on grids up to 30 by 30, before notes, because this choice has
+   to serve the games after sudoku.
+
+**Three further paths are recorded and are not criteria.** The per-change write to IndexedDB is
+already a criterion, as whether state must be unwrapped before each write; its worst case, a
+whole-store snapshot that grows with session length, turns on
+[is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md). The
+flush when the page is hidden has the same shape with less time to finish. A long archive list
+depends on [can a player explore past puzzles?](can-a-player-explore-past-puzzles.md), and
+virtualisation serves it under any candidate.
+
+*Reasoned — from what a renderer spends CPU and memory on, and from
+[the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md).
+Whether drag-selection exists is open in
+[what interactions must the grid support?](what-interactions-must-the-grid-support.md), and the grid
+sizes after sudoku in [which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md).
+No floor-class device is available here, and nothing has been measured.*

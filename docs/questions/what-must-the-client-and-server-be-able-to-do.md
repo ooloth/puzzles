@@ -365,9 +365,10 @@ scale now and rules out, separately, a decision that makes growing into it expen
 Each of these is something a comparison reaches for first and none of them binds here. Scoring a
 candidate on one is measuring what does not decide anything.
 
-**How fast a renderer updates a cell.** [../constraints.md](../constraints.md) names framework render
-throughput as its worked example of measuring what does not bind, because client CPU and memory clear
-this workload by orders of magnitude.
+**How fast a renderer updates one cell.** [../constraints.md](../constraints.md) names a single-cell
+update on an 81-cell grid as its worked example of measuring what does not bind. It does not settle
+the worst-case paths, such as cold launch, high-frequency input and bulk updates, which are open in
+that file's device section and worked in [what renders the client?](what-renders-the-client.md).
 
 **How fast generation runs.** [../problem.md](../problem.md) ranks the interactive path above batch
 throughput, so a player never waits on generation and it can be as slow as it needs to be.

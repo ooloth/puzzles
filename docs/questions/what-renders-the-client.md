@@ -964,3 +964,51 @@ generative AI pitfalls". That models write the most dependable code for React fo
 volume of it they were trained on, and is reasoned rather than measured.
 *Sourced — Svelte's AI overview page, opened by me 2026-09-24. The evaluations are arXiv papers a
 research agent saw only as search results.*
+
+### React, Vue and Svelte against the offline, local-first architecture, 2026-09-24
+
+**React's documentation recommends starting with a framework, and building on Vite without one is a
+documented path for apps whose constraints frameworks do not serve.** Its recommended frameworks are
+Next.js, React Router and Expo, and all of them "support client-side rendering (CSR), single-page
+apps (SPA), and static-site generation (SSG)" deployable without a server. React Server Components
+ship with those frameworks and "do not require a server". So client-only React is supported and is
+not React's recommended path; this app, with a build-output entry document and no framework per
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) and
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), takes the
+"build from scratch" path, which leaves routing and data loading to be chosen here.
+*Sourced — [react.dev/learn/creating-a-react-app](https://react.dev/learn/creating-a-react-app) and
+[the Create React App sunset post](https://react.dev/blog/2025/02/14/sunsetting-create-react-app),
+both opened by me 2026-09-24.*
+
+**Vue's documentation presents exactly this app's shape as its default**: `npm create vue@latest`
+scaffolds a single-page app on Vite, and "the general recommendation is to use a framework only if
+you need SSR". **Svelte's recommends SvelteKit**, and describes plain Vite with
+`vite-plugin-svelte` as the alternative, mainly for single-page apps, that will usually need a
+routing library chosen separately.
+*Sourced — [vuejs.org/guide/quick-start](https://vuejs.org/guide/quick-start) and
+[svelte.dev/docs/svelte/getting-started](https://svelte.dev/docs/svelte/getting-started), both
+opened by me 2026-09-24.*
+
+**The service worker does not separate them.** `vite-plugin-pwa` ships a registration module for each
+of React, Vue and Svelte (`virtual:pwa-register/react`, `/vue`, `/svelte`), and precaching is a
+property of the build rather than of the renderer.
+*Sourced by a research agent from the plugin's framework docs, opened by it 2026-09-24.*
+
+**Each has a documented way to subscribe a view to state held outside it.** React has
+`useSyncExternalStore`, "a React Hook that lets you subscribe to an external store", which expects an
+immutable snapshot, the shape this app's board already takes. Vue has `customRef` and `shallowRef`,
+and Svelte 5 has the store contract and `createSubscriber` in `svelte/reactivity`. So a board held in
+a plain TypeScript module that owns mutation, the write to storage and sync can sit under any of
+them, and the renderer is then a view over it.
+*Sourced by a research agent from react.dev, vuejs.org and svelte.dev reference pages it opened
+2026-09-24; the React quotation is from its report.*
+
+**Local-first libraries serve React best, then Svelte, then Vue.** Of the sync and offline stores
+surveyed, Dexie, ElectricSQL, Automerge, Replicache and Zero ship first-party React bindings and none
+for Vue or Svelte. TinyBase and LiveStore add first-party Svelte. RxDB and PowerSync add first-party
+Vue. Only InstantDB ships all three. Zero has community bindings for Vue and Svelte. This matters
+only if the client adopts such a library; a store written here needs one small adapter in any of the
+three.
+*Sourced — the npm registry, read by a research agent 2026-09-24; I checked `@instantdb/vue`,
+`@instantdb/svelte`, `@powersync/vue`, `@livestore/svelte`, the community ownership of `zero-vue` and
+`zero-svelte`, and the absence of `dexie-vue` myself the same day.*

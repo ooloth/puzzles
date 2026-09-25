@@ -1012,3 +1012,91 @@ three.
 *Sourced — the npm registry, read by a research agent 2026-09-24; I checked `@instantdb/vue`,
 `@instantdb/svelte`, `@powersync/vue`, `@livestore/svelte`, the community ownership of `zero-vue` and
 `zero-svelte`, and the absence of `dexie-vue` myself the same day.*
+
+### The architecture spike, designed 2026-09-24
+
+**React, Vue and Svelte each build the same slice of the intended client, written the way each is
+best used today**, so the comparison is of what each is like to write and read rather than of speed,
+which the earlier rounds settled at these grid sizes.
+
+**Shared by all three, in plain TypeScript:** a store that holds the board outside the renderer and
+owns every change: an immutable board, undo, the selection, a write to IndexedDB on every change and
+a load on start, a simulated remote update that changes cells outside the selection, and the same
+update carried to other open tabs over `BroadcastChannel`. Each renderer subscribes its view to that
+store through its own documented mechanism. Storage is IndexedDB called directly, so the spike
+decides nothing for [which client storage mechanism?](which-client-storage-mechanism.md).
+
+**Each view adds:** the board with drag-select and the keyboard, an animation when a value appears
+and when a remote update changes a cell, and an accessible settings dialog. A service worker from
+`vite-plugin-pwa` precaches the build, so the app starts offline and restores the saved board.
+
+**Best current use means:** React 19 with React Compiler and `useSyncExternalStore`; Vue 3.5 with
+single-file components, with templates type-checked by `vue-tsc` on TypeScript 6 installed for it,
+which is the workaround while `vue-tsc` cannot run on TypeScript 7; Svelte 5 with runes, checked by
+`svelte-check` the same way. Each may use the libraries its own ecosystem would reach for.
+
+**What is compared:** the view code side by side; whether a remote update arriving during a drag
+disturbs it; how much the animation and the dialog take; what the type check covers; and what the
+agent that wrote each build had to correct before it worked, as that agent reports it.
+
+### What the architecture spike showed, 2026-09-24
+
+**No behaviour differed because of the renderer.** In Chromium and WebKit, all three builds kept a
+drag intact while a remote update landed partway through it, carried a change to a second open tab,
+and undid from the keyboard. All three restored the saved board from the service worker with the
+network off in Chromium. The same offline reload fails identically for all three in Playwright's
+WebKit, which reports an internal error on reloading offline, so that is not attributed to any of
+them. All three chose the native `<dialog>`, and in all three a Tab from the dialog's last control
+leaves the page for the browser's own interface, which is how a native modal dialog behaves.
+*Measured — a shared scenario script run by me against each production build, 2026-09-24.*
+
+**The React build lost focus on closing the dialog in WebKit, and the cause is app code, not React.**
+It remembered whichever element had focus when the dialog opened, and WebKit, like Safari, does not
+focus a button when it is clicked, so it remembered the page body. The Vue and Svelte builds return
+focus to the Settings button by name. Any renderer needs to do the same.
+
+**All three type-check everything they render.** React with `tsc` on TypeScript 7.0.2; Vue with
+`vue-tsc` and Svelte with `svelte-check` on TypeScript 6.0.3, installed for them. All pass with no
+errors.
+
+**Size and length.** JavaScript shipped, brotli: React 60.5KB, Vue 27.2KB, Svelte 20.0KB, each
+including the shared store and `vite-plugin-pwa`'s registration. View code including styles: React
+499 lines, Vue 426, Svelte 455.
+
+**What each renderer's own tools did.** Subscribing to the store took one hook call in React, an
+eight-line composable over `shallowRef` in Vue, and a ten-line class over `createSubscriber` in
+Svelte. The value animation used a CSS keyframe replayed by changing a `key` in React, Vue's built-in
+`<Transition>`, and Svelte's built-in `in:scale`. Each needed one piece of imperative code to open and
+close the native dialog. Svelte's compiler flagged a missing `tabindex` on the grid as an
+accessibility warning; neither of the others checks that by default.
+
+**What the agents had to correct.** Every build met the same trap, that Shift changes `e.key` for
+digits, so a note shortcut must read `e.code`. The React build also hit a dependency clash: React
+Compiler's Babel preset brings Babel 8, and `vite-plugin-pwa`'s Workbox build needs Babel 7, which
+took a package-manager override to resolve. The Vue build type-checked cleanly on its first run, and
+did not use `defineModel`, which Vue has offered for two-way component bindings since 3.4, so its
+dialog carries more boilerplate than current Vue needs.
+*From each build agent's own corrections log, 2026-09-24; the Babel clash and the `defineModel`
+omission were read in the code by me.*
+
+**Touch drag-select was broken in two of the three first builds, and the cause is the platform.** A
+touch pointer is captured by the element it went down on, so `pointerenter` does not fire on the
+cells a finger drags across. The Vue and Svelte builds relied on `pointerenter` and selected one
+cell; the React build hit-tested coordinates in `pointermove` and worked. Releasing the implicit
+capture on `pointerdown`, with `touch-action: none` on the board, fixed both. Every renderer needs
+one of these two on a phone-first board, and a mouse-only test does not show the fault.
+*Measured — a drag across six cells sent as real touch events through Chromium's DevTools protocol,
+run by me against each build 2026-09-24: six cells selected in all three after the fix.*
+
+**Each build was then revised to its project's current documented idioms**, each change checked
+against react.dev, vuejs.org or svelte.dev by the agent that made it: React passes `ref` as a prop
+with a cleanup function and moves focus in the event handlers instead of an effect; Vue uses
+`defineModel`, reactive props destructure and `useTemplateRef`; Svelte uses `{@attach}` for DOM work
+the docs say an effect should not do. One revision was wrong and was reverted by me: Vue's docs state
+that "the ref array does not guarantee the same order as the source array", so collecting the cells
+through a string ref inside `v-for` and indexing it by cell number could focus the wrong cell; the
+build uses a function ref keyed by index instead. After the revisions every scenario still passes in
+both engines, and every build type-checks.
+*Sourced — [vuejs.org/guide/essentials/template-refs](https://vuejs.org/guide/essentials/template-refs.html),
+opened by me 2026-09-24. Measured — the scenario script and each build's checker, rerun by me the
+same day.*

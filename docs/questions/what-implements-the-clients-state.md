@@ -27,8 +27,9 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Split from [does client state live outside the renderer?](does-client-state-live-outside-the-renderer.md),
-whose first option had named a hand-written module without arguing it.
+Split from the question answered by
+[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md), whose first
+option had named a hand-written module without arguing it.
 
 ## Options
 
@@ -59,3 +60,10 @@ updates and cross-tab sync.
 **Whether any library's persistence helpers meet this app's durability needs is unchecked.** The
 needs are an ordered write to client storage on every change, a flush when the page is hidden, and
 detecting eviction.
+
+**A signals library adds a dependency to the most durable part of the client**, whose stewardship
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+prices at close to the cost of rewriting it, and the TC39 proposal that would standardise signals is
+at Stage 1.
+*Reasoned. The proposal's stage is from the renderer survey in
+[what renders the client?](what-renders-the-client.md), 2026-09-16, not re-checked since.*

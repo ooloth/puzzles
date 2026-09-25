@@ -23,6 +23,12 @@ date: 2026-09-24
 - [What renders the client?](../questions/what-renders-the-client.md) found no difference a player
   can see between React, Vue and Svelte, so how much a wrong choice of renderer costs to reverse is
   set by this record rather than by the renderer.
+- The architecture spike recorded in that question ran one state module unchanged under all three
+  renderers, and every scenario behaved identically: a remote update mid-drag, cross-tab sync,
+  keyboard undo, touch drag-select and an offline restore. Held outside, every change is applied by
+  plain code before any renderer schedules anything, and the rules only ever receive plain data,
+  which removes the two traps the earlier spike measured: React dropping drag input, and Solid
+  costing fifteen times more when its reactive store reached the rules.
 
 ## Decision
 
@@ -84,10 +90,10 @@ state?](../questions/what-implements-the-clients-state.md).
 
 ## Risk
 
-**React cannot defer an update that comes from the client's state.** Its documentation says a store
-mutated during a transition makes React "fall back to performing that update as blocking", so a
-large update from sync always renders at once. At measured grid sizes that costs one to two
-milliseconds.
+**React cannot defer an update that comes from the client's state.** Its
+[documentation](https://react.dev/reference/react/useSyncExternalStore) says a store mutated during
+a transition makes React "fall back to performing that update as blocking", so a large update from
+sync always renders at once. At measured grid sizes that costs one to two milliseconds.
 
 **Every change notifies every subscribed view,** so a renderer's fine-grained tracking only works
 below the snapshot. Screens added later, such as an archive or stats, subscribe to a selected slice
@@ -99,7 +105,8 @@ architecture spike did the second: its store carries `remoteChanged` and `remote
 view can animate.
 
 **The client's state is invisible to renderer devtools.** Inspecting it needs hooks of its own, such
-as a log of actions, unless the library chosen at M5 supplies them.
+as a log of actions, unless the library chosen at M5 supplies them. Each renderer also needs a small
+adapter to subscribe: one hook call in React and about ten lines in Vue and Svelte in the spike.
 
 ## Revisit when
 

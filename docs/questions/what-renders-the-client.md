@@ -1100,3 +1100,42 @@ both engines, and every build type-checks.
 *Sourced — [vuejs.org/guide/essentials/template-refs](https://vuejs.org/guide/essentials/template-refs.html),
 opened by me 2026-09-24. Measured — the scenario script and each build's checker, rerun by me the
 same day.*
+
+### Tooling, routing, testing and debugging, researched 2026-09-24
+
+**Single-file components lag every new TypeScript tool, and the cause is structural.** A `.tsx` file
+is a format TypeScript and every tool built on it understands natively. `.vue` and `.svelte` files
+need their own layer, and each new tool supports them later. Microsoft's TypeScript 7.0 announcement
+says workflows using Vue and Svelte "will likely not yet be able to leverage TypeScript 7" because it
+"does not yet expose a stable programmatic API", which 7.1 is expected to add; only nightly 7.1
+builds exist. Biome marks Vue and Svelte parsing, formatting and linting as experimental, against
+full support for TSX. oxlint does "no template linting yet" for Vue or Svelte. ast-grep lists TSX
+among its languages and neither single-file format. `vue-tsc` has broken on several earlier
+TypeScript releases because it patches the compiler's internals.
+*Sourced — [biomejs.dev/internals/language-support](https://biomejs.dev/internals/language-support/)
+and [oxc.rs/compatibility.html](https://oxc.rs/compatibility.html), opened by me 2026-09-24; the
+[TypeScript 7.0 announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/),
+opened by a research agent and seen by me in search results; ast-grep's language list and the
+history of `vue-tsc` breakage from a research agent, the history from GitHub issues it saw only as
+search results.*
+
+**Routing without a meta-framework is official in Vue, mature in React and community-only in
+Svelte.** `vue-router` is Vue's own project. React has `react-router` and `@tanstack/react-router`,
+both maintained. Svelte's own site names SvelteKit as the official router and lists community
+routers for other apps, the most used of which have tens of thousands of weekly downloads at most.
+*Sourced by a research agent from the npm registry and svelte.dev's packages page, opened by it
+2026-09-24.*
+
+**Testing view code is supported in all three, with one caveat each.** Vitest's browser mode has
+first-party packages for React, Vue and Svelte. Vue's documentation recommends `@vue/test-utils` and
+warns that `@testing-library/vue` "has issues with testing asynchronous component with Suspense";
+the latter has not released since 2024. Svelte documents that tests using runes must be named
+`.svelte.test.ts`. React Compiler does not run in tests unless wired in.
+*Sourced by a research agent from vuejs.org, svelte.dev and vitest.dev pages it opened 2026-09-24,
+and the npm registry.*
+
+**Svelte has no maintained devtools for Svelte 5.** The official browser extension's last release,
+v2.2.2, is from 2024-05-29 and requires Svelte 4. React's and Vue's devtools both shipped releases
+this year. Svelte documents its runtime errors well, which is a reference rather than an inspector.
+*Sourced — the GitHub API for `sveltejs/svelte-devtools`, queried by me 2026-09-24: latest release
+2024-05-29, last push 2025-01-22. The rest from a research agent.*

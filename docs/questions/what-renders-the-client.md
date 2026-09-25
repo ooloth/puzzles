@@ -720,3 +720,247 @@ engine while the iPhone floor runs Safari's, and background eviction cannot be e
 So the record that settles this question names a measurement on a floor device as the condition
 that reopens it, and that measurement happens before M4, while a renderer swap still costs little.
 The maintainer intends to buy floor-class devices later.
+
+### The update-model spike, designed 2026-09-24
+
+**The spike measures update models rather than libraries**, because DOM mutations and allocations per
+action are set mostly by how a renderer updates the DOM. Five builds of one board: React and Preact
+for the virtual DOM that re-renders and diffs, two because the benchmark shows them far apart; Vue
+3.5 for proxy-tracked reactivity over a virtual DOM; Solid for fine-grained updates; and the DOM
+directly with hand-written updates. Each holds state the way its own documentation shows. It lives
+outside the repository and is deleted afterwards.
+
+**The board** is an N-by-N grid at N = 9 and N = 30, with 3-by-3 boxes at 9 and 6-by-5 boxes at 30.
+Every cell is a focusable element carrying a label, showing a value or nine note slots. Selecting a
+cell highlights its row, column and box, marks conflicting values, and marks cells with the same
+digit. Dragging a pressed pointer adds cells to the selection. A digit key sets the value in the
+selection. One control fills every empty cell's candidate notes. Each change hands a plain copy of
+the board to `structuredClone`, standing in for the write to IndexedDB, so unwrapping reactive state
+is part of the cost.
+
+**What is measured, per build and size, in production builds.**
+
+- **Path 1, cold launch:** JavaScript shipped, brotli-compressed; script time and time from
+  navigation to the first rendered board, in Chromium and WebKit, both unthrottled.
+- **Path 2, resident memory:** JS heap in use after a forced collection, once loaded and again after
+  a scripted session. Chromium only, as WebKit exposes no equivalent to scripts.
+- **Path 3, high-frequency input:** a drag across a row of cells. Time per pointer event to the next
+  frame, and bytes allocated per event. Collection pauses are not counted.
+- **Path 4, bulk updates:** filling every candidate, and moving the selection, which re-highlights
+  peers. Time to the next frame and DOM mutation records per action.
+- **Path 5, larger grids:** all of the above at N = 30.
+
+**Method.** Playwright drives Chromium and WebKit on the maintainer's Mac. Each measurement runs at
+least ten times and reports the median and the spread. Allocation is read from Chromium's sampling
+heap profiler with collected objects included, and mutations from a `MutationObserver` on the board.
+Frame time is measured from the input event to a timer queued inside the next animation frame.
+
+### What the update-model spike measured, 2026-09-24
+
+**Five builds reached an identical board, and two needed a fix first.** After a scripted session
+every cell's classes, text and `tabindex` matched the hand-written build in Chromium and WebKit at
+both sizes. React's first build did not match in WebKit at N = 30: its drag handler computed the
+next selection from the state captured at the last render, and React defers rendering for
+`pointerenter`, so a second event arriving before the render overwrote the first and a cell was
+dropped from the selection. The fix react.dev teaches is an updater function, and a handler then
+cannot see the state it queued, so the write for every change moved into an effect that runs after
+React commits. Solid's first build passed the store itself into the shared pure functions, and
+filling candidates at N = 30 then took 217.6ms of CPU against 14.4ms once the store was unwrapped
+first, which is the rule recorded above that the rules only ever see plain data.
+
+**CPU work per action, Chromium on an Apple M2, unthrottled, median of ten.** Script, style and
+layout time per input event, from Chromium's performance metrics.
+
+- **Moving the selection, which re-highlights every peer (paths 3 and 4), at N = 30:** Vue 0.7ms,
+  Preact 1.2ms, hand-written 1.6ms, Solid 7.1ms, React 8.3ms. At N = 9 every build is under 1.1ms.
+- **One drag step at N = 30:** Vue 0.7ms, Preact 1.2ms, hand-written 1.7ms, Solid 6.9ms, React
+  7.9ms. At N = 9 React is 1.9ms and Solid 1.3ms, the rest under 0.5ms.
+- **Filling every candidate at N = 30:** Vue 7.6ms, Preact 7.9ms, hand-written 13.0ms, Solid 14.4ms,
+  React 25.0ms. This includes the candidate calculation itself, which is the same code in every
+  build.
+
+**Allocation per drag step at N = 30**: hand-written 322KB, Solid 874KB, React 1,029KB, Vue
+2,635KB, Preact 3,239KB. At 60 steps a second Preact and Vue would allocate 150 to 200MB a second.
+How often that forces a collection pause was not measured.
+
+**Preact wrote every text node on every render**: 6,204 mutation records per drag step at N = 30
+against 86 for the others, almost all `characterData` writes of an unchanged value. It did not show
+up as CPU in Chromium. Why Preact does it with this JSX was not diagnosed.
+
+**JS heap after a forced collection, Chromium, at N = 30**: hand-written 1.4MB loaded and 2.1MB
+after a session, Preact 3.4 and 4.2, Vue 3.5 and 4.5, React 3.6 and 6.1, Solid 7.4 and 8.1.
+
+**Cold launch (path 1).** JavaScript shipped, brotli-compressed: hand-written 1.8KB, Preact 6.5KB,
+Solid 7.8KB, Vue 22.8KB, React 58.3KB. Time from navigation to the first rendered board at N = 30
+was 29ms hand-written, 38ms Vue, 41ms Solid, 52ms React and 55ms Preact in Chromium, and 52 to 75ms
+in WebKit in the same order apart from Preact.
+
+**Frame latency did not discriminate.** Time from an input event to the frame after the board
+changed sat within one frame of 16.7ms for every build in both engines, except Preact's drag at
+N = 30 in Chromium, which landed a frame later at 33ms. Playwright paces events by protocol round
+trip, so this measured frame alignment rather than work.
+
+**What this spike measured is first-pass code, not each model's floor.** Each build was written as
+its renderer's documentation shows, without memoising cell components. React has `React.memo` and
+Solid has `createSelector`, both documented for exactly this shape of update where one selection
+change touches every cell's highlight, and neither was used. So the gap above is the cost of the
+first version a practitioner writes, and whether React and Solid close it with those tools is
+unmeasured. Vue and Preact reached their numbers with no such tool.
+
+*Measured — throwaway builds with Vite 8.3.0, React 19.3.0, Preact 10.29.8, Vue 3.5.43 and Solid
+1.9.15, all targeting `safari15`, driven by Playwright 1.63.0 in its Chromium and WebKit 26.6 on an
+Apple M2 running macOS 26.6.2 and Node 26.7.0, ten runs per build, size and engine, run by me
+2026-09-24. Allocation is the sum of Chromium's sampling heap profile at a 256-byte interval with
+collected objects included. Ratios to a floor device are not applied here; the only ratios on
+record are hypotheses about a different engine.*
+
+### The second round: the documented fixes, Svelte and Vue Vapor, 2026-09-24
+
+**Memoising halves React's cost and a selector cuts Solid's by 60%, and neither reaches Vue.** React
+with `React.memo` and stable props re-rendered 52 of 900 cells on a selection move, and Solid with
+`createSelector` keyed on row, column and box re-ran 60 cell computations rather than 900. CPU per
+selection move at N = 30 in Chromium on the M2, median of ten:
+
+- Vue Vapor 0.6ms and Vue 0.7ms, with nothing memoised.
+- Preact 1.2ms and hand-written 1.6ms.
+- Solid with `createSelector` 2.8ms, Svelte 3.1ms, React with `React.memo` 3.6ms.
+- Solid 7.2ms and React 8.3ms as first written.
+
+A drag step ranks the same way. Filling every candidate at N = 30 costs Vue, Vapor and Preact about
+7.7ms, hand-written and Solid about 14ms, React 25ms and Svelte 28ms.
+
+**Allocation and heap pull the other way.** Per drag step at N = 30: hand-written 322KB, Solid with
+a selector 373KB, React memoised 415KB, Svelte 487KB, Vapor 1,401KB, Vue 2,635KB, Preact 3,239KB.
+JS heap after load at N = 30: hand-written 1.4MB, Preact 3.4MB, Vue 3.5MB, React 3.6MB, Vapor 6.5MB,
+Solid 7.4 to 8.1MB, Svelte 9.0MB.
+
+**JavaScript shipped, brotli**: hand-written 1.8KB, Preact 6.5KB, Solid 7.8 to 8.1KB, Svelte 15.6KB,
+Vapor 18.8KB, Vue 22.8KB, React 58.3KB.
+
+*Measured — the same harness, builds and machine as the first round, plus Svelte 5.57.1 and Vue
+3.6.0-rc.9 in Vapor mode, ten runs each, run by me 2026-09-24. Every build matched the hand-written
+board in both engines at both sizes. The Vapor bundle contains no virtual DOM helpers
+(`createVNode`, `openBlock`), checked by me with grep.*
+
+**Neither single-file-component checker runs on the TypeScript this repository uses.** The
+repository pins TypeScript 7.0.2. `vue-tsc` 3.3.11, its latest, exits with
+`ERR_PACKAGE_PATH_NOT_EXPORTED` because it loads `typescript/lib/tsc`, which TypeScript 7 no longer
+exports. `svelte-check` 4.7.6 declares `typescript: ^5.0.0 || ^6.0.0` and refuses to start unless
+TypeScript 6 is installed alongside 7 and a `--tsgo` flag is passed. JSX checked by plain `tsc`,
+which React, Preact and Solid use, runs on TypeScript 7. So Vue or Svelte means markup is unchecked,
+or TypeScript 6 runs beside 7, until the checkers catch up.
+*Measured — both tools run by me 2026-09-24 against TypeScript 7.0.2. The reason, that TypeScript
+7.0 ships without the programmatic compiler API these checkers depend on and that 7.1 plans one, is
+from search results naming vuejs/language-tools issue 5381 and discussion 6121, which I did not open.
+A community checker, `vue-tsgo` at 0.3.0, claims TypeScript 7 support and was not tried. Which
+TypeScript line the repository runs is not settled by any record.*
+
+### How the criteria are weighed, agreed 2026-09-24
+
+**Four criteria disqualify, and each removal names the one it fails:** running at the floor without
+an unguarded call to an API the floor lacks, building as a plugin inside Vite, registering every
+input under fast events, and keeping focus on the same cell through a grid update.
+
+**Markup checked at build is not a disqualifier while a checker cannot run on TypeScript 7.** It is
+kept as a tie-breaker, and it counts against Vue, Vapor and Svelte only between candidates otherwise
+level.
+
+**Drag-select matters and very large grids do not.** Star battle needs drag-select, so path 3 is
+weighed. A 30 by 30 grid is unlikely in a game that has to be playable on a phone, so path 5 is
+weighed at 15 by 15 rather than 30 by 30.
+
+**The discipline a renderer needs to stay fast counts a little**, under clarity over cleverness in
+[../problem.md](../problem.md): memoisation and stable props in React, selectors and unwrapping in
+Solid.
+
+**The comparison is also held against what matters over years, not only these criteria.** Why React
+is the default choice, what breaking changes each candidate has put its users through, and what the
+product will need from a renderer's ecosystem later are part of the weighing, because this choice is
+meant to last.
+
+### The third round: every candidate built, at realistic sizes, 2026-09-24
+
+**No disqualifier removes a candidate, apart from Marko if the floor is Safari 15.0.** All eighteen
+builds reached the identical board after a fast drag, and all kept focus on the same element through
+a digit, a clear and a fill, in Chromium and WebKit at N = 9 and N = 15.
+*Measured — the same harness, with a focus check added: focus an empty cell, then enter a digit,
+clear it, and fill candidates, checking after each that the focused element is the same object and
+still attached. The clear is a synthetic `keydown` because Playwright's WebKit treats a real
+Backspace outside an input as navigating back. Run by me 2026-09-24.*
+
+**At N = 15 the cost of a drag step separates three groups.** Chromium on the M2, script, style and
+layout per event, median of ten:
+
+- **Under 1ms:** Vue 0.3ms, Vapor 0.3ms, Preact 0.4ms, the hand-written build 0.7ms, Marko 0.9ms.
+- **1.5 to 3.5ms:** Ripple 1.5ms, Solid with `createSelector` 1.6ms, the signal store 1.6ms, Svelte
+  1.8ms, React with `React.memo` 1.9ms, React with React Compiler 2.1ms, Solid 2.7ms, React as first
+  written 3.2ms.
+- **About 4 to 10ms:** Hyperapp 3.8ms, VanJS 4.1ms, RE:DOM 4.9ms, Mithril 5.0ms, Crank 9.9ms.
+
+The minimal libraries sit in the slowest group because each build re-derives every cell on every
+change, which is what their documentation shows. Heap after load is 1.2 to 3.3MB for every build at
+N = 15, so it does not separate them.
+
+**React Compiler reaches hand-memoised React with no hand-written memoisation.** The compiled build
+costs 2.1ms per drag step against 1.9ms for `React.memo` and 3.2ms uncompiled, and its bundle carries
+the compiler's memo-cache sentinel. It is enabled through `@rolldown/plugin-babel` with
+`reactCompilerPreset`, as `@vitejs/plugin-react` 6.1.1 documents. Its own announcement recommends
+pinning an exact compiler version, because a later version may change how memoisation is applied.
+*Measured by me as above. Sourced —
+[react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1),
+opened by me 2026-09-24: "React Compiler 1.0 is available today", and "we recommend pinning the
+compiler to an exact version".*
+
+**JavaScript shipped, brotli:** hand-written 1.8KB, signal store 3.1KB, Hyperapp 3.2KB, VanJS 3.4KB,
+RE:DOM 3.7KB, Marko 5.0KB, Preact 6.5KB, Solid 7.9KB, Mithril 9.8KB, Ripple 11.2KB, Crank 12.4KB,
+Svelte 15.6KB, Vapor 18.9KB, Vue 22.8KB, React 58.4KB and 59.0KB with the compiler.
+
+**Markup type checking differs by more than TypeScript 7.** Plain `tsc` checks JSX in React, Preact
+and Solid. VanJS, RE:DOM and Hyperapp build elements with typed function calls, so `tsc` covers
+them. Crank's JSX types declare every element as `any`, and Mithril's attribute type has an `any`
+index signature, so neither checks element attributes at all, and that does not change with a
+TypeScript release. Marko and Ripple each need their own checker, and neither was tried.
+*Sourced — each build's report of what `tsc` covered, from the agents that built them on
+2026-09-24. I did not open the type declarations.*
+
+### What matters over years, researched 2026-09-24
+
+**Measured performance at realistic sizes barely separates the mainstream candidates**, so the
+comparison turns on what a renderer costs to live with. React leads usage by a wide margin: 132.7
+million weekly npm downloads against 24.3 million for Preact, 12.0 million for Vue, 4.2 million for
+Svelte and 3.6 million for Solid. It does not lead satisfaction. Solid has had the highest
+satisfaction in State of JS for five years running.
+*Sourced — the npm downloads API for 2026-09-15 to 2026-09-21, queried by me 2026-09-24. Solid's
+satisfaction is stated on the State of JS 2025 front-end frameworks page, opened by me the same day;
+per-framework satisfaction percentages were not in its text and are not recorded here.*
+
+**Breaking changes differ, and one candidate has a rewrite pending now.** React removed APIs in 19
+that had been deprecated for years, after a release whose only purpose was to warn about them. Vue 2
+to 3 changed the global API and Vue 2 reached end of life on 2023-12-31. Svelte 5 replaced implicit
+reactivity with runes while old syntax keeps working per file. Solid 2.0, in release candidate now,
+rewrites reactivity so that a signal write is not read back immediately. Preact 10 has run since
+2019, with 11 in release candidate. Mithril has stayed on 2.x.
+*Sourced by a research agent from each project's migration guides and release notes, mostly search
+results it did not open. The version states were checked by me against the npm registry.*
+
+**Backing:** React has been governed by the React Foundation under the Linux Foundation since
+2026-02-24. Vue's creator is funded through sponsorships and his company. Svelte's and Solid's
+creators are each employed by one company to work on them. Preact's funding is spread across small
+sponsors, and 83% of its commits in the last year came from one person. The minimal libraries each
+have one maintainer.
+*Sourced by a research agent; the React Foundation date is in the Findings above.*
+
+**Ecosystem for what the product will need beyond the board**, meaning drag gestures, animation,
+accessible dialogs and menus, charts for a stats screen, internationalisation, a Testing Library
+variant and devtools: React, Vue, Svelte and Solid each have a maintained option for every one.
+Preact borrows most of React's through `preact/compat`. The minimal libraries have almost none, so
+each of those would be built by hand.
+*Sourced by a research agent, existence only, mostly from search results.*
+
+**AI coding assistants:** no published evaluation measures code-generation quality for most of these
+candidates. The cross-framework ones found cover React, Vue, Angular and Svelte, and report React
+and Vue compiling more reliably than Angular. Svelte ships an MCP server that corrects "common
+generative AI pitfalls". That models write the most dependable code for React follows from the
+volume of it they were trained on, and is reasoned rather than measured.
+*Sourced — Svelte's AI overview page, opened by me 2026-09-24. The evaluations are arXiv papers a
+research agent saw only as search results.*

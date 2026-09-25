@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-24
+updated: 2026-09-25
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -191,7 +191,7 @@ derivation.
    - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
    - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the build is the floor's only reader until the checks arrive at M2, so `build.target` names the floor's versions in the build's own config and never falls through to the bundler's default
    - **Given:** [0029-the-client-bundler-is-vite](../decisions/0029-the-client-bundler-is-vite.md) — the precache manifest and content-hashed filenames are this bundler's outputs, and whether it emits a manifest containing the entry document is what that record names as unproven
-     - **Must answer:** [does-client-state-live-outside-the-renderer](does-client-state-live-outside-the-renderer.md) — or else the renderer is chosen without knowing whether it will own the state, saving and sync or only draw them, which is the difference between a renderer that costs a view rewrite to replace and one that costs the client. Answered first, because it sets how much a wrong renderer pick costs
+   - **Given:** [0037-the-renderer-draws-client-state-and-does-not-own-it](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) — so the renderer only draws state held under `src/client/state/`, and replacing it costs a rewrite of the views rather than of the client. It answers [does client state live outside the renderer?](does-client-state-live-outside-the-renderer.md), whose file is deleted once mined
      - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. The build is settled and forecloses nothing here, so the field is open. Before assuming [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) still holds, check its Nuxt rejection: that rejection is that Nuxt closes the renderer to Vue, so choosing Vue here removes its grounds and reopens that record
 3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
@@ -415,6 +415,10 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
    gesture with no keyboard form.
 2. [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
    — after the above, since the budget covers the input path and what an input is comes first.
+3. [What implements the client's state?](what-implements-the-clients-state.md) — the first puzzle
+   state held in memory arrives here. How much a library could supply depends on the storage
+   mechanism, undo depth and state shape at M6, so this is answered with those in view rather than
+   ahead of them.
 
 ## M6 — the board survives a reload
 

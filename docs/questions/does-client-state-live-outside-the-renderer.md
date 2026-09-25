@@ -1,6 +1,6 @@
 ---
 opened: 2026-09-24
-status: open
+status: answered
 resolves_into: decision
 ---
 
@@ -40,17 +40,20 @@ a player sees.
 
 ## Options
 
-*A. A plain TypeScript store owns durable state, and the renderer is a view over it.* The store holds
-the board, the selection, undo, the save on every change and sync, and exposes actions and a
+*A. Code outside the renderer owns durable state, and the renderer is a view over it.* That code
+holds the board, the selection, undo, the save on every change and sync, and exposes actions and a
 subscription. The renderer subscribes, draws and calls actions. State that no guarantee covers, such
-as a drag in progress or whether a dialog is open, stays in the renderer.
+as a drag in progress or whether a dialog is open, stays in the renderer. How the module is built,
+by hand or on a library, is a separate question:
+[what implements the client's state?](what-implements-the-clients-state.md).
 
 *B. The renderer's own state tools own it.* A reducer and context in React, a Pinia store in Vue, a
 runes module in Svelte, with saving and sync written as that renderer's effects or plugins.
 
-*C. As A, with the store built on a framework-agnostic reactive library* such as
+*C. As A, with the module built on a framework-agnostic reactive library* such as
 `@preact/signals-core` or `alien-signals`, so views can subscribe to one cell's state rather than to
-the whole snapshot.
+the whole snapshot. This is a way of building option A, and moved to
+[what implements the client's state?](what-implements-the-clients-state.md).
 
 ## Findings
 

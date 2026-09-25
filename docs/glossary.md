@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-01
+updated: 2026-09-25
 update_when: a domain term enters the code, or code naming drifts from user language
 decays: slow
 status: active
@@ -25,6 +25,16 @@ settled by [ADR-0020](decisions/0020-the-stores-engine-is-sqlite.md).
 > **Never write "storage" unqualified.** The two above have opposite properties — one is taken away
 > without warning and belongs to one device, the other is ours and outlives every device — and a
 > sentence that does not say which one it means is read as whichever the reader had in mind.
+
+**puzzle state** — the board plus what a player needs back on reopening: the selection, and undo
+history if it is kept. It is held in memory by the code under `src/client/state/`, per
+[ADR-0037](decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md), saved to client
+storage on every change, and synced to the store, so one puzzle's state can exist as three copies.
+Where copies need telling apart, say where each lives: in memory, in client storage, in the store.
+
+**view state** — state only the renderer needs and no promise covers: a drag in progress, whether a
+dialog is open, a hover highlight. It lives in the renderer and is lost on reload, per
+[ADR-0037](decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
 
 **the board** — the grid a player is currently solving, including their entries and notes.
 

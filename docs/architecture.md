@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-22
+updated: 2026-09-25
 update_when: a module boundary moves, or something new starts talking to something else
 decays: fast
 status: active
@@ -34,6 +34,8 @@ constraint from intention. The parts still open are listed at the end and are th
         │  ┌───────────────────────────────────┐  │
         │  │ client — owns board state,        │  │   solving never
         │  │ mutates it locally      ADR-0004  │  │   touches the network
+        │  │ src/client/state holds it; the    │  │
+        │  │ renderer only draws it  ADR-0037  │  │
         │  └───────────────────────────────────┘  │
         │  ┌───────────────────────────────────┐  │
         │  │ client storage — the board in     │  │   mechanism open

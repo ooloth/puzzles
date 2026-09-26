@@ -11,10 +11,11 @@ Where things live, what talks to what. Deliberately thin — the code describes 
 prose about structure rots faster than anyone updates it. A diagram and a short list, never
 an essay.
 
-**Almost nothing is built.** The server answers one route from `src/server/`, and nothing else
-exists. What follows is the shape the decision records have already fixed, not a description of
-running software. Every line here cites the record that fixed it, so a reader can tell
-constraint from intention. The parts still open are listed at the end and are the larger half.
+**Almost nothing is built.** The server answers one route from `src/server/`, a client under
+`src/client/` renders "Hello!", and nothing else exists. What follows is the shape the decision
+records have already fixed, not a description of running software. Every line here cites the record
+that fixed it, so a reader can tell constraint from intention. The parts still open are listed at
+the end and are the larger half.
 
 ## The shape so far
 

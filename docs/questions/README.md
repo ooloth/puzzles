@@ -172,6 +172,9 @@ technical properties reachable — performance, safety, portability, and the one
 matter. A question that cannot be settled without a preference says so rather than inventing a
 derivation.
 
+A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
+closes, and the slices left keep their numbers because records cite them by number.
+
 3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
@@ -186,7 +189,7 @@ derivation.
      - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md) — or else the deployment topology caps or destroys the only mechanism that carries an identifier across Safari's storage wipe unaided, per the givens above, and [is guest recovery worth building?](is-guest-recovery-worth-building.md) at M12 finds the mechanism already gone. It fails silently, and unwinding it is a redeploy plus a topology change
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else assets ship without content-hashed filenames and every cached asset is revalidated on every visit, on the network [../problem.md](../problem.md) names as the modal case. Costs a re-scaffold of the build and the serving path together
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the host cannot deploy without briefly running two processes against one volume, and some deploy models cannot be made single-writer-safe at all. Discovering that at M3 is a change of host rather than of configuration
-     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else the host above is chosen against an imagined artifact, and slice 6's pipeline then builds whatever the host turned out to want. Costs a redeploy and a pipeline change. Answered together with the host, which is its main input
+     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else the host above is chosen against an imagined artifact, and [what deploys the code](what-deploys-the-code.md) then builds whatever the host turned out to want. Costs a redeploy and a pipeline change. Answered together with the host, which is its main input
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the platform's own hostname is what the browser resolves, and the first-party test in the given above turns on exactly that. Costs a redeploy, and the failure is silent
@@ -230,7 +233,7 @@ permanent home. Delete what has moved rather than leaving a second copy.
 
 M1 is the first thing that exists and the first thing that can be wrong without anyone noticing.
 Everything after this is verified using whatever gets built here, so building it once now — while the
-stack is chosen and nothing is built on it — is when it is cheapest and when it pays back most.
+stack is chosen and little is built on it — is when it is cheapest and when it pays back most.
 
 Each entry is a maintainer's problem rather than a thing a project ought to have, and each is the
 difference between checking a change in a minute and checking it in an afternoon. They are used many

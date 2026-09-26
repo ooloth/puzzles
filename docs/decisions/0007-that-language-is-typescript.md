@@ -36,11 +36,11 @@ leaves nothing for a compiled artifact to do.
 
 ## Enforced by
 
-**Nothing. Asserted only.** It follows
-[ADR-0006](0006-one-language-across-every-deployable.md) and is checkable on the same condition: once
-deployables exist, the language in each is observable.
-[What language are repo scripts written in?](../questions/what-language-are-repo-scripts-written-in.md)
-at M2 covers the gap this record leaves, since a script is not a deployable.
+**Nothing checks it, and it holds.** Both deployables that exist, `src/server/` and `src/client/`,
+are TypeScript, and `pnpm typecheck` checks each against its own `tsconfig.json`. A script is not a
+deployable, so this record does not reach `scripts/`;
+[ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) puts every repo script on Node, and
+`scripts/check-docs.py` is the one file still in another language.
 
 ## Rejected
 

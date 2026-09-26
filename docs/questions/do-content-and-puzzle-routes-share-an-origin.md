@@ -72,9 +72,9 @@ first appears, and it is worth confirming rather than assuming, since the failur
 so the cost of starting under one host is a redirect rule rather than a broken link — provided the
 original host stays alive to serve it.
 
-**M1 settles the origin for the client and the API, not for everything.** That milestone deploys both
-halves of the system onto one origin and the choice is permanent, so the host has to satisfy the
-server and its store rather than only the client. What stays open here is narrower: whether a third
-kind of route — writing, a landing page — joins them on that origin or lives somewhere of its own.
-That does not have to be settled to choose the host, provided the host is not chosen on the
-assumption that it never will be.
+**Whether the client and the API share an origin is a separate question, open at M1.** That is
+[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md), which
+M1's deployment slice must answer before a host is chosen. What stays open here is narrower: whether
+a third kind of route — writing, a landing page — joins the client on its origin or lives somewhere
+of its own. That does not have to be settled to choose the host, provided the host is not chosen on
+the assumption that it never will be.

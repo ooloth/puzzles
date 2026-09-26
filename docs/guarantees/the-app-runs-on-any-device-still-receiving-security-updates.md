@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-24
+updated: 2026-09-26
 update_when: the declared floor moves, or a vendor changes what it patches
 decays: slow
 status: active
@@ -29,14 +29,17 @@ versions of the other engines, which is the oldest branch Apple still patches pe
 promise covers. That is expected and is not a violation, but it is a change to what players are owed
 rather than a configuration detail, and the record that moves it says so.
 
-**Enforced by** Nothing yet, and the two halves will never be enforced equally.
+**Enforced by** Not yet, and the two halves will never be enforced equally.
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) and
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-fix what the mechanism will be — the build lowers to the declared floor, one check parses the emitted
-bundle at that floor, another checks source for APIs the floor lacks — but no build and no check
-exists. When they do, the syntax half is a parse that succeeds or fails, and the API half is static
-analysis that misses aliased globals, dependencies and anything inside a feature-detection guard. So
-a green check will never be sufficient evidence for this promise.
+fix what the mechanism will be — the build lowers to the declared floor, one check parses the
+emitted bundle at that floor, another checks source for APIs the floor lacks. The build exists and
+lowers to the floor's named versions, and `vite.config.test.ts` confirms that one kind of syntax the
+floor cannot parse comes out lowered. Neither check exists yet, so nothing confirms the whole bundle
+parses at the floor or that source avoids APIs the floor lacks. When they do exist, the syntax half
+is a parse that succeeds or fails, and the API half is static analysis that misses aliased globals,
+dependencies and anything inside a feature-detection guard. So a green check will never be
+sufficient evidence for this promise.
 
 **If violated** A player opens the app and it does not work, with nothing to act on and no way to
 tell that their device is the reason. They are, per [../problem.md](../problem.md), someone with no

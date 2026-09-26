@@ -37,12 +37,12 @@ it holds whichever language wins.
 
 ## Enforced by
 
-**Nothing. Asserted only, and no deployable exists.** It becomes checkable the moment there is more
-than one deployable, and mechanically so: a second language in a deployable's manifest is a violation
-anything could detect. Until then it constrains records rather than code, and
-[ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) is where it was applied: one language
-across every deployable is why that record put the server, the generator and every script on one
-runtime rather than letting them differ.
+**Nothing checks it, and it holds.** The two deployables that exist, the server under `src/server/`
+and the client under `src/client/`, are both TypeScript. A second language in a deployable would be
+a violation anything could detect mechanically, and nothing looks for one yet. It also constrains
+records, and [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) is where it was
+applied: one language across every deployable is why that record put the server, the generator and
+every script on one runtime rather than letting them differ.
 
 ## Rejected
 

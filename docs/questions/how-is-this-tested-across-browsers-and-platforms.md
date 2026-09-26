@@ -23,11 +23,12 @@ Android says its eviction behaviour is unknown and must not be inferred from Chr
 numbers. So the platform this app is aimed at hardest is the one with the least written down, and
 the coverage question is not symmetric across the matrix.
 
-**It is also unbounded until somebody says what the matrix is.** Compatibility is a section in the
-[guarantees README](../guarantees/README.md) holding no promises yet, and it says so plainly: every
-promise in this folder "is implicitly scoped to something, and until that scope is written down each
-one quietly claims more than it can deliver." Testing everywhere is not a plan. This question cannot
-be answered without that scope, and naming the scope is most of the work.
+**It is also unbounded until somebody says what the matrix is.** The Compatibility section of the
+[guarantees README](../guarantees/README.md) sets the floor, every device still receiving security
+updates, and says plainly that a supported browser is not promised to behave identically to any
+other. That bounds which browsers count, not which ones get tested, and testing everywhere is not a
+plan. This question cannot be answered without naming that matrix, and naming it is most of the
+work.
 
 **The same capability is what lets an agent check a change without the maintainer watching**, which
 is the argument for everything else in this milestone.

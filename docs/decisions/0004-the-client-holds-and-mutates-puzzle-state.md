@@ -31,9 +31,9 @@ without waiting on anything remote. The rules needed to validate a move run on t
 
 ## Enforced by
 
-**Nothing. Asserted only, and no client exists.** What would make it true is a client that holds the
-board and mutates it locally, with no server round trip between an input and a paint. It arrives
-across M5 and M6, and
+**Nothing. Asserted only, and no client holds puzzle state yet.** What would make it true is a
+client that holds the board and mutates it locally, with no server round trip between an input and a
+paint. It arrives across M5 and M6, and
 [input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md)
 is the promise that rests on it.
 

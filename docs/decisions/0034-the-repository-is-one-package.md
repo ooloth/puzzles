@@ -2,7 +2,7 @@
 number: 0034
 status: accepted
 date: 2026-09-20
-amended: 2026-09-22
+amended: 2026-09-25
 ---
 
 # 34 — the repository is one package
@@ -41,9 +41,10 @@ under `src/`.
 
 Type checking is scoped per directory rather than per package: one base configuration carries the
 compiler options, and `src/rules/`, `src/client/`, `src/server/` and `src/generator/` each carry a
-short `tsconfig.json` differing only in `lib` and `types`. This is not a property of the choice —
-`lib` and `types` cannot be scoped within one configuration, so every layout needs several
-configurations. It is stated here so that the count of configuration files is not mistaken for a
+short `tsconfig.json` differing in `lib` and `types`, plus `jsx` for the client. A root
+`tsconfig.json` covers the build's own files, `vite.config.ts` and its test, which run on Node and
+belong to no directory under `src/`. This is not a property of the choice — `lib` and `types`
+cannot be scoped within one configuration, so every layout needs several configurations. It is stated here so that the count of configuration files is not mistaken for a
 cost this decision introduces.
 
 **This preserves one option deliberately.** A workspace sibling is placed under `node_modules` by

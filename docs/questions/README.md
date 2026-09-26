@@ -172,19 +172,6 @@ technical properties reachable — performance, safety, portability, and the one
 matter. A question that cannot be settled without a preference says so rather than inventing a
 derivation.
 
-2. **A browser shows "Hello!" rendered by the client, locally.**
-   - **Given:** [0004-the-client-holds-and-mutates-puzzle-state](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)
-   - **Given:** [0013-every-puzzle-cell-is-a-focusable-labelled-element](../decisions/0013-every-puzzle-cell-is-a-focusable-labelled-element.md)
-   - **Given:** [0014-all-play-is-reachable-from-the-keyboard-alone](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md)
-   - **Given:** [the-board-in-play-continues-through-a-loss-of-connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-   - **Given:** [the-app-never-opens-to-a-blank-screen-after-the-first-visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-   - **Given:** [../constraints.md](../constraints.md) — keeping any promise offline puts the thing on the device before the network goes
-   - **Given:** [0024-the-entry-document-is-a-build-output-not-a-per-request-render](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) — so the document is produced by the build, and a renderer is not also being chosen as a server
-   - **Given:** [0025-the-client-build-lowers-syntax-to-a-declared-floor](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) — the bundler must be able to lower syntax to a stated target, which `bun build` cannot
-   - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the build is the floor's only reader until the checks arrive at M2, so `build.target` names the floor's versions in the build's own config and never falls through to the bundler's default
-   - **Given:** [0029-the-client-bundler-is-vite](../decisions/0029-the-client-bundler-is-vite.md) — the precache manifest and content-hashed filenames are this bundler's outputs, and whether it emits a manifest containing the entry document is what that record names as unproven
-   - **Given:** [0037-the-renderer-draws-client-state-and-does-not-own-it](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) — so the renderer only draws state held under `src/client/state/`, and replacing it costs a rewrite of the views rather than of the client
-   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so "Hello!" is rendered by React, mounted from an entry document the build produces
 3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles

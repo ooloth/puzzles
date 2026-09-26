@@ -86,13 +86,15 @@ the root and no workspace, with each part of the system a directory beneath `src
 ```
 package.json        one manifest, every dependency
 tsconfig.base.json  the compiler options
+tsconfig.json       the build's own files, run by Node        lib esnext   types node
+vite.config.ts      the client build and its browser floor    ADR-0029
 src/rules/          shared by the client and the generator   lib esnext   types none
-src/client/         bundled by Vite                 ADR-0029  lib esnext + dom
+src/client/         bundled by Vite                 ADR-0029  lib esnext + dom   jsx
 src/server/         run by Node                     ADR-0030  lib esnext   types node
 src/generator/      run by Node; nothing here until M8
 ```
 
-Each directory carries a short `tsconfig.json` differing only in `lib` and `types`, which is what
+Each directory carries a short `tsconfig.json` differing in `lib` and `types`, which is what
 keeps DOM globals out of the server and Node globals out of the client. Nothing else enforces the
 boundary between these four: a cross-boundary import is refused by the type check and waved through
 by the bundler with a warning, and nothing runs the type check until M2.

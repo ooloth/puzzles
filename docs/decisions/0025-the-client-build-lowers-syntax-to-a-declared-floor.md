@@ -60,19 +60,21 @@ evidence about a bundler, and the other three were decided on their own.
 
 ## Enforced by
 
-**Nothing. Asserted only, and no build exists.**
+**The build's target and one test, until M2.** `vite.config.ts` names the floor's versions in
+`browserFloor`, whose type rejects a keyword such as `esnext`, and `vite.config.test.ts` checks that
+a class static block, which the floor cannot parse, comes out of the build lowered. That test fails
+under Vite's default target.
 
-What would make it true is a client build configured with a lowering target that names the floor's
-versions, which arrives at M1 with the client build, and a check over the emitted bundle confirming
-it, which arrives at M2. At M1 the build is the floor's only reader and names the versions in its
+What would make it fully true is a check over the emitted bundle confirming it parses at the floor,
+which arrives at M2. At M1 the build is the floor's only reader and names the versions in its
 own config; the shared declaration in
 [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) takes over
 when the check arrives.
 
 **The gap between those two is where this record is most likely to look honoured and not be.** A
-build configured with a target emits what the tool emits, and nothing between M1 and M2 compares that
-against the floor. The bundler choice is the only thing carrying this until the check exists, which
-is why it appears as a given on M1 slice 2 rather than only here.
+build configured with a target emits what the tool emits, and the test above proves only that the
+target reaches the build for one syntax feature, not that the whole bundle parses at the floor. The
+bundler's lowering is the only thing carrying the rest until the check exists.
 
 ## Rejected
 

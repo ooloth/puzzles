@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-22
+updated: 2026-09-25
 update_when: a new way to run or observe the system exists, or an old one breaks
 decays: fast
 status: active
@@ -35,10 +35,21 @@ Correct looks like: the curl gets its full response with `200`. The process logs
 then `request completed`, then `shut down`, and exits 0 within a few milliseconds of the request
 finishing. Exiting after about 72 seconds means idle connections are no longer being reaped.
 
+## A browser shows the client
+
+Run: `pnpm dev` for the development server, or `pnpm build` then `pnpm preview` for the built
+output.
+Look at: the printed address in a browser, and `dist/client/` after a build.
+Correct looks like: the page shows "Hello!" with no console errors. The served document's `#root` is
+empty and React fills it. `dist/client/index.html` loads one script named `assets/index-<hash>.js`.
+Can't observe: whether the built script parses on a browser at the floor. Nothing here runs one,
+and that check is owed at M2.
+
 ## Automated checks
 
-Run: `pnpm test` for the server's tests, `pnpm typecheck` for the server's types, and
-`python3 scripts/check-docs.py` for the documentation.
+Run: `pnpm test` for the server's tests and the client build's tests, `pnpm typecheck` for the
+server, the client and the build config, and `python3 scripts/check-docs.py` for the documentation.
+The server's tests bind a local port.
 Can't observe: nothing runs any of these on its own. That is
 [what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M2.
 

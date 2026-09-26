@@ -2,3 +2,4 @@
 .trekker
 
 node_modules/
+dist/

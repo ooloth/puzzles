@@ -63,9 +63,10 @@ at M8 is where that gets asked. Nothing here forecloses it.
 
 ## Enforced by
 
-**Nothing. Asserted only, and no build exists.** What would make it true is an entry document emitted
-by the build rather than rendered per request. It arrives at M1 slice 2, and the same document is
-what carries the fallback
+**The client build.** `pnpm build` emits `dist/client/index.html` from `src/client/index.html`, and
+`vite.config.test.ts` checks that the emitted document loads a content-hashed script. Nothing checks
+that no route renders the document per request; no route serves it yet. The same document is what
+will carry the fallback
 [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md)
 promises.
 

@@ -66,9 +66,8 @@ same spike, downloaded once and parsed on every cold start. Storage does not bin
 
 ## Enforced by
 
-**Nothing. Asserted only.** No client code exists. It is satisfied when `react` and `react-dom`
-are the client's rendering dependencies and the entry point mounts a React root, which slice 2 of M1
-builds.
+**Nothing checks it, and it holds.** `react` and `react-dom` are the client's rendering dependencies
+in `package.json`, and `src/client/main.tsx` mounts a React root.
 
 ## Rejected
 

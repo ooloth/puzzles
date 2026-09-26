@@ -35,10 +35,11 @@ written in browserslist, Vite reads it through an adapter. What format carries t
 
 ## Enforced by
 
-Nothing yet. It is satisfied by a `vite.config.ts` existing, by that config setting `build.target`
-to the floor's named versions rather than leaving Vite's default in place, by that target coming
-from the shared declaration once M2 adds the checks that also read it, and by the build emitting a
-precache manifest that contains the entry document. The third is the one worth checking directly,
+`vite.config.ts` sets `build.target` to the floor's named versions, typed so that a keyword does not
+compile, and `vite.config.test.ts` fails if the build stops lowering syntax the floor cannot parse.
+Two conditions are unmet: the target coming from the shared declaration once M2 adds the checks that
+also read it, and the build emitting a precache manifest that contains the entry document. The
+second is the one worth checking directly,
 because [ADR-0028](0028-the-client-build-and-the-http-server-are-separate-tools.md) rejects three
 candidates for failing it and nothing here proves this one succeeds.
 

@@ -66,7 +66,7 @@ input and its write. The storage mechanism is open at M6.
 
 ## Enforced by
 
-**Nothing. Asserted only.** No client code exists. It is satisfied when `src/client/state/` exists,
+**Nothing. Asserted only.** No client state exists yet. It is satisfied when `src/client/state/` exists,
 and view code reaches it only through its snapshot, subscription and actions. An import boundary
 check could enforce the second half once M2 chooses the checks.
 

@@ -16,7 +16,8 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-**Actually** the only code is a server under `src/server/` that answers one route, and where the
+**Actually** the only code is a server under `src/server/` that answers one route and a client under
+`src/client/` that renders "Hello!", and where the
 system runs and what deploys it are open. Settled so far: the store is a SQLite
 file the server process opens, a service worker answers navigations, the entry document is a build output, the client build and the HTTP server are separate
 tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is

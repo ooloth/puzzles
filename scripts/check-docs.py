@@ -38,6 +38,11 @@ INDEXES = [
 
 SKIP_DIRS = ('brainstorming',)
 
+# Claude Code keeps a `.claude/` bookkeeping directory in whatever directory a
+# shell was left in. Under docs/ it is never a doc, and git never sees it, so it
+# is reported as an artifact to delete rather than as a missing index entry.
+HARNESS_DIR = '.claude'
+
 problems = []
 
 
@@ -225,6 +230,7 @@ def check_top_level_index():
         if (f.endswith('.md') and f != 'README.md') or os.path.isdir(os.path.join('docs', f))
     }
     present -= set(SKIP_DIRS)
+    present.discard(HARNESS_DIR)  # check_harness_artifacts reports it
     for f in sorted(present - listed):
         problems.append(f'NOT INDEXED  docs/{f} is missing from docs/README.md')
 
@@ -235,6 +241,18 @@ def check_top_level_index():
     }
     for f in sorted(listed - claude - {'brainstorming'}):
         problems.append(f'TABLE DRIFT  docs/{f} is in docs/README.md but not CLAUDE.md')
+
+
+def check_harness_artifacts() -> None:
+    """Every `.claude` directory under docs/ is a harness artifact, at any depth."""
+    for root, dirs, _ in os.walk('docs'):
+        dirs.sort()
+        if HARNESS_DIR in dirs:
+            dirs.remove(HARNESS_DIR)
+            problems.append(
+                f'ARTIFACT     {os.path.join(root, HARNESS_DIR)} is a Claude Code working '
+                f'directory, created when a shell runs from inside docs/; delete it'
+            )
 
 
 def question_files():
@@ -566,6 +584,7 @@ check_heading_anchors()
 check_indexes()
 check_decision_checkboxes()
 check_top_level_index()
+check_harness_artifacts()
 check_question_sequencing()
 check_findings_note()
 check_decision_headings()

@@ -28,11 +28,18 @@ const SKELETON: Record<string, string> = {
   [`docs/guarantees/${GUARANTEE}`]: `# ${H1}\n`,
 };
 
-/** The CITATION lines the checker prints for a docs tree holding these files. */
-async function citationProblems(files: Record<string, string>): Promise<readonly string[]> {
+/**
+ * Every problem line the checker prints for a docs tree holding these files. A key ending in `/`
+ * is created as an empty directory, which is how the harness leaves its working directories.
+ */
+async function problemLines(files: Record<string, string>): Promise<readonly string[]> {
   const root = await mkdtemp(join(tmpdir(), "check-docs-"));
   try {
     for (const [path, content] of Object.entries({ ...SKELETON, ...files })) {
+      if (path.endsWith("/")) {
+        await mkdir(join(root, path), { recursive: true });
+        continue;
+      }
       await mkdir(join(root, dirname(path)), { recursive: true });
       await writeFile(join(root, path), content);
     }
@@ -40,10 +47,15 @@ async function citationProblems(files: Record<string, string>): Promise<readonly
       (done) => done.stdout,
       (failed: { stdout: string }) => failed.stdout,
     );
-    return stdout.split("\n").filter((line) => line.startsWith("CITATION"));
+    return stdout.split("\n").filter((line) => line.trim() !== "" && !/^\d+ problem\(s\)$/.test(line));
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+}
+
+/** The CITATION lines the checker prints for a docs tree holding these files. */
+async function citationProblems(files: Record<string, string>): Promise<readonly string[]> {
+  return (await problemLines(files)).filter((line) => line.startsWith("CITATION"));
 }
 
 function citing(text: string, target = `../guarantees/${GUARANTEE}`): string {
@@ -134,4 +146,30 @@ test("a guarantee with no H1 is compared against its filename and does not stop 
     "docs/questions/q.md": citing("every puzzle has exactly one solution", "../guarantees/every-puzzle-has-exactly-one-solution.md"),
   });
   assert.deepEqual(problems, []);
+});
+
+test("a .claude directory directly under docs/ is reported as an artifact to delete, not as unindexed", async () => {
+  const problems = await problemLines({ "docs/.claude/.cc-writes/": "" });
+  const artifacts = problems.filter((line) => line.startsWith("ARTIFACT"));
+  assert.equal(artifacts.length, 1, problems.join("\n"));
+  assert.match(artifacts[0]!, /^ARTIFACT +docs\/\.claude /);
+  assert.ok(artifacts[0]!.includes("delete it"), artifacts[0]!);
+  assert.ok(!problems.some((line) => line.startsWith("NOT INDEXED") && line.includes(".claude")), problems.join("\n"));
+});
+
+test("a .claude directory nested inside a docs folder is reported as an artifact", async () => {
+  const problems = await problemLines({ "docs/decisions/.claude/.cc-writes/": "" });
+  const artifacts = problems.filter((line) => line.startsWith("ARTIFACT"));
+  assert.equal(artifacts.length, 1, problems.join("\n"));
+  assert.match(artifacts[0]!, /^ARTIFACT +docs\/decisions\/\.claude /);
+});
+
+test("an ordinary directory under docs/ that the index omits is still reported as unindexed", async () => {
+  const problems = await problemLines({ "docs/drafts/": "" });
+  assert.ok(problems.includes("NOT INDEXED  docs/drafts is missing from docs/README.md"), problems.join("\n"));
+});
+
+test("a docs tree with no .claude directory reports no artifact", async () => {
+  const problems = await problemLines({});
+  assert.ok(!problems.some((line) => line.startsWith("ARTIFACT")), problems.join("\n"));
 });

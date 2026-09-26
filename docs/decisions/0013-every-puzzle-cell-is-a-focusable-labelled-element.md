@@ -13,8 +13,8 @@ is a property of how the game is played, not an accommodation. A grid a player c
 keyboard fails half the audience described there before accessibility is mentioned at all.
 
 **[../questions/README.md](../questions/README.md) chooses the renderer at M1 and the input model at
-M4**, while [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
-sits at M9. The decision that forecloses it comes five milestones before the question that asks
+M5**, while [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md)
+sits at M10. The decision that forecloses it comes five milestones before the question that asks
 about it, which is the pattern the portable decision-making standard names as worth stopping for:
 a choice that narrows everything downstream without announcing that it has.
 
@@ -72,9 +72,9 @@ an accessible name for every cell.
   `../problem.md` says the desktop half is keyboard-driven, so this fails a stated requirement on
   the day it ships.
 
-- **Decide it at M9, where the question already sits.** The honest "not yet", and it is late by five
+- **Decide it at M10, where the question already sits.** The honest "not yet", and it is late by five
   milestones per [../questions/README.md](../questions/README.md): the renderer is chosen at M1 and
-  the input model at M4.
+  the input model at M5.
 
 - **Promise full screen-reader support now.** Over-decides, and would be a promise effort alone
   cannot keep. The finding in

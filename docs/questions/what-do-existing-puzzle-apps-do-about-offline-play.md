@@ -31,7 +31,6 @@ Ported from the legacy documentation review, 2026-08-30.
 
 ## Findings
 
-...
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **A search for published engineering writing on this came back essentially empty**, and that is the

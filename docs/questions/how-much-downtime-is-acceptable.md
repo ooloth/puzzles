@@ -8,11 +8,14 @@ resolves_into: decision
 
 ## Why it matters
 
-No candidate arrangement gives hardware redundancy without paying for it, and backups protect data
-rather than availability. Accepting that is entirely reasonable for a project this size — but it
-should be accepted explicitly, with a tolerable outage length attached, rather than discovered during
-one. How much redundancy is even in question depends on the arrangement, which is why this cannot be
-answered before the store's shape is.
+The server and its store share one machine, per
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), so the machine failing
+takes the app down until it is replaced, and nothing gives redundancy without paying for it. Backups
+protect data rather than availability, which is why
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+needs a copy off the machine for the data and says nothing about uptime. Accepting that is entirely
+reasonable for a project this size, but it should be accepted explicitly, with a tolerable outage
+length attached, rather than discovered during one.
 
 ## What would settle it
 
@@ -41,25 +44,15 @@ about how long the app was unreachable while it happened. Accepting no redundanc
 this size; accepting it without naming a tolerable outage length is how the number gets discovered
 during an outage instead.
 
-**The redundancy claim below it was arrangement-specific and was stated as though it were general.**
-It read: "A single machine with a single volume has no hardware-failure redundancy, and that is
-equally true of a bare VPS and of a managed platform — neither gives redundancy without paying for
-it." That describes one arrangement — a process and its store sharing a machine — accurately, and
-approximately describes an always-on container with a network store. It does not describe a
-scale-to-zero container or ephemeral functions, where compute is rescheduled across instances by the
-platform and the store is a separately hosted service rather than a volume under the same machine.
+**One machine and one volume give no hardware redundancy, and nothing in the settled arrangement adds
+any.** [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) puts the process and
+its store on the same machine, so the machine running the process and the machine holding the data
+are one object, and its failure is an outage of both. No arrangement names a tolerable outage length;
+that is what this question is for.
 
-The error was collapsing "the machine running our process" and "the machine holding our data" into
-one object, which is true of only one candidate, and then generalising a conclusion drawn from it.
+*Reasoned — from the two records named.*
 
-> So this question cannot be answered before the store arrangement is, and the entry that assumed
-> otherwise is why it looked answerable. What remains true regardless: no arrangement gives
-> redundancy without paying for it, and none of them names a tolerable outage length for you.
-
-*Reasoned — 2026-09-02, from the failure-domain enumeration across the four candidate arrangements
-that [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) reasons from.*
-
-**Fly.io states the single-volume case in its own words**, for whichever arrangement ends up on one:
+**Fly.io states the single-volume case in its own words**:
 "If your app needs a volume to function, and the NVMe drive hosting your volume fails, then that
 instance of your app goes down. There's no way around that." Volumes are not replicated among
 themselves, and Fly's own docs say daily snapshots "shouldn't be your primary backup method."

@@ -9,8 +9,8 @@ resolves_into: decision
 ## Why it matters
 
 [README.md](README.md) holds the order every question is worked in and the rule for when a slice
-gets an issue, and [../README.md](../README.md) sends a new reader straight to it. It is 941 lines
-and about 73KB. An agent reading it cold had a plain read refused as too large, and a second read
+gets an issue, and [../README.md](../README.md) sends a new reader straight to it. It is about 960
+lines and 72KB, measured on 2026-09-25. An agent reading it cold had a plain read refused as too large, and a second read
 stopped at line 788, before the section saying when an issue is filed. The agent believed it had
 read the governing document and had not. The file grows with every milestone that gets planned, so
 this gets worse without anyone deciding it should.

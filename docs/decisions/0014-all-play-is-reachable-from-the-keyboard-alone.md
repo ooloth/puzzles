@@ -10,15 +10,15 @@ date: 2026-09-01
 
 **[../problem.md](../problem.md) records that the desktop half is keyboard-driven by default**, and
 that filling a grid by pointing at each cell is slower than typing. That makes this a requirement of
-the product rather than an accommodation, and it is why this record exists now rather than at M9.
+the product rather than an accommodation, and it is why this record exists now rather than at M10.
 
 **[ADR-0013](0013-every-puzzle-cell-is-a-focusable-labelled-element.md) makes it possible and does
 not make it true.** A grid of focusable cells can still require a pointer to enter a digit, toggle a
 note, or undo. Focus is the precondition; this is the promise.
 
-**[../questions/README.md](../questions/README.md) chooses the input model at M4** — [how does a
+**[../questions/README.md](../questions/README.md) chooses the input model at M5** — [how does a
 player enter a digit?](../questions/how-does-a-player-enter-a-digit.md) — and the interaction set at
-M9. An input model designed for touch and extended to the keyboard afterwards produces keyboard
+M10. An input model designed for touch and extended to the keyboard afterwards produces keyboard
 support for the actions somebody remembered, which is the failure this forecloses.
 
 ## Decision
@@ -65,8 +65,8 @@ at M10 has enumerated the actions. The promise resting on it is
   default rather than a fallback, so the cost of the rule is nearly zero at design time and the cost
   of the exception is discovered by a player who cannot finish a puzzle.
 
-- **Decide it at M9, with the rest of the interaction set.** The honest "not yet", and the input
-  model is chosen at M4. An interaction designed for touch and extended afterwards is exactly the
+- **Decide it at M10, with the rest of the interaction set.** The honest "not yet", and the input
+  model is chosen at M5. An interaction designed for touch and extended afterwards is exactly the
   retrofit `../guarantees/README.md` warns is expensive.
 
 - **Make it a standard rather than a promise.** Genuinely arguable: a rule about how interactions
@@ -87,7 +87,7 @@ keyboard](../guarantees/every-action-while-solving-is-reachable-from-the-keyboar
 _Enforced by: Nothing. Asserted only._ alongside every other promise in that folder, and the honest
 reading is that this is a commitment to build the check rather than a check.
 
-**It constrains M4 and M9 before either is worked.** [How does a player enter a
+**It constrains M5 and M10 before either is worked.** [How does a player enter a
 digit?](../questions/how-does-a-player-enter-a-digit.md) now has an option class ruled out — a
 gesture with no keyboard equivalent, drag-select being the obvious candidate. That is real
 foreclosure, and drag-select is a genuinely good touch interaction whose keyboard form is not

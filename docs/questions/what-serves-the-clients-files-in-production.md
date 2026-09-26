@@ -74,3 +74,6 @@ has to be chosen to serve files. What that record leaves for this one is unchang
 static files through `@fastify/static`, which was measured setting a different `Cache-Control` per
 asset class and answering both conditional-request headers with a 304, so the same process remains a
 live option here rather than a foregone one.
+*Measured — with `@fastify/static` 10.1.4 in the HTTP handler spike on 2026-09-21, recorded in the
+question file deleted by commit `dff3fd0`; `git show
+dff3fd0^:docs/questions/what-handles-http-requests-on-the-server.md` reads it.*

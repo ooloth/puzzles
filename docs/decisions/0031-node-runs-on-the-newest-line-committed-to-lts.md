@@ -149,9 +149,9 @@ to gain from a newer runtime and something to lose from any change at all.
 **Not yet, and keep only the concrete version — because the version was going to be chosen by an
 unstated rule.** The case for it is the strongest objection to this whole record: M1 needs a number
 in a file, not a policy, and a rule decides April 2027 today when waiting would decide it with more
-information. What disqualifies it is that the first draft of this record did exactly that and picked
-26 on the grounds that v24 expires in thirty-one days — which is a rule about support runway,
-applied once and left unnamed. A premise doing that much work is decided rather than deferred.
+information. What disqualifies it is that keeping only the concrete version still chooses it by a
+rule: picking 26 because v24 expires in thirty-one days is a rule about support runway, applied once
+and left unnamed. A premise doing that much work is decided rather than deferred.
 
 *Reverses if* the rule turns out to select something unacceptable and gets overridden by hand, which
 would mean the real decision procedure is judgement and this record is describing it wrongly.

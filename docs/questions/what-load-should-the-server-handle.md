@@ -8,9 +8,12 @@ resolves_into: decision
 
 ## Why it matters
 
-Every performance argument made so far has been made without a number — framework throughput,
-generation cost, database write capacity. A stated load target turns those from opinions into
-checks, and until one exists, no benchmark can be shown to matter or not matter.
+**Framework throughput already has a number and does not need a target.**
+[../constraints.md](../constraints.md) records measured capacity in the tens of thousands of requests
+a second and a deliberately generous traffic model whose morning peak is 46 requests a second, so
+per-request overhead does not bind at any plausible load. **Generation cost and database write
+capacity have no number yet.** A stated load target turns those from opinions into checks, and until
+one exists, no benchmark of them can be shown to matter or not matter.
 
 It also decides *which* measurement is the relevant one. Throughput only becomes interesting
 above some level of concurrency; latency at the tail is what a player experiences at any level,

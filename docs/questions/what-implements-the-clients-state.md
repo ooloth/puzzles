@@ -65,5 +65,7 @@ detecting eviction.
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
 prices at close to the cost of rewriting it, and the TC39 proposal that would standardise signals is
 at Stage 1.
-*Reasoned. The proposal's stage is from the renderer survey in
-[what renders the client?](what-renders-the-client.md), 2026-09-16, not re-checked since.*
+*Sourced — the proposal's stage is from the renderer survey in
+[what renders the client?](what-renders-the-client.md), read by a research agent 2026-09-16, not
+re-checked since. That it prices the dependency high is reasoned from
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).*

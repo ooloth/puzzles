@@ -96,17 +96,25 @@ what makes that kind of interface feel considered. **We are knowingly shipping a
 iOS.** This is the single largest thing given up here, it is not recoverable by more effort inside
 the web platform, and it should not be quietly reframed later as unimportant.
 
+*Unverified — no source is recorded for the 2017 removal or for the state of the request to restore
+it.*
+
 **Web content is capped at sixty frames per second on iOS.** The WebKit bugs tracking this have
 been open since 2017 and June 2025 respectively, and there is no public API to opt in. This is the
 one loss a native shell does not buy back, because `WKWebView` is capped too. It is judged
 acceptable because this app's animation is modest and its interaction is tap-driven rather than
 drag- or physics-driven, where the difference would be visible.
 
+*Unverified — the two WebKit bugs are not named and their dates have no recorded source.*
+
 **VoiceOver support for ARIA grids is actively broken in ways that bear on exactly this widget.**
 Open WebKit bugs cover `aria-selected` not being announced on `role=gridcell`, column headers not
 being announced during cell navigation, and row headers in `aria-owns` grids. A native grid view
 uses first-party accessibility APIs and avoids the bug class structurally. This was weighed and
 judged not decisive; [is screen reader support in scope for v1?](../questions/is-screen-reader-support-in-scope-for-v1.md) remains open and inherits this as a finding.
+
+*Unverified here — the three bugs are not linked from this record; the screen-reader question
+records its own findings on them.*
 
 **[../constraints.md](../constraints.md)'s browser sections are the cost of this decision.**
 Roughly two thirds of that file — eviction clocks, the `persist()` membership test, the
@@ -142,6 +150,9 @@ free here and already required by
 reasons; and serializable state carrying an explicit schema version, not yet decided anywhere,
 which belongs with
 [is puzzle state a snapshot or an event log?](../questions/is-puzzle-state-a-snapshot-or-an-event-log.md).
+
+*Unverified — Capacitor's release activity, the few-weeks estimate, WebKit's statement on tracking
+prevention and Capacitor's warning about `localStorage` have no recorded sources.*
 
 ## Revisit when
 

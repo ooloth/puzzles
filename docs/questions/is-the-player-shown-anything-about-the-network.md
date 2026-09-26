@@ -8,9 +8,9 @@ resolves_into: decision
 
 ## Why it matters
 
-[The network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md).
-That is a promise about what the network may do to a player. Whether the interface
-says anything about it — an offline glyph, a note that a puzzle will sync later, a quiet indication
+[The player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md).
+That promise forbids asking the player to act on the network and permits showing it. Whether the
+interface says anything about it — an offline glyph, a note that a puzzle will sync later, a quiet indication
 that something is pending — is a separate judgement, and it is open.
 
 Three things depend on this being answered deliberately rather than by default: whether a guest is

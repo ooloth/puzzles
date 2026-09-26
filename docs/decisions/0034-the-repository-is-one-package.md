@@ -2,7 +2,7 @@
 number: 0034
 status: accepted
 date: 2026-09-20
-amended: 2026-09-25
+amended: 2026-09-26
 ---
 
 # 34 — the repository is one package
@@ -73,8 +73,7 @@ is what closes that, and until it lands the guard exists without running.
 real and is why this is a decision rather than a formality. It is the only shape where the tooling
 refuses a cross-boundary import outright: `vite build` fails with a resolution error where the
 single package merely warns. Four short manifests are not overhead but the mechanism, each stating
-what one thing may reach. The entry document sits beside the client rather than at the repository
-root, which reads better. Rejected because **the boundaries it buys surround three directories that
+what one thing may reach. Rejected because **the boundaries it buys surround three directories that
 have one consumer each** — nothing imports the client, the server or the generator — and the
 portable code-structure standard holds that such a boundary is not earned. The rules module is the
 only code here with several consumers, and it is shared without a publish step under this record as

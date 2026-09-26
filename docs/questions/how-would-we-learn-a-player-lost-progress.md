@@ -52,9 +52,11 @@ reports nothing either. Evidence that the durability promise is being kept has t
 somewhere other than the player noticing.
 
 **Reporting home does not conflict with the offline guarantee.**
-[The network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
-bounds what the network may do to a player — block, delay, interrupt — and reporting to the
-maintainer does none of those, because the player never sees it. What remains true is that anything reporting home has to fail invisibly: a failed
-report must not become a visible error. A server that only receives these reports does not reopen
+[Input registers without waiting for the network](../guarantees/input-registers-without-waiting-for-the-network.md),
+[the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md), and
+[the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md).
+Reporting to the maintainer delays no input, stops no play and asks nothing of the player, because
+the player never sees it. What remains true is that anything reporting home has to fail invisibly:
+a failed report must not become a visible error. A server that only receives these reports does not reopen
 [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md)'s decision to keep
 authoritative state on the client — it can exist without sitting on the interaction path.

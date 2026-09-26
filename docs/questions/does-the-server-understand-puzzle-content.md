@@ -73,7 +73,7 @@ options by checking against a version of the schema that was current when the da
 **Rejecting a write cannot be the answer on its own.** The client is authoritative and works
 offline, so a write it cannot deliver is a write it keeps. A server that refuses one produces a
 client holding state it cannot sync, indefinitely, with
-[the network never blocks, delays or interrupts play](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+[the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
 forbidding that from becoming the player's problem.
 
 **Validation and arbitration are different powers and only one is ruled out.** Checking a shape is

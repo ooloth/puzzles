@@ -2,6 +2,7 @@
 number: 0010
 status: accepted
 date: 2026-09-01
+amended: 2026-09-26
 ---
 
 # 0010 — The store needs a host, so this system has a server
@@ -84,8 +85,8 @@ be, and M1 slice 1 is where one first answers a request.
 ## Risk
 
 **It reads as bigger than it is.** "There is a server" invites building one, and nothing here
-schedules that or says what it does. The milestone sequence puts a same-origin endpoint answering one
-route at M1 and a store behind it at M2, and neither is a server in the sense this record might be
+schedules that or says what it does. The milestone sequence puts an endpoint answering one
+route at M1 and a store behind it at M3, and neither is a server in the sense this record might be
 read to authorise.
 
 **It arrives before the rest of what the server holds is worked.** The danger is that a server

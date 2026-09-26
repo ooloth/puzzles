@@ -320,6 +320,7 @@ only." where nothing does>
   still needs asking at all — and nobody notices from inside the record. Two examples left over
   A question whose title carries a conditional — "if there is one", "if anything" — is the clearest
   case, because the record that answers the conditional leaves the question asking something settled.
-  Bare filenames in prose are invisible to `scripts/check-docs.py`, which matches markdown links
-  only, so a renamed question leaves a dead reference here that nothing reports; link them.
+  A filename in plain prose, neither linked nor in backticks, is invisible to
+  `scripts/check-docs.py`, so a renamed question leaves a dead reference here that nothing reports;
+  link them.
   Tick the box by saying what moved, or by saying nothing did.

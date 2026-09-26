@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-25
+updated: 2026-09-26
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -43,6 +43,12 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
+**The third slice answers whether the client and the API share an origin, a slice before the host is
+chosen.** It is the first slice where the client calls the API, so it has to join the two locally,
+and [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+requires the local arrangement to follow production's. The answer narrows which hosts qualify by
+topology. It is not the client selecting a host, and choosing one is still the fourth slice.
+
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
 technical properties reachable — performance, safety, portability, and the ones not yet known to
@@ -52,11 +58,13 @@ derivation.
 A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
 closes, and the slices left keep their numbers because records cite them by number.
 
-3. **The client calls the server's `/hello` route and shows the answer, locally.**
+3. **The client calls the server's `/hello` route and shows the answer, locally.** Its two **Must
+   answer** entries are independent: neither answer changes what the other has to decide, so their
+   order below says nothing about which to take first.
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
    - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is shown by a React view. It leaves data loading to be chosen, and [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not settle it either: it keeps state a promise covers out of the renderer and lets other state live inside it
-     - **Must answer:** [how-does-the-client-load-data-from-the-server](how-does-the-client-load-data-from-the-server.md) — or else this slice's fetch goes wherever is convenient and M3's puzzle fetch copies it. A puzzle on the board is state [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) keeps out of the renderer, so a loading path built inside a view is moved out again at M3. Costs a re-scaffold of the client's loading path
+     - **Must answer:** [how-does-the-client-load-data-from-the-server](how-does-the-client-load-data-from-the-server.md) — or else M3's puzzle fetch inherits a loading path this slice built without an answer. A puzzle on the board is state [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) keeps out of the renderer, so a loading path inside a view is moved out again at M3, with the first real content already depending on it. Costs a re-scaffold of the client's loading path
    - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so locally the client and the API are two processes on two ports, and the browser sees two origins unless something joins them
    - **Given:** [0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) — so how the local call is joined follows production's arrangement rather than convenience, and until M2 builds the production-like run this slice is verified in the closest mode with its gap recorded
      - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md), for local runs and production together — or else the local call is wired before production's arrangement is known. A proxy against a split production hides every cross-origin fault until it is deployed, and cross-origin headers against a single origin add server behaviour production never wants. Costs a re-scaffold of the local wiring, and the first direction fails silently
@@ -109,7 +117,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
 1. [What runs the tests?](what-runs-the-tests.md) — `node --test` runs them today as a stopgap.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
-3. **Rewriting `check-docs.py` in TypeScript.** Not a question:
+3. **Rewrite the docs checker in TypeScript.** Not a question:
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every repo
    script runs on Node, so the Python checker is the one artifact in the repository contradicting a
    settled record. Its answered question file is
@@ -134,10 +142,10 @@ a player can see, which is why it has to be a milestone rather than a habit.
    pin with only one machine to bind is a file nothing reads. It carries the artifact
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, and
    the rule at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
-   supplies the Node value it has to hold. **Both its inputs have now landed**: the package manager
-   is settled at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), whose own spike found
-   that pnpm reads a `packageManager` field and switches itself to the declared version with no
-   Corepack involved, which is one of the mechanisms this question has to weigh.
+   supplies the Node value it has to hold. The package manager is
+   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and pnpm reads a `packageManager`
+   field and switches itself to the declared version with no Corepack involved, which is one of the
+   mechanisms this question has to weigh.
 6. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This is where [../verification.md](../verification.md) gets its content.
@@ -713,12 +721,13 @@ local runs, or both. A question framed only for production leaves its local half
 convenience, and per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
 the production-like local run has to match whatever production gets. **There are no Blocked by,
-Blocks, or What this decides beyond itself sections.** A per-file dependency list is one graph held in sixty-odd places, each of which sees a
-sliver of it. It goes stale invisibly — noticing requires re-reading everything around it — and it
-is trusted precisely because it reads as a fact rather than as the judgement it is. The milestone
+Blocks, or What this decides beyond itself sections.** A per-file dependency list is one graph held
+in sixty-odd places, each of which sees a sliver of it. It goes stale invisibly — noticing requires
+re-reading everything around it — and it is trusted precisely because it reads as a fact rather than as the judgement it is. The milestone
 grouping above holds the same information where every sequencing claim sits beside the others and
-one file can be checked against itself. `scripts/check-docs.py` fails on the two headings that
-carried this before, because they spread by being copied.
+one file can be checked against itself. `scripts/check-docs.py` fails on the two lead sentences
+that carried this before, "What this decides beyond itself" and "Not blockers, and worth saying so",
+because they spread by being copied. A paraphrase gets past it.
 
 A question that genuinely cannot be worked until another is answered says so under **What would
 settle it**, in prose, as part of describing what an answer requires.
@@ -761,8 +770,9 @@ Where a claim decays on a known date rather than gradually — a support window 
 reaching end of life — the finding says so and names the date, because that is cheaper to act on
 than a general warning.
 
-Nothing enforces any of this. `scripts/check-docs.py` checks that a tier is present and cannot
-check whether the claim behind it is still true.
+Nothing enforces any of this. `scripts/check-docs.py` checks that a tier, where one is given, is a
+recognised word. It does not check that a finding has one, and it cannot check whether the claim
+behind it is still true.
 
 ### Findings are evidence, not fact
 

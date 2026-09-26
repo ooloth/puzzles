@@ -85,14 +85,12 @@ server exists — so nothing about answering this question re-opens whether to b
 open is what that server holds and how it is operated, and
 [how is the server operated?](how-is-the-server-operated.md) is the latter half.
 
-**[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) was reasoned entirely from the signed-in bound this question now reopens, and says so
-itself.** Its own Risk section: "its whole basis is one promise in one record. If the durability record's
-signed-in bound is ever revised, this goes with it." Its own Revisit-when section: "the durability record is
-superseded and the signed-in bound is dropped... should be superseded in the same change." Demoting
-the durability record is exactly that event. This is recorded as a finding rather than acted on, because
-superseding a decision record is outside what this question can do on its own — it needs its own
-decision, made with the full inventory of what the server holds in view, not made as a side effect
-of opening this file.
+**No answer here can remove the server.**
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) rests on two
+records rather than on this bound: the store, from [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md),
+and withholdable content, from
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md). Its Revisit-when
+section needs both superseded before it falls.
 
 **Two bounds, one per persona, are a standing cost, not a one-time edit.** Every promise in
 [../guarantees/](../guarantees/) now has to name which persona it covers, and a promise that quietly

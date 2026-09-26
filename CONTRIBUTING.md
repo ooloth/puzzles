@@ -24,7 +24,7 @@ Either address shows "Hello!". The client does not call the server yet.
 ## Run the server
 
 - `pnpm start` listens on `127.0.0.1:3000`. Set `HOST` and `PORT` to change it.
-- `curl -i http://127.0.0.1:3000/hello` answers `200` with `Hello!`.
+- `curl -i http://127.0.0.1:3000/hello` answers `200` with `Hello!` (`http :3000/hello` is also available)
 
 ## Check a change
 

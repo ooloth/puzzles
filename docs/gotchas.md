@@ -25,6 +25,17 @@ Bites you when: `pnpm dev` seems to serve something other than `src/client/`. `c
 server actually sends. From M9 the app registers its own service worker on this address, which
 makes this more likely.
 
+### `pnpm` is whatever Corepack hands back
+
+Actually: `pnpm` on the development machine is Corepack's shim, from a global npm install, not a
+pnpm anyone chose. Inside this repo it honours `packageManager` in `package.json` and runs 12.5.1.
+In a directory without that field, such as a scratch project under `$TMPDIR`, it runs Corepack's
+default, 7.27.0, which fails every registry request on Node 26 with `ERR_INVALID_THIS`. Why this
+is not pinned yet is in
+[what pins the toolchain versions across machines?](questions/what-pins-the-toolchain-versions-across-machines.md).
+Bites you when: a spike outside the repo installs nothing and the error looks like a network or
+sandbox failure. Give the scratch project a `packageManager` field, or use `npm` there.
+
 <!-- Template:
 
 ### <What looks true but isn't>

@@ -12,9 +12,8 @@ date: 2026-09-26
 the HTTP server in separate tools, so from M1's third slice onward the client and the API run locally
 as two processes on two ports. Its Risk section records that the dev server does not proxy the API for
 free. How that gap is closed locally decides whether local runs are same-origin, which is the
-arrangement [do the client and the API share an origin?](../questions/do-the-client-and-the-api-share-an-origin.md)
-settles for production. That question is a **Must answer** for M1's third slice, and it cannot settle
-the local half without knowing what the local half owes production.
+arrangement [ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md) settles for production. M1's third slice needs the local half, and
+that cannot be settled without knowing what the local half owes production.
 
 [../problem.md](../problem.md) names the solo maintainer as a stakeholder and ranks clarity over
 cleverness because one person maintains this. A fault first seen after a deploy costs a deploy cycle

@@ -72,9 +72,8 @@ first appears, and it is worth confirming rather than assuming, since the failur
 so the cost of starting under one host is a redirect rule rather than a broken link — provided the
 original host stays alive to serve it.
 
-**Whether the client and the API share an origin is a separate question, open at M1.** That is
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md), which
-M1's deployment slice must answer before a host is chosen. What stays open here is narrower: whether
+**The client and the API share one origin**, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). What stays open here
+is narrower: whether
 a third kind of route — writing, a landing page — joins the client on its origin or lives somewhere
 of its own. That does not have to be settled to choose the host, provided the host is not chosen on
 the assumption that it never will be.

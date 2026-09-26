@@ -331,10 +331,10 @@ These are not requirements. They are futures [../problem.md](../problem.md) or a
 worth keeping, and a choice that closes one is a choice that has to say so.
 
 **Serving the client and the API on one hostname.** [../constraints.md](../constraints.md) records
-that this arrangement skips the first-party test entirely, that a second hostname resolving elsewhere
-caps the cookie to seven days, and that the failure is silent. Whether this system takes that
-exemption is [open](do-the-client-and-the-api-share-an-origin.md), so it is a door rather than a
-requirement.
+that this arrangement passes the first-party test by being compared with itself, that a second
+hostname resolving to a different provider caps the cookie to seven days, and that the failure is
+silent. [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts both halves on one origin, which keeps this door open without
+deciding whether a cookie walks through it.
 
 **Being installed to a home screen as a designed path.** [../constraints.md](../constraints.md)
 records installation as the only confirmed mitigation against the thirty-day wipe, and that an

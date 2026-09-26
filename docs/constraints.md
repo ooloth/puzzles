@@ -110,19 +110,21 @@ to a 400-day ceiling.
 *Sourced — WebKit's Intelligent Tracking Prevention 2.3 announcement, checked 2026-08-31.*
 
 **That exemption is lost if Safari judges the server setting the cookie not to be genuinely
-first-party.** The 7-day cap applies to a subresource request that looks first-party by hostname but
-resolves somewhere else — either through a CNAME pointing at a different host, or, when there is no
-CNAME, to an IP address matching the first-party host's in fewer than its leading 16 bits for IPv4
-or 64 bits for IPv6.
+first-party.** The check runs on every subresource request to the same site as the page, including
+one to the page's own hostname. Safari compares the request against what it recorded about the page's
+host from that host's top-level navigation. If the request resolved through a CNAME, the CNAME
+target's registrable domain must match the page's domain or the host's own recorded CNAME. With no
+CNAME, the request's IP address must share its leading 16 bits (IPv4) or 64 bits (IPv6) with the
+host's recorded address. A cookie on a response that fails is capped to 7 days.
 
-> So the recovery mechanism above depends on deployment topology, not just on code. A static host
-> with the API on its own subdomain is the shape that fails, and it fails silently: the cookie
-> expires in seven days alongside the storage it was meant to outlive. Two consequences are easy to
-> get backwards. **Serving the API on the same hostname as the app skips the test entirely**, because
-> there is then no second host to resolve and compare — which makes path-based routing, not merely
-> the same registrable domain, the arrangement that is safe. And a *genuinely* cross-origin API is
-> not exempt because the cap does not reach it: its cookies are blocked outright by ordinary
-> third-party cookie blocking, which is worse rather than better.
+> So the recovery mechanism above depends on deployment topology, not just on code, and it fails
+> silently: the cookie expires in seven days alongside the storage it was meant to outlive. A static
+> host with the API on a subdomain served by a different provider is the shape that fails. An API on
+> the page's own hostname passes, because it is compared with itself. Two subdomains CNAMEd to the
+> same provider's registrable domain also pass, so the same hostname is sufficient but not the only
+> safe arrangement. And a *genuinely* cross-site API is not exempt because the cap does not reach it:
+> its cookies are blocked outright by ordinary third-party cookie blocking, which is worse rather
+> than better.
 
 *Sourced — WebKit [PR #5347](https://github.com/WebKit/WebKit/pull/5347), diff read 2026-09-02, for
 [bug 246477](https://bugs.webkit.org/show_bug.cgi?id=246477) ("Cap cookie lifetimes to 7 days for
@@ -133,8 +135,34 @@ here rather than quoted from the source. The call sits behind `if (request.isThi
 so it runs only for requests that are not third-party, and behind `if (cnameDomain.isEmpty())`, so
 the IP comparison is the fallback when no CNAME exists. Top-level navigations are excluded earlier.
 Which Safari version shipped it is widely reported as 16.4 and appears in no Apple release note, so
-the version is unverified while the mechanism is not. Whether current WebKit trunk still carries it
-unchanged was not confirmed.*
+the version is unverified while the mechanism is not. WebKit trunk still carries it: re-read 2026-09-26 in `NetworkTaskCocoa.mm`
+`setCookieTransformForFirstPartyRequest`, at `2eb570e1d735` (2026-09-23), the last commit touching
+the file, which is also the source for the same-hostname comparison and the registrable-domain
+match described above.*
+
+**What Safari compares against is kept in memory and recorded only from a network response to a
+top-level navigation.** It sits in two in-memory maps on the network session, filled when a top-level
+navigation's response arrives. A navigation answered by a service worker, which
+[ADR-0023](decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) makes the
+normal case, may never record it in that browser session. With nothing recorded, the IP comparison
+lets the cookie through, but the CNAME comparison caps it: a request whose hostname is a CNAME to a
+provider's domain fails even when that hostname is the page's own.
+
+> So a hostname that is a CNAME to a platform's domain may cap even a same-hostname API's cookies,
+> on any visit after a browser restart where the service worker answered the navigation. An apex
+> domain served by A records has no CNAME and does not hit this. Whether it happens in a shipped
+> Safari is unobserved, so it bears on
+> [how does the domain reach the deployment?](questions/how-does-the-domain-reach-the-deployment.md)
+> as a risk to test rather than a fact to design around.
+
+*Reasoned from source, not observed. WebKit trunk read 2026-09-26 at the last commit touching the
+file, `2eb570e1d735` (2026-09-23): `NetworkDataTaskCocoa::updateFirstPartyInfoForSession` is called
+from `didReceiveResponse` only when `isTopLevelNavigation()`, and writes
+`m_firstPartyHostCNAMEDomains` and `m_firstPartyHostIPAddresses`, both `HashMap`s declared in
+`NetworkSession.h`. In `NetworkTaskCocoa.mm`, a missing recorded address returns the cookies
+uncapped, and the CNAME branch caps when `!cnameDomain.matches(firstPartyURL) && (!firstPartyHostCNAME
+|| ...)`. Whether a service-worker-answered navigation reaches `didReceiveResponse` as a top-level
+navigation was not traced.*
 
 **A home-screen-installed web app is exempt from the deletion mechanism entirely**, with storage
 isolated from regular Safari. This is the only confirmed mitigation.
@@ -600,6 +628,67 @@ during high-frequency input, updates that touch hundreds of elements at once, gr
 
 *Reasoned — from the floor guarantee and from what a renderer spends CPU and memory on. Nothing here
 has been measured.*
+
+---
+
+## Browsers — a second origin costs round trips
+
+*In scope because [decisions/0003](decisions/0003-this-is-delivered-over-the-web.md) chose web
+delivery.*
+
+**A cross-origin request that sends JSON waits for a preflight, and a same-origin request never
+does.** `Content-Type: application/json` is not a CORS-safelisted value, so a cross-origin POST
+carrying it sends an `OPTIONS` request and waits for the answer before the request itself leaves. A
+GET with no custom headers does not preflight. A same-origin request never reaches the preflight
+step.
+
+> So on a split topology every JSON write pays one more round trip, on links where one costs 270ms
+> to 2s. Avoiding it cross-origin means never sending a non-safelisted header, a rule on the API's
+> whole write contract.
+
+*Sourced — WHATWG Fetch, `fetch.bs` in whatwg/fetch, the CORS-safelisted request-header and HTTP
+fetch algorithms, read 2026-09-26.*
+
+**A preflight is cached per exact URL, for at most ten minutes in Safari.** The cache entry is keyed
+on the request's URL, so each distinct path preflights on its own. WebKit caps a cached preflight at
+600 seconds, Chromium at 2 hours and Firefox at 24 hours, and all three default to 5 seconds when the
+server sends no `Access-Control-Max-Age`.
+
+> So a preflight is not a one-time cost. A player on Safari pays it again on every session more than
+> ten minutes after the last, and on every new URL.
+
+*Sourced — `fetch.bs` cache entry definition, and WebKit
+`Source/WebCore/loader/CrossOriginPreflightResultCache.cpp`, `maxPreflightCacheTimeout = 600_s`,
+both opened 2026-09-26. Chromium `services/network/cors/preflight_result.cc` (`kMaxTimeout =
+base::Hours(2)`) and Firefox `netwerk/protocol/http/nsCORSListenerProxy.cpp` (cap of 86400) were
+read by a research agent the same day.*
+
+**A beacon always sends cookies, and preflights when its body is not a safelisted type.** WebKit's
+`sendBeacon` sets credentials to include unconditionally and switches to CORS mode for a body such as
+JSON. A `fetch` with `keepalive` behaves the same. In Chromium and WebKit the load moves to the
+network process when the page goes away, so the preflight delays the send rather than losing it.
+
+> So the fire-and-forget send on `visibilitychange`, which the mobile-networks section above makes
+> the last chance to persist, carries a preflight ahead of its data when it crosses origins.
+
+*Sourced — W3C Beacon `index.bs`, and WebKit `Source/WebCore/Modules/beacon/NavigatorBeacon.cpp`
+lines 138 to 157, opened 2026-09-26. WebKit `NetworkResourceLoader::abort` and Chromium
+`content/browser/loader/keep_alive_url_loader.h` were read by a research agent the same day.*
+
+**A second hostname needs its own connection unless the browser coalesces it, and Chromium never
+coalesces across credentials modes.** HTTP/2 and HTTP/3 allow a connection to be reused for another
+hostname when the certificate covers both, and Chrome and Firefox also require the addresses to
+overlap. The Fetch spec keys its connection pool on credentials as well as origin, and Chromium's
+connection key carries the same distinction, so an uncredentialed cross-origin `fetch` does not
+share the document's connection. Safari coalesces by Apple's account and publishes no conditions.
+
+> So a separate API hostname adds DNS, TCP and TLS setup, three to four round trips, to the first
+> call after the page loads, unless coalescing applies, and a same-origin call adds none.
+
+*Sourced — RFC 9113 §9.1.1 via httpwg/http2-spec, RFC 9114 §3.3, `fetch.bs` connection pool
+definition, Chromium `net/base/privacy_mode.h` and `net/spdy/spdy_session_key.h`, Firefox
+`StaticPrefList.yaml` (`network.http.http2.coalesce-hostnames`), and WWDC 2020 session 10111, read by
+a research agent 2026-09-26. Not re-opened by the agent that recorded them.*
 
 ---
 

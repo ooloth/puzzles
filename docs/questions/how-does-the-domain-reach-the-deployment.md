@@ -21,10 +21,13 @@ A reverse proxy in front of the origin is exactly the topology that rule describ
 resolves is not cosmetic: it can cap the cookie at seven days, and the failure produces no error and
 no log line — the cookie simply expires alongside the storage it was meant to outlive.
 
-Whether the system serves both halves from one origin is open, at
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md). Either way
-this question still bites: same-origin does not rescue a cookie that fails the resolution test, so
-what the domain resolves to has to be settled with the hosting choice rather than after it.
+The system serves both halves from one origin, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). This question
+still bites: one origin does not rescue a cookie that fails the resolution test. Safari records what
+it compares against only from a network response to a top-level navigation, and a service worker
+answers most navigations, so a hostname that is a CNAME to a provider's domain may cap even a
+same-origin API's cookie, per [../constraints.md](../constraints.md). An apex domain on A records has
+no CNAME. So what the domain resolves to has to be settled with the hosting choice rather than after
+it, and the CNAME case is worth observing on a real Safari before it decides anything.
 
 The rest of it is ordinary and still has to be decided: whether the app answers on the apex or a
 subdomain, and where the certificate comes from.
@@ -85,13 +88,13 @@ from Apple's release notes. It should not decide a topology until somebody estab
 
 *Sourced — per [../constraints.md](../constraints.md), which carries the caveat itself.*
 
-**A same-origin deployment may pass both tests by construction.** If the client and the API are one
-origin behind one proxy, the address serving the site and the address setting the cookie are the same
-address, so the first-half comparison is trivially satisfied. Whether the CNAME clause also passes
-depends on what the browser resolves rather than on what is configured upstream. This is a
-plausible reading of the rule, not a finding, and it is the specific thing to go and check.
+**A same-origin deployment passes both comparisons when Safari has recorded the host, and may fail
+the CNAME one when it has not.** A same-hostname request is compared with the CNAME or address Safari
+recorded from the host's own top-level navigation, so it matches itself. With nothing recorded, the
+address comparison lets the cookie through and the CNAME comparison caps it.
 
-*Reasoned — from the rule as recorded, which is itself unverified.*
+*Reasoned from source — WebKit trunk read 2026-09-26, per [../constraints.md](../constraints.md). Not
+observed in a shipped Safari.*
 
 **Certificate ownership follows from the topology rather than being a separate choice.** A proxy
 terminates TLS with its own certificate; a DNS-only arrangement leaves issuance and renewal with the

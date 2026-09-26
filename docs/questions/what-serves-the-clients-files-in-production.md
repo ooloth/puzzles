@@ -18,11 +18,11 @@ Something has to answer the browser when it asks for the client, and nothing cur
 and says nothing about static assets.
 [Where does this run?](where-does-this-run.md) picks a host, not what the host serves with.
 
-It is what makes an origin arrangement achievable or not. The same process can serve both the
-client's files and the API, or a content delivery network can serve the files while a separate
-process answers the API, or the platform can route between two deployables. Those are different
-answers to [do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md)
-even when the domain is identical, and the difference is invisible from outside.
+It is what makes the one origin required by [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) real. The same process can
+serve both the client's files and the API, a proxy can route by path to two backends, or a platform or
+content delivery network can route between two deployables. Each presents one origin to the browser,
+and they differ in who owns caching, and in whether something in front can cache an API response or
+strip `Set-Cookie`, per the findings below.
 
 It also decides who owns cache headers.
 [../constraints.md](../constraints.md) records that without content-hashed filenames a browser
@@ -77,3 +77,12 @@ live option here rather than a foregone one.
 *Measured — with `@fastify/static` 10.1.4 in the HTTP handler spike on 2026-09-21, recorded in the
 question file deleted by commit `dff3fd0`; `git show
 dff3fd0^:docs/questions/what-handles-http-requests-on-the-server.md` reads it.*
+
+**Something in front of the server can cache an API response or strip `Set-Cookie`.** Cloudflare's
+cache-behaviour documentation describes configurations where it removes `Set-Cookie` and caches the
+response, and Vercel caches external rewrites that return cache headers by default for projects
+created on or after 2026-04-06. A rule written for the files and applied to the whole origin reaches
+the API too.
+
+*Sourced — Cloudflare `developers.cloudflare.com/cache/concepts/cache-behavior/` and Vercel
+`vercel.com/docs/rewrites`, read by a research agent 2026-09-26. Not re-opened.*

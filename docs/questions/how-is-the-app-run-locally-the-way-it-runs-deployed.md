@@ -56,9 +56,7 @@ client build and the HTTP server in separate tools, and says under Risk that "th
 proxy the API for free". So from M1's third slice onward the client is served by one local process
 and the API answers on another port, and to the browser those are two origins unless something
 proxies them into one. Whatever closes that gap decides whether local development is same-origin,
-which is the arrangement
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md) settles
-for production. Proxied in development and split in production is parity failing in the direction
+which is the arrangement [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) settles for production: one origin. Proxied in development and split in production is parity failing in the direction
 that hides the fault: everything cross-origin works locally and shows up for the first time once
 deployed.
 

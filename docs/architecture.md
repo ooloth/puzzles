@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-25
+updated: 2026-09-26
 update_when: a module boundary moves, or something new starts talking to something else
 decays: fast
 status: active
@@ -47,6 +47,7 @@ the end and are the larger half.
                              │  first load, a puzzle not yet on the
                              │  device, a second device, recovery
                              │  after eviction        problem.md
+                             │  files and API on one origin  ADR-0040
                              ▼
         ┌─────────────────────────────────────────┐
         │  one machine                    ADR-0021│

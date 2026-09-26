@@ -13,13 +13,9 @@ where the running cost lands and where the operational surface is set — a mana
 most of what [how is the server operated?](how-is-the-server-operated.md) covers, and a bare machine
 supplies none of it.
 
-Two things constrain the answer from outside. Same-origin serving keeps a server-set cookie inside
-Safari's first-party exemption, per [../constraints.md](../constraints.md) — but **whether this
-system takes that exemption is open**, at
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md) — no
-record settles it, so it is an assumption wherever it appears as a given. So the
-honest form is conditional: if that question lands on one origin, a platform that cannot serve both
-halves from one is not a candidate. And whatever the browser resolves before it reaches the platform
+Two things constrain the answer from outside. The client and the API answer on one origin, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so a platform that cannot present both halves on one hostname is not a
+candidate. And whatever the browser resolves before it reaches the platform
 is its own question — see
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
@@ -62,7 +58,7 @@ Options and findings ported from legacy ADR-12 (host on Fly.io).
 
 **Everything below is unverified research, not a shortlist.** Every figure dates from 2026 with no
 link recorded, every reputational claim is sourced to unnamed community reports, and the comparison
-assumes same-origin serving, which no record settles. None of it decides anything until it has been
+assumes same-origin serving, which [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) settles. None of it decides anything until it has been
 re-checked against the vendor.
 
 *Fly.io.* Managed micro-VMs. TLS, health-checked restarts and Prometheus/Grafana without running any
@@ -111,9 +107,9 @@ between any candidate.
 
 **Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
 Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely
-first-party — which is the shape of a static host with its API on another origin, per
-[../constraints.md](../constraints.md). Serving the client and its API from one origin avoids the
-test entirely. A bearer token in script-writable storage avoids it too, at the cost of living in
+first-party — which is the shape of a static host with its API on another provider, per
+[../constraints.md](../constraints.md). Serving the client and its API from one origin, which
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) requires, passes the test by comparing the host with itself. A bearer token in script-writable storage avoids it too, at the cost of living in
 storage the browser evicts and being reachable by any script that runs on the page. Neither is
 forced; what is forced is that this gets chosen rather than inherited from wherever the two things
 happen to be deployed.

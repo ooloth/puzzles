@@ -15,9 +15,8 @@ covers, which
 the renderer. A loading path built inside a view for "Hello!" would then have to be moved out again
 at the point it starts carrying something that matters.
 
-This is client code, so it is the same in every environment. What differs between local runs and
-production is only where the request goes, which is
-[do the client and the API share an origin?](do-the-client-and-the-api-share-an-origin.md).
+This is client code, so it is the same in every environment. Where the request goes is the client's
+own origin, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md).
 
 ## What would settle it
 

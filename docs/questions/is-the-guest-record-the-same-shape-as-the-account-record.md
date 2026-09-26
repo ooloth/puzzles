@@ -41,6 +41,10 @@ signed-in player identically except for an identity field attached on sign-in. I
 contortions, that is evidence for one shape. If representing a guest cleanly requires fields or
 constraints a signed-in record does not need, or vice versa, that is evidence the two should diverge.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

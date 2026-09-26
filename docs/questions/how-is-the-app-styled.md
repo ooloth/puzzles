@@ -18,6 +18,10 @@ can be changed without touching markup.
 Building the same non-trivial piece of the grid both ways and comparing what each costs to change
 afterwards, since the interface is expected to be revised heavily rather than written once.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

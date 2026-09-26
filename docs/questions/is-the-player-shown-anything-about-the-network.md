@@ -31,6 +31,10 @@ The guest case is the sharp one. A guest's work is bounded by what the browser k
 available to them is signing in. That is information they can act on, which is a different thing
 from a spinner.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

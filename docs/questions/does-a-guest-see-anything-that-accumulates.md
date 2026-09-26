@@ -33,6 +33,10 @@ Then, for anything that does: is it shown because a player wants it, or because 
 worth doing? Those are different reasons and only the first survives the guard in
 [../problem.md](../problem.md) — would this be worth building if its demonstration value were zero.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -54,6 +54,10 @@ what is actually at stake. A guest shown nothing that accumulates has an unfinis
 which costs little. A guest shown a streak has something worth protecting, which changes what a
 narrow bound is worth accepting.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

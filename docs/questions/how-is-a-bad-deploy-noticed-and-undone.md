@@ -22,6 +22,10 @@ after every deploy and depends on someone watching is a loop that will eventuall
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

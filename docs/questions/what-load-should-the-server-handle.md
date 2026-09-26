@@ -26,6 +26,10 @@ Picking a concurrent-player target, then deriving a request rate from it using t
 already recorded in [../constraints.md](../constraints.md) and whichever sync model gets chosen.
 The derivation is arithmetic once those two are known; the target is a choice.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/). The derived figures then become facts in

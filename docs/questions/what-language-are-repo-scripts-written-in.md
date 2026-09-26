@@ -55,6 +55,10 @@ manages: it imports `os`, `re` and `sys` and nothing else.
 *Measured — a TypeScript file executed with `node` on v26.7.0 in an empty directory, with no
 `package.json` and no `node_modules` present, on 2026-09-20.*
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

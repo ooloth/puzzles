@@ -52,6 +52,10 @@ documented failure reports against each one are.
 actually been rehearsed, and stays separate — a design nobody has tested and a design that does not
 work are indistinguishable from outside.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and the thing that makes

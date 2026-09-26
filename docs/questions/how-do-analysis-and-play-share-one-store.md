@@ -40,6 +40,10 @@ Three things any answer has to cover:
   [how is the store backed up?](how-is-the-store-backed-up.md) will want an integrity check running on
   something, and running it against the live file is the naive choice.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably a line in

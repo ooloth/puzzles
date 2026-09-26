@@ -22,6 +22,10 @@ result changed because of the change under test or because of leftover state.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

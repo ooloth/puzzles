@@ -45,6 +45,10 @@ nothing: a managed platform supplies the machine's baseline and gives access thr
 and a bare virtual machine supplies neither. So this cannot be scoped before that question lands,
 though it can be asked now.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in

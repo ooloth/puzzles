@@ -37,6 +37,10 @@ confirm it is blocked. That works once a client exists, from M1 slice 2.
 Nothing else waits on it before whatever serves the client's files is chosen, which is where the
 header is set.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

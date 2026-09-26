@@ -24,6 +24,10 @@ judged against a grid that already works than in the abstract.
 Solving puzzles on paper and in existing apps, and noticing which interactions carry the
 experience and which are decoration.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

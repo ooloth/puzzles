@@ -41,6 +41,10 @@ covers the catalogue as well as the player record — its wording is "anything t
 the simpler storage a fetch-by-key catalogue would have allowed is not available. The Findings record
 how that was checked.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

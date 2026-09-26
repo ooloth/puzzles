@@ -17,6 +17,10 @@ than a differentiator — and something else has to carry the product.
 
 An hour with a few of the popular apps and aeroplane mode.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 `problem.md`.

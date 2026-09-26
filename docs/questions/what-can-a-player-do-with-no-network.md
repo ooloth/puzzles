@@ -25,6 +25,10 @@ Deciding what a player should be able to reach with the network gone, then check
 volume it implies is affordable in the storage that survives eviction. The answer has to name
 content, not duration.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

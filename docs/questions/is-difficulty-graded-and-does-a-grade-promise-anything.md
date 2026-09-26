@@ -20,6 +20,10 @@ Nothing on the road to a tech stack waits on this.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

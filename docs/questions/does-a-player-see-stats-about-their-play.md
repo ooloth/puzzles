@@ -37,6 +37,10 @@ whether any of it is wanted for a guest, which is where it meets
 question asks whether a guest accumulates anything at all, and this one asks what accumulating
 would consist of for anybody.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

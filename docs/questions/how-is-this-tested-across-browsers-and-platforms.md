@@ -45,6 +45,10 @@ storage evictions. A simulator cannot see the network-path bugs. Only a real dev
 can see both, and it is the slowest and least automatable. So the answer is likely a ladder rather
 than a single mechanism, and what belongs on each rung is the decision.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably promises in the

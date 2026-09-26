@@ -40,6 +40,10 @@ failed writes), whether the promises hold (progress lost, latency missed), and w
 enjoy it (completion rates, abandonment). The first two argue for themselves. The third is a
 product appetite question.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably a new promise under the

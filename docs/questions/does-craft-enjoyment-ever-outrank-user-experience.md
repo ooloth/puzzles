@@ -16,6 +16,10 @@ than smuggled into individual decisions as a performance or architecture argumen
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 [../problem.md](../problem.md).

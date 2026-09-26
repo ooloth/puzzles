@@ -17,6 +17,10 @@ tier appears.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 `constraints.md`.

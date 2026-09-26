@@ -24,6 +24,10 @@ routinely, not just once after the backup is first set up.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

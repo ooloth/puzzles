@@ -39,6 +39,10 @@ old-browser support lands, so each candidate's dependence on them is part of the
 *Sourced — `@mdn/browser-compat-data` on `main`, `version_added` for Safari read from the raw JSON by
 me on 2026-09-23.*
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

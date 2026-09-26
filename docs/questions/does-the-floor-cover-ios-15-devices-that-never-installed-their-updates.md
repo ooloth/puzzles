@@ -36,6 +36,10 @@ devices on the iOS 15 branch run a version below 15.8, and what a player on such
 the app does not run, which
 [what does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) covers.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and a change to the guarantee's wording if the

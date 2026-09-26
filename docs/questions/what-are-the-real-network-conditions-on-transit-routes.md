@@ -17,6 +17,10 @@ under-built.
 
 Carrying a phone on the actual commute with something logging.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 `constraints.md`.

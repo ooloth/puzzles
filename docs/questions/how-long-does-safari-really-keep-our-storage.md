@@ -25,6 +25,10 @@ itself.
 
 Failing that, an explicit statement from Apple, which does not currently exist.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 `../constraints.md`, confirming or replacing the thirty-day figure recorded there.

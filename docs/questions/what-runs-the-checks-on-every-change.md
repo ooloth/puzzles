@@ -26,6 +26,10 @@ document links to a file that does not exist, and that the question index matche
 Then where they run — before a commit, on a branch, or both — which is a question about how much
 latency is tolerable on each iteration.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in

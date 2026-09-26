@@ -21,6 +21,10 @@ Whether the catalogue is ever expected to hold two puzzles for one day — two d
 second game type publishing on the same rhythm. That is a product question, not a technical one; the
 technical cost is already known and is the same regardless of the answer.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

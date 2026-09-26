@@ -16,6 +16,10 @@ silent stall never produces. No timeout figure exists anywhere.
 
 Measurement on a real device on a real degraded link.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 `constraints.md`.

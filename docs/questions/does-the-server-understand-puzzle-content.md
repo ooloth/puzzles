@@ -34,6 +34,10 @@ over state, which is what
 The sharp case is not rejection but acceptance: the server stores something malformed and later
 returns it to a client that will not accept it. See Findings.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

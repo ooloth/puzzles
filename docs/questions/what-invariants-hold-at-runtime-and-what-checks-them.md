@@ -28,6 +28,10 @@ that runs on every write catches it regardless of which test exercised the path.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -54,6 +54,10 @@ directly or through the server's API, which
 Being wrong on any of these is cheap. Moving files and rewriting specifiers is a change of
 configuration and a find-and-replace, with no data migration and nothing a player sees.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

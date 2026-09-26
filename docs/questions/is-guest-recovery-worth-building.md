@@ -40,6 +40,10 @@ mode](../failure-modes/the-write-endpoint-becomes-free-storage.md).
 The second of those depends on
 [do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -36,6 +36,10 @@ enough to need nothing else, and whether local development can work without a re
 — which is a property of the arrangement rather than of the tooling, and is decided by
 [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

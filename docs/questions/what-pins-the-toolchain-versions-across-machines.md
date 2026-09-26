@@ -46,6 +46,10 @@ reads is documentation rather than a pin; and whether
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 can both
 consume whatever is chosen, since they are two of the three machines that have to agree.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and the artifact

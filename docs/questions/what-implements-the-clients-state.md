@@ -21,6 +21,10 @@ log, because those decide how much of it a library could supply. Then a comparis
 option provides against what the client's state must do: apply changes synchronously, save each one
 in order, merge from sync and other tabs, and be inspectable while developing.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

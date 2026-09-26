@@ -24,6 +24,10 @@ reasoning, while several arguments already lean on generation being batch work n
 The cost question above, plus whether the product model needs an unbounded supply of distinct
 puzzles or a curated finite set.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

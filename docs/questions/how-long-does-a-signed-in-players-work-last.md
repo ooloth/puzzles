@@ -42,6 +42,10 @@ what the server holds fixes what an account can actually store,
 and [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) decides
 whether "any device" ships in the first release or later.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -28,6 +28,10 @@ Listing each thing that moves, its direction, its trigger, and its size. A playe
 every one to three seconds while solving, per `../constraints.md`, so the difference between sending
 each one and sending a batch on `visibilitychange` is three orders of magnitude in request volume.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

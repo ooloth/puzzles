@@ -21,6 +21,10 @@ question about reversibility rather than about features.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

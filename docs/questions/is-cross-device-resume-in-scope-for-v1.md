@@ -27,6 +27,10 @@ whether a shipped browser matches the source.
 The rest is a product call: whether progress following a player is part of what this is, or a
 convenience that can wait.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

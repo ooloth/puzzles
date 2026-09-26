@@ -23,6 +23,10 @@ without asking the maintainer to watch.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

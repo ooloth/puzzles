@@ -39,6 +39,10 @@ whether it is a native addon that has to be rebuilt per runtime version, and onl
 driver throughput in the tens of thousands, so performance is unlikely to decide this and should not
 be allowed to.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

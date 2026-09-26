@@ -20,6 +20,10 @@ this gets worse without anyone deciding it should.
 A structure where the file an agent is sent to fits in one read, and a check that fails when it
 stops fitting. The check matters more than the split: a split with nothing enforcing it drifts back.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and a size check in `scripts/check-docs.py` or

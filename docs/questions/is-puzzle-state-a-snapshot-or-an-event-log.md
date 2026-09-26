@@ -22,6 +22,10 @@ Two things to size while doing it: what a session's worth of actions costs in by
 what replay costs at the upper end of a game's length. Both are cheap to measure and neither has
 been.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

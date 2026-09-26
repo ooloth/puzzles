@@ -23,6 +23,10 @@ performance regression from evidence, instead of asking the maintainer to reprod
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -28,6 +28,10 @@ Writing a generator for one variant in one language and timing it: fill, then cl
 a uniqueness check per candidate. Then the same with difficulty targeting, which is where the
 cost is most likely to hide.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 [../constraints.md](../constraints.md).

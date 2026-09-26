@@ -16,6 +16,10 @@ are written down; neither yields.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 [../problem.md](../problem.md).

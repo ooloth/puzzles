@@ -62,6 +62,10 @@ has to price both shapes rather than assume one.
 [ADR-0038](../decisions/0038-the-renderer-is-react.md), so the declaration has to feed Vite's
 `build.target`, and that path is part of what this question checks.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

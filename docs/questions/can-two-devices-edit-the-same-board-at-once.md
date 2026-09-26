@@ -31,6 +31,10 @@ grounds that the player did something unusual.
 The honest test is what a player would experience in the case: not whether the data structure is
 theoretically sound, but whether the board they see afterwards makes sense to them.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

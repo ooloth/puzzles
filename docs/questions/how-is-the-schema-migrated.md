@@ -51,6 +51,10 @@ Deciding the mechanism and, more importantly, what surrounds it. Five things any
 worth calling a migration arrives when the store's shape settles. Deciding the routine before there is
 data to lose is when it is cheapest.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

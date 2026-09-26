@@ -23,6 +23,10 @@ question becomes whether a bound may be conditioned on an action most players wi
 No such bound is promised yet — see
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md).
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

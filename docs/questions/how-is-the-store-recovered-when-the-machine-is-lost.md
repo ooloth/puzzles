@@ -39,6 +39,10 @@ Writing the procedure down and running it, on a real machine, from nothing. Any 
 - **How the procedure is kept working** as the system changes, which is the same rehearsal problem as
   the backup itself.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in

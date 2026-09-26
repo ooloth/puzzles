@@ -31,6 +31,10 @@ trying it.
 Worth doing while it is cheap: the entry model is visible in every screenshot of every competitor,
 so the field is easy to survey, and the disagreements between them are the interesting part.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

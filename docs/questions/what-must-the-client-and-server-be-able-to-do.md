@@ -33,6 +33,10 @@ It is finished when a reader who does not know which candidates exist can score 
 when every property names the file that establishes it. A property that cannot name one is an open
 question and is asked rather than assumed.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 Unsettled, and deliberately left so. Of the folder's other three values this is none of them cleanly:

@@ -35,6 +35,10 @@ Knowing what the client is â€” a set of files, or something a process produces â
 chosen host offers. Several hosts serve static assets as a feature, which makes this fall out rather
 than be chosen; others do not, and then it is a real decision about what runs.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

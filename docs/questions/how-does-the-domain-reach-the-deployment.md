@@ -46,6 +46,10 @@ for the window to elapse, answers it directly — and
 [../constraints.md](../constraints.md) already records that this class of behaviour does not
 reproduce in a desktop browser.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -30,6 +30,10 @@ Those are product questions rather than technical ones, and the second dissolves
 a shared link that previews as "a puzzle from *(name)*, for 2 September" needs no per-puzzle markup
 at all, while one that previews the grid does.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

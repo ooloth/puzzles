@@ -23,6 +23,10 @@ player notices and leaves, which is also the point at which the maintainer finds
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

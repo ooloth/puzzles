@@ -18,6 +18,10 @@ may be solving the wrong platform's problem.
 Chrome's and Android's own storage documentation, then confirmation on a real device that the
 documented behaviour is the observed one. An afternoon.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 [../constraints.md](../constraints.md), in the client-storage section alongside the Safari

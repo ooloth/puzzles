@@ -25,6 +25,10 @@ Nothing on the road to a tech stack waits on this.
 Probably by solving a lot of puzzles and noticing what separates the good ones, rather than by
 reasoning.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

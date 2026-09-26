@@ -22,6 +22,10 @@ versions. Both are already forbidden.
 The scope question above, then choosing between the options below against the two guarantees.
 Most of the argument is already made.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -53,6 +53,10 @@ leaves the format open and it is decided at [what format declares the browser
 floor?](what-format-declares-the-browser-floor.md). Whatever is chosen here has to satisfy both,
 which disqualifies `bun build` for this job and says nothing about Bun elsewhere.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

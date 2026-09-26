@@ -16,6 +16,10 @@ a second game actually exists to generalise from.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

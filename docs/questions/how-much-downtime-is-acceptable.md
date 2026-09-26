@@ -21,6 +21,10 @@ length attached, rather than discovered during one.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

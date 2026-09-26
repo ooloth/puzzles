@@ -31,6 +31,10 @@ what each can match on: a path prefix, an explicit list of routes, or a request 
 `Sec-Fetch-Mode`. Then which rule every layer can apply the same way, so a path cannot be the API's in
 one layer and the client's in another.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

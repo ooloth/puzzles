@@ -32,6 +32,10 @@ must have passed, and whether the person deploying has to be at their own machin
 the least machinery that delivers it. Most of it falls out of the host, since several candidate
 platforms ship their own git integration and adopting it is free.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

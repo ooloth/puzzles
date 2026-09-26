@@ -42,6 +42,10 @@ Three things any answer has to settle:
   [../constraints.md](../constraints.md), so a prefetch that wakes the radio on a schedule is a
   battery decision as much as a latency one.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and possibly a promise in

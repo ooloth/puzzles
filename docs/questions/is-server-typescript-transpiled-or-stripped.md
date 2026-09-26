@@ -49,6 +49,10 @@ What to weigh beyond that: whether a transpiler in the path costs anything in th
 survives, since stripping needs no source maps and a transpiler does; and whether type checking
 differs, which it does not, because `tsc --noEmit` is the answer either way.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and possibly an

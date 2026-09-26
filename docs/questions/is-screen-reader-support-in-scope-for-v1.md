@@ -27,6 +27,10 @@ the WebKit findings below make expensive, and none of it is answered by the two 
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

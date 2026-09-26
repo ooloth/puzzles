@@ -47,6 +47,10 @@ The duration before giving up is a separate and smaller question, and it belongs
 [what latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md)
 rather than here.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably a promise in

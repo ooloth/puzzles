@@ -57,6 +57,10 @@ Whether running something is required is open until the reading is done. The rea
 it: a shape that cannot satisfy the four properties above is out on the properties, not on a
 measurement.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

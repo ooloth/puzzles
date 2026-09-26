@@ -24,6 +24,10 @@ verifying its own change without the maintainer watching.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

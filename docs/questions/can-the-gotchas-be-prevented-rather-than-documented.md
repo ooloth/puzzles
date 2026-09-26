@@ -20,6 +20,10 @@ be deleted, and the next trap goes straight to a command rather than into a list
 Going through each entry and naming the command or check that would prevent it, or saying why
 none can. An entry nothing can prevent is the case for keeping the file.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/): whether gotchas are recorded as prose, as

@@ -25,6 +25,10 @@ most needed many times a day rather than occasionally.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

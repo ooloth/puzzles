@@ -33,6 +33,10 @@ This also covers what the developer sees when one of the two processes is not ru
 client calling an API that was never started. What a *player* sees when the API cannot be reached is
 [is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md).
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

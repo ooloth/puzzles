@@ -22,6 +22,10 @@ undecided, everything either alerts or nothing does, and both are wrong for diff
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

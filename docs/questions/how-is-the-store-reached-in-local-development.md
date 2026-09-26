@@ -46,6 +46,10 @@ Worth checking rather than assuming: whether a development instance of a managed
 and always-on, whether the local and deployed stores can be the same engine and version, and whether
 anything about the arrangement makes it possible to run against production data by accident.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content for

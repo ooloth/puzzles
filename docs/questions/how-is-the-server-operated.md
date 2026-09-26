@@ -33,6 +33,10 @@ Naming, for each thing that can go wrong, what notices and what happens next. A 
 the machine it monitors notices nothing when the machine dies, which is the mistake this question
 exists to avoid.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

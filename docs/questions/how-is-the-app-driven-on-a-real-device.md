@@ -24,6 +24,10 @@ the class this app is most exposed to.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

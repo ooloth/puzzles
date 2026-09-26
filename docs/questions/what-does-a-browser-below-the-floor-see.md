@@ -44,6 +44,10 @@ one more reader for [what format declares the browser
 floor?](what-format-declares-the-browser-floor.md) to serve. That question is answered first and
 prices both shapes, so the answer here is free to take either.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

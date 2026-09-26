@@ -26,6 +26,10 @@ to the state code under `src/client/state/`, and never make a player wait during
 [../problem.md](../problem.md). Then which way of loading meets that without being replaced when
 M3 arrives.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

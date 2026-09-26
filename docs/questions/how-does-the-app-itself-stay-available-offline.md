@@ -40,6 +40,10 @@ noticing either happening. Four things are open, none of which
 - **How a bad service worker is recovered from**, since it fails by serving an old app indefinitely
   rather than by crashing.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

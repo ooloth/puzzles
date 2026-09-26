@@ -24,6 +24,10 @@ failures without needing the physical device and network conditions that produce
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

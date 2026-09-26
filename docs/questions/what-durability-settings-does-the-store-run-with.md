@@ -44,6 +44,10 @@ The settings in scope, each of which should be chosen rather than defaulted into
 - **Whether tables are `STRICT`**, which narrows the dynamic-typing cost
   [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records as a standing one.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably an entry in

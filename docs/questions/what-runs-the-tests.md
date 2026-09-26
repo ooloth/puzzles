@@ -23,6 +23,10 @@ grid driven by simulated input — and comparing watch-mode latency and the qual
 message. The second matters more than it sounds: a runner that reports a failed assertion as a
 timeout costs an afternoon every time it happens.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

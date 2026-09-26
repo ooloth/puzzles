@@ -26,6 +26,10 @@ without a release means a branch is no longer patched. A scheduled check also ne
 run it, which is [what runs the checks on every change?](what-runs-the-checks-on-every-change.md)
 or a scheduled agent outside the repository.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/) naming the mechanism. Whatever it chooses opens

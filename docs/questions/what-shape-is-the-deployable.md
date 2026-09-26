@@ -37,6 +37,10 @@ that question rather than before it.
 Then what each shape costs in the loop that runs most often, which is deploying a small change. And
 what each costs the first time, which is not the same and is the one usually quoted.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), or a finding folded into

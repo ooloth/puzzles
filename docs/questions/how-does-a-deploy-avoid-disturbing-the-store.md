@@ -42,6 +42,10 @@ Deciding the sequence, and stating what must never overlap. Any answer has to sa
 - **Whether a deploy can be rolled back** once a migration has run, which is
   [how is the schema migrated?](how-is-the-schema-migrated.md) meeting this question.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in

@@ -37,6 +37,10 @@ The useful test is a third game type nobody has planned for — see
 [which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md).
 A model that fits two is often a model that fits two.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

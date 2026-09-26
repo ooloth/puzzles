@@ -37,6 +37,10 @@ thing from its own side, under Risk: "If the answer to [one puzzle a day, or unl
 one a day with no archive, there is no body of content to gate and the whole option was
 theoretical."
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

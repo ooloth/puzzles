@@ -15,6 +15,10 @@ exists, whether streaks make sense, and whether "today" needs timezone handling.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

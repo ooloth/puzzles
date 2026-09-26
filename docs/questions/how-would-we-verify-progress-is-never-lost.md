@@ -16,6 +16,10 @@ most consequential guarantee in the product is enforced by nothing.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

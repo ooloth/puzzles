@@ -39,6 +39,10 @@ that person is served at all rather than assuming they are.
 Then, for anything proposed: does a player who never reads it lose something. If not, it is a cost
 paid on the slowest load in the product.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

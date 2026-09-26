@@ -44,6 +44,10 @@ A platform is also cheap to try. Deploying the same trivial application to two c
 afternoon and answers questions about build times, cold starts and how much of the operational
 surface turns out to be yours that no comparison page will.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

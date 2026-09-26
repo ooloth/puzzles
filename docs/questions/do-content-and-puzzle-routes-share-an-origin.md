@@ -37,6 +37,10 @@ Nothing has to be built to answer it. What has to happen is that
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) are not
 settled in a way that assumes one host forever without saying so.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

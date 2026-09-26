@@ -15,6 +15,10 @@ requirement. Unlimited undo constrains the state model; shallow undo doesn't.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

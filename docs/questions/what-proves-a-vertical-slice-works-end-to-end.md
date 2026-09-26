@@ -25,6 +25,10 @@ the maintainer watching it happen, unless this question has already been settled
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

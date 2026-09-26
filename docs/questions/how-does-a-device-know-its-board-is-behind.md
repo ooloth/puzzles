@@ -45,6 +45,10 @@ already promises. If the answer to
 event log, two divergent histories over one board may merge without a choice being presented. If it
 is a snapshot, one of them is being discarded and the promise is under strain.
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

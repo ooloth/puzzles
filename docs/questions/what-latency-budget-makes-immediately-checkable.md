@@ -16,6 +16,10 @@ paint — on a named reference device rather than on whatever the developer hold
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

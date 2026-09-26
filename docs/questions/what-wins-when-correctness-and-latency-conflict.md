@@ -17,6 +17,10 @@ wrong is worse than a slower answer at move one.
 
 ...
 
+## Properties the answer is scored against
+
+...
+
 ## Resolves into
 
 [../problem.md](../problem.md).

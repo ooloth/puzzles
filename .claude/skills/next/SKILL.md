@@ -57,7 +57,12 @@ issue means one should have been filed and was not. Offer `write-ticket-descript
   picks among them and does the `problem.md` and `guarantees/` reading this skill skipped.
 - **An issue that exists** — name its number and title. The user decides whether this session
   starts it.
-- **A workable slice with no issue** — offer to file it.
+- **A workable slice with no issue** — offer to file it, and say that "workable" is only as good as
+  the entry. A slice with no **Must answer** listed may still hide a choice the planning pass
+  missed, often about local runs. Drafting the issue is the last check: every Ideal-state bullet and
+  QA step traces to a **Given** or a record, per step 4 of `uphold-project-requirements`. One that
+  does not means the slice was not workable, and the route becomes "a question" by way of "When a
+  choice surfaces mid-work" in `CLAUDE.md`.
 - **Anything ambiguous** — two slices both workable, a milestone that looks finished but has an
   unfiled slice — say what is ambiguous rather than picking. Guessing points a whole session at
   the wrong thing, which costs more than asking.

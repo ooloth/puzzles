@@ -1,6 +1,6 @@
 ---
 name: make-next-decision
-description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER whenever the user asks about prioritizing unresolved questions or unmade decisions, or wants to make a technical decision.
+description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER whenever the user asks about prioritizing unresolved questions or unmade decisions, or wants to make a technical decision, and whenever you find a choice your current work would make that no Given or record settles (see "When a choice surfaces mid-work" in CLAUDE.md).
 ---
 
 ## Context
@@ -265,6 +265,11 @@ record what you find.
    now. A summary of them held in working memory for an hour is what produces a record that
    satisfies the format and breaks a Must, and the failure is invisible because the record looks
    complete.
+1. **Route what was settled through "Where a new fact goes" in `docs/README.md` before writing
+   anything.** Usually that is an ADR, and usually it is not only an ADR: what the decision commits
+   us to may also belong in `guarantees/`, `standards/`, `unfinished.md` or `verification.md`, each
+   linking to the record. Settle this from that list rather than asking the user which kind of
+   record it is.
 1. Author the ADR
 1. For any resolved question files, mine any valuable content and then delete them.
 

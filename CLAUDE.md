@@ -29,6 +29,32 @@ once per session). Do not merely refer to your memory of the skill.
 Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full. Everything
 downstream is derived from them, and a sequence argued without them is argued from the wrong end.
 
+### When a choice surfaces mid-work
+
+Most choices are found while drafting an issue, writing code or editing docs, not while planning a
+milestone. The planning pass misses some, and nothing downstream assumes it caught them all.
+
+**A choice is a question here if something else will be built on it, or if an open question could
+force it to be reversed, in any environment, local runs included.** Looking small or easy to undo
+does not exempt it. Choices that meet neither test, such as a local variable name or a log line's
+wording, are the implementer's.
+
+**This repo has no obvious defaults.** A choice that no **Given** and no record settles is open,
+however conventional the usual answer. Recommending one and carrying on is the failure this section
+exists to stop, and it happens because the choice looks too minor to raise.
+
+**Before asking the user anything, check whether `docs/` already answers it.** Where a fact belongs
+is answered by "Where a new fact goes" in [docs/README.md](docs/README.md). What is settled is the
+listing of `docs/decisions/`. What is promised is the listing of `docs/guarantees/`.
+
+**When one is found, stop the work that surfaced it and do this:**
+
+1. Find the question file that covers it, or write one, and say which environments it covers.
+2. Add it to the slice in `docs/questions/README.md` as a **Must answer** with its "or else" clause.
+   Where it can wait, record it under the slice as **Deferred**, naming the question that owns it.
+3. Hand it to `make-next-decision`. Once settled, route what it commits us to through "Where a new
+   fact goes", which usually names more than one home.
+
 ## Where work lives, and where thinking lives
 
 **Work is GitHub Issues in this repository.** One issue per observable change: something is true of
@@ -66,7 +92,8 @@ exists and the docs are right about why.
 - Building the thing you already chose → the issue
 - Wondering why a slice exists, or what it rests on → `docs/questions/README.md`
 - Recording that something is done, or how far along it is → the issue
-- Answering a question → `docs/decisions/`, then update `docs/questions/README.md`
+- Answering a question → usually `docs/decisions/`, plus whatever else "Where a new fact goes" in
+  `docs/README.md` names, then update `docs/questions/README.md`
 
 **Before opening an issue, check the slice exists in `docs/questions/README.md`.** If it does not,
 either it is not a slice or that file is behind — and the second is the more likely, since work tends

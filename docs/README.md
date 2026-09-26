@@ -51,17 +51,34 @@ and hope.
 
 ## Where a new fact goes
 
-Four of these are easy to confuse:
+**Answer this from the list below before asking anyone.** It covers every home in `docs/`, and each
+line is the question that sorts a fact into it:
 
 - Can't change it → [constraints](constraints.md)
 - Chose it, could choose otherwise → [decisions/](decisions/)
+- Not chosen yet, and something will be built on the answer → [questions/](questions/)
 - Promised it, and breaking it is our bug → [guarantees/](guarantees/)
 - Always true, and a player would never see it break → [invariants/](invariants/)
+- A claim about work that a reviewer can mark true or false, with stated exceptions →
+  [standards/](standards/)
+- A way the system can fail, and whether we would know → [failure-modes/](failure-modes/)
+- A trap in this repo that surprised you → [gotchas](gotchas.md)
+- True for now and misleading until a change finishes → [unfinished](unfinished.md)
+- How to run something and what correct looks like → [verification](verification.md)
+- A domain word and its code name → [glossary](glossary.md)
+- Where code lives and what calls what → [architecture](architecture.md)
 
-A constraint forces a decision; a decision commits us to a guarantee; a guarantee is only
-real once something checks it. An invariant usually falls out of a decision rather than being
-chosen, and the difference from a guarantee is who notices: a guarantee is what a player would see
-break, an invariant is what only the system would.
+The first five are the easiest to confuse. A constraint forces a decision; a decision commits us to
+a guarantee; a guarantee is only real once something checks it. An invariant usually falls out of a
+decision rather than being chosen, and the difference from a guarantee is who notices: a guarantee
+is what a player would see break, an invariant is what only the system would.
+
+**One thing learned often has several homes, each for its own reader.** A choice goes in a decision
+record with its reasoning and rejected options. What it commits us to goes where that commitment is
+checked: a promise to players in `guarantees/`, a rule for reviewers in `standards/`, a state that
+misleads until finished in `unfinished`, a new way to run something in `verification`. Each home
+links to the record rather than restating its reasoning. So the question is never only "which
+file?" but "which readers now need to know, and where does each of them look?"
 
 ## Conventions
 

@@ -707,8 +707,12 @@ It is also the one value that should be rare: exactly one file carries it today.
 than passing quietly.
 
 The first six sections are stable and short. **Why it matters** is what's blocked or what gets
-expensive if we're wrong. **There are no Blocked by, Blocks, or What this decides beyond itself
-sections.** A per-file dependency list is one graph held in sixty-odd places, each of which sees a
+expensive if we're wrong. It also names which environments the choice shows up in: production,
+local runs, or both. A question framed only for production leaves its local half to be wired for
+convenience, and per
+[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+the production-like local run has to match whatever production gets. **There are no Blocked by,
+Blocks, or What this decides beyond itself sections.** A per-file dependency list is one graph held in sixty-odd places, each of which sees a
 sliver of it. It goes stale invisibly — noticing requires re-reading everything around it — and it
 is trusted precisely because it reads as a fact rather than as the judgement it is. The milestone
 grouping above holds the same information where every sequencing claim sits beside the others and

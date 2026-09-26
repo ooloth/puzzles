@@ -30,8 +30,8 @@ Either address shows "Hello!". The client does not call the server yet.
 
 Run all three before committing. Nothing runs them automatically yet.
 
-- `pnpm test` runs every `*.test.ts` under Node's test runner: the server's tests and the client
-  build's tests.
+- `pnpm test` runs every `*.test.ts` under Node's test runner: the server's tests, the client
+  build's tests, and the docs checker's tests, which run `check-docs.py` against small fixture trees.
 - `pnpm typecheck` checks the server, the client and the build config, each against its own
   `tsconfig.json`.
 - `python3 scripts/check-docs.py` checks `docs/` for broken links, missing index entries and

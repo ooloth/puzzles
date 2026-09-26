@@ -18,6 +18,7 @@ its own, so it can be wired up before the stack is chosen.
 import os
 import re
 import sys
+from dataclasses import dataclass
 
 # Each index lists the files in its own directory. Both directions are checked:
 # a listed file that does not exist, and an existing file nobody listed.
@@ -451,6 +452,76 @@ def check_h1_matches_filename():
                 )
 
 
+# A link into docs/guarantees/ is a promise quoted by name, so its text says what was
+# promised. guarantees/README.md puts every caveat in the filename and the H1 restates it,
+# so link text shortened any other way can drop the caveat and promise more than the file
+# does: "Play continues through a loss of connectivity" loses "the board in", which is the
+# whole scope of that guarantee. The text has to be the H1 or the filename, as words or
+# as written, in any case. Link text wraps across lines, so links are found in the whole file rather
+# than line by line, and blanked-out comments keep their newlines so line numbers hold.
+GUARANTEES = 'docs/guarantees'
+LINK_WITH_TEXT = re.compile(r'\[([^\]]+)\]\(([^)\s]+)\)')
+
+
+@dataclass(frozen=True)
+class GuaranteeCitation:
+    source: str
+    line: int
+    text: str
+    target: str
+
+
+def blanked(text: str) -> str:
+    """Text with comments and fenced blocks replaced by their newlines, so nothing moves."""
+    keep_newlines = lambda m: '\n' * m.group(0).count('\n')
+    return FENCED_BLOCK.sub(keep_newlines, COMMENT_BLOCK.sub(keep_newlines, text))
+
+
+def guarantee_citations(root: str, path: str) -> list[GuaranteeCitation]:
+    text = blanked(open(path).read())
+    citations = []
+    for m in LINK_WITH_TEXT.finditer(text):
+        target = os.path.normpath(os.path.join(root, m.group(2).split('#')[0]))
+        if os.path.dirname(target) != GUARANTEES or not target.endswith('.md'):
+            continue
+        if os.path.basename(target) == 'README.md' or not os.path.exists(target):
+            continue
+        citations.append(GuaranteeCitation(
+            source=path,
+            line=text.count('\n', 0, m.start()) + 1,
+            text=' '.join(m.group(1).split()),
+            target=target,
+        ))
+    return citations
+
+
+def accepted_titles(target: str) -> list[str]:
+    """The H1 where there is one, then the filename's words. A missing H1 is NO H1's report."""
+    with open(target) as fh:
+        h1 = next((l[2:].strip() for l in fh if l.startswith('# ')), None)
+    slug = os.path.basename(target).removesuffix('.md').replace('-', ' ')
+    return ([h1] if h1 else []) + [slug]
+
+
+def comparable(title: str) -> str:
+    """A title as the check compares it: case ignored, and a hyphen read as a space, so the
+    filename itself passes as well as its words."""
+    return title.lower().replace('-', ' ')
+
+
+def check_guarantee_citations() -> None:
+    for root, path in markdown_files():
+        for citation in guarantee_citations(root, path):
+            titles = accepted_titles(citation.target)
+            if comparable(citation.text) in (comparable(t) for t in titles):
+                continue
+            problems.append(
+                f'CITATION     {citation.source}:{citation.line} "{citation.text}" cites '
+                f'{citation.target} by a name it does not have; use '
+                + ' or '.join(f'"{t}"' for t in titles)
+            )
+
+
 def check_frontmatter():
     for root, dirs, files in os.walk('docs'):
         if any(skip in root for skip in SKIP_DIRS):
@@ -502,6 +573,7 @@ check_adr_references()
 check_provenance_tiers()
 check_frontmatter()
 check_h1_matches_filename()
+check_guarantee_citations()
 
 for p in problems:
     print(p)

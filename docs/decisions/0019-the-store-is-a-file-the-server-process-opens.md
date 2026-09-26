@@ -1,7 +1,7 @@
 ---
 number: 0019
 status: accepted
-amended: 2026-09-04
+amended: 2026-09-26
 date: 2026-09-03
 ---
 
@@ -172,7 +172,7 @@ reason.
 - [x] `constraints.md` — imports the fact that a volume attached to one machine is not replicated and
       its loss is unrecoverable without an off-machine copy
 - [x] Nothing in `guarantees/` — this promises a player nothing. What is owed them about durability is
-      already [reopening restores the board in progress](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+      already [reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
       and is unchanged
 - [x] `questions/how-is-the-store-backed-up.md` — opened by this record, because backups-in-depth is
       the condition that makes this choice safe rather than a detail beneath it

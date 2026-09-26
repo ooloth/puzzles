@@ -63,8 +63,8 @@ though it does.
 the game's own document as a build output and explicitly preserves per-route rendering added later, so
 a landing page that wants markup a link-preview crawler can read is additive rather than a reopening.
 
-**Anything shown before a player can solve is on the offline path too.**
-[The app never opens to a blank screen](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) and
+**Anything shown to a returning player before they can solve is on the offline path too.**
+[The app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) and
 [the board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md),
 and [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
 records that the precache list is a build output. A landing page is either precached, in which case

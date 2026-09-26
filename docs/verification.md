@@ -60,9 +60,9 @@ and that check is owed at M2.
 
 ## Automated checks
 
-Run: `pnpm test` for the server's tests and the client build's tests, `pnpm typecheck` for the
-server, the client and the build config, and `python3 scripts/check-docs.py` for the documentation.
-The server's tests bind a local port.
+Run: `pnpm test` for the server's, the client build's and the docs checker's tests, `pnpm typecheck`
+for the server, the client and the build config, and `python3 scripts/check-docs.py` for the
+documentation. The server's tests bind a local port, and the docs checker's tests need `python3`.
 Can't observe: nothing runs any of these on its own. That is
 [what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M2.
 

@@ -14,8 +14,8 @@ longer whether a shell reaches the device or by what mechanism — it is everyth
 
 ## Why it matters
 
-[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-promises exactly that, and
+[The board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+keeps the open board working with no connection, and
 [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
 promises the floor beneath it. Every discussion of those promises has been about *data* — where
 progress lives and how it survives. The document is settled; what surrounds it is not, and a service

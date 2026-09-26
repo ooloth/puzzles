@@ -8,9 +8,9 @@ resolves_into: decision
 
 ## Why it matters
 
-[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-is promised, and everything so far has read that as *the puzzle already open keeps working*.
-That is the smallest possible reading. A larger one — finish this puzzle, then browse the archive
+[The board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+is promised, and it is scoped to the puzzle already open. That is the smallest possible offline
+promise. A larger one — finish this puzzle, then browse the archive
 and start another, all in a tunnel — is a different product and a different app by orders of
 magnitude.
 

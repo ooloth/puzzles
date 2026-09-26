@@ -2,7 +2,7 @@
 number: 0004
 status: accepted
 date: 2026-08-31
-amended: 2026-09-01
+amended: 2026-09-26
 ---
 
 # 0004 — The client holds and mutates puzzle state
@@ -11,7 +11,7 @@ amended: 2026-09-01
 
 Two promises in [../guarantees/](../guarantees/), in order of weight.
 
-**[Play continues through a loss of
+**[The board in play continues through a loss of
 connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md).**
 With no network there is nothing to ask, so the only state that can change is state already on the
 device. Nothing else satisfies this — it is a property of the arrangement rather than of any
@@ -39,15 +39,15 @@ is the promise that rests on it.
 
 ## Rejected
 
-- **The server holds state and the client renders it.** Fails both promises — [play continues
-  through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+- **The server holds state and the client renders it.** Fails both promises — [the board in play
+  continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
   and [input registers without waiting for the
   network](../guarantees/input-registers-without-waiting-for-the-network.md) — by construction.
   Every state change needs a round trip, so there is no version of this that works in a tunnel.
   This is true of the whole category of server-owned-state approaches, not of any particular one,
   so it cannot be rescued by choosing a better framework.
 - **The client caches but defers mutation to the server.** Reads work offline, writes do not, which
-  fails [play continues through a loss of
+  fails [the board in play continues through a loss of
   connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)'s promise for
   exactly the case it exists to cover: a player mid-puzzle underground.
 

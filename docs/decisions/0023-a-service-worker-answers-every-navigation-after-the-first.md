@@ -1,7 +1,7 @@
 ---
 number: 0023
 status: accepted
-amended: 2026-09-04
+amended: 2026-09-26
 date: 2026-09-03
 ---
 
@@ -83,7 +83,7 @@ rests on it.
   settling now rather than at M9 — remove it and the decision is unchanged, while the schedule is not.
 
 - **Make no offline promise for the document.** Reversing
-  [the guarantee](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) rather
+  [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) rather
   than choosing a mechanism for it, and a real option — the promise is currently enforced by nothing.
   Rejected because [../problem.md](../problem.md) names the interrupted commute as the normal case
   rather than an edge case, and a blank screen there is the failure the promise exists to rule out.

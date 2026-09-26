@@ -2,6 +2,7 @@
 number: 0012
 status: accepted
 date: 2026-09-01
+amended: 2026-09-26
 ---
 
 # 0012 — Puzzle content is served by a runtime, not bundled
@@ -38,7 +39,7 @@ boundary exists, nothing is withheld from anyone, and no player sees any differe
 out is a delivery shape that makes withholding impossible later.
 
 **It applies only to content a player has not been given yet.** Anything already delivered is theirs,
-including everything precached so that [play continues through a loss of
+including everything precached so that [the board in play continues through a loss of
 connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md) can be kept. That is
 not a leak to be closed — it is what an offline promise means. Gating governs the boundary of what
 is handed over, never what has been.
@@ -79,8 +80,8 @@ delivered cannot be withdrawn.
   them below the solving experience and below play continuing.
 
 - **Gate at the CDN with signed or expiring URLs, and keep the files static.** A real middle path
-  that keeps most of the static option's advantages. Rejected because it fails against [play
-  continues through a loss of
+  that keeps most of the static option's advantages. Rejected because it fails against [the board
+  in play continues through a loss of
   connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)'s promise rather
   than against the gating one: content precached for offline play is on the device and no URL
   scheme reaches it, so the mechanism protects exactly the content that is not the problem.

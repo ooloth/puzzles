@@ -75,7 +75,7 @@ client.
 state on the client for latency and offline reasons. A hypermedia-style crossing would add a second
 rendering path on top of that layer rather than remove the one that already exists.
 
-**[Play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
+**[The board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
 requires the client to render a board it already holds.** A server that returns markup for the
 client to insert is a server the client cannot do without, which that guarantee rules out
 regardless of what shape this boundary settles on.

@@ -138,6 +138,9 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
   was real. Expect them in question files, in `docs/failure-modes/`, and inside multi-paragraph
   arguments resting on the promise as a premise, which are the hardest to spot and the most costly
   to leave.
+  `check-docs.py` already fails a link to a guarantee whose text is not its H1 or filename, so skip
+  link text. What it cannot see is a promise paraphrased in plain prose, or a faithfully named link
+  inside a sentence that claims more than the guarantee does. Read for those.
 - **Docs narrating their own edit history.** A document describing how it got here rather than what is
   true now. Search for _used to_, _previously_, _no longer_, _has since_, _was changed to_, dates
   attached to edits rather than to evidence, and strikethrough, which is always this defect. A

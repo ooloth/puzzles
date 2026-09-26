@@ -2,6 +2,7 @@
 number: 0005
 status: accepted
 date: 2026-08-31
+amended: 2026-09-26
 ---
 
 # 0005 — The puzzle rules are defined once and shared, not reimplemented
@@ -22,7 +23,7 @@ notice the other. A promise that can be broken with nothing raised anywhere is n
 keeps by intending to.
 
 **[ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md) put puzzle state on the client, and
-[play continues through a loss of
+[the board in play continues through a loss of
 connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md) is promised.** So the
 client cannot delegate these judgements. It holds them locally or it cannot tell a player their
 board is finished.

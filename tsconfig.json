@@ -4,5 +4,5 @@
     "lib": ["esnext"],
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "vite.config.test.ts"]
+  "include": ["vite.config.ts", "vite.config.test.ts", "scripts/check-docs.test.ts"]
 }

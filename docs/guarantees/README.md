@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-24
+updated: 2026-09-26
 update_when: a promise is made to players, a promise is withdrawn, or a theme is added
 decays: slow
 status: active
@@ -73,6 +73,8 @@ Related promises group themselves by sharing an opening phrase — `every-puzzle
   play", either replace it or the guarantee isn't written yet.
 - `scripts/check-docs.py` checks that each filename's words appear in its H1, in order, so a
   renamed file or a reworded title cannot drift from the other unnoticed.
+- It also checks that every link to a guarantee uses its H1 or its filename as the link text,
+  ignoring case. A shortened name can drop the caveat and cite a bigger promise than the file makes.
 - Frontmatter carries `theme` and `enforced`. Nothing reads either field and nothing checks that
   `enforced` agrees with the **Enforced by** line, so both are descriptive rather than load bearing.
 

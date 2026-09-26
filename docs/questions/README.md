@@ -43,129 +43,6 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**Three of M1's toolchain questions turned out to have a property that separates their candidates,
-and two of those three were found by running rather than by reading.**
-
-- **The build**, found by survey. TanStack Start, React Router in SPA mode and Qwik City cannot emit
-  a precache manifest naming the entry document, which
-  [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and
-  [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-  between them require. Settled at
-  [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) and
-  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md); the reversal conditions are in
-  [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
-- **The runtime**, found by measuring after a survey concluded nothing separated the finalists. Bun
-  cannot bound its heap and so cannot be made to say why it died. Settled at
-  [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md).
-- **The package manager**, also found by measuring after a survey found every candidate equivalent
-  on the axis the question was framed on. An import of an undeclared transitive dependency resolves
-  under a hoisted layout and throws under an isolated one. Settled at
-  [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) and
-  [ADR-0033](../decisions/0033-an-import-of-an-undeclared-dependency-fails.md).
-
-**So "nothing separates these candidates" means "no survey has found a separator", and the records
-above are the standing proof that those are different claims.** The HTTP handler is the fourth and
-sharpest instance: a survey had found its field equivalent, and running it turned up a class that
-cannot parse under this Node line at all, a framework whose own documented pattern for releasing a
-database is unsafe under its own default listen, and a response contract that only one candidate
-enforces. Settled at [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and
-[ADR-0036](../decisions/0036-request-and-response-bodies-are-described-with-zod.md).
-**The renderer is the fifth.** Building every surviving candidate against the same board found no
-disqualifier and no difference a player can see, and found the separator in tooling instead: JSX is
-native to TypeScript's tools and single-file components lag each new one. Settled at
-[ADR-0038](../decisions/0038-the-renderer-is-react.md), on top of
-[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md). A question that
-looks like a coin toss is usually one nobody has run yet, and running it is the cheap thing.
-
-**Running one also turns up limits that belong to other questions.** The package-manager spike found
-that Node refuses to strip types under `node_modules`, which constrains the layout, the deployable
-and the transpiler rather than the tool that was being chosen. It is in
-[../constraints.md](../constraints.md).
-
-**What breaks a tie between two questions that do not derive from each other is which one is
-cheaper to get wrong.** Not which unblocks the most. That measures how the work was planned rather
-than anything about the system, so redrawing the milestones changes it while the cost of being wrong
-does not. The two usually agree, because the thing everything waits on is often the cheap one. Where
-they disagree the cost of being wrong decides. The portable decision-making standard carries this,
-including the part that matters most here: cheapest to get wrong counts discovery, so a question
-whose wrong answer nobody would notice moves earlier rather than later, while the thing it affects
-is still small enough to inspect.
-
-**The Node version is settled too**, at
-[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md), which was the root
-of this chain and was answered first. **It is a rule rather than a number** — the newest released
-line that is in Active LTS or committed to becoming it — because a record titled with a version
-expires on a schedule and has to be re-argued each time. The number the rule yields today is 26, and
-it belongs in the pin artifact rather than in a record. No follow-up question was opened, because
-the rule answers both which line and when it moves.
-
-Two things that derived from it are now discharged: the transpiler question has two options rather
-than three, because `--experimental-transform-types` does not exist on the line the rule selects;
-and Corepack no longer arrives with Node, because Node stopped bundling it at v25, which is scored
-inside [what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
-at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
-runs whatever Corepack hands back rather than a version any record chose. What remains:
-
-**The renderer is React,** per [ADR-0038](../decisions/0038-the-renderer-is-react.md), drawing state
-held outside it per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
-[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
-rejection stands, since its only reversal was choosing Vue. What React leaves open, React Compiler, a
-router, styling and how view code is tested, are each decided when a slice needs them.
-
-**The two browser-floor questions are not M1's.** Old-browser support is work that can land later
-without breaking what the guarantees promise, because no player exists before launch and the build
-lowers syntax to whatever target it is given. At M1 the build is the floor's only reader, so it
-names the floor's versions in its own config, and there is nothing for a shared declaration to keep
-in step.
-
-- [What format declares the browser floor?](what-format-declares-the-browser-floor.md) sits at M2,
-  where the checks that read the floor are chosen, so the format is decided with those tools in
-  hand rather than guessed ahead of them.
-- [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) sits at
-  M10, with the finished guest game, because a fallback in the entry document is cheap to add and
-  has nobody to reach until players exist.
-
-**What is not deferred is the floor's value, as an input.** Several APIs a storage or cross-tab
-design might lean on arrive above a Safari 15.0 floor: Web Locks, `BroadcastChannel` and
-`structuredClone` at 15.4, and `navigator.storage.persist()` and the origin private file system at
-15.2. A design built on one of them would have to be redone when old-browser support lands, so any
-question choosing storage or cross-tab coordination states the floor it was checked against.
-[Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) at M6 is
-the first. **Which floor that is, 15.0 or 15.6, is open** at
-[does the floor cover iOS 15 devices that never installed their updates?](does-the-floor-cover-ios-15-devices-that-never-installed-their-updates.md),
-because a patched iOS 15 device runs Safari 15.6. It bears on the renderer too, since Marko and
-Svelte's `$state.snapshot` call APIs Safari added at 15.4.
-
-**The fork question is retired and its file is not worked as posed.**
-[Does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md)
-asked how many tools do the work, and no property in
-[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
-says anything about tool count, so the list every M1 toolchain choice is scored against cannot score
-it. The coupling it was opened for is real and is handled instead by working the renderer, the HTTP
-handler and the build as one field of candidate toolchains, where a bundled framework and an
-assembled set are both points in the field. How many records fall out is decided by the separability
-test in [../decisions/README.md](../decisions/README.md) when the records are written. The file
-stays until it is mined, and says so under **Findings** rather than at its head, so a reader who
-stops at **Why it matters** will not learn it there.
-
-**One thing in that cluster was a property rather than a decision, and it has been discharged.**
-Whether the server's handler is written against the web-standard `Request` and `Response` interfaces
-never narrowed the runtime field; it was something candidates were scored on.
-[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) settles the handler on one that uses
-Node's own request and response objects, having found that the three reasons for wanting the
-web-standard shape were each weaker than they read: portability was already priced low, socketless
-testing turned out to be available either way, and running one handler in both the server and a
-service worker solves a problem this architecture does not have.
-
-**The server's execution shape is fully settled and blocks nothing here.** Nothing on the request path
-scales to zero ([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md)), the
-server does not run in a constrained isolate
-([ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)), and the store is
-a SQLite file the process opens on the same machine
-([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md),
-[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)). None of it is open.
-
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
 technical properties reachable — performance, safety, portability, and the ones not yet known to
@@ -240,7 +117,7 @@ difference between checking a change in a minute and checking it in an afternoon
 times a day, by the maintainer and by an agent working without them. This milestone produces nothing
 a player can see, which is why it has to be a milestone rather than a habit.
 
-1. [What runs the tests?](what-runs-the-tests.md) — likely answered by M1's runtime.
+1. [What runs the tests?](what-runs-the-tests.md) — `node --test` runs them today as a stopgap.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
 3. **Rewriting `check-docs.py` in TypeScript.** Not a question:
@@ -412,7 +289,10 @@ The first durability promise anything actually keeps.
 2. [What can a player do with no network?](what-can-a-player-do-with-no-network.md) — one board or a
    browsable archive, which sets storage volume by orders of magnitude.
 3. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md)
-4. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
+4. [Does the floor cover iOS 15 devices that never installed their updates?](does-the-floor-cover-ios-15-devices-that-never-installed-their-updates.md)
+   — whether the floor is Safari 15.0 or 15.6, which decides whether a storage or cross-tab design
+   may use the APIs Safari added at 15.2 and 15.4.
+5. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
    one stack choice with no clean migration path.
 
 ## M7 — the rules run
@@ -605,6 +485,10 @@ before signing in because the whole question is what a guest gets _without_ an a
 
 Real, and nothing is waiting on them. Several are research rather than choices.
 
+[What must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
+— the property list toolchain choices are scored against. The choices it served are made; what is
+left open is which `resolves_into` value its shape deserves.
+
 [How is the questions index kept readable in one pass?](how-is-the-questions-index-kept-readable-in-one-pass.md)
 — this file is past what an agent can read at once, and nothing stops it growing.
 
@@ -710,6 +594,12 @@ and everything learned before it must be answered is information the answer woul
 without. The skill this list is trying to capture is spotting the moment a question can no longer be
 put off, and making it as narrow as possible when that moment arrives. Closing a door is clarifying
 and irreversible, so the record that closes one says which one.
+
+**A milestone's prose holds only what its remaining slices need.** When a question is answered, what
+it settled goes in the record and the milestone gains no paragraph saying so. The slice entry goes
+when its issue closes, and so does any prose that only that slice needed. A milestone that reads as
+an account of what was decided is carrying history the records already hold, and it pushes the
+slices still to be built further down a file that is already past what one reading can cover.
 
 ## Milestones below the current one stay unplanned
 

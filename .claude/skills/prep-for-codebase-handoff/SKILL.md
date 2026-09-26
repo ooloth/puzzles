@@ -201,6 +201,12 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
   mislead a reader today. Check whether it still would. An entry describing a migration that
   finished, or a pattern that no longer exists, trains readers to skim the one file whose whole
   value is being read carefully — and an honestly empty `unfinished.md` is better than a padded one.
+- **Milestone prose recounting what was settled.** `docs/questions/README.md` holds only what each
+  milestone's remaining slices need, per its own rule under "Building a milestone's list". Read each
+  milestone's prose above its list and flag paragraphs that report a question as answered, name a
+  record as having settled something, or explain how a past choice was reached. The record already
+  holds that. Before deleting one, check it is not the only place the index links a question file,
+  because `check-docs.py` reports the orphan only after the link is gone.
 
 Run `python3 scripts/check-docs.py` yourself while the subagents work. It is fast and covers the
 things that are facts rather than judgement.

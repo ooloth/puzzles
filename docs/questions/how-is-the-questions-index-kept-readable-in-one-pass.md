@@ -48,3 +48,10 @@ the cap is first hit.
 **The truncation is measured.** A cold-read subagent on 2026-09-23 reported "Output too large
 (72.9KB)" from `cat` and a `Read` cut off at 788 of 941 lines. The `/next` skill already works around
 this by grepping for the filing rule instead of reading the file.
+
+**Most of M1's prose was history the records already held.** Cutting the paragraphs that recounted
+settled toolchain choices, and adding a rule that a milestone's prose holds only what its remaining
+slices need, took the file from 953 lines to 843, and from 70.2KB to 61.6KB. It is still past one
+reading, so the rule slows the growth rather than answering this question.
+
+*Measured — `wc -l` and `wc -c` on `docs/questions/README.md` before and after, 2026-09-26.*

@@ -638,6 +638,10 @@ inline styles; it becomes real with whatever serves the client's files.
 it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here
 rather than at a milestone because no milestone in this list is the one where somebody arrives.
 
+[How do we learn the browser floor can rise?](how-do-we-learn-the-browser-floor-can-rise.md) —
+nothing waits on it, because a floor left low breaks no promise. It becomes real when Apple stops
+patching iOS 15, which nothing currently notices.
+
 [Does a player see stats about their play?](does-a-player-see-stats-about-their-play.md) and
 [can a player explore past puzzles?](can-a-player-explore-past-puzzles.md) — both are intent stated in
 [../problem.md](../problem.md) that no record argues and no promise covers: "what they have solved,

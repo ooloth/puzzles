@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-31
+updated: 2026-09-26
 update_when: a documentation convention is agreed, or an existing one is repeatedly broken
 decays: slow
 status: active
@@ -46,9 +46,11 @@ listing its job. One question per file also lets a decision record cite by path 
 answers.
 
 **Decision records are numbered and questions are not.**
-Decision records are chronological and append-only, so a number is their identity and never
-changes. Questions are a live set that gets edited and deleted, where numbering would only cost
-renumbering.
+Decision records are numbered in the order they derive from each other, so reading the listing top
+to bottom is reading the argument, and a record inserted into the chain renumbers the ones after it.
+[decisions/README.md](../decisions/README.md) holds the rule and `scripts/check-docs.py` catches every
+link a renumber breaks. Questions are a live set that gets edited and deleted, where a number would
+carry no ordering the milestone lists do not already hold.
 
 ## Should
 

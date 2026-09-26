@@ -48,6 +48,10 @@ collect. If you cannot say what you would observe, the issue is not scoped yet â
 out what it is actually for. That is the signal to keep thinking, never a reason to decide the work
 does not belong in the tracker.
 
+**The QA plan is observed in the production-like local run**, not the fast loop, per
+[ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
+Until M2 builds that run, the plan names the closest mode and says what it cannot show.
+
 **Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
 which questions block it. `docs/decisions/` holds what has been settled and why.
 

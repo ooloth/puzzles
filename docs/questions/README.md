@@ -56,6 +56,10 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
    - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is fetched and shown by a React view, with the fetch outside the renderer per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
+   - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so locally the client and the API are two processes on two ports, and the browser sees two origins unless something joins them
+   - **Given:** [0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) — so how the local call is joined follows production's arrangement rather than convenience, and until M2 builds the production-like run this slice is verified in the closest mode with its gap recorded
+     - **Must answer:** [do-the-client-and-the-api-share-an-origin](do-the-client-and-the-api-share-an-origin.md), for local runs and production together — or else the local call is wired before production's arrangement is known. A proxy against a split production hides every cross-origin fault until it is deployed, and cross-origin headers against a single origin add server behaviour production never wants. Costs a re-scaffold of the local wiring, and the first direction fails silently
+   - **Deferred:** what the page shows when the API cannot be reached. What a player is shown is [is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md) at M9, and noticing a server that was never started is part of [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md) at M2. This slice leaves it unspecified rather than answering either
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player
    - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving elsewhere, and the test is skipped entirely when the API is path-routed on the app's own hostname
@@ -138,6 +142,10 @@ a player can see, which is why it has to be a milestone rather than a habit.
    This is where [../verification.md](../verification.md) gets its content.
 7. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
+   [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+   settled that verification happens in a production-like local run and only the fast loop may
+   differ. What is left is building that run: which differences it closes, how, and what command
+   runs it.
 8. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the

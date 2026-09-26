@@ -29,6 +29,13 @@ cadence, different tooling, a CDN in front of one and not the other.
 The answer may also be "one origin, and nothing rests on it", which is different from "one origin,
 because the cookie needs it". The second commits us to a recovery mechanism the first leaves open.
 
+**The answer covers local runs as well as production, and settles both together.** M1's third slice
+is the first to call the API from the client, so it needs the local half before any host exists.
+[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+requires the production-like local run to match production's arrangement, so that half follows from
+the production answer. What this question still has to say is how the fast loop joins the two
+processes, and whether that is allowed to differ from production.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).
@@ -90,6 +97,14 @@ convenience. The mechanism is
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
 
 *Reasoned — 2026-09-20.*
+
+**[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) has since made this binding for the production-like run and not for the fast loop.** A
+fault the fast loop hides is caught when the slice is verified in the production-like run, so the
+fast loop's arrangement is a question of how early a cross-origin fault shows, not whether it shows.
+That holds once M2 has built the production-like run. Until then the fast loop is the closest mode
+M1's slices are verified in, so its arrangement is the only local check on this answer.
+
+*Reasoned — from [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md), 2026-09-26.*
 
 ### What is still open
 

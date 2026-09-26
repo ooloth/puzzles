@@ -17,7 +17,7 @@ pnpm install
 
 - `pnpm dev` serves the client with live reload at http://localhost:5173/.
 - `pnpm build` writes the built client to `dist/client/`.
-- `pnpm preview` serves `dist/client/` at http://localhost:4173/, as it would ship.
+- `pnpm preview` serves the built client in `dist/client/` at http://localhost:4173/, with no API behind it.
 
 Either address shows "Hello!". The client does not call the server yet.
 
@@ -39,6 +39,11 @@ Run all three before committing. Nothing runs them automatically yet.
 
 Then run the part you changed, using the commands above, and compare it with
 [docs/verification.md](docs/verification.md). Tests passing is not evidence that it works.
+
+The commands above are the fast loop. A change is verified in a production-like local run, per
+[ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
+That run does not exist until M2, so for now verify in the fast loop and record in
+`docs/verification.md` what it cannot show.
 
 ## In the Claude Code sandbox
 

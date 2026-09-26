@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-25
+updated: 2026-09-26
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -70,6 +70,19 @@ interim, and they come ahead of [what runs the tests?](questions/what-runs-the-t
 at M2, each of which may replace them.
 
 **So** follow them for now, and don't cite either one as settled.
+
+### Changes are to be verified in a run that does not exist yet
+
+**You'll see** [ADR-0039](decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
+`CLAUDE.md` and `CONTRIBUTING.md` saying a change is verified in a production-like local run.
+
+**Actually** no such run exists. `pnpm dev` and `pnpm start` are the fast loop, and `pnpm preview`
+serves the built client with no API behind it. Building the production-like run is
+[how is the app run locally the way it runs deployed?](questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+at M2.
+
+**So** verify in the fast loop, and record in [verification.md](verification.md) under **Can't
+observe** what it cannot show.
 
 <!-- Template:
 

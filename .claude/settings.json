@@ -1,11 +1,7 @@
 {
   "sandbox": {
-    "excludedCommands": [
-      "pnpm add *",
-      "pnpm install*",
-      "pnpm remove *",
-      "pnpm update*",
-      "pnpm view *"
-    ]
+    "network": {
+      "allowLocalBinding": true
+    }
   }
 }

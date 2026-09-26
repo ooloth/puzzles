@@ -7,7 +7,12 @@ The goal is a delightful puzzle-solving UI that rivals the UX of any current alt
 supporting uninterrupted puzzling with or without internet connectivity. 📱 The puzzles themselves
 will be tuned to match the techniques a human would actually use to solve them. 🤖🙅
 
-**Current status:** M1 in progress: a server answers one route locally.
+**Current status:** M1 in progress: a server answers one route and a browser shows "Hello!"
+rendered by the client, both locally.
+
+## 🛠️ Running it
+
+The commands for running, testing and checking it are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## 📖 Docs
 

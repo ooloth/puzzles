@@ -4,11 +4,15 @@ This will evolve eventually into an app serving logic puzzles (think grid-fillin
 sudoku, star battle, etc) plus a pipeline for generating them. The site will eventually have
 users whose progress must be reliably saved and restored.
 
-The only code is a server skeleton under `src/server/` (M1 slice 1). Much of the stack is settled
+The only code is a server under `src/server/` that answers one route (M1 slice 1) and a client under
+`src/client/` that renders "Hello!" (M1 slice 2). Much of the stack is settled
 on paper — see `docs/decisions/` for the language, the store engine, the client bundler and the
 runtime — and what remains open in the toolchain is listed under M1 in `docs/questions/README.md`.
 The repository is one package ([ADR-0034](docs/decisions/0034-the-repository-is-one-package.md));
 what remains of the codebase layout is what lives inside `src/`, and that waits for M7.
+
+The commands for running the server and client, testing, and checking a change are in
+[CONTRIBUTING.md](CONTRIBUTING.md). Read it before running anything.
 
 ## Uphold requirements
 

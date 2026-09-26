@@ -69,5 +69,5 @@ seventh-generation iPod touch.
 **Safari on iOS 15.8.x reports itself as 15.6.x.** iOS 15.8 sends `Version/15.6.6` and iOS 15.8.4
 sends `Version/15.6.7`, so security updates to the branch do not advance Safari's version.
 
-*Sourced — user-agent strings recorded by user-agents.net and useragents.io, seen by me in search
+*Unverified — user-agent strings recorded by user-agents.net and useragents.io, seen by me in search
 results on 2026-09-24. No Apple source states it, and nobody has checked it on a device.*

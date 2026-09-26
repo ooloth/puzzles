@@ -36,12 +36,13 @@ Ported from the legacy documentation review, 2026-08-30.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**There may be no losing write.**
-[what the server does with puzzle state](what-does-the-server-do-with-puzzle-state.md)
-settles that merges are deterministic and per cell, which means two devices that edited different
-cells both keep their work — the union is the answer, and nothing is discarded. A write is only
-lost where both devices changed the *same* cell, and then only the older one, which is a single
-value rather than a session.
+**There may be no losing write.** One option in
+[what does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md), which is
+still open, is a merge that is
+deterministic and per cell. If that option is taken, two devices that edited different cells both
+keep their work — the union is the answer, and nothing is discarded. A write is only lost where both
+devices changed the *same* cell, and then only the older one, which is a single value rather than a
+session.
 
 What remains open is narrower than the title suggests: whether losing one cell's value silently is
 acceptable, or whether that case deserves surfacing somehow — bearing in mind that

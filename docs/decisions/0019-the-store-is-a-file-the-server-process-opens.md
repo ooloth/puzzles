@@ -85,6 +85,12 @@ which decide how that file is opened.
   than for a team. And with continuous replication a file's recovery point is about a second, which
   beats a self-managed service with a nightly dump on the one failure that matters most here.
 
+  *Sourced — PlanetScale's announcement,
+  [planetscale.com/blog/planetscale-forever](https://planetscale.com/blog/planetscale-forever), dated
+  2024-03-06: "Our Hobby plan will be retired on April 8th, 2024." Litestream's
+  [configuration reference](https://litestream.io/reference/config/): a replica's `sync-interval`
+  defaults to `1s`. Both fetched 2026-09-26.*
+
   **Reverses if** the product grows a feature where many players write the same row — a leaderboard
   maintained transactionally, or real-time collaborative solving — because that is the one access
   pattern where the engines differ in kind rather than in degree. [../problem.md](../problem.md)

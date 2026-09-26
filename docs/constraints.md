@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-25
+updated: 2026-09-26
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -908,7 +908,7 @@ file on the same machine rather than treating co-location as an implementation d
 ## Law and licensing
 
 **AGPL-3.0's network-use clause generally requires releasing a hosted service's complete source
-to any user of that service.** At least one prominent sudoku library is AGPL-3.0.
+to any user of that service.**
 
 > So we must audit dependencies for *network* copyleft, not only distribution copyleft. AGPL is
 > disqualifying for anything linked into a hosted service.

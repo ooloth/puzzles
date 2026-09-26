@@ -1,7 +1,7 @@
 ---
 number: 0027
 status: accepted
-amended: 2026-09-20
+amended: 2026-09-26
 date: 2026-09-17
 ---
 
@@ -96,7 +96,12 @@ replacement as small. This asks for an argument rather than a measurement until 
 **One position on the ordering is now established rather than estimated.**
 [ADR-0032](0032-the-package-manager-is-pnpm.md) prices leaving the package manager at a lockfile swap
 and an edit to every manifest naming a sibling, which is what let it accept a three-week-old
-implementation. The runtime's and the renderer's places remain estimates.
+implementation. The renderer's is stated rather than estimated: leaving it costs a rewrite of the
+view code, per
+[ADR-0037](0037-the-renderer-draws-client-state-and-does-not-own-it.md). The runtime's remains an
+estimate, and a load-bearing one:
+[ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) separated the candidates on measured
+grounds, so the runtime is not cheap to leave the way a choice among equivalent candidates would be.
 
 ## Revisit when
 

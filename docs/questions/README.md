@@ -87,24 +87,8 @@ permanent home. Delete what has moved rather than leaving a second copy.
 
 **Open, and spanning more than one question file.**
 
-- **The ordering of replacement costs across positions is reasoned, and one point on it is now
-  measured.**
-  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  prices every stewardship concern by that ordering, states it as runtime-most-expensive down to
-  router-cheapest, and names in its own Risk section that the ordering is an estimate made before
-  anything is built. [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) is the first record
-  to establish a point on it rather than assume one: leaving the package manager costs a lockfile
-  swap and an edit to every manifest naming a sibling.
-  **The runtime's place is still an estimate, and the renderer's is now stated.** The runtime's is
-  load-bearing, because [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
-  separated the candidates on measured grounds, so that position had bad answers available and is not
-  cheap to leave for the reason an equivalence argument would have given. The renderer's is a rewrite
-  of the view code, per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
-- **Nothing else currently spans more than one question file.** The cross-cutting items this section
-  has held are settled in
-  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  and in [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md). The
-  section stays because the next cross-cutting thought needs somewhere to go.
+- **Nothing currently spans more than one question file.** The section stays because the next
+  cross-cutting thought needs somewhere to go.
 
 ## M2 — a change can be checked before it ships
 
@@ -491,6 +475,10 @@ left open is which `resolves_into` value its shape deserves.
 
 [How is the questions index kept readable in one pass?](how-is-the-questions-index-kept-readable-in-one-pass.md)
 — this file is past what an agent can read at once, and nothing stops it growing.
+
+[Can the gotchas be prevented rather than documented?](can-the-gotchas-be-prevented-rather-than-documented.md)
+— each trap in [../gotchas.md](../gotchas.md) might become a command in the contributing guide, which
+would leave that file with nothing to hold.
 
 [How long does Safari really keep our storage?](how-long-does-safari-really-keep-our-storage.md),
 [how does Android evict stored data?](how-does-android-evict-stored-data.md),

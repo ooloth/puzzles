@@ -58,11 +58,9 @@ that shows the message by default and has the bundle remove it reads nothing. A 
 script tests the browser against the floor reads it. So this question can be answered first, but it
 has to price both shapes rather than assume one.
 
-**The answer must not narrow [what renders the client?](what-renders-the-client.md).** That is the
-most expensive open question at M1, and a format that only some renderers' build setups can feed
-into the lowering target would remove candidates from it by consequence. So each renderer
-candidate's path from the declaration to the target it actually lowers to is part of what this
-question checks. The known case is Nuxt, whose own lowering setting defaults to `esnext`.
+**The answer must reach the renderer's build.** The renderer is React on Vite, per
+[ADR-0038](../decisions/0038-the-renderer-is-react.md), so the declaration has to feed Vite's
+`build.target`, and that path is part of what this question checks.
 
 ## Resolves into
 

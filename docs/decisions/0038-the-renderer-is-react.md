@@ -16,8 +16,8 @@ date: 2026-09-25
   bundler, so the renderer runs client-only on Vite.
 - [ADR-0007](0007-that-language-is-typescript.md) makes the client TypeScript, and the repository
   pins TypeScript 7.
-- [What renders the client?](../questions/what-renders-the-client.md) built all eighteen surviving
-  candidates against the same board and disqualified none. Measured speed at realistic grid sizes
+- The renderer question, whose measurements and research are read with
+  `git show b931fb7:docs/questions/what-renders-the-client.md`, built all eighteen surviving candidates against the same board and disqualified none. Measured speed at realistic grid sizes
   separated only the minimal libraries from the rest, so the field was narrowed on what each costs to
   live with: the minimal libraries, Marko and Ripple have thin ecosystems, single maintainers and
   little code for AI assistants to have learned from; Solid has a rewrite of its reactivity in
@@ -89,8 +89,8 @@ builds.
   from one author. **Reverses if** React's size or speed is measured binding on a floor-class
   device, which is the case this record keeps it open for.
 - **The rest of the field** — Solid, Marko, Ripple, the minimal libraries and hand-written DOM —
-  were weighed in [what renders the client?](../questions/what-renders-the-client.md), which records
-  each one's measurements and the reasons they fell behind.
+  were weighed in the renderer question, which records each one's measurements and the reasons they
+  fell behind.
 - **Not yet** — slice 2 of M1 renders "Hello!" on the client and cannot be built without a renderer.
 
 ## Risk

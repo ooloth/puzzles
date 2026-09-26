@@ -30,7 +30,7 @@ at M9 waits on it.
 
 **The inner loop is the maintainer's cost here**, and it is real: this is the component a change is
 checked through every day. It is a cost of this choice rather than a justification for another one,
-and nothing in [what renders the client?](what-renders-the-client.md) rests on it.
+and nothing in the renderer choice at [ADR-0038](../decisions/0038-the-renderer-is-react.md) rests on it.
 
 **How coupled this is to the renderer depends on an answer nobody has given.** Under separate tools
 most renderers run under several bundlers, and either can be revisited without rewriting the other.

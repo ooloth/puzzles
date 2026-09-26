@@ -61,9 +61,9 @@ requirement above; the last three do not, and fail for their own reasons.
   [../constraints.md](../constraints.md) describes, and it is invisible until an asset evicts.
   **Reverses if** SvelteKit emits a revisioned manifest that includes the prerendered document.
 - **Nuxt** — it closes the renderer to Vue, and nothing requires that to be closed.
-  **Reverses if** [what renders the client?](../questions/what-renders-the-client.md) independently
-  chooses Vue, at which point this rejection has no grounds left and this record is reopened rather
-  than cited. That record checks this condition before assuming this one still holds.
+  **Reverses if** the renderer independently becomes Vue, at which point this rejection has no
+  grounds left and this record is reopened rather than cited.
+  [ADR-0038](0038-the-renderer-is-react.md) chose React, so this has not arisen.
 - **Astro** — its own documentation states it is "the web framework for building content-driven
   websites like blogs, marketing, and e-commerce", and names this application's shape as what other
   frameworks exist for: "logged-in admin dashboards, inboxes, social networks, todo lists". A single
@@ -93,8 +93,8 @@ A meta-framework emits a revisioned precache manifest including the prerendered 
 **and** the renderer or runtime it implies has been chosen independently on its own merits, so that
 adopting it would close nothing that is still open.
 
-Also when [what renders the client?](../questions/what-renders-the-client.md) chooses Vue, which
-removes the grounds for the Nuxt rejection above.
+Also if a record replacing [ADR-0038](0038-the-renderer-is-react.md) chooses Vue, which removes the
+grounds for the Nuxt rejection above.
 
 ## Also update
 

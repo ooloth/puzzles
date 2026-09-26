@@ -35,12 +35,11 @@ assigned it.
 
 ## What it costs, and why that is small
 
-Nothing. Keeping domain logic free of I/O and of framework types is ordinary design, and the survey
-behind
-[what renders the client?](../questions/what-renders-the-client.md) found no renderer that makes it
-harder: a module that never calls a reactive primitive is untouched by every restriction any of them
-imposes. The work is entirely at the boundary, where the view layer hands over a plain value rather
-than a proxied one.
+Nothing. Keeping domain logic free of I/O and of framework types is ordinary design, and the
+renderer survey, read with `git show b931fb7:docs/questions/what-renders-the-client.md`, found no
+renderer that makes it harder: a module that never calls a reactive primitive is untouched by every
+restriction any of them imposes. The work is entirely at the boundary, where the view layer hands
+over a plain value rather than a proxied one.
 
 ## Enforced by
 
@@ -67,8 +66,8 @@ that slice's issue carries these two checks into its done-when.
 
 ## Where it came from
 
-The renderer survey recorded in
-[what renders the client?](../questions/what-renders-the-client.md), which established that a
+The renderer survey recorded in the question read with
+`git show b931fb7:docs/questions/what-renders-the-client.md`, which established that a
 renderer's reactive primitive constrains the module that calls it and no other. The rule is what
 turns that finding into something the codebase can rely on rather than something a future reader has
 to re-derive.

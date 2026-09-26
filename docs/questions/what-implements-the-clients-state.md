@@ -17,9 +17,9 @@ at close to the cost of rewriting it.
 ## What would settle it
 
 Knowing the storage mechanism, how far back undo goes and whether state is a snapshot or an event
-log, because those decide how much of it a library could supply. Then a comparison of what
-each option provides against what the client's state must do: apply changes synchronously, save each one in
-order, merge from sync and other tabs, and be inspectable while developing.
+log, because those decide how much of it a library could supply. Then a comparison of what each
+option provides against what the client's state must do: apply changes synchronously, save each one
+in order, merge from sync and other tabs, and be inspectable while developing.
 
 ## Resolves into
 
@@ -65,7 +65,6 @@ detecting eviction.
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
 prices at close to the cost of rewriting it, and the TC39 proposal that would standardise signals is
 at Stage 1.
-*Sourced — the proposal's stage is from the renderer survey in
-[what renders the client?](what-renders-the-client.md), read by a research agent 2026-09-16, not
-re-checked since. That it prices the dependency high is reasoned from
+*Sourced — the proposal's stage is from the renderer survey, read with
+`git show b931fb7:docs/questions/what-renders-the-client.md`, by a research agent 2026-09-16, not re-checked since. That it prices the dependency high is reasoned from
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).*

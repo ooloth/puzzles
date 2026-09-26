@@ -106,8 +106,7 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-**The renderer is React,** per [ADR-0038](../decisions/0038-the-renderer-is-react.md), which answers
-[what renders the client?](what-renders-the-client.md), drawing state
+**The renderer is React,** per [ADR-0038](../decisions/0038-the-renderer-is-react.md), drawing state
 held outside it per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
 [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
 rejection stands, since its only reversal was choosing Vue. What React leaves open, React Compiler, a

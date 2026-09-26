@@ -26,27 +26,24 @@ the renderer under `src/client/state/`, and the renderer is React.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
-### Four answered question files are still on disk
+### Three answered question files are still on disk
 
 **You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md),
 [questions/what-builds-the-client-and-serves-it-in-development.md](questions/what-builds-the-client-and-serves-it-in-development.md)
-[questions/what-language-are-repo-scripts-written-in.md](questions/what-language-are-repo-scripts-written-in.md)
-and [questions/what-renders-the-client.md](questions/what-renders-the-client.md), all four carrying
-full working as though they were live.
+and [questions/what-language-are-repo-scripts-written-in.md](questions/what-language-are-repo-scripts-written-in.md),
+all three carrying full working as though they were live.
 
-**Actually** all four are answered — the first by
+**Actually** all three are answered — the first by
 [ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), the second by
 [ADR-0029](decisions/0029-the-client-bundler-is-vite.md), and the third by
 [ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md), whose Decision covers
-every repo script, and the fourth by [ADR-0038](decisions/0038-the-renderer-is-react.md). All four say `status: answered`, and
+every repo script. All three say `status: answered`, and
 `grep -l 'status: answered' docs/questions/*.md` is the authoritative count.
 
-**So** don't work any of them. Don't cite the first three either — the build one asserted that
+**So** don't work any of them, and don't cite them either — the build one asserted that
 [the floor record](decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-requires a browserslist config, which that record leaves open. The renderer one holds the
-measurements [ADR-0037](decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) and
-[ADR-0038](decisions/0038-the-renderer-is-react.md) cite, so read it for evidence rather than for what is open. Each
-is deleted once its findings are mined.
+requires a browserslist config, which that record leaves open. They are deleted once their findings
+are mined.
 
 ### The doc checker is written in a language no record sanctions
 

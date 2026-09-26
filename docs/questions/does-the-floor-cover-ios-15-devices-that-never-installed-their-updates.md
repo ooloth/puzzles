@@ -14,12 +14,12 @@ whose vendor still ships it updates", it covers an iPhone 7 on iOS 15.0 that nev
 and the floor is Safari 15.0. Read as "any device running the updates its vendor ships", it covers
 that iPhone only on iOS 15.8.x, whose Safari reports itself as 15.6.x, and the floor is Safari 15.6.
 
-**The difference is a set of APIs that designs may want.** Safari 15.4 added
-`Array.prototype.at`, `structuredClone`, `Object.hasOwn`, `BroadcastChannel` and Web Locks, and
-15.2 added `navigator.storage.persist()` and the origin private file system. The renderer does not depend
-on them: React's published runtime calls none of them, per the scan recorded in
-[what renders the client?](what-renders-the-client.md). What remains is any storage or cross-tab
-design built on those APIs, which
+**The difference is a set of APIs that designs may want.** Safari 15.4 added `Array.prototype.at`,
+`structuredClone`, `Object.hasOwn`, `BroadcastChannel` and Web Locks, and 15.2 added
+`navigator.storage.persist()` and the origin private file system. The renderer does not depend on
+them: React's published runtime calls none of them, per the scan recorded in the renderer question,
+read with `git show b931fb7:docs/questions/what-renders-the-client.md`. What remains is any storage
+or cross-tab design built on those APIs, which
 [which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) has to be
 checked against.
 

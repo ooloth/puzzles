@@ -385,6 +385,33 @@ there is no public API for a page or an embedding app to opt in.
 
 ---
 
+## Browsers — a cached script still costs a compile, and nobody publishes when a page is discarded
+
+**Chrome compiles scripts eagerly into its code cache only when they are classic scripts cached during
+a service worker's install.** A module script loses that cache and falls back to the ordinary one,
+which compiles lazily and caches on later loads. Vite emits module scripts, so a cold start under
+Chrome pays the ordinary path. Whether Safari persists compiled bytecode for page scripts is not
+documented anywhere found.
+
+*Sourced — [v8.dev/blog/code-caching-for-devs](https://v8.dev/blog/code-caching-for-devs), opened
+2026-09-24: "If the page ends up loading it as an ES module instead then the code cache will be
+discarded and replaced with a 'normal' code cache." The Safari half is a research agent's report of
+finding nothing, recorded in the renderer question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`.*
+
+**Neither iOS nor Android publishes when it discards a backgrounded page.** WebKit releases memory in
+stages under pressure and iOS kills the page's process with no published threshold, and
+`document.wasDiscarded` exists only in Chrome. So a page cannot learn it was discarded on iOS, only
+that it was hidden.
+
+*Sourced by a research agent from WebKit's `MemoryPressureHandler.cpp` and caniuse, both opened by it
+2026-09-24, and recorded in the renderer question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`.*
+
+> So every JavaScript byte is paid for in compilation on each cold start, not only on the first
+> download, and the last write before a page is hidden has to complete on `pagehide` or
+> `visibilitychange`, because nothing reliably says afterwards that the page was thrown away.
+
+---
+
 ## Browsers — touch and focus do not behave the way a mouse test shows
 
 **A touch drag keeps reporting to the element it started on.** On touch, the browser captures the
@@ -395,7 +422,7 @@ finger drags across, and a drag-select built on it selects one cell. Releasing t
 
 *Measured — a six-cell drag sent as touch events through Chromium's DevTools protocol against three
 builds of the board, 2026-09-24: one cell selected by the builds relying on `pointerenter`, six
-after the fix. Recorded in [what renders the client?](questions/what-renders-the-client.md).*
+after the fix. Recorded in the renderer question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`.*
 
 **WebKit does not focus a button when it is clicked.** So code that remembers
 `document.activeElement` when a dialog opens remembers the page body, and focus is lost when the
@@ -566,10 +593,10 @@ data: parsing and running the app's code on every cold launch, work and allocati
 during high-frequency input, updates that touch hundreds of elements at once, grids much larger than
 81 cells, and a resident heap large enough that the operating system discards a backgrounded page.
 
-> So whether client CPU and memory bind on those paths is open, and nothing may cite this section to
-> say they do not. They are worked as criteria in
-> [what renders the client?](questions/what-renders-the-client.md), because the renderer is the
-> choice that most changes what each of them costs.
+> So whether client CPU and memory bind on those paths on a floor device is open, and nothing may
+> cite this section to say they do not. The renderer was chosen against them measured on an Apple M2
+> only, and a measurement on a floor-class device is what
+> [ADR-0038](decisions/0038-the-renderer-is-react.md) names as its reason to revisit.
 
 *Reasoned — from the floor guarantee and from what a renderer spends CPU and memory on. Nothing here
 has been measured.*
@@ -773,6 +800,41 @@ store open, which is long enough for a deploy to run two processes against one f
 are both about. The remedy is part of
 [ADR-0035](decisions/0035-the-http-handler-is-fastify.md)'s decision rather than an operational
 detail, because it is not visible in any single route.
+
+## Dependencies — React can run a handler against state from its last render
+
+**React defers rendering for continuous events such as `pointerenter`, so a second event can reach a
+handler before the first one's update has rendered.** A handler that computes the next state from
+the value it closed over then overwrites the earlier update, and in a drag-select a cell drops out
+of the selection. An updater function computes from the latest queued state instead.
+
+*Measured — a fast drag across a 30 by 30 board in Playwright's WebKit against a React 19.3.0 build,
+2026-09-24: cells dropped with a closure, none with an updater function. Recorded in the renderer
+question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`.*
+
+> So state a view changes during continuous input is set with updater functions, and durable state
+> never lives in React at all, per
+> [ADR-0037](decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
+
+---
+
+## Dependencies — React Compiler's Babel preset and Workbox need different Babel majors
+
+**Enabling React Compiler through `@vitejs/plugin-react`'s Babel preset brings `@babel/core` 8, and
+`vite-plugin-pwa`'s Workbox build needs Babel 7.** With both installed, the build fails until a
+package-manager override keeps Workbox on its own Babel.
+
+*Measured — a spike build with `@vitejs/plugin-react` 6.1.1, `babel-plugin-react-compiler` 1.0.0 and
+`vite-plugin-pwa` 1.3.0 under npm, 2026-09-24, fixed by an `overrides` entry nesting
+`@rollup/plugin-babel` under `workbox-build`. Recorded in the renderer question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`.*
+
+> So adopting React Compiler and a service worker together costs an override until the two agree.
+> Whether to adopt the compiler at all is not decided.
+
+*Unlike most of this file, a claim about a tool can be overtaken by a release shipping the same
+week. Rebuild with both before relying on it.*
+
+---
 
 ## Servers — framework throughput is three orders of magnitude above this workload
 

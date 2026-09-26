@@ -26,10 +26,10 @@ once an interaction model exists**, and says plainly that silence is not a decis
 **Every cell in a puzzle grid is a real element in the document that can take focus and carry a
 name, a role and a state. The grid is not painted into a canvas.**
 
-That is the whole decision. It is a constraint on
-[what renders the client?](../questions/what-renders-the-client.md) and on nothing else, and it
-leaves the rendering technology, the framework and the markup entirely open — every candidate in
-that question satisfies this except a canvas.
+That is the whole decision. It is a constraint on the choice
+of renderer, settled at [ADR-0038](0038-the-renderer-is-react.md), and on nothing else, and it leaves
+the rendering technology, the framework and the markup to that choice; every candidate it
+considered satisfies this except a canvas.
 
 **What it buys now** is that keyboard operation is possible at all. A player can move focus to a
 cell, which is the precondition for doing anything there without a pointer. What a player can
@@ -89,17 +89,17 @@ an accessible name for every cell.
 sudoku and more for star battle, each participating in layout, paint and the accessibility tree.
 [../constraints.md](../constraints.md) says client CPU and memory are not constraints under any
 plausible data model and that we must not optimise for them, which is why this is recorded as a risk
-rather than a reason to hesitate — but it is reasoned rather than observed, and it constrains
-[what renders the client?](../questions/what-renders-the-client.md) before that question is worked.
+rather than a reason to hesitate — but it is reasoned rather than observed, and it bounds the renderer
+choice, settled at [ADR-0038](0038-the-renderer-is-react.md), rather than following from it.
 
 **This delivers no accessibility.** It removes the structural blocker and nothing else. A player
 using a screen reader is no better off until somebody writes the labels, decides what a cell
 announces, and tests it against real VoiceOver — and the WebKit gaps above mean some of that is
 waiting rather than working.
 
-**It constrains an M1 question from outside it.** [What renders the
-client?](../questions/what-renders-the-client.md) now has one candidate class ruled out before it is
-argued on its own terms. That is deliberate and it is the second time in this folder; saying so is
+**It constrains an M1 decision from outside it.** The renderer choice, settled at
+[ADR-0038](0038-the-renderer-is-react.md), has one candidate class ruled out before it is argued on
+its own terms. That is deliberate and it is the second time in this folder; saying so is
 what stops it becoming a habit.
 
 ## Revisit when

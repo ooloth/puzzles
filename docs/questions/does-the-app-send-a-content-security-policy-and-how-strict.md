@@ -68,4 +68,5 @@ style elements unless their hashes are listed, and hashes only work for content 
 
 **React and React DOM contain no `eval` or `new Function` in their published builds.**
 *Measured — a scan of `react` and `react-dom` 19.3.0 for those calls, run by a research agent
-2026-09-23 and recorded in [what renders the client?](what-renders-the-client.md).*
+2026-09-23 and recorded in the renderer question, read with
+`git show b931fb7:docs/questions/what-renders-the-client.md`.*

@@ -16,7 +16,7 @@ Do not work it.
 ## Why it matters
 
 It decides how many records get written, which nothing else open in M1 does. One answer
-collapses [what renders the client?](what-renders-the-client.md),
+collapses the renderer question, since settled at [ADR-0038](../decisions/0038-the-renderer-is-react.md),
 [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and
 [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
 into a single choice. The other leaves all three standing, each with its own field.
@@ -64,7 +64,7 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-18. Three question files describe this fork as coupling between them and none of
-them asks it. [What renders the client?](what-renders-the-client.md) lists a meta-framework as a
+them asks it. The renderer question, since settled at [ADR-0038](../decisions/0038-the-renderer-is-react.md), lists a meta-framework as a
 class of answer,
 [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) lists a
 meta-framework's own server as a candidate, and each defers the choice to the other.
@@ -138,7 +138,7 @@ from a GitHub code search run 2026-09-04 by a research agent; I did not run it.*
 The runtime question held
 that "the runtime is the least reversible position in the stack", which
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) went on to contradict.
-[What renders the client?](what-renders-the-client.md) holds that "a renderer swap is cheap
+The renderer question holds that "a renderer swap is cheap
 enough relative to the runtime that no candidate here is removed by it", while
 [README.md](README.md) records the renderer as the largest re-scaffold M1 can create. Those
 cannot all hold.

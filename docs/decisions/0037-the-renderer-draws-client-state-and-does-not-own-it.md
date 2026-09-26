@@ -20,9 +20,9 @@ date: 2026-09-24
   reconciled without asking the
   player](../guarantees/conflicts-are-reconciled-without-asking-the-player.md) each depend on how a
   change is applied, saved and merged. Where that code runs decides what can break them.
-- [What renders the client?](../questions/what-renders-the-client.md) found no difference a player
-  can see between React, Vue and Svelte, so how much a wrong choice of renderer costs to reverse is
-  set by this record rather than by the renderer.
+- The renderer question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`,
+  found no difference a player can see between React, Vue and Svelte, so how much a wrong choice of
+  renderer costs to reverse is set by this record rather than by the renderer.
 - The architecture spike recorded in that question ran one state module unchanged under all three
   renderers, and every scenario behaved identically: a remote update mid-drag, cross-tab sync,
   keyboard undo, touch drag-select and an offline restore. Held outside, every change is applied by

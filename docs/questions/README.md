@@ -70,10 +70,12 @@ cannot parse under this Node line at all, a framework whose own documented patte
 database is unsafe under its own default listen, and a response contract that only one candidate
 enforces. Settled at [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) and
 [ADR-0036](../decisions/0036-request-and-response-bodies-are-described-with-zod.md).
-**The renderer is the one still in that position.** Every surveyed candidate satisfies what the
-records require and the differences found so far are operational frictions, which is a result about
-the searching rather than about the candidates. A question that looks like a coin toss is usually
-one nobody has run yet, and running it is the cheap thing.
+**The renderer is the fifth.** Building every surviving candidate against the same board found no
+disqualifier and no difference a player can see, and found the separator in tooling instead: JSX is
+native to TypeScript's tools and single-file components lag each new one. Settled at
+[ADR-0038](../decisions/0038-the-renderer-is-react.md), on top of
+[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md). A question that
+looks like a coin toss is usually one nobody has run yet, and running it is the cheap thing.
 
 **Running one also turns up limits that belong to other questions.** The package-manager spike found
 that Node refuses to strip types under `node_modules`, which constrains the layout, the deployable
@@ -104,21 +106,12 @@ inside [what pins the toolchain versions across machines?](what-pins-the-toolcha
 at M2. **It is installed on this machine anyway**, as a global npm package, so a bare `pnpm` here
 runs whatever Corepack hands back rather than a version any record chose. What remains:
 
-**The renderer is the next M1 question.** It is the only open one slice 2 needs, and it derives
-from nothing. The other open M1 questions sit under slices 4 to 6, and none of them derives from it
-either. It goes first because its wrong answer is cheapest now and grows fastest: it is the only M1
-question that accumulates code written against the choice, so a wrong pick costs a re-scaffold of a
-page saying "Hello!" today and a rewrite of the grid after M4 and M5. It is settled by running
-candidates rather than by reading, as
-[what renders the client?](what-renders-the-client.md) describes under **What would settle it**.
-**Check [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
-rejection before assuming it holds**: Nuxt is rejected there for closing the renderer to Vue, so
-choosing Vue here removes its grounds and reopens that record. Reopening it turns on whether Nuxt
-lowers the client bundle to a named floor. Nuxt's own docs say it respects `vite.build.target`, per
-the findings in
-[what format declares the browser floor?](what-format-declares-the-browser-floor.md), and nobody
-here has built one to confirm it. That check is a build and an inspection, and it is only worth
-running if Vue wins.
+**The renderer is React,** per [ADR-0038](../decisions/0038-the-renderer-is-react.md), which answers
+[what renders the client?](what-renders-the-client.md), drawing state
+held outside it per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
+[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
+rejection stands, since its only reversal was choosing Vue. What React leaves open, React Compiler, a
+router, styling and how view code is tested, are each decided when a slice needs them.
 
 **The two browser-floor questions are not M1's.** Old-browser support is work that can land later
 without breaking what the guarantees promise, because no player exists before launch and the build
@@ -192,11 +185,11 @@ derivation.
    - **Given:** [0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) — the build is the floor's only reader until the checks arrive at M2, so `build.target` names the floor's versions in the build's own config and never falls through to the bundler's default
    - **Given:** [0029-the-client-bundler-is-vite](../decisions/0029-the-client-bundler-is-vite.md) — the precache manifest and content-hashed filenames are this bundler's outputs, and whether it emits a manifest containing the entry document is what that record names as unproven
    - **Given:** [0037-the-renderer-draws-client-state-and-does-not-own-it](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) — so the renderer only draws state held under `src/client/state/`, and replacing it costs a rewrite of the views rather than of the client
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else every later client slice is written against a renderer chosen before anything was rendered, and changing it rewrites the client half rather than adjusting it. Costs a re-scaffold. The build is settled and forecloses nothing here, so the field is open. Before assuming [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) still holds, check its Nuxt rejection: that rejection is that Nuxt closes the renderer to Vue, so choosing Vue here removes its grounds and reopens that record
+   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so "Hello!" is rendered by React, mounted from an entry document the build produces
 3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
-     - **Must answer:** [what-renders-the-client](what-renders-the-client.md) — or else the renderer is chosen without knowing it has to fetch and display asynchronously, which is the one thing this slice adds over the last. Costs a re-scaffold of the client half
+   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is fetched and shown by a React view, with the fetch outside the renderer per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player
    - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving elsewhere, and the test is skipped entirely when the API is path-routed on the app's own hostname
@@ -236,15 +229,15 @@ permanent home. Delete what has moved rather than leaving a second copy.
   anything is built. [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md) is the first record
   to establish a point on it rather than assume one: leaving the package manager costs a lockfile
   swap and an edit to every manifest naming a sibling.
-  **The runtime's and the renderer's places are still estimates.** The runtime's is load-bearing,
-  because [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) separated the
-  candidates on measured grounds, so that position had bad answers available and is not cheap to
-  leave for the reason an equivalence argument would have given. The renderer record has to state its
-  own place rather than inherit one.
-- **Nothing currently spans more than one question file.** The two bullets this section held were
-  absorbed by
+  **The runtime's place is still an estimate, and the renderer's is now stated.** The runtime's is
+  load-bearing, because [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
+  separated the candidates on measured grounds, so that position had bad answers available and is not
+  cheap to leave for the reason an equivalence argument would have given. The renderer's is a rewrite
+  of the view code, per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
+- **Nothing else currently spans more than one question file.** The cross-cutting items this section
+  has held are settled in
   [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-  and by [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md). The
+  and in [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md). The
   section stays because the next cross-cutting thought needs somewhere to go.
 
 ## M2 — a change can be checked before it ships
@@ -403,8 +396,9 @@ board for six milestones and meeting the store for the first time with a finishe
 
 The M3 puzzle, rendered as a grid. Static, no interaction.
 
-- [How is the app styled?](how-is-the-app-styled.md) — after the renderer, since a rendering approach
-  that ships a build pipeline anyway changes what a styling toolchain costs.
+- [How is the app styled?](how-is-the-app-styled.md) — with the renderer settled at
+  [ADR-0038](../decisions/0038-the-renderer-is-react.md), which ships no styling of its own, so the
+  styling toolchain is a choice here rather than something React brings.
 
 ## M5 — a player can fill it in
 
@@ -638,9 +632,8 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
 
 [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
-— one part of it separates renderer candidates, because a policy without `unsafe-eval` removes
-Alpine's default build. It blocks [what renders the client?](what-renders-the-client.md) only if a
-candidate that needs `eval` or injected inline styles is still in the field when the spike is chosen.
+— nothing waits on it now that the renderer is React, which needs neither `eval` nor injected
+inline styles; it becomes real with whatever serves the client's files.
 
 [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — nothing waits on it, and
 it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here

@@ -56,8 +56,9 @@ client's state can run where no renderer does: under a test runner without a bro
 or behind a different shell.
 
 **Resources.** CPU does not bind: every change hands each subscribed view a new snapshot to
-re-derive from, which measured under 2ms per change at a 15 by 15 grid on an Apple M2 in every
-renderer tried, and a floor device is unmeasured. Memory does not bind: each change allocates a new
+re-derive from, and a drag step at a 15 by 15 grid cost 0.3ms in Vue, 1.8ms in Svelte and 2.1 to
+3.2ms in React on an Apple M2, depending on whether React Compiler was used. A floor device is
+unmeasured. Memory does not bind: each change allocates a new
 board of tens of kilobytes, inside the device bound in [../constraints.md](../constraints.md).
 Storage and network are where this earns its place rather than where it costs: the client's state
 owns the write on every change and the merge from sync, so no renderer's scheduling sits between an

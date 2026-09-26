@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-24
+updated: 2026-09-25
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -382,6 +382,31 @@ there is no public API for a page or an embedding app to opt in.
 > designed to read well at 60fps rather than tuned to a rate the platform will not deliver.
 
 *Sourced — WebKit bugs 173434 and 294338, both open, checked 2026-08-31.*
+
+---
+
+## Browsers — touch and focus do not behave the way a mouse test shows
+
+**A touch drag keeps reporting to the element it started on.** On touch, the browser captures the
+pointer to the element the finger went down on, so `pointerenter` never fires on the elements a
+finger drags across, and a drag-select built on it selects one cell. Releasing the capture on
+`pointerdown`, or finding the cell under the finger's coordinates in `pointermove`, restores it, and
+`touch-action: none` on the board stops the page scrolling instead.
+
+*Measured — a six-cell drag sent as touch events through Chromium's DevTools protocol against three
+builds of the board, 2026-09-24: one cell selected by the builds relying on `pointerenter`, six
+after the fix. Recorded in [what renders the client?](questions/what-renders-the-client.md).*
+
+**WebKit does not focus a button when it is clicked.** So code that remembers
+`document.activeElement` when a dialog opens remembers the page body, and focus is lost when the
+dialog closes.
+
+*Measured — Playwright's WebKit 26.6, 2026-09-24: focus returned to the body after closing a dialog
+in the build that remembered the active element, and to the button in the builds that named it.*
+
+> So every drag gesture is tested with real touch events rather than a mouse, and focus is always
+> returned to a named element rather than to whatever was focused before. Neither fault shows in a
+> test driven by a mouse in Chromium.
 
 ---
 

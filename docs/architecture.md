@@ -35,7 +35,7 @@ constraint from intention. The parts still open are listed at the end and are th
         │  │ client — owns board state,        │  │   solving never
         │  │ mutates it locally      ADR-0004  │  │   touches the network
         │  │ src/client/state holds it; the    │  │
-        │  │ renderer only draws it  ADR-0037  │  │
+        │  │ React only draws it  ADR-0037, 38 │  │
         │  └───────────────────────────────────┘  │
         │  ┌───────────────────────────────────┐  │
         │  │ client storage — the board in     │  │   mechanism open

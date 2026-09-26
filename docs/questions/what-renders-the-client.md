@@ -1,6 +1,6 @@
 ---
 opened: 2026-08-31
-status: open
+status: answered
 resolves_into: decision
 ---
 
@@ -21,38 +21,28 @@ would mean deciding the same thing twice.
 
 ## What would settle it
 
-Building the same non-trivial piece of the grid two ways — a cell that takes a digit, shows
-pencil marks and highlights its peers — and comparing what the state layer looks like when the
-board, its persistence and a deterministic merge all have to stay pure and testable with no
-browser.
+**Answered at [ADR-0038](../decisions/0038-the-renderer-is-react.md): React**, drawing state held
+outside it per [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md).
+The Findings below are the evidence, in the order it was gathered:
 
-**That comparison takes two candidates and the framework class holds six**, so something narrows the
-field before the spike is worth running. Stewardship does not do it:
-[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-prices a supply worry by what leaving the position costs, and a renderer swap is cheap enough relative
-to the runtime that no candidate here is removed by it.
+1. **The field was rebuilt from registries**, removed by one named reason each where a candidate
+   failed a hard requirement, and narrowed on type-checked markup, fitting inside Vite and cost far
+   outside the rest.
+2. **Every surviving candidate was built as the same board** and measured at 9 by 9, 15 by 15 and 30
+   by 30 in Chromium and WebKit. All eighteen registered every input and kept focus, so none was
+   disqualified, and speed at realistic sizes separated only the minimal libraries.
+3. **The field was narrowed to React, Vue and Svelte on what each costs to live with for years**, by
+   the maintainer's judgement on the rows recorded under **What matters over years**.
+4. **Those three built the same slice of the intended client** over one shared state module, showed
+   no difference a player can see, and were compared on tooling, routing, testing and debugging,
+   where JSX's native place in TypeScript's tools separated React.
 
-**Nothing narrows it yet.** Where each candidate lets reactive state live does not do it: the
-finding dated 2026-09-19 below shows that property shapes the view-state layer and not the shared
-rules, so it binds nothing a record requires. So the field is rebuilt from nothing, and the properties
-that actually differ between candidates are derived from what the client has to do before any spike
-is designed. A spike then measures only those properties, on whatever survives them.
+**Familiarity entered only as a tie-breaker.** It was excluded from every measurement and weighing
+above, and [ADR-0038](../decisions/0038-the-renderer-is-react.md) names it as a tie-breaker alongside
+the demonstration purpose.
 
-**The analysis is purely technical.** The maintainer's experience in any ecosystem is not an input,
-as a cost or otherwise, by the maintainer's own direction. Candidates are scored against the
-product's characteristics and the capabilities the client needs, as derived in
-[what must the client and the server each be able to do?](what-must-the-client-and-server-be-able-to-do.md)
-and the records it cites.
-
-**It was coupled to the HTTP handler, settled at
-[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md), and is no longer.** The coupling was that a meta-framework's own server exists only if the renderer is that
-meta-framework, so neither could be settled without deciding part of the other.
-[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) broke it by
-settling that no single tool owns both, which means this question now chooses a renderer and nothing
-else.
-
-**One condition still ties them.** That record rejects Nuxt for closing the renderer to Vue, so
-choosing Vue here removes its grounds and reopens it. Check that before assuming it holds.
+**[ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt
+rejection stands**, since its only reversal was choosing Vue.
 
 ## Resolves into
 
@@ -72,14 +62,10 @@ below record both why that is evidence and why it is weak evidence.
 *A minimal library*, for binding state to the DOM without a component model.
 
 *A component framework.* Given
-[ADR-0007](../decisions/0007-that-language-is-typescript.md), the field is React, Preact, Vue, Svelte,
-Solid and Lit. **Nothing in this class is eliminated**, and the Findings say per candidate why. Two of
-the concerns against candidates here are wrong on their facts; the rest are stewardship concerns,
-which
-[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
-prices by what leaving the position costs rather than treating as disqualifiers. Vue has no
-disqualifier and no advantage, which is a reason to leave it in rather than to narrow it out. React
-and Preact share a programming model, so comparing them is one comparison rather than two.
+[ADR-0007](../decisions/0007-that-language-is-typescript.md), React, Preact, Vue, Svelte, Solid,
+Mithril, Crank, Marko and Ripple were built and measured; Lit, Qwik, Ember, Inferno and Angular were
+removed with the reasons recorded under **The field narrowed**. React and Preact share a programming
+model, so moving between them is the cheapest change in the field.
 
 *A meta-framework.* **Out**, by [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), which settles that the client build and the HTTP
 server are separate tools, and by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), which names the bundler. SvelteKit, Astro,
@@ -87,8 +73,10 @@ TanStack Start, Nuxt, Next, Remix and the rest of the class each bundle a render
 server, and that bundle is what those records reject. The individual grounds are in the first of
 them. **Reverses if** either record does.
 
-*A framework for the shell with direct rendering for the board.* The pattern comparable projects
-converge on, and a genuine fourth option rather than a blend of the others.
+*A framework for the shell with direct rendering for the board.* A genuine fourth option rather than
+a blend of the others, with weak precedent: the projects first read as using it mostly use one
+renderer throughout, per the Findings. It was not built, because its board half behaves like the
+hand-written and signal builds and its cost is the seam between the halves.
 
 ## Findings
 
@@ -190,11 +178,12 @@ Riot, LWC, Qwik, where the one similarly-named function is marked a deprecated t
 Qwik and LWC entries as search synthesis rather than pages it opened. I opened none of them.*
 
 
-**Comparable applications converge on a pattern the demoted record did not consider.** tldraw keeps
-React and drives the editor from a bespoke signals store rather than React state. Excalidraw renders
-to canvas. SudokuPad, Cracking the Cryptic's client and the closest surface analogue that exists, uses
-no framework and no bundler at all. The recurring shape is a framework for the shell with direct
-rendering for the board.
+**Comparable applications give weak and conflicting evidence for a split between shell and board.**
+tldraw keeps React and drives the editor from a bespoke signals store rather than React state.
+Excalidraw renders to canvas. SudokuPad, Cracking the Cryptic's client and the closest surface
+analogue that exists, uses no framework and no bundler at all. A later reading, under **The field
+rebuilt from nothing**, finds that tldraw and lichess each use one renderer throughout, so no
+project here is shown to split ownership at a shell/board seam.
 
 *Sourced — tldraw's repository describes itself as "Build infinite canvas apps in React with the
 tldraw SDK" and its own documentation says "the state system is built on a signals architecture where
@@ -290,14 +279,16 @@ has not been reproduced against a bundle of this app, which does not exist yet.*
 named network profile is unsourced wherever it turns up, and producing one needs a bundle of this app,
 which does not exist yet.*
 
-**What actually separates them is where reactive state is allowed to live.** Vue and Preact
+**Where each candidate lets reactive state live differs, and does not separate them on anything a
+record requires**, per the finding dated 2026-09-19 below and
+[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md), which holds
+state outside any renderer. The mechanics: Vue and Preact
 expose their reactive primitive as a standalone package that runs in plain TypeScript under
 Node. Solid's is a runtime function. Svelte's runes are compiler syntax and only exist inside
 files the Svelte compiler processes, so the store must be a `.svelte.ts` and testing it needs
 the compiler. React has no reactive primitive outside a component at all, and instead requires a
 bridge whose contract — an immutable snapshot, stable across calls — is exactly the discipline a
-deterministic per-cell merge wants anyway. On the criterion this question weights highest,
-React's constraint pushes in the right direction rather than the wrong one.
+deterministic per-cell merge wants anyway.
 
 *Sourced for the mechanics — React's rules of hooks state "Only call Hooks at the top level" and
 "Don't call Hooks from regular JavaScript functions"
@@ -306,9 +297,6 @@ Svelte's `$state` documentation states "You can declare state in `.svelte.js` an
 but you can only export that state if it's not directly reassigned"
 ([svelte.dev/docs/svelte/$state](https://svelte.dev/docs/svelte/$state)). Both read 2026-09-17 by a
 research agent; I did not open them.*
-
-*The judgement that React's constraint "pushes in the right direction" carries no tier, because there
-is nothing to have established. It is the argument this question has to actually make.*
 
 **Svelte's `$state` proxies cannot be written to IndexedDB directly**, because `structuredClone`
 rejects proxies; the documented fix is one `$state.snapshot()` call at the persistence boundary.
@@ -446,11 +434,10 @@ did not open them.*
 which bundler any of them uses, so a claim pairing this set with a named bundler is unsourced wherever
 it turns up. Logseq's core is ClojureScript with React only in the UI layer.*
 
-### The criterion this file weights highest does not bind, checked 2026-09-19
+### Where reactive state lives does not bind, checked 2026-09-19
 
 **Where a renderer allows a reactive primitive to live constrains the state-holding module and not
-the domain-logic module.** The restriction was read as reaching the shared puzzle rules, and it does
-not. Svelte's `$state` is compiler syntax: it compiles only in `.svelte`, `.svelte.js` and
+the domain-logic module.** It does not reach the shared puzzle rules. Svelte's `$state` is compiler syntax: it compiles only in `.svelte`, `.svelte.js` and
 `.svelte.ts`, and the only file that needs the Svelte compiler in its path is the one that calls it.
 A module of pure functions over plain objects that never calls `$state` is an ordinary `.ts` file,
 importable unchanged by a browser build, a server process and a batch script run directly under a
@@ -1139,3 +1126,18 @@ v2.2.2, is from 2024-05-29 and requires Svelte 4. React's and Vue's devtools bot
 this year. Svelte documents its runtime errors well, which is a reference rather than an inspector.
 *Sourced — the GitHub API for `sveltejs/svelte-devtools`, queried by me 2026-09-24: latest release
 2024-05-29, last push 2025-01-22. The rest from a research agent.*
+
+### Narrowing to three, and the heap at 15 by 15, 2026-09-24
+
+**The field was narrowed from eighteen builds to React, Vue and Svelte on the rows about living with
+a renderer for years, by the maintainer's judgement rather than by a measurement.** Speed at 15 by
+15 separated only the minimal libraries from the rest. The minimal libraries, Marko and Ripple have
+thin ecosystems, single maintainers and little code for AI assistants to have learned from; Solid has
+a rewrite of its reactivity in release candidate and one employer behind it; Preact stays as React's
+alternative. The rows are recorded above under **What matters over years**.
+
+**JS heap after load at 15 by 15, Chromium on the M2, median of ten:** React 2.2MB, React with React
+Compiler 2.3MB, Vue 2.0MB, Vue Vapor 2.7MB, Svelte 3.3MB, Solid 2.8MB and 3.0MB with
+`createSelector`, Preact 1.8MB, the hand-written build 1.2MB.
+*Measured — the third-round harness, run by me 2026-09-24; the aggregate range above is from the
+same run.*

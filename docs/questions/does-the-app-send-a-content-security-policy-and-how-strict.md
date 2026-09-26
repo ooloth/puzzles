@@ -13,10 +13,10 @@ or question here mentions one. That makes it the default by omission: no policy,
 reaches the page runs with the page's full authority. That includes a player's board and, once
 [are there user accounts?](are-there-user-accounts.md) settles, whatever identifies them.
 
-**It already bears on the renderer.** Alpine's default build evaluates attribute expressions with
-`new Function()`, which a policy without `unsafe-eval` blocks, per the findings in
-[what renders the client?](what-renders-the-client.md). So a strict policy removes a candidate that
-no policy leaves in the field, and choosing a renderer first would settle this question by accident.
+**The renderer does not constrain it.** [ADR-0038](../decisions/0038-the-renderer-is-react.md)
+chose React, whose published runtime calls neither `eval` nor `new Function`, so a policy without
+`unsafe-eval` costs it nothing. Libraries adopted later are what could still need either, so each is
+checked against the policy when it is adopted.
 
 **The entry document constrains what a policy can use.**
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) makes
@@ -34,9 +34,8 @@ it against the running app. The check is observable: load the app with the polic
 confirm the browser's console reports no violation, then inject a script the policy should block and
 confirm it is blocked. That works once a client exists, from M1 slice 2.
 
-**Before the renderer settles, only one part of it is needed**: whether `unsafe-eval` and inline
-styles or scripts will be allowed. That is what separates renderer candidates. The rest of the policy
-can wait for whatever serves the client's files.
+Nothing else waits on it before whatever serves the client's files is chosen, which is where the
+header is set.
 
 ## Resolves into
 
@@ -61,8 +60,12 @@ access and method calls.**
 *Sourced by a research agent on 2026-09-23 from Alpine's documentation and a third-party guide to
 its CSP build. I did not open them.*
 
-**Whether other renderer candidates inject inline `<style>` elements or use `eval` at runtime has
-not been checked.** It matters because a policy without `unsafe-inline` for styles blocks injected
+**Whether React, or a library adopted with it, injects inline `<style>` elements has not been
+checked.** It matters because a policy without `unsafe-inline` for styles blocks injected
 style elements unless their hashes are listed, and hashes only work for content fixed at build time.
 
-*Unverified — no candidate has been read or run for this.*
+*Unverified — nothing has been read or run for this.*
+
+**React and React DOM contain no `eval` or `new Function` in their published builds.**
+*Measured — a scan of `react` and `react-dom` 19.3.0 for those calls, run by a research agent
+2026-09-23 and recorded in [what renders the client?](what-renders-the-client.md).*

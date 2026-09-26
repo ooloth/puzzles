@@ -1,6 +1,6 @@
 ---
 number: 38
-status: proposed
+status: accepted
 date: 2026-09-25
 ---
 
@@ -16,11 +16,16 @@ date: 2026-09-25
   bundler, so the renderer runs client-only on Vite.
 - [ADR-0007](0007-that-language-is-typescript.md) makes the client TypeScript, and the repository
   pins TypeScript 7.
-- [What renders the client?](../questions/what-renders-the-client.md) built every surviving
-  candidate against the same board and found that no candidate is disqualified, and that React, Vue
-  and Svelte show no difference a player can see. So the choice turns on what each costs to live
-  with, which [../problem.md](../problem.md) weights by one maintainer building it for years with an
-  interface worth being proud of.
+- [What renders the client?](../questions/what-renders-the-client.md) built all eighteen surviving
+  candidates against the same board and disqualified none. Measured speed at realistic grid sizes
+  separated only the minimal libraries from the rest, so the field was narrowed on what each costs to
+  live with: the minimal libraries, Marko and Ripple have thin ecosystems, single maintainers and
+  little code for AI assistants to have learned from; Solid has a rewrite of its reactivity in
+  release candidate and one employer behind it; Preact stays as React's alternative, below. That
+  narrowing is the maintainer's judgement on those rows rather than a measurement. React, Vue and
+  Svelte were then built as the same slice of the intended client and showed no difference a player
+  can see. [../problem.md](../problem.md) weights what remains by one maintainer building it for years
+  with an interface worth being proud of.
 
 ## Decision
 
@@ -34,9 +39,11 @@ date: 2026-09-25
    7, `svelte-check` needs TypeScript 6 beside it, Biome marks both formats experimental and oxlint
    does not lint their templates. The cause is structural, so the gap recurs with each new tool.
    This is the weight the decision rests on.
-2. **What a long life will need beyond the board.** React has the widest set of maintained libraries
-   for gestures, dialogs, charts, internationalisation and local-first storage, the largest body of
-   code AI assistants learned from, and foundation governance since 2026-02-24.
+2. **What a long life will need beyond the board.** React, Vue and Svelte each have a maintained
+   library for gestures, dialogs, charts, internationalisation and testing, so existence does not
+   separate them. React leads where the question file compares them: first-party bindings from most
+   local-first storage libraries, the largest body of code AI assistants learned from, which is
+   reasoned from usage rather than measured, and foundation governance since 2026-02-24.
 3. **Tie-breakers, stated as such.** The maintainer knows React, which is recorded as the cost of
    learning Vue or Svelte rather than as a merit of React. And React is what the demonstration
    purpose in [../problem.md](../problem.md) is most likely to be read against. That purpose's guard
@@ -52,7 +59,8 @@ or how view code is tested. Each is its own decision, taken when a slice needs i
 
 **Resources.** CPU does not bind at the grid sizes that matter: a drag step at 15 by 15 cost 3.2ms as
 first written and 2.1ms with React Compiler on an Apple M2, and a floor device is unmeasured. Memory
-does not bind: the heap after load was under 2.3MB at 15 by 15. Network is where React costs most:
+does not bind: the heap after load at 15 by 15 was 2.2 to 2.3MB for React, against 2.0MB for Vue
+and 3.3MB for Svelte, in Chromium. Network is where React costs most:
 about 58KB of JavaScript after brotli compression against 23KB for Vue and 16KB for Svelte in the
 same spike, downloaded once and parsed on every cold start. Storage does not bind.
 
@@ -94,6 +102,12 @@ arithmetic rather than a measurement.
 **Floor-device speed is unmeasured.** A 15 by 15 drag step costs 2 to 3ms on an M2, and a device
 five to ten times slower would sit near a 60Hz frame for the largest grids.
 
+**The concrete instance of the first weight rests on a pin nothing has chosen.** `vue-tsc` fails
+here because `package.json` pins TypeScript 7.0.2, and which versions are pinned is open at
+[what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md).
+The structural part of that weight does not depend on the pin: Biome, oxlint and ast-grep treat
+single-file components as secondary whatever TypeScript version is installed.
+
 **This app is off React's main path.** React recommends starting with a framework, and a client-only
 app on Vite leaves routing, data loading and styling to be chosen here.
 
@@ -112,10 +126,10 @@ first weight does not depend on it.
 
 ## Also update
 
-- [ ] questions/README.md — the renderer question is answered; slices 2 and 3 take this as a given,
+- [x] questions/README.md — the renderer question is answered; slices 2 and 3 take this as a given,
   and [ADR-0028](0028-the-client-build-and-the-http-server-are-separate-tools.md)'s Nuxt condition
-  no longer applies.
-- [ ] architecture.md — name React as the renderer.
+  cannot arise.
+- [x] architecture.md — names React as the renderer.
 - [x] constraints.md — nothing imported.
 - [x] glossary.md — nothing introduced.
 - [x] guarantees/ — no new promise.

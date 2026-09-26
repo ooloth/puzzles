@@ -98,7 +98,7 @@ reasoned from until it has been checked** — not the Findings, not the Options,
 **Why it matters** naming a disqualified candidate.
 
 **It is a step rather than a reminder because a reminder does not survive a file that reads as
-settled.** The portable standard, step 4 below and `constraints.md` all say to treat an inherited
+settled.** The portable standard, step 5 below and `constraints.md` all say to treat an inherited
 claim as unverified. A tier written into a question file is the thing that stops the next reader
 asking what produced it, so a tier nothing produced is indistinguishable from one that was earned.
 
@@ -150,12 +150,50 @@ changed one is not, and the user cannot overrule a deletion they never saw.
 
 **Say nothing about where the answer is leaning, and do not form a lean to keep to yourself.** At
 this point the options have not been researched, so any sense of the likely answer came from a
-question file's accumulated content rather than from evidence — which is exactly the thing step 4
+question file's accumulated content rather than from evidence — which is exactly the thing step 5
 exists to test. Naming a favourite here commits you to defending it and turns the research into
 confirmation. Flagging which findings are weakly sourced is not the same thing and is worth doing;
 saying which side they point to is.
 
-### 4. Look before you leap, then settle it by measuring
+### 4. Derive the properties the answer is scored against, before naming any option
+
+**This is the step the rest of the process runs on.** A property list assembled after the options
+are named is the options' own list, and it reads as complete because it was written to fit them.
+Written first, it aims the research, turns the comparison into a grid, and gives every rejection
+the one property it fails.
+
+1. **List the moments the system touches the thing being chosen.** Each request, write, read,
+   deploy, failure and wait it takes part in, named concretely from `docs/problem.md`,
+   `docs/guarantees/` and the records. "The network" returns nothing to reason about. "A returning
+   player's first request after the service worker has answered the navigation" returns a property.
+2. **Turn each moment's consequence into a property a candidate either has or lacks**, and cite the
+   record, guarantee, constraint, failure mode or `docs/problem.md` passage it rests on. An open
+   question's reasoning is not a citation. A property that can cite nothing settled rests on an
+   input that is not settled. Where the question owning that input belongs to this milestone, stop
+   and raise it with the user as a prerequisite, which the portable standard says is settled before
+   the decision that surfaced it. Where it belongs to a later milestone, step 0 says not to settle
+   it now: leave the property out, and name it under the list as deferred, with the question that
+   owns it, so the record can say what it did not weigh.
+   What reversing each option would cost is not a property here. It is weighed in step 5, by what
+   each option forecloses.
+3. **Ask the resource questions**: which of CPU, memory, storage and network bind, and why the rest
+   do not, per the portable decision-making standard.
+4. **Write the numbered list into the question file** under `## Properties the answer is scored
+   against`, the section between `## What would settle it` and `## Resolves into`, before any
+   research starts. `scripts/check-docs.py` requires it there and fails a question opened on or
+   after 2026-09-27 that records Options while this section is still `...`. Open it with a short
+   paragraph naming the moments from sub-step 1, so a reader can see what the list was derived
+   from. A quantity with no threshold yet, such as bytes added, goes under the resource answer as
+   something to measure rather than as a property. Record the properties checked and found binding
+   on nothing as well, since an omission and a considered non-binding look the same
+   in a finished record.
+5. **Test the question against the list.** If no property separates any two plausible answers, the
+   question is framed wrongly. Restate it without naming a solution and derive again.
+
+Show the list to the user before step 5's research starts, so they can disagree with a property
+before any conclusion has framed it.
+
+### 5. Look before you leap, then settle it by measuring
 
 **Arrive at the question file as though it were blank.** Whatever Options and Findings you find
 there are claims to verify. They are not a head start, not a shortlist you are refining, and not a
@@ -202,9 +240,12 @@ to aim it rather than to replace it. Scaffolding a hello world under three runti
 real loop settles more than a week of comparison. Budget hours, not days, and delete the spike
 afterwards; the observation is the artifact.
 
-1. Deploy as many parallel subagents as needed to survey the field without bias. Ask each for the
-   candidates, the traps, and the specific properties worth observing. Give every option a fair
-   chance and wait to see what comes back.
+1. Deploy parallel subagents, one per property or group of related properties from step 4, rather
+   than one per candidate. Ask each what the candidates do against its properties, with a verdict,
+   a source and a quote for each, plus the traps it finds and any property the list missed. Add
+   one more agent to enumerate the field, so the candidates are not only the ones already named.
+   Give every option a fair chance and wait to see what comes back. A property an agent surfaces is
+   added to the list in the question file, with its source, before any option is compared.
 1. Verify the subagents' claims, especially where evidence is lacking. A claim with a citation that
    nobody opened is not verified, and a number with no method behind it is not a measurement.
 1. **Write what you have established into the question file before going further**, per "While a
@@ -251,14 +292,16 @@ decision turns on, that the environment resembles production, and that the diffe
 enough to matter against everything else in the budget. `docs/constraints.md` describes how to
 record what you find.
 
-### 5. Present the decision
+### 6. Present the decision
 
-1. Present your findings and rationale to the user using formatting they can digest in 30 seconds
+1. Present your findings and rationale to the user using formatting they can digest in 30 seconds.
+   Show every option against every property from step 4, and for each option you would reject, name
+   the one property that disqualifies it.
 1. Discuss the user's feedback and questions
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to draft the ADR and wait for the user's approval
 
-### 6. Document the decision
+### 7. Document the decision
 
 1. **Re-invoke the `uphold-standards` skill for the portable decision-making standard, and re-read
    `docs/decisions/README.md`, now**, immediately before writing. Not at the start of the session —
@@ -270,7 +313,8 @@ record what you find.
    us to may also belong in `guarantees/`, `standards/`, `unfinished.md` or `verification.md`, each
    linking to the record. Settle this from that list rather than asking the user which kind of
    record it is.
-1. Author the ADR
+1. Author the ADR. Its Decision carries the numbered properties from step 4 under **Scored
+   against**, and each Rejected entry names the property it fails.
 1. For any resolved question files, mine any valuable content and then delete them.
 
    **Commit the worked question file before deleting it.** `docs/questions/README.md` says that where

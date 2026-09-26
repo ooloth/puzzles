@@ -173,3 +173,177 @@ test("a docs tree with no .claude directory reports no artifact", async () => {
   const problems = await problemLines({});
   assert.ok(!problems.some((line) => line.startsWith("ARTIFACT")), problems.join("\n"));
 });
+
+/** A question file with the seven sections, each body given or left as `...`. */
+function questionFile(opened: string, bodies: { properties?: string | null; options?: string; propertiesAfterOptions?: boolean }): string {
+  const properties = bodies.properties === null ? [] : ["## Properties the answer is scored against", "", bodies.properties ?? "...", ""];
+  const options = ["## Options", "", bodies.options ?? "...", ""];
+  const middle = bodies.propertiesAfterOptions ? [...options, ...properties] : [...properties, ...options];
+  return [
+    "---",
+    `opened: ${opened}`,
+    "status: open",
+    "resolves_into: decision",
+    "---",
+    "",
+    "# Q?",
+    "",
+    "## Why it matters",
+    "",
+    "...",
+    "",
+    "## What would settle it",
+    "",
+    "...",
+    "",
+    ...(bodies.propertiesAfterOptions ? [] : properties),
+    "## Resolves into",
+    "",
+    "...",
+    "",
+    "## Source",
+    "",
+    "...",
+    "",
+    ...(bodies.propertiesAfterOptions ? middle : options),
+    "## Findings",
+    "",
+    "...",
+    "",
+  ].join("\n");
+}
+
+async function propertyProblems(files: Record<string, string>): Promise<readonly string[]> {
+  return (await problemLines(files)).filter((line) => line.startsWith("PROPERTIES"));
+}
+
+test("a question file without a properties section is reported", async () => {
+  const problems = await propertyProblems({ "docs/questions/q.md": questionFile("2026-09-01", { properties: null }) });
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /^PROPERTIES +docs\/questions\/q\.md .*missing/);
+});
+
+test("a properties section placed after Options is reported as out of order", async () => {
+  const problems = await propertyProblems({ "docs/questions/q.md": questionFile("2026-09-01", { propertiesAfterOptions: true }) });
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /out of order/);
+});
+
+test("a question opened on or after the cutoff with options but no properties is reported as underived", async () => {
+  const problems = await propertyProblems({ "docs/questions/q.md": questionFile("2026-09-27", { options: "*One.* A case." }) });
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /^PROPERTIES +docs\/questions\/q\.md:\d+ .*underived/);
+});
+
+test("a question opened on or after the cutoff with neither properties nor options passes", async () => {
+  assert.deepEqual(await propertyProblems({ "docs/questions/q.md": questionFile("2026-09-27", {}) }), []);
+});
+
+test("a question opened before the cutoff may keep options it recorded without properties", async () => {
+  assert.deepEqual(await propertyProblems({ "docs/questions/q.md": questionFile("2026-09-26", { options: "*One.* A case." }) }), []);
+});
+
+test("a question resolving into a fact may mark both sections not applicable", async () => {
+  const file = questionFile("2026-09-27", { properties: "N/A — this resolves into a fact.", options: "N/A — this resolves into a fact." });
+  assert.deepEqual(await propertyProblems({ "docs/questions/q.md": file }), []);
+});
+
+test("a question with derived properties and options passes", async () => {
+  const file = questionFile("2026-09-27", { properties: "1. **A property.** Rests on X.", options: "*One.* A case." });
+  assert.deepEqual(await propertyProblems({ "docs/questions/q.md": file }), []);
+});
+
+/** A decision record with the template headings, optionally a Scored against section, and these Rejected bullets. */
+function decisionRecord(scoredAgainst: string | null, rejected: readonly string[]): string {
+  return [
+    "---",
+    "number: 41",
+    "status: accepted",
+    "date: 2026-09-27",
+    "---",
+    "",
+    "# 41 — Something is decided",
+    "",
+    "## Forced by",
+    "",
+    "Something.",
+    "",
+    ...(scoredAgainst === null ? [] : ["## Scored against", "", scoredAgainst, ""]),
+    "## Decision",
+    "",
+    "Something.",
+    "",
+    "## Enforced by",
+    "",
+    "Nothing. Asserted only.",
+    "",
+    "## Rejected",
+    "",
+    ...rejected,
+    "",
+    "## Risk",
+    "",
+    "Some.",
+    "",
+    "## Revisit when",
+    "",
+    "Later.",
+    "",
+    "## Also update",
+    "",
+    "- [x] nothing",
+    "",
+  ].join("\n");
+}
+
+const PROPERTIES = "1. **First property.** Rests on X.\n2. **Second property.** Rests on Y.";
+
+async function decisionProblems(name: string, record: string): Promise<readonly string[]> {
+  return (await problemLines({ [`docs/decisions/${name}`]: record })).filter(
+    (line) => line.startsWith("PROPERTIES") || line.startsWith("HEADINGS"),
+  );
+}
+
+test("a record numbered 0041 or later without Scored against is reported", async () => {
+  const problems = await decisionProblems("0041-something-is-decided.md", decisionRecord(null, ["- **Other** — fails property 1."]));
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /^HEADINGS .*Scored against/);
+});
+
+test("a record numbered 0040 or earlier passes without Scored against", async () => {
+  assert.deepEqual(await decisionProblems("0040-something-is-decided.md", decisionRecord(null, ["- **Other** — no reason given."])), []);
+});
+
+test("a record numbered 0040 or earlier may add Scored against", async () => {
+  assert.deepEqual(await decisionProblems("0040-something-is-decided.md", decisionRecord(PROPERTIES, ["- **Other** — fails property 1."])), []);
+});
+
+test("a rejection naming a listed property passes", async () => {
+  assert.deepEqual(await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, ["- **Other** — fails property 2."])), []);
+});
+
+test("a rejection naming no property is reported", async () => {
+  const problems = await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, ["- **Other** — it felt wrong."]));
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /^PROPERTIES +docs\/decisions\/0041-something-is-decided\.md:28 .*names no property/);
+});
+
+test("a rejection naming a property the list does not have is reported", async () => {
+  const problems = await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, ["- **Other** — fails property 9."]));
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /property 9/);
+});
+
+test("a Not yet rejection needs no property", async () => {
+  assert.deepEqual(await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, ["- **Not yet.** The milestone needs it."])), []);
+});
+
+test("a record whose properties are not applicable skips the rejection check", async () => {
+  const record = decisionRecord("N/A — follows necessarily from ADR-0040.", ["- **Reversing ADR-0040** — would reverse the parent."]);
+  assert.deepEqual(await decisionProblems("0041-something-is-decided.md", record), []);
+});
+
+test("continuation lines of a rejection count toward naming its property", async () => {
+  const bullet = ["- **Other** — a long case that wraps", "  onto a second line and fails property 1."];
+  assert.deepEqual(await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, bullet)), []);
+});

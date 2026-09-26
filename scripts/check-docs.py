@@ -325,12 +325,31 @@ TEMPLATE_HEADINGS = [
 ]
 
 
+def record_number(path: str) -> int:
+    return int(os.path.basename(path)[:4])
+
+
+# Records from this number on carry the properties they were scored against, as a
+# `## Scored against` section between Forced by and Decision. Earlier records were
+# written before that rule and may add the section when they are revisited.
+SCORED_FROM = 41
+SCORED_AGAINST = '## Scored against'
+
+
+def expected_headings(path: str, found: list[str]) -> list[str]:
+    scored = TEMPLATE_HEADINGS[:1] + [SCORED_AGAINST] + TEMPLATE_HEADINGS[1:]
+    if record_number(path) >= SCORED_FROM or SCORED_AGAINST in found:
+        return scored
+    return TEMPLATE_HEADINGS
+
+
 def check_decision_headings():
     for path in decision_files():
         found = [l.rstrip() for l in open(path) if l.startswith('## ')]
-        if found != TEMPLATE_HEADINGS:
-            extra = [h for h in found if h not in TEMPLATE_HEADINGS]
-            missing = [h for h in TEMPLATE_HEADINGS if h not in found]
+        expected = expected_headings(path, found)
+        if found != expected:
+            extra = [h for h in found if h not in expected]
+            missing = [h for h in expected if h not in found]
             detail = []
             if extra:
                 detail.append('unexpected ' + ', '.join(f'"{h}"' for h in extra))
@@ -339,6 +358,118 @@ def check_decision_headings():
             if not detail:
                 detail.append('out of order')
             problems.append(f'HEADINGS     {path} — {"; ".join(detail)}')
+
+
+@dataclass(frozen=True)
+class Section:
+    heading: str
+    body: str
+    line: int
+    body_line: int
+
+
+def sections_of(path: str) -> list[Section]:
+    """A file's `## ` sections in file order: the heading, its body with surrounding blank lines
+    removed, the line the heading is on, and the line the body starts on."""
+    sections: list[Section] = []
+    heading, start, body_start, body = None, 0, 0, []
+
+    def close() -> None:
+        if heading is not None:
+            sections.append(Section(heading, ''.join(body).strip(), start, body_start or start))
+
+    for n, line in enumerate(open(path), 1):
+        if line.startswith('## '):
+            close()
+            heading, start, body_start, body = line.rstrip(), n, 0, []
+        elif heading is not None:
+            if not body_start and line.strip():
+                body_start = n
+            body.append(line)
+    close()
+    return sections
+
+
+def is_unworked(body: str) -> bool:
+    """`...` means nobody has looked; `N/A` means somebody looked and there is nothing."""
+    return body in ('', '...') or body.startswith('N/A')
+
+
+PROPERTIES_HEADING = '## Properties the answer is scored against'
+
+# A question opened on or after this date may not record Options before its
+# properties. Earlier questions recorded Options first and keep them until they
+# are worked; the make-next-decision skill derives their properties then.
+PROPERTIES_REQUIRED_FROM = '2026-09-27'
+
+
+def opened_on(path: str) -> str:
+    match = re.search(r'^opened: *(\S+)', open(path).read(), re.MULTILINE)
+    return match.group(1) if match else ''
+
+
+def check_question_properties() -> None:
+    for path in question_files():
+        sections = sections_of(path)
+        headings = [s.heading for s in sections]
+        if PROPERTIES_HEADING not in headings:
+            problems.append(f'PROPERTIES   {path} is missing "{PROPERTIES_HEADING}"')
+            continue
+        properties = sections[headings.index(PROPERTIES_HEADING)]
+        if '## Options' not in headings:
+            continue
+        options = sections[headings.index('## Options')]
+        if properties.line > options.line:
+            problems.append(
+                f'PROPERTIES   {path}:{properties.line} is out of order; it goes before "## Options"'
+            )
+            continue
+        if opened_on(path) < PROPERTIES_REQUIRED_FROM:
+            continue
+        if properties.body in ('', '...') and not is_unworked(options.body):
+            problems.append(
+                f'PROPERTIES   {path}:{options.line} Options are recorded but the properties are '
+                f'underived; derive them first'
+            )
+
+
+PROPERTY_ITEM = re.compile(r'^(\d+)\. ', re.MULTILINE)
+PROPERTY_NAMED = re.compile(r'\bpropert(?:y|ies) (\d+)', re.IGNORECASE)
+
+
+def rejected_bullets(section: Section) -> list[tuple[int, str]]:
+    """Each top-level bullet under Rejected, with its line, continuation lines included."""
+    bullets: list[tuple[int, str]] = []
+    for offset, line in enumerate(section.body.split('\n')):
+        if line.startswith('- '):
+            bullets.append((offset, line))
+        elif bullets and line.startswith(' '):
+            start, text = bullets[-1]
+            bullets[-1] = (start, text + ' ' + line.strip())
+    return bullets
+
+
+def check_rejections_name_properties() -> None:
+    for path in decision_files():
+        if record_number(path) < SCORED_FROM:
+            continue
+        sections = {s.heading: s for s in sections_of(path)}
+        scored, rejected = sections.get(SCORED_AGAINST), sections.get('## Rejected')
+        if scored is None or rejected is None or scored.body.startswith('N/A'):
+            continue
+        listed = {int(n) for n in PROPERTY_ITEM.findall(scored.body)}
+        if not listed:
+            problems.append(f'PROPERTIES   {path}:{scored.line} Scored against lists no numbered property')
+            continue
+        for offset, text in rejected_bullets(rejected):
+            if text.startswith('- **Not yet'):
+                continue
+            named = {int(n) for n in PROPERTY_NAMED.findall(text)}
+            where = f'{path}:{rejected.body_line + offset}'
+            if not named:
+                problems.append(f'PROPERTIES   {where} rejection names no property from Scored against')
+            for n in sorted(named - listed):
+                problems.append(f'PROPERTIES   {where} names property {n}, which Scored against does not list')
 
 
 # There is deliberately no check that a rejected option cites its evidence.
@@ -588,6 +719,8 @@ check_harness_artifacts()
 check_question_sequencing()
 check_findings_note()
 check_decision_headings()
+check_question_properties()
+check_rejections_name_properties()
 check_adr_references()
 check_provenance_tiers()
 check_frontmatter()

@@ -258,6 +258,11 @@ date: YYYY-MM-DD
 ## Forced by
 <the constraint, user need, or ranking that made this necessary — by reference>
 
+## Scored against
+1. <a property the answer must have, and the record, guarantee or constraint it rests on>
+2. <...>
+<or: N/A — follows necessarily from ADR-NNNN>
+
 ## Decision
 <what we're doing>
 
@@ -266,8 +271,9 @@ date: YYYY-MM-DD
 only." where nothing does>
 
 ## Rejected
-- <Option A> — because <the actual disqualifying reason>
-- <Option B> — because <...>
+- <Option A> — fails property <N>, because <the actual disqualifying reason>
+- <Option B> — fails property <N>, because <...>
+- **Not yet** — because <what needs the answer now>
 
 ## Risk
 <the real cost or weakness being knowingly accepted>
@@ -285,6 +291,16 @@ only." where nothing does>
 
 ## Guidance
 
+- **Scored against** carries the numbered properties from the question's **Properties the answer
+  is scored against**, derived before any option was named. It sits above **Decision** for the same
+  reason: a reader can disagree with a property before the conclusion has framed it. A record that
+  follows necessarily from another writes `N/A` and names the parent. `scripts/check-docs.py`
+  requires the section from record 41 on and allows it earlier, so an older record can gain one when
+  it is revisited.
+- **Each Rejected entry names the property it fails**, as `property N`, except **Not yet**, whose
+  reason is timing. `scripts/check-docs.py` checks that the number is on the list. It cannot check
+  that the property is the one that actually disqualifies the option, which is still the rule
+  above and still read by `prep-for-codebase-handoff`.
 - **Rejected** entries need the actual disqualifying reason, not a bare label. "Considered
   X" tells a future reader nothing; "considered X, rejected because Y" does.
 - **Risk** is the section that keeps an ADR honest rather than a justification. If nothing

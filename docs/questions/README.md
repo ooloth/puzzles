@@ -692,7 +692,7 @@ the top level. Link text is the filename, so the list reads without opening anyt
 
 ## What goes in a question file
 
-Six sections, in a fixed order. **Every section stays**, with `...` where nothing has been
+Seven sections, in a fixed order. **Every section stays**, with `...` where nothing has been
 recorded yet — the empty ones are the reminder of what hasn't been thought about.
 
 `...` and `N/A` mean different things. `...` means nobody has looked. `N/A` means someone
@@ -715,7 +715,8 @@ It is also the one value that should be rare: exactly one file carries it today.
 `scripts/check-docs.py` rejects any other value, so a typo and an invented category both fail rather
 than passing quietly.
 
-The first six sections are stable and short. **Why it matters** is what's blocked or what gets
+**Why it matters**, **What would settle it**, **Resolves into** and **Source** are stable and
+short. **Why it matters** is what's blocked or what gets
 expensive if we're wrong. It also names which environments the choice shows up in: production,
 local runs, or both. A question framed only for production leaves its local half to be wired for
 convenience, and per
@@ -737,6 +738,16 @@ question came from, so provenance survives the deletion of whatever raised it. I
 section here that is history by design, and the forward-only rule in the portable documentation
 standard does not reach it. That covers where the question came from and nothing else: a **Source**
 that grows into an account of how the work went has left its purpose rather than extended it.
+
+**Properties the answer is scored against** is a numbered list of what an answer must deliver,
+derived from the moments the system touches the thing being chosen. Each property cites the record,
+guarantee, constraint, failure mode or passage of [../problem.md](../problem.md) it rests on, and the list ends
+with the properties checked and found binding on nothing. It is written before any option is named,
+which is why it sits above **Options**: a list written after them is the options' own list. Step 4
+of the `make-next-decision` skill is how it is derived. `scripts/check-docs.py` requires the section
+in every file, above **Options**, and fails a question opened on or after 2026-09-27 whose Options
+are recorded while its properties are still `...`. Questions opened earlier keep the Options they
+recorded first until they are worked.
 
 The last two grow. **Options** holds each candidate answer with its strongest case and its cost.
 
@@ -826,6 +837,10 @@ resolves_into: decision | constraint | problem | unsettled
 ...
 
 ## What would settle it
+
+...
+
+## Properties the answer is scored against
 
 ...
 

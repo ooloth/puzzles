@@ -69,6 +69,10 @@ then later milestones. It is a starting point rather than a rule, so a case that
 raised with the user rather than forced into it. The `next` skill applies it at the start of a
 session.
 
+**Every issue carries one kind label:** `bug`, `feature` or `maintenance`. It is what the order
+above reads, so an unlabelled issue gets one before anything else. A `feature` is a slice and sits in
+its milestone.
+
 **"Observable" does not mean "a player can see it".** A check that fails on a bad import, a script
 that reproduces a bug, a pin that makes two machines agree — each changes what the system does, and
 each can be demonstrated before and after. M2 is an entire milestone of them. Nothing here is

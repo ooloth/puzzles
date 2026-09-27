@@ -25,8 +25,8 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
    finished. Invoke `use-gh` first, as the user's global `CLAUDE.md` requires before any `gh` call.
 3. **Rank what the tracker holds** by the order in `CLAUDE.md`: bugs first, then the current
    milestone, then maintenance, then later milestones. An open bug is the route, whatever the
-   milestones say. Issues with no milestone are bugs or maintenance, and their title and labels
-   say which; where neither does, say so rather than guessing.
+   milestones say. Each issue's kind label, `bug`, `feature` or `maintenance`, says which rank it
+   has. An issue with no kind label is reported as needing one rather than guessed at.
 4. **Identify the current milestone**, then read that milestone's section of the README — its
    slices, their **Given** bullets and their **Must answer** bullets. In that order: which milestone
    is current depends on the tracker, so reading a section first risks reading the wrong one.

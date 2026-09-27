@@ -81,8 +81,9 @@ its key, which is 6 and 9. Matching the whole segment is 8.
 **The research is in the question this record answers**, which was committed before it was
 deleted: `git show 4e052ac:docs/questions/how-are-api-paths-kept-apart-from-client-paths-on-one-origin.md`.
 The vendor findings behind properties 5 to 9 are there with their sources, and the ones a later
-question needs have moved: the Safari and Vite facts to [../constraints.md](../constraints.md), and
-Cloudflare Pages' fallback and CloudFront's `Set-Cookie` caching to
+question needs have moved: the Safari and Vite facts, and the path-only routing of Cloudflare Pages
+and CloudFront, to [../constraints.md](../constraints.md), and Cloudflare Pages' fallback and
+CloudFront's `Set-Cookie` caching to
 [what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
 
 **This does not decide whether the API is versioned in its path.** `/api/v1/` would be this rule with
@@ -137,7 +138,8 @@ opened as a navigation.
 - **Content negotiation on `Accept`** — fails property 7. Its case: one URL can answer a page to a
   browser and data to the client. But Cloudflare Pages' `_routes.json` has no header field and
   CloudFront chooses an origin by path only, so some serving arrangements still open cannot apply it,
-  per the research cited under **Decision**. **Reverses if** every serving arrangement
+  per "Hosting — some routing layers choose a backend by path alone" in
+  [../constraints.md](../constraints.md). **Reverses if** every serving arrangement
   left open can route on a header, and every cache in front keys on `Accept`.
 - **Route existence first**, where whichever half has a match answers and everything else falls back
   to the entry document — fails property 2. Its case: there is no rule to maintain, and platforms such

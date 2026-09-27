@@ -711,6 +711,30 @@ in mdn/browser-compat-data, read 2026-09-26. Re-check if the floor moves.*
 
 ---
 
+## Hosting — some routing layers choose a backend by path alone
+
+*In scope because [decisions/0040](decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md)
+puts the client and the API on one origin, so something in front may have to route between them.*
+
+**Cloudflare Pages' `_routes.json` matches on path only.** Its schema has three fields: `version`,
+`include` ("Defines routes that will be invoked by Functions. Accepts wildcard behavior.") and
+`exclude`. Nothing in it reads a request header.
+
+**CloudFront picks an origin by path pattern only.** Each cache behavior names one origin, and "the
+requested path is compared with path patterns in the order in which cache behaviors are listed in the
+distribution. The first match determines which cache behavior is applied to that request." Its
+header settings change what is cached, not where a request goes; choosing by header needs a function
+running at the edge.
+
+> So a rule that tells the API from the client by a request header cannot be applied by either
+> without extra code, and a rule on a path prefix can be applied by both.
+
+*Sourced — [Pages Functions routing](https://developers.cloudflare.com/pages/functions/routing/) and
+[CloudFront cache behavior settings](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesCacheBehavior.html),
+read 2026-09-27. Vendor documentation; re-check when either is chosen.*
+
+---
+
 ## Content delivery — what reaches a device cannot be recalled
 
 **Anything shipped to a device as part of the application can be read and replayed by whoever holds

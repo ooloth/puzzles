@@ -29,7 +29,7 @@ versions of the other engines, which is the oldest branch Apple still patches pe
 promise covers. That is expected and is not a violation, but it is a change to what players are owed
 rather than a configuration detail, and the record that moves it says so.
 
-**Enforced by** Not yet, and the two halves will never be enforced equally.
+**Enforced by** One small part of one half, and the two halves will never be enforced equally.
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) and
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
 fix what the mechanism will be — the build lowers to the declared floor, one check parses the

@@ -43,11 +43,12 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**The third slice answers whether the client and the API share an origin, a slice before the host is
-chosen.** It is the first slice where the client calls the API, so it has to join the two locally,
-and [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
-requires the local arrangement to follow production's. The answer narrows which hosts qualify by
-topology. It is not the client selecting a host, and choosing one is still the fourth slice.
+**The third slice is the first where the client calls the API, so it joins the two locally.**
+[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+requires the local arrangement to follow production's, which is one origin per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). What the slice still has to answer is how API paths and client paths
+share that origin, and how the client loads what it asks for. Choosing a host is still the fourth
+slice.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most

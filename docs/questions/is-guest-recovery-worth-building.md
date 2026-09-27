@@ -17,12 +17,12 @@ has a premise: an account exists to be offered. A guest-only first release does 
 
 **It is answered here and constrained much earlier.** There is exactly one mechanism that restores a
 lapsed guest's work without asking them for anything — a server-set cookie — and whether it survives
-depends on the client and the API sharing an origin, per [../constraints.md](../constraints.md). That
-is a constraint on M1's hosting choice rather than a reason to answer this question there: holding
-same-origin open costs nothing once a runtime is on the content path, and closing it happens silently
-and cannot be undone without moving hosts.
+depends on the client and the API sharing an origin, per [../constraints.md](../constraints.md).
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts them on one origin in production, so the mechanism stays
+available, subject to how the domain resolves, which is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
-So M1 must not foreclose this. Whether it is built is decided here, once a guest has something worth
+So nothing at M1 forecloses this. Whether it is built is decided here, once a guest has something worth
 keeping and the browser is the only thing keeping it.
 
 ## What would settle it
@@ -65,13 +65,12 @@ players. Note that
 durable copy off the device but says explicitly that it "does not say what a guest gets", so it
 neither forces nor forbids this.
 
-*Build it, and hold the hosting constraint that makes it work.* The server sets an `HttpOnly` cookie
+*Build it.* The server sets an `HttpOnly` cookie
 on first visit and keeps a copy of the guest's record against it. Local storage is cleared, the
 cookie survives, the server hands the state back, and the player is never told any of it happened.
 
-*Do not build it, but hold the constraint anyway.* Same-origin costs nothing when a server exists, so
-the door can be held open for a milestone or two while the product question above is answered. The
-risk is that a door held open indefinitely is a tax paid for nothing.
+*Do not build it.* The one origin that keeps it possible is settled for other reasons, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so not building it costs nothing to keep reachable.
 
 *Offer accounts early instead.* Skip the anonymous tier and make the first durable thing a sign-in.
 Honest and expensive: it introduces identity to an audience [../problem.md](../problem.md) describes

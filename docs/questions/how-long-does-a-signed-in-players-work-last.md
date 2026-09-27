@@ -26,13 +26,12 @@ this question has to settle is not "how do we survive eviction" but "what do we 
 and to which devices."
 
 Answering this in the affirmative — any bound at all beyond the current session — forces a
-consequence: something off-device has to hold the record. That consequence is decided separately, in
-[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), "a server
-exists." That record rests entirely on a signed-in bound that nothing now states, and it says
-explicitly that if the bound is ever dropped it has no independent basis and should be superseded in
-the same change. The bound is not a decided fact; it is this open question. So whether
-[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) should also be
-revisited is live, and it is flagged here rather than settled, because this file does not settle it.
+consequence: something off-device has to hold the record. A server exists already, per
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), which rests on
+the store from [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md)
+and on withholdable content from
+[ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) rather than on
+this bound. So no answer here adds or removes the server.
 
 ## What would settle it
 

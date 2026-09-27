@@ -41,9 +41,8 @@ ships.
 
 **Deferring the more exciting puzzle is a risk to the project being finished, not just a
 sequencing preference.** [problem.md](../problem.md) states this is a craft project intended to
-stay worth doing over about a year, and a solo project that stops being enjoyable stops. The
-original framing recorded this as a tradeoff accepted; it is better understood as the main thing
-that could go wrong with this decision.
+stay worth doing over about a year, and a solo project that stops being enjoyable stops. It is
+the main thing that could go wrong with this decision.
 
 Secondary: sudoku is well-trodden, so a v1 that launches with it alone competes with every other
 sudoku app on execution rather than on novelty. That is consistent with the stated priority —

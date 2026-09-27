@@ -80,7 +80,8 @@ that code ran there.
   edge storage tier only D1 survives, and Cloudflare's own limits documentation says D1 "is designed
   for horizontal scale out across multiple, smaller (10 GB) databases, such as per-user, per-tenant or
   per-entity databases" — which is precisely the sharded shape [ADR-0011](0011-stored-play-data-can-be-analysed-not-just-retrieved.md) rules out. Its ceiling is
-  500 MB on the free plan and 10 GB paid.
+  500 MB on the free plan and 10 GB paid, per
+  [D1 limits](https://developers.cloudflare.com/d1/platform/limits/), read 2026-09-26.
 
   So an isolate server would hold its data in one region and execute everywhere else. Every request
   that touches the store becomes client → nearest edge, then edge → the region the store is in, and
@@ -160,9 +161,9 @@ observable about the edge.
 
 ## Also update
 
-- [x] `questions/README.md` — this is one of the records
-      [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
-      resolves into; that question stays open for store locality
+- [x] `questions/README.md` — this is one of the records the store-locality question resolved
+      into; [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md) settled the rest of
+      it
 - [x] the runtime question — the isolate tier is out of its field, which leaves ordinary runtimes
       only. That question is now settled at [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md), whose Rejected section carries the
       eliminations this record caused

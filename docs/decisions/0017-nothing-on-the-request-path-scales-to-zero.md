@@ -137,9 +137,9 @@ one. Nothing in this project has been timed, because nothing in this project exi
 
 ## Also update
 
-- [x] `questions/README.md` — this is one of the records
-      [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)
-      resolves into; that question stays open for store locality
+- [x] `questions/README.md` — this is one of the records the store-locality question resolved
+      into; [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md) settled the rest of
+      it
 - [x] `constraints.md` — nothing to import. The wake-up figures are vendor claims about specific
       platforms rather than facts about the world, and they belong with
       [where does this run?](../questions/where-does-this-run.md)

@@ -40,10 +40,11 @@ much shorter real window makes a browser-only bound weak enough to reconsider on
 
 ## What would settle it
 
-[Where does this run?](where-does-this-run.md) settles whether the client and the API are hosted
-same-origin, which is what a server-set cookie needs to survive Safari's first-party test — see
-[../constraints.md](../constraints.md). That determines whether the anonymous-server-copy option
-below is even available at full strength.
+The client and the API answer on one origin in production, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), which is what a server-set cookie needs to pass Safari's first-party
+test — see [../constraints.md](../constraints.md). So the anonymous-server-copy option below is
+available at full strength, subject to how the domain resolves, which is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
 [Do privacy regulations apply?](do-privacy-regulations-apply.md) settles whether data about a person
 who cannot be identified — no login, no email, nothing but a cookie — can lawfully be kept without
@@ -122,8 +123,10 @@ The end state has to be decided regardless of which phase decides what gets buil
 are not settled facts.** It cited: rows keyed to tokens nobody will present again accumulating
 indefinitely; data about people who cannot be identified also not being deletable on request; and the
 mechanism silently degrading to a seven-day cookie lifetime if the API is not judged first-party by
-Safari. The third of those is a property of hosting topology, decided by
-[where does this run?](where-does-this-run.md) — choosing same-origin removes it. The second depends
+Safari. The third of those is a property of hosting topology. One origin, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), removes it, except where the hostname is a CNAME to a provider's
+domain and a service worker answered the navigation, which [../constraints.md](../constraints.md)
+records as reasoned from source and unobserved. The second depends
 on [do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. Only the
 first cost — orphan rows accumulating — was a property of the mechanism itself, and even that is
 overstated as a rejection reason: a TTL on the row, or a periodic cleanup job keyed to the cookie's

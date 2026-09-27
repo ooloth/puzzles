@@ -222,10 +222,11 @@ the claimable anchor: adding accounts later becomes "attach this account to the 
 hold" rather than a rescue operation for stranded players. Skipping Layer 1 is what makes Layer 2
 expensive later, not deferring Layer 2 itself.
 
-**Layer 1 only works if Safari judges the cookie-setting server genuinely first-party.** A
-static host with its API on another provider is exactly the shape that fails, and it fails
-silently — see [../constraints.md](../constraints.md). Adding accounts later is cheap; moving
-hosting later because the recovery mechanism does not work is not.
+**Layer 1 only works if Safari judges the cookie-setting server genuinely first-party.**
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts the API on the page's own origin, which passes that test, except
+where the hostname is a CNAME to a provider's domain and a service worker answered the navigation —
+see [../constraints.md](../constraints.md). Whether the domain avoids that is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
 **One argument does pull Layer 2 earlier, and it is commercial rather than technical.** A free
 account exists partly to capture an address, which is the only channel for telling existing

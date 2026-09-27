@@ -22,8 +22,9 @@ system runs and what deploys it are open. Settled so far: the store is a SQLite
 file the server process opens, a service worker answers navigations, the entry document is a build output, the client build and the HTTP server are separate
 tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is
 pnpm, the repository is one package with each part of the system a directory under `src/`,
-Fastify answers HTTP with request and response bodies described in zod, client state is held outside
-the renderer under `src/client/state/`, and the renderer is React.
+Fastify answers HTTP with request and response bodies described in zod, client state that a
+guarantee covers is held outside the renderer under `src/client/state/`, the client and the API
+answer on one origin in production, and the renderer is React.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 

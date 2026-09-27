@@ -46,8 +46,8 @@ thing in M1 is the string the endpoint returns.
 **The third slice is the first where the client calls the API, so it joins the two locally.**
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
 requires the local arrangement to follow production's, which is one origin per
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). What the slice still has to answer is how API paths and client paths
-share that origin. How the client loads data waits for M3, where the first content that becomes the
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). API paths and client paths share it by the `/api/` prefix, per
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). How the client loads data waits for M3, where the first content that becomes the
 board is fetched. Choosing a host is still the fourth
 slice.
 
@@ -69,7 +69,7 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so locally the client and the API are two processes on two ports, and the browser sees two origins unless something joins them
    - **Given:** [0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) — so how the local call is joined follows production's arrangement rather than convenience, and until M2 builds the production-like run this slice is verified in the closest mode with its gap recorded
    - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the client calls the API by a path on its own origin, and the local wiring is derived from that
-     - **Must answer:** [how-are-api-paths-kept-apart-from-client-paths-on-one-origin](how-are-api-paths-kept-apart-from-client-paths-on-one-origin.md) — or else `/hello` sets the path pattern M3 copies, and every later routing layer is written against whatever it happened to be. A path claimed by both halves is served `index.html` with a 200 rather than a 404, which fails silently. Costs renaming every API route and every rule that routes on them
+   - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so the route is `/api/hello`, and the dev server proxies `/api/` to the server and nothing else
    - **Deferred:** what the page shows when the API cannot be reached. What a player is shown is [is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md) at M9, and noticing a server that was never started is part of [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md) at M2. This slice leaves it unspecified rather than answering either
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player
@@ -79,6 +79,7 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0021-the-server-and-its-store-share-a-machine](../decisions/0021-the-server-and-its-store-share-a-machine.md) — the host must run an ordinary process with a local disk beside it
    - **Given:** [0022-the-machines-disk-survives-restart-redeploy-and-host-replacement](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) — and that disk must survive a redeploy, which platforms vary on
    - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the host must present both halves on one hostname
+   - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so whatever serves the origin sends every path under `/api/` to the server, and no cache or cookie rule written for the files reaches it
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else assets ship without content-hashed filenames and every cached asset is revalidated on every visit, on the network [../problem.md](../problem.md) names as the modal case. Costs a re-scaffold of the build and the serving path together
      - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the host cannot deploy without briefly running two processes against one volume, and some deploy models cannot be made single-writer-safe at all. Discovering that at M3 is a change of host rather than of configuration
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else the host above is chosen against an imagined artifact, and [what deploys the code](what-deploys-the-code.md) then builds whatever the host turned out to want. Costs a redeploy and a pipeline change. Answered together with the host, which is its main input
@@ -333,7 +334,8 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    which settled that a service worker answers the navigation. What is left is everything else: what
    the precache holds besides the document, how the manifest is generated, and what strategy anything
    other than a navigation uses. The manifest is a build output, so this still waits on M1's build
-   choice.
+   choice. The fallback to the entry document excludes `^/api/`, per
+   [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
 2. [How long must offline play survive?](how-long-must-offline-play-survive.md)
 3. [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)
 4. [How do we exercise offline, throttled and backgrounded conditions?](how-do-we-exercise-offline-throttled-and-backgrounded-conditions.md)

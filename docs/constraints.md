@@ -692,6 +692,25 @@ a research agent 2026-09-26. Not re-opened by the agent that recorded them.*
 
 ---
 
+## Browsers — fetch metadata headers are missing below Safari 16.4
+
+*In scope because [decisions/0003](decisions/0003-this-is-delivered-over-the-web.md) chose web
+delivery.*
+
+**Safari and iOS Safari before 16.4 send no `Sec-Fetch-Mode`, `Sec-Fetch-Dest` or `Sec-Fetch-Site`
+header.** browser-compat-data records `Sec-Fetch-Mode` from Chrome 76, Firefox 90 and Safari 16.4,
+with iOS mirroring Safari. Inside a service worker, `request.mode` is available far earlier; the gap
+is only in what reaches the server.
+
+> So below 16.4 the server cannot tell a navigation from any other request by its headers, and the
+> declared floor includes Safari and iOS 15. A rule that routes on the header routes those browsers'
+> navigations as whatever a missing header means.
+
+*Sourced — [`Sec-Fetch-Mode.json`](https://raw.githubusercontent.com/mdn/browser-compat-data/main/http/headers/Sec-Fetch-Mode.json)
+in mdn/browser-compat-data, read 2026-09-26. Re-check if the floor moves.*
+
+---
+
 ## Content delivery — what reaches a device cannot be recalled
 
 **Anything shipped to a device as part of the application can be read and replayed by whoever holds
@@ -978,6 +997,20 @@ type-aware linter in widest use states the consequence in its own manifest:
 
 *Unlike the rest of this file, a claim about a tool can be overtaken by a release shipping the same
 week. Re-run the three commands above before building on it.*
+
+## Toolchain — Vite's dev server answers any path it does not proxy with the entry document
+
+**With the default `appType: 'spa'`, Vite's dev server answers a path that matches no file and no
+proxy key with the entry document and a 200, and its proxy runs before that fallback.** With a proxy
+key of `/api/` and nothing listening behind it, `/`, `/nope`, `/hello` and `/apidocs` each returned
+`200 text/html`, and `/api/nope` returned `502` from the proxy.
+
+> So an API call the proxy does not cover gets HTML with a 200 in `pnpm dev`, and the client sees a
+> parse error rather than a 404. A key of `/api/` does not take `/apidocs`.
+
+*Measured — Vite 8.3.1, one `curl` per path on macOS, 2026-09-26.*
+
+---
 
 ## Databases — SQLite is not safe on a network filesystem
 

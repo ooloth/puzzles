@@ -48,6 +48,8 @@ the end and are the larger half.
                              │  device, a second device, recovery
                              │  after eviction        problem.md
                              │  files and API on one origin  ADR-0040
+                             │  /api/ is the API, the rest the client
+                             │                               ADR-0041
                              ▼
         ┌─────────────────────────────────────────┐
         │  one machine                    ADR-0021│

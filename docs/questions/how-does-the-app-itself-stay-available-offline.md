@@ -121,3 +121,14 @@ recovery path needs rehearsing against a real installed app before launch rather
 assumed.
 
 *Unverified — no source recorded.*
+
+**Workbox's fallback to the entry document can exclude `/api/` by path alone.** `NavigationRoute`
+matches only requests whose `mode` is `navigate`, and its `allowlist` and `denylist` "are matched
+against the concatenated `pathname` and `search` portions of the requested URL", with the denylist
+winning. So `denylist: [/^\/api\//]` is enough to keep an API URL opened as a navigation away from
+the entry document, per
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
+
+*Sourced — [workbox-routing](https://developer.chrome.com/docs/workbox/modules/workbox-routing/),
+the `mode` sentence re-opened by the main session 2026-09-26, the allowlist sentence read by a
+research agent the same day from the docs and `NavigationRoute.ts` at v7.3.0.*

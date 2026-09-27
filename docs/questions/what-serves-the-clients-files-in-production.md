@@ -103,3 +103,15 @@ a CDN in front fails with an API response is per vendor, and cannot be assumed f
 [cookie caching page](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
 and Cloudflare's [default cache behaviour](https://developers.cloudflare.com/cache/about/default-cache-behavior/).
 Not re-opened.*
+
+**Cloudflare Pages falls back to the entry document for a path nothing else matches.** Its routing
+docs say an unmatched request "will fall back to a static asset if there is one. Otherwise, the
+Function will fall back to the default routing behavior for Pages' static assets", and with no
+top-level `404.html` Pages treats the project as a single-page app. Under
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) that
+arrangement has to send all of `/api/` to the server, or an unknown API path gets the entry document
+with a 200.
+
+*Sourced by a research agent 2026-09-26 from [Pages Functions routing](https://developers.cloudflare.com/pages/functions/routing/)
+and [serving Pages](https://developers.cloudflare.com/pages/configuration/serving-pages/). Not
+re-opened.*

@@ -24,7 +24,7 @@ tools, the bundler is Vite, everything outside the browser runs on Node, the pac
 pnpm, the repository is one package with each part of the system a directory under `src/`,
 Fastify answers HTTP with request and response bodies described in zod, client state that a
 guarantee covers is held outside the renderer under `src/client/state/`, the client and the API
-answer on one origin in production, and the renderer is React.
+answer on one origin in production with API paths under `/api/`, and the renderer is React.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
@@ -84,6 +84,17 @@ at M2.
 
 **So** verify in the fast loop, and record in [verification.md](verification.md) under **Can't
 observe** what it cannot show.
+
+### The server answers `/hello` outside `/api/`
+
+**You'll see** [ADR-0041](decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md)
+saying every API path starts with `/api/`, and `src/server/app.ts`, `CONTRIBUTING.md` and
+[verification.md](verification.md) using `/hello` at the root.
+
+**Actually** the route predates the record. M1's third slice moves it to `/api/hello` when the client
+first calls it.
+
+**So** put any new route under `/api/`, and leave `/hello` for that slice to move.
 
 <!-- Template:
 

@@ -54,8 +54,8 @@ keeps that mechanism available and does not commit to it.
 **This settles the origin and nothing about how it is served.** Whether the API process also serves
 the files, a proxy routes by path, or a platform or CDN does, is
 [what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
-How API paths and client paths are kept apart on the one origin is
-[how are API paths kept apart from client paths on one origin?](../questions/how-are-api-paths-kept-apart-from-client-paths-on-one-origin.md).
+How API paths and client paths are kept apart on the one origin is settled by
+[ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
 How the local runs join the two processes is derived from this record afterwards; the production-like
 run matches it per
 [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
@@ -113,7 +113,7 @@ answered at M2.
 **One origin puts API paths and client paths in one namespace.** A catch-all that returns
 `index.html` for unknown paths answers an unknown API path with 200 and HTML, and a CDN in front can
 cache API responses or strip `Set-Cookie` if its rules are written for the files. How the two are
-kept apart is its own question, named above.
+kept apart is settled by the record named above.
 
 **One hostname may not be enough to keep the cookie.** Safari records what it compares a request
 against only from a network response to a top-level navigation, in memory. Where the service worker

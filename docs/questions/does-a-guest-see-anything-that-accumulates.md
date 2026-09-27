@@ -86,7 +86,7 @@ so a guest must go thirty browser-active days without opening this app. Anyone w
 churned by any ordinary definition. What accumulating stats create is a bad experience for a
 **returning** churned player, which is a smaller group and a more interesting one.
 
-*Sourced — follows from the WebKit behaviour recorded in [../constraints.md](../constraints.md).*
+*Reasoned — follows from the WebKit behaviour recorded in [../constraints.md](../constraints.md).*
 
 **Gating on an account and gating on a mechanism are different rules, and only one is honest.**
 Gating a streak behind signing in says the streak requires identity, which is false — it requires

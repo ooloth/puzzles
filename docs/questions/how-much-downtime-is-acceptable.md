@@ -71,8 +71,9 @@ in [../problem.md](../problem.md) under "Where a player waits" needs the server,
 of them is opening a puzzle whose content has never reached the device.
 
 > So the honest statement of the cost is: an outage is invisible to somebody mid-puzzle and total for
-> somebody arriving. A failure at eight in the morning means nobody starts that day's puzzle, on a
-> product whose whole shape is a daily puzzle played on a commute.
+> somebody arriving. If the product is a daily puzzle played on a commute, which
+> [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
+> has not settled, a failure at eight in the morning means nobody starts that day's puzzle.
 
 **Two things would shrink that cost without shortening the outage**, which is why this question should
 not be answered as though recovery speed were the only lever. Prefetching a puzzle before it is needed

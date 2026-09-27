@@ -78,14 +78,15 @@ technical sophistication.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Origin topology is a factor here, and it fails silently.** If sessions are carried by a cookie,
-Safari caps a server-set cookie back to seven days when it judges the setting server not genuinely
-first-party — which is the shape of a static host with its API on another origin, per
-[../constraints.md](../constraints.md). Serving the client and its API from one origin avoids the
-test entirely. A bearer token in script-writable storage avoids it too, at the cost of living in
-storage the browser evicts and being reachable by any script that runs on the page. Neither is
-forced; what is forced is that this gets chosen rather than inherited from wherever the two things
-happen to be deployed.
+**The origin is settled, and whether a cookie carries the session is not.** If sessions are
+carried by a cookie, Safari caps a server-set cookie to seven days when it judges the setting server
+not genuinely first-party, per [../constraints.md](../constraints.md).
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts the
+client and the API on one origin, which passes that test, except possibly where the hostname is a
+CNAME and a service worker answered the navigation. That case is reasoned from source and unobserved,
+and belongs to [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
+A bearer token in script-writable storage avoids the test too, at the cost of living in storage the
+browser evicts and being reachable by any script that runs on the page.
 
 
 **The axis that orders all of these is where the credential lives.** Anything held by the browser

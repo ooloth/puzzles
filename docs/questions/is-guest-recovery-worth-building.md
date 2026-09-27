@@ -53,8 +53,8 @@ A decision record in [../decisions/](../decisions/).
 Raised 2026-09-01, from a draft durability record that was demoted rather than accepted and no
 longer exists. It rejected an anonymous server copy for guests, giving three reasons. One
 of them — that the mechanism silently degrades to seven days when the API is not judged first-party —
-is a consequence of a hosting topology nobody has chosen yet, which means an option was rejected
-partly on grounds a later decision could remove.
+rested on a hosting topology nobody had chosen. [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md)
+puts the API on the page's own origin, so that reason does not hold.
 
 ## Options
 
@@ -63,14 +63,13 @@ nothing stored about anyone, no endpoint to abuse. The cost falls entirely on re
 players. Note that
 [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) puts the
 durable copy off the device but says explicitly that it "does not say what a guest gets", so it
-neither forces nor forbids this.
+neither forces nor forbids this. The one origin that keeps building it possible is settled for other
+reasons, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md),
+so not building it costs nothing to keep reachable.
 
 *Build it.* The server sets an `HttpOnly` cookie
 on first visit and keeps a copy of the guest's record against it. Local storage is cleared, the
 cookie survives, the server hands the state back, and the player is never told any of it happened.
-
-*Do not build it.* The one origin that keeps it possible is settled for other reasons, per
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so not building it costs nothing to keep reachable.
 
 *Offer accounts early instead.* Skip the anonymous tier and make the first durable thing a sign-in.
 Honest and expensive: it introduces identity to an audience [../problem.md](../problem.md) describes

@@ -83,7 +83,7 @@ That is what makes an issue well formed: one move from a current state to a bett
 evidence you can go and collect. If you cannot say what you would observe, the issue is not scoped
 yet — split it or work out what it is actually for. That is the signal to keep thinking, never a
 reason to decide the work does not belong in the tracker. The test is applied while drafting; the
-issue itself carries the observable Ideal state, not a verification plan, per the
+issue body carries the observable Ideal state, not a verification plan, per the
 `write-ticket-description` skill.
 
 **The verification plan is written during implementation and observed in the production-like local
@@ -96,16 +96,22 @@ plan names the closest mode and says what it cannot show.
 **Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
 which questions block it. `docs/decisions/` holds what has been settled and why.
 
-**Neither restates the other.** No reasoning in an issue — an issue that turns out to need a decision
-stops and points at the question. No status in the docs — no checkboxes, no "in progress". The slice
-title appears in both as the join key, and where they disagree the tracker is right about what work
-exists and the docs are right about why.
+**Each kind of reasoning has one home.** Why a choice others build on was made is in
+`docs/decisions/`. Why a slice exists, what it rests on and when it comes is in
+`docs/questions/README.md`. Why a slice is built the way it is, meaning its properties, then the
+approach, then the design, is in the issue's comments. An issue never settles a choice of the first
+kind: one that needs it stops and follows "When a choice surfaces mid-work". Issues link records
+rather than restating their arguments. No status in the docs: no checkboxes, no "in progress". The
+slice title appears in both as the join key, and where they disagree the tracker is right about what
+work exists and the docs are right about why.
 
 **Which one to open, by what you are doing:**
 
 - Deciding what to work on next, or why something is blocked → `docs/questions/README.md`
 - Building the thing you already chose → the issue
 - Wondering why a slice exists, or what it rests on → `docs/questions/README.md`
+- Wondering why a slice was built the way it was → that issue's comments, reached from the commit or
+  PR
 - Recording that something is done, or how far along it is → the issue
 - Answering a question → usually `docs/decisions/`, plus whatever else "Where a new fact goes" in
   `docs/README.md` names, then update `docs/questions/README.md`

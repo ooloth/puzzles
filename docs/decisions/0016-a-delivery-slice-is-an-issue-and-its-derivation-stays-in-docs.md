@@ -2,6 +2,7 @@
 number: 0016
 status: accepted
 date: 2026-09-02
+amended: 2026-09-27
 ---
 
 # 0016 — A delivery slice is an issue, and its derivation stays in docs
@@ -33,13 +34,15 @@ goes in an issue.
 the two disagree, the tracker is right about what work exists and the docs are right about why — so a
 drifted title is a documentation bug by definition.
 
-**Neither restates the other's half.** No reasoning in an issue; no status in the docs.
+**Neither restates the other's half.** No derivation in an issue; no status in the docs. Why a slice
+is built the way it is (its properties, then the approach, then the design) is in the issue's
+comments.
 
 ## Enforced by
 
 **Nothing, and no issue exists to test it against.** What would make it true is each slice in
 [../questions/README.md](../questions/README.md) appearing as one issue whose title matches, carrying
-no reasoning. The title is the only join between the two halves and nothing verifies it, which that
+no derivation. The title is the only join between the two halves and nothing verifies it, which that
 file states plainly rather than leaving to be discovered.
 
 ## Rejected

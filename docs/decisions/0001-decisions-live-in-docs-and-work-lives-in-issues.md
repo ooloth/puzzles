@@ -2,6 +2,7 @@
 number: 0001
 status: accepted
 date: 2026-09-01
+amended: 2026-09-27
 ---
 
 # 0001 — Decisions live in docs and work lives in issues
@@ -24,12 +25,12 @@ issue tracker creates sixty pairs that can disagree, and the copy a reader finds
 yet to be chosen and in what order. They are read as a set, and their order is part of their
 meaning.
 
-**An issue tracker holds work**: something to build, with a definition of done and no reasoning to
-preserve once it is closed. Which tracker is not settled here — see the footer.
+**An issue tracker holds work**: something to build, with a definition of done, and in its comments
+the reasoning for how it was built. Which tracker is not settled here — see the footer.
 
-The test when it is unclear: **after this is finished, is there reasoning worth keeping?** If yes it
-is a decision and it belongs in `docs/`. If the artifact is the whole of it, it is work and it
-belongs in an issue.
+The test when it is unclear: **will something else be built on this choice, or could an open
+question reverse it?** If yes, it is a decision and it belongs in `docs/`. If not, it is work: it
+belongs in an issue, and so does the reasoning for how it was done.
 
 **Neither restates the other.** A question is not opened as an issue. An issue that turns out to
 need a decision stops and points at the question, rather than deciding inside itself.
@@ -83,8 +84,9 @@ this, and it only works once there is a tracker to persist to.
 
 - **The first implementation work exists**, which is the point this record is written for. Issues
   start then, not before.
-- **Questions start being opened as issues, or issues start carrying reasoning.** Either means the
-  test above is not doing its job and the boundary needs restating rather than enforcing.
+- **Questions start being opened as issues, or issues start settling choices that other work rests
+  on.** Either means the test above is not doing its job and the boundary needs restating rather
+  than enforcing.
 
 ## Also update
 

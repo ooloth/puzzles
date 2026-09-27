@@ -627,7 +627,8 @@ When a milestone becomes the next one, run the seven steps on it. Not before.
 and
 [../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
 The tracker holds what work exists and what state it is in. This file holds why — what each slice
-rests on, what blocks it, and why they are in this order.
+rests on, what blocks it, and why they are in this order. Why a slice is built the way it is sits in
+its issue's comments.
 
 **So the tracker is deliberately shorter than this list, and a slice with no issue is normal.** An
 issue is filed once nothing in its entry is still a **Must answer**, because an issue written

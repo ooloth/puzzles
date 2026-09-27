@@ -119,15 +119,6 @@ a player can see, which is why it has to be a milestone rather than a habit.
 1. [What runs the tests?](what-runs-the-tests.md) — `node --test` runs them today as a stopgap.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
-3. **Rewrite the docs checker in TypeScript.** Not a question:
-   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every repo
-   script runs on Node, so the Python checker is the one artifact in the repository contradicting a
-   settled record. Its answered question file is
-   [what language are repo scripts written in?](what-language-are-repo-scripts-written-in.md), kept
-   until it is mined. It sits beside the item above because they decide the same artefact. **It
-   depends on neither of them and could be done at any point**: Node 26 runs TypeScript unflagged, so
-   a checker that keeps no dependencies runs with nothing installed, exactly as the Python one does
-   today.
 4. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
    It sits here rather than at M1 because this is the first point it cannot be deferred further.
    Nothing in M1 needs a construct Node cannot strip, and
@@ -659,6 +650,13 @@ evidence dies with the file. Where the working is too long to move, cite the com
 `git show <commit>^:<path>` still reads it.
 **Promises are written as they fall out of records**, on the decision template's checklist, rather
 than committed to in advance.
+
+**An answered question waiting on maintenance rather than on a slice is listed here.**
+[What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md) is
+answered by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which
+makes the Python docs checker the one script contradicting a settled record. It is mined and
+deleted by the maintenance issue that rewrites the checker in TypeScript, which can be done at any
+point.
 
 `scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
 is referenced at least once from the lists above, no link points at a heading, no question file has

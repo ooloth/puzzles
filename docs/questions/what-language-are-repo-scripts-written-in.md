@@ -38,10 +38,9 @@ it." Node runs the language [ADR-0007](../decisions/0007-that-language-is-typesc
 repo scripts are TypeScript and the Python and shell options below are foreclosed.
 
 **What that creates is work rather than a further question.** `scripts/check-docs.py` is Python, so
-it is now the one artifact in the repository contradicting a settled record. Rewriting it is an M2
-job, tracked against
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md), and
-[../unfinished.md](../unfinished.md) carries the warning until it lands.
+it is now the one artifact in the repository contradicting a settled record. Rewriting it is a
+maintenance job, which can be done at any point, and [../unfinished.md](../unfinished.md) carries
+the warning until it lands.
 
 **The cost the options below name does not exist.** They say a Python checker runs on a bare machine
 while a TypeScript one waits for an install. That was written before the runtime was settled.

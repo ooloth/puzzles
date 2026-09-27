@@ -69,6 +69,15 @@ abandoned, and `@effect/vitest` re-exports `fast-check`).
 *Measured — 32 tests in about 1.5s under Node v26.7.0, by me on 2026-09-22. The alternatives'
 status is from `npm view`, run the same day.*
 
+**Client modules that need no DOM are tested under the same interim runner.** M1's third slice
+tests how the client reads the server's reply before this is answered, so `src/client/*.test.ts`
+run under `node --test` with real `Response` objects, which Node provides. The client tsconfig has
+`"types": []`, so those files are excluded from it and typechecked by the root `tsconfig.json`,
+which has Node's types. Moving them is as mechanical as moving the server's. Views still have no
+runner, which is the half of this question a DOM-capable runner exists for.
+
+*Reasoned — from `src/client/tsconfig.json` and `package.json`, 2026-09-27.*
+
 **Nothing about `bun test` can be measured here yet.** This app has no components and nothing is
 installed, so any claim tagged *Measured* against its own code is impossible by construction. What
 follows is established from Bun's documentation and issue tracker instead.

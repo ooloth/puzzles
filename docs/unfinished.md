@@ -62,8 +62,10 @@ as the Python one does.
 
 ### The test runner and the pnpm pin look chosen and are not
 
-**You'll see** `src/server/*.test.ts` running under `node --test`, and `"packageManager":
-"pnpm@12.5.1"` in `package.json`.
+**You'll see** `*.test.ts` files under `src/` running under `node --test`, and `"packageManager":
+"pnpm@12.5.1"` in `package.json`. Client test files cover modules that need no DOM, and are
+excluded from `src/client/tsconfig.json` and typechecked by the root `tsconfig.json`, because the
+client config has no Node types for `node:test`.
 
 **Actually** both were put in place so M1's first slice could be installed and tested. They are
 interim, and they come ahead of [what runs the tests?](questions/what-runs-the-tests.md) and

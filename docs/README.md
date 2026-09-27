@@ -26,7 +26,6 @@ Full context: [problem.md](problem.md).
 | [gotchas](gotchas.md)            | Non-obvious traps in this codebase      |
 | [problem](problem.md)            | Who this is for and what success means  |
 | [unfinished](unfinished.md)      | What's mid-change and would mislead you |
-| [verification](verification.md)  | How to run the system and check changes |
 
 ## Read these two first
 
@@ -64,7 +63,6 @@ line is the question that sorts a fact into it:
 - A way the system can fail, and whether we would know → [failure-modes/](failure-modes/)
 - A trap in this repo that surprised you → [gotchas](gotchas.md)
 - True for now and misleading until a change finishes → [unfinished](unfinished.md)
-- How to run something and what correct looks like → [verification](verification.md)
 - A domain word and its code name → [glossary](glossary.md)
 - Where code lives and what calls what → [architecture](architecture.md)
 
@@ -76,7 +74,7 @@ is what a player would see break, an invariant is what only the system would.
 **One thing learned often has several homes, each for its own reader.** A choice goes in a decision
 record with its reasoning and rejected options. What it commits us to goes where that commitment is
 checked: a promise to players in `guarantees/`, a rule for reviewers in `standards/`, a state that
-misleads until finished in `unfinished`, a new way to run something in `verification`. Each home
+misleads until finished in `unfinished`. Each home
 links to the record rather than restating its reasoning. So the question is never only "which
 file?" but "which readers now need to know, and where does each of them look?"
 

@@ -46,7 +46,7 @@ Writing the procedure down and running it, on a real machine, from nothing. Any 
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in
-[../verification.md](../verification.md).
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Source
 

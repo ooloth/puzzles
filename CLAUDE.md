@@ -89,7 +89,9 @@ issue itself carries the observable Ideal state, not a verification plan, per th
 **The verification plan is written during implementation and observed in the production-like local
 run**, not the fast loop, per
 [ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
-Until M2 builds that run, the plan names the closest mode and says what it cannot show.
+It is the sections of [CONTRIBUTING.md](CONTRIBUTING.md) the change touches, plus any section it
+adds, and the status report records what was run and what came back. Until M2 builds that run, the
+plan names the closest mode and says what it cannot show.
 
 **Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
 which questions block it. `docs/decisions/` holds what has been settled and why.
@@ -148,7 +150,6 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | `docs/gotchas.md`      | Non-obvious traps in this codebase      |
 | `docs/problem.md`      | Who this is for and what success means  |
 | `docs/unfinished.md`   | What's mid-change and would mislead you |
-| `docs/verification.md` | How to run the system and check changes |
 
 Proactively read and update these files as you go. Be sure to read `docs/unfinished.md` before
 extending any existing pattern — it records where the codebase might currently mislead you.

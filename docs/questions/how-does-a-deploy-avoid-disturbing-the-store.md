@@ -49,7 +49,7 @@ Deciding the sequence, and stating what must never overlap. Any answer has to sa
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in
-[../verification.md](../verification.md) about what a safe deploy looks like.
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) about what a safe deploy looks like.
 
 ## Source
 

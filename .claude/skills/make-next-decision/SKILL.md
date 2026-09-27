@@ -310,7 +310,7 @@ record what you find.
    complete.
 1. **Route what was settled through "Where a new fact goes" in `docs/README.md` before writing
    anything.** Usually that is an ADR, and usually it is not only an ADR: what the decision commits
-   us to may also belong in `guarantees/`, `standards/`, `unfinished.md` or `verification.md`, each
+   us to may also belong in `guarantees/`, `standards/`, `unfinished.md` or `CONTRIBUTING.md`, each
    linking to the record. Settle this from that list rather than asking the user which kind of
    record it is.
 1. Author the ADR. Its Decision carries the numbered properties from step 4 under **Scored

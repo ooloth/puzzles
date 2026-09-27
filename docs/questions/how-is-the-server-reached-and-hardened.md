@@ -52,7 +52,7 @@ though it can be asked now.
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in
-[../verification.md](../verification.md) about how to get onto the machine and what to look at.
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) about how to get onto the machine and what to look at.
 
 ## Source
 

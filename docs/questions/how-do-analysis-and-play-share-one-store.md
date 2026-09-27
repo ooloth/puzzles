@@ -47,7 +47,7 @@ Three things any answer has to cover:
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and probably a line in
-[../verification.md](../verification.md) about how to look at data safely.
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) about how to look at data safely.
 
 ## Source
 

@@ -13,9 +13,8 @@ Every milestone in [README.md](README.md) is described as a thin vertical slice:
 consists of — which command, which URL, which output counts as proof the slice works, as opposed to
 proof its pieces individually compile or its tests pass in isolation.
 
-[../verification.md](../verification.md) holds hand-written run, look-at and correct-looks-like
-entries for the server from M1's first slice. Someone has to re-type each one to use it, and this
-question decides whether they become something that runs. Without a concrete answer, each milestone's
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) holds hand-written commands and their expected output
+for the server and the client. Someone has to re-type each one to use it, and this question decides whether they become something that runs. Without a concrete answer, each milestone's
 observability claim is asserted rather than checkable. [../problem.md](../problem.md) names the solo
 maintainer as a stakeholder, and this is the loop that runs after every milestone and every smaller
 change inside one — an agent that finishes a slice has no way to confirm it actually works without

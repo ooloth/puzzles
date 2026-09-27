@@ -142,7 +142,8 @@ a player can see, which is why it has to be a milestone rather than a habit.
    mechanisms this question has to weigh.
 6. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
-   This is where [../verification.md](../verification.md) gets its content.
+   This decides whether the checks in [../../CONTRIBUTING.md](../../CONTRIBUTING.md) become something
+   that runs.
 7. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)

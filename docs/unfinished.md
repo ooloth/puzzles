@@ -82,14 +82,14 @@ serves the built client with no API behind it. Building the production-like run 
 [how is the app run locally the way it runs deployed?](questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
 at M2.
 
-**So** verify in the fast loop, and record in [verification.md](verification.md) under **Can't
+**So** verify in the fast loop, and record in [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't
 observe** what it cannot show.
 
 ### The server answers `/hello` outside `/api/`
 
 **You'll see** [ADR-0041](decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md)
-saying every API path starts with `/api/`, and `src/server/app.ts`, `CONTRIBUTING.md` and
-[verification.md](verification.md) using `/hello` at the root.
+saying every API path starts with `/api/`, and `src/server/app.ts` and
+[CONTRIBUTING.md](../CONTRIBUTING.md) using `/hello` at the root.
 
 **Actually** the route predates the record. M1's third slice moves it to `/api/hello` when the client
 first calls it.

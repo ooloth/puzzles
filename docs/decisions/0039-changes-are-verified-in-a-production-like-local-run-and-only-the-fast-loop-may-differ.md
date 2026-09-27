@@ -2,6 +2,7 @@
 number: 0039
 status: accepted
 date: 2026-09-26
+amended: 2026-09-27
 ---
 
 # 39 — changes are verified in a production-like local run, and only the fast loop may differ
@@ -46,8 +47,9 @@ compression, the built bundle and, later, the service worker all qualify. A diff
 closed in the production-like run or recorded with its reason. A difference that cannot matter, such
 as a port number or a log format, needs neither.
 
-**A slice's end-to-end check is observed in the production-like run.** That is the run an issue's QA
-plan names and the one [../verification.md](../verification.md) describes as correct.
+**A slice's end-to-end check is observed in the production-like run.** That is the run a change's
+verification plan names and the one [../../CONTRIBUTING.md](../../CONTRIBUTING.md) describes as
+correct.
 
 Of CPU, memory, storage and network, none binds on this choice as a cost. Both modes run on the
 maintainer's machine, and the only cost that differs between them is build time, which the fast loop
@@ -65,8 +67,8 @@ how, and what command runs it are
 at M2, which builds it.
 
 **Until then each slice is verified in the closest mode that exists**, and
-[../verification.md](../verification.md) records under **Can't observe** what that mode cannot show.
-That is the existing convention for a gap, and it keeps the gap visible rather than letting the fast
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) records under **Can't observe** what that mode cannot
+show. That is the existing convention for a gap, and it keeps the gap visible rather than letting the fast
 loop's result stand in for production's.
 
 Once the production-like run exists, what enforces this is a check that runs a slice's end-to-end
@@ -122,7 +124,7 @@ build does. Either removes the reason for two modes.
       local-parity question is narrowed to what is still open
 - [x] questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md — narrowed to which
       differences the production-like run closes, how, and what command runs it
-- [x] verification.md — says which mode each capability is observed in
+- [x] CONTRIBUTING.md — says which mode each capability is observed in
 - [x] CONTRIBUTING.md — "Check a change" points here
 - [x] unfinished.md — the production-like run is named and does not exist yet
 - [x] architecture.md — nothing moved; this names no boundary in the running system

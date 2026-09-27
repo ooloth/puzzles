@@ -61,7 +61,7 @@ a gap.
 
 **A document whose contents could be confused with a sibling names that boundary at its top.**
 The pairs that blur here are constraints against guarantees, gotchas against unfinished, and
-standards against verification. A boundary line is cheapest at the point where a reader is
+standards against `CONTRIBUTING.md`. A boundary line is cheapest at the point where a reader is
 already deciding whether they opened the right file.
 
 **Archival directories are labelled non-authoritative where a reader will meet them.**

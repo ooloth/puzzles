@@ -53,7 +53,7 @@ anything about the arrangement makes it possible to run against production data 
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content for
-[../verification.md](../verification.md) once there is something to run.
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) once there is something to run.
 
 **This sits at M2, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and M1
 is decided on which option keeps technical doors open — a different test, which ergonomics loses. Any

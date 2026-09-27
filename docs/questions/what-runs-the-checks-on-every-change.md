@@ -14,7 +14,8 @@ catch are caught by it. Neither is true of a project where the checks exist but 
 and for a solo maintainer with no reviewer, automation is the only thing standing between a
 standard and a good intention.
 
-[../verification.md](../verification.md) is currently a stub. Whatever answers this fills it.
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md) lists the three checks and says nothing runs them.
+Whatever answers this changes that line.
 
 ## What would settle it
 
@@ -33,7 +34,7 @@ latency is tolerable on each iteration.
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and content in
-[../verification.md](../verification.md).
+[../../CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Source
 

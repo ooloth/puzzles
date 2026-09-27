@@ -62,7 +62,7 @@ were briefly filed as their own issue and it was closed as mis-scoped: its QA pl
 a renderer import to a rules directory, and neither the renderer nor the directory exists, so
 nothing about it could be run or observed. An issue whose evidence cannot be collected is not
 scoped yet. So the obligation lives here until there is a slice to attach it to, and whoever writes
-that slice's issue carries these two checks into its done-when.
+that slice's issue carries these two checks into its Ideal state.
 
 ## Where it came from
 

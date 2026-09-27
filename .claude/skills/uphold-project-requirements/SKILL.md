@@ -15,9 +15,9 @@ description: Load relevant project-level decisions, guarantees and standards and
 3. Read (or re-read) all files with a theme that may be relevant to the current task
 4. **List every choice your task will make, and name the record or Given that settles each one.**
    Include choices that look small and choices about local runs: a wiring detail, a default
-   behaviour, what a page shows when something fails. For an issue, check each Ideal-state bullet
-   and each QA step. A choice you cannot trace to a record is an open question, however
-   conventional its usual answer. **Stop and follow "When a choice surfaces mid-work" in
+   behaviour, what a page shows when something fails. For an issue, check each Ideal-state bullet,
+   and each verification step once implementation writes the plan. A choice you cannot trace to a
+   record is an open question, however conventional its usual answer. **Stop and follow "When a choice surfaces mid-work" in
    `CLAUDE.md`** rather than recommending an answer and carrying on. An untraced choice presented
    as a recommendation reads as reasoned whether or not anything was reasoned.
 5. If you notice a gap in the decisions, guarantees or standards guidance that would help you with

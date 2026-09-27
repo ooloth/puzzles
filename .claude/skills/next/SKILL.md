@@ -34,7 +34,7 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
    nothing workable, or as a second line in the report.
 5. **Check you are not resuming.** `git status`, the current branch, and the candidate issue's
    state and comments — `gh issue view N --json state,comments`. Fetch those rather than the body:
-   the body is a full task brief with a QA plan, it cannot tell you whether anyone has started, and
+   the body is a full task brief, it cannot tell you whether anyone has started, and
    reading it makes stopping harder than it needs to be.
 6. **Report.** Three or four lines: the milestone, the slice, the route, and the sentence of
    evidence that decided it.
@@ -65,8 +65,8 @@ issue means one should have been filed and was not. Offer `write-ticket-descript
   starts it.
 - **A workable slice with no issue** — offer to file it, and say that "workable" is only as good as
   the entry. A slice with no **Must answer** listed may still hide a choice the planning pass
-  missed, often about local runs. Drafting the issue is the last check: every Ideal-state bullet and
-  QA step traces to a **Given** or a record, per step 4 of `uphold-project-requirements`. One that
+  missed, often about local runs. Drafting the issue is the last check: every Ideal-state bullet
+  traces to a **Given** or a record, per step 4 of `uphold-project-requirements`. One that
   does not means the slice was not workable, and the route becomes "a question" by way of "When a
   choice surfaces mid-work" in `CLAUDE.md`.
 - **Anything ambiguous** — two slices both workable, a milestone that looks finished but has an

@@ -79,13 +79,15 @@ each can be demonstrated before and after. M2 is an entire milestone of them. No
 excluded for being infrastructure, and there is no second category of work that issues do not cover.
 
 **The scoping test is whether you can name what you would run and what you would expect to see.**
-That is the QA plan the `write-ticket-description` skill asks for, and it is the thing that makes an
-issue well formed: one move from a current state to a better one, with evidence you can go and
-collect. If you cannot say what you would observe, the issue is not scoped yet — split it or work
-out what it is actually for. That is the signal to keep thinking, never a reason to decide the work
-does not belong in the tracker.
+That is what makes an issue well formed: one move from a current state to a better one, with
+evidence you can go and collect. If you cannot say what you would observe, the issue is not scoped
+yet — split it or work out what it is actually for. That is the signal to keep thinking, never a
+reason to decide the work does not belong in the tracker. The test is applied while drafting; the
+issue itself carries the observable Ideal state, not a verification plan, per the
+`write-ticket-description` skill.
 
-**The QA plan is observed in the production-like local run**, not the fast loop, per
+**The verification plan is written during implementation and observed in the production-like local
+run**, not the fast loop, per
 [ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
 Until M2 builds that run, the plan names the closest mode and says what it cannot show.
 

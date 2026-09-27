@@ -93,8 +93,9 @@ It is the sections of [CONTRIBUTING.md](CONTRIBUTING.md) the change touches, plu
 adds, and the status report records what was run and what came back. Until M2 builds that run, the
 plan names the closest mode and says what it cannot show.
 
-**Thinking is `docs/`.** `docs/questions/README.md` holds why each slice exists, what it rests on and
-which questions block it. `docs/decisions/` holds what has been settled and why.
+**Decisions and derivations are `docs/`.** `docs/questions/README.md` holds why each slice exists,
+what it rests on and which questions block it. `docs/decisions/` holds what has been settled and
+why.
 
 **Each kind of reasoning has one home.** Why a choice others build on was made is in
 `docs/decisions/`. Why a slice exists, what it rests on and when it comes is in

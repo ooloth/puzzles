@@ -43,14 +43,6 @@ client runs almost anywhere, so it is the half least able to discriminate betwee
 be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
 thing in M1 is the string the endpoint returns.
 
-**The third slice is the first where the client calls the API, so it joins the two locally.**
-[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
-requires the local arrangement to follow production's, which is one origin per
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). API paths and client paths share it by the `/api/` prefix, per
-[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). How the client loads data waits for M3, where the first content that becomes the
-board is fetched. Choosing a host is still the fourth
-slice.
-
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
 short-term guess against a long-lived choice. These are decided on which option keeps the most
 technical properties reachable — performance, safety, portability, and the ones not yet known to
@@ -60,18 +52,6 @@ derivation.
 A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
 closes, and the slices left keep their numbers because records cite them by number.
 
-3. **The client calls the server's `/api/hello` route and shows the answer, locally.**
-   - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
-   - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
-   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is shown by a React view
-   - **Given:** [0037-the-renderer-draws-client-state-and-does-not-own-it](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) — state no promise covers "may live in the renderer", and no promise covers "Hello!", so the view may fetch and hold it itself
-   - **Deferred:** how the client loads data from the server. Its inputs are what crosses the boundary at M3, what implements the client's state at M5 and whether a puzzle is fetched before it is needed at M9, so it cannot be derived here. It is owned by [how does the client load data from the server?](how-does-the-client-load-data-from-the-server.md) at M3, which is listed there so that M3 answers it rather than copying this slice's fetch
-   - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so locally the client and the API are two processes on two ports, and the browser sees two origins unless something joins them
-   - **Given:** [0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) — so how the local call is joined follows production's arrangement rather than convenience, and until M2 builds the production-like run this slice is verified in the closest mode with its gap recorded
-   - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the client calls the API by a path on its own origin, and the local wiring is derived from that
-   - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so the route is `/api/hello`, and the dev server proxies `/api/` to the server and nothing else
-   - **Deferred:** what the page shows before the answer arrives, and when the API cannot be reached. What a player is shown is [is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md) at M9, and noticing a server that was never started is part of [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md) at M2. This slice renders nothing until the text arrives rather than answering either
-   - **Deferred:** where the dev server's proxy sends `/api/`. How the two local processes learn each other's address is part of [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md) at M2. This slice points the proxy at the server's default address, `http://127.0.0.1:3000`, as an IP literal because `localhost` can resolve to `::1` while the server listens on IPv4 only, so a server started on another port gets a 502 in the fast loop
 4. **Both halves are deployed on a host.**
    - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player
    - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving to a different provider, and an API path-routed on the app's own hostname passes by being compared with itself, unless that hostname is a CNAME and a service worker answered the navigation, which is reasoned from source and unobserved

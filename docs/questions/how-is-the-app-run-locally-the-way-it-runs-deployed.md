@@ -84,3 +84,14 @@ would be assembled from.
 *Measured — `preview: preview?.proxy ?? server.proxy` in Vite 8.3.1's
 `dist/node/chunks/node.js`, and `pnpm build && pnpm preview` answering `/api/hello` with the
 server's `Hello!` and `/apidocs` with the entry document, 2026-09-27.*
+
+**The two local processes find each other by a fixed address, and this question owns replacing it.**
+`vite.config.ts` points the `/api/` proxy at `http://127.0.0.1:3000`, the server's default, as an IP
+literal because `localhost` can resolve to `::1` while the server listens on IPv4 only. A server
+started with another `PORT` gets a `502` from the proxy in both `pnpm dev` and `pnpm preview`. M1's
+third slice chose the fixed address rather than having the Vite config read `HOST` and `PORT` or
+import the server's config parser, because either would settle how the processes share
+configuration, which is this question.
+
+*Measured — `PORT=3001 pnpm start` with `pnpm dev`: `/api/hello` through the dev server answered
+`502`, and `127.0.0.1:3001/api/hello` answered `Hello!`, 2026-09-27.*

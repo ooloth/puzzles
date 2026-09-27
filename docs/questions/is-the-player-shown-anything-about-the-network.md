@@ -72,6 +72,14 @@ already says the interface owes them.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Until this is answered, the client shows nothing while a request is in flight or after one fails.**
+M1's third slice fetches the page's only text from `/api/hello`, and renders nothing before the
+answer arrives and nothing when the call fails, logging the failure to the console instead. That is
+a placeholder with nothing built on it, not an answer to this question; M3's first fetched content
+is where it starts to matter to a player.
+
+*Reasoned — from `src/client/app.tsx`, 2026-09-27.*
+
 **[Observability](../guarantees/README.md) is a theme in the guarantees README holding no promises
 yet, and whether a guest is told their work is only held locally is still open** — see
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md), where the disclosure

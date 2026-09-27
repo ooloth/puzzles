@@ -90,3 +90,16 @@ the API too.
 
 *Sourced — Cloudflare `developers.cloudflare.com/cache/concepts/cache-behavior/` and Vercel
 `vercel.com/docs/rewrites`, read by a research agent 2026-09-26. Not re-opened.*
+
+**CloudFront caches `Set-Cookie` with the object once a cache behaviour forwards cookies, and replays
+it on every cache hit.** AWS's cookie documentation says that where cookies are forwarded and "the
+origin response includes Set-Cookie headers, CloudFront returns them to the viewer... CloudFront also
+caches the Set-Cookie headers with the object... and sends those Set-Cookie headers to viewers on all
+cache hits." Its fix is an origin response carrying `Cache-Control: no-cache="Set-Cookie"`.
+Cloudflare's default leans the other way: it does not cache HTML or JSON unless told to. So which way
+a CDN in front fails with an API response is per vendor, and cannot be assumed from "a CDN".
+
+*Sourced by a research agent 2026-09-26 from the CloudFront developer guide's
+[cookie caching page](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
+and Cloudflare's [default cache behaviour](https://developers.cloudflare.com/cache/about/default-cache-behavior/).
+Not re-opened.*

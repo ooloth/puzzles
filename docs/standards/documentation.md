@@ -60,9 +60,9 @@ plausible. A line stating that nothing has been recorded yet makes emptiness a f
 a gap.
 
 **A document whose contents could be confused with a sibling names that boundary at its top.**
-The pairs that blur here are constraints against guarantees, gotchas against unfinished, and
-standards against `CONTRIBUTING.md`. A boundary line is cheapest at the point where a reader is
-already deciding whether they opened the right file.
+The pairs that blur here are constraints against guarantees, and gotchas against unfinished. A
+boundary line is cheapest at the point where a reader is already deciding whether they opened the
+right file.
 
 **Archival directories are labelled non-authoritative where a reader will meet them.**
 `docs/brainstorming/` holds unfiltered material that reads as

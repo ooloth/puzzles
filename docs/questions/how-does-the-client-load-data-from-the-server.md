@@ -44,9 +44,7 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-26, while drafting M1's third slice as an issue. Its entry claimed [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) put the
-fetch outside the renderer, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not say. Moved from that slice to M3 on
-2026-09-26, because the inputs named under **What would settle it** are answered at M3, M5 and M9, so
-it could not be derived at M1.
+fetch outside the renderer, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not say.
 
 ## Options
 

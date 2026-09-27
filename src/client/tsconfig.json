@@ -5,5 +5,7 @@
     "types": [],
     "jsx": "react-jsx"
   },
-  "include": ["."]
+  "include": ["."],
+  // Tests run under Node and are typechecked by the root tsconfig, which has Node's types.
+  "exclude": ["**/*.test.ts"]
 }

@@ -9,7 +9,7 @@ async function listeningServer() {
   const app = buildServer({ logDestination: { write: () => {} } });
   let release = () => {};
   const released = new Promise<void>((resolve) => (release = resolve));
-  app.get("/slow", async () => {
+  app.get("/api/slow", async () => {
     await released;
     return "finished";
   });
@@ -18,7 +18,7 @@ async function listeningServer() {
   await startServer(app, config.config);
   const address = app.addresses()[0];
   assert.ok(address);
-  return { app, release, url: `http://${address.address}:${address.port}/slow` };
+  return { app, release, url: `http://${address.address}:${address.port}/api/slow` };
 }
 
 // fetch keeps its connection alive by default, which is what leaves a connection falling idle

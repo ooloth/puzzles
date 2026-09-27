@@ -27,7 +27,13 @@ export function buildServer(options: BuildServerOptions = {}) {
     return reply.status(errorReply.statusCode).send(toErrorBody(errorReply));
   });
 
-  app.get("/hello", () => "Hello!");
+  // Added before any route, so every route this server ever registers passes through it — see
+  // ADR-0041. A route outside `/api/` is unreachable in any arrangement that routes by the prefix.
+  app.addHook("onRoute", (route) => {
+    assert.ok(route.url.startsWith("/api/"), `route outside /api/: ${route.url}`);
+  });
+
+  app.get("/api/hello", () => "Hello!");
 
   return app;
 }

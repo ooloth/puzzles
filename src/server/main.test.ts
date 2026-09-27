@@ -37,13 +37,13 @@ function startMain(t: TestContext, env: Record<string, string>) {
   return { child, lines, lineMatching, exited };
 }
 
-test("the server logs JSON, answers /hello, and exits 0 on SIGTERM", { timeout: 10_000 }, async (t) => {
+test("the server logs JSON, answers /api/hello, and exits 0 on SIGTERM", { timeout: 10_000 }, async (t) => {
   const server = startMain(t, { HOST: "127.0.0.1", PORT: "0" });
   const listening = await server.lineMatching((line) => line.msg.startsWith("Server listening at "));
   const origin = listening.msg.replace("Server listening at ", "");
   assert.match(origin, /^http:\/\/127\.0\.0\.1:\d+$/);
 
-  const response = await fetch(`${origin}/hello`);
+  const response = await fetch(`${origin}/api/hello`);
   assert.equal(await response.text(), "Hello!");
 
   const completed = await server.lineMatching((line) => line.msg === "request completed");

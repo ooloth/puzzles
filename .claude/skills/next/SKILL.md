@@ -22,15 +22,21 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
    a single read exhausts its token budget partway through, so reading top-down leaves whether you
    see the rule to chance. The rule is the repo's own and it decides everything below.
 2. **Read the tracker with `--state all`.** Open issues alone cannot tell you which milestone is
-   finished. Invoke `use-gh` first, as `CLAUDE.md` requires before any `gh` call.
-3. **Identify the current milestone**, then read that milestone's section of the README — its
+   finished. Invoke `use-gh` first, as the user's global `CLAUDE.md` requires before any `gh` call.
+3. **Rank what the tracker holds** by the order in `CLAUDE.md`: bugs first, then the current
+   milestone, then maintenance, then later milestones. An open bug is the route, whatever the
+   milestones say. Issues with no milestone are bugs or maintenance, and their title and labels
+   say which; where neither does, say so rather than guessing.
+4. **Identify the current milestone**, then read that milestone's section of the README — its
    slices, their **Given** bullets and their **Must answer** bullets. In that order: which milestone
    is current depends on the tracker, so reading a section first risks reading the wrong one.
-4. **Check you are not resuming.** `git status`, the current branch, and the candidate issue's
+   Maintenance comes after the current milestone's route, so name it only when that milestone has
+   nothing workable, or as a second line in the report.
+5. **Check you are not resuming.** `git status`, the current branch, and the candidate issue's
    state and comments — `gh issue view N --json state,comments`. Fetch those rather than the body:
    the body is a full task brief with a QA plan, it cannot tell you whether anyone has started, and
    reading it makes stopping harder than it needs to be.
-5. **Report.** Three or four lines: the milestone, the slice, the route, and the sentence of
+6. **Report.** Three or four lines: the milestone, the slice, the route, and the sentence of
    evidence that decided it.
 
 ## Three things a first reading gets wrong

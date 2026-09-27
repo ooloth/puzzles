@@ -4,8 +4,9 @@ This will evolve eventually into an app serving logic puzzles (think grid-fillin
 sudoku, star battle, etc) plus a pipeline for generating them. The site will eventually have
 users whose progress must be reliably saved and restored.
 
-The only code is a server under `src/server/` that answers one route (M1 slice 1) and a client under
-`src/client/` that renders "Hello!" (M1 slice 2). Much of the stack is settled
+The product code is a server under `src/server/` that answers one route (M1 slice 1) and a client
+under `src/client/` that renders "Hello!" (M1 slice 2). Beside it are the docs checker in
+`scripts/` and the client build's tests in `vite.config.test.ts`. Much of the stack is settled
 on paper — see `docs/decisions/` for the language, the store engine, the client bundler and the
 runtime — and what remains open in the toolchain is listed under M2 in `docs/questions/README.md`.
 The repository is one package ([ADR-0034](docs/decisions/0034-the-repository-is-one-package.md));
@@ -58,9 +59,15 @@ listing of `docs/decisions/`. What is promised is the listing of `docs/guarantee
 ## Where work lives, and where thinking lives
 
 **Work is GitHub Issues in this repository.** One issue per observable change: something is true of
-the system after it that was not true before, and you can go and look. Grouped by a GitHub milestone
-matching M1, M2 and so on. The title names what becomes true; the definition of done is that it is.
-The tracker is where you read what exists and what state it is in.
+the system after it that was not true before, and you can go and look. An issue for a slice sits in
+the GitHub milestone matching its M-number. Other issues, such as bugs and maintenance, need no
+milestone. The title names what becomes true; the definition of done is that it is. The tracker is
+where you read what exists and what state it is in.
+
+**What to work on next, in this order:** bugs first, then the current milestone, then maintenance,
+then later milestones. It is a starting point rather than a rule, so a case that does not fit is
+raised with the user rather than forced into it. The `next` skill applies it at the start of a
+session.
 
 **"Observable" does not mean "a player can see it".** A check that fails on a bad import, a script
 that reproduces a bug, a pin that makes two machines agree — each changes what the system does, and
@@ -95,9 +102,9 @@ exists and the docs are right about why.
 - Answering a question → usually `docs/decisions/`, plus whatever else "Where a new fact goes" in
   `docs/README.md` names, then update `docs/questions/README.md`
 
-**Before opening an issue, check the slice exists in `docs/questions/README.md`.** If it does not,
-either it is not a slice or that file is behind — and the second is the more likely, since work tends
-to get invented at the keyboard.
+**Before opening an issue for a slice, check the slice exists in `docs/questions/README.md`.** If it
+does not, either it is not a slice or that file is behind — and the second is the more likely, since
+work tends to get invented at the keyboard. An issue that is not a slice needs no entry there.
 
 Set by [ADR-0015](docs/decisions/0015-the-issue-tracker-is-github-issues.md) and
 [ADR-0016](docs/decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).

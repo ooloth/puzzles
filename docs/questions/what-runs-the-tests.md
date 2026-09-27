@@ -78,6 +78,20 @@ runner, which is the half of this question a DOM-capable runner exists for.
 
 *Reasoned — from `src/client/tsconfig.json` and `package.json`, 2026-09-27.*
 
+**Some checks are done by hand only because nothing here can render a view, and the runner this
+question chooses owes each of them a test.** Moving the existing tests to another runner brings
+none of these along, since they were never written. Each slice that leaves a view check by hand adds
+it here:
+
+- `src/client/app.tsx` shows the text of an `answered` outcome from `/api/hello`, and nothing for
+  any other outcome (M1's third slice).
+- It logs one `console.error` naming the outcome when the greeting cannot be shown, and nothing when
+  the view unmounts mid-request (M1's third slice).
+- `loadHello` in `src/client/hello.ts` turns a rejected `fetch`, or a body cut off while it is read,
+  into an `unreachable` outcome rather than a rejection (M1's third slice).
+
+*Reasoned — from the design comment on issue #7 and `src/client/`, 2026-09-27.*
+
 **Nothing about `bun test` can be measured here yet.** This app has no components and nothing is
 installed, so any claim tagged *Measured* against its own code is impossible by construction. What
 follows is established from Bun's documentation and issue tracker instead.

@@ -73,7 +73,14 @@ block is served by the dev server unchanged and emitted by the build lowered.
 
 *Measured — 2026-09-26, recorded with its method in [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).*
 
-**`pnpm preview` serves the built client with no API behind it**, so it is not the production-like
-run even though it serves the build. It is one of the pieces such a run would be assembled from.
+**`pnpm preview` serves the built client with the API behind it on one origin, and it is still not
+the production-like run.** Vite 8.3.1's `preview.proxy` defaults to `server.proxy`, so the `/api/`
+rule `vite.config.ts` gives the dev server applies to preview too, and `vite.config.test.ts` checks
+it. What it cannot show is how production serves the files and routes `/api/`, which is open in
+[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+and it still points the proxy at the server's default address. It is one of the pieces such a run
+would be assembled from.
 
-*Reasoned — from `vite.config.ts` and `package.json`, 2026-09-26.*
+*Measured — `preview: preview?.proxy ?? server.proxy` in Vite 8.3.1's
+`dist/node/chunks/node.js`, and `pnpm build && pnpm preview` answering `/api/hello` with the
+server's `Hello!` and `/apidocs` with the entry document, 2026-09-27.*

@@ -21,7 +21,7 @@ pnpm install
 ## Check a change
 
 ```sh
-pnpm test                        # every *.test.ts: server, client build, docs checker
+pnpm test                        # every *.test.ts: server, client, client build, docs checker
 pnpm typecheck                   # server, client and build config, each against its tsconfig
 python3 scripts/check-docs.py    # docs/: links, index entries, frontmatter
 ```
@@ -37,14 +37,19 @@ change that adds a way to run or observe something adds its section here.
 
 ```sh
 pnpm start                               # node src/server/main.ts on 127.0.0.1:3000
+curl -i http://127.0.0.1:3000/api/hello
 curl -i http://127.0.0.1:3000/hello
 HOST=localhost pnpm start
 ```
 
 - `pnpm start`: after pnpm's own `$ node src/server/main.ts` line, every line is JSON, and the first
   has `"msg":"Server listening at http://127.0.0.1:3000"`. `HOST` and `PORT` change the address.
-- `curl`: `200`, `content-type: text/plain`, body `Hello!`. Stdout gains an `incoming request` line
-  and a `request completed` line with the same `reqId`, the second carrying `responseTime`.
+- `curl /api/hello`: `200`, `content-type: text/plain`, body `Hello!`. Stdout gains an
+  `incoming request` line and a `request completed` line with the same `reqId`, the second carrying
+  `responseTime`.
+- `curl /hello`: `404` with a JSON body. Every route lives under `/api/`, per
+  [ADR-0041](docs/decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md),
+  and the server refuses to start if a route is registered anywhere else.
 - `HOST=localhost`: exits 1 with a `"level":60` line whose `problems` name `HOST`.
 
 Can't observe: how the server answers behind production's host and address, neither of which exists
@@ -67,21 +72,41 @@ curl -i http://127.0.0.1:3000/<slow-route>
 
 Can't observe: how production's host stops the process, since no host is chosen yet.
 
-## A browser shows the client
+## A browser shows the server's answer
+
+The client asks the server for `/api/hello` on its own origin, per
+[ADR-0040](docs/decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). Both
+Vite servers send every path under `/api/` to the server at `http://127.0.0.1:3000` and answer every
+other path themselves. Run the server in one terminal and one of the Vite servers in another:
 
 ```sh
+pnpm start                               # the API, on 127.0.0.1:3000
 pnpm dev                                 # http://localhost:5173/, live reload
 pnpm build && pnpm preview               # dist/client/ at http://localhost:4173/
-ls dist/client/assets/
+curl -i http://localhost:5173/api/hello  # or :4173 for preview
+curl -i http://localhost:5173/apidocs
 ```
 
-- Either address: the page shows "Hello!" with no console errors. The served document's `#root` is
-  empty and React fills it. The client does not call the server yet.
-- `dist/client/index.html` loads one script, `assets/index-<hash>.js`.
-- `pnpm preview` has no API behind it, so it is not the production-like run.
+- Either address: the page shows "Hello!", which it fetched from `/api/hello` on the same origin. The
+  served document's `#root` is empty until the answer arrives. The only console error is a 404 for
+  `/favicon.ico`, which does not exist.
+- `curl /api/hello`: the server's `200 text/plain` `Hello!`, and the server's stdout logs the request
+  with its path unchanged. An unknown path under `/api/` gets the server's `404` JSON.
+- `curl /apidocs`: the entry document with a `200`, as do `/` and `/api`. A key of `/api/` does not
+  take them.
+- With the server stopped: the page stays empty, `/api/hello` gets a `502`, the Vite terminal logs
+  `http proxy error: /api/hello` with `ECONNREFUSED 127.0.0.1:3000`, and the browser console logs
+  `the greeting could not be shown` with `{kind: "error-status", status: 502}`. A server started on
+  another port gets the same `502`, because the proxy target is fixed until
+  [how is the app run locally the way it runs deployed?](docs/questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+  settles how the two processes find each other.
+- `dist/client/index.html` loads one script, `assets/index-<hash>.js`, which asks for `/api/hello`
+  by a relative path.
 
-Can't observe: whether the built script parses on a browser at the floor. Nothing here runs one, and
-that check is owed at M2.
+Can't observe: how production serves the files and routes `/api/`, which is open in
+[what serves the client's files in production?](docs/questions/what-serves-the-clients-files-in-production.md);
+`pnpm preview` is the closest mode, not the production-like run. Nor whether the built script
+parses on a browser at the floor, since nothing here runs one; that check is owed at M2.
 
 ## In the Claude Code sandbox
 

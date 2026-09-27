@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-26
+updated: 2026-09-27
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -16,8 +16,8 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-**Actually** the only code is a server under `src/server/` that answers one route and a client under
-`src/client/` that renders "Hello!", and where the
+**Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client under
+`src/client/` that shows its answer, and where the
 system runs and what deploys it are open. Settled so far: the store is a SQLite
 file the server process opens, a service worker answers navigations, the entry document is a build output, the client build and the HTTP server are separate
 tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is
@@ -79,24 +79,15 @@ at M2, each of which may replace them.
 **You'll see** [ADR-0039](decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
 `CLAUDE.md` and `CONTRIBUTING.md` saying a change is verified in a production-like local run.
 
-**Actually** no such run exists. `pnpm dev` and `pnpm start` are the fast loop, and `pnpm preview`
-serves the built client with no API behind it. Building the production-like run is
+**Actually** no such run exists. `pnpm dev` and `pnpm start` are the fast loop. `pnpm preview` serves
+the built client with the API behind it on one origin, but not the way production will, which is not
+chosen yet. Building the production-like run is
 [how is the app run locally the way it runs deployed?](questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
 at M2.
 
-**So** verify in the fast loop, and record in [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't
-observe** what it cannot show.
-
-### The server answers `/hello` outside `/api/`
-
-**You'll see** [ADR-0041](decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md)
-saying every API path starts with `/api/`, and `src/server/app.ts` and
-[CONTRIBUTING.md](../CONTRIBUTING.md) using `/hello` at the root.
-
-**Actually** the route predates the record. M1's third slice moves it to `/api/hello` when the client
-first calls it.
-
-**So** put any new route under `/api/`, and leave `/hello` for that slice to move.
+**So** verify in the closest mode that exists, which for anything the browser sees is
+`pnpm build && pnpm preview` with the server running, and record in
+[CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't observe** what it cannot show.
 
 <!-- Template:
 

@@ -4,8 +4,8 @@ This will evolve eventually into an app serving logic puzzles (think grid-fillin
 sudoku, star battle, etc) plus a pipeline for generating them. The site will eventually have
 users whose progress must be reliably saved and restored.
 
-The product code is a server under `src/server/` that answers one route (M1 slice 1) and a client
-under `src/client/` that renders "Hello!" (M1 slice 2). Beside it are the docs checker in
+The product code is a server under `src/server/` that answers `/api/hello` (M1 slice 1) and a client
+under `src/client/` that shows its answer (M1 slices 2 and 3). Beside it are the docs checker in
 `scripts/` and the client build's tests in `vite.config.test.ts`. Much of the stack is settled
 on paper — see `docs/decisions/` for the language, the store engine, the client bundler and the
 runtime — and what remains open in the toolchain is listed under M2 in `docs/questions/README.md`.

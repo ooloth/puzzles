@@ -47,7 +47,8 @@ thing in M1 is the string the endpoint returns.
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
 requires the local arrangement to follow production's, which is one origin per
 [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). What the slice still has to answer is how API paths and client paths
-share that origin, and how the client loads what it asks for. Choosing a host is still the fourth
+share that origin. How the client loads data waits for M3, where the first content that becomes the
+board is fetched. Choosing a host is still the fourth
 slice.
 
 **Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
@@ -59,13 +60,12 @@ derivation.
 A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
 closes, and the slices left keep their numbers because records cite them by number.
 
-3. **The client calls the server's `/hello` route and shows the answer, locally.** Its two **Must
-   answer** entries are independent: neither answer changes what the other has to decide, so their
-   order below says nothing about which to take first.
+3. **The client calls the server's `/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
-   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is shown by a React view. It leaves data loading to be chosen, and [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not settle it either: it keeps state a promise covers out of the renderer and lets other state live inside it
-     - **Must answer:** [how-does-the-client-load-data-from-the-server](how-does-the-client-load-data-from-the-server.md) — or else M3's puzzle fetch inherits a loading path this slice built without an answer. A puzzle on the board is state [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) keeps out of the renderer, so a loading path inside a view is moved out again at M3, with the first real content already depending on it. Costs a re-scaffold of the client's loading path
+   - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is shown by a React view
+   - **Given:** [0037-the-renderer-draws-client-state-and-does-not-own-it](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) — state no promise covers "may live in the renderer", and no promise covers "Hello!", so the view may fetch and hold it itself
+   - **Deferred:** how the client loads data from the server. Its inputs are what crosses the boundary at M3, what implements the client's state at M5 and whether a puzzle is fetched before it is needed at M9, so it cannot be derived here. It is owned by [how does the client load data from the server?](how-does-the-client-load-data-from-the-server.md) at M3, which is listed there so that M3 answers it rather than copying this slice's fetch
    - **Given:** [0028-the-client-build-and-the-http-server-are-separate-tools](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md) — so locally the client and the API are two processes on two ports, and the browser sees two origins unless something joins them
    - **Given:** [0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md) — so how the local call is joined follows production's arrangement rather than convenience, and until M2 builds the production-like run this slice is verified in the closest mode with its gap recorded
    - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the client calls the API by a path on its own origin, and the local wiring is derived from that
@@ -216,41 +216,47 @@ board for six milestones and meeting the store for the first time with a finishe
    — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
 4. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
-5. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
+5. [How does the client load data from the server?](how-does-the-client-load-data-from-the-server.md)
+   — after the boundary above, which is its first input. This is the first fetch of content that
+   becomes the board, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
+   keeps out of the renderer, so M1's fetch of "Hello!" inside a view is not the pattern to copy. What
+   implements the client's state is answered at M5 and prefetching at M9, so this may need to settle
+   only where fetched content enters the client and leave when it is fetched to M9.
+6. [How is the store backed up?](how-is-the-store-backed-up.md) — the first row exists here, so this
    is where a backup stops being hypothetical. It sits at this milestone rather than later because
    setting it up alongside the store is when it is cheapest, and because the named precedent for
    deferring it is an operational inventory of roughly twenty-five tasks written for exactly this
    architecture with no backup or restore procedure in it. Distinct from
    [is the store's backup restorable?](is-the-stores-backup-restorable.md) at M11, which asks whether
    anyone has actually rehearsed one.
-6. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — before the
+7. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — before the
    settings below, because journal mode and busy timeout are applied through whatever opens the file.
    It sits here rather than at M1 because the first row is here, but its *openness* is a caveat on M1:
    the argument that the store does not narrow the runtime runs entirely through `node:sqlite`, which
    no record has chosen.
-7. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
+8. [What durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
    — journal mode, synchronous level and busy timeout decide whether a committed write survives a
    power cut, which [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left
    open. Answered here because the first row is the first thing that could be lost, and the question
    is framed to test whether the safest setting costs anything at all rather than to position a dial.
-8. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
+9. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there is
    data to lose is when it is cheapest, and
    [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) already schedules the change
    that forces one.
-9. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
-   — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
-   commits to surviving host replacement and the machine cannot deliver that alone. This is the main
-   lever on how long an outage lasts, and it is ours rather than a provider's.
-10. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
+10. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+    — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+    commits to surviving host replacement and the machine cannot deliver that alone. This is the main
+    lever on how long an outage lasts, and it is ours rather than a provider's.
+11. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
     there is no store at M1, so nothing can be disturbed there. What M1 owes this question is only
     that the host it picks *can* deploy without two processes holding one file, and that is recorded
     against [where does this run?](where-does-this-run.md) in that milestone. The rest —
     checkpointing on exit, replication across a restart, rolling back past a migration — is real from
     the first row.
-11. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
-   real secret exists here, because this is where the store gains a row and, if it is reached over a
-   network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
-   none.
+12. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+    real secret exists here, because this is where the store gains a row and, if it is reached over a
+    network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
+    none.
 
 ## M4 — a grid is on the screen
 

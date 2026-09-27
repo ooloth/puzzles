@@ -8,12 +8,19 @@ resolves_into: decision
 
 ## Why it matters
 
-M1's third slice is the first time the client asks the server for anything, and whatever it does
-becomes the pattern M3 copies for the first puzzle. A puzzle, once on the board, is state a guarantee
-covers, which
+M3 is the first time the client fetches content that becomes the board. A puzzle, once on the
+board, is state a guarantee covers, which
 [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) keeps out of
-the renderer. A loading path built inside a view for "Hello!" would then have to be moved out again
-at the point it starts carrying something that matters.
+the renderer. So whatever loads it has to hand it to the state code rather than hold it in a view.
+
+M1's third slice fetches "Hello!" before this is answered, and does it inside a view, which
+[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) allows for state
+no promise covers. That fetch is not the pattern M3 copies. This question is listed at M3 so that M3
+answers it instead.
+
+Its inputs arrive at different milestones: what crosses the boundary at M3, what implements the
+client's state at M5, and whether a puzzle is fetched before it is needed at M9. So M3 may settle
+only where fetched content enters the client, and leave when it is fetched to M9.
 
 This is client code, so it is the same in every environment. Where the request goes is the client's
 own origin, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md).
@@ -37,7 +44,9 @@ A decision record in [../decisions/](../decisions/).
 ## Source
 
 Raised 2026-09-26, while drafting M1's third slice as an issue. Its entry claimed [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) put the
-fetch outside the renderer, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not say.
+fetch outside the renderer, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) does not say. Moved from that slice to M3 on
+2026-09-26, because the inputs named under **What would settle it** are answered at M3, M5 and M9, so
+it could not be derived at M1.
 
 ## Options
 

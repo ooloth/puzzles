@@ -83,9 +83,14 @@ other path themselves. Run the server in one terminal and one of the Vite server
 pnpm start                               # the API, on 127.0.0.1:3000
 pnpm dev                                 # http://localhost:5173/, live reload
 pnpm build && pnpm preview               # dist/client/ at http://localhost:4173/
-curl -i http://localhost:5173/api/hello  # or :4173 for preview
-curl -i http://localhost:5173/apidocs
+curl -i http://localhost:5173/api/hello             # or :4173 for preview, in each curl here
+curl -i http://localhost:5173/api/does-not-exist
+curl -i http://localhost:5173/apidocs               # also / and /api
+curl -i http://localhost:5173/hello                 # differs between dev and preview
+grep -o '.\{12\}/api/hello.\{2\}' dist/client/assets/*.js
 ```
+
+Then stop `pnpm start` and reload the page, and start it again with `PORT=3001` and reload once more.
 
 - Either address: the page shows "Hello!", which it fetched from `/api/hello` on the same origin. The
   served document's `#root` is empty until the answer arrives. The only console error is a 404 for
@@ -94,14 +99,17 @@ curl -i http://localhost:5173/apidocs
   with its path unchanged. An unknown path under `/api/` gets the server's `404` JSON.
 - `curl /apidocs`: the entry document with a `200`, as do `/` and `/api`. A key of `/api/` does not
   take them.
+- `curl /hello`: in `pnpm dev`, `200 text/javascript`, because the dev server serves
+  `src/client/hello.ts` for it (see [docs/gotchas.md](docs/gotchas.md)); in `pnpm preview`, the entry
+  document. Neither reaches the server.
 - With the server stopped: the page stays empty, `/api/hello` gets a `502`, the Vite terminal logs
   `http proxy error: /api/hello` with `ECONNREFUSED 127.0.0.1:3000`, and the browser console logs
   `the greeting could not be shown` with `{kind: "error-status", status: 502}`. A server started on
   another port gets the same `502`, because the proxy target is fixed until
   [how is the app run locally the way it runs deployed?](docs/questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
   settles how the two processes find each other.
-- `dist/client/index.html` loads one script, `assets/index-<hash>.js`, which asks for `/api/hello`
-  by a relative path.
+- `dist/client/index.html` loads one script, `assets/index-<hash>.js`. The `grep` finds
+  `` `/api/hello` `` with no scheme or host in front of it.
 
 Can't observe: how production serves the files and routes `/api/`, which is open in
 [what serves the client's files in production?](docs/questions/what-serves-the-clients-files-in-production.md);

@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-26
+updated: 2026-09-27
 update_when: you were surprised
 decays: slow
 status: active
@@ -24,6 +24,16 @@ Clear site data.
 Bites you when: `pnpm dev` seems to serve something other than `src/client/`. `curl` shows what the
 server actually sends. From M9 the app registers its own service worker on this address, which
 makes this more likely.
+
+### `pnpm dev` serves `/hello` as JavaScript
+
+Actually: the dev server answers a path that names a module under `src/client/` with that module,
+with or without its extension, so `/hello`, `/app` and `/main` get `200 text/javascript`. Only a
+path that names no file gets the entry document. `pnpm preview` serves the build, where those
+modules are bundled away, so the same paths get the entry document there.
+Bites you when: `/hello` seems to answer through `pnpm dev` although the server moved it to
+`/api/hello`, or a client URL shadows a module name. `curl -i http://localhost:4173/hello` against
+`pnpm preview` shows what a browser gets from the build.
 
 ### `pnpm` is whatever Corepack hands back
 

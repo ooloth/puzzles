@@ -60,7 +60,7 @@ derivation.
 A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
 closes, and the slices left keep their numbers because records cite them by number.
 
-3. **The client calls the server's `/hello` route and shows the answer, locally.**
+3. **The client calls the server's `/api/hello` route and shows the answer, locally.**
    - **Given:** [input-registers-without-waiting-for-the-network](../guarantees/input-registers-without-waiting-for-the-network.md)
    - **Given:** [0035-the-http-handler-is-fastify](../decisions/0035-the-http-handler-is-fastify.md) — so the first call across the boundary meets a handler that is already chosen, and what the call carries is [what crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) at M3 rather than anything this slice settles
    - **Given:** [0038-the-renderer-is-react](../decisions/0038-the-renderer-is-react.md) — so the answer is shown by a React view

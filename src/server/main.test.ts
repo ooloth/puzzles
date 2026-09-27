@@ -2,14 +2,18 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { createInterface } from "node:readline";
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 
 type LogLine = { level: number; msg: string; reqId?: string; responseTime?: number; problems?: string[] };
 
 const entry = new URL("./main.ts", import.meta.url).pathname;
 
-function startMain(env: Record<string, string>) {
+function startMain(t: TestContext, env: Record<string, string>) {
   const child = spawn(process.execPath, [entry], { env: { ...process.env, ...env }, stdio: ["ignore", "pipe", "inherit"] });
+  // A failed assertion must not leave the server running, or the whole test run waits on it.
+  t.after(() => {
+    if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+  });
   const lines: LogLine[] = [];
   const waiters: Array<() => void> = [];
   createInterface({ input: child.stdout }).on("line", (line) => {
@@ -33,8 +37,8 @@ function startMain(env: Record<string, string>) {
   return { child, lines, lineMatching, exited };
 }
 
-test("the server logs JSON, answers /hello, and exits 0 on SIGTERM", { timeout: 10_000 }, async () => {
-  const server = startMain({ HOST: "127.0.0.1", PORT: "0" });
+test("the server logs JSON, answers /hello, and exits 0 on SIGTERM", { timeout: 10_000 }, async (t) => {
+  const server = startMain(t, { HOST: "127.0.0.1", PORT: "0" });
   const listening = await server.lineMatching((line) => line.msg.startsWith("Server listening at "));
   const origin = listening.msg.replace("Server listening at ", "");
   assert.match(origin, /^http:\/\/127\.0\.0\.1:\d+$/);
@@ -51,20 +55,20 @@ test("the server logs JSON, answers /hello, and exits 0 on SIGTERM", { timeout: 
   assert.equal(await server.exited, 0);
 });
 
-test("a hostname as HOST stops the server before it listens, naming HOST", { timeout: 10_000 }, async () => {
-  const server = startMain({ HOST: "localhost", PORT: "0" });
+test("a hostname as HOST stops the server before it listens, naming HOST", { timeout: 10_000 }, async (t) => {
+  const server = startMain(t, { HOST: "localhost", PORT: "0" });
   assert.equal(await server.exited, 1);
   const fatal = server.lines.find((line) => line.level === 60);
   assert.ok(fatal?.problems?.some((problem) => problem.startsWith("HOST: ")));
   assert.ok(!server.lines.some((line) => line.msg.startsWith("Server listening at ")));
 });
 
-test("a port already in use stops the server with exit 1 and a fatal line", { timeout: 10_000 }, async () => {
-  const first = startMain({ HOST: "127.0.0.1", PORT: "0" });
+test("a port already in use stops the server with exit 1 and a fatal line", { timeout: 10_000 }, async (t) => {
+  const first = startMain(t, { HOST: "127.0.0.1", PORT: "0" });
   const listening = await first.lineMatching((line) => line.msg.startsWith("Server listening at "));
   const port = new URL(listening.msg.replace("Server listening at ", "")).port;
 
-  const second = startMain({ HOST: "127.0.0.1", PORT: port });
+  const second = startMain(t, { HOST: "127.0.0.1", PORT: port });
   assert.equal(await second.exited, 1);
   assert.ok(second.lines.some((line) => line.level === 60 && line.msg === "server failed to start"));
 

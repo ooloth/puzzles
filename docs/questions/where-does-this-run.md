@@ -46,7 +46,109 @@ surface turns out to be yours that no comparison page will.
 
 ## Properties the answer is scored against
 
-...
+Derived on 2026-09-27, before any candidate was compared, from the moments the system touches the
+host:
+
+- a browser's first navigation to the app's address, and the DNS answer it resolves first;
+- a returning player's first API call after a gap of hours or days;
+- a request that reads or writes the store, from M3;
+- a deploy, a process restart, and the machine being replaced;
+- installing and starting what was built;
+- the host's own probes of the server;
+- a copy of the store leaving the machine, from M3;
+- the same change being checked in the production-like local run first.
+
+1. **The client's files and the API answer on one hostname, with every path under `/api/` reaching
+   the server.** Rests on
+   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and
+   [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
+2. **The app's hostname can resolve with A/AAAA records to an address the host serves from, with no
+   CNAME to a provider's domain required.** Rests on the Safari first-party comparison in
+   [../constraints.md](../constraints.md): a CNAME to a provider's domain may cap the API's cookie at
+   seven days even on one origin. That entry is reasoned from WebKit source and unobserved.
+   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) keeps
+   that cookie reachable without relying on it, and this property is what keeps it reachable.
+3. **Nothing between the browser and the server caches an API response or strips `Set-Cookie`,
+   unless we configure it to.** Rests on
+   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), Risk,
+   and properties 6 and 9 of
+   [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
+4. **The server process runs continuously and is never stopped or suspended for inactivity.** Rests
+   on [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md).
+5. **It is an ordinary long-running Node process on a version we choose.** Rests on
+   [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md),
+   [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) and
+   [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md).
+6. **The process writes to a local filesystem, not a network filesystem.** Rests on
+   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) and "Databases — SQLite
+   is not safe on a network filesystem" in [../constraints.md](../constraints.md).
+7. **What the process writes survives a restart and a redeploy.** Rests on
+   [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
+8. **A deploy never has two processes holding the store's file at once.** Rests on
+   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), which rejects more than
+   one process sharing the file.
+9. **The file can be copied off the machine while the server runs.** Rests on
+   [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md):
+   surviving host replacement needs a copy that is not on the machine. How the copy is taken is M3's.
+10. **The deployed dependency tree is pnpm's symlinked layout, unchanged.** Rests on
+    [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), whose Revisit when names this
+    host, and
+    [no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md).
+11. **What the host runs can be run locally, with the same artifact and runtime.** Rests on
+    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
+    the production-like run differs from production only where a record says why.
+12. **Anything the host requests from the server can sit under `/api/`, or be switched off.** Rests on
+    the Risk in
+    [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md),
+    which names a health-check path fixed outside `/api/` as an exception to avoid.
+13. **Whatever terminates TLS for the browser offers TLS 1.3.** Rests on "Mobile networks — setup
+    cost, not bandwidth" in [../constraints.md](../constraints.md): a fresh connection costs three to
+    four round trips depending on TLS version, at 270ms or more each.
+
+**Resources.**
+
+- **Network binds**, as round trips rather than bytes. It is covered by properties 1, 2, 4 and 13,
+  and by the region, which is deferred below.
+- **CPU does not bind.** "Servers — framework throughput is three orders of magnitude above this
+  workload" in [../constraints.md](../constraints.md). The generator is not placed on this host by
+  any record, so its CPU is not an input here.
+- **Memory does not bind as a property**, but has a floor to measure: the server's resident memory
+  against the smallest instance a candidate sells. "Runtimes — a heap ceiling does not bound a
+  process" in [../constraints.md](../constraints.md) is why the figure is resident memory and not
+  heap.
+- **Storage does not bind on size.** There is no store at M1, and one board is small per "Mobile
+  networks" in [../constraints.md](../constraints.md). What binds about storage is where it is and
+  what it survives, which is properties 6 to 9.
+
+**Checked and found binding on nothing:**
+
+- **Whether the host streams responses unbuffered.** No record uses a streaming response.
+- **Horizontal scaling.** [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)
+  already forecloses it.
+- **Surviving the machine's own failure.**
+  [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+  records that no provider offers it, and that recovery speed is set by our own automation more than
+  by the provider.
+- **The demonstration purpose in [../problem.md](../problem.md).** Its own guard admits nothing that
+  would not be worth building anyway, so it rules nothing in.
+
+**Cost is a tie-breaker, not a property.** Per the maintainer on 2026-09-27, recorded in
+[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md), it separates only
+candidates that the list above does not. Free is strongly preferred for roughly the first year.
+
+**Deferred, because their inputs belong to later milestones:**
+
+- **The region**, and so the round trip to the machine. See
+  [which region does the machine run in?](which-region-does-the-machine-run-in.md) at M3. A
+  candidate's region list is recorded, not scored.
+- **How much downtime is acceptable.** See
+  [how much downtime is acceptable?](how-much-downtime-is-acceptable.md) at M16.
+- **How the machine is reached, patched and watched.** See
+  [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) at M2 and
+  [how is the server operated?](how-is-the-server-operated.md) at M11. This is where a managed
+  platform and a bare machine differ most. With it deferred, the list may not separate those two
+  tiers at all. If it does not, that is the finding, and the choice between them is made on cost as
+  stated above rather than dressed as a derivation.
 
 ## Resolves into
 

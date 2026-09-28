@@ -230,6 +230,11 @@ board for six milestones and meeting the store for the first time with a finishe
     real secret exists here, because this is where the store gains a row and, if it is reached over a
     network, a credential. [What deploys the code?](what-deploys-the-code.md) records that M1 needs
     none.
+13. [Which region does the machine run in?](which-region-does-the-machine-run-in.md) — every wait a
+    player has includes the round trip to the one machine
+    [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) allows, and nothing
+    says where the players are. At M1 moving the machine is a redeploy. From the first row it moves
+    the store too, which is why it is answered here.
 
 ## M4 — a grid is on the screen
 

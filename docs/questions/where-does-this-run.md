@@ -60,10 +60,9 @@ Options and findings ported from legacy ADR-12 (host on Fly.io).
 
 ## Options
 
-**Everything below is unverified research, not a shortlist.** Every figure dates from 2026 with no
-link recorded, every reputational claim is sourced to unnamed community reports, and the comparison
-assumes same-origin serving, which [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) settles. None of it decides anything until it has been
-re-checked against the vendor.
+**This is an inherited list, not a shortlist.** Its figures were re-checked on 2026-09-27, in the
+pass under Findings, and the field itself has not been rebuilt: an option absent here was never
+considered rather than rejected.
 
 *Fly.io.* Managed micro-VMs. TLS, health-checked restarts and Prometheus/Grafana without running any
 of it yourself. An optimised configuration — one `shared-cpu-1x`, 256MB, shared IPv4, scheduled
@@ -73,22 +72,27 @@ published prices against the vendor. Against it: shared-CPU steal,
 per-app billing that does not amortise across deployables, and volume snapshots billed with
 compounding retention.
 
-*Hetzner.* A bare VPS, roughly $4.59/month for 2 vCPU and 4GB. More compute headroom, simpler
-tooling, fixed predictable cost. Full operational ownership — patching, TLS, monitoring — with no
-managed offset.
+*Hetzner.* A bare VPS. Its 2 vCPU / 4GB CX23 is €5.49/month since the 15 June 2026 price
+adjustment, but that line is EU-only and its order page showed it unavailable on 2026-09-27; the US
+locations carry only the CPX line, whose price was not confirmed. See the 2026-09-27 pass below. Full
+operational ownership — patching, TLS, monitoring — with no managed offset.
 
-*Google Compute Engine e2-micro, "Always Free".* Roughly $3-4/month once its external IPv4 fee is
-counted, so not free. Locked to three US regions, with a tighter compute ceiling and real GCP
-console complexity.
+*Google Compute Engine e2-micro, "Always Free".* Not free once an external IPv4 is counted, whose fee
+was not confirmed on a Google page. Locked to three US regions (`us-west1`, `us-central1`,
+`us-east1`), with a tighter compute ceiling and real GCP console complexity.
 
-*DigitalOcean or Linode.* Roughly $24/month for specs equivalent to Hetzner's — around five times
-the cost with no capability gap relevant here.
+*DigitalOcean or Linode.* $24/month each for 2 vCPU / 4GB, confirmed 2026-09-27; their cheapest
+plans are $4 and $5.
+
+*Cloudflare Containers.* Out: "All disk is ephemeral", so it fails
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
+See the 2026-09-27 pass below.
 
 *Cloudflare Workers and the rest of the constrained-isolate tier.* Ruled out by
 [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md), because the store
 cannot be at the edge and edge compute reading a central store adds a hop rather than removing one.
-Cloudflare as a *platform* is not ruled out — Containers runs an ordinary container — so this
-excludes a runtime tier rather than a vendor.
+This excludes a runtime tier rather than a vendor; Cloudflare's container tier is out on its disk,
+per the entry above.
 
 *Google Cloud Run and the rest of the serverless tier.* Ruled out on two counts.
 [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
@@ -127,13 +131,9 @@ costlier to reverse than its price comparisons suggest.
 
 *Sourced — per [../constraints.md](../constraints.md).*
 
-**Structural platform facts, which need re-checking but are not price claims.** Fly volumes are
-single-attach without LiteFS, so two processes sharing one file must sit on one machine. Cloud Run
-has an ephemeral filesystem and a hard sixty-minute request timeout. Cloudflare Workers has no
-persistent process and no local filesystem. Fly's per-app billing scales roughly linearly per
-deployable with no bundling discount across apps.
-
-*Unverified — no source recorded.*
+**Structural platform facts** were unsourced here until 2026-09-27, and are now in the pass at the
+end of this file with their sources. One of them did not survive: Fly's reserved capacity gives a
+discount that pools across an organisation's apps, so "no bundling discount across apps" is false.
 
 **A platform in the edge tier is not the same thing as a constrained runtime, and pricing this list
 should not assume it is.** Cloudflare Containers is generally available on the Workers Paid plan and
@@ -153,18 +153,12 @@ whether an embedded store is reachable on a given platform at all, and it is the
 this list having one column or two.
 
 Check it for each candidate rather than by reputation: a container platform, a micro-VM with a
-volume, a plain machine, and the managed tier. Cloudflare Containers specifically was not checked for
-this — its documentation was read for what it is *for*, not for what its disk guarantees.
+volume, a plain machine, and the managed tier. Answered for Cloudflare Containers, Cloud Run, Fly,
+Railway, Render and Hetzner in the 2026-09-27 pass below; not yet for any candidate not named there.
 
-*Unverified — the question has been posed and not answered.*
-
-**Figures and reputational claims.** Every price above dates from 2026 research with no links
-recorded. The claim that Fly's `shared-cpu-1x` tier suffers sustained CPU steal — described as 70%
-or worse on some hosts, with a free destroy-and-reclone as the first remedy and `performance-1x` a
-3-10x cost jump — is sourced to unnamed community reports. Useful as orientation about what to look
-into; not evidence.
-
-*Unverified — no source recorded.*
+**A claim about Fly CPU steal was found unsourced on 2026-09-27 and deleted.** It described 70% or
+worse on some hosts, sourced to unnamed community reports. What Fly documents instead is in the pass
+below.
 
 **Backups cover data loss, not downtime.** One machine with one volume has zero hardware-failure
 redundancy, and that holds for a bare VPS exactly as much as for a managed platform. See
@@ -198,13 +192,13 @@ structural rather than a consequence of low traffic — see
 derivation. So wake-up latency lands on most waits in the product, and it does not improve with growth.
 
 **Fly.io distinguishes suspend from stop, and only one of them is fast.** Resume from suspended is
-"a few hundred ms"; cold start from fully stopped is "~2+ seconds for common apps". Stopping a
-suspended machine invalidates its snapshot, forcing a cold boot next start. Fly's own docs warn that
-resuming from suspend can produce clock skew affecting JWT validation, cron and TLS checks, and
-recommend `stop` over `suspend` for clock-sensitive apps.
+"a few hundred ms"; cold start from fully stopped is "~2+ seconds for common apps". On resume, "the
+clock can lag a few seconds until NTP syncs", and deploying new code discards the snapshot.
 
-*Sourced — [fly.io/docs/reference/suspend-resume](https://fly.io/docs/reference/suspend-resume/),
-second-hand from a research agent 2026-09-02.*
+*Sourced — [docs.fly.io/reference/suspend-resume](https://docs.fly.io/reference/suspend-resume/),
+re-read by a research agent 2026-09-27. Two claims previously here were not found on the page and
+were deleted: that stopping a suspended machine invalidates its snapshot, and that Fly recommends
+`stop` over `suspend` for clock-sensitive apps.*
 
 **Fly volumes are not replicated, stated first-party.** "If your app needs a volume to function, and
 the NVMe drive hosting your volume fails, then that instance of your app goes down. There's no way
@@ -226,10 +220,13 @@ agent 2026-09-02. The latency figure is explicitly unverified.*
 **Vercel's free plan restriction is stricter than "do we charge users".** The pricing page says the
 Hobby plan "is for personal, non-commercial use", and the Fair Use Guidelines define commercial usage
 as "any Deployment that is used for the purpose of financial gain of anyone involved in any part of
-the production of the project, including a paid employee or consultant writing the code." Donations
-are named as commercial usage.
+the production of the project, including a paid employee or consultant writing the code." Donations are
+not: the same page says "Asking for Donations does not fall under commercial usage."
 
-*Sourced — Vercel's pricing and fair-use pages, second-hand from a research agent 2026-09-02.*
+*Sourced — [Hobby plan](https://vercel.com/docs/plans/hobby) and
+[fair-use guidelines](https://vercel.com/docs/limits/fair-use-guidelines), re-read by a research agent
+2026-09-27. This file said until then that donations counted as commercial usage, which the page
+contradicts.*
 
 **Cloudflare began hard-enforcing D1's free-tier daily limits on 2026-09-01.** Exceeding them returns
 errors rather than billing: "When your account hits the daily read and/or write limits, you will not be
@@ -241,12 +238,14 @@ written/day.
 from a research agent citing Cloudflare's changelog, and I did not open it.*
 
 **A managed platform's control plane can take its own backups down with it.** In May 2026 Google Cloud
-auto-suspended Railway's production GCP account; customer databases went offline and customers could
-not retrieve their backups, because backup storage sat behind the same control plane. Blast radius was
-set by a dependency the customer did not choose and could not see.
+auto-suspended Railway's production GCP account, which "took our API, control plane and databases
+offline". With the dashboard and API down, customers could not retrieve their backups during the
+incident. Blast radius was set by a dependency the customer did not choose and could not see.
 
-*Sourced — second-hand from a research agent cross-referencing InfoQ and Railway's status history. Not
-opened by me; re-check before this decides anything.*
+*Sourced — Railway's [incident report](https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage)
+and [InfoQ](https://www.infoq.com/news/2026/05/railway-gcp-account-outage/), read by a research agent
+2026-09-27. Not opened by me. The earlier wording here said backup storage sat behind the same control
+plane; neither source says that, and it was removed.*
 
 **Free tiers behave like outage modes at this traffic level.** Supabase pauses free projects after
 7 days of low activity, restorable for up to a year; Render's free Postgres expires 30 days after
@@ -317,3 +316,130 @@ hatch withdraws
 exactly that reason. A host that runs an ordinary process on an ordinary disk — which
 [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) already requires — does not
 have this problem, so the two constraints point the same way.
+
+### Re-checked 2026-09-27, before the properties were derived
+
+*Tier per claim. "Opened by me" means the session that wrote this pass read the page itself; the rest
+were read by research agents that day and are passed on as theirs.*
+
+**Cloudflare Containers cannot hold the store.** "All disk is ephemeral. When a Container instance
+goes to sleep, the next time it is started, it will have a fresh disk as defined by its container
+image." Instances sleep after 10 minutes by default, and "Cloudflare does not guarantee that any
+container instance will run for any set period of time." That fails
+[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+and [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md). The product went GA
+on 2026-04-13 on Workers Paid, and its docs list disk snapshots as "coming soon".
+
+*Sourced — [Containers FAQ](https://developers.cloudflare.com/containers/faq/), opened by me
+2026-09-27. GA date from the [changelog](https://developers.cloudflare.com/changelog/post/2026-04-13-containers-sandbox-ga/),
+read by an agent. Reverses if a persistent disk ships.*
+
+**Cloud Run has no persistent local disk.** "It is an in-memory file system, so writing to it uses the
+instance's memory." "Data written to the file system doesn't persist when the instance stops." Its
+volume types are Cloud Storage FUSE, NFS and in-memory. The request timeout is at most 60 minutes, and
+min-instances defaults to 0.
+
+*Sourced — [container contract](https://docs.cloud.google.com/run/docs/container-contract) opened by
+me 2026-09-27; volume types, timeout and min-instances read by an agent.*
+
+**Cloudflare Workers can write files now, and nothing persists.** `node:fs` shipped 2025-08-15 as "a
+virtual file system [that] is ephemeral with each individual request having its own isolated
+temporary file space."
+
+*Sourced — [changelog](https://developers.cloudflare.com/changelog/post/2025-08-15-nodejs-fs/), read
+by an agent 2026-09-27.*
+
+**Every volume-backed platform checked stops the old instance before starting the new one, so none
+runs two processes against one file during a deploy.**
+
+- **Fly.** Rolling is "the default strategy for apps with or without volumes. One by one, each running
+  Machine is taken down and replaced by a new release Machine." Canary and bluegreen "cannot be used
+  for Machines with attached volumes". "A volume can be attached to only one Machine."
+- **Railway.** "To prevent data corruption, we prevent multiple deployments from being active and
+  mounted to the same service. This means that there will be a small amount of downtime when
+  re-deploying a service that has a volume attached."
+- **Render.** "Adding a disk to a service prevents zero-downtime deploys." "Render stops the existing
+  instance before bringing up the new instance." Disk data is preserved across deploys and restarts.
+- **Hetzner**, or any bare machine, has no deploy model of its own, so single-writer safety is
+  whatever the deploy we write does.
+
+*Sourced — Fly's [configuration reference](https://docs.fly.io/reference/configuration/) and Railway's
+[volumes reference](https://docs.railway.com/reference/volumes) opened by me 2026-09-27; Fly's
+[volumes overview](https://docs.fly.io/volumes/overview/) and Render's
+[disks page](https://render.com/docs/disks) read by an agent.*
+
+**So the price of single-writer safety is a few seconds of downtime per deploy**, on every managed
+platform checked. It is reasoned from the four entries above.
+
+**Fly documents its shared-CPU quota.** "For each 80ms period of time, we set a quota of 5ms for each
+shared vCPU", which is a 6.25% baseline with a burst balance above it, and throttling is reported as
+its own metric, `fly_instance_cpu_throttle`.
+
+*Sourced — [CPU performance](https://docs.fly.io/machines/cpu-performance/), read by an agent
+2026-09-27.*
+
+**Fly's shared-cpu-1x prices could not be re-read on 2026-09-27.** The pricing page renders its table
+in script, and successive agent fetches returned different numbers. The last verified figures are
+the ones [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) records from
+2026-09-04. Re-read them in a browser before cost decides anything. A shared IPv4 is free and a
+dedicated one is "$2/month". Fly's reserved capacity gives "a 40% discount" and applies "in any of your
+organisation's apps".
+
+*Sourced — Fly's cost-management and pricing pages, read by an agent 2026-09-27.*
+
+**Fly recommends A and AAAA records at the apex, not a CNAME.** "In general, we recommend setting
+A/AAAA records on the apex domain." That bears on the Safari CNAME comparison in
+[../constraints.md](../constraints.md), and on
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
+Cloudflare DNS, where the domain is registered, flattens a CNAME at the apex and returns "the final IP
+address instead of a CNAME record". Whether a flattened answer satisfies Safari's comparison is
+reasoned rather than observed.
+
+*Sourced — Fly's [custom domain docs](https://docs.fly.io/networking/custom-domain/) and Cloudflare's
+[CNAME flattening](https://developers.cloudflare.com/dns/cname-flattening/), read by agents
+2026-09-27.*
+
+**Hetzner: prices moved, US stock differs, and its volumes are network block storage.**
+
+- CX23 €5.49, CAX11 €5.99 and CX33 €8.49 since "15 June 2026". The Cost-Optimized page showed "This
+  product is currently unavailable" for every plan on 2026-09-27, and that line is EU-only.
+- Ashburn and Hillsboro carry only the CPX line. A US CPX11 price of about $20.49 is from third-party
+  trackers and is unverified.
+- Locations are Falkenstein, Nuremberg, Helsinki, Ashburn, Hillsboro and Singapore.
+- Volumes "are based on the networked block storage model". A block device is not a network
+  filesystem, so [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) does not
+  rule them out on its own terms. The server's own disk is "local NVMe SSD".
+- The primary IPv4 fee was found at €1.70 on a dedicated-server page. A Cloud-specific figure was not
+  confirmed.
+
+*Sourced — Hetzner's price-adjustment, locations, volumes and architecture docs, read by an agent
+2026-09-27. The $4.59 figure previously here matched the pre-April-2026 CX22 and was replaced.*
+
+**GCE's free e2-micro regions are `us-west1`, `us-central1` and `us-east1`, with a 30 GB-month
+standard persistent disk.** Its external IPv4 fee is about $2.92/month from secondary sources only,
+because Google's pricing page did not render for the agent.
+
+*Sourced for the regions and disk — [free-tier features](https://docs.cloud.google.com/free/docs/free-cloud-features),
+read by an agent 2026-09-27. The IPv4 figure is unverified.*
+
+**DigitalOcean and Linode both charge $24/month for 2 vCPU / 4GB**, and their cheapest plans are $4
+and $5.
+
+*Sourced — both pricing pages, read by an agent 2026-09-27.*
+
+**Railway's services do not sleep unless its opt-in Serverless setting is on, and Hobby is
+$5/month.** Render's always-on Starter tier is said to be $7/month, and its pricing page did not render
+to the agent, so that price is unverified.
+
+*Sourced for Railway — [app sleeping](https://docs.railway.com/reference/app-sleeping) and
+[plans](https://docs.railway.com/reference/pricing/plans), read by an agent 2026-09-27.*
+
+**Confirmed unchanged on 2026-09-27**, each read by an agent:
+
+- D1's free limits, and their enforcement from 2026-09-01, per the
+  [changelog](https://developers.cloudflare.com/changelog/post/2026-09-01-d1-free-tier-limit-enforcement/).
+- Supabase's 7-day pause, restorable for 1 year.
+- Render's 30-day free Postgres expiry with a 14-day grace period.
+- Heroku's one-package-manager rule.
+- Railpack reading `packageManager` before lockfiles.
+- pnpm naming serverless providers without symlink support as a reason for `hoisted`.

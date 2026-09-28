@@ -626,6 +626,9 @@ means those slices are finished rather than missing. A milestone is finished whe
 [../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
 record has not settled; mine it first, since findings graduate to
 [../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
+**Mining happens in the change that lands the record, never later.** A finding a still-open question
+will use moves into that question's file then, so no answered file is kept waiting for a later
+record to take what it needs.
 **Mining moves a claim's tier and source with it**, or the record inherits a bare assertion and the
 evidence dies with the file. Where the working is too long to move, cite the commit that deleted it —
 `git show <commit>^:<path>` still reads it.
@@ -673,9 +676,8 @@ looked and there is nothing — no blockers, or no options because the question 
 fact rather than a choice.
 
 Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, `problem`, or
-`unsettled`. `status` is `open`, or `answered` for a file whose record has landed and which is
-waiting only to be mined and deleted; nothing else should carry `answered`, because a question that
-is answered and not being deleted is one nobody finished. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
+`unsettled`. `status` is `open`. A question whose record lands is mined and deleted in that change, so a file
+carrying `answered` is one nobody finished. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
 research backlog, and everything resolving into a decision is a choice waiting to be made.
 
 **`unsettled` means where the answer lands has not been argued**, not that the question is unanswered

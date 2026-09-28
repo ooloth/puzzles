@@ -315,7 +315,10 @@ record what you find.
    record it is.
 1. Author the ADR. Its Decision carries the numbered properties from step 4 under **Scored
    against**, and each Rejected entry names the property it fails.
-1. For any resolved question files, mine any valuable content and then delete them.
+1. For any resolved question files, mine any valuable content and then delete them, in the same
+   change as the record. A finding that a still-open question will use moves into that question's
+   file with its tier and source, rather than the resolved file being kept until a later record can
+   take it.
 
    **Commit the worked question file before deleting it.** `docs/questions/README.md` says that where
    the working is too long to move, you cite the commit that deleted it and `git show <commit>^:<path>`

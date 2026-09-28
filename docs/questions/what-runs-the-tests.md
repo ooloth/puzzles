@@ -124,9 +124,7 @@ about this defect, which matches nothing in the tracker.
 *Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent which quoted
 39768's comparison table verbatim. I did not open them.*
 
-*Two things about those issues that a reader will otherwise get wrong, the same as in
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
-Issue 39768 is closed as a duplicate of issue 5540, which moves where the defect is tracked rather
+*Two things about those issues that a reader will otherwise get wrong. Issue 39768 is closed as a duplicate of issue 5540, which moves where the defect is tracked rather
 than fixing it, so 5540 is the issue to watch. Issue 40077 is an omnibus report bundling four
 findings, of which the ~30 GB allocation is one, so its state says nothing about snapshots alone. The
 quantified reports cover single nodes: any figure for what a whole suite costs is unsourced wherever
@@ -137,8 +135,3 @@ under Bun when last checked.
 
 *Sourced — Vitest's own test matrix, read 2026-09-04. Its currency is unknown, and claims about this
 field go stale in days, so re-check it before it decides anything.*
-
-**The `bun test` findings above are duplicated in
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md)
-and this file is the one that keeps them.** That file is answered by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) and scheduled for
-deletion, and the duplication ends there rather than needing an edit now.

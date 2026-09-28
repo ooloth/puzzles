@@ -152,8 +152,9 @@ at M2, and until that lands the promise rests on compatibility data rather than 
       [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
       and
       [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md)
-- [x] `questions/what-builds-the-client-and-serves-it-in-development.md` — its Bun entry now carries a
-      disqualification rather than an observation waiting on a matrix
+- [x] The bundler question — its Bun entry now carries a disqualification rather than an
+      observation waiting on a matrix, read with
+      `git show aef41be:docs/questions/what-builds-the-client-and-serves-it-in-development.md`
 - [x] Nothing in `architecture.md` — this constrains what the build emits, not where anything sits
 - [x] Nothing in `glossary.md` — no new domain term
 

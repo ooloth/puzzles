@@ -34,8 +34,8 @@ noticing either happening. Four things are open, none of which
 - **What the precache holds besides the document** — the bundle, styles, fonts, and how much puzzle
   content, which is where this meets
   [what can a player do with no network?](what-can-a-player-do-with-no-network.md).
-- **How the manifest is generated**, which is a build output and so waits on
-  [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+- **How the manifest is generated**, which is a build output of Vite, per
+  [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md).
 - **What strategy anything other than a navigation uses** — the API, puzzle content, assets.
 - **How a bad service worker is recovered from**, since it fails by serving an old app indefinitely
   rather than by crashing.
@@ -60,6 +60,26 @@ browser and never how a browser keeps them.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Plain Vite has a maintained integration that generates the precache manifest.**
+`vite-plugin-pwa` 1.3.0, published 2026-05-05, runs `workbox-build` against Vite's output.
+`workbox-build` is at 7.4.1, published 2026-05-04, is not archived, and its README states that
+Chrome's Aurora team owns it. Its `injectManifest` and `generateSW` work on a directory of built
+files rather than on a bundler, so a hand-written post-build step is also possible.
+
+*Sourced — npm registry and GitHub metadata read 2026-09-19 by a research agent; I did not open
+them. Recorded in the bundler question, read with
+`git show aef41be:docs/questions/what-builds-the-client-and-serves-it-in-development.md`.*
+
+**An open Vite defect sits in the machinery a precache manifest reads.** vitejs/vite issue 23377,
+"Imported worker missing from Vite build manifest", was filed 2026-08-26 against Vite 8.2.2 and was
+still open on 2026-09-17. A manifest that omits an asset ships a cache that never completes to
+every installed player, so whatever generates the manifest here is checked against it.
+
+*Sourced — vitejs/vite issue 23377, state read 2026-09-17 by a research agent via the GitHub API; I
+did not open it, and the "against Vite 8.2.2" detail was not re-checked. Recorded in the bundler
+question, read with the same `git show`. This repository runs Vite 8.3.1, so re-check the issue
+before it decides anything.*
 
 Caching an app shell and updating it are opposed problems, and any mechanism has to answer both.
 A cache that never updates strands players on an old version indefinitely; one that revalidates

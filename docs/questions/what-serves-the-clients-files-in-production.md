@@ -6,8 +6,8 @@ resolves_into: decision
 
 # What serves the client's files in production?
 
-**Production only.** What serves them while developing is
-[what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md).
+**Production only.** What serves them while developing is Vite's dev server, per
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md).
 They are the same job in two environments, and the gap between them is
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
 
@@ -65,8 +65,8 @@ work, and it makes the arrangement the platform's rather than ours to reason abo
 
 **Content-hashed filenames are what make an asset cacheable without a revalidation round trip**, per
 [../constraints.md](../constraints.md). That is produced by whatever builds the client, so this
-question and [what builds and serves the client?](what-builds-the-client-and-serves-it-in-development.md) meet at
-the filenames.
+question and the build, which is Vite per
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), meet at the filenames.
 
 **The client is a set of files, so this is a real question rather than a collapsed one.**
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles

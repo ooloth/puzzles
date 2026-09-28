@@ -105,11 +105,10 @@ unchanged — it is additive rather than a switch, which is what makes it cheap.
 A pinned interpreter buys nothing while the only caller is a person typing the command on the machine
 where it already works. So this is worth adopting alongside an answer here rather than ahead of one.
 
-**It is downstream of a question that did not exist until now.**
-[What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md) asks
-whether the checker should be Python at all, and if the answer is TypeScript this option disappears
-rather than being rejected. Considering the `uv` version first would be choosing between Pythons in a
-repository that has not decided it wants one.
+**A record forecloses it.**
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) runs every repo script on
+Node, so the checker is rewritten in TypeScript, which is issue #2, and a `uv` script is not an
+option rather than a rejected one.
 
 **`actions/setup-node` caches all three package managers, and pnpm has an ordering requirement.**
 Its supported `cache` values are npm, yarn and pnpm. For pnpm the setup action that installs it has

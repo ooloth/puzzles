@@ -165,17 +165,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
    [what runs the checks on every change?](what-runs-the-checks-on-every-change.md), which chooses
    the linter and the syntax check, and after the cross-browser question above, which chooses the
    test matrix, because the format has to suit the tools that read it and choosing it first would
-   choose them. **This is where two answered question files get mined and deleted**, because this
-   record is the last one that cites findings living only in them:
-   [does one tool build the client and answer HTTP?](does-one-tool-build-the-client-and-answer-http.md),
-   answered by
-   [ADR-0028](../decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), and
-   [what builds the client and serves it in development?](what-builds-the-client-and-serves-it-in-development.md),
-   answered by [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md). Commit each before
-   deleting it or `git show <commit>^:<path>` has nothing to recover. **The build file additionally
-   carries findings that belong to another question**, about Bun's test runner, its branch coverage
-   and its snapshot serialisation; those move to [what runs the tests?](what-runs-the-tests.md)
-   with their tiers and sources, or they die with a file that was deleted for an unrelated reason.
+   choose them.
 
 ## M3 — a puzzle comes from the store
 
@@ -641,13 +631,6 @@ evidence dies with the file. Where the working is too long to move, cite the com
 `git show <commit>^:<path>` still reads it.
 **Promises are written as they fall out of records**, on the decision template's checklist, rather
 than committed to in advance.
-
-**An answered question waiting on maintenance rather than on a slice is listed here.**
-[What language are repo scripts written in?](what-language-are-repo-scripts-written-in.md) is
-answered by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which
-makes the Python docs checker the one script contradicting a settled record. It is mined and
-deleted by the maintenance issue that rewrites the checker in TypeScript, which can be done at any
-point.
 
 `scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
 is referenced at least once from the lists above, no link points at a heading, no question file has

@@ -61,9 +61,8 @@ candidates for failing it and nothing here proves this one succeeds.
 reason.** All three read a browserslist configuration natively, which is an advantage over Vite on
 [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) rather than a
 disadvantage, and `workbox-webpack-plugin` covers the manifest for webpack. What decided against them
-is the development loop, which
-[what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md)
-names as the maintainer's daily cost of this choice, and that `vite-plugin-pwa` is the reference
+is the development loop, which the bundler question named as the maintainer's daily cost, read with
+`git show aef41be:docs/questions/what-builds-the-client-and-serves-it-in-development.md`, of this choice, and that `vite-plugin-pwa` is the reference
 integration for the manifest rather than one of several. Neither is a disqualification and neither is
 measured here.
 

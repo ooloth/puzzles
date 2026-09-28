@@ -32,9 +32,8 @@ built, not rendered per request.**
 
 **This constrains document production and nothing else.** A framework does three separable jobs —
 build the client bundle, produce the entry document, answer HTTP requests. This record binds only the
-second. It does not decide who builds the bundle
-([what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md))
-and it does not decide what answers HTTP, which was settled afterwards at
+second. It does not decide who builds the bundle, which
+[ADR-0029](0029-the-client-bundler-is-vite.md) settled, and it does not decide what answers HTTP, which was settled afterwards at
 [ADR-0035](0035-the-http-handler-is-fastify.md).
 
 **So the meta-frameworks are not excluded, and the option lists that already assumed they were should

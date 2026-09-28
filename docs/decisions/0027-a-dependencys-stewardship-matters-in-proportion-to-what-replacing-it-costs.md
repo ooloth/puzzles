@@ -62,8 +62,8 @@ reasoned rather than measured and says so.
 
   *Measured for the five inversions, with the commands and their caveats recorded in
   [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md), under **Findings** in the renderer
-  question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`, and in
-  [what builds the client and serves it in development?](../questions/what-builds-the-client-and-serves-it-in-development.md).
+  question, read with `git show b931fb7:docs/questions/what-renders-the-client.md`, and in the bundler question, read with
+  `git show aef41be:docs/questions/what-builds-the-client-and-serves-it-in-development.md`.
   Sourced for the frameworks — each tool's own documentation and published check list, read by a
   research agent; I did not open them.*
 

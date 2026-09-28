@@ -23,25 +23,6 @@ constraint on what gets built, not as a description of what exists.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
-### Three answered question files are still on disk
-
-**You'll see** [questions/does-one-tool-build-the-client-and-answer-http.md](questions/does-one-tool-build-the-client-and-answer-http.md),
-[questions/what-builds-the-client-and-serves-it-in-development.md](questions/what-builds-the-client-and-serves-it-in-development.md)
-and [questions/what-language-are-repo-scripts-written-in.md](questions/what-language-are-repo-scripts-written-in.md),
-all three carrying full working as though they were live.
-
-**Actually** all three are answered — the first by
-[ADR-0028](decisions/0028-the-client-build-and-the-http-server-are-separate-tools.md), the second by
-[ADR-0029](decisions/0029-the-client-bundler-is-vite.md), and the third by
-[ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md), whose Decision covers
-every repo script. All three say `status: answered`, and
-`grep -l 'status: answered' docs/questions/*.md` is the authoritative count.
-
-**So** don't work any of them, and don't cite them either — the build one asserted that
-[the floor record](decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
-requires a browserslist config, which that record leaves open. They are deleted once their findings
-are mined.
-
 ### The doc checker is written in a language no record sanctions
 
 **You'll see** `scripts/check-docs.py`, in Python, referenced from

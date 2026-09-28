@@ -2,6 +2,7 @@
 number: 40
 status: accepted
 date: 2026-09-26
+amended: 2026-09-27
 ---
 
 # 40 — The client and the API answer on one origin in production
@@ -72,12 +73,12 @@ older clients either way, and nothing recorded asks for separate schedules.
 
 ## Enforced by
 
-**Nothing. Asserted only.** Nothing is deployed. It becomes true when M1's fourth slice deploys both
-halves behind one hostname, and the client calls the API by a path relative to its own origin rather
-than by an absolute URL. A check that the built client contains no absolute API URL could enforce the
-second half once
+**Half of it.** The client calls the API by a path relative to its own origin, and
+`vite.config.test.ts` fails if the built client contains an absolute API URL. Nothing runs that
+test on every change until
 [what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) is
-answered at M2.
+answered at M2. The other half, both halves answering behind one hostname, becomes true when M1's
+fourth slice deploys them.
 
 ## Rejected
 

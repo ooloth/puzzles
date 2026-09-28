@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-26
+updated: 2026-09-27
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -101,7 +101,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
 1. [What runs the tests?](what-runs-the-tests.md) — `node --test` runs them today as a stopgap.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
    already exists and nothing runs it, which is the shape of the whole problem.
-4. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
+3. [Is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md) —
    It sits here rather than at M1 because this is the first point it cannot be deferred further.
    Nothing in M1 needs a construct Node cannot strip, and
    [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) means the runtime
@@ -110,7 +110,7 @@ a player can see, which is why it has to be a milestone rather than a habit.
    start executing the same source, and a second executor is the thing that makes "what transforms
    it" a real choice rather than a default. Sits after the three above because they name the
    executors.
-5. [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+4. [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
    — here rather than at M1 for the same reason. M1 runs on one machine, where an unstated
    version is a fact rather than a disagreement. The second machine is the CI runner that
    [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) creates, and a
@@ -121,44 +121,44 @@ a player can see, which is why it has to be a milestone rather than a habit.
    [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and pnpm reads a `packageManager`
    field and switches itself to the declared version with no Corepack involved, which is one of the
    mechanisms this question has to weigh.
-6. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
+5. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This decides whether the checks in [../../CONTRIBUTING.md](../../CONTRIBUTING.md) become something
    that runs.
-7. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+6. [How is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    — a bug that only appears deployed costs a deploy cycle per attempt to reproduce it.
    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
    settled that verification happens in a production-like local run and only the fast loop may
    differ. What is left is building that run: which differences it closes, how, and what command
    runs it.
-8. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+7. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
    — the specific instance of the question above that M1's store choice creates. It sits here rather
    than at M1 because the decision is downstream of the store's shape; what M1 needs is only the
    comparison of what each shape would cost in the daily loop, and that is a finding recorded against
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
-9. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+8. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place.
-10. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+9. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-11. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+10. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
    platform is a phone, and [../constraints.md](../constraints.md) records a streaming bug that
    reproduced only on real iOS Safari over a real network.
-12. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
+11. [How is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) — getting onto
    the machine, and the baseline that stops it being trivially compromised. It sits here because a
    restore drill, a look at a log and a check of what actually shipped all need access, and because
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) put the data on a
    machine rather than behind a vendor. Its size depends entirely on
    [where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a
    bare machine supplies none of it.
-13. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+12. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. The matrix itself is settled by
    [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md);
    this question is the other half, which is what to run it on. It carries more weight than it looks:
    [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
    is promised against compatibility data rather than observation until this lands, and the API half
    of the floor is only partly checkable by any tool.
-14. [What format declares the browser floor?](what-format-declares-the-browser-floor.md) — the
+13. [What format declares the browser floor?](what-format-declares-the-browser-floor.md) — the
    checks above are the floor's second and third readers, which is when
    [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)'s
    single declaration starts to matter. It comes after

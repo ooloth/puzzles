@@ -23,7 +23,7 @@ pnpm install
 ```sh
 pnpm test                        # every *.test.ts: server, client, client build, docs checker
 pnpm typecheck                   # server, client and build config, each against its tsconfig
-python3 scripts/check-docs.py    # docs/: links, index entries, frontmatter
+python3 scripts/check-docs.py    # docs/: links, indexes, frontmatter, record structure; see the script
 ```
 
 Expect all three to pass. Nothing runs them automatically yet; that is

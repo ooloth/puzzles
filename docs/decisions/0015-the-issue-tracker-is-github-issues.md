@@ -2,6 +2,7 @@
 number: 0015
 status: accepted
 date: 2026-09-02
+amended: 2026-09-27
 ---
 
 # 0015 — The issue tracker is GitHub Issues
@@ -16,7 +17,7 @@ start then, not before."
 
 **That moment has arrived.** [../questions/README.md](../questions/README.md) now describes M1 as six
 delivery slices, each with an observable definition of done. Those are work items, not decisions —
-there is no reasoning to preserve once "a server answers one route" is true.
+nothing else is built on one once "a server answers one route" is true.
 
 **[../problem.md](../problem.md) names a public demonstration as one of three reasons this exists**:
 "a system whose operation is worth describing to someone hiring for it." Where the work log lives is
@@ -51,8 +52,9 @@ truth.
 **Sub-issues when a slice needs breaking into tasks**, and not before. Milestones already provide the
 one grouping level M1 needs.
 
-**Issues carry no reasoning.** An issue that turns out to need a decision stops and points at the
-question, per [ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md).
+**Issues settle no decisions.** An issue that turns out to need a decision stops and points at the
+question, per [ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md). What an issue's
+comments carry is the reasoning for how its work was built.
 
 ## Enforced by
 
@@ -100,7 +102,7 @@ is not.
 *Sourced — <https://github.blog/changelog/2025-08-21-dependencies-on-issues/>, read 2026-09-02.*
 
 **Two places to look, permanently.** Accepted because they hold different things, which is
-[ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md)'s argument and has not changed.
+[ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md)'s argument.
 
 **The work log is now tied to one vendor**, along with the code. Moving hosts later means moving the
 issue history or losing it.
@@ -110,9 +112,9 @@ issue history or losing it.
 - **The repository stops being public.** The reason Linear lost disappears with it.
 - **A flat list of issues per milestone stops being readable**, which is the condition that would
   bring GitHub Projects back.
-- **Issues start carrying reasoning, or questions start being opened as issues.** That is
-  [ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md)'s own revisit condition and it
-  applies here unchanged: it means the boundary needs restating rather than enforcing.
+- **Issues start settling choices that other work rests on, or questions start being opened as
+  issues.** That is [ADR-0001](0001-decisions-live-in-docs-and-work-lives-in-issues.md)'s own revisit
+  condition: it means the boundary needs restating rather than enforcing.
 
 ## Also update
 

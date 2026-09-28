@@ -1,7 +1,7 @@
 ---
 number: 0032
 status: accepted
-amended: 2026-09-20
+amended: 2026-09-27
 date: 2026-09-19
 ---
 
@@ -151,9 +151,9 @@ this project would be finding some of them. [ADR-0027](0027-a-dependencys-stewar
 says to price that by what leaving costs, and leaving costs a lockfile and two manifest edits, so
 the price is low. It is accepted knowingly rather than overlooked.
 
-**The manifests stop being portable.** pnpm refuses a plain `"*"` for a workspace sibling and needs
-`workspace:*`, which npm rejects outright. Moving to npm later means editing every manifest that
-names a sibling, on top of swapping the lockfile.
+**Leaving pnpm is a lockfile swap.** [ADR-0034](0034-the-repository-is-one-package.md) makes the
+repository one package with no workspace, so no manifest names a sibling in pnpm's `workspace:*`
+form, which npm rejects outright. A workspace added later brings that cost back.
 
 **The symlinked layout is a documented liability for some deployment targets**, and pnpm names
 "deployment to serverless providers that don't support symlinks" as a reason to switch its linker.

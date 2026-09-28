@@ -92,9 +92,9 @@ it here:
 
 *Reasoned — from the design comment on issue #7 and `src/client/`, 2026-09-27.*
 
-**Nothing about `bun test` can be measured here yet.** This app has no components and nothing is
-installed, so any claim tagged *Measured* against its own code is impossible by construction. What
-follows is established from Bun's documentation and issue tracker instead.
+**Nothing about `bun test` has been measured here.** Bun is not installed, and the one view,
+`src/client/app.tsx`, renders a single paragraph, which is too little to show the DOM-shaped
+behaviour below. What follows is established from Bun's documentation and issue tracker instead.
 
 **`bun test` has a watch mode.** `bun test --watch` is documented and works. It reruns the whole suite
 on any change rather than only affected tests (issues 4825 and 7546) and does not pick up newly added
@@ -112,7 +112,7 @@ shared module.
 
 *Sourced — [bun.com/docs/test/coverage](https://bun.com/docs/test/coverage) and oven-sh/bun issue
 7100, read 2026-09-04 by a research agent. I did not open them. Any claim about what it reports for
-this app's own components is impossible for the reason above.*
+this app's own code needs Bun installed first, for the reason above.*
 
 **Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, filed
 2026-08-20, records a JSDOM fragment containing one `<button>` producing a 146,955-line, 7.5 MB

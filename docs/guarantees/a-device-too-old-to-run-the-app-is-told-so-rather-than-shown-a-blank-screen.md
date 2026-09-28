@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-12
+updated: 2026-09-27
 update_when: the declared floor moves, or what a below-floor device is shown changes
 decays: slow
 status: active
@@ -37,7 +37,8 @@ different to build for, which is why they are separate files.
 [ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) and
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
 establish that a floor exists and where it is declared, which is what makes "below the floor" a
-definite set. Neither says what a browser below it is shown, and no entry document exists yet.
+definite set. Neither says what a browser below it is shown, and the entry document the build emits
+carries no message for one.
 
 **If violated** A player on an old phone gets a blank page. Per [../problem.md](../problem.md) they
 have no assumed technical sophistication, so there is nothing for them to diagnose and no reason to

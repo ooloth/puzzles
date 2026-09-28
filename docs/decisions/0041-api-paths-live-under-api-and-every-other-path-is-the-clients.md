@@ -2,6 +2,7 @@
 number: 41
 status: accepted
 date: 2026-09-26
+amended: 2026-09-27
 ---
 
 # 41 — API paths live under `/api/` and every other path is the client's
@@ -103,13 +104,16 @@ keeps older clients running.
 
 ## Enforced by
 
-**Nothing. Asserted only.** The server answers `/hello` at the root today, which
-[../unfinished.md](../unfinished.md) records. The rule becomes true in three places at three times:
+**Partly, and the rest lands at two later points.** The rule holds in three places:
 
-- M1's third slice moves the route to `/api/hello` and gives the dev server a proxy key of `/api/`.
-  A server test that every registered route starts with `/api/` would enforce the server's half from
-  then on.
-- M1's fourth slice has whatever serves production send `/api/` to the server.
+- The server's half is enforced. `buildServer` in `src/server/app.ts` asserts in an `onRoute` hook
+  that every route starts with `/api/`, so a route registered anywhere else stops the server, and
+  `src/server/app.test.ts` checks that with a property test. The dev server and `pnpm preview` send
+  `/api/` to the server through the one key `proxyApiTo` builds in `vite.config.ts`, and
+  `vite.config.test.ts` checks that `/api/…` reaches the server while `/`, `/apidocs` and `/api` get
+  the entry document.
+- Nothing yet sends `/api/` to the server in production. M1's fourth slice does, through whatever
+  serves production.
 - M9's service worker lists `^/api/` in the denylist of its fallback to the entry document, per
   [how does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md).
 

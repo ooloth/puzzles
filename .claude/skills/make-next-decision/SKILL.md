@@ -333,3 +333,9 @@ record what you find.
 1. Update all other docs as needed based on the ADR's implications, including `questions/README.md`,
    `docs/problem.md`, `docs/architecture.md`, `docs/constraints.md`, `docs/guarantees/` and
    `docs/failure-modes/`
+1. **When a record is amended or superseded, search for the claim it retracts and fix every copy in
+   the same change.** Other records, `CLAUDE.md`, `docs/` and the skills restate a record's claims
+   in their own words, and each copy keeps reading as settled after the source changes. Search for
+   the claim's key phrase and for its paraphrases, since no script can match a paraphrase. A record
+   that cites the changed one as its authority is the likeliest to repeat it, so read every record
+   that links to it.

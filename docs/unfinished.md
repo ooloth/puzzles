@@ -65,6 +65,23 @@ at M2.
 `pnpm build && pnpm preview` with the server running, and record in
 [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't observe** what it cannot show.
 
+### A record on co-location rules out more than its source does
+
+**You'll see** [ADR-0021](decisions/0021-the-server-and-its-store-share-a-machine.md) ruling out "a
+network block device presented as local" alongside NFS and FUSE mounts.
+
+**Actually** its only source, SQLite's
+[network-filesystem page](https://www.sqlite.org/useovernet.html), is about network *filesystems*,
+whose file locking is unreliable, and does not mention block devices. That page was opened on
+2026-09-27. A block device attached to one machine carries a filesystem that machine mounts and locks
+itself. So the block-device clause is not supported by what the record cites. It matters because
+most cloud VMs boot from network block storage, and
+[where does this run?](questions/where-does-this-run.md) scores hosts against this record. Whether to
+amend the record has not been decided.
+
+**So** don't cite that clause to rule a host out. Record each candidate's disk as local or
+network-attached, so it can be scored either way once the record is settled.
+
 <!-- Template:
 
 ### <What looks contradictory>

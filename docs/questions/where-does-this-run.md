@@ -132,9 +132,11 @@ host:
 - **The demonstration purpose in [../problem.md](../problem.md).** Its own guard admits nothing that
   would not be worth building anyway, so it rules nothing in.
 
-**Cost is a tie-breaker, not a property.** Per the maintainer on 2026-09-27, recorded in
-[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md), it separates only
-candidates that the list above does not. Free is strongly preferred for roughly the first year.
+**Cost enters as a row once the technical rows stop separating candidates.** It rules nothing out
+before that. Per the maintainer on 2026-09-27, recorded in
+[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md), free is strongly
+preferred for roughly the first year. What counts as free, strictly $0 or under some yearly amount,
+has not been stated.
 
 **Deferred, because their inputs belong to later milestones:**
 
@@ -508,9 +510,10 @@ reasoned rather than observed.
 - Ashburn and Hillsboro carry only the CPX line. A US CPX11 price of about $20.49 is from third-party
   trackers and is unverified.
 - Locations are Falkenstein, Nuremberg, Helsinki, Ashburn, Hillsboro and Singapore.
-- Volumes "are based on the networked block storage model". A block device is not a network
-  filesystem, so [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) does not
-  rule them out on its own terms. The server's own disk is "local NVMe SSD".
+- Volumes "are based on the networked block storage model". As written,
+  [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) rules out "a network
+  block device presented as local", which covers them. Its source does not support that clause, per
+  [../unfinished.md](../unfinished.md). The server's own disk is "local NVMe SSD".
 - The primary IPv4 fee was found at €1.70 on a dedicated-server page. A Cloud-specific figure was not
   confirmed.
 
@@ -545,3 +548,232 @@ to the agent, so that price is unverified.
 - Heroku's one-package-manager rule.
 - Railpack reading `packageManager` before lockfiles.
 - pnpm naming serverless providers without symlink support as a reason for `hoisted`.
+
+### Scored against the properties, 2026-09-27
+
+*"Opened by me" means the session that wrote this pass read the page itself. Everything else was read
+by research agents that day and is passed on as theirs. One agent claimed that Oracle's and Azure's
+free VMs have local disks. The pages below contradict it, so that claim was discarded.*
+
+**The field was rebuilt from scratch before scoring.** Beyond the inherited list, these were checked:
+
+- **PaaS:** Koyeb, Northflank, DigitalOcean App Platform, Heroku, Sliplane, Zeabur, Clever Cloud,
+  Scalingo, Upsun, Azure App Service and Replit.
+- **VMs:** AWS Lightsail and EC2, Oracle Always Free, Azure's B1s, Vultr, RackNerd, OVHcloud,
+  Scaleway, Contabo, netcup, IONOS, BuyVM, Kamatera, Hostinger and Alibaba ECS.
+- **Other:** PikaPods, Deno Deploy, Val Town, Glitch, a machine at home behind Cloudflare Tunnel, and
+  Coolify or Dokku, which are control planes to run on one of the VMs rather than hosts.
+
+**Out, each on one property:**
+
+| Candidate | Fails | Why |
+|---|---|---|
+| DigitalOcean App Platform | 7 | "App Platform does not currently support volumes"; "Every redeployment of your app will reset the filesystem" |
+| Heroku | 7 | "Any files written get discarded the moment the dyno stops or restarts" |
+| Deno Deploy | 7 | No persistent disk; its docs point to KV or object storage |
+| Koyeb | 2 | "Koyeb does not support directly setting apex domains"; its workaround is a redirect to `www`, which also costs a round trip [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) property 4 forbids |
+| Val Town | 4 | "After some inactivity with no new requests, the HTTP process is terminated" |
+| Azure App Service free tier | 4 | "Always On... is not available on the Free or Shared tiers" |
+| Oracle Always Free | 4 | "Idle Always Free compute instances may be reclaimed": 7 days under 20% CPU at the 95th percentile and under 20% network, which an idle small app meets. It passes only if kept artificially busy |
+| Free tiers of Render, Koyeb and Zeabur | 4 | Each sleeps, and Render's and Koyeb's also refuse a persistent disk |
+| PikaPods | 5 | Deploys only from its own catalogue |
+| Glitch | — | App hosting shut down 2025-07-08 |
+| A machine at home behind Cloudflare Tunnel | 2 | The domain must point at `<UUID>.cfargotunnel.com` and resolves to Cloudflare's proxy |
+
+*Sourced — Oracle's [Always Free resources](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)
+opened by me. The rest from each vendor's docs, read by agents: DigitalOcean's
+[store data](https://docs.digitalocean.com/products/app-platform/how-to/store-data/), Heroku's
+[dynos](https://devcenter.heroku.com/articles/dynos), Koyeb's
+[domains](https://www.koyeb.com/docs/run-and-scale/domains) and
+[volumes](https://www.koyeb.com/docs/reference/volumes), Render's [free](https://render.com/docs/free),
+Val Town's [http-preview](https://blog.val.town/http-preview), Cloudflare's
+[tunnel DNS](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/).
+Each reverses if the quoted behaviour changes. Oracle also reverses if a paid account's use of Always
+Free shapes is exempt from reclaim, which was not checked.*
+
+**No platform-as-a-service offers an always-on free instance with a persistent disk, with one
+possible exception.** Northflank's free Sandbox is "Always-on-compute – no sleeping", but no page read
+confirmed that a volume can be attached on it.
+
+- Fly has "no permanent free tier". Its trial gives "2 hours of machine runtime or 7 days of access,
+  whichever comes first".
+- Railway's free plan is about $1 of credit a month, which does not roll over.
+
+*Sourced — Fly's [free trial](https://docs.fly.io/about/free-trial/) opened by me; Northflank's
+[pricing](https://northflank.com/pricing) and Railway's plans read by agents.*
+
+**The only free always-on VMs have network-attached disks.**
+
+- **Google's e2-micro:** "they are network-attached devices that transmit data over Google's
+  networks", and the free allowance is "30 GB-months standard persistent disk". It is limited to
+  `us-west1`, `us-central1` and `us-east1`, with 1GB of free egress a month. Whether its external
+  IPv4 is free was not confirmed.
+- **Oracle's free VM:** its boot volume is "a detachable boot volume device" in the Block Volume
+  service, counted against the 200GB block allowance. That a detachable, reattachable volume is
+  network storage is reasoned; no page opened says so in those words. It is out on property 4 in any
+  case.
+- **Azure's B1s** is free for 12 months, and **AWS's** new-account credits last 6 months. Neither is
+  free after that.
+
+So whether a free host qualifies at all turns on property 6 and the block-device clause of
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), which
+[../unfinished.md](../unfinished.md) records as unsupported by its source.
+
+*Sourced — Google's [disks](https://docs.cloud.google.com/compute/docs/disks) and
+[free tier](https://docs.cloud.google.com/free/docs/free-cloud-features), and Oracle's
+[Block Volume overview](https://docs.oracle.com/en-us/iaas/Content/Block/Concepts/overview.htm),
+opened by me. Azure and AWS terms read by an agent.*
+
+**Local disks, per the vendor:**
+
+- Hetzner: "local NVMe SSD".
+- DigitalOcean Droplets: "the Droplet's local disk".
+- Linode: "local storage... built entirely on enterprise-grade SSDs".
+- Vultr: "directly attached to the instance".
+- RackNerd: "PURE SSD's in RAID-10".
+- Fly: "a slice of an NVMe drive on the same physical server".
+- Koyeb: "on the same physical machine".
+
+Railway, Render and Northflank's managed cloud do not say whether their disks are local or
+networked. Northflank on your own cloud uses EBS or Persistent Disk, which are network-attached.
+
+*Sourced — each vendor's docs, read by agents.*
+
+**RackNerd's specials** run from $21.99 a year for 1 vCPU, 1 GB of RAM, 20 GB of SSD and one IPv4
+address, to $119.99 a year for 8 GB. They are billed annually, under KVM virtualisation, and "You can
+renew at the same rate for as long as you decide." Locations include Los Angeles, San Jose, Utah,
+Chicago, Dallas, New York, Atlanta, Ashburn and Toronto. IPv6 is not mentioned. No snapshot or backup
+product was found, and nothing is published about host failure.
+
+*Sourced — [specials](https://www.racknerd.com/specials/) opened by me; the disk wording from its
+[KVM page](https://www.racknerd.com/kvm-vps), read by an agent.*
+
+**Apex domains on the platforms that pass property 7:**
+
+- **Fly:** A and AAAA records.
+- **Render:** an A record to `216.24.57.1` and no AAAA, but with Cloudflare DNS, Render's guide asks
+  for a CNAME.
+- **Railway:** "does not publish a static IP, so A records are not supported". The apex needs CNAME
+  flattening.
+- **Northflank:** "must support CNAME flattening".
+
+Cloudflare's flattening answers with A records, so the browser never sees a CNAME. Whether Safari's
+comparison then passes is reasoned from the rule in [../constraints.md](../constraints.md), and not
+observed.
+
+*Sourced — each vendor's domain docs, read by agents.*
+
+**TLS 1.3** is documented for Fly ("TLSv1.2 and TLSv1.3") and Railway, and is selectable on
+DigitalOcean. Render states no minimum TLS version anywhere found, so property 13 is unknown there
+until it is scanned. On a VM, whatever we run terminates TLS.
+
+*Sourced — vendor docs, read by an agent.*
+
+**Every platform checked that offers a volume limits a service using one to a single instance** and
+gives up zero-downtime deploys: Render, Northflank, Koyeb, Railway and Fly. That is the mechanism
+behind property 8 passing everywhere it was checked.
+
+*Sourced — Render's [disks](https://render.com/docs/disks) and Northflank's
+[persistent storage](https://northflank.com/docs/v1/application/production-workloads/persistent-storage-in-production),
+read by an agent.*
+
+**Properties an agent suggested that bind on nothing here:**
+
+- **Edge idle and response timeouts**: Heroku's 30 seconds, Koyeb's 100. No record uses a long-lived
+  connection.
+- **Egress pricing**: a cost, so it breaks ties only.
+
+**No primary source gives a Fastify server's resident memory.** It has to be measured, per the
+resources paragraph under the properties.
+
+### Local disk against network block storage, 2026-09-28
+
+*Gathered to settle whether [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)'s
+block-device clause holds, per [../unfinished.md](../unfinished.md). "Opened by me" means the session
+that wrote this pass read the page itself.*
+
+**What SQLite needs from storage is locks that work, one host, and honest syncs.** Its corruption page
+names "network filesystems and NFS in particular" for lock bugs, and says "SQLite must believe whatever
+the operating system and hardware tell it about the status of sync requests". WAL requires "all
+processes using a database must be on the same host computer". None of SQLite's reference pages
+mentions block devices, iSCSI or SANs. Posts on SQLite's own forum say a remote block device under a
+local filesystem is fine, because locking stays local. Those posts are community discussion and not
+reference documentation.
+
+*Sourced — [howtocorrupt](https://www.sqlite.org/howtocorrupt.html) and [wal](https://www.sqlite.org/wal.html)
+opened by me; forum posts found by an agent and not opened by me.*
+
+**How many syncs a commit costs.** In WAL mode, "Writers sync the WAL on every transaction commit if
+PRAGMA synchronous is set to FULL but omit this sync if PRAGMA synchronous is set to NORMAL", and with
+NORMAL "transactions are no longer durable and might rollback following a power failure or hard
+reset". Rollback-journal mode at FULL syncs three times per commit. Reads never sync, and a page
+already in the OS cache is read without touching the disk.
+
+*Sourced — [wal](https://www.sqlite.org/wal.html) opened by me; [atomiccommit](https://www.sqlite.org/atomiccommit.html)
+and [pragma](https://www.sqlite.org/pragma.html#pragma_synchronous) read by an agent.*
+
+**The storage round trip therefore lands on each durable write, not on reads.** Solving never waits
+on a server write, per [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md). So
+the latency added to a commit is not on any wait [../problem.md](../problem.md) names, unless a player
+is waiting on a write to be acknowledged. Reasoned.
+
+**Latency figures.**
+
+- AWS: "The average latency between EC2 instances and EBS is single-digit milliseconds" for general
+  SSD volumes.
+- Google: "SSD Persistent Disk is designed for single-digit millisecond latencies". No figure is
+  published for the HDD-backed standard disk the free tier includes. Google also says local SSD
+  offers "very low latency compared to the persistent storage provided by... Persistent Disk"
+  because it is "physically attached to the server".
+- No vendor opened publishes local and network latency side by side in numbers. What a local NVMe
+  `fsync` costs here is unmeasured.
+
+*Sourced — AWS [EBS features](https://aws.amazon.com/ebs/features/), Google
+[local SSD](https://docs.cloud.google.com/compute/docs/disks/local-ssd), read by agents.*
+
+**Google's free disk caps writes by size.** Standard persistent disk is "Write IOPS per GiB: 1.5", so
+the free 30 GB is 45 write operations a second. Balanced is 6 per GiB, but the free tier names only
+"standard persistent disk". So the free disk is also the slowest disk type Google sells.
+
+*Sourced — [performance](https://docs.cloud.google.com/compute/docs/disks/performance) opened by me.
+The e2-micro per-VM cap could not be read by the agent.*
+
+**Single attachment holds by default.** Google's standard and balanced persistent disks are single
+writer. Multi-writer mode is available only on some Hyperdisk types, and Google warns that ext4 or XFS
+there "might experience data loss". Hetzner Volumes: "you can only attach a Volume to one server at a
+time".
+
+*Sourced — Google's [disk sharing](https://docs.cloud.google.com/compute/docs/disks/sharing-disks-between-vms)
+and Hetzner's [volumes FAQ](https://docs.hetzner.com/cloud/volumes/faq/), read by agents.*
+
+**No vendor found states that a write acknowledged to the OS is durable**, for network block storage
+(Google, AWS) or for local disks. That leaves the honest-sync condition resting on reputation on both
+sides, so it separates neither.
+
+*Sourced as an absence — agents searched Google's persistent-disk and AWS's EBS pages for cache,
+flush, fsync and acknowledge, 2026-09-28.*
+
+**What survives the host failing is where the two differ.**
+
+- **Local disks die with their host.** Fly: "Volumes are pinned to physical hosts, so when there's a
+  host outage the volume is unreachable". Recovery is from a daily snapshot, and "Any data stored
+  between the time when the snapshot was taken and the time when the restore is made will not be
+  included". DigitalOcean calls its RAID "a single point of failure". Hetzner documents a live copy
+  off a host that is failing but still readable, and nothing for a drive that has died.
+- **Network block storage outlives its host.** Hetzner Volumes are stored "on three different
+  physical servers". DigitalOcean Volumes are "replicated across multiple hosts". AWS EBS is
+  "replicated across multiple servers in an Availability Zone". Google's disk "has built-in
+  redundancy to protect your data against equipment failure".
+
+*Sourced — Fly's [host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/) opened by me;
+the rest read by agents.*
+
+**Which platform volumes are local is known only for Fly and Koyeb.** Fly: "a volume exists on one
+server in a single region — it is not network storage". Railway says only that "all of Railway's disks
+are NVMe SSDs", and Render only that its disks "use the same high-performance SSDs as Render
+Postgres". Neither says local or networked, and neither documents what happens to a volume when its
+host fails. Northflank states neither the disk type nor whether its free Sandbox can attach a volume.
+
+*Sourced — Fly's [volumes overview](https://docs.fly.io/volumes/overview/), Railway's
+[Metal](https://docs.railway.com/railway-metal) and Render's [disks](https://render.com/docs/disks),
+read by agents. Render's community forum could not be reached from the sandbox.*

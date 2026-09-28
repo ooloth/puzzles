@@ -263,16 +263,16 @@ afterwards; the observation is the artifact.
    recommendation yet.
 1. **If more than one candidate survives, run another pass instead of presenting.** Several
    survivors mean the property list is not finished; it does not mean the candidates are equal. So:
-   - **Zoom in.** Split each property every survivor passes into the conditions it stands for.
-     "A local filesystem" split into locks, one host, honest syncs, per-commit latency, a write
-     ceiling and survival of host failure, and only the last three separated a local disk from a
-     network one.
+   - **Zoom in.** Split each property every survivor passes into the conditions it stands for, and
+     score each condition separately.
    - **Extend.** Derive properties from moments not yet listed, then softer ones once the technical
      rows stop separating. Each cites its source in `docs/problem.md`, a record, or something the
      maintainer has stated, and enters as a row rather than as a tie-breaker outside the table.
-   - **Maximums.** Where a tradeoff between performance and safety appears, state the theoretical
-     maximum of each and look for a design that comes close to both, per the portable
-     decision-making standard, before accepting the tradeoff.
+   - **Maximums.** Where a tradeoff appears between any of safety, performance and experience,
+     state the theoretical maximum of each, as the portable decision-making standard defines them,
+     and look for a design that comes close to all three before accepting it. State safety's
+     maximum for each kind of wrongness the system could have, not only the kind the question is
+     about.
    - **Record it.** Write the pass into the question file with its date: the new properties under
      **Properties the answer is scored against**, and the new verdicts under **Findings**. Then
      research and score again.

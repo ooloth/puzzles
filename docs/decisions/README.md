@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-30
+updated: 2026-09-28
 update_when: never — this describes the format, not the decisions
 decays: never
 ---
@@ -182,9 +182,18 @@ writing to it is bound to this moment rather than to somebody remembering.
 A template captures a decision; it doesn't improve one. A coin toss written up in this
 format is worse than a scrappy one — the format lends it authority it didn't earn.
 
-**Size the decision first.** How expensive is it to reverse? Cheap-to-reverse decisions
-deserve a coin toss: pick one and move. Everything below is for the expensive ones.
-Spending equal effort on both is the real waste.
+**How expensive a decision is to reverse sets when it is taken, not how carefully it is
+derived.** A cheap one can be taken early, before evidence that only later work would produce, per
+the portable decision-making standard. It still gets its properties derived and scored, and it
+still follows every step below. A choice picked quickly because reversing it looked cheap is the
+failure this folder exists to prevent: once recorded, it reads exactly like one that was reasoned.
+
+**Where the first comparison leaves several options standing, the property list is not finished.**
+Zoom into each property every survivor passes, and extend the list to moments not yet covered,
+including softer rows such as what the maintainer will live with for years, each citing its source.
+Then score again. Worked this way, the last round is usually easy.
+[ADR-0038](0038-the-renderer-is-react.md) is the example: its technical rows stopped separating the
+field, and the rows added after that decided it.
 
 1. **State the problem without naming a solution.** Coin tosses happen because the question
    got framed as "X or Y" instead of "what must be true." A solution-free statement often

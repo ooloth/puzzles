@@ -258,10 +258,31 @@ afterwards; the observation is the artifact.
    already done become the answer by default.
 1. Run the spike. Record what you ran, on what, how many times, and what you observed — a
    measurement without its method is an assertion with a number in it.
+1. **Score every candidate against every property, and count the survivors.** An unknown cell is
+   not a pass: resolve it, or name it as what stops the comparison finishing. Do not form a
+   recommendation yet.
+1. **If more than one candidate survives, run another pass instead of presenting.** Several
+   survivors mean the property list is not finished; it does not mean the candidates are equal. So:
+   - **Zoom in.** Split each property every survivor passes into the conditions it stands for.
+     "A local filesystem" split into locks, one host, honest syncs, per-commit latency, a write
+     ceiling and survival of host failure, and only the last three separated a local disk from a
+     network one.
+   - **Extend.** Derive properties from moments not yet listed, then softer ones once the technical
+     rows stop separating. Each cites its source in `docs/problem.md`, a record, or something the
+     maintainer has stated, and enters as a row rather than as a tie-breaker outside the table.
+   - **Maximums.** Where a tradeoff between performance and safety appears, state the theoretical
+     maximum of each and look for a design that comes close to both, per the portable
+     decision-making standard, before accepting the tradeoff.
+   - **Record it.** Write the pass into the question file with its date: the new properties under
+     **Properties the answer is scored against**, and the new verdicts under **Findings**. Then
+     research and score again.
+
+   Repeat until one candidate remains, or until a pass that zoomed and extended changes no verdict.
+   In that case say so, and name what the next pass would need.
 1. Analyze the implications from first principles, with reference to `docs/problem.md`,
    `docs/guarantees/` and any other context clarifying what matters to provide users and the
    maintainer with the intended experience
-1. Reason your way to the best answer
+1. Reason your way to the answer the table yields
 
 **Weigh the options by what each forecloses, not by which is better today.** This is what to do
 with a pile of research and no obvious winner, and it is usually the step that produces the answer.
@@ -295,8 +316,10 @@ record what you find.
 ### 6. Present the decision
 
 1. Present your findings and rationale to the user using formatting they can digest in 30 seconds.
-   Show every option against every property from step 4, and for each option you would reject, name
-   the one property that disqualifies it.
+   Show every option against every property from step 4, and from every pass after it. For each
+   option you would reject, name the one property that disqualifies it. Show the passes in order,
+   so the user can see which properties narrowed the field, and challenge a pass rather than only
+   the result.
 1. Discuss the user's feedback and questions
 1. Proactively conduct further research if needed, using as many parallel subagents as necessary
 1. Offer to draft the ADR and wait for the user's approval

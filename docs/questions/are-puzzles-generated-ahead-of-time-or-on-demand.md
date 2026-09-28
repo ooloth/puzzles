@@ -56,8 +56,11 @@ case — not its average — becomes a player's wait.
 *On demand, via a job queue.* Keeps generation off the request path without a schedule, but adds
 infrastructure for a problem that may not exist at this scale.
 
-Note that two processes sharing a store constrains deployment: under the previous design, the web
-app and the generator sharing one database file is what forced them onto a single machine.
+Note that how the generator reaches the store constrains deployment. One that writes into the store
+directly has to share the server's machine, because the store is a file the server process opens
+([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)). One that publishes
+through the server's API runs anywhere, per
+[are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md).
 
 ## Findings
 

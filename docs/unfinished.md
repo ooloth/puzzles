@@ -16,15 +16,10 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **You'll see** records fixing the store, the entry document, the build and the server's shape, plus a
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
-**Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client under
-`src/client/` that shows its answer, and where the
-system runs and what deploys it are open. Settled so far: the store is a SQLite
-file the server process opens, a service worker answers navigations, the entry document is a build output, the client build and the HTTP server are separate
-tools, the bundler is Vite, everything outside the browser runs on Node, the package manager is
-pnpm, the repository is one package with each part of the system a directory under `src/`,
-Fastify answers HTTP with request and response bodies described in zod, client state that a
-guarantee covers is held outside the renderer under `src/client/state/`, the client and the API
-answer on one origin in production with API paths under `/api/`, and the renderer is React.
+**Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
+under `src/client/` that shows its answer, and where the system runs and what deploys it are open.
+Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
+constraint on what gets built, not as a description of what exists.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 

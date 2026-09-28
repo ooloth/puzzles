@@ -92,10 +92,10 @@ package.json        one manifest, every dependency
 tsconfig.base.json  the compiler options
 tsconfig.json       the build's own files, run by Node        lib esnext   types node
 vite.config.ts      the client build and its browser floor    ADR-0029
-src/rules/          shared by the client and the generator   lib esnext   types none
+src/rules/          shared by the client and the generator   lib esnext   types none; not built yet
 src/client/         bundled by Vite                 ADR-0029  lib esnext + dom   jsx
 src/server/         run by Node                     ADR-0030  lib esnext   types node
-src/generator/      run by Node; nothing here until M8
+src/generator/      run by Node; not built yet, nothing here until M8
 ```
 
 Each directory carries a short `tsconfig.json` differing in `lib` and `types`, which is what

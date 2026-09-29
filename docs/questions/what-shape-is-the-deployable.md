@@ -31,8 +31,10 @@ whatever is chosen.
 ## What would settle it
 
 Whether the host chosen at [where does this run?](where-does-this-run.md) prefers or requires one
-shape, which is the input that most constrains this, and which is why this is answered alongside
-that question rather than before it.
+shape, which is the input that most constrains this. So this is answered after that question, within
+what the chosen host accepts. The host is not narrowed to suit a preferred shape, per the maintainer
+on 2026-09-28. The part of the shape that bears on safety, whether what runs deployed can be run
+locally, is scored there as one of the host's properties.
 
 Then what each shape costs in the loop that runs most often, which is deploying a small change. And
 what each costs the first time, which is not the same and is the one usually quoted.

@@ -26,7 +26,8 @@ constraint on what gets built, not as a description of what exists.
 ### The doc checker is written in a language no record sanctions
 
 **You'll see** `scripts/check-docs.py`, in Python, referenced from
-[questions/README.md](questions/README.md) and run as the repository's only documentation check.
+[questions/README.md](questions/README.md) and run by hand as the repository's only documentation
+check. Nothing runs it automatically yet.
 
 **Actually** [ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every
 repo script runs on Node, so this file contradicts a settled record. It is the only artifact in the

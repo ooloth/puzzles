@@ -299,7 +299,9 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 5. [Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) —
    the first URL worth sharing or indexing exists here. It sits at this milestone rather than at M1
    because no rendering choice forecloses it: a rebuild on publish and a single runtime-rendered
-   route are both additive. The record that settles M1's rendering shape should say so explicitly.
+   route are both additive, as
+   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
+   records.
 6. [Do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
    the assumption in play is one host with everything under paths, and it is an assumption rather
    than a decision. The client and the API share one origin, per
@@ -311,8 +313,8 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    — narrowed by [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md),
    which settled that a service worker answers the navigation. What is left is everything else: what
    the precache holds besides the document, how the manifest is generated, and what strategy anything
-   other than a navigation uses. The manifest is a build output, so this still waits on M1's build
-   choice. The fallback to the entry document excludes `^/api/`, per
+   other than a navigation uses. The manifest is a build output of
+   [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md)'s Vite build. The fallback to the entry document excludes `^/api/`, per
    [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
 2. [How long must offline play survive?](how-long-must-offline-play-survive.md)
 3. [Is the player shown anything about the network?](is-the-player-shown-anything-about-the-network.md)

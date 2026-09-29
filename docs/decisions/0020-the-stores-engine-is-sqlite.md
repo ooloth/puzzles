@@ -86,8 +86,10 @@ rather than settled here.
 ## Risk
 
 **Corruption detection is opt-in, and the precedent is not reassuring.** SQLite's own documentation
-carries a section titled "The WAL-Reset Bug": a checkpoint race present from 2010 until March 2026
-that lost committed writes with no error raised. It is fixed. What it establishes is the shape —
+carries a section titled "The WAL-Reset Bug", a bug that "could, in rare cases, lead to database
+corruption", present from version 3.7.0 (2010-07-21) through 3.51.2 and fixed in 3.51.3
+(2026-03-13). *Sourced — [wal.html](https://www.sqlite.org/wal.html), read 2026-09-28.* It is fixed.
+What it establishes is the shape —
 `PRAGMA integrity_check` runs when somebody schedules it, and a corrupt page otherwise surfaces only
 when a read happens to touch it. Postgres has page checksums on by default from version 18; this does
 not.

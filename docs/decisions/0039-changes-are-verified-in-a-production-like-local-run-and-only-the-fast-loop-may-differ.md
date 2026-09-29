@@ -5,7 +5,7 @@ date: 2026-09-26
 amended: 2026-09-27
 ---
 
-# 39 — changes are verified in a production-like local run, and only the fast loop may differ
+# 0039 — changes are verified in a production-like local run, and only the fast loop may differ
 
 ## Forced by
 

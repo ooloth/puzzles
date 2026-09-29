@@ -5,7 +5,7 @@ amended: 2026-09-23
 date: 2026-09-19
 ---
 
-# 29 — the client bundler is Vite
+# 0029 — the client bundler is Vite
 
 ## Forced by
 

@@ -5,7 +5,7 @@ date: 2026-09-19
 amended: 2026-09-22
 ---
 
-# 30 — TypeScript outside the browser runs on Node
+# 0030 — TypeScript outside the browser runs on Node
 
 ## Forced by
 

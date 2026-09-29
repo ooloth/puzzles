@@ -1,10 +1,10 @@
 ---
-number: 42
+number: 0042
 status: accepted
 date: 2026-09-28
 ---
 
-# 42 — The store's disk is inside its machine, not reached over a network
+# 0042 — The store's disk is inside its machine, not reached over a network
 
 ## Forced by
 

@@ -5,7 +5,7 @@ amended: 2026-09-20
 date: 2026-09-19
 ---
 
-# 31 — Node runs on the newest line committed to LTS
+# 0031 — Node runs on the newest line committed to LTS
 
 ## Forced by
 

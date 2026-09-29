@@ -4,7 +4,7 @@ status: accepted
 date: 2026-09-19
 ---
 
-# 28 — the client build and the HTTP server are separate tools
+# 0028 — the client build and the HTTP server are separate tools
 
 ## Forced by
 

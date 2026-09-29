@@ -5,7 +5,7 @@ amended: 2026-09-27
 date: 2026-09-19
 ---
 
-# 32 — the package manager is pnpm
+# 0032 — the package manager is pnpm
 
 ## Forced by
 

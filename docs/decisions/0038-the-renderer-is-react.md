@@ -1,10 +1,10 @@
 ---
-number: 38
+number: 0038
 status: accepted
 date: 2026-09-25
 ---
 
-# 38 — The renderer is React
+# 0038 — The renderer is React
 
 ## Forced by
 

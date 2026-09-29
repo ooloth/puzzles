@@ -1,10 +1,10 @@
 ---
-number: 37
+number: 0037
 status: accepted
 date: 2026-09-24
 ---
 
-# 37 — The renderer draws client state and does not own it
+# 0037 — The renderer draws client state and does not own it
 
 ## Forced by
 

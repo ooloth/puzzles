@@ -9,7 +9,8 @@ decays: never
 A record of the reasoning behind choices that took some thought, or could reasonably
 have gone a different way.
 
-One file per decision: `NNNN-kebab-title.md`.
+One file per decision: `NNNN-kebab-title.md`. The frontmatter's `number` and the heading carry the
+same four digits, and `scripts/check-docs.py` fails a record where the three disagree.
 
 **A record is never numbered before a record it rests on.** A new record takes the next free number,
 so everything it rests on already sorts above it, and reading the listing top to bottom never meets a
@@ -258,12 +259,12 @@ An ADR citing nothing was made on vibes.
 <!-- Template:
 
 ---
-number: 01
+number: NNNN
 status: proposed | accepted | superseded by 00NN
 date: YYYY-MM-DD
 ---
 
-# 01 — <the choice, plainly stated>
+# NNNN — <the choice, plainly stated>
 
 ## Forced by
 <the constraint, user need, or ranking that made this necessary — by reference>

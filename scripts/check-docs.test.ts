@@ -253,16 +253,19 @@ test("a question with derived properties and options passes", async () => {
   assert.deepEqual(await propertyProblems({ "docs/questions/q.md": file }), []);
 });
 
-/** A decision record with the template headings, optionally a Scored against section, and these Rejected bullets. */
+/**
+ * A decision record with the template headings, optionally a Scored against section, and these
+ * Rejected bullets. `NNNN` stands for the record's number and is replaced from its filename.
+ */
 function decisionRecord(scoredAgainst: string | null, rejected: readonly string[]): string {
   return [
     "---",
-    "number: 41",
+    "number: NNNN",
     "status: accepted",
     "date: 2026-09-27",
     "---",
     "",
-    "# 41 — Something is decided",
+    "# NNNN — Something is decided",
     "",
     "## Forced by",
     "",
@@ -299,9 +302,14 @@ function decisionRecord(scoredAgainst: string | null, rejected: readonly string[
 const PROPERTIES = "1. **First property.** Rests on X.\n2. **Second property.** Rests on Y.";
 
 async function decisionProblems(name: string, record: string): Promise<readonly string[]> {
-  return (await problemLines({ [`docs/decisions/${name}`]: record })).filter(
+  return (await problemLines({ [`docs/decisions/${name}`]: record.replaceAll("NNNN", name.slice(0, 4)) })).filter(
     (line) => line.startsWith("PROPERTIES") || line.startsWith("HEADINGS"),
   );
+}
+
+/** The NUMBER lines the checker prints for one decision record, written exactly as given. */
+async function numberProblems(name: string, record: string): Promise<readonly string[]> {
+  return (await problemLines({ [`docs/decisions/${name}`]: record })).filter((line) => line.startsWith("NUMBER"));
 }
 
 test("a record numbered 0041 or later without Scored against is reported", async () => {
@@ -346,4 +354,27 @@ test("a record whose properties are not applicable skips the rejection check", a
 test("continuation lines of a rejection count toward naming its property", async () => {
   const bullet = ["- **Other** — a long case that wraps", "  onto a second line and fails property 1."];
   assert.deepEqual(await decisionProblems("0041-something-is-decided.md", decisionRecord(PROPERTIES, bullet)), []);
+});
+
+test("a record whose number field and heading match its filename passes the number check", async () => {
+  const record = decisionRecord(PROPERTIES, ["- **Other** — fails property 1."]).replaceAll("NNNN", "0042");
+  assert.deepEqual(await numberProblems("0042-something-is-decided.md", record), []);
+});
+
+test("a number field without its leading zeros is reported against the filename", async () => {
+  const record = decisionRecord(PROPERTIES, ["- **Other** — fails property 1."])
+    .replace("number: NNNN", "number: 42")
+    .replaceAll("NNNN", "0042");
+  const problems = await numberProblems("0042-something-is-decided.md", record);
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /number: 42.*0042/);
+});
+
+test("a heading whose number differs from the filename is reported", async () => {
+  const record = decisionRecord(PROPERTIES, ["- **Other** — fails property 1."])
+    .replace("# NNNN", "# 42")
+    .replaceAll("NNNN", "0042");
+  const problems = await numberProblems("0042-something-is-decided.md", record);
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0]!, /heading.*42.*0042/);
 });

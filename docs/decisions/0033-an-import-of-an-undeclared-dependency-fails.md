@@ -5,7 +5,7 @@ date: 2026-09-19
 amended: 2026-09-22
 ---
 
-# 33 — an import of an undeclared dependency fails
+# 0033 — an import of an undeclared dependency fails
 
 ## Forced by
 

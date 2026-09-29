@@ -1,11 +1,11 @@
 ---
-number: 40
+number: 0040
 status: accepted
 date: 2026-09-26
 amended: 2026-09-27
 ---
 
-# 40 — The client and the API answer on one origin in production
+# 0040 — The client and the API answer on one origin in production
 
 ## Forced by
 

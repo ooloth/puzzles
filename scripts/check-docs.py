@@ -343,6 +343,29 @@ def expected_headings(path: str, found: list[str]) -> list[str]:
     return TEMPLATE_HEADINGS
 
 
+# A record's number is quoted in commit messages, code comments and issues, where nothing can
+# correct it, and it appears three times in the record itself: the filename, the frontmatter and
+# the heading. On 2026-09-28 fourteen records disagreed with themselves, some writing `number: 42`
+# or `# 27` beside a filename of 0042 or 0027. The filename is the authority, because it is what
+# every link resolves against.
+FRONTMATTER_NUMBER = re.compile(r'^number:\s*(\S+)\s*$', re.MULTILINE)
+HEADING_NUMBER = re.compile(r'^# (\S+) ', re.MULTILINE)
+
+
+def check_decision_numbers() -> None:
+    for path in decision_files():
+        expected = os.path.basename(path)[:4]
+        text = open(path).read()
+        field = FRONTMATTER_NUMBER.search(text)
+        heading = HEADING_NUMBER.search(text)
+        if field and field.group(1) != expected:
+            line = text[:field.start()].count('\n') + 1
+            problems.append(f'NUMBER       {path}:{line} number: {field.group(1)} does not match the filename\'s {expected}')
+        if heading and heading.group(1) != expected:
+            line = text[:heading.start()].count('\n') + 1
+            problems.append(f'NUMBER       {path}:{line} heading number {heading.group(1)} does not match the filename\'s {expected}')
+
+
 def check_decision_headings():
     for path in decision_files():
         found = [l.rstrip() for l in open(path) if l.startswith('## ')]
@@ -719,6 +742,7 @@ check_harness_artifacts()
 check_question_sequencing()
 check_findings_note()
 check_decision_headings()
+check_decision_numbers()
 check_question_properties()
 check_rejections_name_properties()
 check_adr_references()

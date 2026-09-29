@@ -1,11 +1,11 @@
 ---
-number: 41
+number: 0041
 status: accepted
 date: 2026-09-26
 amended: 2026-09-27
 ---
 
-# 41 — API paths live under `/api/` and every other path is the client's
+# 0041 — API paths live under `/api/` and every other path is the client's
 
 ## Forced by
 

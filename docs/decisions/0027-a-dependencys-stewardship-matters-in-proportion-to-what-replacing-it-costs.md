@@ -5,7 +5,7 @@ amended: 2026-09-27
 date: 2026-09-17
 ---
 
-# 27 — a dependency's stewardship matters in proportion to what replacing it costs
+# 0027 — a dependency's stewardship matters in proportion to what replacing it costs
 
 ## Forced by
 

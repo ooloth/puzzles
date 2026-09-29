@@ -5,7 +5,7 @@ date: 2026-09-20
 amended: 2026-09-26
 ---
 
-# 34 — the repository is one package
+# 0034 — the repository is one package
 
 ## Forced by
 

@@ -83,13 +83,14 @@ as casual and found rather than marketed, and the first play has to work without
 nothing of them.** Work is recoverable only if something can be presented from a fresh starting
 state, and there are three candidates for what holds it:
 
-| Carrier | Survives the wipe? | Asks the player for anything? |
-| --- | --- | --- |
-| Anything the browser holds — IndexedDB, `localStorage`, a locally-minted identifier | No, by definition | No |
-| A **server-set** `HttpOnly` cookie | Yes, to a 400-day ceiling | No |
-| Something the player holds — an email address, a passkey, a code | Yes | Yes, and that is an account |
+- **Anything the browser holds**, such as IndexedDB, `localStorage` or a locally minted identifier.
+  It does not survive the wipe, by definition, and asks the player for nothing.
+- **A server-set `HttpOnly` cookie.** It survives the wipe, up to a 400-day ceiling, and asks the
+  player for nothing.
+- **Something the player holds**, such as an email address, a passkey or a code. It survives the
+  wipe, and asks the player for something, which makes it an account.
 
-The list is exhaustive, which is what makes the middle row load-bearing: it is the only mechanism
+The list is exhaustive, which is what makes the cookie load-bearing: it is the only mechanism
 that protects a lapsed guest for free, and it is the one the demoted draft rejected.
 
 *Sourced — the wipe covers non-cookie website data only, and server-set cookies follow their declared

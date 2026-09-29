@@ -60,14 +60,16 @@ opened hours later — which is the case none of that machinery is for.
 
 The dependency picture, checked 2026-09-02:
 
-| Project | State |
-| --- | --- |
-| Replicache | Archived 2026-06-10; maintenance mode, users pointed at Zero |
-| ElectricSQL | Team joined Databricks 2026-08-11; Electric Cloud winding down with no stated shutdown date; the open-source projects continue |
-| InstantDB | Team joined OpenAI 2026-08-22; signups closed, cloud apps shut down 2027-08-31, backups retained to 2028-08-31 |
-| Legend-State | In 3.0 beta since 2024-09-22 with no stable release; npm `latest` still 2.1.15 from 2024-08-30 |
-| Triplit | Last pushed 2026-01-19, roughly seven months stale; AGPL-3.0, which `../constraints.md` records as disqualifying for a hosted service |
-| LiveStore, TinyBase, Evolu | Healthy and actively released, and each effectively one person |
+- **Replicache:** archived 2026-06-10 and in maintenance mode, with users pointed at Zero.
+- **ElectricSQL:** the team joined Databricks 2026-08-11. Electric Cloud is winding down with no
+  stated shutdown date, and the open-source projects continue.
+- **InstantDB:** the team joined OpenAI 2026-08-22. Signups are closed, cloud apps shut down
+  2027-08-31, and backups are retained to 2028-08-31.
+- **Legend-State:** in 3.0 beta since 2024-09-22 with no stable release. npm `latest` is still
+  2.1.15, from 2024-08-30.
+- **Triplit:** last pushed 2026-01-19, roughly seven months stale. It is AGPL-3.0, which
+  `../constraints.md` records as disqualifying for a hosted service.
+- **LiveStore, TinyBase and Evolu:** healthy and actively released, and each effectively one person.
 
 That pattern is the strongest argument in the research for hand-rolling. It is not an argument that
 these are bad projects.

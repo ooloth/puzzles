@@ -567,19 +567,29 @@ free VMs have local disks. The pages below contradict it, so that claim was disc
 
 **Out, each on one property:**
 
-| Candidate | Fails | Why |
-|---|---|---|
-| DigitalOcean App Platform | 7 | "App Platform does not currently support volumes"; "Every redeployment of your app will reset the filesystem" |
-| Heroku | 7 | "Any files written get discarded the moment the dyno stops or restarts" |
-| Deno Deploy | 7 | No persistent disk; its docs point to KV or object storage |
-| Koyeb | 2 | "Koyeb does not support directly setting apex domains"; its workaround is a redirect to `www`, which also costs a round trip [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) property 4 forbids |
-| Val Town | 4 | "After some inactivity with no new requests, the HTTP process is terminated" |
-| Azure App Service free tier | 4 | "Always On... is not available on the Free or Shared tiers" |
-| Oracle Always Free | 4 | "Idle Always Free compute instances may be reclaimed": 7 days under 20% CPU at the 95th percentile and under 20% network, which an idle small app meets. It passes only if kept artificially busy |
-| Free tiers of Render, Koyeb and Zeabur | 4 | Each sleeps, and Render's and Koyeb's also refuse a persistent disk |
-| PikaPods | 5 | Deploys only from its own catalogue |
-| Glitch | — | App hosting shut down 2025-07-08 |
-| A machine at home behind Cloudflare Tunnel | 2 | The domain must point at `<UUID>.cfargotunnel.com` and resolves to Cloudflare's proxy |
+- **DigitalOcean App Platform** fails property 7: "App Platform does not currently support
+  volumes", and "Every redeployment of your app will reset the filesystem".
+- **Heroku** fails property 7: "Any files written get discarded the moment the dyno stops or
+  restarts".
+- **Deno Deploy** fails property 7. It has no persistent disk, and its docs point to KV or object
+  storage.
+- **Koyeb** fails property 2: "Koyeb does not support directly setting apex domains". Its workaround
+  is a redirect to `www`, which also costs a round trip that
+  [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md)
+  property 4 forbids.
+- **Val Town** fails property 4: "After some inactivity with no new requests, the HTTP process is
+  terminated".
+- **Azure App Service's free tier** fails property 4: "Always On... is not available on the Free or
+  Shared tiers".
+- **Oracle Always Free** fails property 4: "Idle Always Free compute instances may be reclaimed"
+  after 7 days under 20% CPU at the 95th percentile and under 20% network. An idle small app meets
+  that, so it passes only if kept artificially busy.
+- **The free tiers of Render, Koyeb and Zeabur** fail property 4. Each sleeps, and Render's and
+  Koyeb's also refuse a persistent disk.
+- **PikaPods** fails property 5. It deploys only from its own catalogue.
+- **Glitch** shut down its app hosting on 2025-07-08.
+- **A machine at home behind Cloudflare Tunnel** fails property 2. The domain must point at
+  `<UUID>.cfargotunnel.com`, so it resolves to Cloudflare's proxy.
 
 *Sourced — Oracle's [Always Free resources](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)
 opened by me. The rest from each vendor's docs, read by agents: DigitalOcean's

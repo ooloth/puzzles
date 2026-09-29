@@ -154,6 +154,102 @@ the whole of the preference, per the maintainer on 2026-09-28, recorded in
   tiers at all. If it does not, that is the finding, and the choice between them is made on cost as
   stated above rather than dressed as a derivation.
 
+### Extended 2026-09-28: the failures a host choice could cause
+
+*Written before any candidate is scored on it, per the extend-and-zoom step. The failures are a
+starting list, not a complete one.*
+
+**How the choice could go wrong or cause harm:**
+
+- An action on the provider's side, such as an account suspension, a billing error or an outage
+  upstream of the provider, takes the machine offline. Railway's May 2026 incident, recorded below, is
+  the example.
+- The machine runs unpatched software beneath our code and is compromised.
+- The machine is lost, and replacing it is slow because every step is manual.
+- The provider changes its terms, raises its prices or shuts down, and leaving is expensive.
+- The machine's public address changes without our doing anything, and the domain points nowhere.
+
+**How it could be slow:**
+
+- The machine is far from the players.
+- Every fresh connection pays its three or four round trips to the machine itself, wherever that is.
+- A neighbour on shared hardware takes the CPU the process needs.
+- The smallest instance has less memory than the server uses.
+
+**How it could be hard to use or to change:**
+
+- Recurring chores fall on the maintainer: patching, certificate renewal, restarting a dead process.
+- Leaving needs the app rewritten around the provider's own features.
+- A long prepaid term makes leaving cost money.
+
+**Properties added from that list:**
+
+14. **Software beneath our code receives security patches without a recurring manual step.** Rests on
+    the solo maintainer and "Clarity over cleverness, because one person maintains this" in
+    [../problem.md](../problem.md), and the security theme in
+    [../guarantees/README.md](../guarantees/README.md). How the machine is hardened is still
+    [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) at M2. This
+    property asks only whether patching recurs as manual work.
+15. **A replacement machine can be created and the store restored to it by a script, through the
+    provider's API.** Rests on
+    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md),
+    Risk: "the lever that most affects the answer is how automated the recovery is".
+16. **Leaving the host costs a redeploy and a copy of the store, and nothing in the app depends on the
+    provider.** Rests on
+    [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md):
+    a stewardship worry is priced by what leaving costs. This property keeps that cost low. A
+    prepaid term's remainder counts toward it.
+17. **The TLS handshake for a fresh connection completes close to the player.** Rests on "Mobile
+    networks — setup cost, not bandwidth" in [../constraints.md](../constraints.md): a fresh
+    connection costs three to four round trips before any payload moves. A handshake ending at an edge
+    near the player makes those round trips short, however far away the machine is. This zooms into
+    property 13, which asked only which TLS version.
+18. **The machine's public address does not change unless we change it.** Rests on property 2, and
+    on [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md): a
+    changed address with the domain still pointing at the old one is an outage nobody triggered.
+
+**Property 2 is split, because its wording failed hosts its purpose may not.**
+
+- **2a. What the browser receives for the app's hostname is A/AAAA records, with no CNAME to a
+  provider's domain in the answer.** This is what Safari's comparison reads, per
+  [../constraints.md](../constraints.md). Cloudflare's flattening of an apex CNAME answers with A
+  records, so a host that needs flattening can pass. Whether a shipped Safari agrees is reasoned, not
+  observed.
+- **2b. The DNS setup needs no CNAME at all.** This is what the property said before. It separates
+  nothing 2a does not, once flattening passes 2a, so it binds on nothing.
+
+**Checked and found binding on nothing:**
+
+- **A neighbour taking CPU.** "Servers — framework throughput is three orders of magnitude above this
+  workload" in [../constraints.md](../constraints.md). Even Fly's documented floor of 6.25% of a
+  shared vCPU leaves that margin at this audience. This reverses if the generator runs on the same
+  machine, which no record says it does.
+- **Protection against attacks on the address.** The security theme in
+  [../guarantees/README.md](../guarantees/README.md) records the surface as small while nothing is
+  worth gating. BuyVM's protection being a paid add-on is recorded, not scored.
+- **Logs and metrics.** Every candidate lets the process write logs somewhere it can be read after a
+  crash. What is watched is [what are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
+  at M11.
+
+**Measured: the server's resident memory is about 113 MB idle and about 132 MB after 5,000
+requests.** The JavaScript heap stays near 18 MB. So a 256 MB instance, Fly's smallest, leaves roughly
+120 MB of headroom, before the store is added at M3. A 1 GB VPS also carries its operating system.
+
+*Measured, 2026-09-28. `src/server/app.ts`'s `buildServer` ran in a forked child process on Node
+26.7.0, macOS on Apple silicon (arm64), and reported its own `process.memoryUsage()` after a forced
+garbage collection. A separate parent process sent 5,000 sequential `GET /api/hello` requests. It ran
+five times: idle 112.2 to 112.7 MB, loaded 131.3 to 132.1 MB. A first attempt, which sent the
+requests from inside the server's own process, read about 215 MB and was discarded, because the
+HTTP client's memory was counted with the server's. Not measured: Linux, which is what production
+runs and which counts resident memory differently from macOS; the store, which does not exist until
+M3; and serving the client's files from the same process.*
+
+**Still an open input:** where the first players are.
+[Which region does the machine run in?](which-region-does-the-machine-run-in.md) decides the region at
+M3. But a host with no region near the players forces a change of host, not just of region, so
+whether the host offers a region near them is a property once someone says where they are. Until
+then, each candidate's regions are recorded.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).

@@ -791,3 +791,125 @@ host fails. Northflank states neither the disk type nor whether its free Sandbox
 *Sourced — Fly's [volumes overview](https://docs.fly.io/volumes/overview/), Railway's
 [Metal](https://docs.railway.com/railway-metal) and Render's [disks](https://render.com/docs/disks),
 read by agents. Render's community forum could not be reached from the sandbox.*
+
+### Scored on the remaining properties, 2026-09-28
+
+*This pass scores properties 1, 3, 9, 10, 11 and 12, resolves property 6 where it could, and screens
+candidates found earlier but never scored. "Opened by me" means the session that wrote this pass read
+the page itself. The rest was read by research agents that day. Several agents lost web search partway
+through, and several vendor pages render only in a browser, so more cells are unknown than the
+evidence would otherwise leave. An unknown is not a pass.*
+
+**Out, each on one property:**
+
+- **Kamatera** fails property 6: its servers are "based on SSD SAN storage array". *Opened by me,
+  [pricing](https://www.kamatera.com/pricing/).*
+- **Scalingo** fails property 7: "when you redeploy your application or if your application is
+  restarted, SQLite data would be lost". *Opened by me, [SQLite](https://doc.scalingo.com/databases/sqlite).*
+- **Replit's Reserved VM** fails property 7: "The file system in published apps is not persistent and
+  resets every time you publish". *Opened by me,
+  [troubleshooting](https://docs.replit.com/build/troubleshooting).*
+- **Clever Cloud** fails property 7: "you will lose anything on the local disk after a rebuild or a
+  restart". Its persistent option, FS Buckets, is "a network-based storage solution", which fails
+  property 6. *Opened by me, [FS Buckets](https://www.clever.cloud/developers/doc/deploy/storage/fs-bucket/).*
+
+**Upsun was reported out and is not.** Its `storage` mounts point at "an external network directory",
+which fails property 6. But its `instance` mounts "are local mounts", and no page says whether one
+survives a redeploy. So Upsun is unknown on property 7. *Opened by me,
+[mounts](https://developer.upsun.com/docs/configure-apps/image-properties/mounts).*
+
+**Property 6, where it was resolved:**
+
+- **Local:**
+  - Fly: "a slice of an NVMe drive on the same physical server".
+  - Linode: "This local storage is built entirely on enterprise-grade SSDs", opened by me at
+    [manage disks](https://techdocs.akamai.com/cloud-computing/docs/manage-disks-on-a-compute-instance).
+  - Hetzner, DigitalOcean and Vultr, per the 2026-09-27 pass.
+  - RackNerd: "RAID-10 protected Pure SSD storage".
+  - BuyVM: "Pure SSD storage".
+  - Scaleway's cheapest types: "Dynamic local: 1 x SSD".
+  - The RackNerd and BuyVM wording describes a disk array without saying "local". Local is the
+    reasonable reading, not a stated one.
+- **Unknown:** Railway, Render, Northflank and Sliplane, where no vendor page says whether a volume is
+  on its host or networked. Also AWS Lightsail, OVHcloud, netcup, Contabo, IONOS and Hostinger, where
+  no page describes the root disk either way.
+  - Railway's hardware post mentions "12 drives of NVMe per box, and 4x 100G NICs" for its storage
+    offering, which fits either reading.
+  - Render's community forum, one place a staff answer might have been, "was sunset on March 24,
+    2026".
+  - Sliplane runs "on infrastructure from Hetzner GmbH" in Europe and "on Datapacket and Latitude" in
+    the US.
+
+**Property 2 turns out to need zooming in.** Northflank says "Your DNS provider must support CNAME
+flattening in order to link an apex domain", and Railway says the same in effect. The property as
+written, "no CNAME to a provider's domain required", fails them. But what Safari's comparison reads is
+the DNS answer the browser gets, and Cloudflare's flattening answers with A records. So what the
+property protects may survive flattening. That is reasoned, not observed, and it is the next pass's
+work to split the property into what the browser resolves and what the DNS setup requires.
+
+**Properties 1, 3, 9, 10, 11 and 12 for the managed platforms still standing:**
+
+- **Property 1:** every platform checked routes all paths on the domain to the one process unless
+  told otherwise. Fly: "When you add a `[[statics]]` section… the Fly Proxy intercepts requests
+  matching your `url_prefix`", so without one nothing is intercepted.
+- **Property 3:**
+  - Render: edge caching "None… is the default", and a response carrying `Set-Cookie` is never
+    cached even when caching is on.
+  - Northflank's CDN is opt-in, but one page says to "disable Northflank's CDN on the subdomain" in
+    one workflow, so its default is unclear.
+  - Fly's and Railway's documentation is silent. Unknown.
+- **Property 9:** passes on Fly (`fly ssh sftp`), Railway (`railway service files download`), Render
+  (SCP and Magic Wormhole), Northflank (SSH and a transfer command) and Sliplane (SSH).
+- **Property 10:** every one of them can deploy a Docker image built with pnpm, which keeps its
+  symlinked layout. None states this in so many words.
+- **Property 11:** passes on Fly, Railway, Render, Northflank and Sliplane, which all deploy a
+  Dockerfile or an image.
+- **Property 12:**
+  - Fly's checks take a `path`, and no page says they can be turned off.
+  - Railway checks only at deploy time: "Railway does not monitor the healthcheck endpoint after the
+    deployment has gone live".
+  - Render's default is a TCP probe, and an HTTP path is optional.
+  - Northflank's checks are opt-in.
+  - Sliplane mentions "automatic healthchecks" with no configuration found.
+- **Price, cheapest always-on setup with about 1 GB of volume:**
+  - Fly: about $2.09 a month ($1.94 for 256 MB plus $0.15 per GB).
+  - Northflank: about $2.85.
+  - Railway: $5 plus usage.
+  - Render: not readable, because its pricing page renders in script.
+  - Sliplane: €9, with 20 GB included.
+
+**Properties 1, 3, 9, 10, 11 and 12 on a VPS** are ours to satisfy by construction. Nothing sits in
+front of the machine unless we put it there, and we reach it over SSH. What remains per provider is
+whether anything the provider adds breaks one of them:
+
+- BuyVM's DDoS protection is a paid add-on at $3 a month per IP.
+- Scaleway bills its IPv4 separately, at €0.004 an hour.
+- Hetzner charges €0.50 a month for IPv4.
+- Lightsail's IPv4 changes on every stop unless a static IP is attached, which is free while
+  attached.
+
+None of these fails a property.
+
+**Price, cheapest VPS with at least 1 GB of RAM:**
+
+- RackNerd: $21.99 a year, "lifetime recurring".
+- BuyVM: $3.50 a month.
+- Linode: $5 a month.
+- DigitalOcean: $6 a month.
+- Lightsail: $7 a month.
+- Hostinger: $6.49, renewing at $11.99 on a two-year term.
+- IONOS: $2 a month for three months, then $6.
+- OVHcloud: $4.54 a month on a 12-month prepay.
+- Contabo: €5.50 a month on a 24-month term.
+- netcup: €8.26 a month on a 12-month term.
+- Hetzner's figure could not be read, because its page renders in script.
+
+**Regions are recorded, not scored**, per the deferral to M3. Scaleway has none in North America:
+"Paris (France), Amsterdam (Netherlands), and Warsaw (Poland)".
+
+**Two properties an agent surfaced:**
+
+- **A platform's health check can itself be traffic the app never asked for.** Fly checks
+  continuously, while Railway and Render check only at deploy.
+- **Every platform with a volume limits a service using one to a single instance, and gives up
+  zero-downtime deploys.** That is already property 8.

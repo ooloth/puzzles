@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-26
+updated: 2026-09-28
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -1046,10 +1046,34 @@ network filesystem."
 
 *Sourced — [sqlite.org/lockingv3.html](https://www.sqlite.org/lockingv3.html), read 2026-09-03.*
 
-**So an embedded store and a network-mounted disk do not combine.** This rules out Cloud Run's Cloud
+**So an embedded store and a network filesystem do not combine.** This rules out Cloud Run's Cloud
 Storage FUSE and NFS mounts and AWS Lambda with EFS as homes for one, whatever else they offer, and it
 is why [ADR-0021](decisions/0021-the-server-and-its-store-share-a-machine.md) puts the process and the
-file on the same machine rather than treating co-location as an implementation detail.
+file on the same machine rather than treating co-location as an implementation detail. A network
+block device is a different thing: the machine it is attached to mounts and locks its filesystem
+itself, and SQLite's documentation does not mention block devices at all (checked 2026-09-28).
+
+## Databases — SQLite commits wait on a sync
+
+**In WAL mode with full durability, every commit waits for one sync of the WAL file.** "Writers sync
+the WAL on every transaction commit if PRAGMA synchronous is set to FULL but omit this sync if PRAGMA
+synchronous is set to NORMAL." With NORMAL, "transactions are no longer durable and might rollback
+following a power failure or hard reset". In rollback-journal mode at FULL, a commit syncs three
+times.
+
+**Reads never sync.** A page already in the operating system's cache is read without touching the
+disk.
+
+*Sourced — [wal.html](https://www.sqlite.org/wal.html) read 2026-09-28;
+[atomiccommit.html](https://www.sqlite.org/atomiccommit.html) and
+[pragma.html](https://www.sqlite.org/pragma.html#pragma_synchronous) read by a research agent the
+same day.*
+
+> So whatever a sync costs on the store's disk is paid on every durable commit, and on no read. A disk
+> reached over a network adds that network's round trip to every commit. Which synchronous setting the
+> store runs with is [what durability settings does the store run with?](questions/what-durability-settings-does-the-store-run-with.md).
+
+*Reasoned — from the two facts above.*
 
 ## Law and licensing
 

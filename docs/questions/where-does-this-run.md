@@ -79,9 +79,12 @@ host:
    [ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md),
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) and
    [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md).
-6. **The process writes to a local filesystem, not a network filesystem.** Rests on
+6. **The process writes to a disk inside its own machine, not to a network filesystem or network
+   block storage.** Rests on
    [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) and "Databases — SQLite
-   is not safe on a network filesystem" in [../constraints.md](../constraints.md).
+   is not safe on a network filesystem" in [../constraints.md](../constraints.md) for the filesystem,
+   and on [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
+   for the disk.
 7. **What the process writes survives a restart and a redeploy.** Rests on
    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
 8. **A deploy never has two processes holding the store's file at once.** Rests on
@@ -510,10 +513,9 @@ reasoned rather than observed.
 - Ashburn and Hillsboro carry only the CPX line. A US CPX11 price of about $20.49 is from third-party
   trackers and is unverified.
 - Locations are Falkenstein, Nuremberg, Helsinki, Ashburn, Hillsboro and Singapore.
-- Volumes "are based on the networked block storage model". As written,
-  [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) rules out "a network
-  block device presented as local", which covers them. Its source does not support that clause, per
-  [../unfinished.md](../unfinished.md). The server's own disk is "local NVMe SSD".
+- Volumes "are based on the networked block storage model", which
+  [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
+  rules out for the store. The server's own disk is "local NVMe SSD".
 - The primary IPv4 fee was found at €1.70 on a dedicated-server page. A Cloud-specific figure was not
   confirmed.
 
@@ -615,9 +617,11 @@ confirmed that a volume can be attached on it.
 - **Azure's B1s** is free for 12 months, and **AWS's** new-account credits last 6 months. Neither is
   free after that.
 
-So whether a free host qualifies at all turns on property 6 and the block-device clause of
-[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), which
-[../unfinished.md](../unfinished.md) records as unsupported by its source.
+So on 2026-09-27, whether a free host qualified at all turned on property 6 and the block-device
+clause of [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md). That clause was
+removed on 2026-09-28, and network block storage was ruled out on other grounds by
+[ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md), so
+neither free VM qualifies.
 
 *Sourced — Google's [disks](https://docs.cloud.google.com/compute/docs/disks) and
 [free tier](https://docs.cloud.google.com/free/docs/free-cloud-features), and Oracle's
@@ -689,8 +693,9 @@ resources paragraph under the properties.
 ### Local disk against network block storage, 2026-09-28
 
 *Gathered to settle whether [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)'s
-block-device clause holds, per [../unfinished.md](../unfinished.md). "Opened by me" means the session
-that wrote this pass read the page itself.*
+block-device clause held. It was settled by
+[ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md).
+"Opened by me" means the session that wrote this pass read the page itself.*
 
 **What SQLite needs from storage is locks that work, one host, and honest syncs.** Its corruption page
 names "network filesystems and NFS in particular" for lock bugs, and says "SQLite must believe whatever

@@ -100,6 +100,15 @@ and omitted the step that protects a player's work.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**A settled record depends on this answer being continuous.**
+[ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
+keeps the store on a disk inside its machine, which dies with the machine, rather than on network
+block storage, which does not. It justifies that by relying on this question's copy to cover the
+machine's loss. That holds only if the copy is updated continuously. A copy taken periodically loses
+every write since the last one, and the record says to revisit if that is the answer here. The
+client keeping each change until the off-machine copy has it might close the last gap. That was
+raised on 2026-09-28 and is not researched.
+
 **No vendor examined documents test-restoring customer backups**, and Railway's own guide states the
 principle: "A backup you have never restored is unverified." This holds at both ends of the store
 question — a managed service changes who runs the storage, not who verifies the restore.

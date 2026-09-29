@@ -58,6 +58,7 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [../constraints.md](../constraints.md) — a genuinely cross-origin API is blocked outright rather than capped, so it is worse and not exempt
    - **Given:** [../constraints.md](../constraints.md) — without content-hashed filenames a browser revalidates every cached asset
    - **Given:** [0021-the-server-and-its-store-share-a-machine](../decisions/0021-the-server-and-its-store-share-a-machine.md) — the host must run an ordinary process with a local disk beside it
+   - **Given:** [0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md) — and that disk is inside the machine, not network block storage
    - **Given:** [0022-the-machines-disk-survives-restart-redeploy-and-host-replacement](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) — and that disk must survive a redeploy, which platforms vary on
    - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the host must present both halves on one hostname
    - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so whatever serves the origin sends every path under `/api/` to the server, and no cache or cookie rule written for the files reaches it

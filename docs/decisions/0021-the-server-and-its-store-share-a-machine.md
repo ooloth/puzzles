@@ -2,6 +2,7 @@
 number: 0021
 status: accepted
 date: 2026-09-03
+amended: 2026-09-28
 ---
 
 # 0021 — The server and its store share a machine
@@ -25,9 +26,16 @@ constrains hosting, and a hosting choice made without it is the failure that rec
 [Where does this run?](../questions/where-does-this-run.md) inherits this: any candidate must run an
 ordinary process with a local disk beside it.
 
-**What is ruled out is a network filesystem**, in every form — NFS, a FUSE mount over object storage,
-or a network block device presented as local. Cloud Run's Cloud Storage FUSE and NFS mounts and AWS
-Lambda with EFS are all specific instances.
+**What is ruled out is a network filesystem**, in every form: NFS, SMB, or a FUSE mount over object
+storage. Cloud Run's Cloud Storage FUSE and NFS mounts and AWS Lambda with EFS are all specific
+instances.
+
+**A network block device is not a network filesystem, and this record does not rule it out.** On a
+block device attached to one machine, that machine mounts the filesystem and does the locking
+itself, so the unreliable locking SQLite warns about does not arise. This record said until
+2026-09-28 that such a device was ruled out, but its source never mentions block devices, so the
+clause was removed. Whether the store may sit on one is settled separately, on other grounds, by
+[ADR-0042](0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md).
 
 **It says nothing about redundancy or replication.** Copies of the file may exist elsewhere, and
 [how is the store backed up?](../questions/how-is-the-store-backed-up.md) is where that is designed.

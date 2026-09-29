@@ -257,18 +257,19 @@ considered rather than rejected.
 of it yourself. An optimised configuration — one `shared-cpu-1x`, 256MB, shared IPv4, scheduled
 volume snapshots disabled — starts from $2.02/month for the instance, per
 [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md), which checked Fly's
-published prices against the vendor. Against it: shared-CPU steal,
-per-app billing that does not amortise across deployables, and volume snapshots billed with
-compounding retention.
+published prices against the vendor. Against it: shared CPU with a documented quota, and volume
+snapshots billed by retention. Fly's reserved capacity gives a discount across all of an
+organisation's apps, per the 2026-09-27 pass.
 
 *Hetzner.* A bare VPS. Its 2 vCPU / 4GB CX23 is €5.49/month since the 15 June 2026 price
 adjustment, but that line is EU-only and its order page showed it unavailable on 2026-09-27; the US
 locations carry only the CPX line, whose price was not confirmed. See the 2026-09-27 pass below. Full
 operational ownership — patching, TLS, monitoring — with no managed offset.
 
-*Google Compute Engine e2-micro, "Always Free".* Not free once an external IPv4 is counted, whose fee
-was not confirmed on a Google page. Locked to three US regions (`us-west1`, `us-central1`,
-`us-east1`), with a tighter compute ceiling and real GCP console complexity.
+*Google Compute Engine e2-micro, "Always Free".* Out: its disk is a network-attached persistent
+disk, which [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
+rules out for the store. It is also limited to three US regions (`us-west1`, `us-central1`,
+`us-east1`).
 
 *DigitalOcean or Linode.* $24/month each for 2 vCPU / 4GB, confirmed 2026-09-27; their cheapest
 plans are $4 and $5.
@@ -865,7 +866,8 @@ flush, fsync and acknowledge, 2026-09-28.*
 *Sourced — Fly's [host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/) opened by me;
 the rest read by agents.*
 
-**Which platform volumes are local is known only for Fly and Koyeb.** Fly: "a volume exists on one
+**Among the platforms, which volumes are local is known only for Fly, and for Koyeb per the
+2026-09-27 pass.** Fly: "a volume exists on one
 server in a single region — it is not network storage". Railway says only that "all of Railway's disks
 are NVMe SSDs", and Render only that its disks "use the same high-performance SSDs as Render
 Postgres". Neither says local or networked, and neither documents what happens to a volume when its
@@ -955,7 +957,9 @@ work to split the property into what the browser resolves and what the DNS setup
   - Northflank's checks are opt-in.
   - Sliplane mentions "automatic healthchecks" with no configuration found.
 - **Price, cheapest always-on setup with about 1 GB of volume:**
-  - Fly: about $2.09 a month ($1.94 for 256 MB plus $0.15 per GB).
+  - Fly: $2.02 a month for 256 MB, as verified on 2026-09-04, plus $0.15 per GB of volume. A fetch
+    on 2026-09-28 read $1.94, from a page whose figures changed between fetches, so it is
+    unverified.
   - Northflank: about $2.85.
   - Railway: $5 plus usage.
   - Render: not readable, because its pricing page renders in script.
@@ -967,7 +971,8 @@ whether anything the provider adds breaks one of them:
 
 - BuyVM's DDoS protection is a paid add-on at $3 a month per IP.
 - Scaleway bills its IPv4 separately, at €0.004 an hour.
-- Hetzner charges €0.50 a month for IPv4.
+- Hetzner's IPv4 fee is unconfirmed: €1.70 was found on a dedicated-server page, and €0.50 was
+  reported for Cloud with no source.
 - Lightsail's IPv4 changes on every stop unless a static IP is attached, which is free while
   attached.
 
@@ -985,7 +990,8 @@ None of these fails a property.
 - OVHcloud: $4.54 a month on a 12-month prepay.
 - Contabo: €5.50 a month on a 24-month term.
 - netcup: €8.26 a month on a 12-month term.
-- Hetzner's figure could not be read, because its page renders in script.
+- Hetzner: CX23 at €5.49 a month in the EU, per the 2026-09-27 pass. Its US price could not be read,
+  because the page renders in script.
 
 **Regions are recorded, not scored**, per the deferral to M3. Scaleway has none in North America:
 "Paris (France), Amsterdam (Netherlands), and Warsaw (Poland)".
@@ -1003,16 +1009,19 @@ None of these fails a property.
 source is in the pass that established it. The next pass replaces this entry rather than adding
 beneath it.*
 
-**Unscored for every candidate:** properties 2a and 14 to 18, added by the extend pass under
-**Properties the answer is scored against**.
+**Unscored for every candidate:** properties 14 to 18, added by the extend pass under
+**Properties the answer is scored against**. Property 2a is scored below for each managed platform.
+On a VPS it passes by construction, since the domain points straight at the machine's own address.
 
 **Still to be given:** where the first players are. It turns "the host offers a region near them"
 into a property. See **Still an open input** under the properties.
 
 **Standing, managed platforms:**
 
-- **Fly.io** passes every property scored except 3, which is unknown because Fly's documentation
-  says nothing about caching or `Set-Cookie`. About $2.09 a month for 256 MB and 1 GB of volume.
+- **Fly.io** passes every property scored, 2a included, since Fly recommends A and AAAA records at the
+  apex. The exception is 3, which is unknown because Fly's documentation says nothing about caching
+  or `Set-Cookie`. About $2.17 a month for 256 MB and 1 GB of volume, from the $2.02 verified on
+  2026-09-04.
 - **Railway**:
   - Unknown on 3 and 6.
   - Passes 2a only through Cloudflare's CNAME flattening, which is reasoned.
@@ -1037,7 +1046,8 @@ into a property. See **Still an open input** under the properties.
 provider checked has a policy of stopping an idle machine.
 
 - **Local disk confirmed:**
-  - Hetzner: price unread, and its IPv4 is €0.50 a month.
+  - Hetzner: CX23 at €5.49 a month in the EU, per the 2026-09-27 pass, though its order page showed
+    it unavailable that day. The US price was not read, and the IPv4 fee is unconfirmed.
   - DigitalOcean: $6 a month.
   - Linode: $5 a month.
   - Vultr: price and policies unread.

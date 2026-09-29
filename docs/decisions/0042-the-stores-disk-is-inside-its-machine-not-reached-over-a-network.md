@@ -82,6 +82,12 @@ this, and the chosen host is what makes it true.
   publishes no figure for on its standard disk. Its survival benefit is mostly owed already by the
   off-machine copy. **Reverses if** the off-machine copy cannot be made continuous, or if a provider's
   network block storage is measured adding no latency a commit would notice.
+
+  *Sourced — AWS's [EBS features](https://aws.amazon.com/ebs/features/): "The average latency
+  between EC2 instances and EBS is single-digit milliseconds"; Google's
+  [disk performance](https://docs.cloud.google.com/compute/docs/disks/performance) gives no latency
+  for its standard disk. Read by research agents 2026-09-28; the working is under "Local disk against
+  network block storage" in [where does this run?](../questions/where-does-this-run.md).*
 - **Not yet.** Rejected because the host question scores candidates on the disk now, and several
   hosts differ on exactly this.
 
@@ -89,7 +95,8 @@ this, and the chosen host is what makes it true.
 
 **A disk inside the machine dies with it.** Fly: "Volumes are pinned to physical hosts, so when
 there's a host outage the volume is unreachable." Until the off-machine copy exists at M3, a machine
-failure loses the store outright. [ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) already names that gap.
+failure loses the store outright. *Sourced — Fly's
+[host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/), opened 2026-09-28.* [ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) already names that gap.
 
 **The argument rests on a later question.** If the M3 copy is not continuous, the balance shifts,
 and this record should be revisited rather than kept by default.

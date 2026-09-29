@@ -21,28 +21,15 @@ is its own question — see
 
 ## What would settle it
 
-Pricing the platforms that fit the shape, which is now known. Four records settle it: the store is a
-SQLite file the server process opens
-([ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md),
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md)), on the same machine as the process
-([ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)), on a disk that survives
-restart and redeploy ([ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)),
-in an ordinary runtime that never scales to zero on the request path
-([ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md),
-[ADR-0018](../decisions/0018-the-server-does-not-run-in-a-constrained-isolate.md)).
+**Scoring every candidate against the numbered properties below, in passes, until one candidate
+remains**, or until a pass that zooms into the properties and extends the list changes no verdict.
+That is the extend-and-zoom loop in the `make-next-decision` skill. The records a candidate must
+satisfy are listed with the properties, and each pass is written into **Findings** with its date.
 
-**So a candidate has to offer four things**: an ordinary long-running process, a local disk beside it,
-that disk surviving a redeploy, and a deploy model that never runs two processes against one volume.
-
-**What is still genuinely open is whether that machine is managed or bare**, and that is most of what
-this question now decides. Both satisfy every record above — a managed platform with a persistent
-volume qualifies exactly as a rented virtual machine does — and they differ enormously in how much of
-[how is the server operated?](how-is-the-server-operated.md) and
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) they supply.
-
-A platform is also cheap to try. Deploying the same trivial application to two candidates costs an
-afternoon and answers questions about build times, cold starts and how much of the operational
-surface turns out to be yours that no comparison page will.
+Two kinds of evidence settle a cell. Reading settles what a vendor documents: disk type, deploy
+behaviour, routing, price. Running settles what only running shows. Deploying the same trivial
+application to the last two or three candidates, then checking the DNS answer, the TLS handshake, a
+redeploy and a restore, is the observation the reading narrows the field for.
 
 ## Properties the answer is scored against
 
@@ -1009,3 +996,70 @@ None of these fails a property.
   continuously, while Railway and Render check only at deploy.
 - **Every platform with a volume limits a service using one to a single instance, and gives up
   zero-downtime deploys.** That is already property 8.
+
+### Open at the end of 2026-09-28
+
+*A summary of the passes above, so the next pass starts here rather than rebuilding it. Each claim's
+source is in the pass that established it. The next pass replaces this entry rather than adding
+beneath it.*
+
+**Unscored for every candidate:** properties 2a and 14 to 18, added by the extend pass under
+**Properties the answer is scored against**.
+
+**Still to be given:** where the first players are. It turns "the host offers a region near them"
+into a property. See **Still an open input** under the properties.
+
+**Standing, managed platforms:**
+
+- **Fly.io** passes every property scored except 3, which is unknown because Fly's documentation
+  says nothing about caching or `Set-Cookie`. About $2.09 a month for 256 MB and 1 GB of volume.
+- **Railway**:
+  - Unknown on 3 and 6.
+  - Passes 2a only through Cloudflare's CNAME flattening, which is reasoned.
+  - Its health check runs only at deploy.
+  - $5 a month plus usage.
+- **Render**:
+  - Unknown on 6 and 13, since no minimum TLS version is stated.
+  - Its guide for Cloudflare DNS asks for a CNAME, so it passes 2a only through flattening.
+  - Price unread.
+- **Northflank**:
+  - Unknown on 3, 6 and 13.
+  - Passes 2a only through flattening.
+  - About $2.85 a month. Whether its free Sandbox can attach a volume is unknown.
+- **Sliplane**:
+  - Unknown on 3, 4, 6, 12 and 13.
+  - Passes 2a with A and AAAA records.
+  - €9 a month, with 20 GB included.
+- **Upsun:** unknown on 7, because nothing says whether an `instance` mount survives a redeploy. It
+  has not been scored on anything else.
+
+**Standing, VPS providers.** On a plain VPS, properties 1, 3 and 9 to 13 are ours to satisfy, and no
+provider checked has a policy of stopping an idle machine.
+
+- **Local disk confirmed:**
+  - Hetzner: price unread, and its IPv4 is €0.50 a month.
+  - DigitalOcean: $6 a month.
+  - Linode: $5 a month.
+  - Vultr: price and policies unread.
+  - RackNerd: $21.99 a year.
+  - BuyVM: $3.50 a month.
+  - Scaleway: no North American region.
+- **Disk type unknown:** AWS Lightsail, which also needs a static IP attached for property 18,
+  OVHcloud, netcup, Contabo, IONOS and Hostinger.
+
+**How the unknowns get resolved.** They are unknown mainly because this session used up its web
+searches and several vendor pages render only in a browser. Two routes:
+
+- **A web search**, in a session with enough of its search budget left. The budget is set by
+  `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`. Searches are needed for:
+  - every disk type still unknown;
+  - Upsun's `instance` mounts;
+  - property 3 on Fly, Railway and Northflank;
+  - the minimum TLS version on Render, Northflank and Sliplane;
+  - properties 4 and 12 on Sliplane.
+- **The browser agent**, for pages that render only in script:
+  - Hetzner's and Render's pricing;
+  - Vultr's site, which refused every fetch;
+  - Fly's pricing, whose figures came back different on each fetch.
+
+**Then the next extend-and-zoom pass**, on whatever is still standing.

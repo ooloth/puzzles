@@ -166,6 +166,12 @@ the one property it fails.
    deploy, failure and wait it takes part in, named concretely from `docs/problem.md`,
    `docs/guarantees/` and the records. "The network" returns nothing to reason about. "A returning
    player's first request after the service worker has answered the navigation" returns a property.
+
+   Then, for those moments, list the ways a bad answer could fail in all three categories the
+   portable decision-making standard names: how it could be wrong, how it could be slow, and how it
+   could be hard to use or to change. Do this for every category, not only the one the question is
+   about, because the topic is what narrows attention. Each failure on the list becomes a property
+   in the next sub-step.
 2. **Turn each moment's consequence into a property a candidate either has or lacks**, and cite the
    record, guarantee, constraint, failure mode or `docs/problem.md` passage it rests on. An open
    question's reasoning is not a citation. A property that can cite nothing settled rests on an
@@ -270,9 +276,9 @@ afterwards; the observation is the artifact.
      maintainer has stated, and enters as a row rather than as a tie-breaker outside the table.
    - **Maximums.** Where a tradeoff appears between any of safety, performance and experience,
      state the theoretical maximum of each, as the portable decision-making standard defines them,
-     and look for a design that comes close to all three before accepting it. State safety's
-     maximum for each kind of wrongness the system could have, not only the kind the question is
-     about.
+     and look for a design that comes close to all three before accepting it. First list the ways a
+     bad design could be wrong, slow, or hard to use or change, in all three categories and not
+     only the one the question is about.
    - **Record it.** Write the pass into the question file with its date: the new properties under
      **Properties the answer is scored against**, and the new verdicts under **Findings**. Then
      research and score again.

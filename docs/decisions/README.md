@@ -11,12 +11,13 @@ have gone a different way.
 
 One file per decision: `NNNN-kebab-title.md`.
 
-**Numbers follow the order decisions derive from each other, not the order they were written.** A
-record inserted into the middle of the chain renumbers everything after it, and every link with it.
-That churn is a one-time cost each time and it buys something permanent: reading the listing top to
-bottom is reading the argument being built, from the product statement forward. Chronology helps
-nobody — what a reader needs is which decisions a decision rests on, and the numbers carry that for
-free. `scripts/check-docs.py` catches every link a renumber breaks, so the operation is mechanical.
+**A record is never numbered before a record it rests on.** A new record takes the next free number,
+so everything it rests on already sorts above it, and reading the listing top to bottom never meets a
+record before what it depends on. Numbers are never changed once assigned, because commit messages,
+code comments and issues quote them and nothing can update those. A gap between a record and what it
+rests on is normal: [ADR-0042](0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
+rests on [ADR-0021](0021-the-server-and-its-store-share-a-machine.md). Nothing checks this, because a
+link in **Forced by** can be context rather than a prerequisite, and no script can tell the two apart.
 
 **A decision that changes is superseded by a new record, not edited into a different one.** The
 point is that what we believed at the time survives, so a record is never quietly rewritten to look

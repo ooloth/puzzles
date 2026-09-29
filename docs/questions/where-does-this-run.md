@@ -135,11 +135,10 @@ host:
 - **The demonstration purpose in [../problem.md](../problem.md).** Its own guard admits nothing that
   would not be worth building anyway, so it rules nothing in.
 
-**Cost enters as a row once the technical rows stop separating candidates.** It rules nothing out
-before that. Per the maintainer on 2026-09-27, recorded in
-[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md), free is strongly
-preferred for roughly the first year. What counts as free, strictly $0 or under some yearly amount,
-has not been stated.
+**Price enters as a row, per month or per year, once the technical rows stop separating
+candidates.** It rules nothing out. All else being equal, a lower price is preferred, and that is
+the whole of the preference, per the maintainer on 2026-09-28, recorded in
+[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md).
 
 **Deferred, because their inputs belong to later milestones:**
 

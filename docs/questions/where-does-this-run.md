@@ -2145,16 +2145,106 @@ deploy, and deploys are rare, so row 30 now weighs little.
 - **A5 is cheapest.** It is the only variant where J2 can never be removed from the maintainer's hands,
   and its terms disclaim data integrity.
 
-### Open at the end of the ninth pass
+### Tenth pass 2026-09-30: pressure-testing A1
+
+*The maintainer asked what could go wrong with the Droplet itself, and with Kamal. Agents read vendor
+docs and GitHub issues. Their quotes came through a page summariser, so re-open any page before a
+record relies on it. The memory figures below were measured here.*
+
+**Measured: memory during deploys**, 2026-09-30.
+
+- **The setup.** A minimal server using `node:sqlite` in WAL mode, kamal-proxy and Litestream 0.5.17 ran
+  in `node:24-bookworm`, Node 24.21.0, Linux arm64 under Docker. 20 clients loaded it for 40 seconds.
+  It went through five Kamal-style overlapping deploys, with the health check at `/api/up`.
+  Resident memory was sampled every half second from `/proc`.
+- **Result:** 254,329 requests, none failed.
+
+  | Process | Median | Max |
+  | --- | --- | --- |
+  | App, both processes during overlap | 80 MB | 143 MB |
+  | kamal-proxy | 20 MB | 20 MB |
+  | Litestream | 34 MB | 34 MB |
+  | All three together | | 197 MB |
+
+- *One run. Not measured: Docker's own daemons, Ubuntu itself, DigitalOcean's agent, amd64, and the
+  real Fastify server, whose macOS figure was 113 MB idle in the fourth pass.*
+
+**The Droplet.**
+
+- **Memory is enough at launch.**
+  - Docker's daemons are reported at about 100 to 170 MB idle. That comes from one blog, measured on
+    Ubuntu 26.04, and is weak.
+  - Ubuntu's stated minimum for a cloud image is 1 GB.
+  - So the total is likely under half the machine. Only the 197 MB is measured.
+- **No swap, reportedly.** Community sources, weak, say Droplets ship without swap. When memory then
+  runs out, the kernel's out-of-memory killer ends a process, possibly `dockerd`, rather than the
+  machine slowing down. Fix: a small swap file and a memory limit on the app container, both set in
+  cloud-init. DigitalOcean's old tutorials warned against swap on SSD. Those pages are from 2012 to
+  2019 and were not opened.
+- **CPU only spikes on deploy if the image is built on the Droplet.**
+  - Kamal builds on the laptop or in CI, and deploys held no request longer than 82ms in the eighth
+    pass.
+  - The Droplet must not be Kamal's remote builder. Kamal issue
+    [#1794](https://github.com/basecamp/kamal/issues/1794), seen in search only, reports BuildKit data
+    reaching 40 to 50 GB after weeks of deploys.
+- **Growth.**
+  - A CPU-heavy generator on the one shared vCPU would compete with requests, against "The interactive
+    path over batch throughput" in [../problem.md](../problem.md).
+  - It can run away from the request path at no cost, on the laptop or in CI, since generation "can
+    be as slow as it needs to be". It can also run on a second $6 Droplet.
+  - A resize that changes only CPU and RAM keeps the disk, so it can be reversed. It needs the Droplet
+    powered off, for about a minute per GB of disk used.
+- **Found, each with its fix:**
+  - **The disk fills from logs.** Docker's `json-file` logs grow without limit: max-size "Defaults to
+    -1 (unlimited)". A full disk fails the store's writes. Fix: `max-size` and `max-file` in
+    `daemon.json`.
+  - **Docker bypasses the machine's own firewall.** "traffic to and from that container gets diverted
+    before it goes through the ufw firewall settings". Fix: DigitalOcean's Cloud Firewall, which is
+    network-based and separate from the machine.
+  - **Docker is not patched automatically.** "Just adding another package repository to an Ubuntu
+    system WILL NOT make `unattended-upgrades` consider it for updates!" Fix: add Docker's origin to
+    the allowed list.
+  - **The WAL can grow without limit.** With `wal_autocheckpoint=0`, which the eighth pass's spike
+    used from Litestream's advice for heavy load, the file grows without bound if Litestream stops.
+    Fix: keep SQLite's default at this load, and alert on disk use and on a stale copy.
+    *Reasoned from Litestream's docs.*
+  - **A failed card can stop and then delete the machine.** "We power down the account's resources",
+    then "we may permanently delete the account's resources", and "DigitalOcean does not publish fixed
+    timelines for these stages". The copy in B2 is what survives it.
+  - **No ARM Droplets were found**, so images are built for amd64 on an arm64 Mac. Weak.
+
+**Kamal's costs, and how much each matters.**
+
+| Cost | Weight |
+| --- | --- |
+| Docker on the server: its memory, the three Docker findings above, and an OS to own. Fly has none of this. | The largest. Each finding is fixed once in setup |
+| Upgrading Kamal can require a newer kamal-proxy. v2.11.0: "This version requires kamal-proxy v0.9.2 or higher". `kamal proxy reboot` causes "a small outage", and rolling does not help on one server | Low: seconds, a few times a year, and absorbed by the client's retries |
+| Accessories "do not have zero-downtime deployments", so replication pauses while Litestream restarts | Low: it catches up afterwards |
+| amd64 images built on an arm64 Mac | Moderate for the developer. Emulated build speed is unmeasured. Building in CI belongs to [what deploys the code?](what-deploys-the-code.md) |
+| SSH as root by default. A non-root user in the docker group is still effectively root | Low: key-only SSH and the Cloud Firewall |
+| The local registry is new, since v2.8.0 in October 2025. Two bugs are closed and one Apple silicon to amd64 issue, [#1690](https://github.com/basecamp/kamal/issues/1690), is of unknown status | Moderate. GitHub's registry is the fallback |
+| Rough edges: disk filling with images ([#1655](https://github.com/basecamp/kamal/issues/1655)), unhelpful health-check errors ([#1667](https://github.com/basecamp/kamal/issues/1667)), and flaky health checks in 2024 ([kamal-proxy #71](https://github.com/basecamp/kamal-proxy/issues/71)) | Low to moderate |
+
+Its health-check path can be set, as in `healthcheck: {path: ...}`, so `/api/up` keeps
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). No cost
+here disqualifies A1.
+
+**All of this is to be mined** into [../constraints.md](../constraints.md),
+[../gotchas.md](../gotchas.md) and [../failure-modes/](../failure-modes/) when this question resolves,
+per the maintainer on 2026-09-30.
+
+### Open at the end of the tenth pass
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **The maintainer confirms A1**, or weighs A2 or A4 differently.
-2. **Then the records.**
-   - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended with
-     the eighth pass's scoring.
+1. **Measure a real Droplet.** The maintainer is opening a DigitalOcean account. To measure:
+   - memory used by the OS, Docker and the stack together, and its peak during a `kamal deploy`;
+   - whether swap exists;
+   - whether Livepatch covers the kernel.
+2. **Alternatives to Kamal for running the host**, with DigitalOcean held fixed until it is measured.
+3. **Then the maintainer confirms A1 or another variant**, and the records follow, as listed at the
+   end of the ninth pass. That list is kept here:
+   - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended.
    - A record is drafted for this question.
-   - Row 8's over-strict reading is corrected wherever it appears.
-   - Two findings go to their own questions: the Docker Desktop mount trap to
-     [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md),
-     and B2 as the copy's home to [how is the store backed up?](how-is-the-store-backed-up.md).
+   - Row 8 is corrected.
+   - The mount trap and B2 go to their own questions.

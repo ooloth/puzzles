@@ -161,6 +161,15 @@ reason.
   found requires a runtime tier
   [ADR-0018](0018-the-server-does-not-run-in-a-constrained-isolate.md) rules out. If it returns, the
   comparison changes shape.
+- **The tolerable outage is set at seconds, with no person involved, including through deploys.**
+  That is [how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md). This
+  record judged setup "a wash" on the assumption that recovery is a restore. Recovering with no person
+  changes that. For a file, it means a watchdog off the machine, fencing so that two machines never
+  both write, promoting a replica, and holding the socket across restarts. For a managed service,
+  failover is usually a plan tier, and a stateless server gets restarts that drop nothing on most
+  hosts. The margin this record was decided on may not survive that. The maintainer raised the goal
+  on 2026-09-29, and the working is in [where does this run?](../questions/where-does-this-run.md),
+  fourth and fifth passes.
 
 ## Also update
 

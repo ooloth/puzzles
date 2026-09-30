@@ -1783,12 +1783,378 @@ the real server.*
 - The maintainer's own monitoring, required by 28, lowers what 35 is worth. That is why DigitalOcean's
   lead there is a lead, not a decision.
 
-### Open at the end of the fifth pass
+### Sixth pass 2026-09-30: row 32 dropped, and what recovery costs
+
+**Row 32 is dropped, per the maintainer on 2026-09-30**, because measuring it is hard and nothing
+showed it could matter.
+
+- **Performance.** At one input every one to three seconds per player, even 10ms per fsync allows
+  about 100 commits a second in series. Those 10ms sit inside a mobile round trip of 270ms or more,
+  per "Mobile networks" in [../constraints.md](../constraints.md). *Reasoned.*
+- **The case that would matter is network storage**, which row 6 already excludes.
+- **What remains is whether an fsync is honest, not how fast it is.** A virtualised disk whose write
+  cache acknowledges before the data is durable loses those writes when the host loses power. No
+  latency measurement detects that, and it applies equally to every candidate. The continuous copy
+  off the machine is what covers it. It belongs to
+  [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md).
+
+**What recovery costs, by design.** The fourth pass's two designs for row 29 differ in what they cost,
+and the price rows so far showed only one machine.
+
+- **Automated rebuild.** One machine, plus object storage for the continuous copy. The outage is
+  minutes and the loss about a second of writes.
+  - DigitalOcean: about $11 a month ($6 plus Spaces at $5).
+  - Linode: about $10 ($5 plus Object Storage at $5).
+  - The copy could sit with another provider for less. That is not priced here.
+- **Warm standby.** A second machine following the copy. The outage is seconds and the compute cost
+  doubles: about $17 on DigitalOcean and $15 on Linode, storage included. Linode's provider-run
+  address failover exists only in this design.
+- **What the extra machine buys** is minutes against seconds on a dead host. That event is rare,
+  since host maintenance on both is already handled by live migration.
+
+**Vultr is next.** It is the one mainstream VPS left unresolved on row 6, and the maintainer asked on
+2026-09-30 for its reliability and price stability to be compared with the others.
+
+### Seventh pass 2026-09-30: Vultr
+
+*Vultr's main site, status page, SLA and terms returned 403 to the research agent's fetches, so those
+cells rest on search summaries unless marked. Its docs site and its public API were readable.
+"Opened by me" marks what the session that wrote this pass fetched itself.*
+
+**Scored on the rows that separated DigitalOcean and Linode:**
+
+- **Row 6 passes.**
+  - Local storage "is directly attached to the instance", the "inbuilt storage of your compute
+    instances". Its drawback: "Lower data reliability as the data is not replicated across a highly
+    available cluster". Block Storage is the replicated product. *Opened by me,
+    [storage types](https://docs.vultr.com/introduction-to-object-block-file-system-and-local-storage).*
+  - The High Frequency page calls its disk "local NVMe storage", read by the browser agent.
+  - The same docs say "All servers, except entry-level options, feature high-performance NVMe disks".
+  - The maintainer found "local" on Vultr's High Frequency page, a MassiveGRID post and a Reddit post.
+    MassiveGRID sells a competing product. The Reddit post has one upvote and contradicts itself.
+- **Row 19 passes.** Vultr's public plans API lists `vc2-1c-1gb` at $5 ("SSD"), and `vhf-1c-1gb`,
+  `vhp-1c-1gb-amd` and `vhp-1c-1gb-intel` at $6, all available in Toronto. *Queried by me,
+  `api.vultr.com/v2/plans`.*
+- **Row 25 leans fail.**
+  - No Vultr page found says it live-migrates a machine. DigitalOcean, Linode and Hetzner each
+    document that they do.
+  - A maintenance notice quoted by a third party reads "this reboot will not be as clean as if it were
+    done from within your OS", which describes a host reboot.
+  - The Reddit post reports two maintenance reboots of about 30 seconds in eight months on High
+    Frequency. MassiveGRID claims "no live migration, no automatic VM restart on a healthy host".
+  - Neither is strong evidence, and Vultr documents nothing either way. Unknown, leaning fail.
+- **Row 29 passes.**
+  - The API creates an instance with cloud-init user data: "Vultr API requires base64-encoded
+    user-data in the JSON payload".
+  - A reserved IP moves between instances, and costs "$0.004 per hour ($3/month)" whether attached or
+    not. DigitalOcean's is free while attached.
+- **Row 34 is partial.** Vultr's object storage lists no Toronto cluster. The nearest are `ewr`, `ord`
+  and `atl`. *Queried by me, `api.vultr.com/v2/object-storage/clusters`.* Its price is $18 a month
+  for the standard tier, per a search summary, against $5 at DigitalOcean and Linode. A copy with
+  another provider would avoid it.
+- **Row 35 is partial, the weakest of the three.** Built-in monitoring shows "vCPU Usage", "Disk
+  Operations" and "Network", with no memory and no threshold alerts found.
+- **Row 33 is unscored.** The status page could not be read. The SLA is reported as a "100% uptime
+  guarantee", with scheduled maintenance on 24 hours' notice excluded. Payment failure can lead to
+  suspension with no grace period stated: "Vultr may suspend or terminate your subscription, access
+  to services, or account if payment is not received on time or your payment method fails."
+- **Row 26 passes by absence**, as DigitalOcean and Linode do. No price increase to Cloud Compute was
+  found. Its object storage was relaunched in March 2025 at two to three times the old price, per
+  third-party reports only.
+- **Row 36.** Vultr raised $333 million at a $3.5 billion valuation in December 2024, led by LuminArx
+  and AMD Ventures, its first outside equity. Its focus since is GPUs, per CNBC and Vultr's blog, as
+  summarised by search. Nothing was found about its small plans.
+
+**Against DigitalOcean and Linode, Vultr is equal on rows 6, 19, 26 and 29 and behind on 25, 34 and
+35.** The row 25 gap is the one that matters, since it decides whether routine host maintenance costs
+an unannounced reboot. It rests on an absence of documentation, not on a statement. A written answer
+from Vultr on live migration would settle it.
+
+**Vultr is dropped, per the maintainer on 2026-09-30**, as trailing DigitalOcean and Linode on rows
+25, 34 and 35. What would reverse it: Vultr stating in writing that it live-migrates machines for
+host maintenance, at a price below Linode's.
+
+### Properties for the eighth pass, agreed 2026-09-30
+
+*Derived before research, from the maintainer's ideal for the choice: "it just works", "it's so easy"
+and "great price", all at once. The maintainer confirmed on 2026-09-30 that these capture what they
+mean.*
+
+**What is scored is a complete setup: the host plus everything built around it.** On a VPS, whether
+it just works and whether it is easy depend on what we add. Scoring bare hosts would leave both
+unscored.
+
+*It just works:*
+
+- **J1.** Every routine event completes with no failed request and no person: host maintenance, a
+  crash, a deploy, a certificate renewal, an OS patch and its reboot.
+- **J2.** A dead host is recovered with no person, within minutes, losing at most about a second of
+  acknowledged writes.
+- **J3.** A failure reaches the maintainer through a monitor that runs away from the machine it
+  watches, not because they looked.
+
+*It's so easy:*
+
+- **E1.** The pieces the maintainer must build, listed and counted, each marked as supplied by the host
+  or built once by us.
+- **E2.** The pieces that need recurring attention after setup. The target is zero.
+- **E3.** What the maintainer must understand to fix any one of them when it breaks.
+- **E4.** The time from an empty account to "Hello!" deployed on the domain.
+
+*Great price:*
+
+- **P1.** The monthly total of the full setup that meets J1 to J3: the machine, the copy's storage,
+  the reserved IP, monitoring, and wherever the watchdog runs.
+- **P2.** How likely that total is to change without the maintainer changing anything. This is
+  row 26.
+
+**A dependency to keep visible.** A VPS setup's E1 to E4 turn on deploy tooling, such as Kamal or
+Coolify, which [what deploys the code?](what-deploys-the-code.md) owns and which waits on this
+question. The pass scores a VPS setup both with and without such a tool, rather than choosing the tool
+here.
+
+### Eighth pass 2026-09-30: complete setups, file store against managed database
+
+*The maintainer asked on 2026-09-30 whether the store's design should be derived from the end-to-end
+hosted system rather than drive it.
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) found the runtime
+comparison a tie and broke it on failure domains, judging setup "a wash" on the assumption that
+recovery is a restore. So this pass scores setups that use a managed database alongside those that
+use the file. [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) stands until this question resolves.*
+
+**Setups.** Each is the least that meets J1 to J3.
+
+- **A. File store, Kamal.** SQLite and Litestream on a DigitalOcean or Linode VPS, deployed with
+  Kamal. An external monitor watches it, and for J2 a scheduled function at another provider rebuilds
+  through the provider's API.
+- **B. File store, built by hand.** The same, with the socket-holding supervisor, drain and proxy of
+  the fifth pass in place of Kamal. **Dominated by A.** Kamal supplies the proxy, TLS and deploy
+  that B builds, and A's deploys dropped nothing when observed, below.
+- **C. Fly, two machines, Fly Managed Postgres.**
+- **D. DigitalOcean App Platform and DigitalOcean Managed PostgreSQL.**
+- **E. Render web service and Render Postgres.**
+- **F. Fly, two machines, and Neon Postgres always on.**
+- **Out, each on one property:**
+  - **Railway Postgres** fails E2: "they are considered unmanaged, meaning you have total control over
+    their configuration and maintenance", so patching is ours.
+  - **Supabase** fails J2 at any modest price: automatic failover is reported to be Enterprise-only,
+    per search summaries.
+  - **Turso** is unknown on J2: no failover behaviour was found.
+
+**Observed: Kamal's deploy with a file store drops nothing**, 2026-09-30.
+
+- **The setup.** kamal-proxy, taken from the `basecamp/kamal-proxy` image, and Litestream 0.5.17 in
+  `node:24-bookworm`, Node 24.21.0, Linux arm64 under Docker. The server opened SQLite in WAL mode with
+  `busy_timeout=5000`, `wal_autocheckpoint=0` and `synchronous=FULL`, following Litestream's tips. One
+  Litestream process replicated to a local file replica. 20 clients alternated GET and POST for 40
+  seconds.
+- **The deploy.** Five times, in Kamal's order: a new server was started on the other port, `kamal-proxy
+  deploy` switched to it once `/up` answered, and the old one was then stopped with SIGTERM. So two
+  processes had the file open at each switch.
+- **Result, three runs:** 0 failed requests out of about 232,000 to 238,000 per run, and no request
+  slower than 82ms. Every acknowledged write was in the live file and in a Litestream restore, and
+  `PRAGMA integrity_check` returned `ok` on both. Litestream logged one `database is locked` at start
+  and recovered.
+- **The same run with the file on a macOS folder mounted into the container** crashed the server with
+  a bus error, and in one run acknowledged ids that were missing from the file. That folder is shared
+  from macOS by Docker Desktop, where SQLite's shared-memory index does not work. A file store must
+  sit on the machine's own disk, which [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md) already requires in production. This belongs as a trap
+  for [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
+
+So row 8, "A deploy never has two processes holding the store's file at once", was stricter than the
+store needs. SQLite supports several processes on one machine: "All processes using a database must be
+on the same host computer", with "only one writer at a time" (*opened by me,
+[WAL](https://www.sqlite.org/wal.html)*). [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)
+rejects machines sharing the file, not processes. What must stay single is the replicator: "It is
+_your_ responsibility to ensure you do not have multiple applications replicating concurrently"
+(*opened by me, [tips](https://litestream.io/tips/)*). Litestream therefore runs as its own process
+beside the app, never inside each app container.
+
+*Measured: three runs of five deploys each, in one Linux container on a laptop. Not measured: a real
+VPS, TLS, and Kamal itself driving the deploy rather than its proxy driven by hand.*
+
+**Scored.** Prices are monthly, for about 10 GB of storage, in North America.
+
+| | A. File store, Kamal | C. Fly + Fly Postgres | D. DO App Platform + DO Postgres | E. Render + Render Postgres | F. Fly + Neon |
+| --- | --- | --- | --- | --- | --- |
+| J1: deploys | pass, observed | pass with two machines ("at least two Machines to avoid downtime") | reported, not confirmed | pass, documented for one instance | pass with two machines |
+| J1: patches | OS updates automatic; a kernel reboot drops the site for about a minute unless Livepatch covers it | Fly patches its hosts; database patching is "not there yet" | provider's, with brief disconnects | provider's, notified by email and schedulable | provider's, restarts of "a few seconds" about weekly |
+| J2: dead host | only with our watchdog and fencing; otherwise a person restores | supplied: "All plans include high availability" | supplied with a standby, $60 for the database | supplied with a standby, "a few seconds" | supplied without a standby: compute replaced in "1-2 minutes" on node failure |
+| J3: monitor | external, free tier | external, free tier | external, free tier | external, free tier | external, free tier |
+| E1: pieces we build | Kamal config, Litestream, update settings, monitor, and a watchdog for J2 | Fly config, monitor | app spec, monitor | service config, monitor | Fly config, Neon project, monitor |
+| E2: recurring attention | Kamal and Litestream upgrades; watchdog and fencing if built | database major upgrades, once "not there yet" is filled | database major upgrades, user-started | database major upgrades, up to an hour of downtime | little found |
+| E3: to understand | Linux, Docker, SQLite WAL, Litestream, the watchdog | Fly, Postgres | DO, Postgres | Render, Postgres | Fly, Neon, Postgres |
+| P1: price | about $10 to $11 | about $50 | about $70, or $20 without failover | about $124, not verified | about $31 |
+| P2: terms | the VPS provider's only | Fly's rise on 1 October; Managed Postgres is young | no rise found | free database expiry cut from 90 to 30 days in 2024 | Neon cut prices in 2025; two vendors |
+
+*Sources. Fly Managed Postgres: Basic "$38", "All plans include high availability, backups, and
+connection pooling", and "Security patches and version upgrades" listed under "What's not there yet",
+opened by me at [Fly Managed Postgres](https://docs.fly.io/mpg/). DigitalOcean's database: "High
+availability clusters begin at $30.00 per month … with at least one $30.00 per month matching standby
+node", opened by me at [pricing](https://docs.digitalocean.com/products/databases/postgresql/details/pricing/).
+Kamal's deploy order and "without downtime", opened by me at
+[deploy](https://kamal-deploy.org/docs/commands/deploy/). The rest is an agent's reading on
+2026-09-30. Render's database prices are search summaries only.*
+
+**What the table yields.**
+
+- **No setup reaches all three of the maintainer's words.**
+  - **Price:** the file store, at about a fifth of the cheapest managed setup that recovers without
+    a person.
+  - **Just works, for a dead host:** every managed setup, which supplies J2. The file store needs a
+    watchdog with fencing, which is the most delicate thing any setup here asks us to build.
+  - **Easy:** the managed setups, with fewer pieces and less to understand.
+- **Where the file store closes the gap, and where it does not.** Kamal closes J1 for deploys, as
+  observed. It does not close J2, and it leaves reboots after kernel patches as brief planned outages.
+- **Among the managed setups, F is cheapest at about $31**, recovering in minutes without a standby.
+  C costs about $50 with a standby, but its database patching is unfinished.
+
+The maintainer said on 2026-09-30 that a system that stays up while they sleep "is obviously much more
+reliable", but that price is "so appealing that it's not enough by itself to decide". So the choice
+left is the maintainer's weighing of J2, about $20 a month (A against F), and the pieces A asks them to
+build. It is a stated preference, and it enters as a row citing them.
+
+### Ninth pass 2026-09-30: variants of the file-store setup
+
+**Setup A was put together to show that a file store could meet the properties, not tuned part by
+part.** On 2026-09-30 the maintainer asked for its variants to be scored, and gave a price target.
+
+**Rows added before research.**
+
+- **P0. The whole setup costs about $10 a month or less.** The maintainer said on 2026-09-30: "$10
+  usd / month is about as high as I would ideally want to go if possible; not a hard line, but $20
+  usd/month becomes likely too expensive". That rules out every managed-database setup in the eighth
+  pass unless their prices change. It is not a hard line, so a setup over it is marked rather than
+  dropped.
+- **L1. The hosted setup can be run on the maintainer's Mac, the same way it runs deployed.** Where two
+  setups are otherwise equal, the one that is much easier to simulate locally wins. The maintainer
+  said so on 2026-09-30, for the developer's experience. Rests on
+  [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
+  the production-like run "runs the production artifacts in the production topology", and it may
+  differ only where a record says why. This zooms into row 11. The eighth pass found one trap
+  already: a SQLite file on a macOS folder mounted into Docker crashes.
+- **The challenge to row 30.**
+  - **The promise.** [The player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+    forbids asking the player to act on the network. It does not forbid a request failing. The
+    network is "our problem to handle rather than theirs to manage".
+  - **What the client already absorbs.** On a train, the client must retry silently through failures
+    far worse than a 502 during a deploy.
+  - **So** a deploy that fails a request may be invisible to the player, provided the client's own
+    retries absorb it.
+  - **What still matters is how long.** A deploy that holds requests for 15 seconds, as Fly's did, is
+    a wait at the start of a session. A deploy that fails them fast is retried within a second.
+  - **What the pass does with it.** It asks whether row 30 still separates the variants once the
+    client's retries are counted, and it scores the length of any hold, not just whether a request
+    failed.
+
+**Variants.**
+
+| | Variant |
+| --- | --- |
+| A1 | DigitalOcean $6, Kamal, Litestream copying to another provider's object storage, Livepatch, an external monitor, DigitalOcean's monitoring, and a scheduled function elsewhere as the watchdog |
+| A2 | The same on Linode $5 |
+| A3 | A1 with Dokku, or Docker Compose and Caddy, in place of Kamal |
+| A4 | Fly, one machine, SQLite with Litestream copying to another provider |
+| A5 | RackNerd and Kamal, restoring by hand, since there is no API to order a machine |
+
+**Research, 2026-09-30.** Agents read vendor pages. "Opened by me" marks what the session that wrote
+this pass fetched itself.
+
+- **Where the copy goes.**
+  - Backblaze B2: "First 10GB storage is always free", and "Class A, B, and C API calls are free for
+    pay-as-you-go customers". *Opened by me, [pricing](https://www.backblaze.com/cloud-storage/pricing).*
+    Litestream detects B2 endpoints itself, per its [B2 guide](https://litestream.io/guides/backblaze/).
+  - Cloudflare R2: its free tier includes "1 million requests / month" of Class A. *Opened by me,
+    [pricing](https://developers.cloudflare.com/r2/pricing/).* Litestream's default 1-second sync makes
+    "approximately 2.6 million PUT requests monthly" under constant writes. *Opened by me,
+    [config](https://litestream.io/reference/config/).* So R2 would cost money, or need a longer sync
+    interval. A longer interval widens the loss on a dead host.
+  - **B2 is the copy's home that costs nothing at this size**, and it sits with a provider other than
+    the machine's, so losing the machine's account does not lose the copy.
+- **Kernel patches.** Livepatch "is available free for up to 5 machines, for personal use". But it
+  "is not a replacement for rebooting". Whether DigitalOcean's Ubuntu 24.04 kernel is covered is
+  unknown. On Linode, a 2018 answer, seen in search only, says its own kernel was "not eligible for
+  livepatch updates" until Ubuntu's kernel is booted instead.
+- **The watchdog.** Cloudflare Workers' free plan allows 5 cron triggers. Secrets are stored
+  encrypted. No page forbids calling an outside API. Community threads in 2026 report that
+  every-minute triggers on free accounts do not fire, so every five minutes is the safe assumption.
+  Healthchecks.io's free plan monitors 20 jobs, which covers alerting when Litestream's copy goes
+  stale.
+- **Deploy tools.**
+  - **Kamal** can skip an outside registry: "If the registry server starts with `localhost`, Kamal
+    will start a local Docker registry on that port and push the app image to it" (*opened by me,
+    [registry](https://kamal-deploy.org/docs/configuration/docker-registry/)*). Litestream runs as an
+    accessory, "not updated when you deploy".
+  - **Dokku** builds on the server when you `git push`, and needs "1GB of system memory, or add swap".
+    By default it waits 10 seconds after starting a container and does not check its health. It has
+    no sidecar, so Litestream becomes a Procfile process. Renewing certificates needs a cron job added
+    by hand.
+  - **Docker Compose with `docker-rollout`** needs a health check, a proxy that routes by service name
+    (no page confirms Caddy does), and a service without `ports` or `container_name`.
+  - **Kamal dominates both on J1 and E1**, and A3 leaves the field.
+- **L1, running it on the Mac.**
+  - A Multipass VM takes the same cloud-init user data as the VPS: `--cloud-init` accepts "Path or URL
+    to a user-data cloud-init configuration". Kamal deploys to it over SSH as it would to the VPS, per
+    [a walkthrough](https://alexpeattie.com/blog/testing-kamal-locally-with-multipass/). The VM's own
+    disk avoids the trap the eighth pass found. Reports of Multipass failing on some Apple silicon
+    machines are search results only.
+  - **Two gaps.** Let's Encrypt cannot issue for a local VM, so a local certificate is loaded in its
+    place. And the Mac runs arm64 while DigitalOcean and Linode run amd64, so the local image is built
+    for a different architecture. Node's built-in `node:sqlite` has no native module to compile per
+    architecture, which keeps that gap small, but the driver is still open at
+    [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md).
+  - **Fly has no local emulator.** Its docs say to "Build the image locally with `docker build` and
+    test it with `docker run`". The proxy, TLS termination, volume pinning and Firecracker cannot be
+    run locally.
+  - Litestream's copy can target a separate B2 bucket from the Mac. MinIO is reported to be in
+    maintenance mode.
+
+**The row 30 challenge, answered.** Once the client's retries are counted, a request that fails fast is
+invisible. What still separates the variants is how long a request is held: Kamal's deploys held none
+longer than 82ms, and Fly's held some for about 15 seconds. That is a wait on opening the app during a
+deploy, and deploys are rare, so row 30 now weighs little.
+
+**Scored.**
+
+| | A1: DigitalOcean + Kamal | A2: Linode + Kamal | A4: Fly, one machine | A5: RackNerd + Kamal |
+| --- | --- | --- | --- | --- |
+| P0/P1: a month | about $6 | about $5 | about $2.50 to $4.50 | about $1.83 |
+| J1: deploys | pass, observed | pass | holds of about 15s, observed | pass |
+| J1: host maintenance | live migration | live migration, or power off and on with notice | volume pinned; Fly migrates on its own schedule | unknown |
+| J1: kernel patches | reboot at a set hour, fewer if Livepatch covers the kernel | same; Livepatch doubtful | Fly patches; applied on our next deploy | reboot at a set hour |
+| J2: dead host | watchdog on a Worker calling the API, built by us; loss about 1s | same | same, through Fly's API | by hand: no API to order a machine |
+| J3: alerts | external monitor, Healthchecks, and DigitalOcean's memory and disk alerts | external monitor and Healthchecks | external monitor and Healthchecks | external monitor and Healthchecks |
+| E1: pieces we build | cloud-init, Kamal config, Litestream, monitors, watchdog | same | fly config, Litestream, monitors, watchdog | same as A1, no watchdog |
+| E3: to understand | Linux, Docker, Kamal, SQLite WAL, Litestream | same | Fly, SQLite WAL, Litestream | same as A1 |
+| L1: on the Mac | Multipass with the same cloud-init; local certificate and arm64 differ | same | `docker run` only | same as A1 |
+| P2: terms | no rise found | no rise found | a rise on 1 October | "lifetime recurring"; terms disclaim data integrity |
+
+**What the table yields.**
+
+- **A1 fits all three of the maintainer's words**, within the price target at about $6.
+  - It just works: deploys observed dropping nothing, maintenance absorbed by the provider, and alerts
+    reaching the maintainer.
+  - It is easy enough: its pieces are few and documented, and the whole setup runs on the Mac.
+  - Its one gap is J2. Recovering a dead host without a person means building the watchdog, and that
+    can come after launch. Until then, a dead host is a scripted restore that a person starts.
+- **A2 ties A1 on nearly everything and is $1 cheaper.** It loses on J3, having no memory or
+  disk-space alert of its own, and on Livepatch coverage. The maintainer called $1 insignificant.
+- **A4 is the easiest to operate and the cheapest after A5.** It is the worst on L1, which the
+  maintainer weighted for the developer's experience. It also pins the volume to a host and raises its
+  price tomorrow.
+- **A5 is cheapest.** It is the only variant where J2 can never be removed from the maintainer's hands,
+  and its terms disclaim data integrity.
+
+### Open at the end of the ninth pass
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **Row 32** needs fsync latency measured on each of DigitalOcean's $6 plan and Linode's $5 plan in
-   Toronto. That is a machine on each for minutes, at a cost of cents, on accounts the maintainer
-   would open.
-2. **Then weigh 35 against 33's disclosure**, with 32's result. That weighing is the maintainer's
-   where the rows still tie.
+1. **The maintainer confirms A1**, or weighs A2 or A4 differently.
+2. **Then the records.**
+   - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended with
+     the eighth pass's scoring.
+   - A record is drafted for this question.
+   - Row 8's over-strict reading is corrected wherever it appears.
+   - Two findings go to their own questions: the Docker Desktop mount trap to
+     [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md),
+     and B2 as the copy's home to [how is the store backed up?](how-is-the-store-backed-up.md).

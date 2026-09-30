@@ -18,6 +18,22 @@ names.
 pnpm install
 ```
 
+### DigitalOcean CLI
+
+Needed only for work on the host, not to build or test. The host is still open at
+[where does this run?](docs/questions/where-does-this-run.md). This is what its measurements run on.
+
+1. In the DigitalOcean console, under **API → Generate New Token**, create a token with an expiry.
+   Give it custom scopes that allow creating, reading and deleting Droplets and SSH keys. Reading the
+   account is not needed, so `doctl account get` returning 403 is expected.
+2. Install the CLI and authenticate it:
+
+```sh
+brew install doctl
+doctl auth init          # paste the token
+doctl compute droplet list   # an empty table, not an error, means it works
+```
+
 ## Check a change
 
 ```sh

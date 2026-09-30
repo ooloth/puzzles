@@ -298,6 +298,8 @@ only." where nothing does>
 - [ ] constraints.md — givens this decision imports
 - [ ] glossary.md — domain terminology this decision introduces
 - [ ] guarantees/ — promises this decision commits us to
+- [ ] ../CONTRIBUTING.md — setup this decision introduces: an account, a CLI, local tooling, or a
+      new way to run or check something
 -->
 
 ## Guidance

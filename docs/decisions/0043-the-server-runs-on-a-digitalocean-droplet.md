@@ -154,5 +154,6 @@ Render, Northflank, Sliplane, Upsun, Koyeb, Scaleway, Lightsail and several smal
   is left.
 - [x] constraints.md: what a fresh Droplet has, measured and sourced
 - [x] architecture.md: the machine is a Droplet, and only its region stays open
+- [x] ../CONTRIBUTING.md: the DigitalOcean CLI setup, and the token scopes it needs
 - [x] guarantees/: no new promise
 - [x] glossary.md: nothing introduced

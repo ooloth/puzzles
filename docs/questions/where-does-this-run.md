@@ -2341,21 +2341,90 @@ sit on two ports behind Caddy, and Caddy checks `/api/up` on each. A deploy:
 [what deploys the code?](what-deploys-the-code.md), a Must answer for M1 slice 6. Choosing N here would
 settle much of that, so the two are decided together, or that question records N as its lead.
 
-### Open at the end of the eleventh pass
+### Twelfth pass 2026-09-30: N and Kamal measured on DigitalOcean
+
+**The setup.**
+
+- **Machines.** Two `s-1vcpu-1gb` Droplets in `tor1`, Ubuntu 24.04, one for each stack. A third,
+  `s-2vcpu-4gb`, played the laptop: it ran Kamal 2.12.0 with Docker 29.8.1, and it generated the load
+  over DigitalOcean's private network so the internet's noise stayed out of the counts.
+- **The app.** The same minimal `node:sqlite` server on Node 24.21.0, with Litestream 0.5.17 copying to
+  a file on the Droplet. HTTP only.
+- **N.** Caddy 2.11.4 from its apt repository. A systemd template unit `puzzles@.service` with
+  `MemoryMax`, `ProtectSystem=strict` and `Restart=always`, and the four-step deploy script run on the
+  Droplet.
+- **Kamal.** kamal-proxy, the app in `node:24-slim`, Litestream as an accessory, and the local registry.
+- **The load and the deploys.** 20 clients, five deploys each. Resident memory was sampled every half
+  second. Every acknowledged write was then checked on the Droplet, and each copy was restored.
+- Everything was deleted afterwards: the Droplets and the uploaded SSH key.
+
+**Before anything was installed, on both Droplets:**
+
+- 961 MB of memory in total, about 320 MB used, about 640 MB available.
+- **No swap.** `swapon --show` printed nothing. This settles the tenth pass's weak claim.
+- Kernel `6.8.0-142-generic`. `pro status` reports Livepatch as available.
+- A 24 GB disk and one vCPU.
+
+**Results.**
+
+| | N: systemd + Caddy | Kamal |
+| --- | --- | --- |
+| Failed requests across 5 deploys | 0 of 20,254 | 0 of 52,628 |
+| Acknowledged writes missing | 0 | 0 |
+| Slowest request | 219ms | 964ms |
+| Each deploy | 2.7 to 2.9s, run on the Droplet | 13 to 19s, including building, pushing and pulling |
+| Memory used, stack idle | 360 MB | 424 MB |
+| Memory used, peak during deploys | 373 MB | 470 MB |
+| Beyond the app and Litestream | Caddy 47 to 51 MB | dockerd 51 to 70, containerd 32 to 35, docker-proxy 18 and kamal-proxy 14 to 31 MB |
+| App, median and peak | 78 and 149 MB | 76 and 152 MB |
+| Litestream restore | complete, `integrity_check` ok | complete, `integrity_check` ok |
+| Disk used afterwards | 2.3 GB | 3.1 GB, with 777 MB of images |
+
+**What this settles.**
+
+- **Both stacks meet J1 on a real Droplet.** Neither dropped a request or lost a write during deploys.
+- **N uses about 70 to 100 MB less memory** and 0.8 GB less disk.
+- **N's deploys are about five times faster**, and its slowest request under deploy is a quarter of
+  Kamal's.
+- **The eleventh pass's prediction holds.** The measured Docker overhead, about 120 MB, sits inside the
+  range reported earlier.
+- **1 GB is enough for either** at launch. The peak used was under half the machine. Without swap, a
+  memory limit on the app, such as N's `MemoryMax`, is what keeps a leak from reaching the rest.
+
+*Measured: one run of five deploys per stack, on 2026-09-30. Not measured: TLS, the real Fastify
+server, and deploys driven from a laptop over the internet.*
+
+**Steps confirmed on the way, for the runbook:**
+
+- **Node.** The official tarball, unpacked to `/opt/node-<version>-linux-x64`, with `/opt/node` linked
+  to it.
+- **Caddy.** From its Cloudsmith apt repository, which needs `debian-keyring`,
+  `debian-archive-keyring` and `apt-transport-https`.
+- **Litestream.** The `.deb` from its GitHub release (`litestream-<version>-linux-x86_64.deb`), which
+  installs `litestream.service` reading `/etc/litestream.yml`.
+- **The app.** A system user `puzzles`, owning `/var/lib/puzzles`.
+- **First deploy, then Litestream.** The first deploy creates the store, and only then is
+  `litestream.service` enabled.
+- **Listen address.** The app listens on `127.0.0.1` under N. Inside a container it must listen on
+  `0.0.0.0`, or kamal-proxy's health check times out, as the first `kamal setup` here did.
+- **Process name.** Node 24 names its process `MainThread`, not `node`. A memory monitor matching on
+  `node` misses it.
+- **The token.** It needs no `account:read`. Creating a tagged Droplet needs `tag:create`, so the
+  Droplets here were left untagged.
+
+### Open at the end of the twelfth pass
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **Measure N and Kamal side by side on DigitalOcean**, as the maintainer asked on 2026-09-30:
-   - memory with nothing running, with each stack running, and at each stack's peak during a deploy;
-   - failed requests during deploys;
-   - whether swap exists;
-   - whether Livepatch covers the kernel;
-   - how long each deploy takes.
-2. **How N and [what deploys the code?](what-deploys-the-code.md) are decided**: together, or with
-   that question recording N as its lead.
+1. **The maintainer chooses N or Kamal** from the measurements above.
+2. **How the choice and [what deploys the code?](what-deploys-the-code.md) are decided**: together, or
+   with that question recording the choice as its lead.
 3. **Then the records**, as the ninth pass listed:
    - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended.
    - A record is drafted for this question.
    - Row 8 is corrected.
    - The mount trap and B2 go to their own questions.
    - The tenth pass's traps are mined.
+   - Every setup step, including the twelfth pass's, goes into a runbook, per the maintainer on
+     2026-09-30. Where it lives is settled through "Where a new fact goes" in
+     [../README.md](../README.md) once the steps are confirmed.

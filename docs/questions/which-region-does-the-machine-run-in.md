@@ -17,7 +17,10 @@ three to four round trips. The distance to the machine is paid on every one of t
 
 **Nothing says where the players are.** [../problem.md](../problem.md) describes them as the general
 public, phone-first and in transit, and names no geography. So the input this question needs is not
-written down anywhere.
+written down anywhere. Asked on 2026-09-29, the maintainer said they were not sure and would assume
+North America if they had to pick. That is an assumption, not a fact about the audience.
+[Where does this run?](where-does-this-run.md) uses it only to require a North American region from the
+host. This question still needs the fact.
 
 **It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
 redeploy. From the first row onward, moving it means moving the store, and later a live player

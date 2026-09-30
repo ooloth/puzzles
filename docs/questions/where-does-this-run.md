@@ -231,11 +231,20 @@ HTTP client's memory was counted with the server's. Not measured: Linux, which i
 runs and which counts resident memory differently from macOS; the store, which does not exist until
 M3; and serving the client's files from the same process.*
 
-**Still an open input:** where the first players are.
-[Which region does the machine run in?](which-region-does-the-machine-run-in.md) decides the region at
-M3. But a host with no region near the players forces a change of host, not just of region, so
-whether the host offers a region near them is a property once someone says where they are. Until
-then, each candidate's regions are recorded.
+**Where the first players are is assumed, not known.** Asked on 2026-09-29, the maintainer said they
+were not sure and would assume North America if they had to pick. That enters as the property
+below, marked as resting on an assumption. If the assumption changes, this property changes with it.
+[Which region does the machine run in?](which-region-does-the-machine-run-in.md) still decides the
+region itself at M3.
+
+19. **The host offers a North American region for the process and its disk together.** Rests on the
+    maintainer's assumption above, not on a record. A host with no region near the players forces a
+    change of host rather than of region, which is why this is a property and not left to M3.
+
+**Property 17 is scored as "reachable on this host", with or without a proxy in front**, per the
+maintainer on 2026-09-29. Whether a proxy sits in front is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md), and this
+question does not settle it.
 
 ## Resolves into
 
@@ -1003,73 +1012,601 @@ None of these fails a property.
 - **Every platform with a volume limits a service using one to a single instance, and gives up
   zero-downtime deploys.** That is already property 8.
 
-### Open at the end of 2026-09-28
+### Scored 2026-09-29: the unknowns, properties 14 to 19, and a rebuilt field
 
-*A summary of the passes above, so the next pass starts here rather than rebuilding it. Each claim's
-source is in the pass that established it. The next pass replaces this entry rather than adding
-beneath it.*
+*Research agents read vendor pages on 2026-09-29, and a browser agent read the pages that render only
+in script. Their page reads came back as a small model's summary, so a quote from them may not be
+verbatim. "Opened by me" means the session that wrote this pass fetched the page itself: Upsun's cache
+page, Koyeb's volumes page and Fly's services page. Everything else is the agents' reading and is
+Sourced at that strength. An unknown is not a pass.*
 
-**Unscored for every candidate:** properties 14 to 18, added by the extend pass under
-**Properties the answer is scored against**. Property 2a is scored below for each managed platform.
-On a VPS it passes by construction, since the domain points straight at the machine's own address.
+**One agent verdict was overturned.** An agent reported Upsun failing property 3 because "Caching is
+enabled by default". The same page says responses with no `Cache-Control` header use `default_ttl`,
+and "The default `default_ttl` value is `0`", so nothing is cached unless the app asks. Responses with
+`Set-Cookie` are "not cached". Upsun passes property 3. *Opened by me,
+[cache](https://developer.upsun.com/docs/routes/cache).*
 
-**Still to be given:** where the first players are. It turns "the host offers a region near them"
-into a property. See **Still an open input** under the properties.
+**Property 18 needs the same split property 2 got.** Railway's staff say "inbound uses anycast IPs that
+can change", and Upsun's docs say that when "a router's IP address changes… if you use `A` records…
+you need to update your `A` records manually". Both fail 18 as written. But the harm 18 guards
+against is the domain pointing at an old address. A CNAME, or Cloudflare's flattening of one, follows
+the change, so the harm does not happen under the DNS setup those hosts ask for. Split it:
 
-**Standing, managed platforms:**
+- **18a. Under the DNS setup the host asks for, a change of the host's address never leaves the
+  domain pointing at the old one.** This is what the property protects.
+- **18b. The address is fixed unless we change it.** This is what the property said. It matters only
+  where the setup is hand-written A records, which on these hosts is the setup they advise against.
 
-- **Fly.io** passes every property scored, 2a included, since Fly recommends A and AAAA records at the
-  apex. The exception is 3, which is unknown because Fly's documentation says nothing about caching
-  or `Set-Cookie`. About $2.17 a month for 256 MB and 1 GB of volume, from the $2.02 verified on
-  2026-09-04.
-- **Railway**:
-  - Unknown on 3 and 6.
-  - Passes 2a only through Cloudflare's CNAME flattening, which is reasoned.
-  - Its health check runs only at deploy.
-  - $5 a month plus usage.
-- **Render**:
-  - Unknown on 6 and 13, since no minimum TLS version is stated.
-  - Its guide for Cloudflare DNS asks for a CNAME, so it passes 2a only through flattening.
-  - Price unread.
-- **Northflank**:
-  - Unknown on 3, 6 and 13.
-  - Passes 2a only through flattening.
-  - About $2.85 a month. Whether its free Sandbox can attach a volume is unknown.
-- **Sliplane**:
-  - Unknown on 3, 4, 6, 12 and 13.
-  - Passes 2a with A and AAAA records.
-  - €9 a month, with 20 GB included.
-- **Upsun:** unknown on 7, because nothing says whether an `instance` mount survives a redeploy. It
-  has not been scored on anything else.
+*Railway's quote is from a search result summarising a May 2026 staff answer on
+[Central Station](https://station.railway.com/questions/does-railway-provide-static-ip-also-d-ec2ed437),
+not opened. Upsun's is an agent's read of
+[DNS](https://fixed.docs.upsun.com/domains/steps/dns.html).*
 
-**Standing, VPS providers.** On a plain VPS, properties 1, 3 and 9 to 13 are ours to satisfy, and no
-provider checked has a policy of stopping an idle machine.
+**Property 17 separates nothing under the reading chosen for it.** A proxy in front of any candidate
+ends TLS near the player, so every candidate can reach 17. Fly ("The Fly Proxy will terminate TLS on
+the host a client connects to", opened by me at
+[services](https://docs.fly.io/networking/services/)), Railway ("The edge proxy terminates TLS", with
+anycast) and Northflank ("HTTPS requests are terminated at the edge load-balancer") do it without one.
+Whether one is placed in front belongs to
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md).
 
-- **Local disk confirmed:**
-  - Hetzner: CX23 at €5.49 a month in the EU, per the 2026-09-27 pass, though its order page showed
-    it unavailable that day. The US price was not read, and the IPv4 fee is unconfirmed.
-  - DigitalOcean: $6 a month.
-  - Linode: $5 a month.
-  - Vultr: price and policies unread.
-  - RackNerd: $21.99 a year.
-  - BuyVM: $3.50 a month.
-  - Scaleway: no North American region.
-- **Disk type unknown:** AWS Lightsail, which also needs a static IP attached for property 18,
-  OVHcloud, netcup, Contabo, IONOS and Hostinger.
+**Property 14 on a VPS is ours by construction**, in the same way as 1, 3 and 9. Automatic security
+updates are an operating-system setting. No provider page checked offers them or prevents them.
+Whether they cover the kernel without a manual reboot is reasoned, not checked, and it belongs to
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) at M2.
 
-**How the unknowns get resolved.** They are unknown mainly because this session used up its web
-searches and several vendor pages render only in a browser. Two routes:
+**Managed platforms:**
 
-- **A web search**, in a session with enough of its search budget left. The budget is set by
-  `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`. Searches are needed for:
-  - every disk type still unknown;
-  - Upsun's `instance` mounts;
-  - property 3 on Fly, Railway and Northflank;
-  - the minimum TLS version on Render, Northflank and Sliplane;
-  - properties 4 and 12 on Sliplane.
-- **The browser agent**, for pages that render only in script:
-  - Hetzner's and Render's pricing;
-  - Vultr's site, which refused every fetch;
-  - Fly's pricing, whose figures came back different on each fetch.
+- **Fly.io**
+  - 3: still unknown. No docs page speaks to caching or `Set-Cookie`. The nearest is a staff answer
+    from 2021-08-18, "We don't do normal HTTP caching", at
+    [community.fly.io](https://community.fly.io/t/static-cache-not-caching/2245/2). Five years old
+    and not a docs page.
+  - 13 passes: "The Fly proxy only supports TLSv1.2 and TLSv1.3".
+  - 14 passes for what sits beneath us. Fly patches "the operating system, other 3rd-party software";
+    the image's own packages stay ours.
+  - 15 passes: the Machines API creates apps, machines and volumes, and `fly ssh sftp` puts a file on
+    a volume.
+  - 16 passes on the runtime: a Dockerfile or a prebuilt image. Whether `fly.toml` is required was not
+    read.
+  - 18a and 18b pass. Every app gets a shared IPv4 and anycast IPv6, and a dedicated IPv4 is $2 a
+    month.
+  - 19 passes: seven North American regions, including Toronto.
+  - Price, read twice in a browser on 2026-09-29 with identical figures: $1.94 a month for
+    `shared-cpu-1x` with 256 MB, plus $0.15 per GB-month of volume. That settles the figure the
+    2026-09-28 pass left unverified.
+- **Railway**
+  - 3 passes: "It's off by default and enabled per service", of its CDN. A third-party report of a
+    March 2026 incident that cached uncached GETs was not verified.
+  - 6: still unknown. Its hardware post describes separate storage servers with "4x 100G NICs", which
+    suggests network volumes but does not say so.
+  - 18a passes through a CNAME. 18b fails.
+  - 19 passes: California and Virginia.
+- **Render**
+  - 6, 13 and 17: still unknown.
+  - 15 is partial: the API creates a service with a disk, and whether the SSH setup for copying a file
+    can be scripted was not found.
+  - 18: the apex points at `216.24.57.1`, whose stability is not stated. "Render uses IPv4", and its
+    docs say to remove AAAA records.
+  - 19 passes: Oregon, Ohio and Virginia.
+  - Price: $7 a month for 512 MB, plus $0.25 per GB-month of disk, read in a browser.
+- **Northflank**
+  - 3: its CDN is opt-in per subdomain ("You must configure each subdomain individually"). How the
+    CDN treats cookies when it is on was not found. The earlier "disable Northflank's CDN" quote was
+    not found again.
+  - 6, 13 and 18: still unknown.
+  - 14 and 15 pass.
+  - 19 passes, though whether every North American region takes a volume was not confirmed.
+- **Sliplane**
+  - 3, 4, 6, 13, 14 and 17: still unknown.
+  - 12 passes: "set a route that returns a 2XX response", default `/`, so it can be set under `/api/`.
+  - 15: an agent marked it failing, because uploading to a volume is documented only through a web
+    file browser. But the 2026-09-28 pass found SSH access for property 9, which a script can copy
+    over. Unknown, not failing.
+  - 18: a CNAME is preferred, and a guide says it "automatically tracks Sliplane IP changes", so 18b
+    likely fails and 18a passes through the CNAME.
+- **Upsun**
+  - 3 passes, per the overturned verdict above. 13 passes, since `min_version: TLSv1.3` can be set.
+  - 7: still unknown. An `instance` mount is stated to be local, "local mounts; set to 8 GB", but no
+    page says it survives a redeploy. Only `tmp` mounts are documented as removable.
+  - 16: an agent marked it failing because config lives in `.upsun/config.yaml` and a Docker app must
+    be a prebuilt image. A deploy config file is not the app depending on the provider, which is what
+    16 asks, so that is not a failure. Whether a private image can be pulled is undocumented. Unknown.
+  - 18a passes through a CNAME. 18b fails.
 
-**Then the next extend-and-zoom pass**, on whatever is still standing.
+**VPS providers:**
+
+- **Property 15:**
+  - Passes on DigitalOcean (`POST /v2/droplets` with `ssh_keys` and `user_data`), Linode (with
+    `authorized_keys` and `metadata.user_data`), Hetzner (Terraform provider and cloud-init) and
+    Contabo (`POST /v1/compute/instances` with `userData`).
+  - Partial on Vultr (a Terraform provider with `user_data`, and API parameters seen only in search)
+    and Lightsail (`--user-data` and `--key-pair-name` on the CLI).
+  - RackNerd has only its control panel's API, and cloud-init was reported unavailable in 2023. Both
+    were seen in search only. Unknown, leaning fail.
+  - BuyVM, OVHcloud, netcup, IONOS and Hostinger: unknown.
+- **Property 16, the prepaid term:**
+  - Billed by the hour or second with a monthly cap: Hetzner, DigitalOcean, Linode and Lightsail.
+  - RackNerd sells yearly, and its terms say "no refunds are provided once payment is received". An
+    annual remainder is a cost of leaving.
+  - netcup's shown price is a 12-month contract, IONOS's promotional price a one-year term,
+    Hostinger's cheapest plan a two-year term, OVHcloud's a 12-month prepay, and Contabo's
+    discounted price a 24-month term.
+- **Property 18b:**
+  - Lightsail: "The default dynamic public IP address… changes every time you stop and restart the
+    instance". A static IP is free while attached, which passes once attached.
+  - DigitalOcean: a reserved IP is free while assigned.
+  - Linode: reserved IPs keep the address through a rebuild or migration in the region, at a flat
+    hourly rate that was not read.
+  - Vultr: a reserved IP is $3 a month.
+  - Hetzner: a Primary IP is its own resource at €0.50 or $0.60 a month, per its docs. Its plan pages
+    say "Price incl. IPv4", so the two pages disagree.
+  - RackNerd charges $3 to change an IP after 72 hours, which implies it is fixed.
+- **Property 6:**
+  - Still unknown for Lightsail, OVHcloud, netcup, Contabo, IONOS and Hostinger. None of their pages
+    says local or network. Lightsail's add-on disks are "automatically replicated within its
+    Availability Zone", which describes the add-on, not the system disk.
+  - Vultr's pages on 2026-09-29 say "regular SSD" for its cheapest 1 GB plan, and do not say whether
+    the disk is local. Its Block Storage is "Network-attached NVMe SSD storage", which is a separate
+    product. The 2026-09-27 pass is what records Vultr as local.
+- **Property 19:**
+  - Passes on Hetzner (Ashburn, Hillsboro), DigitalOcean, Linode, Vultr, Lightsail, RackNerd, BuyVM
+    (Las Vegas, New York), netcup (Manassas) and Contabo ("United States").
+  - Scaleway fails, as recorded on 2026-09-28.
+- **Hetzner's prices have moved.** Read in a browser on 2026-09-29:
+  - Every Cost-Optimized plan, the CX23 among them, shows "not available". CX23 is listed at
+    "€ 5.99 /month", up from the €5.49 recorded on 2026-09-27.
+  - The cheapest plan in a US location is CPX11, 2 vCPU and 2 GB, at "$ 21.09 /month".
+  - The agent flagged these as far above past prices and suggested confirming them in Hetzner's
+    console.
+- **RackNerd's $21.99-a-year plan was not found again.** Its page showed $26.99 a year for 512 MB
+  and $17.99 a month for 1 GB. The "lifetime recurring" price is only in third-party reviews.
+
+**Candidates added by rebuilding the field.** One agent listed hosts not yet considered and screened
+each on never sleeping, a disk that survives a redeploy, and whether that disk is local:
+
+- **Koyeb.** Its volumes are "local and as such they might fail as they are bound to a single
+  machine", and they survive redeploys. They are "currently only suitable for testing", in public
+  preview. They attach only to a service at a scale of one, and in North America only in Washington,
+  D.C. *Opened by me, [volumes](https://www.koyeb.com/docs/reference/volumes).* Mistral AI announced
+  it would acquire Koyeb on 2026-02-17, per an agent's search, not opened. Not yet scored beyond 6, 7
+  and 19. Whether a vendor's own "only suitable for testing" label fails a property is for the next
+  pass to decide.
+- **Out, each on one property, per the agent's reading:**
+  - DigitalOcean App Platform fails 7: "App Platform does not currently support volumes".
+  - Heroku fails 7: its dyno filesystem is ephemeral. Search summary only.
+  - Porter fails 6: its persistent disks are Amazon EFS.
+  - Azure VMs fail 6: managed disks are replicated three times.
+  - UpCloud fails 6, inferred from its clustered storage design.
+- **Unknown on 6:** Zeabur, Sevalla, RamNode, InterServer, HostHatch, Hostwinds and Cherry Servers.
+  Oracle's free tier is also unknown on 4, because an idle instance may be reclaimed.
+- **Not relevant:** Latitude.sh and Hivelocity sell bare metal starting well above this workload.
+  Elestio provisions on providers already listed. Equinix Metal was reported sunset on 2026-06-30.
+  PikaPods runs only a fixed catalogue of apps.
+- **Not researched:** Bunny Magic Containers, Leapcell and Back4app.
+
+### Second pass 2026-09-29: the remaining unknowns, observed where possible
+
+*Research agents read vendor pages and, where a public app on the platform's default domain could be
+found, ran `openssl s_client -tls1_3` and `curl -sI` against it from the maintainer's machine near
+Toronto. "Opened by me" marks what the session that wrote this pass fetched itself.*
+
+**Out, each on one property:**
+
+- **Northflank** fails property 6: "New PaaS workloads are now deployed with high-performance
+  network-attached NVME with low latency". *Opened by me,
+  [November 2025 release](https://northflank.com/changelog/platform-november-2025-release).*
+
+**Observed, TLS 1.3 (property 13):** Render (`corsmirror.onrender.com`), Northflank's `*.code.run`
+edge, Sliplane (`mordhaus.sliplane.app`) and Koyeb's `*.koyeb.app` edge each answered `Protocol:
+TLSv1.3`. Render, Sliplane and Koyeb pass 13. *Observed by agents, OpenSSL 3.6.3, one host each
+except Render and Sliplane with two.*
+
+**Render:**
+
+- 17 passes: its default domain resolves through `cdn.cloudflare.net`, and the response carried
+  `server: cloudflare`, `cf-ray: …-YYZ` and `cf-cache-status: DYNAMIC`. So Cloudflare ended the
+  connection in Toronto and did not cache the response. No Render page says so. *Observed.*
+- 15 is partial: SSH keys are added in the dashboard ("click + Add SSH Public Key"), and the API
+  reference has no SSH-key endpoint. Once a key is added, `scp` runs from a script.
+- 6: still unknown. No Render statement names the disk's type or location beyond "the same
+  high-performance SSDs as Render Postgres".
+
+**Sliplane:**
+
+- 3: its proxy is Caddy (`server: Caddy`), and an app's own `cache-control: private, no-cache…` reached
+  the client unchanged. Whether `Set-Cookie` passes was not tested. Still unknown.
+- 4 leans pass: pausing is manual ("Pausing a service stops the container"), and no page mentions an
+  idle stop. Absence is not a statement, so still unknown.
+- 6: still unknown. Its European servers are on Hetzner, and a resolved address's whois reads
+  `CLOUD-NBG1`, which suggests Hetzner Cloud. Its pricing calls the disk "NVMe Block Storage", which
+  could mean either.
+- 15: the API creates servers, volumes and services, and registers SSH keys. Copying a file to a
+  volume over SSH was not tried.
+- 17 fails without a proxy: TLS ends on the server itself. `*.sliplane.app` resolves straight to
+  Hetzner addresses. Under the reading chosen for 17, a proxy in front can still reach it, so it
+  passes.
+- 14: still unknown.
+
+**Upsun:**
+
+- 7 leans fail. The mounts page says "`tmp` and `instance` are meant to restrict data to build time
+  and runtime of a single application instance, respectively", and "Upsun will provide new local
+  mounts in the near future". No page says `instance` data survives a redeploy. Still unknown.
+- 16 passes on what it asks. Upsun does not build a Dockerfile ("Upsun Cloud does not build a
+  Dockerfile from the repository for this app type"), but runs a prebuilt image from a registry.
+  Pulling from a private registry is undocumented, so the image would be public.
+
+**Railway:** 6 is still unknown. Its hardware post describes separate storage servers ("12 drives of
+NVMe per box, and 4x 100G NICs"), and its volumes are capped at 3,000 IOPS. Both suggest network
+storage, and neither says so.
+
+**Koyeb**, scored on the rest:
+
+- Passes 1, 4 (scale-to-zero is opt-in), 5, 9 (`koyeb instances cp`), 12 (a TCP check by default, or
+  an HTTP path), 13, 16, 17 (Cloudflare edge, `cf-ray: …-YYZ`) and 18a.
+- 8 passes by inference: "Services that have volumes attached may experience downtime during
+  redeployment while the volume is detached".
+- 2a: subdomains take a CNAME to `<org>.cname.koyeb.app`, and "Koyeb does not support directly
+  setting apex domains for most DNS providers" (*opened by me,
+  [domains](https://www.koyeb.com/docs/run-and-scale/domains)*). Flattening is not mentioned. Unknown,
+  with the apex unsupported.
+- 3, 14 and 15: unknown. A volume "cannot currently be detached except if the Service is deleted", and
+  snapshots are also in preview.
+- Price: new users "will only be able to sign up for" the Pro plan or above (*opened by me,
+  [announcement](https://www.koyeb.com/blog/koyeb-is-joining-mistral-ai-to-build-the-future-of-ai-infrastructure)*).
+  The agent read Pro as $29 a month with $10 of compute included. Koyeb says it will "double down on
+  our Inference, Sandboxes and serverless capabilities".
+
+**Fly.io, property 3: not observed.** A throwaway app was created with three routes under `/api/`: one
+with no cache headers, one setting a cookie, and one allowing caching as a control. The deploy
+stopped at "We require your billing information", because the maintainer's Fly account has no
+payment method. The app was destroyed. Property 3 stays unknown until an account with billing runs
+the same spike.
+
+### Extend and zoom, 2026-09-29
+
+**Extended: one property from a moment not yet listed**, the vendor's own statement of what its
+storage is fit for.
+
+20. **The vendor offers the storage the store sits on for production data.** Rests on
+    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+    and "Never lose in-progress work" in [../problem.md](../problem.md). A disk the vendor calls fit
+    only for testing is a disk it may change or withdraw without the notice a production product gets.
+
+Koyeb fails 20: its volumes are "currently only suitable for testing". No other standing candidate
+labels its storage that way on the pages read. That is an absence found while reading for other
+properties, not a separate search.
+
+**Zoomed: property 6 on the managed platforms.** Two passes of reading have not settled it on Railway,
+Render or Sliplane, and none of them publishes the fact. Reading will not resolve it. What would is a
+vendor's written answer, or a measurement that can tell local from network storage. A measurement
+here is weaker than it sounds, because latency suggests where a disk is without proving it. Until one
+of those, they stand unresolved rather than out.
+
+**Zoomed: the price row, now that two vendors sell something other than their list price.**
+
+- Hetzner's cheapest orderable plan in a US location is CPX11, 2 vCPU and 2 GB, at $21.09 a month.
+  Its CX line is shown "not available" everywhere.
+- Koyeb's entry is the Pro plan, which the agent read as $29 a month.
+
+**What the table yields at the end of this pass:**
+
+| Candidate | Unknown or failing | Price per month, smallest fit |
+| --- | --- | --- |
+| DigitalOcean | none | $6, 1 GB |
+| Linode | none | $5, 1 GB |
+| Hetzner | none | $21.09, 2 GB, US |
+| Fly.io | 3, not observed | $1.94 for 256 MB, plus $0.15 per GB of volume |
+| Railway | 6 | $5 plus usage |
+| Render | 6, and 15 partial | $7 for 512 MB, plus $0.25 per GB of disk |
+| Sliplane | 3, 4, 6, 14, 15 | €9 |
+| Upsun | 7, leaning fail | not read |
+| Vultr | 6 | $5, 1 GB, "regular SSD" |
+| Lightsail, OVHcloud, netcup, Contabo, IONOS, Hostinger | 6 | as in the 2026-09-28 pass |
+| RackNerd | 15, leaning fail | $17.99 a month for 1 GB, or yearly |
+| Northflank | out on 6 | |
+| Koyeb | out on 20 | |
+
+**On the technical rows, the complete VPS candidates and Fly do not separate.** On a VPS every
+property is ours to satisfy by construction, and Fly passes every property it has been scored on. The
+2026-09-27 properties said this might happen, because the questions where a managed platform and a
+bare machine differ most were deferred: how the machine is reached, patched and watched. This pass
+therefore stops without one candidate, and the next section says what would finish it.
+
+### Third pass 2026-09-29: Fly observed, the field cut, and the maintainer's reasons as rows
+
+**Fly passes property 3, observed.** A throwaway app on Fly served three routes under `/api/` from one
+256 MB machine in `yyz`. Each was requested three times from near Toronto:
+
+- One route had no cache headers. Every response was new: its timestamp and UUID changed each time.
+- One set a cookie. `set-cookie: sid=abc123; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`
+  arrived unchanged all three times.
+- One allowed caching with `cache-control: public, max-age=300, s-maxage=300`. Every response was
+  still new, so the proxy does not cache even when allowed to.
+
+The proxy added only `server: Fly/…`, `via: 2 fly.io` and `fly-request-id`. The app was destroyed
+afterwards. *Measured, 2026-09-29: one run of nine requests, flyctl v0.4.110, Node 24 on Alpine,
+requests served by the `yyz` edge.*
+
+**Railway, Render and Sliplane are dropped, on the maintainer's instruction of 2026-09-29.** Each was
+held on property 6, which their vendors do not publish. The maintainer said to drop them unless their
+price was very compelling, and it is not:
+
+- Railway: $5 plus usage.
+- Render: $7 plus $0.25 per GB of disk.
+- Sliplane: €9.
+- Against: Fly at $2.19 plus $0.15 per GB from 1 October, Linode at $5, and RackNerd at $21.99 a year.
+
+What would reverse it: any of them publishing that its volumes are on local disk at a price below
+Linode's.
+
+**Property 15 is split, and the maintainer judged which half binds.**
+
+- **15a. Everything after the machine exists is scripted:** the runtime installed, the store
+  restored, the app started. This binds.
+- **15b. The machine itself is ordered through an API.** The maintainer judged on 2026-09-29 that
+  this does not bind: one manual order, followed by a script, passes. [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)'s Risk is about how
+  fast recovery is, and an order that takes minutes changes that little.
+
+RackNerd fails 15b and passes 15a, over SSH:
+
+- Its API manages only a server that already exists. A RackNerd representative pointed to the
+  SolusVM client API on LowEndTalk, seen in search only.
+- Its terms say a KVM VPS is provisioned "within 30 minutes".
+- *The terms were read by an agent, [terms](https://www.racknerd.com/terms-of-service).*
+
+**RackNerd's price, corrected.** $21.99 a year for 1 vCPU, 1 GB and 20 GB of SSD: "These RackNerd VPS
+specials are lifetime recurring. You can renew at the same rate". *Opened by me,
+[specials](https://www.racknerd.com/specials/).* The second pass's "$17.99 a month" was the regular
+plan and is wrong for this candidate.
+
+**Fly's price rises on 1 October 2026.** A draft pull request in Fly's own docs repository, "Machine
+prices for 1 October 2026", lists `shared-cpu-1x` at "$ 2.19/mo". *Opened by me,
+[superfly/docs#2507](https://github.com/superfly/docs/pull/2507).* Memory rises 20% and CPU does not,
+per a Layerbase post that paraphrases Fly's email of 2026-09-21. Layerbase sells a migration off Fly.
+Volume snapshots also became billable from 1 January 2026, per an agent's read of Fly's pricing
+page.
+
+**Extended: the maintainer's reasons, as rows.** On 2026-09-29 the maintainer said a VPS appeals for
+price and because "it's stable and mine", and a managed platform because "it's easy and reasonably
+priced". The candidates should be compared on the best combination of those, not by category. Price
+is already a row. The rest enter as properties citing that statement. The "easy" rows also rest on
+"one person maintains this" in [../problem.md](../problem.md).
+
+*Easy: what the host supplies, so the maintainer need not build, know or keep it working.*
+
+21. **The host issues and renews the custom domain's TLS certificate.**
+22. **The host restarts a crashed process.**
+23. **The host patches the software beneath our code, and the patch reaches the running machine
+    without our step.** This zooms into property 14.
+24. **Nothing on the machine is reachable from the internet except what the app serves, without our
+    configuring a firewall.**
+
+*Stable and mine.*
+
+25. **A maintenance or hardware event on the host does not take the store offline beyond a
+    migration.** This is distinct from the downtime budget deferred to M16. It asks whether the
+    host's routine events cost minutes or can cost days, not how many minutes are acceptable.
+26. **The price of what we run changes only when we change it.**
+27. **We hold root on the whole machine the store sits on**, including its kernel and what sits in
+    front of it.
+
+**Scored.** Evidence is an agent's read of vendor pages on 2026-09-29, except where marked "opened by
+me". "Ours" means we would build it on this candidate, which fails a row that asks what the host
+supplies.
+
+| | Fly.io | DigitalOcean | Linode | Hetzner | RackNerd |
+| --- | --- | --- | --- | --- | --- |
+| 21 TLS | pass | ours | ours | ours | ours |
+| 22 restart | pass | ours | ours | ours | ours |
+| 23 patching | partial | ours | ours | ours | ours |
+| 24 exposure | pass | ours | ours | ours | ours |
+| 25 host events | **fail** | pass | pass | pass | unknown |
+| 26 price | **fail** | pass, by absence | pass, by absence | partial | pass |
+| 27 root | partial | pass | pass | pass | pass |
+| Price per month | $2.19 + $0.15/GB | $6 | $5 | $21.09 | $1.83 ($21.99 a year) |
+
+The sources for each cell:
+
+- **Fly:**
+  - 21: "Fly.io uses Let's Encrypt to issue TLS certificates for custom domains". Renewal is implied
+    by its rate-limit note rather than stated.
+  - 22: "`on-fail` is the default", with up to 10 restarts in 5 minutes.
+  - 23: Fly patches the kernel, but "a machine update or application deploy is sufficient to trigger
+    the upgrade". So a patch reaches a running machine only on our step.
+  - 24: SSH is served on the private network and reached over WireGuard.
+  - 25: "Volumes are pinned to physical hosts, so when there's a host outage the volume is
+    unreachable", and "A host can be down for an hour, or a day, or sometimes longer". Recovery is
+    restoring a daily snapshot into a new volume, losing what was written since. *Opened by me,
+    [host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/).* Fly also migrates a
+    machine with its volume to another host on its own initiative, stopping it first.
+  - 26: the rise on 1 October, above.
+  - 27: root inside our micro-VM. Fly owns the kernel and the proxy.
+- **DigitalOcean:**
+  - 25: live migration is used for "normal infrastructure and network maintenance, software upgrades,
+    and hardware failures", with the string `live_migrate` "at least 10 minutes before". *Opened by
+    me, [live migration](https://docs.digitalocean.com/products/droplets/details/live-migration/).*
+    What happens when a host dies outright is not stated.
+  - 26: no change to the entry plans found for 2025 or 2026.
+- **Linode:**
+  - 25: a host's maintenance migrates the machine live, or powers it off and on, with 3 hours' to
+    7 days' notice.
+  - 26: the 2023 rise left the $5 plan "unchanged", and no change has been found since.
+- **Hetzner:**
+  - 25: live migration, including after "a hardware failure on the physical host", after which the
+    server "is automatically powered on".
+  - 26: a rise on 15 June 2026 applied to new orders only: "Existing servers are not affected by the
+    price adjustment, as long as no rescaling is performed."
+- **RackNerd:**
+  - 25: its maintenance and failure behaviour is not documented. Its terms say "RackNerd.com is not
+    responsible for data integrity, regardless of circumstance", and its hardware support is
+    "best-effort".
+  - 26: the "lifetime recurring" wording above.
+  - 6: still "RAID-10 protected Pure SSD", which says neither local nor network.
+
+**What the table yields: a tradeoff between rows 21 to 24 and rows 25 and 26, split along the managed
+and VPS line.** No candidate passes both groups. By the decision-making standard, the next step is to
+state what the most of each would be, then look for a design that reaches both before accepting the
+trade.
+
+- **Most of the easy rows:** nothing to build, know or keep working for TLS, restarts, patching or
+  exposure.
+- **Most of the stable rows:** the host's own events cost the store minutes, not days, and nothing
+  about it changes unless we change it.
+- **Designs that might reach both:**
+  - **A VPS with the four easy rows automated once.** That means a proxy that renews its own
+    certificates, a service manager that restarts the process, automatic security updates including
+    reboots, and a firewall allowing only the web ports. This turns "ours" into "built once and
+    known", not "supplied". The gap left is the knowing and the fixing when one breaks, which a
+    managed host carries instead.
+  - **Fly, with row 25's cost lowered by the copy M3 will take.** With a continuous copy off the
+    machine, a lost host becomes a restore to a new volume in minutes, not a wait. That depends on
+    [how is the store backed up?](how-is-the-store-backed-up.md) at M3, so it cannot be scored now.
+    Row 26 has no design fix.
+- **Not a design fix:** hosting the store on more than one Fly volume. It needs the store copied
+  between machines, which
+  [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) does not allow.
+
+### Fourth pass 2026-09-29: Fly's host outage re-read, the maintainer's bar, and uptime without intervention
+
+**Fly's row 25 is re-scored from fail to partial.** Fly's recovery steps can be run while the host is
+down: `fly volumes create <volume name> --snapshot-id <snapshot id>`, then `fly scale count 1`, which
+creates "a Machine on healthy infrastructure". *Opened by me,
+[host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/).* So a host that is down for a
+day means the site is down until we notice and run the restore, not for a day. What the restore costs
+is data: "We take snapshots once every 24 hours. Any data stored between the time when the snapshot
+was taken and the time when the restore is made will not be included." With a continuous copy off
+the machine, which [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+requires on any host and [how is the store backed up?](how-is-the-store-backed-up.md) designs at M3,
+the loss shrinks to that copy's lag. What stays worse than on a VPS is that more of the host's
+problems become a restore we run. DigitalOcean, Linode and Hetzner migrate a machine off a sick host
+themselves, while a Fly volume stays pinned to it.
+
+**The maintainer's bar for a VPS.** On 2026-09-29 the maintainer said: "a vps with great observability
+and setup scripts could work for me if low maintainance overall". That enters as a row:
+
+28. **Recurring maintenance is near zero after setup. Whatever the host does not supply is done by
+    setup scripts and watched by our own monitoring.** Rests on that statement.
+
+Every standing candidate can reach 28, a VPS by scripting rows 21 to 24 once and Fly by scripting
+fewer. So 28 separates nothing on its own. Its effect is on rows 21 to 24: per the maintainer, "ours"
+on those rows no longer disqualifies a VPS, provided the scripts and the monitoring exist. What is left
+between the two tiers on those rows is who fixes a supplied piece when it breaks.
+
+**Asked the same day: is near-100% uptime, needing no interaction from the maintainer, reachable?**
+That is [how much downtime is acceptable?](how-much-downtime-is-acceptable.md) at M16 and
+[how is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md),
+and neither is settled here. What this question owes them is not to choose a host that forecloses the
+answer. So the failures were listed by what causes them, and each host was checked for what it keeps
+reachable.
+
+**Each cause of downtime, and what removes it without a person:**
+
+1. **A deploy or restart.** One process at a time holds the store, per
+   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), so a restart leaves a
+   gap.
+   - On a VPS, a proxy in front can hold requests across that gap. Caddy's `lb_try_duration` is "how
+     long to try selecting available backends for each request if the next available host is down",
+     retried every 250ms by default. Connection failures are retried for any method. Untested with a
+     single upstream.
+   - On Fly, an app with a volume deploys only `rolling` or `immediate`, and no page says the proxy
+     holds requests while the one machine restarts. It "might start returning 503 Service
+     Unavailable".
+   - This is what [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+     turns on, so it becomes row 30 below.
+2. **A crash.** systemd on a VPS and Fly's `on-fail` policy both restart the process without anyone.
+3. **Maintenance on the host, or a failing host.** Removed by the provider on DigitalOcean, Linode and
+   Hetzner, per the third pass. On Fly it becomes cause 4.
+4. **A dead host.** Two designs remove the person:
+   - **Automated rebuild.**
+     - Litestream streams every write off the machine. Its `sync-interval` "Defaults to `1s`", per
+       an agent's read of [config](https://litestream.io/reference/config/). Litestream v0.5.17 was
+       released on 2026-08-31, and five releases in two months suggest it is maintained.
+     - A watchdog running somewhere else sees the machine gone, creates a new one through the API,
+       restores the store and moves the address.
+     - The outage is the time this takes, in minutes. The loss is about a second of writes.
+     - It needs machine creation by API and an address that can move.
+   - **Warm standby.**
+     - A second machine keeps a copy current with `litestream restore -f`, which "Continuously
+       restores new data as it becomes available" every second by default, opened read-only. *Opened
+       by me, [restore](https://litestream.io/reference/restore/).*
+     - When the primary is lost, the standby stops following, opens the store for writing, and
+       takes the address.
+     - Linode moves the address itself: "If the primary Linode becomes inaccessible, the shared IP
+       address is automatically routed to the secondary Linode", over BGP with `lelastic` or FRR, and
+       both machines need IPv6. *Opened by me,
+       [failover](https://techdocs.akamai.com/cloud-computing/docs/configure-failover-on-a-compute-instance).*
+     - On DigitalOcean and Hetzner, a script moves a reserved or floating IP through the API.
+     - The outage is seconds, and the cost is a second machine.
+     - [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) allows this, since
+       it "says nothing about redundancy or replication", and [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)'s Revisit when names a warm
+       standby as what an outage budget under about ten minutes needs.
+5. **The whole provider or region goes down.** Nothing above removes this. Only a second provider or
+   region would, and no record asks for one.
+
+**Three safety costs come with removing the person, and each is a design question later, not a host
+property now:**
+
+- **Split brain.** If the primary is cut off rather than dead, an automatic promotion can leave two
+  machines writing. Litestream's docs name no fencing, and LiteFS, which had it through Consul
+  leases, is one Fly says it is "not able to provide support or guidance for" (agent's read,
+  [docs.fly.io/litefs](https://docs.fly.io/litefs/)).
+- **Acknowledged writes lost in the lag.** Replication is asynchronous, so a write the server confirmed
+  can be missing after failover. Whether the client keeps its copy until the write is safe off the
+  machine is a question for how syncing works.
+- **A monitor that decides wrongly.** It must run away from the machine it watches, and a false alarm
+  triggers a failover nobody wanted.
+
+**Provider uptime commitments**, recorded rather than scored:
+
+- DigitalOcean: "Monthly Uptime Percentage of 99.99% for each individual Droplet instance", excluding
+  "Scheduled maintenance". *Opened by me, [SLA](https://www.digitalocean.com/sla/cpu-droplets).*
+- Linode: "99.99% monthly uptime for Covered Services in general availability".
+- Hetzner: "economically reasonable efforts to achieve an annual average network availability of
+  99.9%". This covers the network, not each server.
+- Fly: 99.9% a month for Enterprise customers.
+- All but DigitalOcean's were read by an agent.
+
+**Properties added from this:**
+
+29. **Recovery from a lost host can run with no person: a machine is created through the API, and the
+    address moves to it by API or by routing.** Rests on the maintainer's goal of 2026-09-29 and on
+    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)'s
+    Risk, that how automated recovery is decides the outage. This makes 15b bind again, for this goal,
+    after the maintainer judged earlier the same day that it did not. That judgement was made before
+    this goal was stated, so it is raised with the maintainer rather than overturned here.
+30. **A deploy or restart of the one process does not fail a request.** Rests on
+    [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md).
+
+| | Fly.io | DigitalOcean | Linode | Hetzner | RackNerd |
+| --- | --- | --- | --- | --- | --- |
+| 25 host events | partial | pass | pass | pass | unknown |
+| 26 price | fail | pass, by absence | pass, by absence | partial | pass |
+| 27 root | partial | pass | pass | pass | pass |
+| 28 low maintenance | reachable | reachable | reachable | reachable | reachable |
+| 29 no-person recovery | pass: API, anycast | pass: API, reserved IP | pass: API, BGP failover | pass: API, floating IP | **fail**: no API to order |
+| 30 restarts drop nothing | unknown, no hold documented | reachable, proxy in front | reachable | reachable | reachable |
+| Price per month | $2.19 + $0.15/GB | $6 | $5 | $21.09 | $1.83 |
+
+**What the table yields, and how firmly:**
+
+- **Out:** RackNerd, on 29, if the maintainer confirms 29.
+- **Hetzner separates from Linode only by price**, four times higher in the US.
+- **Fly** fails 26, is partial on 25 and 27, and is unknown on 30.
+- **DigitalOcean and Linode pass every row.** Linode alone moves its address to a standby itself.
+- **How firm it is:**
+  - Row 26's passes for DigitalOcean and Linode are an absence of any rise found, not a promise.
+  - Row 30 is reasoned from Caddy's documentation, not observed.
+  - Row 29's warm standby has not been built on any candidate.
+
+### Open at the end of the fourth 2026-09-29 pass
+
+*The next pass replaces this entry rather than adding beneath it.*
+
+1. **Does 29 bind?** It was added from the maintainer's goal, and it reverses the earlier judgement on
+   15b for RackNerd.
+2. **Row 30 on a VPS** is observable with a spike: Caddy in front of a process restarted under load,
+   counting failed requests. Row 30 on Fly is observable the same way.
+3. **Then the choice between DigitalOcean and Linode**, if it is still open after the maintainer
+   weighs Linode's automatic address failover against a $1 difference.

@@ -22,6 +22,10 @@ North America if they had to pick. That is an assumption, not a fact about the a
 [Where does this run?](where-does-this-run.md) uses it only to require a North American region from the
 host. This question still needs the fact.
 
+**M1 deploys to `tor1` without deciding this.** The maintainer agreed on 2026-09-30 that M1 slice 4's
+Droplet goes in Toronto, as a placement rather than an answer. At M1 the machine holds no data, so
+moving it is a redeploy. The choice is made here, at M3, before the first row is written.
+
 **It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
 redeploy. From the first row onward, moving it means moving the store, and later a live player
 record. That is why it sits at M3, where

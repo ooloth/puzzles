@@ -154,3 +154,13 @@ deleting an account. That is where a stale device resurrects something.
 *Sourced — <https://forum.obsidian.md/t/obsidian-sync-silently-resurrects-deleted-moved-files-when-offline-device-reconnects/113242>;
 <https://docs.datastax.com/en/dse/6.9/architecture/database-internals/architecture-tombstones.html>.
 Checked 2026-09-02.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+- **A crash can commit a write whose acknowledgement never reaches the client.** When the server was
+  killed under load, one run committed a write that its client saw fail. A client that retries the
+  failed write will then repeat it, unless the write can be recognised as the same one, for example by
+  a key the client sends. *Measured — SIGKILL under load, Linux container, 2026-09-30.*
+- **A failed request is invisible to the player only if the client retries it silently.** The promise
+  [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+  forbids asking the player. It does not forbid a request failing.

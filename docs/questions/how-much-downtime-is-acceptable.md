@@ -83,3 +83,22 @@ signed-in session locally with a lifetime would stop an outage ejecting people w
 signed in.
 
 *Reasoned — from [../problem.md](../problem.md) and the records named, 2026-09-03.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+- **The maintainer's weighing, stated 2026-09-29:** "a system that stays up while i'm sleeping is
+  obviously much more reliable than one that waits for me to react but the price is so appealing that
+  it's not enough by itself to decide". Staying up without a person was scored as a property that
+  counts but does not disqualify.
+- **What each recovery design costs in downtime** is in
+  [how is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md):
+  minutes for an automated rebuild, seconds for a warm standby.
+- **Published uptime commitments.**
+  - DigitalOcean: "Monthly Uptime Percentage of 99.99% for each individual Droplet instance",
+    excluding "Scheduled maintenance". *Sourced —
+    [SLA](https://www.digitalocean.com/sla/cpu-droplets), opened 2026-09-29.*
+  - Linode: 99.99%.
+  - Fly: 99.9%, for Enterprise only.
+- **A deploy need not cost downtime.** A deploy that dropped no request was observed on a Droplet,
+  per the twelfth pass.
+- **A reboot for a kernel patch** is a brief outage, unless Livepatch covers the fix.

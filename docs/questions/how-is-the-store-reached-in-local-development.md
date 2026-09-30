@@ -96,3 +96,13 @@ anywhere describes what the network-attached equivalent costs, which makes the e
 one-sided rather than settled.
 
 *Reasoned — from reading that file, 2026-09-02.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+**A SQLite file on a macOS folder mounted into a Docker Desktop container fails under WAL.** The
+server crashed with a bus error, and in one run acknowledged ids were missing from the file. The same
+run with the file on the container's own disk failed nothing. SQLite's WAL needs shared memory that
+such mounts do not give: "All processes using a database must be on the same host computer; WAL does
+not work over a network filesystem". *Measured — three runs each way, `node:24-bookworm` under Docker
+Desktop on Apple silicon, 2026-09-30. The WAL quote is sourced from
+[sqlite.org/wal.html](https://www.sqlite.org/wal.html).*

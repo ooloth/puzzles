@@ -25,7 +25,8 @@ date: 2026-09-30
 ## Scored against
 
 These are the properties that decided the choice. The full list, and each candidate's score on it,
-are in the question's passes. Each line names that question's row.
+are in the question's passes, read with `git show 11ac964:docs/questions/where-does-this-run.md`.
+Each line names that question's row.
 
 1. The process runs continuously and is never stopped for inactivity (row 4, [ADR-0017](0017-nothing-on-the-request-path-scales-to-zero.md)).
 2. The store's disk is inside the machine and survives a restart and a redeploy (rows 6 and 7,
@@ -125,7 +126,8 @@ inside it, in a North American region.
   **Reverses if** RackNerd offers an API to create a machine.
 - **Not yet.** Rejected because M1 slice 4 cannot deploy without a host.
 
-The rest of the field is in the question's passes, each with the property it failed: Railway,
+The rest of the field is in the question's passes at commit `11ac964`, each with the property it
+failed: Railway,
 Render, Northflank, Sliplane, Upsun, Koyeb, Scaleway, Lightsail and several smaller VPS providers.
 
 ## Risk

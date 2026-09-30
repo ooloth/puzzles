@@ -89,3 +89,15 @@ second that is a small fraction of a second per second of wall clock, which is t
 question needs to check rather than assume.
 
 *Sourced — second-hand from a research agent citing Percona benchmarks, 2026-09-03.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+- **Whether an fsync is honest is the case that matters, not how fast it is.** A virtualised disk
+  that acknowledges a write before it is durable loses it on a power loss, and no latency measurement
+  shows that. The continuous copy off the machine is what covers it. *Reasoned. The sixth pass
+  dropped fsync latency as a factor.*
+- **Checkpointing.** Litestream's tips suggest `PRAGMA wal_autocheckpoint = 0` under heavy write
+  load. With it, the WAL grows without bound if Litestream stops. At this project's load, SQLite's
+  default checkpointing avoids that. *Reasoned from [tips](https://litestream.io/tips/).*
+- **The spikes ran** `journal_mode=WAL`, `busy_timeout=5000` and `synchronous=FULL`, with several
+  processes on one machine sharing the file during deploys. No acknowledged write was lost.

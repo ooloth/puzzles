@@ -42,3 +42,27 @@ obvious.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+- **DigitalOcean Monitoring is free and opt-in.** It needs its agent on the Droplet, and alerts on
+  CPU, load, memory, disk use, disk I/O and bandwidth by email or Slack. Read by an agent from
+  [monitoring](https://docs.digitalocean.com/products/monitoring/).
+- **DigitalOcean's uptime checks run from outside the machine.** "Each Uptime check costs $1.00 per
+  month", and one a month is credited free. *Sourced —
+  [uptime pricing](https://docs.digitalocean.com/products/uptime/details/pricing/), opened
+  2026-09-30.*
+- **Other free outside monitors.**
+  - UptimeRobot's free plan has 50 monitors at five-minute intervals, with email alerts. Read by an
+    agent from [pricing](https://uptimerobot.com/pricing/).
+  - Healthchecks.io's free plan monitors 20 heartbeat jobs, and alerts when a ping is late or reports
+    `/fail`. That suits a check that Litestream's copy is fresh. Read by an agent from
+    [pricing](https://healthchecks.io/pricing/).
+- **Cloudflare Workers' free plan allows 5 cron triggers.** 2026 community threads report that
+  one-minute triggers on free accounts do not fire, so five minutes is the safe assumption for a
+  watchdog run there. Read by an agent from
+  [limits](https://developers.cloudflare.com/workers/platform/limits/).
+- **Node 24 names its process `MainThread`**, not `node`, in `ps`. A monitor matching on `node`
+  misses it. *Measured — `ps -eo comm` on a Droplet, 2026-09-30.*
+- **The memory the stack used on a 1 GB Droplet** is in the question's twelfth pass: 360 MB idle and
+  373 MB at the peak of a deploy.

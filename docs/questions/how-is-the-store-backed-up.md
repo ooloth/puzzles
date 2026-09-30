@@ -153,3 +153,26 @@ How much recent work disappears when the machine does is set by the replication 
 engine. Litestream's default is one second. Nothing has said what is acceptable, and
 [how much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md) asks the
 client-side half of the same question.
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+- **Backblaze B2 costs nothing at this size.** "First 10GB storage is always free", and "Class A, B,
+  and C API calls are free for pay-as-you-go customers". *Sourced —
+  [pricing](https://www.backblaze.com/cloud-storage/pricing), opened 2026-09-30.* Litestream detects
+  B2 endpoints itself, per its [B2 guide](https://litestream.io/guides/backblaze/).
+- **Cloudflare R2 charges for writes at Litestream's default.**
+  - Litestream's 1-second sync makes "approximately 2.6 million PUT requests monthly" under constant
+    writes. *Sourced — [config](https://litestream.io/reference/config/), opened 2026-09-30.*
+  - R2's free tier includes "1 million requests / month" of Class A. *Sourced —
+    [pricing](https://developers.cloudflare.com/r2/pricing/), opened 2026-09-30.*
+  - A longer interval stays free, but widens what a lost machine loses.
+- **Neither B2 nor R2 is the machine's provider**, so losing the DigitalOcean account does not lose a
+  copy kept there.
+- **Only one replicator may write a replica path.** Quoted in
+  [how is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md).
+- **On a fresh machine**, `litestream restore -if-db-not-exists -if-replica-exists` restores only
+  when there is something to restore. In the spike, the store was created before Litestream started.
+- **Observed:** a Litestream restore held every acknowledged write, and passed `integrity_check`, in
+  every spike run: locally, and on two Droplets. See the question's eighth and twelfth passes.
+- **A stale copy can be noticed** with a heartbeat to Healthchecks.io, pinged only while the copy is
+  fresh.

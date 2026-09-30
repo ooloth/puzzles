@@ -90,3 +90,34 @@ morning commute means nobody starts that day's puzzle.
 
 So this is a downtime bet rather than a data-loss bet — the data-loss half is
 [how is the store backed up?](how-is-the-store-backed-up.md) — and the downtime is not free.
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+**Two designs recover without a person.**
+
+- **An automated rebuild.** Litestream streams each write off the machine every second by default. A
+  watchdog running elsewhere sees the machine gone, creates a replacement through the provider's API,
+  restores the store, and moves the address. The outage lasts minutes, and about a second of writes
+  is lost.
+- **A warm standby.** A second machine keeps a copy current with `litestream restore -f`, which
+  "Continuously restores new data as it becomes available", opened read-only. It is promoted when the
+  primary is lost. The outage lasts seconds, and the compute costs twice as much. *Sourced —
+  [restore](https://litestream.io/reference/restore/), opened 2026-09-29.*
+
+**What makes either safe: fencing.**
+
+- A machine that is cut off rather than dead can keep writing.
+- Moving the address first, then starting a new replica path, keeps two machines from writing one
+  replica.
+- Litestream says "It is _your_ responsibility to ensure you do not have multiple applications
+  replicating concurrently". *Sourced — [tips](https://litestream.io/tips/), opened 2026-09-30.*
+
+**The pieces on the chosen host.**
+
+- DigitalOcean's API creates a Droplet with cloud-init user data and SSH keys.
+- A reserved IP moves with one API call, and costs nothing while assigned.
+- DigitalOcean live-migrates a Droplet off a failing host, but does not state what happens when a
+  host dies outright. See [../constraints.md](../constraints.md).
+
+**Where a watchdog could run.** Cloudflare Workers' free cron is reported to fire every five minutes
+but not every minute.

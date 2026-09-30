@@ -83,3 +83,31 @@ inventory omitted any backup or restore procedure for the data, which is the sha
 
 *Reasoned — from [../brainstorming/](../brainstorming/), which is non-authoritative and cited for what
 it enumerates rather than for anything it concludes.*
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+**On the Droplet [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)
+chose, running the systemd services of
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md):**
+
+- **DigitalOcean's Cloud Firewall** is "a network-based, stateful firewall service for Droplets
+  provided at no additional cost". It is separate from any firewall on the machine, such as ufw. It
+  was read through a summariser, from
+  [configure rules](https://docs.digitalocean.com/products/networking/firewalls/how-to/configure-rules/).
+- **Automatic updates skip third-party repositories.** "Just adding another package repository to an
+  Ubuntu system WILL NOT make `unattended-upgrades` consider it for updates!" So Caddy's repository,
+  or NodeSource's if Node comes from it, is patched automatically only once its origin is added.
+  *Sourced —
+  [automatic updates](https://ubuntu.com/server/docs/how-to/software/automatic-updates/), read by an
+  agent.*
+- **Livepatch** "is available free for up to 5 machines, for personal use", and it "is not a
+  replacement for rebooting". `pro status` on a fresh Droplet reports it as available, per
+  [../constraints.md](../constraints.md). Using it means attaching an Ubuntu Pro token.
+- **A fresh Droplet has no swap**, per [../constraints.md](../constraints.md). The spike capped the
+  app with `MemoryMax` and hardened its unit with `NoNewPrivileges`, `ProtectSystem=strict`,
+  `ReadWritePaths` and `PrivateTmp`. The unit is in the question's twelfth pass.
+- **journald keeps logs until its own cap**, so `SystemMaxUse` bounds their disk use. A full disk
+  fails the store's writes. *Reasoned.*
+- **Deploy tools default to SSH as root.** Kamal does, which is moot with no Kamal. A non-root user in
+  a group that controls the services is still close to root. *Sourced from Kamal's
+  [ssh docs](https://kamal-deploy.org/docs/configuration/ssh/) by an agent.*

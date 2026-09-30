@@ -100,3 +100,11 @@ described as "a small, contained effort" because the algorithm is well understoo
 battle was said to lack a single known algorithm. The asymmetry is plausible and neither half was
 measured — and difficulty grading plus symmetric clue removal, both named as things a generator
 should do, are exactly the parts that are not simple backtracking.
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+
+**The server's Droplet has one shared vCPU.** A CPU-heavy job there competes with requests, against
+"The interactive path over batch throughput" in [../problem.md](../problem.md). Linode's docs say
+shared CPU "should remain below 80% sustained usage on average", and DigitalOcean documents no figure.
+Generation could run on the maintainer's laptop, in CI, or on a second Droplet. The cheapest
+dedicated CPU found was $36 to $42 a month.

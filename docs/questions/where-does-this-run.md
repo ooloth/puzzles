@@ -1600,13 +1600,195 @@ property now:**
   - Row 30 is reasoned from Caddy's documentation, not observed.
   - Row 29's warm standby has not been built on any candidate.
 
-### Open at the end of the fourth 2026-09-29 pass
+### Fifth pass 2026-09-30: row 29 weighed rather than disqualifying, and an extend-and-zoom on what stands
+
+**Row 29 does not disqualify.** The maintainer said on 2026-09-30: "let's not fail purely because of
+29; let's factor it in; a system that stays up while i'm sleeping is obviously much more reliable than
+one that waits for me to react but the price is so appealing that it's not enough by itself to
+decide". So RackNerd stays in the field, and its fail on 29 counts against it without removing it.
+
+**Extended, before any research: the properties from moments not yet listed.** The maintainer asked
+the same day that DigitalOcean and Linode be separated on "how performance and especially
+safety/reliability will affect DX and UX if relying on those platforms to host the site and
+potentially its future background workloads", and said the $1 difference is insignificant. Fly,
+Hetzner and RackNerd are scored where the same evidence covers them.
+
+The moments:
+
+- a background job, such as puzzle generation, running beside the server;
+- a write committing to the store's disk;
+- the provider's own incident, or an action on the account;
+- a copy of the store leaving for somewhere that survives losing the provider;
+- a second machine joining, as a standby or a worker;
+- the maintainer finding out something is wrong, and looking into it.
+
+The properties:
+
+31. **A CPU-heavy background job can run without slowing the request path.** Either the host sells
+    dedicated CPU at a modest price, or a second machine can sit beside the first on a private
+    network. Rests on "The interactive path over batch throughput" in [../problem.md](../problem.md)
+    and the maintainer's mention of future background workloads. No record places the generator on
+    this host. That is why this is scored as reachable, not as a present need. It reverses the
+    earlier "A neighbour taking CPU" non-binding only in the case where a job does run here.
+32. **A committed write reaches durable storage quickly on the smallest plan.** Every write the store
+    takes waits on it. Rests on [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) and
+    [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md).
+    A figure found in reading is a hypothesis until measured here.
+33. **The provider's incidents are rare, disclosed and short, and an action on the account comes with
+    notice before the machine stops.** Rests on the maintainer's "stable" and on the failure list of
+    2026-09-28: "An action on the provider's side, such as an account suspension, a billing error or
+    an outage upstream of the provider, takes the machine offline."
+34. **The host offers the pieces a no-person recovery and a standby are built from, at modest cost:**
+    a private network between machines, object storage for a continuous copy, and a firewall set
+    outside the machine. Rests on row 29, and on
+    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
+    Whether the copy should live with another provider, so that losing the account does not lose the
+    copy, belongs to [how is the store backed up?](how-is-the-store-backed-up.md).
+35. **The host watches the machine and alerts on it without our running anything, as a floor beneath
+    our own monitoring.** Rests on the maintainer's "great observability" bar in row 28.
+36. **The provider's stewardship of the small plan looks durable.** Rests on
+    [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).
+    Leaving costs a redeploy and a copy, per row 16, so this weighs little, and it enters as a row
+    only to be scored.
+
+**Checked and found binding on nothing:** each provider's region count, since both have Toronto and
+several US regions. Also the uptime commitment, recorded in the fourth pass as 99.99% for each.
+
+**Row 30, observed locally**, on 2026-09-30:
+
+- **The setup.** A Node 26 server held a SQLite file with an exclusive lock and answered a GET that
+  read and a POST that wrote. A load generator ran 20 concurrent clients for 20 seconds, alternating
+  GET and POST, while the process was restarted five times, once every 4 seconds. Each acknowledged
+  write was then checked against the file.
+- **Every run lost no acknowledged write.**
+- **The counts of failed requests, on macOS (Apple silicon):**
+  - Straight to Node: about 28,800 refused connections.
+  - Through Caddy 2.11.4 with `lb_try_duration 10s`: 10 to 32 failed POSTs per run, across three
+    runs. They are `read: connection reset by peer`, and Caddy does not retry a POST once it has sent
+    it.
+  - With the listening socket held across restarts by a supervisor, as systemd socket activation
+    does: still 18 to 31.
+  - Held socket and Caddy's upstream keep-alive off: 1 to 3, across five runs.
+- **The counts on Linux**, in `node:24-bookworm` under Docker (kernel 6.12, Node 24.21.0):
+  - Caddy alone: 45 to 58 failed POSTs.
+  - Held socket, keep-alive off, and the old process draining its connections on SIGTERM instead of
+    closing idle ones: **0 failures in each of three runs**, about 326,000 requests and 15 restarts.
+  - A crash (SIGKILL) under the same setup: 5 failed POSTs, and one write committed that its client
+    never saw acknowledged.
+
+So on a VPS, row 30 is reachable for a planned restart, with three pieces: a supervisor that holds the
+socket, a proxy that does not reuse upstream connections, and a server that drains. A crash still
+fails what was in flight, and can commit a write whose client retries it. That makes writes needing
+to be safe to retry a finding for
+[what happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md), not a
+host property. *Measured on one laptop, one Linux container and three to five runs per setup. The
+Linux runs are the ones that count, since production runs Linux. Not measured: a real VPS, TLS, and
+the real server.*
+
+**Row 30, observed on Fly**, on 2026-09-30:
+
+- **The setup.** The same server ran on one `shared-cpu-1x` 256 MB machine in `yyz`, with its store
+  on a Fly volume and `kill_signal = "SIGTERM"`. A laptop near Toronto ran 10 concurrent clients for
+  100 seconds while the machine was restarted three times with `fly machine restart` and replaced
+  once with `fly machine update`, as a deploy does.
+- **Run 1:** 7 failed requests, 4 GET and 3 POST, all `502`.
+- **Run 2:** 13 failed requests, 4 GET and 9 POST.
+- **Both runs:** the longest request took about 15.2 seconds, so the proxy held some requests through
+  a restart and gave up on others. No acknowledged write was lost.
+- **Fly fails row 30.** A single machine with a volume can deploy only `rolling` or `immediate`, so
+  nothing on Fly's side keeps a socket open across the restart. The app was destroyed afterwards.
+
+*Measured, two runs, flyctl v0.4.110, Node 24 on Alpine.*
+
+**Research on rows 31 to 36**, by agents reading vendor pages and status histories on 2026-09-30.
+"Opened by me" marks what the session that wrote this pass fetched itself.
+
+- **31, a CPU-heavy job beside the server:**
+  - Private networking between machines is free on both. DigitalOcean: "Network traffic is free within
+    a VPC network". Linode: "VPCs are provided at no additional cost".
+  - Linode's shared CPU "should remain below 80% sustained usage on average" (*opened by me,
+    [shared CPU](https://techdocs.akamai.com/cloud-computing/docs/shared-cpu-compute-instances)*), so
+    a generator pinned at 100% belongs on a dedicated plan or its own machine. DigitalOcean documents
+    no ceiling, which is an unknown rather than a pass.
+  - The cheapest dedicated CPU is $36 a month on Linode (2 vCPU, 4 GB) and $42 on DigitalOcean.
+  - Both reach 31 through a second machine on the private network.
+- **32, a committed write reaching disk:**
+  - Neither vendor publishes an fsync latency.
+  - The only published disk figures are single VPSBenchmarks runs in 2024, of fio without fsync, in
+    different regions. DigitalOcean's 1 GB plan read about 26,400 random-write IOPS and Linode's
+    about 25,400. They do not measure what 32 asks.
+  - DigitalOcean's cheapest plans are "Regular" SSD. Its NVMe is on "Premium" plans, per an agent's
+    read and a search summary.
+  - Unknown on both. Only a measurement on a real machine in Toronto settles it.
+- **33, incidents and account actions:**
+  - An agent counted each provider's status history for 2025 and 2026 and reported a Linode incident
+    on "Cloud Manager, API, and CLI - All Regions" as seven days long, 26 August to 2 September 2025.
+  - The incident itself shows about an hour of total loss on 26 August, partial service after it, a
+    recurrence of under half an hour overnight, and maintenance that closed it out. *Opened by me,
+    [incident](https://status.linode.com/incidents/10wt69vh152l).*
+  - So the time between an entry opening and closing is not how long the impact lasted, and neither
+    provider's counts can be scored on duration without opening each one.
+  - What does separate them is disclosure. Linode posted about 30 postmortems between April and
+    September 2026, against one DigitalOcean postmortem in its last 50 incidents.
+  - Neither promises notice before stopping a machine for an account action. DigitalOcean emails the
+    account owner when a payment is past due and publishes no timeline before it powers down.
+    Akamai's policy says it will notify "where appropriate". Both are the agent's reading.
+- **34, the pieces recovery is built from:**
+  - DigitalOcean offers object storage in Toronto, "Minimum Monthly Price: $5/month". A reserved IP
+    moves by one API call and is free while assigned.
+  - Akamai's object storage table lists no Toronto region (*opened by me,
+    [endpoint types](https://techdocs.akamai.com/cloud-computing/docs/endpoint-types)*), so a Toronto
+    Linode's copy would go to Chicago or Newark. That is a different failure domain, which may be
+    what [how is the store backed up?](how-is-the-store-backed-up.md) wants anyway.
+  - Linode's IP Sharing moves the address itself, in Toronto among other regions, but needs `lelastic`
+    or FRR on both machines and IPv6.
+  - Both offer free firewalls outside the machine.
+  - On DigitalOcean the standby can watch the primary itself and move the reserved IP with one API
+    call. So the gap on 29 between Linode moving the address and DigitalOcean moving it is a script
+    of similar size, not a missing capability.
+- **35, the host watching the machine:**
+  - DigitalOcean's free Monitoring alerts on CPU, load, memory, disk use, disk I/O and bandwidth, by
+    email or Slack, through an agent on the machine. It also sells uptime checks run from outside:
+    "Each Uptime check costs $1.00 per month", with one credited free. *Pricing opened by me,
+    [uptime](https://docs.digitalocean.com/products/uptime/details/pricing/).*
+  - Linode's alerts cover CPU, disk I/O, traffic and the transfer quota, with no memory or disk-space
+    alert, and no uptime check was found. Its Cloud Pulse monitoring does not yet cover compute.
+  - DigitalOcean passes and Linode is partial.
+- **36, stewardship:**
+  - DigitalOcean is a public company whose growth is in AI. Its $4 and $6 plans are unchanged.
+  - Akamai held the $5 Nanode through a 20% rise in 2023, has closed its Washington region to new
+    customers, and talks about its cloud in terms of AI inference.
+  - Neither has said anything since about its smallest plan. With row 16 keeping leaving cheap, this
+    weighs little, and it does not separate them.
+
+**Scored, 2026-09-30:**
+
+| | DigitalOcean | Linode |
+| --- | --- | --- |
+| 29 no-person recovery | pass: API, reserved IP | pass: address moved by the provider |
+| 30 restarts drop nothing | reachable, observed on Linux | reachable, observed on Linux |
+| 31 CPU job beside the server | pass through a second machine; shared-CPU ceiling unknown | pass through a second machine; 80% sustained ceiling on shared CPU |
+| 32 fsync latency | unknown | unknown |
+| 33 incidents and account actions | no separation; one postmortem seen | no separation; about 30 postmortems |
+| 34 recovery pieces | pass, object storage in Toronto | pass, object storage elsewhere |
+| 35 host monitoring | pass | partial |
+| 36 stewardship | no separation | no separation |
+
+**What the table yields.**
+
+- DigitalOcean leads on 35, the observability the maintainer named as their bar.
+- Linode leads on disclosure under 33, and moves the address itself under 29, though the second
+  shrank to a script of similar size once the standby can call DigitalOcean's API.
+- 32 is unknown on both, and it is the one row every write depends on.
+- The maintainer's own monitoring, required by 28, lowers what 35 is worth. That is why DigitalOcean's
+  lead there is a lead, not a decision.
+
+### Open at the end of the fifth pass
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **Does 29 bind?** It was added from the maintainer's goal, and it reverses the earlier judgement on
-   15b for RackNerd.
-2. **Row 30 on a VPS** is observable with a spike: Caddy in front of a process restarted under load,
-   counting failed requests. Row 30 on Fly is observable the same way.
-3. **Then the choice between DigitalOcean and Linode**, if it is still open after the maintainer
-   weighs Linode's automatic address failover against a $1 difference.
+1. **Row 32** needs fsync latency measured on each of DigitalOcean's $6 plan and Linode's $5 plan in
+   Toronto. That is a machine on each for minutes, at a cost of cents, on accounts the maintainer
+   would open.
+2. **Then weigh 35 against 33's disclosure**, with 32's result. That weighing is the maintainer's
+   where the rows still tie.

@@ -2233,18 +2233,129 @@ here disqualifies A1.
 [../gotchas.md](../gotchas.md) and [../failure-modes/](../failure-modes/) when this question resolves,
 per the maintainer on 2026-09-30.
 
-### Open at the end of the tenth pass
+### Eleventh pass 2026-09-30: running the host without Kamal
+
+*The maintainer asked for alternatives to Kamal for running the host, with DigitalOcean held fixed.*
+
+**What the host must do, whatever runs it:**
+
+- build and ship a release;
+- switch traffic with nothing dropped;
+- terminate TLS and renew certificates;
+- restart what crashes and start it on boot;
+- deliver secrets;
+- roll back;
+- rotate logs;
+- patch everything beneath the app;
+- let a replacement machine be built from nothing;
+- reproduce all of it on the Mac.
+
+**Docker's usual reasons barely apply here.** A container's usual reasons are freezing native
+dependencies and building for the target's CPU. This server is plain JavaScript on Node, using Node's
+built-in `node:sqlite`, so neither applies while no production dependency has a native addon.
+
+**Surveyed and set aside**, per an agent's reading of each project on 2026-09-30:
+
+- **Kamal-like tools** (Uncloud, Haloy, Dewy, `docker-rollout`) all keep Docker on the server. They
+  are younger than Kamal. Uncloud is before 1.0 and has breaking releases.
+- **Control panels** (Dokploy, Coolify, CapRover) state minimums of 1 to 2 GB for themselves.
+- **PM2's reload** waits for a process to listen or say it is ready, not for a health check to pass.
+  It adds a second supervisor beside systemd.
+- **Podman with Quadlet** restarts the unit on update, so old and new never overlap.
+- **NixOS** has the most to learn, and no zero-downtime deploy of its own.
+- **Release tools** for this pattern are stale or in another language. Shipit's last commit was in
+  2020, and Mina's in 2023.
+
+**Candidate N: systemd, Caddy and a deploy script, with no Docker.** Two systemd instances of the app
+sit on two ports behind Caddy, and Caddy checks `/api/up` on each. A deploy:
+
+1. starts the new instance on the idle port;
+2. waits for its `/api/up` to answer;
+3. signals the old instance, whose `/api/up` then returns 503, and waits a second while Caddy stops
+   routing to it;
+4. stops the old instance, which finishes what it was serving.
+
+**Observed, 2026-09-30.**
+
+- **The setup.** Caddy 2.11.4 with `lb_policy first`, `health_uri /api/up`, `health_interval 250ms`,
+  `health_fails 1`, `lb_try_duration 5s` and upstream keep-alive off. Litestream 0.5.17 ran as one
+  process. The runtime was `node:24-bookworm`, Linux arm64 under Docker. 20 clients ran for 40 seconds
+  through five deploys.
+- **A first version stopped the old instance without draining it first.** It failed 39 POSTs with 502
+  in one run. Requests queued on the old instance's socket were cut after Caddy had sent them, and
+  Caddy does not retry a POST.
+- **The four-step order above:** 0 failed requests in each of three runs, about 221,000 each. No request
+  took longer than 49ms. Every acknowledged write was in the live file and in a Litestream restore,
+  and both passed `integrity_check`. Caddy's resident memory was about 56 MB.
+- *Three runs. Not measured: amd64, a real Droplet, TLS, and systemd itself starting and stopping the
+  instances.*
+
+**What becomes ours without Kamal and Docker, and how each is set so it keeps working:**
+
+| What Docker or Kamal did | Without them | Set once in | Recurring work |
+| --- | --- | --- | --- |
+| An immutable image per version | A release directory per version, built on the laptop or in CI with its `node_modules`. The pnpm layout travels in the archive with its symlinks, per row 10. The last few are kept | the deploy script | none |
+| The runtime pinned in the image | Node on the host, from NodeSource's repository for the major line [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) names, patched by `unattended-upgrades` once its origin is added. The alternative is an exact Node binary inside each release, patched only by deploying | cloud-init | none if patched by apt; a deploy per Node patch if pinned |
+| Isolation | systemd sandboxing: `DynamicUser`, `ProtectSystem=strict`, `ReadWritePaths` limited to the store's directory, `NoNewPrivileges`, `PrivateTmp` | the unit file | none |
+| Memory limits | `MemoryHigh` and `MemoryMax` on each unit, plus a swap file | the unit file and cloud-init | none |
+| Restart on crash | `Restart=always`, with a start limit | the unit file | none |
+| Start on boot, in order | Litestream's unit starts first, restoring on a fresh machine with `-if-db-not-exists -if-replica-exists`, and the app's units follow it | the unit files | none |
+| A switch that drops nothing | The deploy script and Caddy's health checks, observed above. The app returns 503 from `/api/up` on a signal, about three lines of code | the script and the app | none |
+| Aborting an unhealthy deploy | If the new instance never answers, the script stops it and the old one keeps serving, safe by construction | the script | none |
+| Deploy lock | `flock` on the server | the script | none |
+| TLS | Caddy, automatic, with its certificate state on disk | the Caddyfile | none |
+| Secrets | A root-only environment file, or systemd credentials | the script | when a secret rotates |
+| Logs | journald, capped by `SystemMaxUse`. It replaces Docker's unlimited logs | cloud-init | none |
+| Reading logs | `journalctl -u 'app@*'` over SSH, in place of `kamal app logs` | none | none |
+| Patching Caddy | Its apt repository, added to `unattended-upgrades` | cloud-init | none |
+| Patching Litestream | Pinned `.deb` from GitHub. It has no apt repository, so it is upgraded by hand or by the script | the script | a few times a year |
+| Kernel patches | Livepatch, plus a set reboot hour for what it cannot patch | cloud-init | none |
+| Firewall | ufw works, since nothing bypasses it, plus the Cloud Firewall | cloud-init and the account | none |
+| Knowing a unit failed | `OnFailure=` pings Healthchecks.io, beside the external monitor and DigitalOcean's alerts | the unit files | none |
+| Rebuilding the machine | The same cloud-init, then the script restores from B2 and deploys. No Docker install, no registry | cloud-init and the script | none |
+| Reproducing on the Mac | The same cloud-init and script in a Multipass VM. The same JavaScript runs on arm64 and amd64 | none | none |
+
+**What N costs that Kamal does not:**
+
+- **We own the deploy script.** It is small, but its bugs are ours. It needs tests and a run in the
+  Multipass VM before every change. Whether it is written in shell or in TypeScript is for
+  [what deploys the code?](what-deploys-the-code.md).
+- **No immutable image.** What sits beneath the app changes with patches. Pinned versions and release
+  directories narrow this without removing it.
+- **It relies on no native addon in production.** A future dependency with one would bring back
+  building per architecture. A check that fails on one would make that loud.
+- **No community recipe** for this exact arrangement, where Kamal has one.
+
+**Where N and Kamal stand, reasoned before the Droplet measurement:**
+
+| | Kamal | N |
+| --- | --- | --- |
+| Deploys that drop nothing | observed | observed |
+| Memory beyond the app | Docker's daemons, reported at 100 to 170 MB, plus 20 MB | about 56 MB |
+| Building | an amd64 image on an arm64 Mac, and a registry | an archive of JavaScript |
+| Reproducing on the Mac | with a CPU architecture gap | the same script, no gap for the app |
+| Recurring work | Kamal and proxy upgrades | the script, and Litestream upgrades |
+| Known traps | Docker's logs, firewall bypass and patch origin | none of those three |
+
+**N overlaps another question.** N's deploy script is most of the answer to
+[what deploys the code?](what-deploys-the-code.md), a Must answer for M1 slice 6. Choosing N here would
+settle much of that, so the two are decided together, or that question records N as its lead.
+
+### Open at the end of the eleventh pass
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **Measure a real Droplet.** The maintainer is opening a DigitalOcean account. To measure:
-   - memory used by the OS, Docker and the stack together, and its peak during a `kamal deploy`;
+1. **Measure N and Kamal side by side on DigitalOcean**, as the maintainer asked on 2026-09-30:
+   - memory with nothing running, with each stack running, and at each stack's peak during a deploy;
+   - failed requests during deploys;
    - whether swap exists;
-   - whether Livepatch covers the kernel.
-2. **Alternatives to Kamal for running the host**, with DigitalOcean held fixed until it is measured.
-3. **Then the maintainer confirms A1 or another variant**, and the records follow, as listed at the
-   end of the ninth pass. That list is kept here:
+   - whether Livepatch covers the kernel;
+   - how long each deploy takes.
+2. **How N and [what deploys the code?](what-deploys-the-code.md) are decided**: together, or with
+   that question recording N as its lead.
+3. **Then the records**, as the ninth pass listed:
    - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended.
    - A record is drafted for this question.
    - Row 8 is corrected.
    - The mount trap and B2 go to their own questions.
+   - The tenth pass's traps are mined.

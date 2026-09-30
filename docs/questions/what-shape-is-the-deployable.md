@@ -76,6 +76,12 @@ of where it runs, and choosing first would constrain the host for no reason.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**How Node is pinned and patched is left here.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app as systemd services with no
+container. So Node is either installed on the host and patched by the package manager, or carried as
+an exact binary inside each release and patched only by deploying. The first keeps Node patched
+without a deploy, and changes the runtime under a running release. The second keeps every release
+exact, and needs a deploy for each Node patch.
+
 **Node ships a single-executable feature and it is not stable.** The v26 documentation page for
 Single executable applications carries "Stability: 1.1 - Active development".
 

@@ -64,6 +64,13 @@ second environment whose drift from the local one is a real failure mode.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**What a deploy targets is settled.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md): the app runs as systemd services on one Droplet, with
+no container runtime, so a release is a directory of built JavaScript and its `node_modules`. How the
+switch between versions works is still being settled in
+[where does this run?](where-does-this-run.md). What is left here is the pipeline: what triggers a
+deploy, whether checks gate it, and where a release is built. If a production dependency ever has a
+native addon, a release has to be built on Linux x64, not on the maintainer's arm64 Mac.
+
 **A check that does not gate anything is a check nobody runs.**
 [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) records that
 `scripts/check-docs.py` exists and nothing runs it, and treats that as the shape of the whole

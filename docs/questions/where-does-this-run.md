@@ -2414,20 +2414,43 @@ server, and deploys driven from a laptop over the internet.*
 
 ### Open at the end of the twelfth pass
 
-*The next pass replaces this entry rather than adding beneath it.*
+*The next pass replaces this entry rather than adding beneath it. This is the list of records and
+tasks still owed, in order, kept here so that none is lost if a session ends partway.*
 
-1. **Settled so far.** [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)
-   settles the host: a DigitalOcean Droplet. The maintainer chose N over Kamal on 2026-09-30, and it
-   is recorded next. Whether the switch between instances needs a record of its own is discussed
-   when it is reached.
-2. **How the choice and [what deploys the code?](what-deploys-the-code.md) are decided**: together, or
-   with that question recording the choice as its lead.
-3. **Then the records**, as the ninth pass listed:
-   - [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) is amended.
-   - A record is drafted for this question.
-   - Row 8 is corrected.
-   - The mount trap and B2 go to their own questions.
-   - The tenth pass's traps are mined.
-   - Every setup step, including the twelfth pass's, goes into a runbook, per the maintainer on
-     2026-09-30. Where it lives is settled through "Where a new fact goes" in
-     [../README.md](../README.md) once the steps are confirmed.
+1. **Settled so far.**
+   - [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md): the server runs on a
+     DigitalOcean Droplet.
+   - [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md): it runs
+     as systemd services, without containers.
+2. **Next: which OS the Droplet runs.** It was found while drafting the record on systemd. The spikes used Ubuntu
+   24.04 by default, and nothing chose it. It is worked at
+   [which OS does the Droplet run?](which-os-does-the-droplet-run.md) before the records below,
+   since they rest on it.
+3. **Record: Caddy is the front.** It terminates TLS and routes between the app's instances, rather
+   than nginx or another proxy. Scored from the eleventh and twelfth passes. It does not settle who
+   serves the client's files, which is
+   [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
+4. **Discuss whether the deploy switch needs a record.** The switch is two instances, Caddy's health
+   checks, and the order enable, drain, stop. The maintainer asked on 2026-09-30 whether it is an
+   implementation detail rather than an architectural decision. Settle that before drafting
+   anything.
+5. **Coordinate with [what deploys the code?](what-deploys-the-code.md).** It takes the systemd record and
+   whatever item 4 settles as Givens, and answers only the pipeline: the trigger, whether checks gate
+   a deploy, and where a release is built.
+6. **Amend [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)** with the
+   eighth and ninth passes' scoring. The file store stays, because no managed-database setup fits
+   the price target.
+7. **Correct row 8** wherever its over-strict reading appears. Two processes on one machine may share
+   the store's file. What must stay single is the replicator.
+8. **Mine this question** before deleting it:
+   - the Docker Desktop mount trap goes to
+     [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md);
+   - B2 as the copy's home goes to [how is the store backed up?](how-is-the-store-backed-up.md);
+   - the tenth pass's traps go to [../constraints.md](../constraints.md),
+     [../gotchas.md](../gotchas.md) and [../failure-modes/](../failure-modes/);
+   - the [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)
+     risk that the deploy script must enable the new instance at boot goes wherever the
+     script's requirements live.
+9. **A runbook** of every setup step learned here, including the twelfth pass's, with the granular
+   considerations behind each, per the maintainer on 2026-09-30. Where it lives is settled through
+   "Where a new fact goes" in [../README.md](../README.md).

@@ -59,6 +59,7 @@ the end and are the larger half.
         │  │ server — Fastify on Node,         │  │   not an isolate  ADR-0018
         │  │ always on, never scales to zero   │  │   on the request path ADR-0017
         │  └────────────────┬──────────────────┘  │   the handler     ADR-0035
+        │                   │                     │   systemd, no containers ADR-0044
         │                   │ opens as a file     │
         │                   ▼         ADR-0019    │
         │  ┌───────────────────────────────────┐  │

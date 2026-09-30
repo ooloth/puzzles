@@ -128,10 +128,8 @@ host:
 - **The demonstration purpose in [../problem.md](../problem.md).** Its own guard admits nothing that
   would not be worth building anyway, so it rules nothing in.
 
-**Price enters as a row, per month or per year, once the technical rows stop separating
-candidates.** It rules nothing out. All else being equal, a lower price is preferred, and that is
-the whole of the preference, per the maintainer on 2026-09-28, recorded in
-[what is the acceptable running cost?](what-is-the-acceptable-running-cost.md).
+**Price enters as a row, per month.** Its target and ceiling are [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md): about $10 a month
+for hosting is a preference, and $20 is a ceiling.
 
 **Deferred, because their inputs belong to later milestones:**
 
@@ -429,11 +427,8 @@ part.** On 2026-09-30 the maintainer asked for its variants to be scored, and ga
 
 **Rows added before research.**
 
-- **P0. The whole setup costs about $10 a month or less.** The maintainer said on 2026-09-30: "$10
-  usd / month is about as high as I would ideally want to go if possible; not a hard line, but $20
-  usd/month becomes likely too expensive". That rules out every managed-database setup in the eighth
-  pass unless their prices change. It is not a hard line, so a setup over it is marked rather than
-  dropped.
+- **P0. The whole setup costs about $10 a month or less.** Settled in [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md): about $10 is a
+  preference and $20 is a ceiling, in US dollars, for hosting only.
 - **L1. The hosted setup can be run on the maintainer's Mac, the same way it runs deployed.** Where two
   setups are otherwise equal, the one that is much easier to simulate locally wins. The maintainer
   said so on 2026-09-30, for the developer's experience. Rests on
@@ -995,9 +990,12 @@ tasks still owed, in order, kept here so that none is lost if a session ends par
 9. **Work that belongs to other steps**, and is not filed as issues from here:
    - the check that fails on a native addon in production dependencies, named in
      [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s
-     Enforced by, depends on
-     [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md): a driver
-     with no addon needs no check. It is drafted as an issue after that question is answered;
+     Enforced by, guards a release built on the arm64 Mac and shipped to the amd64 Droplet. Whether
+     it is needed depends on where releases are built, which is
+     [what deploys the code?](what-deploys-the-code.md): a release built on Linux x64 compiles any
+     addon for the right CPU. The driver, at
+     [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md), is the
+     likeliest source of an addon. The check is drafted as an issue once the build location is known;
    - tests for the deploy script are written with the script itself, when M1 slice 4 is built. No
      deploy script exists for the product yet; the twelfth pass's is spike code;
    - the server's draining contract and the re-measurement with the real server belong to item 5.

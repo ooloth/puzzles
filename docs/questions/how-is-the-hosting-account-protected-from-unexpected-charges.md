@@ -104,6 +104,9 @@ and "DigitalOcean does not publish fixed timelines for these stages". *Sourced â
 **The API token used for the measurements.** It has custom scopes covering Droplets and SSH keys, but
 not account reading or tag creation, as `doctl` showed on 2026-09-30.
 
+**The numbers a spend alert sits against** are in [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md): about $10 a month for hosting as a
+preference, and $20 as a ceiling.
+
 **What the maintainer set on 2026-09-30:**
 
 - a spend alert;

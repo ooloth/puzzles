@@ -844,6 +844,24 @@ metadata. What happens when a host dies outright is not stated. That case is lef
 *Sourced — [live migration](https://docs.digitalocean.com/products/droplets/details/live-migration/),
 read 2026-09-29.*
 
+## Hosting — providers raise prices, and differ in whether existing machines are spared
+
+**A host's price can rise under a running machine.** So a setup priced close to
+[ADR-0045](decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)'s
+ceiling has less margin than its bill suggests.
+
+- **DigitalOcean** raised its prices once, from 1 July 2022, the 1 GB Droplet going from $5 to $6:
+  "for the first time there will be a price change on some of our products". *Sourced —
+  [DigitalOcean's blog](https://www.digitalocean.com/blog/new-4-dollar-droplet-updated-pricing),
+  opened 2026-09-30.* Existing Droplets were included, per third-party coverage not opened.
+- **Linode** kept its $5 plan through a 20% rise on its other shared plans in 2023, per an agent's
+  read of Akamai's announcement on 2026-09-30.
+- **Hetzner** raised its prices for new orders on 15 June 2026, and "Existing servers are not affected
+  by the price adjustment, as long as no rescaling is performed", per an agent's read of Hetzner's
+  docs on 2026-09-30.
+- **Fly** raises its memory prices from 1 October 2026, per a draft change to its own docs opened
+  2026-09-30.
+
 ## Runtimes — a heap ceiling does not bound a process
 
 **A JavaScript runtime's heap limit governs the JS heap and nothing else, so a process can exceed its

@@ -39,8 +39,8 @@ Each line names that question's row.
    an API, and the address can move to a new one (row 29, [ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)'s Risk).
 6. The host watches the machine and alerts on memory, disk and reachability without our running
    anything (row 35, the maintainer's "great observability").
-7. The whole setup, the machine plus what recovery needs, costs about $10 a month or less (P0, the
-   maintainer).
+7. The whole setup, the machine plus what recovery needs, costs about $10 a month or less (P0,
+   [ADR-0045](0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)).
 8. The price changes only when we change something (row 26).
 9. The setup can be run on the maintainer's Mac the way it runs deployed (L1,
    [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)).

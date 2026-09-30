@@ -53,6 +53,7 @@ the end and are the larger half.
                              ▼
         ┌─────────────────────────────────────────┐
         │  one machine                    ADR-0021│
+        │  a DigitalOcean Droplet         ADR-0043│
         │                                         │
         │  ┌───────────────────────────────────┐  │
         │  │ server — Fastify on Node,         │  │   not an isolate  ADR-0018
@@ -129,7 +130,7 @@ reason outage length is a product question rather than only an operational one.
 
 ## What is not decided
 
-Larger than the list above, and deliberately. Where the machine is, what the domain resolves to,
-what deploys the code, how the schema migrates, what the store is backed up by, which client storage
-mechanism holds a board, and what a puzzle actually looks like. All of it is in
+Larger than the list above, and deliberately. Which region the machine is in, what the domain
+resolves to, what deploys the code, how the schema migrates, what the store is backed up by, which
+client storage mechanism holds a board, and what a puzzle actually looks like. All of it is in
 [questions/](questions/), ordered by the milestone that first needs it.

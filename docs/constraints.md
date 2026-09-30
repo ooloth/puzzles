@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-28
+updated: 2026-09-30
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -815,6 +815,33 @@ that outage is set mostly by how automated the procedure is rather than by which
 which is why it bears on
 [how much downtime is acceptable?](questions/how-much-downtime-is-acceptable.md) without being
 answered by a hosting choice.
+
+## Hosting — a DigitalOcean Droplet starts with no swap
+
+**A fresh Basic Droplet has no swap.** When its memory runs out, the kernel's out-of-memory killer
+ends a process rather than the machine slowing down. So each long-running service carries a memory
+limit of its own, and the app's limit is what keeps a leak from ending something else. Adding swap is
+a setup step, not a default.
+
+**How much of the machine the base system takes.** The 1 GB Droplet reports 961 MB in total. About
+320 MB of it is in use before anything is installed, which leaves about 640 MB for the app and
+whatever runs beside it.
+
+**Livepatch is available for its kernel**, so most kernel fixes can be applied without a reboot.
+
+*Measured — two `s-1vcpu-1gb` Droplets in `tor1` running Ubuntu 24.04, kernel `6.8.0-142-generic`,
+created 2026-09-30. Read with `swapon --show` (it printed nothing), `free -m` after `cloud-init
+status --wait`, and `pro status`. The method is in the twelfth pass of
+[where does this run?](questions/where-does-this-run.md).*
+
+**DigitalOcean moves a Droplet off a host being maintained or failing while it keeps running.** It
+uses live migration "during events like normal infrastructure and network maintenance, software
+upgrades, and hardware failures", and marks one "at least 10 minutes before" in the Droplet's
+metadata. What happens when a host dies outright is not stated. That case is left to
+[how is the store recovered when the machine is lost?](questions/how-is-the-store-recovered-when-the-machine-is-lost.md).
+
+*Sourced — [live migration](https://docs.digitalocean.com/products/droplets/details/live-migration/),
+read 2026-09-29.*
 
 ## Runtimes — a heap ceiling does not bound a process
 

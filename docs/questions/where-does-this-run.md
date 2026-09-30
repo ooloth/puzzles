@@ -2416,7 +2416,10 @@ server, and deploys driven from a laptop over the internet.*
 
 *The next pass replaces this entry rather than adding beneath it.*
 
-1. **The maintainer chooses N or Kamal** from the measurements above.
+1. **Settled so far.** [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)
+   settles the host: a DigitalOcean Droplet. The maintainer chose N over Kamal on 2026-09-30, and it
+   is recorded next. Whether the switch between instances needs a record of its own is discussed
+   when it is reached.
 2. **How the choice and [what deploys the code?](what-deploys-the-code.md) are decided**: together, or
    with that question recording the choice as its lead.
 3. **Then the records**, as the ninth pass listed:

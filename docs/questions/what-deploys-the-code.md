@@ -9,8 +9,12 @@ resolves_into: decision
 ## Why it matters
 
 M1 is a *deployed* skeleton, so something has to move a build from a laptop to the running host, and
-nothing currently says what. The three questions that sit closest all assume a deploy happens without
-asking what performs it: [where does this run?](where-does-this-run.md) prices platforms,
+nothing currently says what. The host is a DigitalOcean Droplet, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and the app runs there
+as systemd services without containers, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). The three
+questions that sit closest all assume a deploy happens without asking what performs it:
+[where does this run?](where-does-this-run.md) compares hosts,
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) is scoped to what
 must hold before a change is committed, and
 [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) takes the deploy
@@ -29,8 +33,9 @@ expensive to undo, and it should not be researched as though it were.
 
 Naming what has to be true at the moment of a deploy — whether anything must be built, whether checks
 must have passed, and whether the person deploying has to be at their own machine — and then choosing
-the least machinery that delivers it. Most of it falls out of the host, since several candidate
-platforms ship their own git integration and adopting it is free.
+the least machinery that delivers it. None of it falls out of the host: a Droplet brings nothing to
+run the app with, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
 ## Properties the answer is scored against
 
@@ -55,6 +60,8 @@ when that machine is not present, and nothing enforces that checks ran.
 maintain and nothing that could go wrong in a way that is ours, at the cost of a build environment
 described by the vendor rather than by us — which bears on
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
+This does not apply on a Droplet, which brings nothing to run the app with, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
 *A pipeline we define, triggered by a push or a merge.* The same trigger with the build steps written
 down, so the deployed artifact is reproducible and checks can gate it. More configuration, and a
@@ -82,6 +89,8 @@ answered by one tool and they are separable: a hand-run deploy of a container im
 gives strong parity with no pipeline, and a hosted pipeline building from a vendor buildpack gives a
 pipeline with weak parity. See
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
+The container example does not apply on the Droplet, which runs no container runtime, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
 **Nothing about M1 requires secrets.** The milestone is a hard-coded response with no database, so
 there is nothing to inject and no secret handling to design. That becomes real at M3 and should not

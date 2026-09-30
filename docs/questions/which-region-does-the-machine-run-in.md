@@ -23,8 +23,8 @@ North America if they had to pick. That is an assumption, not a fact about the a
 host. This question still needs the fact.
 
 **M1 deploys to `tor1` without deciding this.** The maintainer agreed on 2026-09-30 that M1 slice 4's
-Droplet goes in Toronto, as a placement rather than an answer. At M1 the machine holds no data, so
-moving it is a redeploy. The choice is made here, at M3, before the first row is written.
+Droplet goes in Toronto, as a placement rather than an answer. The choice is made here, at M3,
+before the first row is written.
 
 **It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
 redeploy. From the first row onward, moving it means moving the store, and later a live player
@@ -70,3 +70,12 @@ Helsinki, Ashburn, Hillsboro and Singapore. Google's free e2-micro exists only i
 
 *Sourced — per the 2026-09-27 pass in [where does this run?](where-does-this-run.md), read by
 research agents.*
+
+**DigitalOcean's North American datacenters are NYC1, NYC2, NYC3, SFO2, SFO3, TOR1, ATL1, RIC1,
+MKC1 and MEM1, and not all of them offer every Basic Droplet.** The page marks Basic Droplets as
+fully available in NYC1, NYC2, NYC3, SFO3 and TOR1. SFO2 lacks Premium AMD CPUs, ATL1 has only
+Premium CPUs, RIC1 and MKC1 have only Premium Intel CPUs, and MEM1 has no Basic Droplets. SFO1 is a
+legacy datacenter where only accounts with existing Droplets there can create more.
+
+*Sourced — [regional availability](https://docs.digitalocean.com/platform/regional-availability/),
+the page's HTML fetched and read on 2026-09-30.*

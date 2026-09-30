@@ -9,9 +9,15 @@ resolves_into: decision
 ## Why it matters
 
 This is where the client and its API both live, and moving either later moves both. It is also
-where the running cost lands and where the operational surface is set — a managed platform supplies
-most of what [how is the server operated?](how-is-the-server-operated.md) covers, and a bare machine
-supplies none of it.
+where the running cost lands and where the operational surface is set.
+
+**The host and how the app runs on it are settled.**
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) puts the server on a
+DigitalOcean Droplet, and
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs it as
+systemd services without containers. What this question still owes is in the open entry at the end:
+the front that terminates TLS, how a deploy switches between versions, and the amendment to
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
 
 Two things constrain the answer from outside. The client and the API answer on one origin, per
 [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so a platform that cannot present both halves on one hostname is not a
@@ -21,15 +27,10 @@ is its own question — see
 
 ## What would settle it
 
-**Scoring every candidate against the numbered properties below, in passes, until one candidate
-remains**, or until a pass that zooms into the properties and extends the list changes no verdict.
-That is the extend-and-zoom loop in the `make-next-decision` skill. The records a candidate must
-satisfy are listed with the properties, and each pass is written into **Findings** with its date.
-
-Two kinds of evidence settle a cell. Reading settles what a vendor documents: disk type, deploy
-behaviour, routing, price. Running settles what only running shows. Deploying the same trivial
-application to the last two or three candidates, then checking the DNS answer, the TLS handshake, a
-redeploy and a restore, is the observation the reading narrows the field for.
+**The records still owed**, in the open entry at the end. Each is scored against the numbered
+properties below, extended and zoomed where a comparison leaves more than one candidate, with each
+pass written into **Findings** with its date. What only running can show, such as TLS through the
+front and a deploy with the real server, is observed on a Droplet before its record is written.
 
 ## Properties the answer is scored against
 
@@ -74,9 +75,14 @@ host:
    for the disk.
 7. **What the process writes survives a restart and a redeploy.** Rests on
    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
-8. **A deploy never has two processes holding the store's file at once.** Rests on
-   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), which rejects more than
-   one process sharing the file.
+8. **A deploy never has two replicators writing the store's copy at once.** Two processes on one
+   machine may share the store's file, since SQLite requires only that "All processes using a
+   database must be on the same host computer", and the eighth and twelfth passes measured deploys
+   that overlapped two processes with no write lost. What must stay single is the replicator:
+   Litestream says "It is _your_ responsibility to ensure you do not have multiple applications
+   replicating concurrently". Rests on
+   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), which rejects separate
+   machines sharing the file.
 9. **The file can be copied off the machine while the server runs.** Rests on
    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md):
    surviving host replacement needs a copy that is not on the machine. How the copy is taken is M3's.
@@ -310,10 +316,10 @@ unscored.
 - **P2.** How likely that total is to change without the maintainer changing anything. This is
   row 26.
 
-**A dependency to keep visible.** A VPS setup's E1 to E4 turn on deploy tooling, such as Kamal or
-Coolify, which [what deploys the code?](what-deploys-the-code.md) owns and which waits on this
-question. The pass scores a VPS setup both with and without such a tool, rather than choosing the tool
-here.
+**The deploy tooling this pass weighed is settled.**
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app
+as systemd services with no Kamal or Coolify, and
+[what deploys the code?](what-deploys-the-code.md) keeps only the pipeline.
 
 ### Eighth pass 2026-09-30: complete setups, file store against managed database
 
@@ -631,9 +637,14 @@ Its health-check path can be set, as in `healthcheck: {path: ...}`, so `/api/up`
 [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). No cost
 here disqualifies A1.
 
-**All of this is to be mined** into [../constraints.md](../constraints.md),
-[../gotchas.md](../gotchas.md) and [../failure-modes/](../failure-modes/) when this question resolves,
-per the maintainer on 2026-09-30.
+**The Droplet traps above are in the questions that will use them**: the logs and the firewall in
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), the WAL in
+[what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md),
+and billing in
+[how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md).
+The Docker traps do not apply, since
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) installs no
+Docker.
 
 ### Eleventh pass 2026-09-30: running the host without Kamal
 
@@ -739,9 +750,9 @@ sit on two ports behind Caddy, and Caddy checks `/api/up` on each. A deploy:
 | Recurring work | Kamal and proxy upgrades | the script, and Litestream upgrades |
 | Known traps | Docker's logs, firewall bypass and patch origin | none of those three |
 
-**N overlaps another question.** N's deploy script is most of the answer to
-[what deploys the code?](what-deploys-the-code.md), a Must answer for M1 slice 6. Choosing N here would
-settle much of that, so the two are decided together, or that question records N as its lead.
+**N and the deploy question.** N was recorded as
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
+[What deploys the code?](what-deploys-the-code.md) takes it as a Given and answers only the pipeline.
 
 ### Twelfth pass 2026-09-30: N and Kamal measured on DigitalOcean
 
@@ -951,55 +962,52 @@ process.on('SIGTERM', stop); process.on('SIGINT', stop);
 *The next pass replaces this entry rather than adding beneath it. This is the list of records and
 tasks still owed, in order, kept here so that none is lost if a session ends partway.*
 
-1. **Settled so far.**
+1. **Settled.**
    - [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md): the server runs on a
      DigitalOcean Droplet.
    - [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md): it runs
      as systemd services, without containers.
-2. **Next: which OS the Droplet runs.** It was found while drafting the record on systemd. The spikes used Ubuntu
-   24.04 by default, and nothing chose it. It is worked at
-   [which OS does the Droplet run?](which-os-does-the-droplet-run.md) before the records below,
-   since they rest on it.
-3. **Record: Caddy is the front.** It terminates TLS and routes between the app's instances, rather
-   than nginx or another proxy. Scored from the eleventh and twelfth passes. It does not settle who
-   serves the client's files, which is
+2. **Next: [how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md)**
+   It comes first because a token able to create Droplets already exists. It is independent of the
+   records below.
+3. **Then: [which OS does the Droplet run?](which-os-does-the-droplet-run.md)** The spikes used Ubuntu
+   24.04 and nothing chose it. The records below rest on it.
+4. **Record: Caddy is the front.** It terminates TLS and routes between the app's instances, rather
+   than nginx or another proxy. It is scored from the eleventh and twelfth passes. It does not settle
+   who serves the client's files, which is
    [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
-4. **Discuss whether the deploy switch needs a record.** The switch is two instances, Caddy's health
-   checks, and the order enable, drain, stop. The maintainer asked on 2026-09-30 whether it is an
-   implementation detail rather than an architectural decision. Settle that before drafting
-   anything.
-5. **Coordinate with [what deploys the code?](what-deploys-the-code.md).** It takes the systemd record and
-   whatever item 4 settles as Givens, and answers only the pipeline: the trigger, whether checks gate
-   a deploy, and where a release is built.
-6. **Amend [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)** with the
+5. **Discuss whether the deploy switch needs a record.** The switch is two instances, Caddy's health
+   checks, and the order enable, drain, stop. The maintainer asked whether it is an implementation
+   detail rather than an architectural decision, so settle that before drafting anything. It draws on
+   [how does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md),
+   which answers the store's part at M3. Wherever the switch is settled, it carries
+   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s Risk:
+   the script enables the new instance at boot and disables the old.
+6. **Coordinate with [what deploys the code?](what-deploys-the-code.md).** It takes the systemd record,
+   and whatever item 5 settles, as Givens. It answers only the pipeline: the trigger, whether checks
+   gate a deploy, and where a release is built.
+7. **Amend [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)** with the
    eighth and ninth passes' scoring. The file store stays, because no managed-database setup fits
    the price target.
-7. **Correct row 8** wherever its over-strict reading appears. Two processes on one machine may share
-   the store's file. What must stay single is the replicator.
-8. **Mine what remains** when the last record lands. The requirement in
-   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s Risk,
-   that the deploy script enables the new instance at boot and disables the old, goes wherever item
-   4 settles the switch. The mount trap, B2 and the Droplet traps were mined on 2026-09-30.
-9. **A runbook** of every setup step learned here, including the twelfth pass's, with the granular
-   considerations behind each, per the maintainer on 2026-09-30. Where it lives is settled through
-   "Where a new fact goes" in [../README.md](../README.md).
-
-10. **Observations for other questions were mined on 2026-09-30**, into the running cost, backups,
-    recovery, downtime, vitals, hardening, local runs, the local store, sync, generation and
-    durability questions, and the new account question. Each is marked as mined there.
-11. **Work no issue tracks yet**, to be raised as issues and not settled here:
-    - the check that fails on a native addon in production dependencies, and tests for the deploy
-      script, both named in
-      [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s
-      Enforced by;
-    - the real server's draining contract (`/api/up`, and 503 on `SIGUSR2`);
-    - re-measuring the zero-failure switch with the real Fastify server. The spike used a minimal
-      `http` server, and [../constraints.md](../constraints.md) records two Fastify shutdown traps.
-12. **Caveats for the next decisions.**
-    - Every measurement ran on Node 24, while
+8. **A runbook** of every setup step learned here, including the twelfth pass's scripts, with the
+   granular considerations behind each, per the maintainer. Where it lives is settled through "Where
+   a new fact goes" in [../README.md](../README.md).
+9. **Work that belongs to other steps**, and is not filed as issues from here:
+   - the check that fails on a native addon in production dependencies, named in
+     [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s
+     Enforced by, depends on
+     [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md): a driver
+     with no addon needs no check. It is drafted as an issue after that question is answered;
+   - tests for the deploy script are written with the script itself, when M1 slice 4 is built. No
+     deploy script exists for the product yet; the twelfth pass's is spike code;
+   - the server's draining contract and the re-measurement with the real server belong to item 5.
+10. **Caveats for the next decisions.**
+    - The measurements on Droplets and in Linux containers ran on Node 24, while
       [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) names the 26 line.
+      Only the fourth pass's memory measurement, on macOS, ran on Node 26.
     - The Droplet facts and the scripts are Ubuntu 24.04's, so another OS means measuring again.
     - TLS, certificate issuance and serving the client's files were never measured.
-13. **A possible standard.** The maintainer's ideal of "it just works, it's so easy, great price",
+11. **A possible standard.** The maintainer's ideal of "it just works, it's so easy, great price",
     scored over complete setups, may be how every operations choice is judged. Whether it becomes a
-    standard in [../standards/](../standards/) is for the maintainer to decide when it is mined.
+    standard in [../standards/](../standards/) is for the maintainer to decide.
+12. **Delete this file** once items 4 to 8 have landed and nothing in it is left unsettled.

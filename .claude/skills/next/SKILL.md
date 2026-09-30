@@ -18,7 +18,7 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
 ## Your task
 
 1. **Grep the rule, do not read the file to find it.** `grep -n "issue is filed once"
-   docs/questions/README.md` and read the section around the hit. That README is roughly 70KB and
+   docs/questions/README.md` and read the section around the hit. That README is over 60KB and
    a single read exhausts its token budget partway through, so reading top-down leaves whether you
    see the rule to chance. The rule is the repo's own and it decides everything below.
 2. **Read the tracker with `--state all`.** Open issues alone cannot tell you which milestone is

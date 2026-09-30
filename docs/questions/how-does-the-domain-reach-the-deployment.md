@@ -26,8 +26,10 @@ still bites: one origin does not rescue a cookie that fails the resolution test.
 it compares against only from a network response to a top-level navigation, and a service worker
 answers most navigations, so a hostname that is a CNAME to a provider's domain may cap even a
 same-origin API's cookie, per [../constraints.md](../constraints.md). An apex domain on A records has
-no CNAME. So what the domain resolves to has to be settled with the hosting choice rather than after
-it, and the CNAME case is worth observing on a real Safari before it decides anything.
+no CNAME. The host is a DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), which was scored
+on letting one hostname resolve to the host's own address. Whether the domain does is still this
+question, and the CNAME case is worth observing on a real Safari before it decides anything.
 
 The rest of it is ordinary and still has to be decided: whether the app answers on the apex or a
 subdomain, and where the certificate comes from.
@@ -73,15 +75,17 @@ origin then owns TLS — issuance, renewal and the failure when renewal does not
 
 *The platform's default hostname, with no custom domain.* The honest "not yet". Every candidate host
 issues a working URL, which is enough to see M1 running. It defers the question rather than answering
-it, and defers it past the point where a cookie would be set.
+it, and defers it past the point where a cookie would be set. A Droplet does not offer a platform
+hostname, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
 **The domain is registered with Cloudflare and nothing else is settled by that.** A registrar is not
-a host and not a proxy. Cloudflare's own platform is a candidate for hosting on its merits like any
-other, and using their registrar creates no obligation to use their proxy or their compute.
+a host and not a proxy. The host is a DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and using
+Cloudflare's registrar creates no obligation to use their proxy.
 
 *Sourced — stated by the maintainer, 2026-09-02.*
 
@@ -102,6 +106,8 @@ observed in a shipped Safari.*
 
 **Certificate ownership follows from the topology rather than being a separate choice.** A proxy
 terminates TLS with its own certificate; a DNS-only arrangement leaves issuance and renewal with the
-origin, which is work a managed platform absorbs and a bare machine does not. That connects this to
+origin, which on a bare Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) is work we run
+ourselves. That connects this to
 [how is the server operated?](how-is-the-server-operated.md), where an expired certificate is an
 outage nobody is watching for.

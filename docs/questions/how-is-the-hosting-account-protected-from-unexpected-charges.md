@@ -118,4 +118,9 @@ not account reading or tag creation, as `doctl` showed on 2026-09-30.
 - Spaces costs from $5 a month once enabled;
 - backups cost 20 or 30% of the Droplet's price.
 
-The fifth and ninth passes of [where does this run?](where-does-this-run.md) have the sources.
+*Read by research agents on 2026-09-29 and 30 from DigitalOcean's
+[reserved IP pricing](https://docs.digitalocean.com/products/networking/reserved-ips/details/pricing/),
+[uptime pricing](https://docs.digitalocean.com/products/uptime/details/pricing/),
+[Spaces pricing](https://www.digitalocean.com/pricing/spaces-object-storage) and
+[backup pricing](https://docs.digitalocean.com/products/backups/details/pricing/). The uptime figure
+was opened by the session that wrote this; the rest are the agents' reading.*

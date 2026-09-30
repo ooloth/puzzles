@@ -13,11 +13,12 @@ resolves_into: decision
 for: the copy that survives when the device does not. So the backup is not an operational detail
 beneath the store decision — it is the mechanism by which that record's whole purpose is kept.
 
-**A store opened as a file concentrates the risk on one disk.** Fly states the consequence in its own
-words: "If your app needs a volume to function, and the NVMe drive hosting your volume fails, then
-that instance of your app goes down. There's no way around that." Volumes are not replicated among
-themselves, and Fly's own documentation says daily snapshots "shouldn't be your primary backup
-method."
+**A store opened as a file concentrates the risk on one disk.** The host is a DigitalOcean
+Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and
+the store's disk is inside it, with no volume to snapshot or reattach. Fly states the consequence in
+its own words: "If your app needs a volume to function, and the NVMe drive hosting your volume
+fails, then that instance of your app goes down. There's no way around that." That describes Fly,
+and the same holds for a Droplet's disk.
 
 **The thing that would make a file store regrettable is not the engine.** SQLite is about as
 battle-tested as software gets. The replication tooling is not: it is a much smaller project, and
@@ -38,6 +39,9 @@ fails to protect against. The leading shape — recorded here as a candidate rat
 **more than one independent path, chosen so that they fail for different reasons**: continuous
 replication to object storage, the platform's own volume snapshots, and a periodic independent dump
 (`VACUUM INTO` to a second file, shipped elsewhere) that shares no code with the replication tool.
+On a Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), the
+platform's snapshots are DigitalOcean's backups or snapshots of the whole disk, taken while the server
+runs. Whether such an image holds a consistent store is for this question to establish.
 
 Three cheap mechanisms that fail independently are worth more here than one good mechanism, because
 the failure being guarded against is precisely that the one good mechanism was quietly not working.
@@ -62,11 +66,12 @@ A decision record in [../decisions/](../decisions/), and the thing that makes
 [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
 true rather than owed.
 
-**That record commits to surviving host replacement, and a volume cannot deliver it.** Surviving the
-machine needs a copy that is not on the machine, so until this question is answered *and built*, the
-third of that record's three events is an obligation rather than a property. Answering this is what
-closes the gap, and it is also what would make a promise about how long a player's work lasts
-possible — see [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
+**That record commits to surviving host replacement, and the machine's own disk cannot deliver
+it.** Surviving the machine needs a copy that is not on the machine, so until this question is
+answered *and built*, the third of that record's three events is an obligation rather than a
+property. Answering this is what closes the gap, and it is also what would make a promise about
+how long a player's work lasts possible — see
+[how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md),
 neither of which can be answered while the last copy sits on one disk.
 
@@ -86,6 +91,10 @@ Simplest, and it is the single-dependency case this question exists to examine.
 
 *Replication plus the platform's snapshots.* Adds a path that fails for unrelated reasons, at the cost
 of a coarser recovery point on the second path and a restore that produces a new volume to reattach.
+On a Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), a
+restore creates a new Droplet from the disk image rather than a volume to reattach. Backups are priced
+at 20 or 30% of the Droplet, per
+[how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md).
 
 *Replication, snapshots, and an independent dump.* Three paths sharing no code. The candidate shape
 above.
@@ -144,7 +153,9 @@ independence of the mechanisms.
 restart machines with no awareness of LiteFS lease state. Not directly binding —
 [ADR-0017](../decisions/0017-nothing-on-the-request-path-scales-to-zero.md) already rules out
 autostop on the request path — but it is the kind of interaction between two platform features that
-this question has to check for whatever combination it lands on.
+this question has to check for whatever combination it lands on. The host is a Droplet, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), so this Fly case
+does not bind, and the general check still does.
 
 *Sourced — second-hand from a research agent reading Fly's documentation, 2026-09-03.*
 

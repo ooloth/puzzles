@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-27
+updated: 2026-09-30
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -17,7 +17,8 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
-under `src/client/` that shows its answer, and where the system runs and what deploys it are open.
+under `src/client/` that shows its answer. The host and how the app runs on it are settled, and
+nothing is deployed: the front, the deploy switch and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 
@@ -57,14 +58,27 @@ at M2, each of which may replace them.
 `CLAUDE.md` and `CONTRIBUTING.md` saying a change is verified in a production-like local run.
 
 **Actually** no such run exists. `pnpm dev` and `pnpm start` are the fast loop. `pnpm preview` serves
-the built client with the API behind it on one origin, but not the way production will, which is not
-chosen yet. Building the production-like run is
+the built client with the API behind it on one origin, but not the way production will: behind a
+front on a Droplet, under systemd. Building the production-like run is
 [how is the app run locally the way it runs deployed?](questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
 at M2.
 
 **So** verify in the closest mode that exists, which for anything the browser sees is
 `pnpm build && pnpm preview` with the server running, and record in
 [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't observe** what it cannot show.
+
+### The file-store record reads as argued only on runtime properties
+
+**You'll see** [ADR-0019](decisions/0019-the-store-is-a-file-the-server-process-opens.md) keeping the
+store as a file on a tiebreak about failure domains, with a revisit condition about outages without a
+person.
+
+**Actually** the file store was re-scored against managed databases over complete hosted setups, and
+kept. That scoring is in the eighth and ninth passes of
+[where does this run?](questions/where-does-this-run.md), and it is owed to the record as an
+amendment.
+
+**So** read those passes alongside the record until the amendment lands.
 
 <!-- Template:
 

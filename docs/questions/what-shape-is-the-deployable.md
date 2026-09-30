@@ -8,13 +8,14 @@ resolves_into: decision
 
 ## Why it matters
 
-**Two questions both need an answer to this and neither asks it.**
-[Where does this run?](where-does-this-run.md) compares platforms on what they can host, and
-[what deploys the code?](what-deploys-the-code.md) compares pipelines on what they can produce. Both
-were checked on 2026-09-19 and neither poses the question: the first treats "an ordinary container"
-as a property platforms have, the second mentions "a container image built locally" inside one
-option. So the shape is being assumed on both sides rather than chosen on either, which is how a
-choice gets made without anyone making it.
+**The release shape is settled, and how Node is pinned and patched is not.** The server runs on a
+DigitalOcean Droplet, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), as systemd services
+without containers, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). A release
+is a directory holding the built JavaScript and its `node_modules`. What is left here is whether
+Node is installed on the host and patched by its package manager, or carried as an exact binary
+inside each release.
 
 **The candidates are not equivalent to a host.** A directory of files plus a runtime installed on
 the machine, a container image, and a single executable are three different things to build, to
@@ -30,14 +31,12 @@ whatever is chosen.
 
 ## What would settle it
 
-Whether the host chosen at [where does this run?](where-does-this-run.md) prefers or requires one
-shape, which is the input that most constrains this. So this is answered after that question, within
-what the chosen host accepts. The host is not narrowed to suit a preferred shape, per the maintainer
-on 2026-09-28. The part of the shape that bears on safety, whether what runs deployed can be run
-locally, is scored there as one of the host's properties.
-
-Then what each shape costs in the loop that runs most often, which is deploying a small change. And
-what each costs the first time, which is not the same and is the one usually quoted.
+The host and the release shape are settled by
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) and
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). What
+settles the rest is what each way of carrying Node costs in the loop that runs most often, which is
+deploying a small change. And what each costs the first time, which is not the same and is the one
+usually quoted.
 
 ## Properties the answer is scored against
 
@@ -45,8 +44,7 @@ what each costs the first time, which is not the same and is the one usually quo
 
 ## Resolves into
 
-A decision record in [../decisions/](../decisions/), or a finding folded into
-[where does this run?](where-does-this-run.md) if the host turns out to determine it.
+A decision record in [../decisions/](../decisions/) on how Node is pinned and patched.
 
 ## Source
 
@@ -60,17 +58,25 @@ was run and it does not.
 *A directory of files, with the runtime installed on the machine.* Simplest to build and the
 smallest artifact. The runtime version is then a property of the machine rather than of the
 release, so two machines can run the same code differently.
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles this
+shape, and the runtime installed on the machine is one of the two ways of carrying Node left here.
 
 *A container image.* The runtime travels with the code, so a release is reproducible and rollback is
-selecting an older tag. Costs a registry, a build step and image size on every deploy.
+selecting an older tag. Costs a registry, a build step and image size on every deploy. This does
+not apply on the Droplet, which runs no container runtime, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
 *A single executable.* Node documents this as "Single executable applications" at stability
 "1.1 - Active development" on the v26 line. One file to copy, nothing installed on the host. The
 stability tier is the thing to weigh, and whether the build is worth its complexity for one small
-server.
+server. This is not the release shape that
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles, a
+directory with its `node_modules`.
 
-*Not yet.* Available, and probably correct until the host is chosen: the shape is mostly downstream
-of where it runs, and choosing first would constrain the host for no reason.
+*Not yet.* The shape is mostly downstream of where it runs, and
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) and
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settle both,
+so deferring now covers only how Node is pinned and patched.
 
 ## Findings
 
@@ -96,8 +102,7 @@ invisible and this one had already been noticed once and not acted on.
 
 *Reasoned — from reading both files.*
 
-**The runtime no longer varies, which removes one input this question used to have.** The scratchpad
-note that raised it observed that Bun and Deno compile to a single executable and Node does not in
-the same way, making the shape an input to the runtime choice.
-[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) settled the runtime, so
-that coupling is gone and this question is now purely about how Node reaches the machine.
+**The runtime is Node, so the shape is not an input to the runtime choice.** The scratchpad note
+that raised this question observed that Bun and Deno compile to a single executable and Node does
+not in the same way. [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
+settles the runtime, so this question is about how Node reaches the machine.

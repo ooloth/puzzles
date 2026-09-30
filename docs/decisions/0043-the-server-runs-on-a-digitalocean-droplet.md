@@ -76,7 +76,8 @@ inside it, in a North American region.
 
 - **How the app runs on the machine.** That is the next record.
 - **Whether the store stays a file.** That is
-  [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md), amended from the same question.
+  [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md), to be amended from the same
+  question.
 - **Where the copy of the store goes.** That is
   [how is the store backed up?](../questions/how-is-the-store-backed-up.md).
 - **What triggers a deploy.** That is [what deploys the code?](../questions/what-deploys-the-code.md).
@@ -150,8 +151,7 @@ Render, Northflank, Sliplane, Upsun, Koyeb, Scaleway, Lightsail and several smal
 
 ## Also update
 
-- [x] questions/README.md: a **Given** for M1 slices 4, 5 and 6. Slices 5 and 6 no longer wait on
-  the host.
+- [x] questions/README.md: a **Given** for M1 slices 4, 5 and 6
 - [x] questions/where-does-this-run.md: its open entry records that this settles the host, and what
   is left.
 - [x] constraints.md: what a fresh Droplet has, measured and sourced

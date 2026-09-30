@@ -8,9 +8,10 @@ resolves_into: decision
 
 ## Why it matters
 
-Currently stated as not wanting to lose much money on this, which is a direction rather than a
-number. A ceiling changes which platforms qualify; a preference doesn't. The two behave very
-differently under a traffic spike.
+The maintainer has stated a target: about $10 a month, not a hard line, with $20 a month likely too
+much. The quote is in the mined findings below. This question still has to settle what that target
+is for the running system and whether it is a ceiling or a preference. A ceiling changes which
+platforms qualify; a preference doesn't. The two behave very differently under a traffic spike.
 
 ## What would settle it
 
@@ -36,13 +37,13 @@ Ported from the legacy documentation review, 2026-08-30.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**For choosing a host at M1, price is a row in the comparison, per month or per year, and not a
-ceiling.** All else being equal, a lower price is preferred, and that is the whole of the
-preference. So price rules no candidate out in [where does this run?](where-does-this-run.md). This
-describes the period before public use and does not answer this question, which stays at M16.
+**For choosing a host at M1, price was a row in the comparison, per month or per year.** In
+[where does this run?](where-does-this-run.md) that row became P0, scored against the maintainer's
+target of about $10 a month, and
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) counts it as property 7.
+This describes the period before public use and does not answer this question, which stays at M16.
 
-*Sourced — stated by the maintainer, 2026-09-28. It replaces a statement from 2026-09-27 that free
-was strongly preferred for the first year, which the maintainer withdrew.*
+*Sourced — stated by the maintainer, 2026-09-28 and 2026-09-30.*
 
 *Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 

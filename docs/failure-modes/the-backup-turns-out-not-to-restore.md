@@ -60,4 +60,7 @@ was last done. [Is the store's backup restorable?](../questions/is-the-stores-ba
 is where that gets decided; it currently sits at M11.
 
 Nothing about the arrangement removes the need for it. A managed provider changes who runs the
-storage, not who verifies the restore.
+storage, not who verifies the restore. Here there is no managed provider:
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) puts the server on a
+Droplet and leaves where the copy of the store goes to
+[how is the store backed up?](../questions/how-is-the-store-backed-up.md).

@@ -31,9 +31,12 @@ Naming what secrets exist, where each is stored, how each reaches a process at r
 environment, and what the recovery is when one is exposed. The last is the part usually skipped, and
 it is the only part that matters on the day it is needed.
 
-Worth checking rather than assuming: whether the chosen host supplies secret storage that is good
-enough to need nothing else, and whether local development can work without a real credential at all
-— which is a property of the arrangement rather than of the tooling, and is decided by
+The host is a bare DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), which supplies
+no secret storage, and the app runs there as a systemd service per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
+Worth checking rather than assuming: whether local development can work without a real credential at
+all, which is a property of the arrangement rather than of the tooling, and is decided by
 [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
 
 ## Properties the answer is scored against
@@ -53,7 +56,8 @@ that the embedded alternative does not have at all.
 ## Options
 
 *Whatever the host provides.* Environment variables set through the platform's own secret storage.
-Least to build, and it ties the arrangement to the host in a small way.
+Least to build, and it ties the arrangement to the host in a small way. A Droplet does not offer
+this, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 *A dedicated secret store.* A managed service holding secrets that the process fetches at start-up.
 More moving parts than this system's size justifies today, and the option that scales past one

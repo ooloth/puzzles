@@ -11,6 +11,9 @@ resolves_into: decision
 **Three machines resolve a version from somewhere, and where nothing states it they resolve three
 different ones.** A contributor's laptop, a container and a CI runner each need to agree on which
 Node they run and which package manager they install with.
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs no
+container in production, so the machines are the laptop, a CI runner if there is one, and the
+Droplet.
 [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) names the Node half
 under **Enforced by** and records that the artifact does not exist.
 
@@ -33,15 +36,14 @@ which is the kind of difference that surfaces as a bug nobody can reproduce.
 
 ## What would settle it
 
-It derives from both tool choices and cannot be answered before them. A pin names a tool and a
-version. **Both are now settled**: Node at
-[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) and the package
-manager at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md). So this is unblocked.
+It derives from both tool choices. A pin names a tool and a version. **Both tools are settled**:
+Node at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) and the
+package manager at [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md).
 
-What to establish once they have landed: which mechanisms can pin both tools rather than one, since
-one mechanism is the whole point of asking this separately; whether the mechanism has to be
-installed itself, and what pins *that*; whether it is advisory or enforced, because a field nothing
-reads is documentation rather than a pin; and whether
+What to establish: which mechanisms can pin both tools rather than one, since one mechanism is the
+whole point of asking this separately; whether the mechanism has to be installed itself, and what
+pins *that*; whether it is advisory or enforced, because a field nothing reads is documentation
+rather than a pin; and whether
 [where does this run?](where-does-this-run.md) and
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 can both
 consume whatever is chosen, since they are two of the three machines that have to agree.

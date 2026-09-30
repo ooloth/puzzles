@@ -64,5 +64,6 @@ obvious.
   [limits](https://developers.cloudflare.com/workers/platform/limits/).
 - **Node 24 names its process `MainThread`**, not `node`, in `ps`. A monitor matching on `node`
   misses it. *Measured — `ps -eo comm` on a Droplet, 2026-09-30.*
-- **The memory the stack used on a 1 GB Droplet** is in the question's twelfth pass: 360 MB idle and
-  373 MB at the peak of a deploy.
+- **Memory in use on a 1 GB Droplet running the stack**, Ubuntu included, is in the question's twelfth
+  pass: 360 MB idle and 373 MB at the peak of a deploy. The app, Caddy and Litestream accounted for
+  about 160 MB of it.

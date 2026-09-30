@@ -21,6 +21,8 @@ about what ships. Nothing at M1 waits on it — an M1 hello world has no store.
 A store the process opens as a file needs nothing installed and nothing running: the file is there or
 it is created. A store reached over a network needs something to connect to — a container to start, a
 hosted development instance to reach, or a second copy of the data somewhere.
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a network
+store.
 
 That difference is felt every day rather than once, and it is one of the few places where the two
 candidate arrangements differ in something the maintainer touches constantly. It belongs in the
@@ -45,6 +47,8 @@ nothing yet and is worth covering rather than assuming.
 Worth checking rather than assuming: whether a development instance of a managed store can be free
 and always-on, whether the local and deployed stores can be the same engine and version, and whether
 anything about the arrangement makes it possible to run against production data by accident.
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a managed
+store, so the first of these no longer applies.
 
 ## Properties the answer is scored against
 
@@ -76,11 +80,14 @@ weighed against it.
 *The same shape as production.* Whatever runs deployed also runs locally — a file if the store is a
 file, a container running the same engine if it is a service. Highest parity, which is what
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
-exists to protect.
+exists to protect. [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
+rules out the service case, so here this means a file.
 
 *A different shape locally.* An embedded store for development and a network store deployed, or a
 hosted development instance rather than a local one. Cheaper to start, and it puts a difference
 between the two environments in the layer most likely to behave differently under load and failure.
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a network or
+hosted store.
 
 *Not yet.* Nothing is built and no store exists, so this could wait — except that it is an input to
 the choice being made now rather than a consequence of it.

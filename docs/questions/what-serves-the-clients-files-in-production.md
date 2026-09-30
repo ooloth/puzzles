@@ -16,11 +16,13 @@ They are the same job in two environments, and the gap between them is
 Something has to answer the browser when it asks for the client, and nothing currently says what.
 [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) settles the layer answering API requests
 and says nothing about static assets.
-[Where does this run?](where-does-this-run.md) picks a host, not what the host serves with.
+The host is a bare DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), which serves no
+files as a platform feature, so something we run on it or in front of it has to.
 
 It is what makes the one origin required by [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) real. The same process can
-serve both the client's files and the API, a proxy can route by path to two backends, or a platform or
-content delivery network can route between two deployables. Each presents one origin to the browser,
+serve both the client's files and the API, a proxy can route by path to two backends, or a content
+delivery network can route between two deployables. Each presents one origin to the browser,
 and they differ in who owns caching, and in whether something in front can cache an API response or
 strip `Set-Cookie`, per the findings below.
 
@@ -31,9 +33,10 @@ asset on a weak mobile link, which is the link this app is designed for.
 
 ## What would settle it
 
-Knowing what the client is — a set of files, or something a process produces — and then what the
-chosen host offers. Several hosts serve static assets as a feature, which makes this fall out rather
-than be chosen; others do not, and then it is a real decision about what runs.
+Knowing what the client is, a set of files or something a process produces, and then what serves it
+on the Droplet or in front of it. A Droplet serves no static assets as a feature, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), so this is a
+real decision about what runs.
 
 ## Properties the answer is scored against
 
@@ -57,7 +60,8 @@ arrange. The process spends work on bytes that never change, and cache headers a
 properly with little effort. Introduces the question of whether the browser still sees one origin.
 
 *Whatever the host provides.* Several platforms serve static assets as a feature of deploying. Least
-work, and it makes the arrangement the platform's rather than ours to reason about.
+work, and it makes the arrangement the platform's rather than ours to reason about. A Droplet does
+not offer this, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ## Findings
 
@@ -69,15 +73,16 @@ question and the build, which is Vite per
 [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), meet at the filenames.
 
 **The client is a set of files, so this is a real question rather than a collapsed one.**
-[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) settles
-that the entry document is produced by the build. Had it gone the other way, the process producing the
-document would already be answering the browser and this would have folded into the HTTP handler
-choice, since settled at [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). It does not
-follow that a separate file host is required — the same process may serve both — only that something
-has to be chosen to serve files. What that record leaves for this one is unchanged: Fastify serves
-static files through `@fastify/static`, which was measured setting a different `Cache-Control` per
-asset class and answering both conditional-request headers with a 304, so the same process remains a
-live option here rather than a foregone one.
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
+settles that the entry document is produced by the build. Had it gone the other way, the process
+producing the document would already be answering the browser and this would have folded into the
+HTTP handler choice, which is Fastify per
+[ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). It does not follow that a separate
+file host is required — the same process may serve both — only that something has to be chosen to
+serve files. What that record leaves for this one is unchanged: Fastify serves static files through
+`@fastify/static`, which was measured setting a different `Cache-Control` per asset class and
+answering both conditional-request headers with a 304, so the same process remains a live option
+here rather than a foregone one.
 *Measured — with `@fastify/static` 10.1.4 in the HTTP handler spike on 2026-09-21, recorded in the
 question file deleted by commit `dff3fd0`; `git show
 dff3fd0^:docs/questions/what-handles-http-requests-on-the-server.md` reads it.*

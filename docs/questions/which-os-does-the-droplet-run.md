@@ -43,13 +43,15 @@ Litestream, the release's support ending, and the same setup run on the Mac.
 1. **Security patches, the kernel's included, are applied without a recurring manual step, and most
    kernel fixes need no reboot.** Rests on rows 14 and 23 of
    [where does this run?](where-does-this-run.md), and J1: a reboot is a brief outage.
-2. **The same OS image runs on the maintainer's Mac from the same cloud-init.** Rests on
+2. **The same OS image can run on the maintainer's Mac from the same cloud-init**, whatever
+   [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+   settles at M2. Rests on
    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
    and L1.
 3. **Node, Caddy and Litestream install from maintained packages that the automatic patching can
    cover.** Rests on
-   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and row 3
-   of that question.
+   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and its
+   property 3, that everything beneath the app is patched without a recurring manual step.
 4. **The release is supported for years without a forced major upgrade.** Rests on "active attention
    for years after it" in [../problem.md](../problem.md), and on
    [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md).

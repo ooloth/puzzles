@@ -39,11 +39,10 @@ configuration is. What any answer has to cover:
   for the obvious.
 - **The lockout route**, because it is the failure with no remote fix.
 
-**Its size depends entirely on the host.**
-[Where does this run?](where-does-this-run.md) decides whether this is most of a day or almost
-nothing: a managed platform supplies the machine's baseline and gives access through its own tooling,
-and a bare virtual machine supplies neither. So this cannot be scoped before that question lands,
-though it can be asked now.
+**The host supplies none of it.**
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) puts the server on a bare
+DigitalOcean Droplet, which gives neither a baseline nor access through tooling of its own. So all
+four items above are ours, and the question is fully scoped.
 
 ## Properties the answer is scored against
 
@@ -59,7 +58,9 @@ A decision record in [../decisions/](../decisions/), and content in
 Split from [how is the server operated?](how-is-the-server-operated.md) on 2026-09-03. That question
 covered access, hardening, restarting, patching and noticing an outage as one thing, and sat at M16 on
 the assumption that a managed platform would supply most of it.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) removed that assumption.
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) removed that
+assumption, and [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) put the
+server on a bare Droplet.
 The half about reaching the machine is needed to check a change; the half about surviving one is not,
 and stays where it was.
 

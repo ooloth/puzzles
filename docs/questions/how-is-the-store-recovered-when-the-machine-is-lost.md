@@ -9,10 +9,13 @@ resolves_into: decision
 ## Why it matters
 
 **[ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
-commits to surviving host replacement, and the machine cannot deliver that alone.** Fly's own words:
-"If your app needs a volume to function, and the NVMe drive hosting your volume fails, then that
-instance of your app goes down. There's no way around that." The third of that record's three events
-is kept by whatever exists off the machine, and by the procedure that puts it back.
+commits to surviving host replacement, and the machine cannot deliver that alone.** The host is a
+DigitalOcean Droplet, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and the store's disk
+is inside it. Fly's own words: "If your app needs a volume to function, and the NVMe drive hosting
+your volume fails, then that instance of your app goes down. There's no way around that." That
+describes Fly, and the same holds for a Droplet's disk. The third of that record's three events is
+kept by whatever exists off the machine, and by the procedure that puts it back.
 
 **This is the difference between an outage measured in minutes and one measured in hours**, and it is
 almost entirely under our control rather than the provider's. Providers differ by a couple of minutes
@@ -28,7 +31,7 @@ question is about the steps around it.
 
 Writing the procedure down and running it, on a real machine, from nothing. Any answer has to cover:
 
-- **The sequence**, concretely enough to follow while stressed: provision, attach, restore, verify,
+- **The sequence**, concretely enough to follow while stressed: provision, restore, verify,
   redeploy, cut over.
 - **How much of it is automated** rather than typed. This is the variable that sets the outage length.
 - **What "verified" means** before traffic is sent back — row counts, an integrity check, a known
@@ -77,7 +80,10 @@ minutes, and the most to build and pay for. Needed only if the downtime answer d
 **A provider that reschedules a failed machine does not rescue this.** Fly can move a Machine to a
 healthy host, but a volume is pinned to a physical drive and does not follow. So automatic
 rescheduling, which looks like it should solve host loss, does not solve it for a store held on a
-volume.
+volume. This describes Fly. On the Droplet chosen in
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) the disk is inside the
+machine, and what DigitalOcean does when a host dies outright is in
+[../constraints.md](../constraints.md).
 
 *Sourced — second-hand from a research agent reading Fly's volumes documentation, 2026-09-03.*
 

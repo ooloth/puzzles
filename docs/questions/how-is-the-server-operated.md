@@ -11,15 +11,17 @@ resolves_into: decision
 Running a server is not the same as choosing one. Something has to restart it when it dies, tell
 someone when it stops answering, and keep it patched.
 
-**Getting onto the machine is a separate question now.** Access, hardening and the lockout route split
-out to [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) on
-2026-09-03 and sit at M2, because that half is needed to *check* a change and this half is needed to
-*survive* one. What is left here is the ongoing operation of a machine that already exists and can
-already be reached.
+**Getting onto the machine is a separate question.** Access, hardening and the lockout route are
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at M2, because
+that half is needed to *check* a change and this half is needed to *survive* one. What is left here
+is the ongoing operation of a machine that already exists and can already be reached.
 
-None of it is covered by [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md) or
-[where does this run?](where-does-this-run.md), and the amount of it needed varies enormously with
-the answer to the second.
+None of it is covered by [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). The host is
+a bare DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), so no platform
+supplies any of it. The app and Litestream run on it as systemd services per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md),
+which restarts them, starts them at boot and keeps their logs. The rest is open here.
 
 It bears directly on an intention nothing can currently keep.
 [../problem.md](../problem.md) says a record of a player's play is theirs to keep and outlives any
@@ -68,19 +70,20 @@ here rather than in [../constraints.md](../constraints.md) because it only appli
 
 *Unverified — no source recorded.*
 
-**Most of this disappears on a managed platform and none of it disappears on a virtual machine.**
+**None of this disappears, because the host is a bare virtual machine** per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ### The operational comparison this inherits, and why this question got bigger
 
 *Reasoned — from the operational comparison behind
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md), 2026-09-03.*
 
-**This question's size is set by a hosting choice that is narrowed but not made.** The store records
-require an ordinary process with a local disk beside it, which removes the serverless and edge tiers —
-but a managed platform offering a persistent volume satisfies them exactly as a rented virtual machine
-does. So the branch that decides how big this question is, managed against bare, is still open at
-[where does this run?](where-does-this-run.md). A managed platform supplies most of what follows and a
-bare machine supplies none of it.
+**This question is at its largest, because the host is a bare machine.** The store records require
+an ordinary process with a local disk beside it, which removes the serverless and edge tiers. A
+managed platform with a persistent volume would have satisfied them too, but the host is a bare
+DigitalOcean Droplet per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), which supplies
+none of what follows.
 
 **Setup effort is a wash between an embedded store and a database server, which is the opposite of
 the folklore.** Standing up continuous replication plus a restore drill is about as much work as
@@ -94,11 +97,13 @@ because the library version travels with the runtime.
 *Reasoned — 2026-09-03. Estimates for someone competent who does not do this daily; nobody has run
 either.*
 
-**What a machine we operate owns, enumerated**: a volume and its failure mode, a backup mechanism, a
-restore procedure and the discipline of rehearsing it, a process manager, boot persistence, a reverse
-proxy, TLS issuance and renewal, firewall and SSH hardening, unattended security updates, log rotation
-before a disk fills, external uptime monitoring because a machine cannot watch itself, and an alerting
-channel.
+**What a machine we operate owns, enumerated**: the disk inside it and its failure mode, a backup
+mechanism, a restore procedure and the discipline of rehearsing it, a process manager, boot
+persistence, a reverse proxy, TLS issuance and renewal, firewall and SSH hardening, unattended
+security updates, log rotation before a disk fills, external uptime monitoring because a machine
+cannot watch itself, and an alerting channel.
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) makes
+systemd the process manager and what brings the app back after a reboot.
 
 **The same inventory, written out in [../brainstorming/](../brainstorming/) for exactly this
 architecture, contained no backup or restore procedure.** Somebody described crash recovery, reboot

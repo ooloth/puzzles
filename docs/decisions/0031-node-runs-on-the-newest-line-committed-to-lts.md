@@ -1,7 +1,7 @@
 ---
 number: 0031
 status: accepted
-amended: 2026-09-20
+amended: 2026-09-30
 date: 2026-09-19
 ---
 
@@ -74,12 +74,12 @@ heap out of memory" on both, so the heap bound that decided
 observations eliminated nobody**, and that is the finding: capability does not separate the
 candidates, so the rule is argued on support runway instead.
 
-**No host constrains the line.** Every surviving candidate at
-[where does this run?](../questions/where-does-this-run.md) — Fly.io micro-VMs, a Hetzner VPS, a
-Google Compute Engine e2-micro, DigitalOcean or Linode, and Coolify on a VPS — runs an ordinary
-container or an ordinary Linux machine, so the version comes from the image this project builds
-rather than from the platform. Reasoned from what those candidates are, not checked against any
-provider's documentation, because none of them supplies the runtime.
+**No host constrains the line.** The server runs on a DigitalOcean Droplet as systemd services, with
+no container, per [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md) and
+[ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md). The Droplet supplies no
+Node runtime of its own, so the line is ours to choose. Whether the pinned version reaches the
+machine through its package manager or inside each release is
+[what shape is the deployable?](../questions/what-shape-is-the-deployable.md).
 
 **CPU, memory, storage and network were asked and only one binds.** CPU does not: the client owns
 solving ([ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md)), so no Node version sits on

@@ -12,9 +12,11 @@ date: 2026-09-30
   which brings nothing to run it with. Something has to start the app, restart it when it crashes,
   bring it back after a reboot, and switch it to a new version.
 - [ADR-0020](0020-the-stores-engine-is-sqlite.md) and
-  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md): the server is JavaScript on Node,
-  and it uses Node's built-in `node:sqlite`, so it has no native addon to build for the machine's
-  CPU.
+  [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md): the server is JavaScript on Node.
+  While its SQLite driver is Node's built-in `node:sqlite`, it has no native addon to build for the
+  machine's CPU. The driver is still open at
+  [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md),
+  and a driver with an addon would change where releases are built, not this arrangement.
 - "Hosting — a DigitalOcean Droplet starts with no swap" in [../constraints.md](../constraints.md):
   about 640 MB is free on a 1 GB Droplet, and running out ends a process.
 - [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
@@ -61,7 +63,9 @@ installed.**
   - **Logs:** into journald.
 - **Observed on a real Droplet.** It dropped no request and lost no acknowledged write across five
   deploys under load, and it peaked at 373 MB used of 961 MB. Deploys took about 3 seconds. The
-  twelfth pass of [where does this run?](../questions/where-does-this-run.md) has the method.
+  twelfth pass of [where does this run?](../questions/where-does-this-run.md) has the method. That run
+  had Caddy in front and a deploy that switched between two instances, so property 1 holds for this
+  arrangement together with the records that settle the front and the switch.
 
 **What this does not settle:**
 
@@ -110,10 +114,9 @@ run?](../questions/where-does-this-run.md).
 
 ## Risk
 
-- **The deploy script is ours.** It is small, and its bugs are ours too. One was found on paper
-  before it shipped: the script must enable the new instance at boot and disable the old, or a
-  reboot brings back whichever was enabled first. It needs tests and a rehearsal in a local VM
-  before each change.
+- **The deploy script is ours.** It is small, and its bugs are ours too. It must enable the new
+  instance at boot and disable the old, or a reboot brings back whichever was enabled first. It needs
+  tests and a rehearsal in a local VM before each change.
 - **No frozen image.** The operating system's packages beneath the app change as they are patched. Pinned
   versions and release directories narrow that without removing it.
 - **No community recipe** for this exact arrangement, where Kamal has one.

@@ -824,8 +824,9 @@ limit of its own, and the app's limit is what keeps a leak from ending something
 a setup step, not a default.
 
 **How much of the machine the base system takes.** The 1 GB Droplet reports 961 MB in total. About
-320 MB of it is in use before anything is installed, which leaves about 640 MB for the app and
-whatever runs beside it.
+320 MB was in use just after first boot, before anything was installed, while first-boot services such
+as `unattended-upgrades` and `packagekitd` were still running. So that figure overstates the steady
+state: with the app, Caddy and Litestream running, about 360 MB was in use in all.
 
 **Livepatch is available for its kernel**, so most kernel fixes can be applied without a reboot.
 

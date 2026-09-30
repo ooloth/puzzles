@@ -1,7 +1,7 @@
 ---
 number: 0032
 status: accepted
-amended: 2026-09-27
+amended: 2026-09-30
 date: 2026-09-19
 ---
 
@@ -157,8 +157,9 @@ form, which npm rejects outright. A workspace added later brings that cost back.
 
 **The symlinked layout is a documented liability for some deployment targets**, and pnpm names
 "deployment to serverless providers that don't support symlinks" as a reason to switch its linker.
-[Where does this run?](../questions/where-does-this-run.md) can therefore make this decision
-uncomfortable, and the escape hatch costs the strictness that
+The chosen host does not: [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)
+deploys a release with pnpm's symlinked `node_modules` as it is. A host that could not would force the
+escape hatch, which costs the strictness that
 [ADR-0033](0033-an-import-of-an-undeclared-dependency-fails.md) exists to protect.
 
 **npm's stricter git and URL defaults are given up** until they are configured back, per the
@@ -170,8 +171,8 @@ A pnpm release breaks this project in a way that a stable npm would not have, an
 repeats rather than being a single bad version. That is the observable form of the rewrite risk
 above, and it is what would show the price was misjudged rather than merely paid.
 
-Also when [where does this run?](../questions/where-does-this-run.md) selects a host that cannot
-deploy a symlinked tree, since the workaround there removes the main reason this record chose pnpm.
+Also when the server moves to a host that cannot deploy a symlinked tree, since the workaround there
+removes the main reason this record chose pnpm.
 
 ## Also update
 

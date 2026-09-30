@@ -20,8 +20,8 @@ pnpm install
 
 ### DigitalOcean CLI
 
-Needed only for work on the host, not to build or test. The host is still open at
-[where does this run?](docs/questions/where-does-this-run.md). This is what its measurements run on.
+Needed only for work on the host, not to build or test. The server runs on a DigitalOcean Droplet,
+per [ADR-0043](docs/decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 1. In the DigitalOcean console, under **API → Generate New Token**, create a token with an expiry.
    Give it custom scopes that allow creating, reading and deleting Droplets and SSH keys. Reading the
@@ -86,7 +86,9 @@ curl -i http://127.0.0.1:3000/<slow-route>
   few milliseconds of the request finishing. Exiting after about 72 seconds means idle connections
   are no longer being reaped.
 
-Can't observe: how production's host stops the process, since no host is chosen yet.
+Can't observe: systemd stopping the process on the Droplet, per
+[ADR-0044](docs/decisions/0044-the-server-runs-as-systemd-services-without-containers.md). Nothing is
+deployed yet.
 
 ## A browser shows the server's answer
 

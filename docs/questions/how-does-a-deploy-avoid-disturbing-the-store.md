@@ -16,8 +16,10 @@ WAL and starting something else that wants both.
 
 **The failure modes here are the ones SQLite's own documentation warns about.** Its list of ways to
 corrupt a database includes writes interrupted in the wrong place and files separated from their WAL.
-Two processes opening the same file during an overlapping restart is the specific arrangement to avoid,
-and a deploy is when it is most likely to happen.
+Two processes on one machine may open the same file, since SQLite requires only that "All processes
+using a database must be on the same host computer", with one writer at a time. What must never
+overlap is the replicator: two Litestream processes writing one replica can leave it impossible to
+restore. A deploy is when either is most likely to go wrong.
 
 **This is the routine operation that runs most often.** Backups run on a schedule and migrations run
 rarely; deploys run whenever there is a change. A hazard that fires one time in fifty is a hazard that
@@ -31,8 +33,8 @@ without saying so.
 
 Deciding the sequence, and stating what must never overlap. Any answer has to say:
 
-- **Whether two processes can ever hold the file at once**, and what prevents it. The safe answer is
-  that they cannot, and the mechanism matters more than the intention.
+- **How the old and new processes share the file while a deploy overlaps them**, and what keeps the
+  replicator single through it. The mechanism matters more than the intention.
 - **What the old process does before it exits** — finishing in-flight writes, checkpointing the WAL,
   closing cleanly rather than being killed.
 - **What happens when it does not exit cleanly**, because sometimes it will not. SQLite is built to
@@ -89,3 +91,23 @@ separated from its WAL, or a replication tool interrupted in the middle of its o
 **The client absorbs server unavailability by design.** Four promises describe play continuing while
 the server is unreachable, so a deploy gap is cheap for this product in a way it would not be for a
 server-driven one. That widens the field of acceptable answers considerably.
+
+*Mined 2026-09-30 from [where does this run?](where-does-this-run.md), eighth and twelfth passes.
+These are observations for this question to weigh, not answers.*
+
+**Overlapping deploys with a shared file lost nothing when measured.**
+
+- **The arrangement.** Two app processes shared one SQLite file in WAL mode, with `busy_timeout=5000`
+  and `synchronous=FULL`. One Litestream process ran beside them. A deploy started the new process,
+  waited for its health check, drained the old one and then stopped it.
+- **The runs.** Three runs of five deploys under load in a Linux container, and one run of five on a
+  real Droplet.
+- **The result.** No acknowledged write was lost, and every Litestream restore passed
+  `integrity_check`.
+- **The same deploy with the old process stopped before it drained** failed POSTs that were already
+  queued on its socket.
+- **A crash**, as opposed to a deploy, can still commit a write whose acknowledgement never arrives.
+  See [what happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md).
+
+*Measured, 2026-09-30. The scripts are in [where does this run?](where-does-this-run.md). Not
+measured: the real Fastify server, and a migration during a deploy.*

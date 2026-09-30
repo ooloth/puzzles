@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-27
+updated: 2026-09-30
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -64,12 +64,13 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so whatever serves the origin sends every path under `/api/` to the server, and no cache or cookie rule written for the files reaches it
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the server runs on a Droplet in a North American region, with no swap by default and live migration for host maintenance
    - **Given:** [0044-the-server-runs-as-systemd-services-without-containers](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) — the app and Litestream run as systemd services, with no container runtime
-     - **Must answer:** [how-is-the-hosting-account-protected-from-unexpected-charges](how-is-the-hosting-account-protected-from-unexpected-charges.md) — or else the first long-lived Droplet runs on an account whose tokens, sign-in and alerts nobody chose. DigitalOcean has no spending cap, so a leaked token or a forgotten resource is found on the bill. Raised by the maintainer on 2026-09-30, and answered before the Droplet this slice creates
-     - **Must answer:** [which-os-does-the-droplet-run](which-os-does-the-droplet-run.md) — or else the setup scripts, the patching and the local image are built on Ubuntu 24.04 because the spikes happened to use it, and changing it later rebuilds the machine and the scripts together, with the store on it from M3. Found while drafting the record on systemd, and answered before the records on the front and the deploy switch, which rest on it
-     - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else the app runs on the Droplet with nothing settled about how a deploy switches versions without dropping requests, how a crashed process restarts, or what terminates TLS. The host is settled; what remains of this question is how the app runs on it
-     - **Must answer:** [where-does-this-run](where-does-this-run.md), eighth pass — or else [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)'s file store stands on a tiebreak that never scored deploys, recovery without a person, or the whole setup's price, and the host is chosen for a store design that may change. The pass scores complete setups with a file store against setups with a managed database. Per the maintainer on 2026-09-30, the record stands until then: it is amended with the pass's scoring if the file store wins, and superseded, along with the records resting on it, if a managed database does. Moved from M3 to here because the host now depends on it
-     - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else assets ship without content-hashed filenames and every cached asset is revalidated on every visit, on the network [../problem.md](../problem.md) names as the modal case. Costs a re-scaffold of the build and the serving path together. Answered from what the chosen host offers
-     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else [what deploys the code](what-deploys-the-code.md) builds whatever the host turned out to want, and the Node version stays a property of the machine rather than of the release. Costs a redeploy and a pipeline change. Answered within what the chosen host accepts
+   - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — the store is a file on the machine
+     - **Must answer:** [what-is-the-acceptable-running-cost](what-is-the-acceptable-running-cost.md) — or else [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)'s rejection of managed databases rests on a target nobody settled. Whether about $10 a month is a ceiling or a preference decides whether a managed database at about $31 could return, which would reopen the store's design and the host with it. Moved from M16, because the host already depends on it
+     - **Must answer:** [how-is-the-hosting-account-protected-from-unexpected-charges](how-is-the-hosting-account-protected-from-unexpected-charges.md) — or else the Droplet this slice creates runs on an account whose tokens, sign-in and alerts nobody chose. DigitalOcean has no spending cap, so a leaked token or a forgotten resource surfaces only on the bill. First, because a token able to create Droplets already exists
+     - **Must answer:** [which-os-does-the-droplet-run](which-os-does-the-droplet-run.md) — or else the records on the front and the deploy switch are written against the packages and patching of an OS nobody chose, and changing it later rebuilds the setup scripts, the automatic patching and the local image together, with the store on the machine from M3
+     - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else nothing settles what terminates TLS in front of the app's instances, or how a deploy switches between them, so the first deploy either drops requests or has TLS added afterwards. The host and how the app runs on it are settled; the front and the switch remain
+     - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player revalidates every asset on the network [../problem.md](../problem.md) names as the modal case. Costs a change to the front and the serving path together
+     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy. The release itself is settled as a directory of built JavaScript and its `node_modules`; Node remains
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
@@ -155,9 +156,9 @@ a player can see, which is why it has to be a milestone rather than a habit.
    the machine, and the baseline that stops it being trivially compromised. It sits here because a
    restore drill, a look at a log and a check of what actually shipped all need access, and because
    [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) put the data on a
-   machine rather than behind a vendor. Its size depends entirely on
-   [where does this run?](where-does-this-run.md) — a managed platform supplies most of this and a
-   bare machine supplies none of it.
+   machine rather than behind a vendor. Its size is set by
+   [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md): the server is on a bare
+   Droplet, which supplies none of it.
 12. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. The matrix itself is settled by
    [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md);
@@ -228,9 +229,9 @@ board for six milestones and meeting the store for the first time with a finishe
     commits to surviving host replacement and the machine cannot deliver that alone. This is the main
     lever on how long an outage lasts, and it is ours rather than a provider's.
 11. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
-    there is no store at M1, so nothing can be disturbed there. What M1 owes this question is only
-    that the host it picks *can* deploy without two processes holding one file, and that is recorded
-    against [where does this run?](where-does-this-run.md) in that milestone. The rest —
+    there is no store at M1, so nothing can be disturbed there. Two processes on one machine can share
+    the file while a deploy overlaps them, as measured in the eighth and twelfth passes of
+    [where does this run?](where-does-this-run.md); what must stay single is the replicator. The rest —
     checkpointing on exit, replication across a restart, rolling back past a migration — is real from
     the first row.
 12. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
@@ -359,8 +360,8 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 ## M11 — the running system reports its own failures
 
-M2 built what checks a change before it ships. These are for after it has shipped, and they need what
-M2 did not have: a store with rows in it, a deployed thing with traffic, and a product somebody could
+M2 is where checking a change before it ships is built. These are for after it has shipped, and they
+need what M2 does not have: a store with rows in it, a deployed thing with traffic, and a product somebody could
 be using. They sit before the guest durability work below because the whole question there is whether
 players are losing work, and nothing currently could tell us either way.
 
@@ -395,9 +396,10 @@ players are losing work, and nothing currently could tell us either way.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
 12. [How is the server operated?](how-is-the-server-operated.md) — restarting it, patching it, and
-    noticing it has stopped. It sits here because noticing an outage is this milestone's theme, and
-    its size depends on whether [where does this run?](where-does-this-run.md) lands on a managed
-    platform or a bare machine. Its access-and-hardening half is
+    noticing it has stopped. It sits here because noticing an outage is this milestone's theme. The
+    server runs on a bare Droplet as systemd services, per
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
+    systemd restarts it and the rest is ours. Its access-and-hardening half is
     [a separate question](how-is-the-server-reached-and-hardened.md) at M2, because that half is
     needed to check a change rather than to survive one.
 13. [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the
@@ -464,9 +466,8 @@ before signing in because the whole question is what a guest gets _without_ an a
 ## M16 — something is paid for
 
 1. [Is there a paid tier?](is-there-a-paid-tier.md)
-2. [What is the acceptable running cost?](what-is-the-acceptable-running-cost.md)
-3. [What load should the server handle?](what-load-should-the-server-handle.md)
-4. [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
+2. [What load should the server handle?](what-load-should-the-server-handle.md)
+3. [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
 
 ## Blocking nothing yet
 

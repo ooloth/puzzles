@@ -8,8 +8,9 @@ resolves_into: decision
 
 ## Why it matters
 
-The server and its store share one machine, per
-[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md), so the machine failing
+The server and its store share one machine, a DigitalOcean Droplet, per
+[ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) and
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), so the machine failing
 takes the app down until it is replaced, and nothing gives redundancy without paying for it. Backups
 protect data rather than availability, which is why
 [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
@@ -33,7 +34,8 @@ A decision record in [../decisions/](../decisions/).
 
 Ported from the legacy documentation review, 2026-08-30.
 
-Finding drawn from legacy ADR-12 (host on Fly.io).
+Finding drawn from legacy ADR-12, which put the host on Fly.io. The host is now a DigitalOcean
+Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ## Options
 
@@ -48,18 +50,20 @@ about how long the app was unreachable while it happened. Accepting no redundanc
 this size; accepting it without naming a tolerable outage length is how the number gets discovered
 during an outage instead.
 
-**One machine and one volume give no hardware redundancy, and nothing in the settled arrangement adds
-any.** [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) puts the process and
-its store on the same machine, so the machine running the process and the machine holding the data
-are one object, and its failure is an outage of both. No arrangement names a tolerable outage length;
-that is what this question is for.
+**One Droplet with its disk inside it gives no hardware redundancy, and nothing in the settled
+arrangement adds any.**
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) puts the server on one
+Droplet, and [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) puts the
+process and its store on the same machine, so the machine running the process and the machine
+holding the data are one object, and its failure is an outage of both. No arrangement names a
+tolerable outage length; that is what this question is for.
 
 *Reasoned — from the two records named.*
 
-**Fly.io states the single-volume case in its own words**:
+**Fly.io states the single-disk case in its own words**:
 "If your app needs a volume to function, and the NVMe drive hosting your volume fails, then that
-instance of your app goes down. There's no way around that." Volumes are not replicated among
-themselves, and Fly's own docs say daily snapshots "shouldn't be your primary backup method."
+instance of your app goes down. There's no way around that." That describes Fly, and the same holds
+for a Droplet's disk.
 
 *Sourced — [fly.io/docs/volumes/overview](https://fly.io/docs/volumes/overview/), read 2026-09-02.*
 

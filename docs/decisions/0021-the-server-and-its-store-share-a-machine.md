@@ -32,9 +32,9 @@ instances.
 
 **A network block device is not a network filesystem, and this record does not rule it out.** On a
 block device attached to one machine, that machine mounts the filesystem and does the locking
-itself, so the unreliable locking SQLite warns about does not arise. This record said until
-2026-09-28 that such a device was ruled out, but its source never mentions block devices, so the
-clause was removed. Whether the store may sit on one is settled separately, on other grounds, by
+itself, so the unreliable locking SQLite warns about does not arise. SQLite's warning, the source
+this record rests on, is about network filesystems and never mentions block devices. Whether the
+store may sit on one is settled separately, on other grounds, by
 [ADR-0042](0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md).
 
 **It says nothing about redundancy or replication.** Copies of the file may exist elsewhere, and

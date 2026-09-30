@@ -294,6 +294,8 @@ only." where nothing does>
 
 ## Also update
 - [ ] questions/README.md — which questions this settles, re-scopes, or moves to another milestone
+- [ ] questions/<file>.md — mined in this change: what this record settles comes out of its question,
+      and what other questions will use moves into their files as findings
 - [ ] architecture.md — system boundaries or relationships this decision defines
 - [ ] constraints.md — givens this decision imports
 - [ ] glossary.md — domain terminology this decision introduces

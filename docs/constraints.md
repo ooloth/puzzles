@@ -862,6 +862,105 @@ ceiling has less margin than its bill suggests.
 - **Fly** raises its memory prices from 1 October 2026, per a draft change to its own docs opened
   2026-09-30.
 
+## Hosting — DigitalOcean has no spending cap
+
+**Nothing DigitalOcean offers stops a charge without stopping the machine.** So a large bill is
+prevented by what can create resources, and noticed by alerts, rather than capped.
+[ADR-0046](decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) and
+[ADR-0047](decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) follow
+from this.
+
+- "A spend alert budget is not a spending cap and does not limit how much you can use." Alerts go by
+  email to a team's owners and billers, "within an hour of your spend crossing a threshold", and
+  "Each threshold notifies once per billing cycle". *Sourced —
+  [spend alerts](https://docs.digitalocean.com/platform/billing/billing-alerts/), opened 2026-09-30.*
+- Spend alerts do not see transfer until it is invoiced: "projections of Droplet transfer in excess
+  of the transfer pool do not trigger an alert until they are applied to the invoice". So traffic is
+  watched with a Monitoring alert instead. *Same source.*
+- "Droplets incur charges for as long as they remain on the platform, even if they are powered
+  down." Only deleting one stops its charge, and deleting the production Droplet deletes the store.
+  *Sourced — [unrecognised charges](https://docs.digitalocean.com/support/i-dont-recognize-a-charge-on-my-invoice/),
+  opened 2026-09-30.*
+- Prepayment caps nothing: "Prepayment does not waive the Customer's obligation to pay for usage
+  exceeding the credit balance." *Sourced —
+  [prepayment terms](https://www.digitalocean.com/legal/prepayments-and-resource-tier-terms), opened
+  2026-09-30.*
+- Serverless inference is the exception. It needs "a positive prepaid account balance before you can
+  send inference requests", and "When your balance reaches $0, DigitalOcean suspends your access".
+  Auto-reload is off by default. *Sourced —
+  [inference prepayment](https://docs.digitalocean.com/products/inference/how-to/manage-serverless-inference-prepayment/),
+  opened 2026-09-30.*
+- Outbound transfer beyond the team's pooled allowance costs "$0.01 per GiB", and "Traffic dropped by
+  DigitalOcean firewall rules is not billed". *Sourced —
+  [bandwidth](https://docs.digitalocean.com/platform/billing/bandwidth/), read 2026-09-30.*
+
+**Some charges sit outside a Droplet's price, and outlive the Droplet.** A forgotten one shows up
+only on the bill or a spend alert.
+
+- A reserved IPv4 costs "$5.00 per month ($0.01 per hour) when reserved but not assigned to a
+  Droplet"; reserved IPv6 is free. *Sourced —
+  [reserved IP pricing](https://docs.digitalocean.com/products/networking/reserved-ips/details/pricing/),
+  opened 2026-09-30.*
+- Uptime checks cost $1 a month each after the first. *Sourced —
+  [uptime pricing](https://docs.digitalocean.com/products/uptime/details/pricing/), opened 2026-09-30.*
+- Spaces costs from $5 a month once enabled, and backups 20 or 30% of the Droplet's price. *Agents'
+  reading of [Spaces pricing](https://www.digitalocean.com/pricing/spaces-object-storage) and
+  [backup pricing](https://docs.digitalocean.com/products/backups/details/pricing/), 2026-09-29 and
+  30; not opened.*
+
+**A declined payment leads to suspension, and then possibly deletion.** For a failed monthly charge,
+"We email the account owner" and "We place the account on hold, which prevents creating new
+resources", while "existing resources continue to run". Then "We power down the account's
+resources", and then "we may permanently delete the account's resources". "DigitalOcean does not
+publish fixed timelines for these stages." "If the default payment method fails, we try charging
+other payment methods on file." *Sourced —
+[late payments](https://docs.digitalocean.com/platform/billing/late-payments/), opened 2026-09-30.* A
+failed mid-month auto-charge is harsher: DigitalOcean "reserves the right to suspend account access
+and resource availability immediately". The auto-charge applies to a team that "does not have a
+payment history yet", at $25 for tier 1 and $50 for tier 2. *Sourced — the
+[prepayment terms](https://www.digitalocean.com/legal/prepayments-and-resource-tier-terms) and
+[paying bills](https://docs.digitalocean.com/platform/billing/pay-bills/), opened 2026-09-30.* So a
+limited card cannot cap spending without risking the store, and a backup payment method is the
+defence against a card that expires or is replaced.
+
+**A team's limits rise by themselves.** "As you build payment history over time with successful,
+non-zero invoices, your tier and limits can increase automatically." No way to lower them was found.
+Tier 1 allows 3 Droplets of up to $48; tier 2 allows 10, of up to $56 with shared CPUs or $84 with
+dedicated ones, and 4 database clusters. *Sourced —
+[paying bills](https://docs.digitalocean.com/platform/billing/pay-bills/) and
+[resource limits](https://docs.digitalocean.com/platform/resource-limits/), opened 2026-09-30.* A team
+the maintainer created on 2026-09-30 showed tier 1 and then tier 2 the same day, with 4 database
+clusters. *Observed in the control panel by the maintainer.* The largest single database node listed
+is "$975.24" a month. *Sourced —
+[database pricing](https://www.digitalocean.com/pricing/managed-databases), opened 2026-09-30.* So a
+token that can create databases is worth thousands of dollars a month to whoever holds it.
+
+**A token's scopes are per product and per action, never per resource.** The Droplet scopes are
+`droplet:read`, `droplet:create`, `droplet:update`, `droplet:delete` and `droplet:admin`, and the
+aliases `api:read` and `api:write` "automatically expand to include new API endpoints". Nothing limits
+a token to a project or a tag. *Sourced — [scopes](https://docs.digitalocean.com/reference/api/scopes/),
+opened 2026-09-30.* Droplets have no deletion protection; a request for it has been open on
+DigitalOcean's ideas board since 2021, per an agent's reading on 2026-09-30. So any token that can
+delete a Droplet can delete the production one.
+
+**Teams are billed separately.** "Each team has separate billing and its own payment information
+unless it belongs to an organization." *Agent's reading of
+[teams](https://docs.digitalocean.com/platform/teams/), 2026-09-30, not opened.* Creating a second
+team can need a request to support: the control panel showed the maintainer a message saying so on
+2026-09-30.
+
+**Secure Sign-In does not check a GitHub or Google sign-in for 2FA.** "DigitalOcean does not detect
+or enforce 2FA for these sign-in methods." *From a search summary of
+[require secure sign-in](https://docs.digitalocean.com/platform/teams/how-to/require-secure-sign-in/),
+2026-09-30; not opened at the page.* So the account is as hard to take over as the GitHub account.
+Losing GitHub means DigitalOcean's recovery, which asks for "a photo of your government-issued ID"
+and states no turnaround. *Sourced —
+[lost GitHub access](https://docs.digitalocean.com/support/i-lost-access-to-the-github-account-i-use-to-sign-into-digitalocean/),
+opened 2026-09-30.* And "GitHub Support will not be able to restore access to accounts with
+two-factor authentication enabled if you lose your two-factor authentication credentials." *Sourced —
+[recovering 2FA](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/recovering-your-account-if-you-lose-your-2fa-credentials),
+opened 2026-09-30.*
+
 ## Runtimes — a heap ceiling does not bound a process
 
 **A JavaScript runtime's heap limit governs the JS heap and nothing else, so a process can exceed its

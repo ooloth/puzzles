@@ -55,8 +55,9 @@ that buy them are scored in [where does this run?](../questions/where-does-this-
 ## Enforced by
 
 **Nothing in the repo.** The spend alert the maintainer set on DigitalOcean is the nearest thing. Its
-threshold belongs to
-[how is the hosting account protected from unexpected charges?](../questions/how-is-the-hosting-account-protected-from-unexpected-charges.md).
+thresholds are set in [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md),
+and [ADR-0047](0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) records why
+nothing stops spending automatically.
 
 ## Rejected
 

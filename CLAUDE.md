@@ -150,6 +150,7 @@ Index and conventions: `docs/README.md`. Keep this table in step with the one th
 | `docs/guarantees/`     | Promises to players we must never break, one per file |
 | `docs/invariants/`     | What holds without exception, one per file |
 | `docs/questions/`      | Decisions not yet made, in order        |
+| `docs/runbooks/`       | Steps that set up the live system       |
 | `docs/standards/`      | What correct work looks like here       |
 | `docs/architecture.md` | Where code lives and what calls what    |
 | `docs/constraints.md`  | Limits from browsers, networks and law  |

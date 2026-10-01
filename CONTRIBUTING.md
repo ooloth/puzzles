@@ -23,9 +23,16 @@ pnpm install
 Needed only for work on the host, not to build or test. The server runs on a DigitalOcean Droplet,
 per [ADR-0043](docs/decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
-1. In the DigitalOcean console, under **API → Generate New Token**, create a token with an expiry.
-   Give it custom scopes that allow creating, reading and deleting Droplets and SSH keys. Reading the
-   account is not needed, so `doctl account get` returning 403 is expected.
+1. In the DigitalOcean console, switch to the team the work is for: `puzzles-experiments` for spikes
+   and measurements, `puzzles` only for work on production, per
+   [ADR-0048](docs/decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md).
+   Under **API → Generate New Token**, create a token with the shortest expiry offered and custom
+   scopes for only what the work needs, such as creating, reading and deleting Droplets and SSH keys.
+   Reading the account is not needed, so `doctl account get` returning 403 is expected.
+   **Delete the token when the work ends.** No token that can create anything is kept, per
+   [ADR-0046](docs/decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md).
+   The account's own settings are in
+   [docs/runbooks/set-up-the-hosting-account.md](docs/runbooks/set-up-the-hosting-account.md).
 2. Install the CLI and authenticate it:
 
 ```sh

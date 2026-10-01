@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-19
+updated: 2026-09-30
 update_when: this file's own content changes — a row is added to or removed from the table below
 decays: slow
 status: active
@@ -19,6 +19,7 @@ Full context: [problem.md](problem.md).
 | [guarantees/](guarantees/)       | Promises to players we must never break, one per file |
 | [invariants/](invariants/)       | What holds without exception, one per file |
 | [questions/](questions/)         | Decisions not yet made, in order        |
+| [runbooks/](runbooks/)           | Steps that set up the live system       |
 | [standards/](standards/)         | What correct work looks like here       |
 | [architecture](architecture.md)  | Where code lives and what calls what    |
 | [constraints](constraints.md)    | Limits from browsers, networks and law  |
@@ -65,6 +66,7 @@ line is the question that sorts a fact into it:
 - True for now and misleading until a change finishes → [unfinished](unfinished.md)
 - A domain word and its code name → [glossary](glossary.md)
 - Where code lives and what calls what → [architecture](architecture.md)
+- A procedure you follow to put the live system into a known state → [runbooks/](runbooks/)
 
 The first five are the easiest to confuse. A constraint forces a decision; a decision commits us to
 a guarantee; a guarantee is only real once something checks it. An invariant usually falls out of a

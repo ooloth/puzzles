@@ -97,3 +97,12 @@ there is nothing to inject and no secret handling to design. That becomes real a
 be built before then.
 
 *Reasoned — from M1's definition in [README.md](README.md).*
+
+**The pipeline holds no DigitalOcean token that can create anything.**
+[ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) rules out
+any standing token with create scopes, because a leaked one could create thousands of dollars a month
+of resources and DigitalOcean has no spending cap. A deploy that reaches the Droplet over SSH needs no
+DigitalOcean token at all, so the SSH key the pipeline holds is the credential to protect. A token
+with read scopes only is allowed if the pipeline needs one.
+
+*Moved here 2026-09-30 from the hosting-account question when [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) resolved it.*

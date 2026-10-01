@@ -93,8 +93,8 @@ Simplest, and it is the single-dependency case this question exists to examine.
 of a coarser recovery point on the second path and a restore that produces a new volume to reattach.
 On a Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), a
 restore creates a new Droplet from the disk image rather than a volume to reattach. Backups are priced
-at 20 or 30% of the Droplet, per
-[how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md).
+at 20 or 30% of the Droplet, per [../constraints.md](../constraints.md), "Hosting — DigitalOcean has
+no spending cap".
 
 *Replication, snapshots, and an independent dump.* Three paths sharing no code. The candidate shape
 above.
@@ -187,3 +187,14 @@ client-side half of the same question.
   every spike run: locally, and on two Droplets. See the question's eighth and twelfth passes.
 - **A stale copy can be noticed** with a heartbeat to Healthchecks.io, pinged only while the copy is
   fresh.
+
+**The account holding the store's copy is a second account that bills, and gets the same
+protection as DigitalOcean's.** [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)
+counts its charges in the hosting target. The properties DigitalOcean's account was scored against
+apply to it: a leaked credential creates only a bounded amount, spending reaches the maintainer within
+hours, the sign-in resists takeover and can always be recovered, a failed payment never deletes the
+copy unannounced, and stopping spending never destroys the copy. They are listed in
+[ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md). Whether a
+candidate offers a real spending cap, which DigitalOcean does not, is worth scoring.
+
+*Moved here 2026-09-30 from the hosting-account question, which deferred it here.*

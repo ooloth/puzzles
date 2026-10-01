@@ -67,3 +67,12 @@ obvious.
 - **Memory in use on a 1 GB Droplet running the stack**, Ubuntu included, is in the question's twelfth
   pass: 360 MB idle and 373 MB at the peak of a deploy. The app, Caddy and Litestream accounted for
   about 160 MB of it.
+- **The production Droplet runs DigitalOcean's metrics agent**, because the outbound-traffic alert
+  that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+  relies on needs it: "Only Droplets with the DigitalOcean metrics agent installed are available to
+  select." Monitoring is "a free, opt-in service", alerting by email or Slack over windows of 5, 10, 30
+  or 60 minutes. The same agent serves memory and disk alerts. Its memory use on the 1 GB Droplet is
+  unmeasured. *Sourced —
+  [set up alerts](https://docs.digitalocean.com/products/monitoring/how-to/set-up-alerts/), opened
+  2026-09-30. The alert itself is step 10 of
+  [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md).*

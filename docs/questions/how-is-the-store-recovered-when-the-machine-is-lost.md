@@ -127,3 +127,30 @@ So this is a downtime bet rather than a data-loss bet — the data-loss half is
 
 **Where a watchdog could run.** Cloudflare Workers' free cron is reported to fire every five minutes
 but not every minute.
+
+**A no-person recovery needs a standing token that can create a Droplet, and
+[ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) does not
+allow one yet.** Whatever runs the recovery would hold it. DigitalOcean's scopes are per product and
+action, never per resource, so a `droplet:create` token can create as many Droplets as the team's
+limit allows: ten of up to $84 at tier 2, about $840 a month, and the tier rises by itself with payment
+history. A token that can delete, which a recovery replacing a machine may also need, can delete the
+production Droplet, since Droplets have no deletion protection. So an automated recovery is chosen
+here only together with a record that names its token and accepts that cost, per [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md)'s third
+bullet. A runbook followed by hand, with a token created for the occasion, needs no such record. See
+[../constraints.md](../constraints.md), "Hosting — DigitalOcean has no spending cap".
+
+*Moved here 2026-09-30 from the hosting-account question when [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) resolved it.*
+
+**Two more places a watchdog could run, and why each is weak.** GitHub Actions: "In a public
+repository, scheduled workflows are automatically disabled when no repository activity has occurred in
+60 days", and this repository is public. *Sourced —
+[disabling a workflow](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/disabling-and-enabling-a-workflow),
+opened 2026-09-30.* DigitalOcean Functions: scheduled triggers "are currently in private preview",
+with "a maximum of 3 triggers" and no charge "during private preview but this is subject to change".
+*Agent's reading of
+[schedule functions](https://docs.digitalocean.com/products/functions/how-to/schedule-functions/),
+2026-09-30, not opened.*
+
+*Moved here 2026-09-30 from the hosting-account question, where they were weighed for a kill switch
+that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+rejected.*

@@ -635,8 +635,10 @@ here disqualifies A1.
 **The Droplet traps above are in the questions that will use them**: the logs and the firewall in
 [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), the WAL in
 [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md),
-and billing in
-[how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md).
+and billing in [../constraints.md](../constraints.md), "Hosting — DigitalOcean has no spending cap",
+which [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) to
+[ADR-0048](../decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md)
+rest on.
 The Docker traps do not apply, since
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) installs no
 Docker.
@@ -962,10 +964,13 @@ tasks still owed, in order, kept here so that none is lost if a session ends par
      DigitalOcean Droplet.
    - [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md): it runs
      as systemd services, without containers.
-2. **Next: [how is the hosting account protected from unexpected charges?](how-is-the-hosting-account-protected-from-unexpected-charges.md)**
-   It comes first because a token able to create Droplets already exists. It is independent of the
-   records below.
-3. **Then: [which OS does the Droplet run?](which-os-does-the-droplet-run.md)** The spikes used Ubuntu
+2. **Settled since: how the hosting account is protected from unexpected charges.**
+   [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md),
+   [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) and
+   [ADR-0048](../decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md),
+   with the account's settings in
+   [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md).
+3. **Next: [which OS does the Droplet run?](which-os-does-the-droplet-run.md)** The spikes used Ubuntu
    24.04 and nothing chose it. The records below rest on it.
 4. **Record: Caddy is the front.** It terminates TLS and routes between the app's instances, rather
    than nginx or another proxy. It is scored from the eleventh and twelfth passes. It does not settle
@@ -985,8 +990,8 @@ tasks still owed, in order, kept here so that none is lost if a session ends par
    eighth and ninth passes' scoring. The file store stays, because no managed-database setup fits
    the price target.
 8. **A runbook** of every setup step learned here, including the twelfth pass's scripts, with the
-   granular considerations behind each, per the maintainer. Where it lives is settled through "Where
-   a new fact goes" in [../README.md](../README.md).
+   granular considerations behind each, per the maintainer. It goes in [../runbooks/](../runbooks/),
+   beside the account's setup, as "Where a new fact goes" in [../README.md](../README.md) now says.
 9. **Work that belongs to other steps**, and is not filed as issues from here:
    - the check that fails on a native addon in production dependencies, named in
      [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s

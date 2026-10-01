@@ -112,3 +112,19 @@ chose, running the systemd services of
 - **Deploy tools default to SSH as root.** Kamal does, which is moot with no Kamal. A non-root user in
   a group that controls the services is still close to root. *Sourced from Kamal's
   [ssh docs](https://kamal-deploy.org/docs/configuration/ssh/) by an agent.*
+- **A compromised Droplet is the most-reported cause of a surprise DigitalOcean bill**, through the
+  traffic it sends out, often after an exposed service or a weak SSH password. The other common cause
+  is a forgotten resource. *Weak: an agent's reading of secondhand sources and one community thread
+  title, 2026-09-30.* Outbound transfer beyond the pool costs $0.01 per GiB, and
+  [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+  reports traffic rather than cutting it, so hardening is what keeps this cause from starting.
+- **Illegitimate traffic is shed without taking the site down by limiting it per client at the
+  front**, not by cutting outbound traffic, which
+  [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) rejects because it stops the site.
+  *Reasoned, 2026-09-30.*
+- **A Droplet's metadata service lists no DigitalOcean API token**, so root on the machine does not by
+  itself give API access, though it does read `user-data` and any secret put there. *Agent's reading
+  of [metadata](https://docs.digitalocean.com/products/droplets/how-to/retrieve-droplet-metadata/),
+  2026-09-30; not opened.*
+
+*The three entries above moved here 2026-09-30 from the hosting-account question.*

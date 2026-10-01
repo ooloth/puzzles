@@ -24,6 +24,19 @@ constraint on what gets built, not as a description of what exists.
 
 **So** read [questions/README.md](questions/README.md) for what is open and in what order.
 
+### The hosting account's runbook describes steps not yet taken
+
+**You'll see** [runbooks/set-up-the-hosting-account.md](runbooks/set-up-the-hosting-account.md), with
+every setting the account is meant to have, written as steps with no status.
+
+**Actually** three of them were not done on 2026-09-30: the GitHub passkey, and the production
+Droplet's metrics agent and traffic alert, since no production Droplet exists yet. The two teams,
+their spend alerts, Secure Sign-In and the backup payment method were set by the maintainer that day.
+Whether the mail rule exists was not reported.
+
+**So** don't read the runbook as the account's current state. The agent and the traffic alert belong
+to M1 slice 4's issue. Delete this entry once the three are done.
+
 ### The doc checker is written in a language no record sanctions
 
 **You'll see** `scripts/check-docs.py`, in Python, referenced from

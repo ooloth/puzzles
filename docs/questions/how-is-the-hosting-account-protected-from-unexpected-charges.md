@@ -73,13 +73,13 @@ token of its own.
      site to go down", and "If it's site popularity, that'll be interesting to decide what to do
      about." The ceiling is
      [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)'s.
-11. **An alert reaches the maintainer even when one channel fails or the maintainer is away.**
-    Charges grow slowly enough that how long nobody looks decides the bill, not how fast an alert
-    fires. Rests on the same wish as property 1. Added 2026-09-30.
 10. **Stopping spending never destroys the store or its copy.** Rests on
     [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
     It exists because the bluntest way to stop a charge, deleting the resource or letting a payment
     fail, is also the way the store is lost. Added 2026-09-30.
+11. **An alert reaches the maintainer even when one channel fails or the maintainer is away.**
+    Charges grow slowly enough that how long nobody looks decides the bill, not how fast an alert
+    fires. Rests on the same wish as property 1. Added 2026-09-30.
 
 **Deferred:** other accounts that bill for running the system. The store's off-machine copy will sit
 in a second provider's account, and
@@ -174,7 +174,13 @@ preference, and $20 as a ceiling.
 - a spend alert;
 - "Secure Sign-In", which admits only members who sign in "via Google or GitHub or a DigitalOcean
   account with two-factor authentication". The maintainer signs in with GitHub;
-- a 30-day token, to be deleted once the measurement work ends.
+- a 30-day token, to be deleted once the measurement work ends. The maintainer deleted it in the
+  control panel on 2026-09-30. Whether any other token exists was not checked.
+
+**The maintainer's GitHub account, as the maintainer stated on 2026-09-30:** its second factor is a
+one-time code from an authenticator app, and its recovery codes are stored in 1Password. A one-time
+code can be relayed by a phishing page in real time, which a passkey or security key cannot. *Reasoned;
+the phishing claim is general knowledge about one-time codes, not sourced here.*
 
 **Secure Sign-In does not check for 2FA on a Google or GitHub sign-in.** "This setting doesn't
 strictly require 2FA. Google and GitHub sign-ins are accepted for secure sign-in, but DigitalOcean

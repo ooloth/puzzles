@@ -4,4 +4,4 @@ Likely the future home for system admin/ops scripts as well.
 
 May be reorganized - for now a default home for helper scripts is all we need.
 
-Will likely be translated to the codebase's primary language for consistency, once settled.
+`check-docs.py` is in Python, which [ADR-0030](../docs/decisions/0030-typescript-outside-the-browser-runs-on-node.md) rules out for repo scripts. Its rewrite in TypeScript is issue #2. Don't add another Python script.

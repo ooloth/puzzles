@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-30
+updated: 2026-10-01
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -832,8 +832,9 @@ state: with the app, Caddy and Litestream running, about 360 MB was in use in al
 
 *Measured — two `s-1vcpu-1gb` Droplets in `tor1` running Ubuntu 24.04, kernel `6.8.0-142-generic`,
 created 2026-09-30. Read with `swapon --show` (it printed nothing), `free -m` after `cloud-init
-status --wait`, and `pro status`. The method is in the twelfth pass of
-[where does this run?](questions/where-does-this-run.md).*
+status --wait`, and `pro status`. The figure with the app, Caddy and Litestream running comes from
+the twelfth pass of [where does this run?](questions/where-does-this-run.md), which records its
+method.*
 
 **DigitalOcean moves a Droplet off a host being maintained or failing while it keeps running.** It
 uses live migration "during events like normal infrastructure and network maintenance, software
@@ -891,8 +892,12 @@ from this.
   [inference prepayment](https://docs.digitalocean.com/products/inference/how-to/manage-serverless-inference-prepayment/),
   opened 2026-09-30.*
 - Outbound transfer beyond the team's pooled allowance costs "$0.01 per GiB", and "Traffic dropped by
-  DigitalOcean firewall rules is not billed". *Sourced —
-  [bandwidth](https://docs.digitalocean.com/platform/billing/bandwidth/), read 2026-09-30.*
+  DigitalOcean firewall rules is not billed". A Droplet adds to the pool as it runs: "For every second
+  a Droplet exists, it accrues 1/2,419,200 of its total transfer allowance". *Sourced —
+  [bandwidth](https://docs.digitalocean.com/platform/billing/bandwidth/), opened 2026-09-30.* The $6
+  Droplet's allowance is "1,000 GiB" a month. *Sourced —
+  [Droplet pricing](https://www.digitalocean.com/pricing/droplets), opened 2026-09-30.* So using the
+  whole pool within a month takes about 3 Mbps sustained. *Reasoned from those two figures.*
 
 **Some charges sit outside a Droplet's price, and outlive the Droplet.** A forgotten one shows up
 only on the bill or a spend alert.
@@ -930,7 +935,7 @@ dedicated ones, and 4 database clusters. *Sourced —
 [paying bills](https://docs.digitalocean.com/platform/billing/pay-bills/) and
 [resource limits](https://docs.digitalocean.com/platform/resource-limits/), opened 2026-09-30.* A team
 the maintainer created on 2026-09-30 showed tier 1 and then tier 2 the same day, with 4 database
-clusters. *Observed in the control panel by the maintainer.* The largest single database node listed
+clusters. *Measured — read in the control panel by the maintainer, 2026-09-30.* The largest single database node listed
 is "$975.24" a month. *Sourced —
 [database pricing](https://www.digitalocean.com/pricing/managed-databases), opened 2026-09-30.* So a
 token that can create databases is worth thousands of dollars a month to whoever holds it.
@@ -946,8 +951,11 @@ delete a Droplet can delete the production one.
 **Teams are billed separately.** "Each team has separate billing and its own payment information
 unless it belongs to an organization." *Agent's reading of
 [teams](https://docs.digitalocean.com/platform/teams/), 2026-09-30, not opened.* Creating a second
-team can need a request to support: the control panel showed the maintainer a message saying so on
-2026-09-30.
+team can need a request to support. *Measured — a message the maintainer saw in the control panel,
+2026-09-30.* Team settings, Secure Sign-In among them, can be changed only in the control panel: "The
+DigitalOcean API and CLI client, doctl, do not support teams." *From a search summary of
+[require secure sign-in](https://docs.digitalocean.com/platform/teams/how-to/require-secure-sign-in/),
+2026-09-30; not opened at the page.*
 
 **Secure Sign-In does not check a GitHub or Google sign-in for 2FA.** "DigitalOcean does not detect
 or enforce 2FA for these sign-in methods." *From a search summary of

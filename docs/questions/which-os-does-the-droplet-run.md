@@ -18,16 +18,22 @@ measured on Ubuntu 24.04 without anyone choosing it.
 **What rests on it:**
 
 - how security patches arrive, and whether a kernel fix needs a reboot;
-- which package manager carries Node, Caddy and Litestream;
+- which package manager carries Node, Litestream and whatever sits in front of the app;
 - how long a release is supported before a major upgrade;
 - whether the Mac can run the same image locally.
 
 Getting it wrong costs a rebuild of the machine and of the setup scripts. That cost grows once the
 store holds data at M3.
 
-**Environments:** production, and the production-like local run on the maintainer's Mac, which per
+**Environments:** production, and the production-like local run on the maintainer's Mac that
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
-runs the same arrangement.
+requires. That run does not exist yet; building it is M2's.
+
+**It is answered together with what sits in front of the app.** The front is not chosen: the spikes
+used Caddy, and [where does this run?](where-does-this-run.md) lists a record that Caddy is the front
+as owed. Each constrains the other, since a front is only a candidate if this OS packages it, and an OS
+is scored partly on whether it packages the front. So the two are scored side by side, per step 6 of
+"Building a milestone's list" in [README.md](README.md), rather than this one assuming Caddy.
 
 ## What would settle it
 
@@ -37,19 +43,19 @@ The one property that needs running, the local image on the Mac, is checked by b
 ## Properties the answer is scored against
 
 Derived from the moments the system touches the OS: provisioning a Droplet from cloud-init, a
-security patch arriving, a kernel fix, a reboot, installing and upgrading Node, Caddy and
-Litestream, the release's support ending, and the same setup run on the Mac.
+security patch arriving, a kernel fix, a reboot, installing and upgrading Node, Litestream and the
+front, the release's support ending, and the same setup run on the Mac.
 
 1. **Security patches, the kernel's included, are applied without a recurring manual step, and most
-   kernel fixes need no reboot.** Rests on rows 14 and 23 of
-   [where does this run?](where-does-this-run.md), and J1: a reboot is a brief outage.
+   kernel fixes need no reboot.** Rests on property 14 of [where does this run?](where-does-this-run.md), and row 23 of its
+   comparison table, read with `git show 11ac964:docs/questions/where-does-this-run.md`, and J1: a reboot is a brief outage.
 2. **The same OS image can run on the maintainer's Mac from the same cloud-init**, whatever
    [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
    settles at M2. Rests on
    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
    and L1.
-3. **Node, Caddy and Litestream install from maintained packages that the automatic patching can
-   cover.** Rests on
+3. **Node, Litestream and the front install from maintained packages that the automatic patching can
+   cover.** Which front is scored alongside, as above. Rests on
    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and its
    property 3, that everything beneath the app is patched without a recurring manual step.
 4. **The release is supported for years without a forced major upgrade.** Rests on "active attention

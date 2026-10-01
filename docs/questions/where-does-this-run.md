@@ -140,10 +140,9 @@ for hosting is a preference, and $20 is a ceiling.
   [how much downtime is acceptable?](how-much-downtime-is-acceptable.md) at M16.
 - **How the machine is reached, patched and watched.** See
   [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md) at M2 and
-  [how is the server operated?](how-is-the-server-operated.md) at M11. This is where a managed
-  platform and a bare machine differ most. With it deferred, the list may not separate those two
-  tiers at all. If it does not, that is the finding, and the choice between them is made on cost as
-  stated above rather than dressed as a derivation.
+  [how is the server operated?](how-is-the-server-operated.md) at M11.
+  [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) chose a bare machine, so
+  this is work owed on it rather than a way to compare hosts.
 
 ### Extended 2026-09-28: the failures a host choice could cause
 
@@ -199,15 +198,15 @@ starting list, not a complete one.*
     on [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md): a
     changed address with the domain still pointing at the old one is an outage nobody triggered.
 
-**Property 2 is split, because its wording failed hosts its purpose may not.**
+**Property 2 has two readings, and only 2a binds.**
 
 - **2a. What the browser receives for the app's hostname is A/AAAA records, with no CNAME to a
   provider's domain in the answer.** This is what Safari's comparison reads, per
   [../constraints.md](../constraints.md). Cloudflare's flattening of an apex CNAME answers with A
   records, so a host that needs flattening can pass. Whether a shipped Safari agrees is reasoned, not
   observed.
-- **2b. The DNS setup needs no CNAME at all.** This is what the property said before. It separates
-  nothing 2a does not, once flattening passes 2a, so it binds on nothing.
+- **2b. The DNS setup needs no CNAME at all.** It separates nothing 2a does not, once flattening
+  passes 2a, so it binds on nothing.
 
 **Checked and found binding on nothing:**
 
@@ -270,8 +269,7 @@ full comparison was mined into it on 2026-09-30.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**What is here serves the records still owed** in the open entry at the end. They are the store's
-design, the front, the deploy switch, the pipeline and the runbook.
+**What is here serves the records still owed**, listed in the open entry at the end.
 
 **The host comparison was mined on 2026-09-30.** That covers the passes from 2026-09-27 to the seventh
 pass, and the findings on platforms before them. What
@@ -295,7 +293,10 @@ unscored.
 - **J1.** Every routine event completes with no failed request and no person: host maintenance, a
   crash, a deploy, a certificate renewal, an OS patch and its reboot.
 - **J2.** A dead host is recovered with no person, within minutes, losing at most about a second of
-  acknowledged writes.
+  acknowledged writes. Recovering with no person needs a standing token that can create a Droplet,
+  which [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md)
+  allows only under a record that names what the token could cost. Every watchdog below assumes such
+  a token.
 - **J3.** A failure reaches the maintainer through a monitor that runs away from the machine it
   watches, not because they looked.
 
@@ -312,7 +313,7 @@ unscored.
 - **P1.** The monthly total of the full setup that meets J1 to J3: the machine, the copy's storage,
   the reserved IP, monitoring, and wherever the watchdog runs.
 - **P2.** How likely that total is to change without the maintainer changing anything. This is
-  row 26.
+  row 26 of the comparison table read with `git show 11ac964:docs/questions/where-does-this-run.md`.
 
 **The deploy tooling this pass weighed is settled.**
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app
@@ -367,8 +368,8 @@ use the file. [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-proces
   sit on the machine's own disk, which [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md) already requires in production. This belongs as a trap
   for [how is the store reached in local development?](how-is-the-store-reached-in-local-development.md).
 
-So row 8, "A deploy never has two processes holding the store's file at once", was stricter than the
-store needs. SQLite supports several processes on one machine: "All processes using a database must be
+So row 8 asks only that two replicators never write the copy at once, not that two processes never
+hold the store's file. SQLite supports several processes on one machine: "All processes using a database must be
 on the same host computer", with "only one writer at a time" (*opened by me,
 [WAL](https://www.sqlite.org/wal.html)*). [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md)
 rejects machines sharing the file, not processes. What must stay single is the replicator: "It is
@@ -436,7 +437,8 @@ part.** On 2026-09-30 the maintainer asked for its variants to be scored, and ga
   the production-like run "runs the production artifacts in the production topology", and it may
   differ only where a record says why. This zooms into row 11. The eighth pass found one trap
   already: a SQLite file on a macOS folder mounted into Docker crashes.
-- **The challenge to row 30.**
+- **The challenge to row 30** of the comparison table at commit `11ac964`, which weighed how long a
+  request is held during a deploy.
   - **The promise.** [The player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
     forbids asking the player to act on the network. It does not forbid a request failing. The
     network is "our problem to handle rather than theirs to manage".
@@ -771,7 +773,7 @@ sit on two ports behind Caddy, and Caddy checks `/api/up` on each. A deploy:
 **Before anything was installed, on both Droplets:**
 
 - 961 MB of memory in total, about 320 MB used, about 640 MB available.
-- **No swap.** `swapon --show` printed nothing. This settles the tenth pass's weak claim.
+- **No swap.** `swapon --show` printed nothing.
 - Kernel `6.8.0-142-generic`. `pro status` reports Livepatch as available.
 - A 24 GB disk and one vCPU.
 
@@ -793,11 +795,10 @@ sit on two ports behind Caddy, and Caddy checks `/api/up` on each. A deploy:
 **What this settles.**
 
 - **Both stacks meet J1 on a real Droplet.** Neither dropped a request or lost a write during deploys.
-- **N uses about 70 to 100 MB less memory** and 0.8 GB less disk.
+- **N uses about 65 to 100 MB less memory** and 0.8 GB less disk.
 - **N's deploys are about five times faster**, and its slowest request under deploy is a quarter of
   Kamal's.
-- **The eleventh pass's prediction holds.** The measured Docker overhead, about 120 MB, sits inside the
-  range reported earlier.
+- **The measured Docker overhead is about 120 MB**, inside the range the eleventh pass found reported.
 - **1 GB is enough for either** at launch. The peak used was under half the machine. Without swap, a
   memory limit on the app, such as N's `MemoryMax`, is what keeps a leak from reaching the rest.
 
@@ -956,8 +957,8 @@ process.on('SIGTERM', stop); process.on('SIGINT', stop);
 
 ### Open at the end of the twelfth pass
 
-*The next pass replaces this entry rather than adding beneath it. This is the list of records and
-tasks still owed, in order, kept here so that none is lost if a session ends partway.*
+*The list of records and tasks still owed, in order, kept here so that none is lost if a session ends
+partway. It is replaced as a whole when it changes.*
 
 1. **Settled.**
    - [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md): the server runs on a
@@ -971,7 +972,9 @@ tasks still owed, in order, kept here so that none is lost if a session ends par
    with the account's settings in
    [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md).
 3. **Next: [which OS does the Droplet run?](which-os-does-the-droplet-run.md)** The spikes used Ubuntu
-   24.04 and nothing chose it. The records below rest on it.
+   24.04 and nothing chose it. The records below rest on it. It is scored side by side with item 4,
+   since an OS is scored partly on whether it packages the front, and the front only on an OS that
+   packages it.
 4. **Record: Caddy is the front.** It terminates TLS and routes between the app's instances, rather
    than nginx or another proxy. It is scored from the eleventh and twelfth passes. It does not settle
    who serves the client's files, which is

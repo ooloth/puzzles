@@ -15,10 +15,8 @@ beneath the store decision — it is the mechanism by which that record's whole 
 
 **A store opened as a file concentrates the risk on one disk.** The host is a DigitalOcean
 Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and
-the store's disk is inside it, with no volume to snapshot or reattach. Fly states the consequence in
-its own words: "If your app needs a volume to function, and the NVMe drive hosting your volume
-fails, then that instance of your app goes down. There's no way around that." That describes Fly,
-and the same holds for a Droplet's disk.
+the store's disk is inside it, with no volume to snapshot or reattach. If that disk fails, the store
+on it is gone with the machine, and only a copy elsewhere survives.
 
 **The thing that would make a file store regrettable is not the engine.** SQLite is about as
 battle-tested as software gets. The replication tooling is not: it is a much smaller project, and
@@ -37,11 +35,9 @@ both entries with "we wouldn't notice" as their answer.
 Designing the recovery paths and saying how many there are, what each one costs, and what each one
 fails to protect against. The leading shape — recorded here as a candidate rather than an answer — is
 **more than one independent path, chosen so that they fail for different reasons**: continuous
-replication to object storage, the platform's own volume snapshots, and a periodic independent dump
-(`VACUUM INTO` to a second file, shipped elsewhere) that shares no code with the replication tool.
-On a Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), the
-platform's snapshots are DigitalOcean's backups or snapshots of the whole disk, taken while the server
-runs. Whether such an image holds a consistent store is for this question to establish.
+replication to object storage, DigitalOcean's backups or snapshots of the whole disk taken while the
+server runs, and a periodic independent dump (`VACUUM INTO` to a second file, shipped elsewhere) that
+shares no code with the replication tool. Whether such an image holds a consistent store is for this question to establish.
 
 Three cheap mechanisms that fail independently are worth more here than one good mechanism, because
 the failure being guarded against is precisely that the one good mechanism was quietly not working.
@@ -89,10 +85,9 @@ else.
 *One continuous replication path.* Litestream to object storage, roughly a one-second recovery point.
 Simplest, and it is the single-dependency case this question exists to examine.
 
-*Replication plus the platform's snapshots.* Adds a path that fails for unrelated reasons, at the cost
-of a coarser recovery point on the second path and a restore that produces a new volume to reattach.
-On a Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), a
-restore creates a new Droplet from the disk image rather than a volume to reattach. Backups are priced
+*Replication plus DigitalOcean's disk images.* Adds a path that fails for unrelated reasons, at the
+cost of a coarser recovery point on the second path. A restore creates a new Droplet from the disk
+image, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). Backups are priced
 at 20 or 30% of the Droplet, per [../constraints.md](../constraints.md), "Hosting — DigitalOcean has
 no spending cap".
 

@@ -56,16 +56,14 @@ folder covered the mechanism that deploys it.
 configuration. Deploys are whatever the maintainer's machine happened to contain, they cannot happen
 when that machine is not present, and nothing enforces that checks ran.
 
-*The platform's own git integration.* Push to a branch, the platform builds and deploys. Nothing to
-maintain and nothing that could go wrong in a way that is ours, at the cost of a build environment
-described by the vendor rather than by us — which bears on
-[how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
-This does not apply on a Droplet, which brings nothing to run the app with, per
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
-
-*A pipeline we define, triggered by a push or a merge.* The same trigger with the build steps written
+*A pipeline we define, triggered by a push or a merge.* The build steps are written
 down, so the deployed artifact is reproducible and checks can gate it. More configuration, and a
 second environment whose drift from the local one is a real failure mode.
+
+A host's own git integration, where a push makes the platform build and deploy, is not open: a
+Droplet brings nothing that runs the app, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) and
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
 ## Findings
 
@@ -85,16 +83,14 @@ problem rather than an oversight. Whether this question's answer is where that g
 the gate sits earlier at commit time, is the one real interaction between the two.
 
 **This is not the same question as reproducing the deployed environment locally.** They are commonly
-answered by one tool and they are separable: a hand-run deploy of a container image built locally
-gives strong parity with no pipeline, and a hosted pipeline building from a vendor buildpack gives a
-pipeline with weak parity. See
+answered by one tool and they are separable: a hand-run deploy of a release built in a local Linux
+machine matching the Droplet gives strong parity with no pipeline, and a hosted pipeline building on
+its vendor's runner image gives a pipeline with weak parity. See
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
-The container example does not apply on the Droplet, which runs no container runtime, per
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
 
-**Nothing about M1 requires secrets.** The milestone is a hard-coded response with no database, so
-there is nothing to inject and no secret handling to design. That becomes real at M3 and should not
-be built before then.
+**The app needs no secrets in M1.** The milestone is a hard-coded response with no database, so
+there is nothing to inject into the running app. That becomes real at M3 and should not be built
+before then. The deploy itself does hold one credential, the SSH key below.
 
 *Reasoned — from M1's definition in [README.md](README.md).*
 

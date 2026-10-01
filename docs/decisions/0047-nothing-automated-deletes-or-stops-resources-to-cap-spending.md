@@ -51,8 +51,9 @@ Each property's source is listed in [ADR-0046](0046-no-standing-digitalocean-tok
 
 **Why reporting is enough for traffic.** Outbound transfer beyond the pool costs $0.01 per GiB. At a
 sustained 1 Gbps, which is an assumption about the Droplet's network and not a measured figure, that
-is about $108 a day, so $1,000 takes about nine days of ignored alerts. A traffic alert fires within an
-hour.
+is about 10,000 GiB, or $100, a day, so $1,000 takes about ten days of ignored alerts. The traffic
+alert in the runbook fires once a high rate has lasted an hour. How soon DigitalOcean Monitoring
+delivers it after that is not documented.
 
 ## Enforced by
 
@@ -77,8 +78,8 @@ needs a new one that supersedes it.
   10: it stops the charge by taking the site down. **Reverses if** the maintainer decides an outage is
   better than an overage.
 - **Not yet.** M1 slice 4 creates the first billed machine, and
-  [ADR-0045](0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)'s **Enforced by**
-  points at this question.
+  [ADR-0045](0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)'s spend alert
+  needs a rule for what happens when it fires.
 
 ## Risk
 

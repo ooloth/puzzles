@@ -2,6 +2,7 @@
 number: 0044
 status: accepted
 date: 2026-09-30
+amended: 2026-10-01
 ---
 
 # 0044 — The server runs as systemd services, without containers
@@ -18,7 +19,8 @@ date: 2026-09-30
   [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md),
   and a driver with an addon would change where releases are built, not this arrangement.
 - "Hosting — a DigitalOcean Droplet starts with no swap" in [../constraints.md](../constraints.md):
-  about 640 MB is free on a 1 GB Droplet, and running out ends a process.
+  about 600 MB is free on a 1 GB Droplet once the app, Caddy and Litestream run, and running out ends
+  a process.
 - [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
   the production-like run uses the production arrangement.
 - The maintainer's aims recorded in [where does this run?](../questions/where-does-this-run.md): "it

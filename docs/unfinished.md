@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-30
+updated: 2026-10-01
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -29,13 +29,11 @@ constraint on what gets built, not as a description of what exists.
 **You'll see** [runbooks/set-up-the-hosting-account.md](runbooks/set-up-the-hosting-account.md), with
 every setting the account is meant to have, written as steps with no status.
 
-**Actually** three of them were not done on 2026-09-30: the GitHub passkey, and the production
-Droplet's metrics agent and traffic alert, since no production Droplet exists yet. The two teams,
-their spend alerts, Secure Sign-In and the backup payment method were set by the maintainer that day.
-Whether the mail rule exists was not reported.
+**Actually** the GitHub passkey, the production Droplet's metrics agent and its traffic alert do not
+exist yet, and nobody has confirmed the mail rule.
 
-**So** don't read the runbook as the account's current state. The agent and the traffic alert belong
-to M1 slice 4's issue. Delete this entry once the three are done.
+**So** don't read the runbook as the account's current state. Delete this entry once those four are
+in place.
 
 ### The doc checker is written in a language no record sanctions
 
@@ -44,19 +42,15 @@ to M1 slice 4's issue. Delete this entry once the three are done.
 check. Nothing runs it automatically yet.
 
 **Actually** [ADR-0030](decisions/0030-typescript-outside-the-browser-runs-on-node.md) says every
-repo script runs on Node, so this file contradicts a settled record. It is the only artifact in the
-repository that does.
+repo script runs on Node, so this file contradicts a settled record, and `pnpm test` needs `python3`
+because `scripts/check-docs.test.ts` runs it. Its rewrite is issue #2.
 
-**So** don't add a second Python script. Rewriting this one needs nothing else to land first —
-Node 26 runs TypeScript unflagged, so a dependency-free checker runs with nothing installed, exactly
-as the Python one does.
+**So** don't add a second Python script.
 
 ### The test runner and the pnpm pin look chosen and are not
 
 **You'll see** `*.test.ts` files under `src/` running under `node --test`, and `"packageManager":
-"pnpm@12.5.1"` in `package.json`. Client test files cover modules that need no DOM, and are
-excluded from `src/client/tsconfig.json` and typechecked by the root `tsconfig.json`, because the
-client config has no Node types for `node:test`.
+"pnpm@12.5.1"` in `package.json`.
 
 **Actually** both were put in place so M1's first slice could be installed and tested. They are
 interim, and they come ahead of [what runs the tests?](questions/what-runs-the-tests.md) and

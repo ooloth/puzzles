@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-27
+updated: 2026-10-01
 update_when: you were surprised
 decays: slow
 status: active
@@ -47,6 +47,14 @@ Bites you when: a spike outside the repo installs nothing and the error looks li
 sandbox failure. Give the scratch project a `packageManager` field, or use `npm` there.
 
 <!-- Template:
+
+### A client test file is typechecked by the root config, not the client's
+
+Actually: `src/client/tsconfig.json` excludes `*.test.ts`, because the client config has no Node
+types for `node:test`, and the root `tsconfig.json` typechecks those files instead. Client test files
+cover only modules that need no DOM.
+Bites you when: a client test fails `pnpm typecheck` in a way the client config would not explain,
+or a test needs the DOM.
 
 ### <What looks true but isn't>
 

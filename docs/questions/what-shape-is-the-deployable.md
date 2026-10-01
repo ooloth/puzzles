@@ -17,17 +17,16 @@ is a directory holding the built JavaScript and its `node_modules`. What is left
 Node is installed on the host and patched by its package manager, or carried as an exact binary
 inside each release.
 
-**The candidates are not equivalent to a host.** A directory of files plus a runtime installed on
-the machine, a container image, and a single executable are three different things to build, to
-ship, to roll back and to reproduce. They differ in what the platform must support, in how large
-the artifact is, in how long a deploy takes, and in whether the runtime version travels with the
-code or is a property of the machine — which is the part that reaches
+**The two ways of carrying Node are not equivalent.** Installed on the host, Node is patched by the
+package manager without a deploy, and can change under a running release. Carried inside each
+release, it is exact and travels with the code, and each Node patch needs a deploy. Which one holds is
+the part that reaches
 [what pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md).
 
-**It bears on rollback, which nothing else here covers yet.** Rolling back to an image is a
-different operation from rolling back to a commit and reinstalling, and
+**It bears on rollback.** Rolling back a release whose Node is inside it restores the old runtime too;
+rolling back one that uses the host's Node does not, and
 [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 inherits
-whatever is chosen.
+whichever is chosen.
 
 ## What would settle it
 
@@ -55,28 +54,20 @@ was run and it does not.
 
 ## Options
 
-*A directory of files, with the runtime installed on the machine.* Simplest to build and the
-smallest artifact. The runtime version is then a property of the machine rather than of the
-release, so two machines can run the same code differently.
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles this
-shape, and the runtime installed on the machine is one of the two ways of carrying Node left here.
+*Node installed on the host, patched by its package manager.* A release is then the built JavaScript
+and its `node_modules`, and the runtime version is a property of the machine. Two machines can run
+the same release on different Node versions, and a patch reaches the app with no deploy.
 
-*A container image.* The runtime travels with the code, so a release is reproducible and rollback is
-selecting an older tag. Costs a registry, a build step and image size on every deploy. This does
-not apply on the Droplet, which runs no container runtime, per
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
+*Node carried as an exact binary inside each release.* The runtime travels with the code, so a
+release runs the same everywhere and rolls back with its runtime. Each Node patch needs a deploy, and
+each release is larger by the size of the binary.
 
-*A single executable.* Node documents this as "Single executable applications" at stability
-"1.1 - Active development" on the v26 line. One file to copy, nothing installed on the host. The
-stability tier is the thing to weigh, and whether the build is worth its complexity for one small
-server. This is not the release shape that
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles, a
-directory with its `node_modules`.
+*Not yet.* Slice 4 installs Node on the Droplet, so it has to be carried one way or the other.
 
-*Not yet.* The shape is mostly downstream of where it runs, and
-[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) and
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settle both,
-so deferring now covers only how Node is pinned and patched.
+A container image and a single executable were also candidates for the release's shape.
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles the
+shape as a directory of built JavaScript and its `node_modules`, run by systemd with no container
+runtime, so neither is open.
 
 ## Findings
 

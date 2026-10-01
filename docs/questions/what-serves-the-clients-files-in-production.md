@@ -59,9 +59,13 @@ arrange. The process spends work on bytes that never change, and cache headers a
 *A content delivery network in front, the API behind.* Assets served close to the player and cached
 properly with little effort. Introduces the question of whether the browser still sees one origin.
 
-*Whatever the host provides.* Several platforms serve static assets as a feature of deploying. Least
-work, and it makes the arrangement the platform's rather than ours to reason about. A Droplet does
-not offer this, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
+*The front, serving the files from disk.* Whatever terminates TLS in front of the app serves the
+client's files itself and passes only `/api/` to the server, per
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). The
+Node process never touches a static byte, and the cache headers are the front's configuration.
+
+Static hosting supplied by the platform is not open: a Droplet offers none, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ## Findings
 

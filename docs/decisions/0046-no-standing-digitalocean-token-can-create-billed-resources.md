@@ -82,7 +82,9 @@ Asserted only.
 
 - **A standing token that can create Droplets only**, for a pipeline or for recovery. Its case is that
   recovery and deploys could then run with no person. It fails property 1: at tier 2 it can create ten
-  Droplets of up to $84, about $840 a month, and the tier rises by itself with payment history.
+  Droplets of up to $84, about $840 a month, and the tier rises by itself with payment history. A
+  token held by hand could create the same while it exists; what separates them is that a hand-held
+  token's exposure ends at its expiry, and a standing token's never does.
   **Reverses if** DigitalOcean adds a spend cap per token or per team, or a later record accepts that
   cost for no-person recovery.
 - **A standing token with broad scopes**, which is how `doctl` is usually set up. It fails property 1:

@@ -12,9 +12,7 @@ resolves_into: decision
 commits to surviving host replacement, and the machine cannot deliver that alone.** The host is a
 DigitalOcean Droplet, per
 [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and the store's disk
-is inside it. Fly's own words: "If your app needs a volume to function, and the NVMe drive hosting
-your volume fails, then that instance of your app goes down. There's no way around that." That
-describes Fly, and the same holds for a Droplet's disk. The third of that record's three events is
+is inside it, so a failed disk takes the store with the machine. The third of that record's three events is
 kept by whatever exists off the machine, and by the procedure that puts it back.
 
 **This is the difference between an outage measured in minutes and one measured in hours**, and it is
@@ -68,7 +66,10 @@ cheaply enough to actually be rehearsed.
 
 *The ordinary deploy pipeline, with restore as a step.* If a deploy already provisions and configures,
 recovery is a deploy plus a restore — which makes the recovery path something exercised continuously
-rather than annually.
+rather than annually. Provisioning needs a token that can create a Droplet, and
+[ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) keeps no
+such token in a pipeline, so this option needs a record accepting that token's cost, as the finding
+on it below says.
 
 *A warm standby holding a continuously restored copy.* The only option that gets recovery under a few
 minutes, and the most to build and pay for. Needed only if the downtime answer demands it.

@@ -8,13 +8,12 @@ resolves_into: decision
 
 ## Why it matters
 
-**M3 is where the first real secret exists**, because that is where the store gains a row and — if
-the store is reached over a network — a connection string with credentials in it.
-[What deploys the code?](what-deploys-the-code.md) states plainly that "Nothing about M1 requires
-secrets. The milestone is a hard-coded response with no database, so there is nothing to inject and no
-secret handling to design." That stops being true one milestone later.
+**The running app gets its first secret at M3 at the earliest**, when the store and its off-machine
+copy arrive. In M1 the app is a hard-coded response with nothing to inject, per
+[what deploys the code?](what-deploys-the-code.md). The deploy holds a credential from M1, the SSH key
+that reaches the Droplet, and how that key is kept is part of this question.
 
-**The store contributes no secret at all, which is smaller than this question was framed for.**
+**The store contributes no secret at all.**
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) makes the store a file
 the process opens, so there is no credential to hold, rotate or leak, and no copy of one needed on a
 developer's laptop or in whatever runs the checks. What remains are secrets that have nothing to do
@@ -55,17 +54,20 @@ that the embedded alternative does not have at all.
 
 ## Options
 
-*Whatever the host provides.* Environment variables set through the platform's own secret storage.
-Least to build, and it ties the arrangement to the host in a small way. A Droplet does not offer
-this, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
+*Files on the machine, readable only by the service.* The deploy writes each secret to a file that
+systemd hands to the app at start, so nothing outside the Droplet holds it at run time. Least to
+build on a bare machine, and the secret is then only as safe as the deploy that writes it.
 
 *A dedicated secret store.* A managed service holding secrets that the process fetches at start-up.
 More moving parts than this system's size justifies today, and the option that scales past one
 deployable.
 
-*No secret at all.* Not available. It was the honest zero on this axis while the store might have
-needed a credential; the store does not, and the remaining secrets — deploy, publish, backup
-destination — are not removed by that.
+*No secret at all.* Not available. The store needs no credential, per
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md), but the deploy, the
+publish path and the backup destination each still need one.
+
+Secret storage supplied by the host is not open: a Droplet offers none, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 ## Findings
 

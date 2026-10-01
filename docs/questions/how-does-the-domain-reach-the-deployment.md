@@ -73,10 +73,10 @@ written about.
 browser and the server, so the resolution test is whatever the host's own addressing makes it. The
 origin then owns TLS — issuance, renewal and the failure when renewal does not happen.
 
-*The platform's default hostname, with no custom domain.* The honest "not yet". Every candidate host
-issues a working URL, which is enough to see M1 running. It defers the question rather than answering
-it, and defers it past the point where a cookie would be set. A Droplet does not offer a platform
-hostname, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
+*The Droplet's own IP address, with no domain.* The honest "not yet". It is enough to see M1
+running, since a Droplet has a public address and no hostname of its own, per
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). It defers the question
+rather than answering it, past the point where a cookie would be set.
 
 ## Findings
 

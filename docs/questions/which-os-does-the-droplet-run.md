@@ -117,8 +117,7 @@ and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and C
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the second pass:** Ubuntu 24.04, Ubuntu 26.04, Debian 13, and Rocky and
-AlmaLinux 9 and 10.
+**Still standing after the third pass:** Ubuntu 24.04, Ubuntu 26.04 and Debian 13.
 
 **Out, each on the one property it fails:**
 
@@ -131,6 +130,13 @@ AlmaLinux 9 and 10.
   as standard support.
 - **Rocky and AlmaLinux 8** fail property 4: active support ended in 2024 and security support ends
   2029-05-31. *Same source.*
+- **Rocky and AlmaLinux 9 and 10** fail property 1: AlmaLinux 9 issued 62 kernel advisories in the
+  year to 2026-10-02 against Debian 13's 16, so staying patched takes about three times the reboots,
+  each an outage of the one machine. Their one advantage, support to 2032 and 2035 on property 4, is
+  matched by Ubuntu 24.04 under Ubuntu Pro. *Measured, 2026-10-03, third pass.* Agreed by the
+  maintainer on 2026-10-03. Reverses if their kernel advisories fell to the Debian family's rate, or
+  if Ubuntu Pro's free tier stopped covering this project and the Debian family's support then ran
+  out years earlier.
 - **CentOS Stream 10** fails property 7: it "tracks just ahead of Red Hat Enterprise Linux (RHEL)
   development", so it receives changes before the stable product does. *Sourced —
   <https://www.centos.org/centos-stream/>, opened by me on 2026-10-02.* Reverses only if CentOS Stream
@@ -429,4 +435,74 @@ right on property 7, and far less help to find. Ubuntu 26.04 sits beside 24.04 w
 one point release in the field, and the same automatic restarts. What separates Ubuntu 24.04 from
 Debian 13 is Livepatch and the larger community on Ubuntu's side, against more memory free, no
 automatic restarts and a stricter update policy on Debian's.
+
+### Fourth pass 2026-10-03: resource use zoomed, and regressions searched deeper
+
+*The maintainer asked on 2026-10-03 for resource use to be zoomed, since what the OS consumes is a
+cost to minimise. Property 5 is split into memory at steady state, memory with unneeded services off,
+the package manager's peak, disk, background CPU and network, and how long a reboot takes, which is
+also how long each reboot's outage lasts under property 1.*
+
+**Measured on one `s-1vcpu-1gb` Droplet per survivor in `tor1`**, created 02:13 UTC and deleted 02:56
+UTC on 2026-10-03, each read over SSH:
+
+- **Memory available to the app.** `free`'s "used" figure proved unstable on Ubuntu 26.04, because it
+  counts kernel memory that dropping caches does not release, so available memory is the figure that
+  matters. Readings were taken with the page cache dropped, at different points: 11 minutes after
+  first boot, then three readings a minute apart from 5 minutes after a reboot, as shipped and again
+  after switching off services.
+  - Debian 13: 782, 784 and 782 MB, and 769 MB a few minutes later. Steady.
+  - Ubuntu 24.04: 726 MB, then 701 to 726 MB as shipped, then 738 to 764 MB with snapd, multipathd,
+    ModemManager and udisks2 switched off, which nothing here needs.
+  - Ubuntu 26.04: 646 MB, then 793 to 795 MB as shipped, then 674 to 679 MB trimmed, and 655 MB a few
+    minutes later. It varies by 150 MB between readings, for no cause found. Its anonymous and
+    unreclaimable kernel memory at the last reading was about 102 MB against Debian's 63.
+- **Package manager.** `apt-get update` followed by installing `nginx` lowered available memory by
+  134 MB on Debian and Ubuntu 26.04 and 160 MB on Ubuntu 24.04. All three succeeded.
+- **Disk used** after first boot: Debian 967 MB, Ubuntu 24.04 1,898 MB, Ubuntu 26.04 2,181 MB, of
+  about 24 GB. Disk does not bind.
+- **Background load over 10 idle minutes:** CPU busy 0.50% on Debian, 0.10% on Ubuntu 24.04 and
+  0.26% on Ubuntu 26.04, and 24 to 54 KB of network traffic. One window each; neither binds.
+- **Running services** as shipped: Debian 13 to 14, Ubuntu 24.04 19 to 20, Ubuntu 26.04 20 to 21.
+  Debian runs no snapd, multipathd, ModemManager, udisks2 or polkit, and none of them is needed here.
+- **Reboot outage**, from `systemctl reboot` until SSH answered, three times each: Debian 17.7 to
+  18.1 seconds, with `systemd-analyze` reporting about 12; Ubuntu 24.04 24.7 to 30.7 seconds, about 18
+  to 19; Ubuntu 26.04 27.9 to 30.6 seconds, about 20 to 22. SSH answering is a proxy for the app
+  answering, which was not running.
+
+*Measured, 2026-10-03, as above.*
+
+**What the reboot figures mean for property 1, reasoned rather than measured.** With a monthly
+maintenance window, each candidate reboots about 12 times a year. Livepatch lets Ubuntu leave its
+critical and high kernel fixes, about 7 a year on 24.04, for that window. On Debian those either wait
+for the window unpatched or take a reboot outside it. Even counting them all as extra reboots, Debian's
+year is about 19 reboots of 18 seconds, against Ubuntu 24.04's 12 of about 28: roughly 340 seconds of
+outage each. So Livepatch buys Ubuntu earlier patching of the worst kernel bugs, not less time down.
+
+**Regressions, searched deeper.** A research agent on 2026-10-03 read Debian's advisory indexes for
+2025 and 2026 in full, and Ubuntu's regression notices one at a time where its search reached them:
+
+- Debian 13, 13.8 months in the field: 4 regressions confirmed by Debian, in libxslt, nginx's
+  development package, jq and webkit2gtk, none of which stops a running server. About 0.29 a month.
+- Ubuntu 24.04, 29.2 months: at least 13 confirmed, about 0.45 a month, including
+  [USN-8102-2](https://ubuntu.com/security/notices/USN-8102-2), a snapd security update that "caused a
+  regresision for Ubuntu 24.04 LTS while installing the package", published 17 March 2026, and an
+  nginx update that crashed external modules.
+- Ubuntu 26.04, 5.3 months: at least 5 confirmed, about 0.94 a month, three of them one nginx fix
+  revised several times.
+
+The Debian count is close to complete and the Ubuntu counts are lower bounds, since the agent could
+not reach Ubuntu's full notice list or Launchpad's search. So Ubuntu's real rate is at least what is
+shown.
+
+*USN-8102-2 opened by me on 2026-10-03; the rest is a research agent's reading the same day, not
+re-opened.*
+
+**Where the fourth pass leaves the field.** Every survivor passes properties 1 to 5 in the sense of
+each property's sentence, so what is left is how well. Debian 13 leaves the most memory and the
+steadiest, reboots in about two thirds of Ubuntu's time, runs the fewest services and needs none
+switched off, does not restart services after updates, and has shipped the fewest regressions. Ubuntu
+24.04's advantages are support to May 2034 rather than June 2030, which depends on Ubuntu Pro's free
+tier, and Livepatch for the worst kernel bugs. Ubuntu 26.04 adds nothing over 24.04 except two more
+years of support, against the least steady memory and the highest rate of regressions.
 

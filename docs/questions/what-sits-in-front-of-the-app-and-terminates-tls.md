@@ -143,9 +143,8 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the first pass:** Caddy, and nginx with an ACME client, either its native
-module or certbot. Angie and freenginx, both forks of nginx, were found by the enumeration and are
-not scored yet.
+**Still standing after the second pass:** Caddy; nginx with an ACME client, either its native
+module or certbot; and Angie, a fork of nginx with ACME built in.
 
 **Out, each on the one property it fails:**
 
@@ -159,6 +158,8 @@ not scored yet.
 - **The Node process terminating TLS itself** fails property 6: Node's QUIC is experimental, behind
   `--experimental-quic`. Reverses once Node ships stable HTTP/3. *Sourced by a research agent from a
   search summary; Node's page returned 404.*
+- **freenginx** fails property 11: it publishes source and Windows binaries only, with no Linux
+  package repository. *Sourced by a research agent, 2026-10-03.* Reverses if it publishes packages.
 - **River, NGINX Unit and Varnish** fail property 11: River's last release is from August 2024 and
   says "no expectation of stability", Unit is archived, and Varnish's open-source edition is archived
   and has no TLS. *Same source.*
@@ -279,3 +280,17 @@ support it was not established.
 Neither Caddy nor nginx fails a property. Caddy is partial on property 5 and nginx on properties 1
 and 4. The next pass scores Angie and freenginx, zooms into properties 1, 4 and 5, and observes
 what reading cannot: issuance and renewal on a real certificate, and a package upgrade under load.
+
+### Second pass 2026-10-03: the two forks of nginx
+
+*A research agent scored Angie and freenginx on 2026-10-03; not re-opened by me.*
+
+- **Angie** has ACME built in since 1.11.0, with crash and DNS-challenge fixes since. Its docs do not
+  say whether a valid certificate keeps being served when renewal fails, and a reload skips its
+  two-hour wait after an error, so repeated reloads during a failure can reach the authority's
+  limits. Its active health checks are in its paid edition only, as with nginx. It has official
+  packages for Ubuntu 24.04 and 26.04, Debian 13, and the RHEL family's 9 and 10 rebuilds. What its
+  package does on upgrade is unknown, since the scripts are not public. It is made by Web Server LLC,
+  which sells the paid edition; 1.12.2 shipped 2026-09-17.
+- **freenginx** has no ACME and no Linux packages, which is its elimination under **Options**. It is
+  maintained by a very small team and ships about monthly.

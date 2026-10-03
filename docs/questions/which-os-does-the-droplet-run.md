@@ -117,8 +117,8 @@ and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and C
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the first pass:** Ubuntu 24.04, Ubuntu 26.04, Debian 13, and the RHEL family
-on its 9 and 10 releases (Rocky, AlmaLinux, CentOS Stream 10).
+**Still standing after the second pass:** Ubuntu 24.04, Ubuntu 26.04, Debian 13, and Rocky and
+AlmaLinux 9 and 10.
 
 **Out, each on the one property it fails:**
 
@@ -131,6 +131,10 @@ on its 9 and 10 releases (Rocky, AlmaLinux, CentOS Stream 10).
   as standard support.
 - **Rocky and AlmaLinux 8** fail property 4: active support ended in 2024 and security support ends
   2029-05-31. *Same source.*
+- **CentOS Stream 10** fails property 7: it "tracks just ahead of Red Hat Enterprise Linux (RHEL)
+  development", so it receives changes before the stable product does. *Sourced —
+  <https://www.centos.org/centos-stream/>, opened by me on 2026-10-02.* Reverses only if CentOS Stream
+  stopped running ahead of RHEL.
 - **Alpine** fails [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md),
   which runs the app as systemd services: Alpine uses OpenRC. **Flatcar and Fedora CoreOS** fail it
   too, being built to run containers with no package manager for the host. *Sourced by a research
@@ -263,3 +267,76 @@ January, another May).
 **The first pass leaves five candidates standing and three cells unknown on every one of them**, so
 it is not finished. The next pass zooms into property 7 and resolves properties 2 and 5 by booting
 each survivor on a Droplet.
+
+### Second pass 2026-10-03: booting every survivor, and property 7 zoomed
+
+**Booted on DigitalOcean.** One `s-1vcpu-1gb` Droplet in `tor1` per surviving image, created at
+01:00 UTC on 2026-10-03 from the `puzzles-experiments` team, given a `#cloud-config` that wrote a file
+and ran a command, and deleted at 01:14 UTC. Each was read over SSH. Then each ran a real upgrade
+with its package manager, `apt-get upgrade` or `dnf upgrade --refresh`, while the lowest available
+memory was sampled every 0.2 seconds. One run per image.
+
+**Property 2: cloud-init ran on every image.** On all eight, `cloud-init status --long` reported
+`done` from `DataSourceConfigDrive`, and both the file and the command's output were present. CentOS
+Stream 10 reported `degraded done` over a missing module that nothing used. So DigitalOcean's page
+naming only Ubuntu and CentOS is out of date, and property 2's Droplet half passes everywhere. Its
+Mac half is unchanged: only Ubuntu has a sourced route, Multipass.
+
+**Property 5: memory.** After the upgrade, with the page cache dropped:
+
+- Debian 13: 188 MB used, 778 MB available, 13 services running.
+- Ubuntu 24.04: 234 MB used, 726 MB available, 19 services.
+- AlmaLinux 9: 236 MB used, 720 MB available, 18 services.
+- AlmaLinux 10: 273 MB used, 680 MB available, 19 services.
+- Ubuntu 26.04: 364 MB used, 592 MB available, 20 services.
+- Rocky 10: 198 MB used, 564 MB available, 17 services.
+- Rocky 9: 232 MB used, 532 MB available, 17 services.
+
+**Rocky reserves 192 MB for a crash kernel.** Its kernel command line carries
+`crashkernel=1G-4G:192M,...` and `kdump` is enabled, so a Rocky Droplet starts with about 765 MB rather
+than about 960. AlmaLinux 9 and 10 do not reserve it. The reservation can be removed, which is a
+setup step the others do not need.
+
+**No package manager was killed for lack of memory**, and the kernel logged no out-of-memory event on
+any of them. The lowest available memory during the upgrade was 166 MB on Rocky 9 and 167 MB on
+Rocky 10, 345 MB on CentOS Stream 10, about 460 MB on AlmaLinux, and 506 to 635 MB on Ubuntu and
+Debian. The app, Litestream and the front were not running, and the spikes measured them at about
+200 MB together, so on Rocky that headroom would be gone. The apt runs were lighter than the dnf ones:
+`unattended-upgrades` had already applied most updates during boot on Ubuntu and Debian, so they took
+24 to 47 seconds against 215 to 471 for dnf, which upgraded the kernel.
+
+**Property 1: automatic updates by default.** Ubuntu 24.04, Ubuntu 26.04 and Debian 13 boot with
+`unattended-upgrades` enabled and running, and `APT::Periodic::Unattended-Upgrade "1"`. Every RHEL-family
+image boots with only `dnf-makecache.timer`; `dnf-automatic` is not installed. `pro status` on both
+Ubuntu Droplets lists Livepatch as available, on kernels `6.8.0-142-generic` and `7.0.0-31-generic`.
+
+**The RHEL family's 10 releases boot on this plan.** Every Droplet's CPU reported `avx2`, `bmi2`, `fma`
+and `movbe`, which x86-64-v3 needs.
+
+*Measured, 2026-10-03, as above. One run per image; memory read once after the upgrade.*
+
+**Property 7, zoomed into update policy, regressions shipped, and maturity**, by a research agent on
+2026-10-03. Searches were shallow, so the counts are lower bounds, and Ubuntu's are the most findable
+because Launchpad tags regressions.
+
+- **Policy within a release.** Debian's stable updates carry security fixes and serious problems only.
+  Ubuntu's carry bug and security fixes and also move to newer kernels through its hardware-enablement
+  series. The RHEL family keeps one kernel base per major release and backports selected features at
+  each minor release.
+- **Regressions found, 2023 to 2026.** Two for Ubuntu 24.04, on encrypted boot and network boot. None
+  confirmed for Debian 13, Rocky and AlmaLinux 9 and 10, or Ubuntu 26.04. Debian's kernel can still
+  ship one: [bug #1057843](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1057843), "ext4 data
+  corruption in 6.1.64-1", reported 2023-12-09 against Debian 12 and fixed in 6.1.66-1, reached the
+  archive, where automatic updates could install it.
+- **Maturity.** Ubuntu 26.04 was released 2026-04-23 and has had one point release. Debian 13 has had
+  seven since 2025-08-09. Rocky and AlmaLinux 9 have had eight, and 10 has had two.
+- **Rebuild lag.** Rocky states security updates follow RHEL's within 24 to 48 hours; no independent
+  measurement was found, and none for AlmaLinux, which since 2023 aims to be compatible with RHEL
+  rather than identical to it.
+
+*The Debian bug was opened by me on 2026-10-03; the rest is a research agent's reading the same day,
+not re-opened.*
+
+**What still separates the survivors** is the reboot half of property 1. Only Ubuntu has free live
+kernel patching, and only "for personal use", so on Debian, Rocky and AlmaLinux every kernel fix waits
+for a reboot. Whether this project counts as personal use is not established.

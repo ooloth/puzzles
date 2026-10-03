@@ -73,6 +73,7 @@ closes, and the slices left keep their numbers because records cite them by numb
      - **Must answer:** [what-sits-in-front-of-the-app-and-terminates-tls](what-sits-in-front-of-the-app-and-terminates-tls.md) — or else nothing chooses between the app's instances, so the first deploy drops requests, and slice 5 adds TLS with whatever front happened to be installed. Slice 4 is observed over HTTP on the Droplet's address, and TLS is first seen at slice 5, once the domain points at it. Scored side by side with the OS, since each constrains the other
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player revalidates every asset on the network [../problem.md](../problem.md) names as the modal case. Costs a change to the front and the serving path together
+     - **Must answer:** [when-are-updates-applied-to-the-machine](when-are-updates-applied-to-the-machine.md) — or else [what-shape-is-the-deployable](what-shape-is-the-deployable.md) decides when Node is patched with no policy for when anything else is, and the setup leaves Debian's packages updating as shipped while the front and Node update only by hand
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
@@ -399,8 +400,9 @@ players are losing work, and nothing currently could tell us either way.
     unless it is forced to.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
-12. [How is the server operated?](how-is-the-server-operated.md) — restarting it, patching it, and
-    noticing it has stopped. It sits here because noticing an outage is this milestone's theme. The
+12. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
+    stopped. Patching moved to slice 4 of M1, as
+    [when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md). It sits here because noticing an outage is this milestone's theme. The
     server runs on a bare Droplet as systemd services, per
     [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
     systemd restarts it and the rest is ours. Its access-and-hardening half is

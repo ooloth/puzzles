@@ -8,8 +8,13 @@ resolves_into: decision
 
 ## Why it matters
 
-Running a server is not the same as choosing one. Something has to restart it when it dies, tell
-someone when it stops answering, and keep it patched.
+Running a server is not the same as choosing one. Something has to restart it when it dies, and tell
+someone when it stops answering.
+
+**When it is patched is a separate question.** [When are updates applied to the
+machine?](when-are-updates-applied-to-the-machine.md) was split out on 2026-10-03 and sits at M1 slice
+4, because how Node is carried cannot be answered without it. This question no longer covers
+patching.
 
 **Getting onto the machine is a separate question.** Access, hardening and the lockout route are
 [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at M2, because
@@ -52,8 +57,10 @@ operational plan for a single virtual machine and that no question in this folde
 
 N/A — this resolves into a set of arrangements rather than a choice between alternatives. What each
 covers: process supervision and restart, health checking from outside the machine, alerting to
-somewhere the maintainer actually reads, unattended security updates, remote access that survives a
-broken SSH configuration, and backups.
+somewhere the maintainer actually reads, remote access that survives a broken SSH configuration, and
+backups. Security updates moved to
+[when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md) on
+2026-10-03.
 
 ## Findings
 

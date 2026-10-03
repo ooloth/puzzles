@@ -143,16 +143,23 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the third pass:** nginx with its native ACME module, and Angie, a fork of
-nginx with ACME built in. Both were measured on Debian 13, which leads
+**Still standing after the third pass:** Caddy, nginx with its native ACME module, and Angie, a fork
+of nginx with ACME built in, all measured on Debian 13, which leads
 [which OS does the Droplet run?](which-os-does-the-droplet-run.md).
+
+**Caddy is not eliminated on property 5's measurement alone.** Its package upgrade refused
+connections for about a second, which the third pass measured. The maintainer decided on 2026-10-03
+that the spike measured only a few of the fourteen properties and is not to be read row by row: each
+candidate is scored on the whole experience of maintaining it for years, with every finding read in
+context. Two things also bear on that row. A request refused for a second is retried by the client
+unseen, per the finding on hold length in
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md), so
+property 5 as written may be stricter than the guarantee it serves. And a design where Caddy is
+upgraded only in the monthly maintenance window, beside the reboot, would put its restart inside an
+outage that happens anyway. Both are scored in the fourth pass.
 
 **Out, each on the one property it fails:**
 
-- **Caddy** fails property 5: upgrading its package under load failed 33, 44 and 191 requests in
-  three runs, nearly all refused connections while it restarted, where nginx failed 0 to 3 and Angie
-  none. *Measured, 2026-10-03, third pass.* Reverses if Caddy's package upgraded without restarting,
-  or if upgrading the front were taken out of automatic patching and done by the deploy switch.
 - **HAProxy, Traefik and Envoy** fail property 9: none serves static files from disk, so choosing one
   closes the front's option at
   [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
@@ -354,4 +361,103 @@ edition. Their configuration is close enough that moving from one to the other i
 directives, which under
 [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
 lowers how much stewardship should weigh.
+
+### Fourth pass 2026-10-03: maintaining each one for years
+
+*The maintainer asked on 2026-10-03 for each candidate to be scored on the whole experience of
+maintaining a system that chose it, as a solo maintainer who values simplicity and stability, with
+every finding read in context rather than row by row. So this pass follows the moments a maintainer
+meets over years: setting it up, certificates renewing as their lifetimes shrink, deploys, security
+patches, version upgrades, something breaking, and the project itself changing.*
+
+**Setting it up: the full configuration for this setup, validated.** Each config sends `/api/` to two
+app instances, serves the client's files with a long cache for hashed assets and revalidation for the
+entry document, obtains its certificate, redirects HTTP, and serves HTTP/3. Each passed its own check
+on Debian 13 in a local VM: `caddy validate` for Caddy 2.11.6, `nginx -t` for nginx 1.30.5 with
+`nginx-module-acme` 0.4.1, and `angie -t` for Angie 1.12.2.
+
+- **Caddy:** 27 non-blank lines, with 0-RTT turned off. Certificates, the HTTP redirect and HTTP/3
+  need no lines. Switching between the two instances is its own health check, so the deploy script
+  only starts and stops them.
+- **nginx:** 41 lines, plus a `load_module` line added to `nginx.conf`, a separate file naming the
+  live instance, and `systemctl enable --now nginx`, since its package does not start it. The deploy
+  script rewrites that file and reloads, because the free edition has no active health checks. Each
+  location repeated the `Alt-Svc` header, because "These directives are inherited from the previous
+  configuration level if and only if there are no `add_header` directives defined on the current
+  level"; `add_header_inherit merge`, added in 1.29.3, would remove the repetition.
+- **Angie:** 35 lines, plus the same file naming the live instance and the same reload in the deploy
+  script.
+
+*Measured, 2026-10-03, one validation each in a Debian 13 arm64 VM under QEMU; the header rule
+sourced from <https://nginx.org/en/docs/http/ngx_http_headers_module.html>, opened by me that day.*
+
+**Certificates over years, as lifetimes shrink.** Let's Encrypt will issue 64-day certificates by
+default from 2027-02-10 and 45-day ones from 2028-02-16, and recommends that clients use ACME
+Renewal Information. So renewal runs about eight times a year per certificate, and a renewal that
+fails silently leaves [nobody able to start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md)
+once the certificate expires.
+
+- **Caddy** has issued certificates itself since version 2 in 2020. When Let's Encrypt fails "it will
+  try with ZeroSSL; if both fail, it will backoff and retry", with a "Maximum of 1 day between
+  attempts" for "up to 30 days". An agent found it supports renewal information. It has no built-in
+  alert on a failed renewal.
+- **nginx's ACME module** first released on 2025-08-12 and is at 0.4.1, released 2026-05-01. Its
+  README calls it stable and usable. It supports renewal information since 0.4.0. An agent found no
+  documented retry schedule, fallback authority or alert. Its issue #140, "Segfault after module
+  setup and nginx reload", opened 2026-02-25, is still open, and under this design every deploy
+  reloads nginx.
+- **Angie's ACME** shipped in 1.5.0 in 2024. It renews a fixed 30 days before expiry, retries after
+  two hours, and reports its state through a status endpoint that a monitor can read. An agent found
+  it does not support renewal information yet; its issue #167 is open.
+
+*Let's Encrypt's timeline from <https://letsencrypt.org/2025/12/02/from-90-to-45/>, Caddy's behaviour
+from <https://caddyserver.com/docs/automatic-https>, and nginx's releases and issue #140 from GitHub's
+API, all opened by me on 2026-10-03. Angie's, and the renewal-information support, are a research
+agent's reading that day, not re-opened.*
+
+**Security patches.** All three come from the vendor's own repository on Debian 13, since Debian's own
+Caddy is 2.6.2 and its nginx has no ACME module. Debian's automatic updates cover only Debian's
+repositories by default, so each needs its repository added before anything patches it. An agent
+counted, from each vendor's advisories for 2024 to 2026: nginx 30 CVEs, 21 of them in 2026, with 7
+stable releases carrying security fixes between March and September 2026; Caddy 17 advisories, all
+in 2026, over 6 releases; Angie 12 releases with security fixes, mostly nginx's, ported within about
+two days. So each is patched roughly monthly in 2026. Read beside the OS's reboots, Caddy's restart
+on each patch is about a second of refused connections, which the client retries unseen, against 12
+to 19 reboots a year of about 18 seconds each on Debian 13. And the restart can be moved into the
+monthly reboot window, at the cost of a security fix waiting up to a month.
+
+**Upgrades that change behaviour.** An agent found, from the changelogs: Caddy 2.8.0 removed or renamed
+directives in 2024, and 2.11.6, a patch release, added a 16 KiB header limit and one-minute idle
+timeouts by default; nginx 1.29.7, which became stable 1.30, turned on keep-alive to upstreams and
+HTTP/1.1 to them by default; Angie 1.10.0 and 1.11.0 each needed regression fixes. None of these would
+break the configs above as far as was checked, but each is a release whose notes need reading.
+
+**When something breaks: finding help.** Stack Overflow has 54,455 questions tagged nginx and 367
+tagged caddy, and no Stack Exchange site has an angie tag. Caddy's forum had at least 18 new topics in
+the last month, nginx's at least 11, and Angie's none since June 2026. *A research agent's figures,
+2026-10-03, not re-opened.*
+
+**The project itself.** nginx is owned by F5; its long-time lead left in 2024 to fork it as freenginx
+over F5's handling of security, and four people made about 80% of its commits in the last year. Caddy
+is "a project of ZeroSSL, an HID Global company", Apache-2.0, with 129 commit authors in the last year.
+Angie is made by Web Server LLC, based in Russia, with a team of about ten; no sanctions listing was
+found on the US list, and the EU and UK lists were not checked. *A research agent's reading,
+2026-10-03, not re-opened.*
+
+**Running it on the Mac.** Caddy issues a locally trusted certificate itself with `tls internal`;
+nginx and Angie need an outside tool such as mkcert. *A research agent's reading, 2026-10-03.*
+
+**Memory.** Caddy used 47 to 51 MB in the spikes; nginx's own figures are a few megabytes. With about
+780 MB available on Debian 13 before the app, neither binds.
+
+**Where the fourth pass leaves the field.** Read in context, Caddy is ahead on what a solo maintainer
+lives with most: the shortest configuration, certificates handled by the most mature implementation
+with a second authority to fall back on, the deploy switch built in, and a local certificate built
+in. Its costs are about a second of refused connections per patch, which the client absorbs and the
+reboot window can swallow, about 45 MB more memory, which does not bind, and a smaller community than
+nginx's. nginx is ahead on in-place upgrades, memory and help, but the part of it this setup leans on
+hardest, its ACME module, is a year old, documents no retry or fallback, and has an open crash on
+reload in the design that reloads on every deploy. Angie matches nginx on upgrades but has the least
+help, the smallest team and no renewal information. nginx with certbot in place of its module was a
+first-pass survivor and was not measured or configured here.
 

@@ -115,7 +115,31 @@ and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and C
 
 ## Options
 
-...
+*Scored in the first pass, 2026-10-02, under **Findings**.*
+
+**Still standing after the first pass:** Ubuntu 24.04, Ubuntu 26.04, Debian 13, and the RHEL family
+on its 9 and 10 releases (Rocky, AlmaLinux, CentOS Stream 10).
+
+**Out, each on the one property it fails:**
+
+- **Fedora 43 and 44** fail property 4: Fedora 43's support ends 2026-12-09 and Fedora 44's on
+  2027-06-02. *Sourced by a research agent from endoflife.date, 2026-10-02.* Reverses only if Fedora
+  lengthened its lifecycle.
+- **CentOS Stream 9** fails property 4: support ends 2027-05-31. *Same source.*
+- **Ubuntu 22.04** fails property 4: standard support ends in May 2027, so a forced major upgrade
+  comes within the first year. *Same source.* Reverses if Ubuntu Pro's extended support were counted
+  as standard support.
+- **Rocky and AlmaLinux 8** fail property 4: active support ended in 2024 and security support ends
+  2029-05-31. *Same source.*
+- **Alpine** fails [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md),
+  which runs the app as systemd services: Alpine uses OpenRC. **Flatcar and Fedora CoreOS** fail it
+  too, being built to run containers with no package manager for the host. *Sourced by a research
+  agent, 2026-10-02.*
+
+**Not scored yet:** custom images DigitalOcean can boot, of which NixOS, Arch, openSUSE Leap and
+Gentoo use systemd. A research agent reported that custom images lose IPv6 and DigitalOcean's
+monitoring agent, which [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+needs for the traffic alert. That was not opened by me, so none is eliminated on it yet.
 
 ## Findings
 
@@ -171,3 +195,71 @@ front from a third-party repository only once that repository's origin is added 
 *Quoted in the tenth pass of the hosting question, read with
 `git show ed7f54e:docs/questions/where-does-this-run.md`, from a research agent's reading on
 2026-09-30. No URL is recorded beside it, and it was not re-opened.*
+
+### First pass 2026-10-02: every DigitalOcean image against properties 1 to 7
+
+*Four research agents read vendor pages on 2026-10-02, each assigned properties rather than
+candidates; their full reports were working files and are summarised here. "Opened by me" marks what
+the session that wrote this pass fetched itself.*
+
+**dnf can be killed for lack of memory on a 1 GB machine with no swap.** Fedora's own notice says "DNF
+operations fail (due to being killed by the kernel's out-of-memory handler) in low-memory
+environments, especially systems or containers with 1GB or less of memory and no swap space", for
+Fedora 35 to 40. The Droplet has no swap, per [../constraints.md](../constraints.md). An agent found
+the same reported on Rocky 9 and AlmaLinux 9 with EPEL, and a Rocky moderator stating "Both Rocky8 and
+Rocky9 have a minimum memory requirement of 1.5GB" for cloud images. So on the RHEL family the
+automatic patching that property 1 needs may fail on this machine unless swap is added, which
+property 5 weighs. Ubuntu and Debian use apt, and no equivalent was searched for.
+
+*Sourced — <https://discussion.fedoraproject.org/t/dnf-operations-use-large-amount-of-ram-and-may-fail-in-low-memory-environments/76389>,
+opened by me on 2026-10-02. The Rocky and AlmaLinux reports are a research agent's, not re-opened.*
+
+**Free live kernel patching was found only on Ubuntu.** Canonical: "Livepatch is available free for up
+to 5 machines, for personal use, or evaluation purposes", and "Canonical Livepatch is not a
+replacement for rebooting." An agent found no free live patching for Rocky, only a third-party feed
+with unclear terms for AlmaLinux, and nothing for Debian. Whether a portfolio project counts as
+personal use is not stated.
+
+*Sourced — <https://ubuntu.com/security/livepatch>, opened by me on 2026-10-02. The other
+distributions are a research agent's reading.*
+
+**Support windows**, from endoflife.date as read by an agent: Ubuntu 24.04 standard support to May
+2029, Ubuntu 26.04 to May 2031, Debian 13 security support to August 2028 and LTS to June 2030, Rocky
+and AlmaLinux 9 to 2032-05-31 and 10 to 2035-05-31, CentOS Stream 10 to 2030 (one tracker says
+January, another May).
+
+*Sourced by a research agent, 2026-10-02, from a secondary aggregator. Not re-opened.*
+
+**Traps found, each a cost of the candidate it names rather than an elimination:**
+
+- **Ubuntu 24.04 and 26.04 restart services after updates by default.** `needrestart`, run by
+  `unattended-upgrades`, restarts affected services, which includes the app, Litestream and the
+  front. Each such restart is a deploy the switch did not run.
+- **Nothing reboots by default.** Neither `unattended-upgrades` nor `dnf-automatic` reboots, so a
+  kernel fix Livepatch cannot apply waits until something schedules a reboot.
+- **A hand-added repository is outside automatic patching on every candidate.** On Ubuntu and Debian
+  its origin must be allowed, and NodeSource's origin is `. nodistro`, so a pattern matching the
+  release's codename misses it. On the RHEL family, `dnf-automatic` set to security updates only
+  skips NodeSource, nginx.org and the Caddy COPR, because none publishes the metadata it reads.
+- **Debian 13's own packages of the front and Node are too old.** Its Caddy is 2.6.2 and its Node is
+  20, past its end of life; Caddy's Cloudsmith repository and NodeSource serve current ones.
+- **The RHEL family's 10 releases need an x86-64-v3 CPU**, unchecked on DigitalOcean's smallest plan.
+- **Ubuntu 26.04 is five months old** and ships Rust rewrites of coreutils and sudo, which bears on
+  property 7.
+- **DigitalOcean retires an image when standard support ends**, not when extended support does.
+
+*Sourced by research agents, 2026-10-02. Not re-opened by me.*
+
+**What reading could not settle, and only booting can:**
+
+- **Property 2:** whether DigitalOcean's Debian and RHEL-family images run cloud-init on first boot.
+  DigitalOcean's page, updated 2026-09-23, still names only Ubuntu and CentOS. No local VM was found
+  that boots DigitalOcean's own image: Lima writes its own user data, Multipass's support for other
+  distributions on macOS is unconfirmed, and UTM or QEMU with a seed image is likely but untested.
+- **Property 5:** no candidate's memory with nothing installed was found from a usable source.
+- **Property 7:** no measured rate of regressions exists for any candidate. What was found is each
+  distribution's update policy and a handful of incidents, several of them anecdotal.
+
+**The first pass leaves five candidates standing and three cells unknown on every one of them**, so
+it is not finished. The next pass zooms into property 7 and resolves properties 2 and 5 by booting
+each survivor on a Droplet.

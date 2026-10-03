@@ -141,7 +141,32 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 ## Options
 
-...
+*Scored in the first pass, 2026-10-02, under **Findings**.*
+
+**Still standing after the first pass:** Caddy, and nginx with an ACME client, either its native
+module or certbot. Angie and freenginx, both forks of nginx, were found by the enumeration and are
+not scored yet.
+
+**Out, each on the one property it fails:**
+
+- **HAProxy, Traefik and Envoy** fail property 9: none serves static files from disk, so choosing one
+  closes the front's option at
+  [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
+  Reverses if that question chooses the Node server for the files. *Sourced by a research agent,
+  2026-10-02.*
+- **Apache httpd** fails property 6: it has no HTTP/3. *Same source.*
+- **H2O** fails property 11: it has no tagged release since 2019. *Same source.*
+- **The Node process terminating TLS itself** fails property 6: Node's QUIC is experimental, behind
+  `--experimental-quic`. Reverses once Node ships stable HTTP/3. *Sourced by a research agent from a
+  search summary; Node's page returned 404.*
+- **River, NGINX Unit and Varnish** fail property 11: River's last release is from August 2024 and
+  says "no expectation of stability", Unit is archived, and Varnish's open-source edition is archived
+  and has no TLS. *Same source.*
+
+**Not scored here:** fronts off the machine, which are Cloudflare's proxy or tunnel and
+DigitalOcean's load balancer, the last at $12 a month. Whether anything sits between the browser and
+the Droplet is [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md)
+at slice 5.
 
 ## Findings
 
@@ -174,3 +199,83 @@ This is one candidate measured, not a comparison.*
 certificate where production gets a public one. That is the one difference property 12 allows.
 
 *Reasoned, ninth pass of the hosting question, same source.*
+
+### First pass 2026-10-02: the field against properties 1 to 14
+
+*Two research agents scored the field by property, and a third enumerated it, on 2026-10-02. "Opened
+by me" marks what the session that wrote this pass fetched itself.*
+
+**Caddy restarts when its package is upgraded.** Its Debian post-install script runs
+`deb-systemd-invoke try-restart caddy.service` whenever an older version was installed, and its unit
+sets `TimeoutStopSec=5s`. A restart closes the listener, so connections arriving during it are
+refused, and a request still running after five seconds is cut. So Caddy is partial on property 5.
+
+*Sourced — <https://raw.githubusercontent.com/caddyserver/dist/master/scripts/postinstall.sh> and
+<https://raw.githubusercontent.com/caddyserver/dist/master/init/caddy.service>, opened by me on
+2026-10-02.*
+
+**nginx's own package upgrades its binary in place.** Its Debian post-install runs
+`/etc/init.d/nginx upgrade`, which starts the new binary beside the old and retires the old once the
+new one serves. So nginx passes property 5 when installed from nginx.org.
+
+*Sourced — <https://raw.githubusercontent.com/nginx/pkg-oss/master/debian/debian/nginx.postinst>,
+opened by me on 2026-10-02. That the upgrade drops nothing is reasoned from how the binary upgrade
+works, not measured.*
+
+**nginx's open-source edition has no active health checks.** Its docs: "Dynamically configurable
+group with periodic health checks is available as part of our commercial subscription." It detects a
+failed upstream only passively, after a request to it fails. So property 4 holds for nginx only if
+the deploy script itself takes the old instance out of the upstream list and reloads, rather than
+waiting for a health check. An agent found that waiting is slow on the others too by default: Caddy
+and Traefik check every 30 seconds, HAProxy every 2 seconds with three failures. The spikes set
+Caddy's interval to 250ms.
+
+*Sourced — <https://nginx.org/en/docs/http/ngx_http_upstream_module.html>, opened by me on 2026-10-02.
+The other intervals are a research agent's reading.*
+
+**Caddy turns on 0-RTT for HTTP/3 by default.** Its docs: "By default, 0-RTT (early data) is enabled
+for QUIC listeners (i.e. HTTP/3)". Early data can be replayed, so a POST that saves progress must
+not be accepted as early data unless it is idempotent. nginx leaves it off by default, per an agent.
+This is a setting either way, so it moves no verdict, and it is recorded so that whichever is chosen
+sets it deliberately.
+
+*Sourced — <https://caddyserver.com/docs/caddyfile/options>, opened by me on 2026-10-02.*
+
+**HTTP/3 helps returning visitors only.** A browser learns that a site offers HTTP/3 from a header on
+an earlier response, so a first visit pays the TCP and TLS 1.3 handshake whatever the front supports.
+Caddy serves HTTP/3 by default; nginx's HTTP/3 module calls itself experimental.
+
+*Sourced by a research agent, 2026-10-02. Not re-opened.*
+
+**Rebuilding the machine repeatedly can exhaust Let's Encrypt's limit.** It allows 5 certificates for
+the same set of names in 7 days, so a rebuild that does not restore its certificate state is a fresh
+order each time. Caddy and Apache's mod_md fall back to a second certificate authority on their own;
+nginx with certbot does not. Property 7 holds for any candidate whose certificate state is restored
+with the machine.
+
+*Sourced by a research agent, 2026-10-02. Not re-opened.*
+
+**Caddy and nginx differ elsewhere, without either failing:**
+
+- **Property 1:** Caddy issues and renews certificates itself. nginx needs its native ACME module,
+  which an agent found is new and did not establish the retry behaviour of, or certbot on a timer.
+- **Property 8:** an agent found idle figures of 2 to 8 MB for nginx and 15 to 59 MB for Caddy from
+  indirect sources; the spikes measured Caddy at 47 to 51 MB on a Droplet. Both leave most of the
+  machine.
+- **Property 10:** Caddy listens for its administration API on `localhost:2019` by default, which
+  passes property 10 because it is local only.
+
+*Sourced by research agents, 2026-10-02, except the spike figure, which is Measured, 2026-09-30.*
+
+**Let's Encrypt issues certificates for bare IP addresses since 2026-01-15.** "These certificates are
+valid for 160 hours, just over six days", and "IP address certificates must be short-lived
+certificates." So TLS could be observed on a Droplet's address without a hostname. Which clients
+support it was not established.
+
+*Sourced — <https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability/>, opened by me on
+2026-10-02.*
+
+**The first pass leaves two candidates standing, with two forks unscored**, so it is not finished.
+Neither Caddy nor nginx fails a property. Caddy is partial on property 5 and nginx on properties 1
+and 4. The next pass scores Angie and freenginx, zooms into properties 1, 4 and 5, and observes
+what reading cannot: issuance and renewal on a real certificate, and a package upgrade under load.

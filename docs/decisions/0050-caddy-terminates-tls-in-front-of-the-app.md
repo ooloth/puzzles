@@ -76,6 +76,8 @@ already exists.
 **Caddy, installed from its own Debian repository, terminates TLS for the app's hostname and sends
 every path under `/api/` to the app.**
 
+Debian 13's own `caddy` package was not used: a research agent found it at 2.6.2 with open security issues and marked for removal, on 2026-10-02.
+
 The maintainer chose it on 2026-10-03, reading every property in context over years of maintaining
 it alone. What decided it:
 

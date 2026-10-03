@@ -55,6 +55,8 @@ and covers only critical and high kernel fixes, so every candidate reboots to st
 included. That half was therefore scored as how many reboots staying patched takes, and how long each
 one lasts.
 
+**Property 2 means the same OS, not DigitalOcean's own image.** The Droplet is amd64 and the Mac is arm64, so the local run boots the distribution's own arm64 cloud image with the same cloud-init. Every candidate's did, under QEMU on 2026-10-03.
+
 **Maximums.** Maximum safety is an OS that patches itself and never ships a regression. Maximum
 performance is one that takes none of the machine and reboots instantly. Maximum experience is one
 with nothing to configure, switch off or remember. No candidate reaches all three; Debian 13 comes
@@ -119,7 +121,7 @@ cloud image with the same cloud-init.
 
 - **Ubuntu 24.04 LTS.** Its case is real: security support to May 2034 through Ubuntu Pro's free
   tier, Livepatch for critical and high kernel fixes, and the largest community. No single property
-  disqualifies it. It is behind on property 5, about 55 MB less memory and reboots half again as long,
+  disqualifies it. It is behind on property 5, 45 to 80 MB less memory and reboots half again as long,
   and on property 7, at least 13 regressions shipped including a snapd update that broke
   installation. Its `needrestart`, which restarts services after updates applied while the app
   serves, weighs only if updates are applied that way, which is not yet decided. The

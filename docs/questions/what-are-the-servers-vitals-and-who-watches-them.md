@@ -64,9 +64,13 @@ obvious.
   [limits](https://developers.cloudflare.com/workers/platform/limits/).
 - **Node 24 names its process `MainThread`**, not `node`, in `ps`. A monitor matching on `node`
   misses it. *Measured — `ps -eo comm` on a Droplet, 2026-09-30.*
-- **Memory in use on a 1 GB Droplet running the stack**, Ubuntu included, is in the question's twelfth
-  pass: 360 MB idle and 373 MB at the peak of a deploy. The app, Caddy and Litestream accounted for
+- **Memory in use on a 1 GB Droplet running the stack**, measured on Ubuntu 24.04 before the OS was
+  chosen, is in the question's twelfth pass: 360 MB idle and 373 MB at the peak of a deploy. The app, Caddy and Litestream accounted for
   about 160 MB of it.
+  On Debian 13, the OS per [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), the system
+  alone left 769 to 784 MB available, against 701 to 726 MB on Ubuntu 24.04, so the stack has more room.
+  *Measured on Droplets, 2026-10-03, in the fourth pass of the OS question, read with
+  `git show 6bf04f6:docs/questions/which-os-does-the-droplet-run.md`.*
 - **The production Droplet runs DigitalOcean's metrics agent**, because the outbound-traffic alert
   that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
   relies on needs it: "Only Droplets with the DigitalOcean metrics agent installed are available to

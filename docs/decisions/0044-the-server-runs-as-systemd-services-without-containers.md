@@ -2,7 +2,7 @@
 number: 0044
 status: accepted
 date: 2026-09-30
-amended: 2026-10-01
+amended: 2026-10-03
 ---
 
 # 0044 — The server runs as systemd services, without containers
@@ -71,8 +71,11 @@ installed.**
 
 **What this does not settle:**
 
-- **What sits in front of the app and terminates TLS.** That is the next record.
-- **How a deploy switches between versions.** That follows it.
+- **What OS the Droplet runs, and what sits in front of the app and terminates TLS.** Settled since by
+  [ADR-0049](0049-the-droplet-runs-debian-13.md) and
+  [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md).
+- **How a deploy switches between versions.** That is
+  [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
 - **How Node itself is pinned and patched.** Either the host's package manager patches it, or each
   release carries its own binary. That is [what shape is the
   deployable?](../questions/what-shape-is-the-deployable.md).

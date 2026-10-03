@@ -35,7 +35,7 @@ the end and are the larger half.
         │  ┌───────────────────────────────────┐  │
         │  │ client — owns board state,        │  │   solving never
         │  │ mutates it locally      ADR-0004  │  │   touches the network
-        │  │ src/client/state holds it; the    │  │
+        │  │ src/client/state will hold it;    │  │
         │  │ React only draws it  ADR-0037, 38 │  │
         │  └───────────────────────────────────┘  │
         │  ┌───────────────────────────────────┐  │

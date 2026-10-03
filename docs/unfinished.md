@@ -17,8 +17,9 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
-under `src/client/` that shows its answer. The host and how the app runs on it are settled, and
-nothing is deployed: the front, the deploy switch and what triggers a deploy are open.
+under `src/client/` that shows its answer. The host, how the app runs on it, its OS and its front are
+settled, and nothing is deployed: the deploy switch, what serves the client's files, when updates are
+applied, how Node is carried and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 
@@ -80,14 +81,11 @@ at M2.
 [ADR-0050](decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) settling the OS and the front,
 and nothing in [runbooks/](runbooks/) saying how to set either up.
 
-**Actually** the steps were worked out in spikes and live only in git history: the hosting question's
-twelfth pass, read with `git show ed7f54e:docs/questions/where-does-this-run.md`, and the front
-question's third and fourth passes, read with
-`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`. The twelfth
-pass's scripts assume Ubuntu 24.04, not Debian 13.
+**Actually** the only setup steps are spike notes in git history, which assume Ubuntu 24.04, not
+Debian 13: `git show ed7f54e:docs/questions/where-does-this-run.md` and
+`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.
 
-**So** treat those passes as notes, not instructions, until M1 slice 4 writes the setup and its
-runbook.
+**So** do not follow them as instructions; M1 slice 4 writes the setup and its runbook.
 
 <!-- Template:
 

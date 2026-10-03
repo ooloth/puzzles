@@ -27,7 +27,7 @@ settled by [ADR-0020](decisions/0020-the-stores-engine-is-sqlite.md).
 > sentence that does not say which one it means is read as whichever the reader had in mind.
 
 **puzzle state** — the board plus what a player needs back on reopening: the selection, and undo
-history if it is kept. It is held in memory by the code under `src/client/state/`, per
+history if it is kept. It is to be held in memory by code under `src/client/state/`, which does not exist yet, per
 [ADR-0037](decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md), saved to client
 storage on every change, and synced to the store, so one puzzle's state can exist as three copies.
 Where copies need telling apart, say where each lives: in memory, in client storage, in the store.

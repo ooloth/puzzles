@@ -98,8 +98,9 @@ on the release's codename misses it.
   agent's.*
 
 **Live kernel patching covers only critical and high kernel fixes**, on Ubuntu only, and glibc,
-OpenSSL, systemd and microcode updates still need a reboot. So every candidate OS reboots to stay
-patched, and the question is only when.
+OpenSSL, systemd and microcode updates still need a reboot. Debian 13, the OS per
+[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), has no live patching at all, so it
+reboots for every kernel fix, and the question is only when.
 
 *Sourced — <https://canonical.com/blog/mythbusting-the-scope-of-livepatch-protection>, opened
 2026-10-03, third pass of the OS question.*

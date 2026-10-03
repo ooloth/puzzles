@@ -96,14 +96,15 @@ chose, running the systemd services of
   was read through a summariser, from
   [configure rules](https://docs.digitalocean.com/products/networking/firewalls/how-to/configure-rules/).
 - **Automatic updates skip third-party repositories.** "Just adding another package repository to an
-  Ubuntu system WILL NOT make `unattended-upgrades` consider it for updates!" So Caddy's repository,
+  Ubuntu system WILL NOT make `unattended-upgrades` consider it for updates!" Debian 13, the OS per
+  [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), uses the same `unattended-upgrades`. So Caddy's repository,
   or NodeSource's if Node comes from it, is patched automatically only once its origin is added.
   *Sourced —
   [automatic updates](https://ubuntu.com/server/docs/how-to/software/automatic-updates/), read by an
   agent.*
-- **Livepatch** "is available free for up to 5 machines, for personal use", and it "is not a
-  replacement for rebooting". `pro status` on a fresh Droplet reports it as available, per
-  [../constraints.md](../constraints.md). Using it means attaching an Ubuntu Pro token.
+- **Live kernel patching does not apply.** Livepatch is Ubuntu's, and the Droplet runs Debian 13 per
+  [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), so kernel fixes take a reboot. When
+  that happens is [when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md).
 - **A fresh Droplet has no swap**, per [../constraints.md](../constraints.md). The spike capped the
   app with `MemoryMax` and hardened its unit with `NoNewPrivileges`, `ProtectSystem=strict`,
   `ReadWritePaths` and `PrivateTmp`. The unit is in the question's twelfth pass.

@@ -44,3 +44,13 @@ had asked about were enumerated.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**Caddy raises no alert of its own when a certificate fails to renew.** It retries for up to 30 days
+and falls back to a second authority, but a research agent found no hook or metric for an
+approaching expiry in its core. With 45-day certificates from 2028, per "Hosting — Let's Encrypt
+certificates are getting shorter" in [../constraints.md](../constraints.md), something outside the
+machine has to watch the certificate's expiry.
+
+*From [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md); the alerting finding
+is a research agent's reading on 2026-10-03, not re-opened.*
+

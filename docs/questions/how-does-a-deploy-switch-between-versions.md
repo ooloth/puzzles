@@ -26,9 +26,9 @@ triggers a deploy and where a release is built is
 
 ## What would settle it
 
-The front's choice first, at
-[what sits in front of the app and terminates TLS?](what-sits-in-front-of-the-app-and-terminates-tls.md),
-since the switch is carried out partly by the front's health checks. Then a deploy with the real
+The front is Caddy, per
+[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md), and its health checks can
+carry out the switch, as they did in the spikes. Then a deploy with the real
 Fastify server, observed on a Droplet under load, since the spikes ran a minimal server. How many
 records the answer resolves into is decided once it is worked.
 
@@ -112,3 +112,14 @@ and disables the old, or a reboot starts the wrong one. Tests for that script ar
 when slice 4 is built.
 
 *From [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).*
+
+**The front is Caddy, whose free edition has active health checks.** The settings the spikes used
+are above. Had the front been nginx or Angie, whose free editions have none, the deploy script would
+have rewritten a file naming the live instance and reloaded. A reboot of the Droplet, which takes
+about 18 seconds on Debian 13, is not a deploy and is not switched; when it happens is
+[when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md).
+
+*From [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) and
+[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md); the working is read with
+`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.*
+

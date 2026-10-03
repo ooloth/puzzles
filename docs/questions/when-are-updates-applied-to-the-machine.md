@@ -74,7 +74,8 @@ images do not install `dnf-automatic`. Nothing reboots by default on any of them
 does not install it.
 
 *Measured, 2026-10-03, on Droplets and on local VMs of each image, in the second and third passes of
-[which OS does the Droplet run?](which-os-does-the-droplet-run.md).*
+the OS question, read with
+`git show 6bf04f6:docs/questions/which-os-does-the-droplet-run.md`.*
 
 **A repository added by hand is outside automatic updates until its origin is allowed.** That covers
 the front from its vendor and Node from NodeSource. NodeSource's origin is `. nodistro`, so a pattern
@@ -89,7 +90,8 @@ on the release's codename misses it.
 - **The front's package upgrade under load:** Caddy refused connections for about a second each
   time; nginx and Angie upgraded in place, with 0 to 3 failures in about 14,000 requests. *Measured,
   2026-10-03, third pass of
-  [what sits in front of the app and terminates TLS?](what-sits-in-front-of-the-app-and-terminates-tls.md).*
+  the front question, read with
+  `git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.*
 - **How often:** in the year to 2026-10-02 Debian 13 issued 16 kernel security advisories, plus kernel
   fixes in point releases. Caddy and nginx each shipped security fixes roughly monthly in 2026.
   *Measured from Debian's tracker, third pass of the OS question; the front counts are a research

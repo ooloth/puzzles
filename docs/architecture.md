@@ -54,7 +54,13 @@ the end and are the larger half.
         ┌─────────────────────────────────────────┐
         │  one machine                    ADR-0021│
         │  a DigitalOcean Droplet         ADR-0043│
+        │  Debian 13                      ADR-0049│
         │                                         │
+        │  ┌───────────────────────────────────┐  │
+        │  │ Caddy — TLS, and /api/ to the     │  │   ADR-0050
+        │  │ server                            │  │
+        │  └────────────────┬──────────────────┘  │
+        │                   │                     │
         │  ┌───────────────────────────────────┐  │
         │  │ server — Fastify on Node,         │  │   not an isolate  ADR-0018
         │  │ always on, never scales to zero   │  │   on the request path ADR-0017

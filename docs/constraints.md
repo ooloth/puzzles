@@ -987,6 +987,23 @@ each record is served, which is
 - The domain was bought through Cloudflare by the maintainer, who said so on 2026-10-02. Which
   domain it is is not recorded here.
 
+## Hosting — Let's Encrypt certificates are getting shorter
+
+**Let's Encrypt's default certificates go from 90 days to 64 on 2027-02-10 and to 45 on
+2028-02-16.** So a certificate renews about eight times a year from 2028, and whatever renews it runs
+that often unattended. Let's Encrypt recommends ACME Renewal Information so that clients renew when
+it asks rather than at a fixed point.
+
+- "Let's Encrypt will switch our default classic ACME profile to issuing 64-day certificates" on
+  February 10, 2027, and "We will further update the classic profile to issue 45-day certificates
+  with a 7 hour authorization reuse period" on February 16, 2028. "To ensure your ACME client renews
+  on time, we recommend using ACME Renewal Information (ARI)." *Sourced —
+  [From 90 to 45](https://letsencrypt.org/2025/12/02/from-90-to-45/), opened 2026-10-03.*
+- It issues certificates for bare IP addresses since 2026-01-15, "valid for 160 hours, just over six
+  days", and "IP address certificates must be short-lived certificates." *Sourced —
+  [general availability](https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability/),
+  opened 2026-10-02.*
+
 ## Runtimes — a heap ceiling does not bound a process
 
 **A JavaScript runtime's heap limit governs the JS heap and nothing else, so a process can exceed its

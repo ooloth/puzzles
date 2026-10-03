@@ -113,3 +113,13 @@ Only one memory measurement, on macOS, ran on Node 26. Node 24 also names its pr
 not `node`, so a monitor matching on `node` misses it.
 
 *Measured, 2026-09-30, same source.*
+
+**If Node comes from the host's package manager, it is not Debian's.** Debian 13 packages Node 20,
+past its end of life, so it would come from NodeSource. Debian's automatic updates leave NodeSource's
+repository alone until its origin is allowed, and that origin is `. nodistro`, which a pattern on the
+release's codename misses. None of this applies if Node is carried inside each release.
+
+*Sourced by research agents on 2026-10-02, in the first pass of the OS question, read with
+`git show 6bf04f6:docs/questions/which-os-does-the-droplet-run.md`. The host is Debian 13, per
+[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).*
+

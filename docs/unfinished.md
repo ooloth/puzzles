@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-02
+updated: 2026-10-03
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -73,6 +73,21 @@ at M2.
 **So** verify in the closest mode that exists, which for anything the browser sees is
 `pnpm build && pnpm preview` with the server running, and record in
 [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't observe** what it cannot show.
+
+### The Droplet's setup is decided but has no runbook
+
+**You'll see** [ADR-0049](decisions/0049-the-droplet-runs-debian-13.md) and
+[ADR-0050](decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) settling the OS and the front,
+and nothing in [runbooks/](runbooks/) saying how to set either up.
+
+**Actually** the steps were worked out in spikes and live only in git history: the hosting question's
+twelfth pass, read with `git show ed7f54e:docs/questions/where-does-this-run.md`, and the front
+question's third and fourth passes, read with
+`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`. The twelfth
+pass's scripts assume Ubuntu 24.04, not Debian 13.
+
+**So** treat those passes as notes, not instructions, until M1 slice 4 writes the setup and its
+runbook.
 
 <!-- Template:
 

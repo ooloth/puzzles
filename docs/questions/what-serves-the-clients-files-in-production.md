@@ -124,3 +124,14 @@ with a 200.
 *Sourced by a research agent 2026-09-26 from [Pages Functions routing](https://developers.cloudflare.com/pages/functions/routing/)
 and [serving Pages](https://developers.cloudflare.com/pages/configuration/serving-pages/). Not
 re-opened.*
+
+**The front is Caddy, and it can serve the files with a cache header per class.** A configuration
+that served `/srv/client`, sent `public, max-age=31536000, immutable` for `/assets/*` and `no-cache`
+for `/index.html`, and fell back to the entry document for unknown paths, passed `caddy validate` on
+Debian 13. So "the front, serving the files from disk" is open with Caddy as that front, per
+[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md). Serving was validated, not
+measured under load.
+
+*Measured, 2026-10-03, in the fourth pass of the front question, read with
+`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.*
+

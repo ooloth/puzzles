@@ -340,3 +340,93 @@ not re-opened.*
 **What still separates the survivors** is the reboot half of property 1. Only Ubuntu has free live
 kernel patching, and only "for personal use", so on Debian, Rocky and AlmaLinux every kernel fix waits
 for a reboot. Whether this project counts as personal use is not established.
+
+### Third pass 2026-10-03: reboots, restarts the updates make, and the Mac
+
+**Livepatch covers only the most serious kernel fixes, so every candidate needs scheduled reboots.**
+Canonical: "Canonical Livepatch patches kernel vulnerabilities with critical and high Common
+Vulnerability Scoring System (CVSS) and Ubuntu Priority ratings", and microcode, glibc, OpenSSL,
+systemd and dbus updates still need a reboot. Its notice feed lists 7 Livepatch notices covering
+Ubuntu 24.04 since 2025-10-01, and one covering 26.04. So Livepatch lets Ubuntu put off a reboot for
+the most serious kernel fixes. It does not remove reboots, which weakens the reboot half of property 1
+as a separator.
+
+*Sourced — <https://canonical.com/blog/mythbusting-the-scope-of-livepatch-protection> and
+<https://ubuntu.com/security/notices.json?details=LSN-&limit=20&order=newest>, opened by me on
+2026-10-03.*
+
+**Livepatch's free tier is limited by machine count, not by kind of use.** Canonical's personal terms
+grant a "free subscription to use the Service on up to five physical Ubuntu systems with unlimited
+number of VMs or containers", and its FAQ says "Ubuntu Pro is free for personal use. It offers the
+full suite of Ubuntu Pro capabilities for you – and any business you own – on up to 5 physical
+machines". So paying subscribers would not by themselves end it. Two things are not settled: how a
+cloud VM such as a Droplet counts against "physical" systems, and a search summary's report of a
+"non-commercial" line on the terms page, which the page as fetched did not show. Canonical may change
+the terms.
+
+*Sourced — <https://canonical.com/legal/ubuntu-pro/personal> and
+<https://discourse.ubuntu.com/t/ubuntu-pro-faq/34042>, opened by me on 2026-10-03 through a tool that
+summarises pages.*
+
+**The RHEL family needs about three times the kernel reboots.** Since 2025-10-01, AlmaLinux issued 62
+advisories for its 9 kernel, about one a week. Debian issued 16 security advisories for its trixie
+kernel. Debian also ships some kernel fixes in point releases, which are not advisories, so its count
+of kernel updates is somewhat higher than 16. A research agent counted 20 kernel notices for Ubuntu
+24.04, and 57 and 60 for Rocky 9 and 10. Each new kernel takes effect only after a reboot, and each
+reboot of the one machine means
+[nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md) while it lasts.
+
+*Measured, 2026-10-03, from <https://errata.almalinux.org/9/errata.full.json>, counting advisories
+that update the `kernel` package, and from the Debian security tracker's `data/DSA/list`, counting
+`linux` advisories with a trixie fix. The Ubuntu and Rocky counts are a research agent's, from
+their feeds, not re-counted.*
+
+**Ubuntu restarts services after automatic updates; nothing else does.** Ubuntu 24.04 and 26.04 ship
+`needrestart` hooked into apt, and their config says "the default restart mode when running as part of
+the APT hook is 'a'", meaning automatic. So an update to a library the app, Litestream or the front
+uses restarts that service outside any deploy, which property 1 of
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) forbids
+unless the restart drains first. Setting `$nrconf{restart} = 'l'` makes it list instead. Debian 13's
+image does not install `needrestart`. The RHEL family's images do not install `dnf-automatic`, which
+restarts nothing.
+
+**The RHEL family's images run SELinux in enforcing mode; Ubuntu's and Debian's run AppArmor.** A
+research agent found that under SELinux a front such as nginx or Caddy is refused a connection to a
+local port not labelled for HTTP, such as the app's, until `httpd_can_network_connect` is set, and that
+Caddy's RPM ships some policy of its own. No such default refusal was found for AppArmor.
+
+*SELinux and AppArmor modes, `needrestart` and `dnf-automatic` were measured on the local VMs below,
+and `needrestart`'s default read from its config there; the SELinux denial and its fix are a research
+agent's reading on 2026-10-03, not re-opened.*
+
+**Property 2's Mac half passes for every candidate.** Each candidate's own arm64 cloud image booted
+under QEMU 11.1.2 on the maintainer's Apple Silicon Mac, with the same `#cloud-config` as the Droplets
+on a NoCloud seed disk, plus the SSH key the Droplets got from DigitalOcean. All seven reported
+`status: done` from `DataSourceNoCloud` and wrote both files. So Multipass is not needed, and this
+property separates nobody. QEMU was used here only to check this property; what the local run uses
+is [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
+
+*Measured, 2026-10-03, one boot per image.*
+
+**Finding help, and what employers recognise**, from a research agent on 2026-10-03, not re-opened:
+unix.stackexchange.com has 16,089 questions tagged debian and 13,581 tagged ubuntu, against 44 for
+rocky-linux and no almalinux tag. Rocky's and AlmaLinux's forums had 18 and 16 new topics in the last
+30 days, against 295 on Ubuntu's. A job board's postings for the second quarter of 2026 named Ubuntu
+in 5.5%, Debian in 2.1% and RHEL in 2.1%, though most postings named no distribution.
+
+**Ubuntu Pro's free tier extends Ubuntu 24.04's security support to May 2034.** Ubuntu's release
+cycle lists standard security maintenance to "May 2029" and Expanded Security Maintenance to "May
+2034", covering both the main and universe repositories. That is the same free subscription as
+Livepatch, with the same open points about its terms. It puts 24.04 level with or past the RHEL
+family's 9 releases (2032), one year short of its 10 releases (2035), and past Debian 13's long-term
+support (June 2030).
+
+*Sourced — <https://ubuntu.com/about/release-cycle>, opened by me on 2026-10-03.*
+
+**Where the third pass leaves the field.** The RHEL family's one strength was property 4, support to
+2032 and 2035, which Ubuntu 24.04 now roughly matches under Ubuntu Pro. Against it are about three times the reboots on property 1, SELinux denials to set
+right on property 7, and far less help to find. Ubuntu 26.04 sits beside 24.04 with less memory free,
+one point release in the field, and the same automatic restarts. What separates Ubuntu 24.04 from
+Debian 13 is Livepatch and the larger community on Ubuntu's side, against more memory free, no
+automatic restarts and a stricter update policy on Debian's.
+

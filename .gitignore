@@ -1,6 +1,8 @@
 # Theirs
-.trekker
-
-node_modules/
-dist/
 .playwright-mcp/
+.trekker/
+node_modules/
+
+# Mine
+.secrets/
+dist/

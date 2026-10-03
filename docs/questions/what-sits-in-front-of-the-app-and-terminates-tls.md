@@ -143,9 +143,12 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the third pass:** Caddy, nginx with its native ACME module, and Angie, a fork
-of nginx with ACME built in, all measured on Debian 13, which leads
-[which OS does the Droplet run?](which-os-does-the-droplet-run.md).
+**Leading after the fourth pass: Caddy**, with nginx still standing, either with its ACME module or
+with certbot, both on Debian 13, which leads
+[which OS does the Droplet run?](which-os-does-the-droplet-run.md). The maintainer agreed on
+2026-10-03 that Caddy leading matches how they weigh the properties read in context. The final
+comparison is Caddy against nginx with certbot, and weighs both ways of patching Caddy described in
+the fifth pass.
 
 **Caddy is not eliminated on property 5's measurement alone.** Its package upgrade refused
 connections for about a second, which the third pass measured. The maintainer decided on 2026-10-03
@@ -160,6 +163,10 @@ outage that happens anyway. Both are scored in the fourth pass.
 
 **Out, each on the one property it fails:**
 
+- **Angie** fails property 13: of the three it is the hardest to keep working alone, with no Stack
+  Exchange tag, no new forum topics since June 2026, a team of about ten, and no support yet for
+  renewal information. *Fourth pass, 2026-10-03.* Agreed by the maintainer on 2026-10-03. Reverses if
+  its community and its ACME support grew to nginx's or Caddy's.
 - **HAProxy, Traefik and Envoy** fail property 9: none serves static files from disk, so choosing one
   closes the front's option at
   [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
@@ -460,4 +467,48 @@ hardest, its ACME module, is a year old, documents no retry or fallback, and has
 reload in the design that reloads on every deploy. Angie matches nginx on upgrades but has the least
 help, the smallest team and no renewal information. nginx with certbot in place of its module was a
 first-pass survivor and was not measured or configured here.
+
+### Fifth pass 2026-10-03: nginx with certbot, and the two ways of patching Caddy
+
+**nginx with certbot in place of its ACME module.** certbot is the long-standing ACME client, and
+Debian 13 packages it, so it is patched by Debian's automatic updates as shipped, unlike the fronts
+themselves. Debian 13 ships certbot 4.0.0. From that version "Certificates now renew with 1/3rd of
+lifetime left", so it keeps pace with 45-day certificates. Support for renewal information came in
+4.1.0, released 2025-06-10, so Debian 13's certbot does not have it. Debian's `certbot.timer` runs
+`certbot -q renew` twice a day, so a failed renewal is retried twice daily until it succeeds or the
+certificate expires; certbot has no second authority to fall back on and raises no alert by itself. A
+deploy hook reloads nginx after each renewal, and nginx's reload is graceful.
+
+*Sourced — Debian's package versions from <https://sources.debian.org/api/src/python-certbot/>,
+certbot's changelog from <https://raw.githubusercontent.com/certbot/certbot/main/certbot/CHANGELOG.md>,
+and the timer and service units from Debian's 4.0.0-2+deb13u1 source, all opened by me on
+2026-10-03.*
+
+What this changes for nginx, reasoned from the above and the fourth pass:
+
+- **It removes nginx's weakest point.** The certificate path no longer rests on a year-old module
+  with an open crash on reload.
+- **It adds a second program and a hook.** Setting it up needs an order: nginx answers the challenge
+  on port 80 first, certbot obtains the certificate, and only then can the HTTPS server, which names
+  the certificate's files, be enabled. On a rebuilt machine `/etc/letsencrypt` is restored with its
+  links intact. On the Mac it still needs a tool such as mkcert.
+- **Everything else in the fourth pass about nginx stands:** in-place upgrades, little memory, the
+  most help, and a deploy switch that the deploy script carries out by rewriting a file and
+  reloading, since the free edition has no active health checks.
+
+**Two ways of patching Caddy**, both kept for the final comparison at the maintainer's request on
+2026-10-03, and left to the decision record:
+
+- **Patch as released.** Add Caddy's repository to the automatic updates, and accept about a second
+  of refused connections each time, roughly monthly in 2026, which the client retries unseen.
+- **Patch in the monthly window.** Upgrade Caddy only just before the monthly reboot, so its restart
+  falls inside an outage that happens anyway. A Caddy security fix then waits up to a month, unless
+  one is applied at once by hand.
+
+**The comparison left: Caddy against nginx with certbot.** Caddy is one program with certificates, a
+second authority, the deploy switch and a local certificate built in, at the cost of a restart per
+patch and a smaller community. nginx with certbot is two programs joined by a hook, each long
+established, with in-place upgrades and the most help, at the cost of a longer configuration, a
+setup order to get right, a deploy switch written into the deploy script, and no fallback authority
+or renewal information in Debian 13's certbot.
 

@@ -70,7 +70,7 @@ deleted; this question, its two siblings, and the Findings below carry forward e
 guest bound was argued from a rejection that does not hold up: it rejected an anonymous server copy
 for guests on three costs. An audit found two of the three are not settled facts at all —
 they are exactly what
-[where does this run?](where-does-this-run.md) and
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
 [do privacy regulations apply?](do-privacy-regulations-apply.md) are still working out — and the
 third was overstated. See Findings. A decision reasoned from two contingent premises and one
 overstated one is not a decision; it is a placeholder wearing one's clothes. Everything the durability record argued

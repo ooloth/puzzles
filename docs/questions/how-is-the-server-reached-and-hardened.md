@@ -85,7 +85,7 @@ inventory omitted any backup or restore procedure for the data, which is the sha
 *Reasoned — from [../brainstorming/](../brainstorming/), which is non-authoritative and cited for what
 it enumerates rather than for anything it concludes.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 **On the Droplet [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)
 chose, running the systemd services of

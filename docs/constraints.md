@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-02
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -833,7 +833,7 @@ state: with the app, Caddy and Litestream running, about 360 MB was in use in al
 *Measured — two `s-1vcpu-1gb` Droplets in `tor1` running Ubuntu 24.04, kernel `6.8.0-142-generic`,
 created 2026-09-30. Read with `swapon --show` (it printed nothing), `free -m` after `cloud-init
 status --wait`, and `pro status`. The figure with the app, Caddy and Litestream running comes from
-the twelfth pass of [where does this run?](questions/where-does-this-run.md), which records its
+the twelfth pass of where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), which records its
 method.*
 
 **DigitalOcean moves a Droplet off a host being maintained or failing while it keeps running.** It
@@ -968,6 +968,24 @@ opened 2026-09-30.* And "GitHub Support will not be able to restore access to ac
 two-factor authentication enabled if you lose your two-factor authentication credentials." *Sourced —
 [recovering 2FA](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/recovering-your-account-if-you-lose-your-2fa-credentials),
 opened 2026-09-30.*
+
+## Hosting — the domain's DNS is Cloudflare's while Cloudflare is its registrar
+
+**The app's domain was bought through Cloudflare Registrar, which requires Cloudflare's nameservers.**
+So its DNS is answered by Cloudflare for as long as it is registered there. What stays open is how
+each record is served, which is
+[how does the domain reach the deployment?](questions/how-does-the-domain-reach-the-deployment.md).
+
+- "all domains on Cloudflare Registrar use Cloudflare nameservers", and those nameservers "must
+  remain in place for the domain to be Active." *Sourced —
+  [Registrar FAQ](https://developers.cloudflare.com/registrar/faq/), opened 2026-10-02.*
+- A record set to DNS-only puts nothing of Cloudflare's in the path: "Cloudflare responds with your
+  server's actual IP address and does not route HTTP/HTTPS traffic through its network." A proxied
+  record does the opposite, so the choice between them decides whether anything sits between the
+  browser and the Droplet. *Sourced —
+  [proxy status](https://developers.cloudflare.com/dns/proxy-status/), opened 2026-10-02.*
+- The domain was bought through Cloudflare by the maintainer, who said so on 2026-10-02. Which
+  domain it is is not recorded here.
 
 ## Runtimes — a heap ceiling does not bound a process
 

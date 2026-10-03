@@ -33,7 +33,7 @@ traffic growing; and a vendor raising a price.
 5. Keeping it takes no recurring attention (the maintainer's "it just works" and "it's so easy").
 
 CPU, memory, storage and network bind on nothing here. They are what the money buys, and the setups
-that buy them are scored in [where does this run?](../questions/where-does-this-run.md).
+that buy them are scored in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).
 
 ## Decision
 
@@ -50,7 +50,7 @@ that buy them are scored in [where does this run?](../questions/where-does-this-
   it arrives.
 - **Where it stands.** The chosen setup was estimated at about $6 a month: a $6 Droplet, and a copy of
   the store in Backblaze B2's free tier. The ninth pass of
-  [where does this run?](../questions/where-does-this-run.md) has the working.
+  where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) has the working.
 
 ## Enforced by
 

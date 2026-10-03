@@ -65,7 +65,7 @@ for planning. Recorded so nobody reaches for a confident number with nothing beh
 *Sourced — second-hand from a research agent, 2026-09-02.*
 
 **A backup can be correct and unreachable at once.** See the Railway control-plane incident recorded
-against [where does this run?](where-does-this-run.md): the backup was not wrong, it was on the far
+against where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`): the backup was not wrong, it was on the far
 side of the failure. Restorability and reachability are separate properties and this question covers
 both.
 

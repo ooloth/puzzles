@@ -106,7 +106,7 @@ rather than which provider is chosen.
 
 - [x] `constraints.md` — imports the fact that a volume attached to one machine is not replicated and
       its loss is unrecoverable without an off-machine copy
-- [x] `questions/where-does-this-run.md` — candidates must offer storage surviving restart and
+- [x] the hosting question, since deleted and read with `git show ed7f54e:docs/questions/where-does-this-run.md` — candidates must offer storage surviving restart and
       redeploy; surviving host replacement is ours to provide
 - [x] `questions/how-is-the-store-backed-up.md` — this record is why that question is not optional,
       and it is cited there

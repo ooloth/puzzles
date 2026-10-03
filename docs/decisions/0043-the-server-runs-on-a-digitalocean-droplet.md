@@ -19,7 +19,7 @@ date: 2026-09-30
   [ADR-0042](0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md) set what any
   host must allow.
 - The maintainer's stated aims for the choice, recorded in
-  [where does this run?](../questions/where-does-this-run.md): "it just works", "it's so easy" and
+  where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`): "it just works", "it's so easy" and
   "great price", with about $10 a month as the ideal ceiling.
 
 ## Scored against
@@ -61,7 +61,7 @@ inside it, in a North American region.
 
 - **Size.** 1 GB of memory at launch, $6 a month. On a real Droplet, the stack used at most 373 MB of
   961 MB with Ubuntu included, during deploys under load. The measurement is in the twelfth pass of
-  [where does this run?](../questions/where-does-this-run.md). A resize that changes only CPU and
+  where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`). A resize that changes only CPU and
   memory can be reversed.
 - **Region.** Which North American region is left to
   [which region does the machine run in?](../questions/which-region-does-the-machine-run-in.md).

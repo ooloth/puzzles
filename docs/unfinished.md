@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-02
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -73,19 +73,6 @@ at M2.
 **So** verify in the closest mode that exists, which for anything the browser sees is
 `pnpm build && pnpm preview` with the server running, and record in
 [CONTRIBUTING.md](../CONTRIBUTING.md) under **Can't observe** what it cannot show.
-
-### The file-store record reads as argued only on runtime properties
-
-**You'll see** [ADR-0019](decisions/0019-the-store-is-a-file-the-server-process-opens.md) keeping the
-store as a file on a tiebreak about failure domains, with a revisit condition about outages without a
-person.
-
-**Actually** the file store was re-scored against managed databases over complete hosted setups, and
-kept. That scoring is in the eighth and ninth passes of
-[where does this run?](questions/where-does-this-run.md), and it is owed to the record as an
-amendment.
-
-**So** read those passes alongside the record until the amendment lands.
 
 <!-- Template:
 

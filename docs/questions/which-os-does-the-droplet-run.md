@@ -78,6 +78,13 @@ front, the release's support ending, and the same setup run on the Mac.
    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), the least
    to build, understand and keep working, weighed across years. What the maintainer already knows enters as the
    cost of learning the alternative, never as a merit, per the portable decision-making standard.
+7. **It just works: it has a long record of rare bugs and regressions, in the OS and in its updates,
+   so keeping it running needs no troubleshooting.** Secondarily, nothing about it asks for the
+   maintainer's attention between the major upgrades property 4 allows. What an OS bundles counts
+   only where it makes compatibility problems less likely, such as Node, Litestream or the front
+   being packaged and tested for it. Rests on the maintainer's statement on 2026-10-02 that this
+   matters to them above what the OS bundles, and on "it just works", the aim recorded in
+   [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
 
 **Checked and found binding on nothing:**
 
@@ -101,7 +108,7 @@ A decision record in [../decisions/](../decisions/).
 
 Found on 2026-09-30 while drafting
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). The spikes
-in [where does this run?](where-does-this-run.md) used `ubuntu-24-04-x64` by default. DigitalOcean's
+in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) used `ubuntu-24-04-x64` by default. DigitalOcean's
 image list, read with `doctl compute image list-distribution` that day, offers Ubuntu 22.04, 24.04
 and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and CentOS Stream 9 and
 10.
@@ -129,3 +136,38 @@ slugs, the three GPU images included, which are not candidates here.
 *Sourced — <https://docs.digitalocean.com/products/droplets/details/images/>, opened by me on
 2026-10-02. `doctl` could not re-read it, because no DigitalOcean token is held, per
 [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md).*
+
+**Every Droplet fact and script so far is Ubuntu 24.04's.** The spikes created `ubuntu-24-04-x64`
+Droplets because it was the default, so choosing another OS means measuring those again: memory with
+nothing installed, the package steps, and the deploy.
+
+*Measured, 2026-09-30, in the twelfth pass of the hosting question, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`. Before anything was installed: 961 MB total, about 320 MB used, no swap, kernel
+`6.8.0-142-generic`, and `pro status` reporting Livepatch as available.*
+
+**Livepatch is free for up to five machines for personal use, and "is not a replacement for
+rebooting".** So on Ubuntu some kernel fixes still need a reboot at a set hour.
+
+*Sourced by a research agent on 2026-09-30, in the ninth pass, same source. Not re-opened.*
+
+**Multipass, the VM the hosting question used for the Mac, takes the same cloud-init user data as
+the Droplet**: its `--cloud-init` option accepts "Path or URL to a user-data cloud-init
+configuration". Multipass runs Ubuntu images, so for any other OS property 2 needs a different VM,
+which is unscored.
+
+*The quote is sourced by a research agent on 2026-09-30, in the ninth pass, same source, not
+re-opened. That Multipass runs only Ubuntu images is unverified, no source recorded.*
+
+**A runbook of every setup step is owed once the OS and the front are chosen**, in
+[../runbooks/](../runbooks/). It is written then because the spike scripts it draws on assume Ubuntu
+24.04. Those scripts, and the steps confirmed while running them, are in the twelfth pass, same
+source.
+
+**On Ubuntu, a package repository added by hand is not patched automatically until its origin is
+allowed.** "Just adding another package repository to an Ubuntu system WILL NOT make
+`unattended-upgrades` consider it for updates!" So property 3 is met for Node, Litestream or the
+front from a third-party repository only once that repository's origin is added to the allowed list.
+
+*Quoted in the tenth pass of the hosting question, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`, from a research agent's reading on
+2026-09-30. No URL is recorded beside it, and it was not re-opened.*

@@ -90,7 +90,7 @@ question needs to check rather than assume.
 
 *Sourced — second-hand from a research agent citing Percona benchmarks, 2026-09-03.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 - **Whether an fsync is honest is the case that matters, not how fast it is.** A virtualised disk
   that acknowledges a write before it is durable loses it on a power loss, and no latency measurement

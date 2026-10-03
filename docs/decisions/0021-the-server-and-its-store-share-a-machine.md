@@ -23,7 +23,7 @@ best defense is to not use SQLite for files on a network filesystem."
 **Recorded as its own claim rather than left inside
 [ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md)'s reasoning**, because it is what
 constrains hosting, and a hosting choice made without it is the failure that record exists to prevent.
-[Where does this run?](../questions/where-does-this-run.md) inherits this: any candidate must run an
+Where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) inherits this: any candidate must run an
 ordinary process with a local disk beside it.
 
 **What is ruled out is a network filesystem**, in every form: NFS, SMB, or a FUSE mount over object
@@ -45,7 +45,7 @@ What binds here is that the copy the process *writes* is local to it.
 
 **Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment placing
 the process and the file on one machine with a local filesystem. It is settled at M1 slice 4 by
-[where does this run?](../questions/where-does-this-run.md), and the failure it rules out is
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), and the failure it rules out is
 corruption rather than an error, per [../constraints.md](../constraints.md).
 
 ## Rejected
@@ -100,7 +100,7 @@ and it is the point of recording this separately rather than discovering it duri
 
 ## Also update
 
-- [x] `questions/where-does-this-run.md` — its field is narrowed to platforms offering an ordinary
+- [x] the hosting question, since deleted and read with `git show ed7f54e:docs/questions/where-does-this-run.md` — its field is narrowed to platforms offering an ordinary
       process with a local disk; the question stays open
 - [x] `constraints.md` — the network-filesystem fact is imported alongside the volume-redundancy one
 - [x] Nothing in `guarantees/` — this promises a player nothing

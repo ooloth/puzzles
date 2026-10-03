@@ -33,7 +33,7 @@ change rarely, paths under one host cost nothing. If it is a publication with it
 independence is worth something.
 
 Nothing has to be built to answer it. What has to happen is that
-[where does this run?](where-does-this-run.md) and
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) are not
 settled in a way that assumes one host forever without saying so.
 

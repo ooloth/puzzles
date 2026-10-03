@@ -36,7 +36,7 @@ What binds is the sentence above, stated as a property of the system rather than
 setting: a player-facing wait may not include waking something up.
 
 **It does not settle where any of it runs**, which is
-[where does this run?](../questions/where-does-this-run.md), or what the store is, which is
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), or what the store is, which is
 [are puzzles and player records in one store?](../questions/are-puzzles-and-player-records-in-one-store.md)
 and [ADR-0020](0020-the-stores-engine-is-sqlite.md). It constrains those choices without making
 them.
@@ -50,7 +50,7 @@ player is blocked on and nothing else.
 
 **Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment whose
 request-path components have no scale-to-zero configuration. It is settled at M1 slice 4 by
-[where does this run?](../questions/where-does-this-run.md) and is observable afterwards as a cold
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and is observable afterwards as a cold
 first request, which is the shape of the failure rather than an error anything reports.
 
 ## Rejected
@@ -108,11 +108,11 @@ $3.32, $5.92 and $11.11 for 256MB, 512MB, 1GB and 2GB; `$5.17` appears nowhere o
 2026-09-04. Hetzner Cloud's current small plans are CX23 at €5.49, CAX11 at €5.99 and CX33 at €8.49,
 so a range of €6.59–8.09 matches nothing they sell — it fits mid-tier plans priced before their
 15 June 2026 adjustment. Pricing the candidates properly belongs to
-[where does this run?](../questions/where-does-this-run.md).*
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).*
 
 **It forecloses the free tiers**, which is where the cheapest options live, and combined with
 [ADR-0006](0006-one-language-across-every-deployable.md)'s one-toolchain constraint it narrows the
-platform field before [where does this run?](../questions/where-does-this-run.md) is asked.
+platform field before where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) is asked.
 
 **It is cheap to reverse per platform and is recorded anyway.** Auto-stop is a config flag. What the
 record buys is not irreversibility but visibility: sleeping becomes a choice somebody makes rather
@@ -142,7 +142,7 @@ one. Nothing in this project has been timed, because nothing in this project exi
       it
 - [x] `constraints.md` — nothing to import. The wake-up figures are vendor claims about specific
       platforms rather than facts about the world, and they belong with
-      [where does this run?](../questions/where-does-this-run.md)
+      where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`)
 - [x] Nothing in `guarantees/` — this promises a player no duration, and deliberately does not.
       A bound on a wait is
       [what latency budget makes "immediately" checkable?](../questions/what-latency-budget-makes-immediately-checkable.md)

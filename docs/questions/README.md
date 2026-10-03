@@ -70,8 +70,8 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0047-nothing-automated-deletes-or-stops-resources-to-cap-spending](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) — spending is reported by alerts, so the Droplet is created with DigitalOcean's metrics agent for the traffic alert
    - **Given:** [0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments](../decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md) — the Droplet is created in the `puzzles` team, and spikes stay in `puzzles-experiments`
      - **Must answer:** [which-os-does-the-droplet-run](which-os-does-the-droplet-run.md) — or else the records on the front and the deploy switch are written against the packages and patching of an OS nobody chose, and changing it later rebuilds the setup scripts, the automatic patching and the local image together, with the store on the machine from M3
-     - **Must answer:** [what-sits-in-front-of-the-app-and-terminates-tls](what-sits-in-front-of-the-app-and-terminates-tls.md) — or else nothing answers HTTPS on the Droplet or chooses between the app's instances, so the first deploy either drops requests or has TLS added afterwards. Scored side by side with the OS, since each constrains the other
-     - **Must answer:** [where-does-this-run](where-does-this-run.md) — or else nothing settles what terminates TLS in front of the app's instances, or how a deploy switches between them, so the first deploy either drops requests or has TLS added afterwards
+     - **Must answer:** [what-sits-in-front-of-the-app-and-terminates-tls](what-sits-in-front-of-the-app-and-terminates-tls.md) — or else nothing chooses between the app's instances, so the first deploy drops requests, and slice 5 adds TLS with whatever front happened to be installed. Slice 4 is observed over HTTP on the Droplet's address, and TLS is first seen at slice 5, once the domain points at it. Scored side by side with the OS, since each constrains the other
+     - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player revalidates every asset on the network [../problem.md](../problem.md) names as the modal case. Costs a change to the front and the serving path together
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
 5. **The deployment answers at an address we control.**
@@ -234,8 +234,8 @@ board for six milestones and meeting the store for the first time with a finishe
     lever on how long an outage lasts, and it is ours rather than a provider's.
 11. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md) —
     there is no store at M1, so nothing can be disturbed there. Two processes on one machine can share
-    the file while a deploy overlaps them, as measured in the eighth and twelfth passes of
-    [where does this run?](where-does-this-run.md); what must stay single is the replicator. The rest —
+    the file while a deploy overlaps them, as measured in the eighth and twelfth passes of the hosting
+    question, read with `git show ed7f54e:docs/questions/where-does-this-run.md`; what must stay single is the replicator. The rest —
     checkpointing on exit, replication across a restart, rolling back past a migration — is real from
     the first row.
 12. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first

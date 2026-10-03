@@ -92,7 +92,7 @@ separated from its WAL, or a replication tool interrupted in the middle of its o
 the server is unreachable, so a deploy gap is cheap for this product in a way it would not be for a
 server-driven one. That widens the field of acceptable answers considerably.
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md), eighth and twelfth passes.
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), eighth and twelfth passes.
 These are observations for this question to weigh, not answers.*
 
 **Overlapping deploys with a shared file lost nothing when measured.**
@@ -109,5 +109,5 @@ These are observations for this question to weigh, not answers.*
 - **A crash**, as opposed to a deploy, can still commit a write whose acknowledgement never arrives.
   See [what happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md).
 
-*Measured, 2026-09-30. The scripts are in [where does this run?](where-does-this-run.md). Not
+*Measured, 2026-09-30. The scripts are in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`). Not
 measured: the real Fastify server, and a migration during a deploy.*

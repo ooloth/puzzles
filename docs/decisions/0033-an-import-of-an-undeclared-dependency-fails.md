@@ -58,7 +58,7 @@ itself, loudly, at import time, so what is unchecked is the configuration rather
   tool in the ecosystem assumes, it copies to another machine without thinking about symlinks, and
   it is pnpm's own recommended escape hatch for deployment targets that cannot follow them.
 
-  **Reverses if** [where does this run?](../questions/where-does-this-run.md) selects a host that
+  **Reverses if** where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) selects a host that
   cannot deploy a symlinked tree and no other route exists, which is a trade this record would lose
   rather than win.
 

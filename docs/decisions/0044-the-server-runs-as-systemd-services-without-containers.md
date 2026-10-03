@@ -23,7 +23,7 @@ amended: 2026-10-01
   a process.
 - [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
   the production-like run uses the production arrangement.
-- The maintainer's aims recorded in [where does this run?](../questions/where-does-this-run.md): "it
+- The maintainer's aims recorded in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`): "it
   just works", "it's so easy" and "great price".
 
 ## Scored against
@@ -65,7 +65,7 @@ installed.**
   - **Logs:** into journald.
 - **Observed on a real Droplet.** It dropped no request and lost no acknowledged write across five
   deploys under load, and it peaked at 373 MB used of 961 MB. Deploys took about 3 seconds. The
-  twelfth pass of [where does this run?](../questions/where-does-this-run.md) has the method. That run
+  twelfth pass of where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) has the method. That run
   had Caddy in front and a deploy that switched between two instances, so property 1 holds for this
   arrangement together with the records that settle the front and the switch.
 
@@ -111,8 +111,8 @@ time, and neither exists:
   of its own. **Reverses if** the maintainer comes to know Nix well.
 - **Not yet.** Rejected because M1 slice 4 cannot deploy until something runs the app.
 
-The working for each is in the eleventh pass of [where does this
-run?](../questions/where-does-this-run.md).
+The working for each is in the eleventh pass of where does this
+run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).
 
 ## Risk
 

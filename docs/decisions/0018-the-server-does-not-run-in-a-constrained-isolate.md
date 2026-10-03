@@ -36,7 +36,7 @@ rejecting the isolate does not reject Cloudflare. Any argument that reasons from
 runtime constraint is making the error this record exists to stop.
 
 **It does not settle where the server runs**, which is
-[where does this run?](../questions/where-does-this-run.md), nor which ordinary runtime executes the
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), nor which ordinary runtime executes the
 TypeScript, which
 [ADR-0030](0030-typescript-outside-the-browser-runs-on-node.md) settled on Node.
 
@@ -169,7 +169,7 @@ observable about the edge.
       eliminations this record caused
 - [x] `constraints.md` — nothing to import. The D1 limits and the Vercel and Deno retreats are facts
       about specific vendors rather than about the world, and they sit with
-      [where does this run?](../questions/where-does-this-run.md)
+      where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`)
 - [x] Nothing in `guarantees/` — this promises a player nothing
 
 Deliberately not decided here: where the server runs, which ordinary runtime executes the TypeScript,

@@ -160,7 +160,7 @@ engine. Litestream's default is one second. Nothing has said what is acceptable,
 [how much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md) asks the
 client-side half of the same question.
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 - **Backblaze B2 costs nothing at this size.** "First 10GB storage is always free", and "Class A, B,
   and C API calls are free for pay-as-you-go customers". *Sourced —

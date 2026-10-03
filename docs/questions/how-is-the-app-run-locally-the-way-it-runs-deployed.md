@@ -96,7 +96,7 @@ configuration, which is this question.
 *Measured — `PORT=3001 pnpm start` with `pnpm dev`: `/api/hello` through the dev server answered
 `502`, and `127.0.0.1:3001/api/hello` answered `Hello!`, 2026-09-27.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 - **Multipass takes the same cloud-init user data as a cloud VM**: `--cloud-init` accepts "Path or
   URL to a user-data cloud-init configuration". It runs Ubuntu images only. Read by an agent from

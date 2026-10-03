@@ -98,7 +98,7 @@ morning commute means nobody starts that day's puzzle.
 So this is a downtime bet rather than a data-loss bet — the data-loss half is
 [how is the store backed up?](how-is-the-store-backed-up.md) — and the downtime is not free.
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 **Two designs recover without a person.**
 

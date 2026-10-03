@@ -43,7 +43,7 @@ obvious.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 - **DigitalOcean Monitoring is free and opt-in.** It needs its agent on the Droplet, and alerts on
   CPU, load, memory, disk use, disk I/O and bandwidth by email or Slack. Read by an agent from

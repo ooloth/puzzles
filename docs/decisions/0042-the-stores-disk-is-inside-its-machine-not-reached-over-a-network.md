@@ -70,7 +70,7 @@ two kinds of disk again.
 
 ## Enforced by
 
-**Nothing yet.** [Where does this run?](../questions/where-does-this-run.md) scores hosts against
+**Nothing yet.** Where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) scores hosts against
 this, and the chosen host is what makes it true.
 
 ## Rejected
@@ -87,7 +87,7 @@ this, and the chosen host is what makes it true.
   between EC2 instances and EBS is single-digit milliseconds"; Google's
   [disk performance](https://docs.cloud.google.com/compute/docs/disks/performance) gives no latency
   for its standard disk. Read by research agents 2026-09-28; the working is under "Local disk against
-  network block storage" in [where does this run?](../questions/where-does-this-run.md).*
+  network block storage" in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).*
 - **Not yet.** Rejected because the host question scores candidates on the disk now, and several
   hosts differ on exactly this.
 

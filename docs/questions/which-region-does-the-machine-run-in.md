@@ -19,7 +19,7 @@ three to four round trips. The distance to the machine is paid on every one of t
 public, phone-first and in transit, and names no geography. So the input this question needs is not
 written down anywhere. Asked on 2026-09-29, the maintainer said they were not sure and would assume
 North America if they had to pick. That is an assumption, not a fact about the audience.
-[Where does this run?](where-does-this-run.md) uses it only to require a North American region from the
+Where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) uses it only to require a North American region from the
 host. This question still needs the fact.
 
 **M1 deploys to `tor1` without deciding this.** The maintainer agreed on 2026-09-30 that M1 slice 4's
@@ -29,7 +29,7 @@ before the first row is written.
 **It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
 redeploy. From the first row onward, moving it means moving the store, and later a live player
 record. That is why it sits at M3, where
-[where does this run?](where-does-this-run.md) leaves it as an input it deliberately does not weigh.
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) leaves it as an input it deliberately does not weigh.
 
 **Environments:** production only. A local run is on the maintainer's machine by definition, and per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
@@ -52,7 +52,7 @@ rather than only an input here.
 
 ## Source
 
-Raised 2026-09-27, while re-checking [where does this run?](where-does-this-run.md) before deriving its
+Raised 2026-09-27, while re-checking where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) before deriving its
 properties. No question file mentioned a region, and the maintainer agreed it should be tracked here
 at M3.
 
@@ -68,7 +68,7 @@ at M3.
 Helsinki, Ashburn, Hillsboro and Singapore. Google's free e2-micro exists only in `us-west1`,
 `us-central1` and `us-east1`.
 
-*Sourced — per the 2026-09-27 pass in [where does this run?](where-does-this-run.md), read by
+*Sourced — per the 2026-09-27 pass in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), read by
 research agents.*
 
 **DigitalOcean's North American datacenters are NYC1, NYC2, NYC3, SFO2, SFO3, TOR1, ATL1, RIC1,

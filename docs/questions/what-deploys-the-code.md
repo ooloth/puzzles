@@ -14,7 +14,7 @@ nothing currently says what. The host is a DigitalOcean Droplet, per
 as systemd services without containers, per
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). The three
 questions that sit closest all assume a deploy happens without asking what performs it:
-[where does this run?](where-does-this-run.md) compares hosts,
+the hosting question compared hosts until [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) settled one,
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) is scoped to what
 must hold before a change is committed, and
 [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) takes the deploy
@@ -71,8 +71,8 @@ Droplet brings nothing that runs the app, per
 
 **What a deploy targets is settled.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md): the app runs as systemd services on one Droplet, with
 no container runtime, so a release is a directory of built JavaScript and its `node_modules`. How the
-switch between versions works is still being settled in
-[where does this run?](where-does-this-run.md). What is left here is the pipeline: what triggers a
+switch between versions works is
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md). What is left here is the pipeline: what triggers a
 deploy, whether checks gate it, and where a release is built. If a production dependency ever has a
 native addon, a release has to be built on Linux x64, not on the maintainer's arm64 Mac.
 
@@ -102,3 +102,17 @@ DigitalOcean token at all, so the SSH key the pipeline holds is the credential t
 with read scopes only is allowed if the pipeline needs one.
 
 *Moved here 2026-09-30 from the hosting-account question when [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) resolved it.*
+
+**A check that fails on a native addon in production dependencies may not be needed.**
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names it under
+Enforced by, to guard a release built on the arm64 Mac and shipped to the amd64 Droplet. A release
+built on Linux x64 compiles any addon for the right CPU, so whether the check is needed depends on
+where releases are built, which this question answers. The likeliest source of an addon is the
+driver, at [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md).
+The check is drafted as an issue once the build location is known.
+
+**Whether the deploy script is written in shell or in TypeScript is also left here.** The spike's
+script was shell.
+
+*Moved here 2026-10-02 from the hosting question's open entry, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`.*

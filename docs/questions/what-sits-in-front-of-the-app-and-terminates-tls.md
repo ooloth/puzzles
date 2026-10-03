@@ -37,7 +37,9 @@ the front serving them from disk is one option. Property 9 below keeps that opti
 Scoring each candidate against the properties below, from its documentation. TLS and certificate
 issuance were never measured in the spikes, so they are observed on a Droplet before the record is
 written. The spikes did measure Caddy switching between two instances; that evidence is in the
-eleventh and twelfth passes of `where-does-this-run.md`, which commit `01cc03f` holds.
+eleventh and twelfth passes of the hosting question, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`, and in
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md).
 
 ## Properties the answer is scored against
 
@@ -132,7 +134,8 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Split out on 2026-10-02 from [where does this run?](where-does-this-run.md), whose open entry listed
+Split out on 2026-10-02 from the hosting question, deleted that day and
+read with `git show ed7f54e:docs/questions/where-does-this-run.md`. Its open entry listed
 "Record: Caddy is the front" as owed. That entry named the answer before any property was written,
 so the choice moved here to be derived first. The spikes in that file used Caddy 2.11.4 throughout.
 
@@ -151,3 +154,23 @@ production, and the local run on `localhost` is exempt from it.
 
 *Sourced — <https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API>, opened by me on
 2026-10-02.*
+
+**Caddy switched between two instances on its health checks and used about 50 MB.** On a real
+`s-1vcpu-1gb` Droplet running Ubuntu 24.04, Caddy 2.11.4 from its apt repository used 47 to 51 MB
+resident while a deploy switched between two app instances with no failed request. In a Linux
+container it used about 56 MB. Its configuration and the deploy order are in
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md).
+
+*Measured, 2026-09-30, in the eleventh and twelfth passes of the hosting question, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`. Not measured: TLS and certificate issuance, which those runs left out by serving HTTP only.
+This is one candidate measured, not a comparison.*
+
+**Caddy's apt repository is hosted on Cloudsmith** and needed `debian-keyring`,
+`debian-archive-keyring` and `apt-transport-https` on Ubuntu 24.04.
+
+*Measured, 2026-09-30, twelfth pass, same source.*
+
+**A certificate authority cannot issue for a VM on the Mac**, so the local run loads a local
+certificate where production gets a public one. That is the one difference property 12 allows.
+
+*Reasoned, ninth pass of the hosting question, same source.*

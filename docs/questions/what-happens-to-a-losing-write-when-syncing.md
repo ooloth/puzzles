@@ -155,7 +155,7 @@ deleting an account. That is where a stale device resurrects something.
 <https://docs.datastax.com/en/dse/6.9/architecture/database-internals/architecture-tombstones.html>.
 Checked 2026-09-02.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 - **A crash can commit a write whose acknowledgement never reaches the client.** When the server was
   killed under load, one run committed a write that its client saw fail. A client that retries the

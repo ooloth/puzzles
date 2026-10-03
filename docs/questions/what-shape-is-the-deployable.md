@@ -49,7 +49,7 @@ A decision record in [../decisions/](../decisions/) on how Node is pinned and pa
 
 Raised 2026-09-19, promoted out of a scratchpad note in
 [README.md](README.md) that observed nothing asked it. The note said to check whether
-[where does this run?](where-does-this-run.md) already covered it before writing a file; that check
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) already covered it before writing a file; that check
 was run and it does not.
 
 ## Options
@@ -86,7 +86,7 @@ Single executable applications carries "Stability: 1.1 - Active development".
 and the marker grepped by me on 2026-09-19.*
 
 **Neither of the two questions that need this asks it.** Checked on 2026-09-19 by reading
-[where does this run?](where-does-this-run.md) and
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
 [what deploys the code?](what-deploys-the-code.md): the first mentions containers only as a
 platform capability, the second only inside one pipeline option. Recorded because an absence is
 invisible and this one had already been noticed once and not acted on.
@@ -97,3 +97,19 @@ invisible and this one had already been noticed once and not acted on.
 that raised this question observed that Bun and Deno compile to a single executable and Node does
 not in the same way. [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
 settles the runtime, so this question is about how Node reaches the machine.
+
+**The spikes installed Node as the official tarball**, unpacked to `/opt/node-<version>-linux-x64`
+with `/opt/node` linked to it. The alternative the eleventh pass reasoned about installs Node from
+NodeSource's repository for the major line
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) names, patched by
+`unattended-upgrades` once that origin is added. That alternative was not run.
+
+*Measured for the tarball, reasoned for NodeSource, 2026-09-30, in the eleventh and twelfth passes of
+the hosting question, read with `git show ed7f54e:docs/questions/where-does-this-run.md`.*
+
+**The Droplet measurements ran on Node 24, while
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) names the 26 line.**
+Only one memory measurement, on macOS, ran on Node 26. Node 24 also names its process `MainThread`,
+not `node`, so a monitor matching on `node` misses it.
+
+*Measured, 2026-09-30, same source.*

@@ -44,7 +44,7 @@ What to establish: which mechanisms can pin both tools rather than one, since on
 whole point of asking this separately; whether the mechanism has to be installed itself, and what
 pins *that*; whether it is advisory or enforced, because a field nothing reads is documentation
 rather than a pin; and whether
-[where does this run?](where-does-this-run.md) and
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
 [what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 can both
 consume whatever is chosen, since they are two of the three machines that have to agree.
 

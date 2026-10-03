@@ -182,7 +182,7 @@ removes the main reason this record chose pnpm.
       [what pins the toolchain versions across machines?](../questions/what-pins-the-toolchain-versions-across-machines.md)
       was waiting on. Findings also went to
       [what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md)
-      and [where does this run?](../questions/where-does-this-run.md)
+      and where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`)
 - [x] invariants/ — [no package imports what it does not declare](../invariants/no-package-imports-what-it-does-not-declare.md),
       which is what [ADR-0033](0033-an-import-of-an-undeclared-dependency-fails.md) protects and
       where its owed check lives

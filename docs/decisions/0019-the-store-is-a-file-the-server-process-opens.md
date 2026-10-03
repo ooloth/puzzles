@@ -1,7 +1,7 @@
 ---
 number: 0019
 status: accepted
-amended: 2026-09-26
+amended: 2026-10-02
 date: 2026-09-03
 ---
 
@@ -56,6 +56,23 @@ distinction matters because the usual version is false. Setup is a wash: standin
 replication and a restore drill is about as much work as standing up a database daemon and its backup
 story. Day-to-day attention is near-identical. What is actually saved is three failure domains and one
 recurring maintenance event a year, since a file has no major-version upgrade.
+
+**Re-scored on 2026-09-30 over complete hosted setups, and kept, on price.** "Setup is a wash"
+assumed recovery is a restore. Once a dead host has to be recovered with no person involved, it is
+not a wash: every managed-database setup scored supplies that recovery, has fewer pieces to build and
+less to understand, and the file store does not. The file store needs a watchdog off the machine with
+fencing, which is the most delicate piece any setup asked for. But every managed setup that recovers
+without a person cost about $31 a month or more (Fly with Neon about $31, Fly Managed Postgres about
+$50, DigitalOcean's with a standby about $70). That is above the $20 ceiling in
+[ADR-0045](0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md). The file store on a
+Droplet scored about $6. So the file stays because no managed setup that buys the missing recovery
+fits the ceiling. Until a watchdog is built, a dead host is a scripted restore that a person starts,
+and a standing token that would let a watchdog create a Droplet needs a record of its own, per
+[ADR-0046](0046-no-standing-digitalocean-token-can-create-billed-resources.md).
+
+*Method — the eighth and ninth passes of the hosting question, 2026-09-30: setups scored on "it just
+works", "it's so easy" and "great price", with prices from vendor pages, some opened by that session
+and some read by agents. Read with `git show ed7f54e:docs/questions/where-does-this-run.md`.*
 
 ## Enforced by
 
@@ -168,8 +185,10 @@ reason.
   both write, promoting a replica, and holding the socket across restarts. For a managed service,
   failover is usually a plan tier, and a stateless server gets restarts that drop nothing on most
   hosts. The margin this record was decided on may not survive that. The maintainer raised the goal
-  on 2026-09-29, and the working is in [where does this run?](../questions/where-does-this-run.md),
-  fourth and fifth passes.
+  on 2026-09-29, and the working is in the fourth and fifth passes of the hosting question, read with
+  `git show ed7f54e:docs/questions/where-does-this-run.md`. The eighth and ninth passes then found the margin did not survive on
+  ease, and the record holds on price instead, per the Decision. **Reopens if** a managed-database
+  setup that recovers a dead host with no person comes within the $20 ceiling.
 
 ## Also update
 

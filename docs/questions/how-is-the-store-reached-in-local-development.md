@@ -104,7 +104,7 @@ one-sided rather than settled.
 
 *Reasoned — from reading that file, 2026-09-02.*
 
-*Mined 2026-09-30 from [where does this run?](where-does-this-run.md) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
+*Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
 **A SQLite file on a macOS folder mounted into a Docker Desktop container fails under WAL.** The
 server crashed with a bus error, and in one run acknowledged ids were missing from the file. The same

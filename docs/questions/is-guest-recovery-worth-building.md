@@ -99,7 +99,7 @@ lifetime to a 400-day ceiling, per [../constraints.md](../constraints.md).*
 **None of that draft's three rejection reasons stands unconditionally.** It listed orphan rows,
 undeletable data about unidentifiable people, and silent degradation to seven days when the API is
 not judged first-party. The seven-day degradation is contingent on
-[where does this run?](where-does-this-run.md) — same-origin removes it, and nobody has chosen a
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) — same-origin removes it, and nobody has chosen a
 hosting topology yet. The undeletable-data problem is contingent on
 [do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. The
 orphan-rows cost is overstated: a TTL or a cleanup job on unclaimed rows handles it.

@@ -342,6 +342,14 @@ record what you find.
    us to may also belong in `guarantees/`, `standards/`, `unfinished.md` or `CONTRIBUTING.md`, each
    linking to the record. Settle this from that list rather than asking the user which kind of
    record it is.
+1. **List every commitment the draft makes beyond its headline, and name the record that settled
+   each.** Read its Decision, its "What it commits us to" and its Enforced by, and write down each
+   policy, schedule, package source, mechanism or default it keeps. Each must trace to the headline
+   itself, to an earlier record, or to a Given. One that traces to nothing is a choice no one made.
+   Stop and follow "When a choice surfaces mid-work" in `CLAUDE.md`: move it to the question that
+   owns it, or open one. Do not keep it because it reads as a description of the default. This
+   happened on 2026-10-03, when drafts of ADR-0049 and ADR-0050 committed to applying updates as
+   released and to installing Node from NodeSource.
 1. Author the ADR. Its Decision carries the numbered properties from step 4 under **Scored
    against**, and each Rejected entry names the property it fails.
 1. For any resolved question files, mine any valuable content and then delete them, in the same

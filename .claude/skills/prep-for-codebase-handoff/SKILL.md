@@ -165,6 +165,14 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
   names, and a README describing a check its script does not implement. `check-docs.py` catches a
   violation that takes a fixed form, such as a banned heading, and cannot catch the same rule broken
   as a paraphrase, which is why this stays a scan.
+- **A record committing to something no record settled.** For each record in `docs/decisions/`,
+  list the commitments its Decision, "What it commits us to" and Enforced by sections make beyond
+  the headline: a policy, a schedule, a package source, a mechanism, a default kept. Name the record
+  or Given behind each. A commitment that traces to nothing is a choice made without anyone deciding
+  it, and it reads as settled because it sits in a record. It occurred in the drafts of ADR-0049 and
+  ADR-0050 on 2026-10-03, as "updates applied as released" and "Node from NodeSource"; the
+  maintainer caught it by asking why automatic updates were being built in. The fix moves the
+  commitment to the question that owns it.
 - **An ADR resting on something not yet settled.** For each record, take every **Forced by** input
   and every **Rejected** reason and ask what it grounds in. A rejection reason that depends on an
   open question is the expensive one, because the option stays rejected and the reasoning is never

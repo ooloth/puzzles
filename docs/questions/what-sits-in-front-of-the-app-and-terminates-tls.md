@@ -143,12 +143,14 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Leading after the fourth pass: Caddy**, with nginx still standing, either with its ACME module or
-with certbot, both on Debian 13, which leads
-[which OS does the Droplet run?](which-os-does-the-droplet-run.md). The maintainer agreed on
-2026-10-03 that Caddy leading matches how they weigh the properties read in context. The final
-comparison is Caddy against nginx with certbot, and weighs both ways of patching Caddy described in
-the fifth pass.
+**Chosen: Caddy**, on Debian 13, chosen by the maintainer on 2026-10-03 after the fifth pass, with a
+decision record to follow. nginx with certbot is the alternative it was chosen over, and loses on
+properties 1, 4, 12 and 13 read in context: no second authority or renewal information in Debian
+13's certbot, a deploy switch written into the deploy script, no local certificate, and two programs
+joined by a hook to set up in order and keep working. It wins on property 5, on memory and CPU, which
+do not bind, and on how much help exists. Caddy's restart on each patch is a known weakness against
+nginx, and the maintainer chose on 2026-10-03 to record its two mitigations, patching as released or
+in the monthly window, as a choice made at setup.
 
 **Caddy is not eliminated on property 5's measurement alone.** Its package upgrade refused
 connections for about a second, which the third pass measured. The maintainer decided on 2026-10-03
@@ -511,4 +513,17 @@ patch and a smaller community. nginx with certbot is two programs joined by a ho
 established, with in-place upgrades and the most help, at the cost of a longer configuration, a
 setup order to get right, a deploy switch written into the deploy script, and no fallback authority
 or renewal information in Debian 13's certbot.
+
+**CPU, read from the third pass's load runs.** On the same 1 vCPU Droplet, with the Python load
+generator sharing that CPU, the 20-second control runs completed 3,634 requests through Caddy, 7,216
+through nginx and 7,186 through Angie, about 180 and 360 a second; the 40-second upgrade runs show
+the same ratio, about 7,100 against 14,000. So nginx spent about half the CPU per request that Caddy
+did. Both figures are lower bounds on capacity, since the generator took much of the CPU, and the
+connections were kept alive, so TLS handshakes were not measured. Against the morning peak of 46
+requests a second modelled in [../constraints.md](../constraints.md), Caddy has at least four times
+the headroom and nginx at least eight. CPU does not bind at that peak; it would be worth measuring
+properly if the audience grew to about four times that generous model. The maintainer agreed on
+2026-10-03 to record it this way and keep it out of the deciding rows.
+
+*Measured, 2026-10-03, read from the third pass's runs; the threshold is reasoned from them.*
 

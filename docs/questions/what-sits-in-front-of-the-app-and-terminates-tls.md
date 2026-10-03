@@ -143,11 +143,16 @@ so the choice moved here to be derived first. The spikes in that file used Caddy
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the second pass:** Caddy; nginx with an ACME client, either its native
-module or certbot; and Angie, a fork of nginx with ACME built in.
+**Still standing after the third pass:** nginx with its native ACME module, and Angie, a fork of
+nginx with ACME built in. Both were measured on Debian 13, which leads
+[which OS does the Droplet run?](which-os-does-the-droplet-run.md).
 
 **Out, each on the one property it fails:**
 
+- **Caddy** fails property 5: upgrading its package under load failed 33, 44 and 191 requests in
+  three runs, nearly all refused connections while it restarted, where nginx failed 0 to 3 and Angie
+  none. *Measured, 2026-10-03, third pass.* Reverses if Caddy's package upgraded without restarting,
+  or if upgrading the front were taken out of automatic patching and done by the deploy switch.
 - **HAProxy, Traefik and Envoy** fail property 9: none serves static files from disk, so choosing one
   closes the front's option at
   [what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
@@ -294,3 +299,59 @@ what reading cannot: issuance and renewal on a real certificate, and a package u
   which sells the paid edition; 1.12.2 shipped 2026-09-17.
 - **freenginx** has no ACME and no Linux packages, which is its elimination under **Options**. It is
   maintained by a very small team and ships about monthly.
+
+### Third pass 2026-10-03: the three survivors measured on Debian 13
+
+**The run.** Each front was installed from its own Debian 13 repository, one version back, on a fresh
+`s-1vcpu-1gb` Droplet in `tor1` from the `puzzles-experiments` team, with
+`spike.pencilpuzzles.app` pointed at it by a DNS-only A record with a 60-second TTL. A small Python
+server on `127.0.0.1:3000` stood in for the app, answering GET and POST, identical for all three. Each
+front sent `/api/` to it and served every other path from `/var/www/spike`, per
+[ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). The
+three ran one after another between about 03:05 and 03:36 UTC on 2026-10-03, with three certificate
+orders in all against Let's Encrypt's limit of five a week for one name. The scripts were deleted with
+the Droplets; this records what they did.
+
+**Property 1: each issued a trusted certificate within seconds of being configured.** Measured from
+the reload until `curl` from the maintainer's Mac accepted the certificate: Caddy 2.11.4 in 4
+seconds, nginx 1.30.4 with `nginx-module-acme` 0.4.1 in 7 seconds, Angie 1.12.1 in 6 seconds, each
+from Let's Encrypt. nginx and Angie each logged a failed attempt over IPv6, which these Droplets do not
+have, and then succeeded over IPv4. nginx's package installs without starting the service, so it
+needed `systemctl enable --now nginx`.
+
+**Property 5: a package upgrade under load.** Eight threads alternated GET and POST over TLS for 40
+seconds, and 10 seconds in the package was upgraded with `apt-get install`. Before each run it was
+downgraded again outside the load. A 20-second control run with no upgrade failed nothing on all
+three.
+
+- **Caddy 2.11.4 to 2.11.6:** 33, 44 and 191 failed requests, nearly all `ConnectionRefusedError`,
+  out of about 7,100 each. Its package restarts the service, as its post-install script reads.
+- **nginx 1.30.4 to 1.30.5:** 0, 3 and 1 failed requests out of about 14,000, each a keep-alive
+  connection closed as a request was sent. The slowest request was about 1.06 seconds.
+- **Angie 1.12.1 to 1.12.2:** 0, 0 and 0 failed requests out of about 14,000; slowest about 1.06
+  seconds. Its installed post-install script runs `service angie upgrade`, a binary upgrade like
+  nginx's, and installs an override for `needrestart`.
+
+Three runs each cannot separate nginx's 4 failures from Angie's 0: both upgrade the binary in place,
+and nginx's failures are the race any server has when it closes a keep-alive connection. Caddy's
+failures are of another kind and size.
+
+**Property 7: restoring certificate state onto a rebuilt machine issued nothing new.** For each front,
+its state directory was copied off the first Droplet, which was then deleted; a fresh Droplet got the
+current package, the restored directory and the same configuration, and DNS was pointed at it. Each
+served the same certificate serial as before and placed no new order. The directories are
+`/var/lib/caddy/.local/share/caddy`, the `state_path` set for nginx's issuer, here
+`/var/cache/nginx/acme-letsencrypt`, and `/var/lib/angie/acme`. Each holds the ACME account key and
+the certificate's private key, so it is a secret wherever it is copied.
+
+*Measured, 2026-10-03, one issuance, three upgrade runs and one restore per front.*
+
+**Where the third pass leaves the field.** nginx and Angie are the same server at heart and passed
+every measured row alike. What separates them is read rather than measured: nginx's ACME module is at
+0.4.1, Angie's ACME has shipped since 1.11; nginx calls its HTTP/3 experimental, Angie's is reported
+stable; and nginx is maintained by F5, while Angie is made by Web Server LLC, which sells a paid
+edition. Their configuration is close enough that moving from one to the other is a rewrite of a few
+directives, which under
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+lowers how much stewardship should weigh.
+

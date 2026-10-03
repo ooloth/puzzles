@@ -69,11 +69,12 @@ Opened 2026-09-01 by demoting the durability record, "What a player's work survi
 deleted; this question, its two siblings, and the Findings below carry forward everything in it). Its
 guest bound was argued from a rejection that does not hold up: it rejected an anonymous server copy
 for guests on three costs. An audit found two of the three are not settled facts at all —
-they are exactly what
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
-[do privacy regulations apply?](do-privacy-regulations-apply.md) are still working out — and the
+they were exactly what the hosting question, read with
+`git show ed7f54e:docs/questions/where-does-this-run.md`, and
+[do privacy regulations apply?](do-privacy-regulations-apply.md) were then still working out — and the
 third was overstated. See Findings. A decision reasoned from two contingent premises and one
-overstated one is not a decision; it is a placeholder wearing one's clothes. Everything the durability record argued
+overstated one is not a decision; it is a placeholder wearing one's clothes. The hosting half has since been settled, by
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). Everything the durability record argued
 about the guest bound is preserved below, as options and findings rather than as a settled answer.
 
 ## Options

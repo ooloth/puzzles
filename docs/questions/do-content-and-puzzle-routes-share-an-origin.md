@@ -32,9 +32,10 @@ whether anything about it wants tooling the game does not. If the content is a h
 change rarely, paths under one host cost nothing. If it is a publication with its own cadence, the
 independence is worth something.
 
-Nothing has to be built to answer it. What has to happen is that
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
-[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) are not
+Nothing has to be built to answer it. The host is settled by
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts the client and
+the API on one origin. What has to happen is that
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) is not
 settled in a way that assumes one host forever without saying so.
 
 ## Properties the answer is scored against

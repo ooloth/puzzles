@@ -19,7 +19,7 @@ three to four round trips. The distance to the machine is paid on every one of t
 public, phone-first and in transit, and names no geography. So the input this question needs is not
 written down anywhere. Asked on 2026-09-29, the maintainer said they were not sure and would assume
 North America if they had to pick. That is an assumption, not a fact about the audience.
-Where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) uses it only to require a North American region from the
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) uses it only to require a North American region from the
 host. This question still needs the fact.
 
 **M1 deploys to `tor1` without deciding this.** The maintainer agreed on 2026-09-30 that M1 slice 4's
@@ -29,7 +29,7 @@ before the first row is written.
 **It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
 redeploy. From the first row onward, moving it means moving the store, and later a live player
 record. That is why it sits at M3, where
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) leaves it as an input it deliberately does not weigh.
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) leaves it to this question.
 
 **Environments:** production only. A local run is on the maintainer's machine by definition, and per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)

@@ -70,8 +70,8 @@ two kinds of disk again.
 
 ## Enforced by
 
-**Nothing yet.** Where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) scores hosts against
-this, and the chosen host is what makes it true.
+**Nothing yet.** The hosting question scored hosts against this, and the host it chose,
+[ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)'s Droplet, is what makes it true.
 
 ## Rejected
 

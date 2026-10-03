@@ -98,9 +98,11 @@ lifetime to a 400-day ceiling, per [../constraints.md](../constraints.md).*
 
 **None of that draft's three rejection reasons stands unconditionally.** It listed orphan rows,
 undeletable data about unidentifiable people, and silent degradation to seven days when the API is
-not judged first-party. The seven-day degradation is contingent on
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) — same-origin removes it, and nobody has chosen a
-hosting topology yet. The undeletable-data problem is contingent on
+not judged first-party. The seven-day degradation was contingent on the hosting
+topology. [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) has since put the API on the app's own origin,
+which the constraint exempts, so what remains open is whether anything in front of the Droplet changes
+what the hostname resolves to, which is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md). The undeletable-data problem is contingent on
 [do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. The
 orphan-rows cost is overstated: a TTL or a cleanup job on unclaimed rows handles it.
 

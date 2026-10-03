@@ -76,7 +76,7 @@ be, and M1 slice 1 is where one first answers a request.
   awkwardly: withholding content means the gate lives in someone else's rules engine rather than in
   code we write, and `../problem.md` names a demonstrable full-stack system as a maintainer purpose
   that this would hollow out. It remains a live option for *what runs the server*, which is
-  where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) rather than this record.
+  where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), since settled by [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md) rather than this record.
 
 - **Leave it implicit.** [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) forces this and a careful reader would infer it. Rejected because
   the file listing is the checklist of what is settled, and a constraint only derivable by inference

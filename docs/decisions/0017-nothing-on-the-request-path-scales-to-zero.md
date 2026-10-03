@@ -36,7 +36,7 @@ What binds is the sentence above, stated as a property of the system rather than
 setting: a player-facing wait may not include waking something up.
 
 **It does not settle where any of it runs**, which is
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), or what the store is, which is
+where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), since settled by [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md), or what the store is, which is
 [are puzzles and player records in one store?](../questions/are-puzzles-and-player-records-in-one-store.md)
 and [ADR-0020](0020-the-stores-engine-is-sqlite.md). It constrains those choices without making
 them.
@@ -49,8 +49,8 @@ player is blocked on and nothing else.
 ## Enforced by
 
 **Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment whose
-request-path components have no scale-to-zero configuration. It is settled at M1 slice 4 by
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and is observable afterwards as a cold
+request-path components have no scale-to-zero configuration. It was settled at M1 slice 4 by
+[ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md) and is observable afterwards as a cold
 first request, which is the shape of the failure rather than an error anything reports.
 
 ## Rejected

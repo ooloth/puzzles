@@ -44,8 +44,8 @@ What binds here is that the copy the process *writes* is local to it.
 ## Enforced by
 
 **Nothing. Asserted only, and nothing is deployed.** What would make it true is a deployment placing
-the process and the file on one machine with a local filesystem. It is settled at M1 slice 4 by
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), and the failure it rules out is
+the process and the file on one machine with a local filesystem. It was settled at M1 slice 4 by
+[ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md), and the failure it rules out is
 corruption rather than an error, per [../constraints.md](../constraints.md).
 
 ## Rejected

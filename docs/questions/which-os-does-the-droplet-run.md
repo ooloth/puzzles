@@ -117,7 +117,12 @@ and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and C
 
 *Scored in the first pass, 2026-10-02, under **Findings**.*
 
-**Still standing after the third pass:** Ubuntu 24.04, Ubuntu 26.04 and Debian 13.
+**Leading after the fourth pass: Debian 13**, with Ubuntu 24.04 still standing. Debian 13 leads on
+properties 5, 6 and 7: the most memory left and the steadiest, the fastest reboot, the fewest services
+and nothing to switch off, no service restarts after updates, and the fewest regressions shipped.
+Ubuntu 24.04 leads only on property 4, through Ubuntu Pro's free tier. The maintainer agreed on
+2026-10-03 that this matches how they weigh the properties. It is not yet a decision: the front is
+scored on it next, since the two are scored side by side.
 
 **Out, each on the one property it fails:**
 
@@ -130,6 +135,10 @@ and 26.04, Debian 13, Fedora 43 and 44, Rocky Linux and AlmaLinux 8 to 10, and C
   as standard support.
 - **Rocky and AlmaLinux 8** fail property 4: active support ended in 2024 and security support ends
   2029-05-31. *Same source.*
+- **Ubuntu 26.04** fails property 7: it is the youngest survivor, with one point release, and shipped
+  the most regressions for its time in the field, at least 5 in 5.3 months, while its only gain over
+  24.04 is two more years of support. *Fourth pass, 2026-10-03.* Agreed by the maintainer on
+  2026-10-03. Reverses once it has a record in the field comparable to 24.04's.
 - **Rocky and AlmaLinux 9 and 10** fail property 1: AlmaLinux 9 issued 62 kernel advisories in the
   year to 2026-10-02 against Debian 13's 16, so staying patched takes about three times the reboots,
   each an outage of the one machine. Their one advantage, support to 2032 and 2035 on property 4, is

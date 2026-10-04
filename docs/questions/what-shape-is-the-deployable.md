@@ -73,6 +73,15 @@ runtime, so neither is open.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**If Node is installed on the host, NodeSource's repository is held to [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).** It
+would need a key scoped by `signed-by`, the same versions for amd64 and arm64, old versions kept,
+and an apt pin to the major line [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
+names, which also answers the risk that its origin pattern matches every line. Whether NodeSource
+meets each has not been checked. Node carried inside each release arrives by deploy, and that record
+does not govern it.
+
+*Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).*
+
 **How Node is pinned and patched is left here.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app as systemd services with no
 container. So Node is either installed on the host and patched by the package manager, or carried as
 an exact binary inside each release and patched only by deploying. The first keeps Node patched

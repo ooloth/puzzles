@@ -87,6 +87,8 @@ it usually matters more than the failure itself.>
 
 - [A security update fails and nobody knows](a-security-update-fails-and-nobody-knows.md)
   — updates run unattended by design, so a failed run is read by no one and the fixes age silently.
+- [A pinned package outlives its supported major version](a-pinned-package-outlives-its-supported-major-version.md)
+  — every daily run succeeds, because the pin has removed the only update that would carry the fix.
 
 ### Threatening availability and cost
 

@@ -64,6 +64,16 @@ backups, and alerting when a security update fails. When updates are applied is
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Two update failures leave no error at all, and the mechanism here has to catch both.** A
+repository that cannot be downloaded is logged by Debian's daily script at debug level only, and the
+upgrade runs on the old lists, per "Debian 13 updates itself on its own clock" in
+[../constraints.md](../constraints.md). And a package pinned to its major version per
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) gets no fixes once upstream supports only a newer line, while every run
+succeeds: [a pinned package outlives its supported major version](../failure-modes/a-pinned-package-outlives-its-supported-major-version.md).
+The maintainer asked on 2026-10-03 that a mechanism for noticing the second eventually exist.
+
+*Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) and the constraint above.*
+
 **What a failed update leaves to find it by, on Debian 13.** `/var/log/apt/history.log` and
 `/var/log/dpkg.log` rotate monthly and keep 12; `/var/log/unattended-upgrades/` keeps 6 and records
 each run's errors. Syslog output from `unattended-upgrades` is off by default. Nothing is sent

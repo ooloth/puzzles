@@ -18,7 +18,10 @@ a security fix reaches the running system within a day.
 
 1. Updates install unattended each day at a set hour, per [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 2. A run fails: a package's maintainer script errors, dpkg is left half-configured, the disk is full,
-   or a repository's signing key changes. Each is ordinary.
+   or a repository's signing key changes. Each is ordinary. A repository that cannot be downloaded
+   does not even fail the run: Debian's daily script logs it at debug level and upgrades from the
+   lists already on disk, per "Debian 13 updates itself on its own clock" in
+   [../constraints.md](../constraints.md).
 3. The failure is written to `/var/log/unattended-upgrades/` and nowhere a person reads.
 4. Each later run meets the same failure, or skips the packages held back by it. The machine keeps
    serving, on fixes that are days, then weeks, old.

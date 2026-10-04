@@ -104,6 +104,14 @@ and omitted the step that protects a player's work.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Litestream has to come from a source [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) allows.** That is Debian 13's archive or
+a signed apt repository that publishes upstream's releases within about a day for amd64 and arm64,
+keeps old versions, and is pinned to Litestream's major version. A `.deb` downloaded from its GitHub
+releases is not one, because nothing would patch it. Whether Debian or any such repository carries
+Litestream has not been checked.
+
+*Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).*
+
 **A settled record depends on this answer being continuous.**
 [ADR-0042](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md)
 keeps the store on a disk inside its machine, which dies with the machine, rather than on network

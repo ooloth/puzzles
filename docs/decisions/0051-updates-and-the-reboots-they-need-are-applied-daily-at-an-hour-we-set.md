@@ -75,7 +75,8 @@ machine, so applying fewer means waiting longer.
 it uses, and reboots then if anything installed needs it.**
 
 - **Sources.** Debian's archive and security archive as Debian ships them, plus Caddy's repository
-  (`o=cloudsmith/caddy/stable`). Node's repository is added if
+  (`o=cloudsmith/caddy/stable`). Which sources are allowed at all is
+  [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md). Node's repository is added if
   [what shape is the deployable?](../questions/what-shape-is-the-deployable.md) puts Node on the
   host.
 - **The hour.** Both apt timers run at the hour, and the reboot waits for the same hour. Which hour
@@ -131,6 +132,9 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 - **A failed run is silent** until [how is the server operated?](../questions/how-is-the-server-operated.md)
   at M11 adds alerting.
 - **A NodeSource origin pattern matches every major line**, since all share the codename `nodistro`.
+  The major-version pin
+  [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+  requires of every third-party repository holds Node to one line if it comes from there.
 
 ## Revisit when
 

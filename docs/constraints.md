@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-02
+updated: 2026-10-03
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -884,6 +884,59 @@ file is past its `Valid-Until`: 4 days old was accepted, 7 days was refused, unl
 turned off. Repositories outside Debian's archive have no snapshot service.
 
 *Measured on a local Debian 13 arm64 VM, 2026-10-03.*
+
+**A repository that fails to download is hidden by the daily run.** In apt's `apt.systemd.daily`, a
+failed `apt-get update` is reported only through `debug_echo` as "download updated metadata
+(error)", and `unattended-upgrade` then runs anyway on the package lists already on disk. So a
+repository that is unreachable, has moved, or fails its signature check leaves the machine on old
+versions with nothing outside the journal saying so.
+
+*Sourced: `debian/apt.systemd.daily` on apt's main branch, opened 2026-10-03. That apt 3.0.3 in
+Debian 13 has the same flow is assumed from the branch, not checked against its tag.*
+
+## Hosting — Debian 13's Caddy trails upstream's security fixes by months, and only Caddy's own repository keeps pace on both architectures
+
+**Debian 13 ships Caddy 2.6.2 with fixes backported by its security team, months after upstream.**
+`2.6.2-12+deb13u1` was uploaded to `trixie-security` on 10 August 2026 with fixes for eight CVEs that
+upstream had fixed in 2.11.1 (23 February), 2.11.3 (12 May) and 2.11.4 (3 June): 68 to 168 days
+later. CVE-2026-77281, fixed upstream in 2.11.4, is marked `<no-dsa> (Minor issue)` for trixie and
+waits for a point release.
+
+*Sourced: the package's `debian/changelog` on `sources.debian.org`, Caddy's GitHub releases API, and
+Debian's security tracker pages for CVE-2026-45692 and CVE-2026-77281, opened 2026-10-03. Which
+upstream release fixed each of the other CVEs was read from the tracker's descriptions by a research
+agent and not re-opened for each.*
+
+**Debian's backports have no security support.** The backports FAQ answers "Is there security support
+for packages from backports.debian.org?" with "Unfortunately not. This is done on a best effort basis
+by the people who track the package". Caddy in `trixie-backports` is `2.11.2-1~bpo13+1`, built for
+amd64 only.
+
+*Sourced: `backports.debian.org/FAQ/` and `qa.debian.org/madison.php?package=caddy`, opened
+2026-10-03. That its arm64 build failed and was not retried is a research agent's reading of
+`buildd.debian.org`, not re-opened.*
+
+**Caddy's own apt repository, on Cloudsmith, publishes each release within hours, for amd64 and arm64
+alike, and keeps old versions.** Both architectures' `Packages` indexes list the same 39 versions,
+ending at 2.11.7. The 2.11.4 arm64 package was uploaded at 04:38 UTC on 3 June 2026, before the GitHub
+release at 06:52. The repository's sources line scopes its key with
+`signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg`. No published policy says whether its
+`stable` channel would carry a Caddy 3, and Caddy's security policy supports only the latest 2.x.
+The hosting is Cloudsmith's free open-source plan, whose policy says it "may have to suspend the
+open-source repository" if eligibility is questioned.
+
+*Sourced: both `Packages` indexes, Cloudsmith's package API for 2.11.4 and
+`dl.cloudsmith.io/public/caddy/stable/debian.deb.txt`, opened 2026-10-03. The other releases' upload
+times, the security policy and the hosting terms are a research agent's reading of Cloudsmith's API, its open-source hosting policy and Caddy's
+`SECURITY.md`, not re-opened.*
+
+**Every Caddy package restarts Caddy on upgrade.** Caddy's `postinstall.sh` runs
+`deb-systemd-invoke try-restart caddy.service` when upgrading, and Debian's package copies that
+script. Caddy 2 has no graceful binary upgrade.
+
+*Sourced: `scripts/postinstall.sh` in `caddyserver/dist`, opened 2026-10-03. Debian's copy and the
+lack of a graceful upgrade are a research agent's reading of Debian's `debian/rules` and Caddy's
+forum, not re-opened.*
 
 ## Hosting — providers raise prices, and differ in whether existing machines are spared
 

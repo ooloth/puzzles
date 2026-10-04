@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-10-03
 update_when: a way this system can fail is identified, or one actually happens
 decays: slow
 status: active
@@ -82,6 +82,11 @@ it usually matters more than the failure itself.>
 - [Nobody can start today's puzzle](nobody-can-start-todays-puzzle.md)
   — an outage is invisible to somebody mid-puzzle and total for somebody arriving, and the arrivals
   cluster.
+
+### Threatening the machine's safety
+
+- [A security update fails and nobody knows](a-security-update-fails-and-nobody-knows.md)
+  — updates run unattended by design, so a failed run is read by no one and the fixes age silently.
 
 ### Threatening availability and cost
 

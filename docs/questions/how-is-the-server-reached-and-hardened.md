@@ -104,7 +104,7 @@ chose, running the systemd services of
   agent.*
 - **Live kernel patching does not apply.** Livepatch is Ubuntu's, and the Droplet runs Debian 13 per
   [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), so kernel fixes take a reboot. When
-  that happens is [when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md).
+  that happens is set by [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 - **A fresh Droplet has no swap**, per [../constraints.md](../constraints.md). The spike capped the
   app with `MemoryMax` and hardened its unit with `NoNewPrivileges`, `ProtectSystem=strict`,
   `ReadWritePaths` and `PrivateTmp`. The unit is in the question's twelfth pass.

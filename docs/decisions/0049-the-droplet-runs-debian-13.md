@@ -101,9 +101,7 @@ The working is in the question this record resolved, read with
 - **How Node is installed and patched**, by the host's package manager or inside each release. That
   is [what shape is the deployable?](../questions/what-shape-is-the-deployable.md).
 - **When updates are applied and when the machine reboots**: as released, on a schedule we set, or
-  with each deploy. That is [when are updates applied to the machine?](../questions/when-are-updates-applied-to-the-machine.md), in M1 slice 4. Until it is answered, Debian's own
-  packages update as shipped, and anything installed from another repository updates only when
-  upgraded by hand.
+  with each deploy. That is [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 
 **The choice does not depend on that answer.** Rescored under each way of applying updates on
 2026-10-03, Debian 13 leads on every row that does not depend on timing: memory, reboot time,

@@ -847,6 +847,44 @@ metadata. What happens when a host dies outright is not stated. That case is lef
 *Sourced — [live migration](https://docs.digitalocean.com/products/droplets/details/live-migration/),
 read 2026-09-29.*
 
+## Hosting — Debian 13 updates itself on its own clock, and asks for a reboot only after a kernel
+
+**Debian 13 installs updates every morning unless told otherwise.** apt 3.0.3's
+`apt-daily-upgrade.timer` runs at 06:00 machine time with up to an hour's random delay, and
+`unattended-upgrades` acts on Debian's own archive and security archive only. A repository added by
+hand, such as Caddy's or NodeSource's, is left alone until its origin is allowed. Caddy's repository
+names its origin `cloudsmith/caddy/stable`; NodeSource's names `. nodistro`, shared by every major
+line it publishes.
+
+*Sourced — `sources.debian.org/data/main/a/apt/3.0.3/debian/apt-daily-upgrade.timer`, and the
+`Release` files of `dl.cloudsmith.io/public/caddy/stable/deb/debian` and `deb.nodesource.com`,
+fetched 2026-10-03; the allowed origins from `unattended-upgrades` 2.12's shipped configuration, read by a
+research agent and seen in a run's log on a local Debian 13 VM, 2026-10-03.*
+
+**Only a kernel install marks the machine as needing a reboot.** `unattended-upgrades` installs a
+kernel hook that creates `/var/run/reboot-required`, and its automatic reboot waits for that file. An
+upgrade of `libc6` creates no marker, and nothing restarts the processes still using the replaced
+library unless something like `needrestart` is installed. Set to restart automatically,
+`needrestart` restarts every affected unit, the app's included. Old kernels are removed by default.
+
+*Sourced — the hook's text in `unattended-upgrades` 2.12 and its path in Debian 13's package file
+list, and `Remove-Unused-Kernel-Packages` defaulting to true in its source, opened 2026-10-03.
+Measured on a local Debian 13 arm64 VM on 2026-10-03: a kernel install created the marker, and
+`needrestart` in automatic mode ran `systemctl restart app.service ssh.service ...` after a libc6
+upgrade.*
+
+**An upgrade run draws about 114 MB.** Upgrading libc6, OpenSSL and a kernel together lowered
+`MemAvailable` from 751 MB to 637 MB on a 1 GB VM.
+
+*Measured once, on a local Debian 13 arm64 VM, 2026-10-03, sampling every 0.2 seconds.*
+
+**A pin to a snapshot of Debian's archive expires after about six days.** `apt -S <timestamp>`
+installs the archive as it stood then, security included, but apt refuses a pin whose `Release`
+file is past its `Valid-Until`: 4 days old was accepted, 7 days was refused, unless that check is
+turned off. Repositories outside Debian's archive have no snapshot service.
+
+*Measured on a local Debian 13 arm64 VM, 2026-10-03.*
+
 ## Hosting — providers raise prices, and differ in whether existing machines are spared
 
 **A host's price can rise under a running machine.** So a setup priced close to

@@ -116,8 +116,9 @@ when slice 4 is built.
 **The front is Caddy, whose free edition has active health checks.** The settings the spikes used
 are above. Had the front been nginx or Angie, whose free editions have none, the deploy script would
 have rewritten a file naming the live instance and reloaded. A reboot of the Droplet, which takes
-about 18 seconds on Debian 13, is not a deploy and is not switched; when it happens is
-[when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md).
+about 18 seconds on Debian 13, is not a deploy and is not switched; it happens at the hour
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) sets for updates. That record also forbids restarting the app's unit
+for a replaced library, since the restart would bypass this switch.
 
 *From [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) and
 [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md); the working is read with

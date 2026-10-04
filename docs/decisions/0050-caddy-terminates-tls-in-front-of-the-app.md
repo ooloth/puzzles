@@ -101,12 +101,12 @@ The working is in the question this record resolved, read with
 
 **Its known weakness.** Caddy's package restarts it on every upgrade, which refused connections for
 about a second in each of three runs, where nginx upgrades in place. How much that costs depends on
-when updates are applied, which is [when are updates applied to the machine?](../questions/when-are-updates-applied-to-the-machine.md), in M1 slice 4. Applied as released, it is about a
+when updates are applied, which is [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md). Applied as released, it is about a
 second of refused connections per release, about every two months in the year to 2026-10-02, which the client retries unseen.
 Applied on a schedule beside the reboot, or with each deploy, the restart falls inside an outage or a
 switch that happens anyway and costs nothing. The maintainer chose on 2026-10-03 to record both as
-mitigations of a known weakness against nginx. Until that question is answered, Caddy's repository is
-outside Debian's automatic updates, so Caddy is upgraded only by hand.
+mitigations of a known weakness against nginx. [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) applies updates as released, at an hour
+chosen to be quiet, with Caddy's repository included.
 
 **What this does not settle:**
 
@@ -130,7 +130,9 @@ when it is written, because the defaults are wrong here:
   must not be replayable;
 - certificate state under `/var/lib/caddy` restored with the machine, so a rebuild does not order a
   new certificate;
-- whatever [when are updates applied to the machine?](../questions/when-are-updates-applied-to-the-machine.md) settles for when Caddy is upgraded.
+- Caddy's repository among the sources
+  [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) updates
+  daily.
 
 ## Rejected
 
@@ -166,7 +168,8 @@ not scored here; whether anything sits in front of the Droplet is the domain que
 
 ## Risk
 
-- **A restart on every Caddy upgrade**, as above, and no automatic patching of Caddy at all until [when are updates applied to the machine?](../questions/when-are-updates-applied-to-the-machine.md) is answered.
+- **A restart on every Caddy upgrade**, as above, at the hour
+  [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) sets.
 - **Behaviour that is not on the page.** Caddy does a lot that its configuration does not say:
   certificates, the redirect, HTTP/3, directive order, and defaults that change between versions, as
   2.11.6 did with a header limit and idle timeouts in a patch release. `caddy adapt --pretty` prints

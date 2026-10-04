@@ -69,11 +69,12 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0046-no-standing-digitalocean-token-can-create-billed-resources](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) — a token that creates the Droplet is held by hand, expires soon and is deleted afterwards
    - **Given:** [0047-nothing-automated-deletes-or-stops-resources-to-cap-spending](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) — spending is reported by alerts, so the Droplet is created with DigitalOcean's metrics agent for the traffic alert
    - **Given:** [0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments](../decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md) — the Droplet is created in the `puzzles` team, and spikes stay in `puzzles-experiments`
-   - **Given:** [0049-the-droplet-runs-debian-13](../decisions/0049-the-droplet-runs-debian-13.md) — the Droplet runs Debian 13 from `debian-13-x64`, whose own packages update as shipped until the question on update timing says otherwise
+   - **Given:** [0049-the-droplet-runs-debian-13](../decisions/0049-the-droplet-runs-debian-13.md) — the Droplet runs Debian 13 from `debian-13-x64`
    - **Given:** [0050-caddy-terminates-tls-in-front-of-the-app](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) — Caddy, from its own repository, terminates TLS and sends `/api/` to the app, with `0rtt off` and its certificate state restored with the machine
+   - **Given:** [0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) — updates from Debian and Caddy's repository install daily at one hour, and the machine reboots then when anything needs it, never restarting a service for a library
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player revalidates every asset on the network [../problem.md](../problem.md) names as the modal case. Costs a change to the front and the serving path together
-     - **Must answer:** [when-are-updates-applied-to-the-machine](when-are-updates-applied-to-the-machine.md) — or else [what-shape-is-the-deployable](what-shape-is-the-deployable.md) decides when Node is patched with no policy for when anything else is, and the setup leaves Debian's packages updating as shipped while the front and Node update only by hand
+     - **Must answer:** [at-what-hour-does-the-machine-apply-updates-and-reboot](at-what-hour-does-the-machine-apply-updates-and-reboot.md) — or else the timer keeps Debian's 06:00 to 07:00 UTC, chosen by nobody, and every reboot and Caddy restart lands there whether or not players are starting sessions
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
@@ -401,8 +402,9 @@ players are losing work, and nothing currently could tell us either way.
 11. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief.
 12. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
-    stopped. Patching moved to slice 4 of M1, as
-    [when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md). It sits here because noticing an outage is this milestone's theme. The
+    stopped. Patching moved to slice 4 of M1 and is settled by
+    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
+    except for alerting on a failed update, which stays here. It sits here because noticing an outage is this milestone's theme. The
     server runs on a bare Droplet as systemd services, per
     [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
     systemd restarts it and the rest is ours. Its access-and-hardening half is

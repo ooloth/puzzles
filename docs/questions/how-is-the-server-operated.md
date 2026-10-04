@@ -11,10 +11,9 @@ resolves_into: decision
 Running a server is not the same as choosing one. Something has to restart it when it dies, and tell
 someone when it stops answering.
 
-**When it is patched is a separate question.** [When are updates applied to the
-machine?](when-are-updates-applied-to-the-machine.md) was split out on 2026-10-03 and sits at M1 slice
-4, because how Node is carried cannot be answered without it. This question no longer covers
-patching.
+**When it is patched is settled.** [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) installs updates daily at an
+hour we set and reboots then when anything needs it. What it leaves here is noticing a failed update:
+a run that fails is silent until something alerts on it.
 
 **Getting onto the machine is a separate question.** Access, hardening and the lockout route are
 [how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at M2, because
@@ -58,13 +57,22 @@ operational plan for a single virtual machine and that no question in this folde
 N/A — this resolves into a set of arrangements rather than a choice between alternatives. What each
 covers: process supervision and restart, health checking from outside the machine, alerting to
 somewhere the maintainer actually reads, remote access that survives a broken SSH configuration, and
-backups. Security updates moved to
-[when are updates applied to the machine?](when-are-updates-applied-to-the-machine.md) on
-2026-10-03.
+backups, and alerting when a security update fails. When updates are applied is
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**What a failed update leaves to find it by, on Debian 13.** `/var/log/apt/history.log` and
+`/var/log/dpkg.log` rotate monthly and keep 12; `/var/log/unattended-upgrades/` keeps 6 and records
+each run's errors. Syslog output from `unattended-upgrades` is off by default. Nothing is sent
+anywhere a person reads, which is
+[a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
+
+*Sourced by a research agent on 2026-10-03 from the logrotate files of apt 3.0.3, dpkg 1.22.22 and
+unattended-upgrades 2.12, moved here from when are updates applied to the machine? (read with
+`git show cb8e751:docs/questions/when-are-updates-applied-to-the-machine.md`). Not opened by me.*
 
 **A health check that only proves the process is listening proves very little.** The failure this
 project cares about is a write that does not land, so the check has to exercise the storage path

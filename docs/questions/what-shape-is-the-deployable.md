@@ -124,7 +124,7 @@ release's codename misses. None of this applies if Node is carried inside each r
 [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).*
 
 
-**When Node from the host would be patched is now settled.** If Node comes from NodeSource's
+**Node from the host would be patched daily at the chosen hour.** If Node comes from NodeSource's
 repository, [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
 adds that repository to the daily updates at the chosen hour. An upgrade replaces Node on disk and
 leaves the running app on the old binary until the machine reboots at that hour, because that record

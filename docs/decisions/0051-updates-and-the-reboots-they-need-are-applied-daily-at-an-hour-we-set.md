@@ -25,7 +25,8 @@ the running machine, a service restarts because of it, a reboot applies a kernel
 an update fails or brings a regression, the machine is rebuilt, the production-like local run
 updates, and the maintainer finds out what changed.
 
-1. A security fix reaches the running system within a bounded time
+1. A security fix reaches the running system within a bounded time, scored as each option's exposure
+   window
    ([ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) property 3).
 2. Patched on disk is patched in memory
    ([ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) property 3).
@@ -100,16 +101,18 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 ## Rejected
 
 - **A weekly or monthly window.** Its case is real: at most 12 reboots a year instead of about 20,
-  and one predictable moment of change. It fails property 1: a critical kernel fix waits up to 30
-  days, or is applied by hand between windows. **Reverses if** an update applied as released takes
+  and one predictable moment of change. It fails property 1: a critical kernel fix waits up to 7
+  days under a weekly window and up to 30 under a monthly one, against about a day, or is applied by
+  hand between windows. **Reverses if** an update applied as released takes
   the app down and staging updates becomes worth the exposure.
 - **Security fixes as released, the rest on a schedule.** It fails property 1 for kernel fixes that
   arrive in point releases, which wait for the schedule. Caddy's repository has no security label,
   so for the front it collapses into one of the other options anyway. **Reverses if** Debian's point
   releases stop carrying fixes that matter to this machine.
 - **Pinning the machine and the local run to one archive snapshot, advanced deliberately.** It gives
-  identical package sets in both places. It fails property 3: there is no snapshot service for Caddy's
-  or NodeSource's repository. **Reverses if** everything on the machine comes from Debian's archive.
+  identical package sets in both places. It fails property 3: apt's snapshot addresses are built in
+  for Debian's archive, so Caddy's and NodeSource's repositories, which publish none, could not be
+  pinned with it (reasoned from apt 3.0.3's source, read by a research agent). **Reverses if** everything on the machine comes from Debian's archive.
 - **Rebuilding the Droplet from a freshly patched image.** It fails property 4: each rebuild needs a
   token that [ADR-0046](0046-no-standing-digitalocean-token-can-create-billed-resources.md) keeps
   out of standing use. **Reverses if** [ADR-0046](0046-no-standing-digitalocean-token-can-create-billed-resources.md) is.

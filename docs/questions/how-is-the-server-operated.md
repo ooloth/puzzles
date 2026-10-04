@@ -71,7 +71,8 @@ anywhere a person reads, which is
 [a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
 
 *Sourced by a research agent on 2026-10-03 from the logrotate files of apt 3.0.3, dpkg 1.22.22 and
-unattended-upgrades 2.12, moved here from when are updates applied to the machine? (read with
+unattended-upgrades 2.12, in the working for
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) (read with
 `git show cb8e751:docs/questions/when-are-updates-applied-to-the-machine.md`). Not opened by me.*
 
 **A health check that only proves the process is listening proves very little.** The failure this

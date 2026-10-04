@@ -77,8 +77,8 @@ What it was chosen for, all measured on Droplets on 2026-10-03:
 - **Nothing to switch off.** 13 to 14 services as shipped, none of them unneeded here. It has no
   `needrestart`, so an update applied while the app serves restarts nothing beside the package it
   updates.
-- **Security updates for its own packages are applied automatically as shipped**, through
-  `unattended-upgrades`, until the question below decides otherwise.
+- **Security updates for its own packages are applied automatically**, through
+  `unattended-upgrades`, at the time [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) sets.
 - **The fewest regressions shipped.** Four confirmed by Debian in its first 13.8 months, none of which
   stops a running server, against at least 13 for Ubuntu 24.04 in 29.2 months.
 
@@ -123,7 +123,8 @@ cloud image with the same cloud-init.
   disqualifies it. It is behind on property 5, 45 to 80 MB less memory and reboots half again as long,
   and on property 7, at least 13 regressions shipped including a snapd update that broke
   installation. Its `needrestart`, which restarts services after updates applied while the app
-  serves, weighs only if updates are applied that way, which is not yet decided. The
+  serves, weighs only if updates are applied that way, and [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) forbids
+  restarting the app for a library. The
   maintainer chose against it on those two together on 2026-10-03. Its support advantage rests on a
   free tier whose terms count "physical" machines, which a Droplet is not, and which Canonical may
   change. **Reverses if** Debian 13 ships regressions that break servers, or if the maintainer comes
@@ -154,9 +155,9 @@ not scored. NixOS was already rejected for the arrangement in [ADR-0044](0044-th
 ## Risk
 
 - **Kernel fixes wait for a reboot.** Without live patching, a critical kernel fix either takes an
-  unscheduled reboot of about 18 seconds or waits for the next planned one unpatched. Measured over a
-  year with a monthly window, that came to about the same total outage as Ubuntu with Livepatch,
-  about 340 seconds; what Debian gives up is earlier patching of the worst kernel bugs.
+  unscheduled reboot of about 18 seconds or waits for the next planned one unpatched. Under
+  [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) the reboot comes at the chosen hour on the day a kernel fix installs, about 20 a
+  year; what Debian gives up against Ubuntu is patching the worst kernel bugs without one.
 - **A shorter support window.** Long-term support ends June 2030, against 2034 for Ubuntu 24.04 under
   Ubuntu Pro, so the move to Debian 14 comes sooner.
 - **The evidence is one run per measurement.** Memory, reboot time and idle load were each read on one

@@ -20,8 +20,8 @@ a daily release time would make one hour the busiest of the day, and the update 
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
 carries the same configuration and can run it at any hour.
 
-**Until it is answered**, Debian's default holds: updates install between 06:00 and 07:00 UTC, an
-hour chosen by nobody.
+**Until it is answered**, Debian's default holds: updates install between 06:00 and 07:00 machine
+time, per [../constraints.md](../constraints.md), an hour chosen by nobody.
 
 ## What would settle it
 

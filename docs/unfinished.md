@@ -18,8 +18,8 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
 under `src/client/` that shows its answer. The host, how the app runs on it, its OS and its front are
-settled, and nothing is deployed: the deploy switch, what serves the client's files, when updates are
-applied, how Node is carried and what triggers a deploy are open.
+settled, and nothing is deployed: the deploy switch, what serves the client's files, the hour updates are
+applied at, how Node is carried and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 

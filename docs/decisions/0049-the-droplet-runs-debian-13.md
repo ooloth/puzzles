@@ -2,6 +2,7 @@
 number: 0049
 status: accepted
 date: 2026-10-03
+amended: 2026-10-03
 ---
 
 # 0049 — The Droplet runs Debian 13
@@ -50,8 +51,8 @@ the front, the release's support ending, and the same setup run on the Mac.
 the one vCPU and under 60 KB of traffic in ten idle minutes. Disk does not: the largest image used
 2.2 GB of about 24.
 
-**No candidate meets the second half of property 1.** Live kernel patching exists only on Ubuntu,
-and covers only critical and high kernel fixes, so every candidate reboots to stay patched, Debian 13
+**No candidate meets the second half of property 1.** Of the candidates, only Ubuntu offers live
+kernel patching of its own, and it covers only critical and high kernel fixes, so every candidate reboots to stay patched, Debian 13
 included. That half was therefore scored as how many reboots staying patched takes, and how long each
 one lasts.
 
@@ -86,7 +87,7 @@ The working is in the question this record resolved, read with
 
 **What it commits us to:**
 
-- **Kernel fixes need a reboot.** Debian has no live kernel patching, so the machine is rebooted to
+- **Kernel fixes need a reboot.** Debian offers no live kernel patching of its own, so the machine is rebooted to
   apply them.
 - **A major upgrade by mid-2030.** Debian 13's security support ends August 2028 and its long-term
   support June 2030, per endoflife.date as read by a research agent, so the machine moves to Debian

@@ -2,6 +2,7 @@
 number: 0050
 status: accepted
 date: 2026-10-03
+amended: 2026-10-03
 ---
 
 # 0050 — Caddy terminates TLS in front of the app
@@ -101,7 +102,7 @@ The working is in the question this record resolved, read with
 **Its known weakness.** Caddy's package restarts it on every upgrade, which refused connections for
 about a second in each of three runs, where nginx upgrades in place. How much that costs depends on
 when updates are applied, which is [when are updates applied to the machine?](../questions/when-are-updates-applied-to-the-machine.md), in M1 slice 4. Applied as released, it is about a
-second of refused connections per release, roughly monthly in 2026, which the client retries unseen.
+second of refused connections per release, about every two months in the year to 2026-10-02, which the client retries unseen.
 Applied on a schedule beside the reboot, or with each deploy, the restart falls inside an outage or a
 switch that happens anyway and costs nothing. The maintainer chose on 2026-10-03 to record both as
 mitigations of a known weakness against nginx. Until that question is answered, Caddy's repository is

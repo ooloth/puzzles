@@ -105,4 +105,5 @@ signed in.
   - Fly: 99.9%, for Enterprise only.
 - **A deploy need not cost downtime.** A deploy that dropped no request was observed on a Droplet,
   per the twelfth pass.
-- **A reboot for a kernel patch** is a brief outage, unless Livepatch covers the fix.
+- **A reboot for a kernel patch** is a brief outage. The Droplet runs Debian 13, per
+  [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), which offers no live patching of its own.

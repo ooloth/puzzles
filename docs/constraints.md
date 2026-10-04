@@ -828,7 +828,9 @@ a setup step, not a default.
 as `unattended-upgrades` and `packagekitd` were still running. So that figure overstates the steady
 state: with the app, Caddy and Litestream running, about 360 MB was in use in all.
 
-**Livepatch is available for its kernel**, so most kernel fixes can be applied without a reboot.
+**On Ubuntu, Livepatch is available for its kernel**, so most kernel fixes can be applied without a
+reboot. The Droplet runs Debian 13, per
+[ADR-0049](decisions/0049-the-droplet-runs-debian-13.md), which offers no live patching of its own.
 
 *Measured — two `s-1vcpu-1gb` Droplets in `tor1` running Ubuntu 24.04, kernel `6.8.0-142-generic`,
 created 2026-09-30. Read with `swapon --show` (it printed nothing), `free -m` after `cloud-init

@@ -70,7 +70,7 @@ upgrade runs on the old lists, per "Debian 13 updates itself on its own clock" i
 [../constraints.md](../constraints.md). And a package pinned to its major version per
 [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) gets no fixes once upstream supports only a newer line, while every run
 succeeds: [a pinned package outlives its supported major version](../failure-modes/a-pinned-package-outlives-its-supported-major-version.md).
-The maintainer asked on 2026-10-03 that a mechanism for noticing the second eventually exist.
+The maintainer wants a mechanism for noticing the second, whenever this question is answered.
 
 *Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) and the constraint above.*
 

@@ -77,9 +77,10 @@ already exists.
 **Caddy, installed from its own Debian repository, terminates TLS for the app's hostname and sends
 every path under `/api/` to the app.**
 
-Debian 13's own `caddy` package is not used. Its security fixes trail upstream's by months, and
-[ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
-admits Caddy's repository, pinned to `2.*`, under the rule it sets for every source.
+Debian 13's own `caddy` package is not used: its security fixes trail upstream's by months, per
+"Debian 13's Caddy trails upstream's security fixes by months" in
+[../constraints.md](../constraints.md). Which sources the machine may use at all is
+[ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).
 
 The maintainer chose it on 2026-10-03, reading every property in context over years of maintaining
 it alone. What decided it:

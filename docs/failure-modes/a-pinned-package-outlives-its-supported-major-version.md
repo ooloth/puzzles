@@ -33,8 +33,10 @@ healthy, because a run that installs nothing and a run that has nothing to insta
 from outside. [A security update fails and nobody knows](a-security-update-fails-and-nobody-knows.md)
 at least leaves an error in a log; this leaves nothing.
 
-**A new major version is rare enough to be forgotten.** Caddy 2 has been the current line since
-2020.
+**A new major version is rare enough to be forgotten.** Caddy 2.0.0 was released on 4 May 2020 and 2.x
+is still the current line.
+
+*Sourced: Caddy's GitHub releases API for `v2.0.0`, opened 2026-10-03.*
 
 ## How we'd notice
 

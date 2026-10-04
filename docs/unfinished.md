@@ -77,13 +77,15 @@ at M2.
 
 ### The Droplet's setup is decided but has no runbook
 
-**You'll see** [ADR-0049](decisions/0049-the-droplet-runs-debian-13.md) and
-[ADR-0050](decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) settling the OS and the front,
-and nothing in [runbooks/](runbooks/) saying how to set either up.
+**You'll see** [ADR-0049](decisions/0049-the-droplet-runs-debian-13.md),
+[ADR-0050](decisions/0050-caddy-terminates-tls-in-front-of-the-app.md), [ADR-0051](decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) and
+[ADR-0052](decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) settling the OS, the front, how updates are applied and where software comes from, and nothing
+in [runbooks/](runbooks/) saying how to set any of them up.
 
-**Actually** the only setup steps are spike notes in git history, which assume Ubuntu 24.04, not
-Debian 13: `git show ed7f54e:docs/questions/where-does-this-run.md` and
-`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.
+**Actually** the only setup steps are spike notes in git history, written on Ubuntu 24.04 or on a
+mix of Ubuntu and Debian 13: `git show ed7f54e:docs/questions/where-does-this-run.md`,
+`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md` and
+`git show cb8e751:docs/questions/when-are-updates-applied-to-the-machine.md`.
 
 **So** do not follow them as instructions; M1 slice 4 writes the setup and its runbook.
 

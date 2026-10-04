@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-30
+updated: 2026-10-03
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -74,8 +74,8 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) — updates from Debian and Caddy's repository install daily at one hour, and the machine reboots then when anything needs it, never restarting a service for a library
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player revalidates every asset on the network [../problem.md](../problem.md) names as the modal case. Costs a change to the front and the serving path together
-     - **Must answer:** [at-what-hour-does-the-machine-apply-updates-and-reboot](at-what-hour-does-the-machine-apply-updates-and-reboot.md) — or else the timer keeps Debian's 06:00 to 07:00 UTC, chosen by nobody, and every reboot and Caddy restart lands there whether or not players are starting sessions
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
+     - **Must answer:** [which-repositories-may-the-machine-install-packages-from](which-repositories-may-the-machine-install-packages-from.md) — or else the setup installs Caddy from whichever repository [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) happened to name, and [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) runs that publisher's install scripts as root every day with no decision that it may
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
@@ -363,6 +363,10 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    floor until there are players. Its wrong answer is invisible, since every browser above the
    floor shows the app either way, so it is settled by opening the built document in a browser
    below the floor rather than by reading.
+7. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
+   — the hour only matters once someone starts a session at it, and it must avoid the release hour
+   [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
+   may set at M8. Until then Debian's default hour harms nobody.
 
 ## M11 — the running system reports its own failures
 
@@ -503,6 +507,9 @@ would leave that file with nothing to hold.
 [what must we know about how the app is used?](what-must-we-know-about-how-the-app-is-used.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
+
+[At which milestone do players first use the app?](at-which-milestone-do-players-first-use-the-app.md)
+— several questions wait for players, M10's among them, and no milestone says when they arrive.
 
 [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
 — nothing waits on it now that the renderer is React, which needs neither `eval` nor injected

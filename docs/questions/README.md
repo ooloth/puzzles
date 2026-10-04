@@ -339,6 +339,11 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    answer that removes the most common wait in the product rather than dressing it, per
    [../problem.md](../problem.md) under "Where a player waits". It sits here rather than at M8 because
    prefetching is an offline capability and needs a rhythm to fetch ahead of, which M8 establishes.
+6. [Can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+   — the service worker serves an entry document from an earlier release, so its assets are asked
+   for after deploys it never saw. It sits here because before this milestone the window is the
+   milliseconds between the entry document and its assets. A dynamic import added earlier widens
+   that window and brings it forward.
 
 ## M10 — sudoku is finished, in guest mode
 

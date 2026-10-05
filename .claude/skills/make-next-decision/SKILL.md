@@ -89,10 +89,14 @@ directs you to proceed anyway after hearing the above.
 1. **Ask what the records have made stale.** For each question in the current and next milestone,
    check its premise against `docs/decisions/`. A question whose conditional a record has answered
    sends a reader to re-open a settled argument.
-1. **Look for one option listed in two question files.** It means two questions share moments and
-   each is set to score that option against its own list. Found on 2026-10-04: a proxy in front of
-   the Droplet was an option in both the file-serving and the domain question. Raise it, and work
-   the two as a group per "Name the group" at the start of section 4 below.
+1. **Look for one option listed in two question files, and split it before judging anything.** An
+   option named by category, such as "a CDN" or "a proxy in front", usually covers several concrete
+   arrangements that couple differently. Found on 2026-10-04: "something in front of the Droplet"
+   sat in both the file-serving and the domain question. It covered a caching proxy, which changed
+   no file-serving verdict, and an edge platform hosting the files, which was itself a way of
+   serving them. List the arrangements and which questions each one touches. Do not
+   propose moving, splitting or reordering questions here: that waits for scored verdicts, per
+   "Read the coupling off the grid" in section 5.
 1. Confirm the question that would be most impactful to answer next
 
 ### 2. Verify what the question files already claim, before relaying any of it
@@ -166,15 +170,17 @@ are named is the options' own list, and it reads as complete because it was writ
 Written first, it aims the research, turns the comparison into a grid, and gives every rejection
 the one property it fails.
 
-1. **Name the group before naming the moments.** List the open questions that share moments with
-   this one: the same slice, the next slice, any question that names the same option, and any
-   question whose answer changes what happens at a moment this one's answer also changes, such as
-   the same request or the same deploy. Mentioning a deploy is not enough; changing what it does
-   is. Step 6 of "Building a milestone's list" in `docs/questions/README.md` says why.
-   The sub-steps below then derive one list for the group rather than for this question alone, and
-   step 5 scores every candidate under every answer an unsettled member of the group could give. A
-   candidate whose verdict changes with that answer makes the member an input: stop and raise it as
-   a prerequisite. Where the group is this question alone, say so and why.
+1. **Name the group before naming the moments, and claim nothing about order yet.** Two things
+   look alike here and are not. **Sharing a property list** is cheap, and including a question that
+   turns out not to matter costs nothing, so be generous: the same slice, the next slice, any
+   question that names the same option, and any question whose answer changes what happens at a
+   moment this one's answer also changes, such as the same request or the same deploy. Mentioning a
+   deploy is not enough; changing what it does is. **Splitting, merging, moving or reordering
+   questions** is a decision, and nothing yet is evidence for one: candidates have not been scored.
+   So name the group, derive one list for it in the sub-steps below, and propose no change to how
+   the questions are arranged until "Read the coupling off the grid" in section 5. Step 6 of
+   "Building a milestone's list" in `docs/questions/README.md` says why. Where the group is this
+   question alone, say so and why.
 1. **List the moments the system touches the thing being chosen.** Each request, write, read,
    deploy, failure and wait it takes part in, named concretely from `docs/problem.md`,
    `docs/guarantees/` and the records. "The network" returns nothing to reason about. "A returning
@@ -280,6 +286,17 @@ afterwards; the observation is the artifact.
 1. **Score every candidate against every property, and count the survivors.** An unknown cell is
    not a pass: resolve it, or name it as what stops the comparison finishing. Do not form a
    recommendation yet.
+1. **Read the coupling off the grid.** For each candidate, score it again under every answer an
+   unsettled member of the group could give, and name the answers that change its verdict. A
+   question is coupled to this one only through named candidates, and only that evidence supports
+   moving, splitting or reordering questions. Where a candidate's verdict changes with an unsettled
+   answer, that question is an input: stop and raise it as a prerequisite, naming the candidate.
+   Where the dependency also runs the other way, so that one of its candidates changes with this
+   question's answer, neither goes first: the two are answered together, per step 6 of "Building a
+   milestone's list", and each file says so under **What would settle it**. Where no verdict
+   changes, it is not an input, whatever its topic. On 2026-10-04 three
+   rearrangements of the slice 4 and 5 questions were proposed from topic alone and each was
+   withdrawn; the fourth came from this step and held.
 1. **If more than one candidate survives, run another pass instead of presenting.** Several
    survivors mean the property list is not finished; it does not mean the candidates are equal. So:
    - **Zoom in.** Split each property every survivor passes into the conditions it stands for, and

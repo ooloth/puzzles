@@ -595,10 +595,18 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    once, and each question's **Properties the answer is scored against** carries a copy of it,
    adding only what is its own. Each still settles in its own record. A candidate is scored under
    every answer an unsettled member could give, and one whose verdict changes makes that member an
-   input to be settled first. The tell that a group was missed is one option listed in two question
-   files. Until 2026-10-04 a proxy in front of the Droplet was an option in both the file-serving
-   question and the domain question, and each was set to score it against its own list. The two
-   are now worked as one group, and both still list it.
+   input to be settled first.
+
+   **Grouping is generous and ordering needs evidence.** Including a question in a group that turns
+   out not to matter costs nothing. Moving, splitting or reordering questions is a decision, made
+   only from scored candidates: a question is coupled to another through a named candidate whose
+   verdict changes with its answer, never through a shared topic. The tell that a group was missed
+   is one option listed in two question files, and the first move is to split that option into the
+   arrangements it covers. On 2026-10-04 "something in front of the Droplet" sat in both the
+   file-serving and the domain question. Split, it was a caching proxy, which changed no
+   file-serving verdict and stayed with the domain question, and an edge platform hosting the files,
+   which was a file-serving candidate. Three rearrangements proposed from topic before that split
+   were each withdrawn.
 7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
    slices. A slice that reads like the milestone restated is bundling. A question written as a given
    is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask

@@ -141,8 +141,10 @@ Do this:
    selected for being shared, so an equivalence argument resting on it assumes its own premise. The
    `node:sqlite` argument in `what-runs-typescript-outside-the-browser.md` is the worked example.
 1. **Write the corrections into the files before going further**, with provenance saying who opened
-   what and when. Delete a claim that has no source rather than softening it, and say in its place
-   that it was found unsourced, so it cannot quietly return.
+   what and when. Delete a claim whose source you looked for and could not find, or which its source
+   contradicts, rather than softening it, and say in its place that it was found unsourced, so it
+   cannot quietly return. A claim nobody has checked yet is not this case: it keeps its place
+   tagged _Unverified_, per step 5.
 
 **Report what you deleted, not only what you corrected.** A removed claim is invisible in a way a
 changed one is not, and the user cannot overrule a deletion they never saw.
@@ -190,7 +192,7 @@ the one property it fails.
    portable decision-making standard names: how it could go wrong or cause harm, how it could be
    slow, and how it could be hard to use or to change. Do this for every category, not only the one the question is
    about, because the topic is what narrows attention. Each failure on the list becomes a property
-   in the next sub-step.
+   in **Turn each moment's consequence into a property**, next.
 2. **Turn each moment's consequence into a property a candidate either has or lacks**, and cite the
    record, guarantee, constraint, failure mode or `docs/problem.md` passage it rests on. An open
    question's reasoning is not a citation. A property that can cite nothing settled rests on an
@@ -207,7 +209,7 @@ the one property it fails.
    against`, the section between `## What would settle it` and `## Resolves into`, before any
    research starts. `scripts/check-docs.py` requires it there and fails a question opened on or
    after 2026-09-27 that records Options while this section is still `...`. Open it with a short
-   paragraph naming the moments from sub-step 1, so a reader can see what the list was derived
+   paragraph naming the moments from **List the moments** above, so a reader can see what the list was derived
    from. A quantity with no threshold yet, such as bytes added, goes under the resource answer as
    something to measure rather than as a property. Record the properties checked and found binding
    on nothing as well, since an omission and a considered non-binding look the same

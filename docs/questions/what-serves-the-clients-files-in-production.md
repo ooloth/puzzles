@@ -41,7 +41,106 @@ real decision about what runs.
 
 ## Properties the answer is scored against
 
-...
+Derived on 2026-10-04 for every question on the path from the Droplet to the player: this one,
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) and
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md).
+The moments are a first visit, meaning the entry document, its assets and the service worker
+installing; an installed app's first launch; a first visit to a deep link such as `/puzzle/12`; a
+returning visit answered by the service worker; the browser checking the service worker script for
+an update; any request under `/api/`; a deploy; the app process crashing or restarting; Caddy
+restarting on an upgrade; the machine rebuilt from nothing; the local production-like run; and years
+of maintenance. Each candidate is scored twice: with nothing in front of the Droplet (**A**) and with
+a proxy in front (**B**). A verdict that differs between A and B makes the domain question an input
+to this one.
+
+**Safety**
+
+1. At every instant, a deploy included, the entry document being served names only assets that are
+   also being served. A bundle answered with a 404 is a blank screen, and the document is a build
+   output per [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md).
+2. Only content-hashed files get a long `max-age`. The entry document and the service worker script
+   get an explicit `no-cache`, so no browser assigns them a heuristic freshness lifetime, per
+   [../constraints.md](../constraints.md) and [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md).
+   A stale service worker serves an old app indefinitely, per the Risk in
+   [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md).
+3. No path under `/api/` is answered by the client's files or by the fallback to the entry document,
+   and no rule written for the files reaches an API response, in A or B, per
+   [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) and
+   property 3 of [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md).
+4. Only the build's output is reachable: no other path on disk, no dotfiles and no directory
+   listing. From the portable security standard; no project record covers it.
+5. In B, a deploy's new entry document reaches players without waiting out a proxy's cached copy,
+   per the Risk in
+   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md).
+
+**Performance**
+
+6. On a first visit, the entry document, its assets and the first API call share one connection,
+   per property 3 of
+   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and
+   "Mobile networks — setup cost, not bandwidth" in [../constraints.md](../constraints.md).
+7. A returning visit sends no request for an unchanged content-hashed asset, per
+   [../constraints.md](../constraints.md).
+8. An unchanged entry document revalidates to a 304, with validators that agree across two running
+   instances and across deploys that did not change it, per the weak link
+   [../problem.md](../problem.md) designs for.
+9. Assets are sent compressed, with the compression done when the client is built rather than per
+   request. A first visit is the wait
+   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
+   accepted, and at the `2g` tier in [../constraints.md](../constraints.md) bytes are part of it.
+10. On a first visit, files come from a point near the player. The Droplet is in North America per
+    [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). This can only separate
+    A from B.
+
+**Experience**
+
+11. The local production-like run serves the files the same way, with only the hostname and
+    certificate differing, per
+    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+    and property 12 of [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md).
+12. The cache rule for each class of file lives in one place, and a deploy cannot run new files
+    under old rules, per property 6 of
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).
+13. The least for the maintainer to configure and understand over years, per property 6 of
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and
+    property 13 of [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md).
+14. A rebuilt machine serves the files again with no manual step, per
+    [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md).
+15. Hosting stays near $10 a month and under $20, per
+    [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md).
+    It matters mainly for B.
+
+**Resources.** Network binds, as round trips in 6 to 8 and 10, and as first-visit bytes in 9. CPU
+does not bind: static bytes at this audience sit far below the capacity in
+[../constraints.md](../constraints.md), per the resource note in
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). Memory
+does not bind: serving files adds little to the app's 373 MB peak on a 961 MB machine, per
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). Storage does
+not bind: a release's client is a few MB.
+
+**Checked and binding on nothing:** deploying the two halves on separate schedules. [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) found
+that the API tolerates older clients under any arrangement, because the service worker keeps them
+running.
+
+**Maximums.** Safety: no player ever loads a mixed or stale release, and no rule for the files ever
+touches an API response. Performance: a first visit costs one connection setup and the round trips
+for the document and its assets, from the nearest point; a returning visit costs no request for
+files. Experience: one configuration, the same locally as in production, with nothing to remember at
+deploy time.
+
+**Deferred, each to the question that owns it.** Whether old assets are still fetchable after a
+deploy is
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+at M9. Security headers are
+[does the app send a content security policy, and how strict?](does-the-app-send-a-content-security-policy-and-how-strict.md).
+What counts as fast enough is
+[what latency budget makes "immediately" checkable?](what-latency-budget-makes-immediately-checkable.md).
+Noticing a dead API behind a working client is
+[how do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) at M11.
+What the precache holds is
+[how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
+at M9.
 
 ## Resolves into
 
@@ -54,16 +153,41 @@ browser can load the client" turned out to have nothing under it that said what 
 
 ## Options
 
-*The same process that answers the API.* One deployable, one origin by construction, no routing to
-arrange. The process spends work on bytes that never change, and cache headers are ours to get right.
+Rebuilt from an enumeration of the field on 2026-10-04 rather than taken from the earlier list.
 
-*A content delivery network in front, the API behind.* Assets served close to the player and cached
-properly with little effort. Introduces the question of whether the browser still sees one origin.
-
-*The front, serving the files from disk.* Whatever terminates TLS in front of the app serves the
-client's files itself and passes only `/api/` to the server, per
+*C: Caddy serving the files from disk.* The front serves the client's files itself and passes only
+`/api/` to the server, per
 [ADR-0041](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md). The
-Node process never touches a static byte, and the cache headers are the front's configuration.
+Node process never touches a static byte, and the cache headers are Caddy's configuration.
+
+*F: the Fastify process, with `@fastify/static`.* Each release serves its own copy of the client.
+Caddy proxies every path to the app, and the cache headers are the app's code.
+
+*B1: either of those, with a caching proxy in front of the Droplet.* Not a separate way of serving
+the files: a proxy caches what C or F sends. It exists only if
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) answers
+"proxied".
+
+*B2: an edge platform hosting the files, with `/api/` routed from the edge to the Droplet.* For
+example Cloudflare Workers static assets with `run_worker_first` on `/api/*`. It exists only if the
+domain is proxied, since the edge has to answer the hostname.
+
+*Not yet.* Rejected by the slice: slice 4 deploys the client, so something has to serve it.
+
+**Set aside by the enumeration**, each for the reason given. These are a research agent's readings
+on 2026-10-04 and were not re-opened:
+
+- A second static server process beside Caddy, such as `sirv`, adds a process and a hop for nothing
+  Caddy lacks.
+- Node serving files without `@fastify/static` is F with the path-traversal, validator and
+  compression handling rewritten by hand.
+- DigitalOcean Spaces with its CDN cannot route `/api/` to the Droplet on the same hostname, so it
+  breaks [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md).
+- GitHub Pages cannot proxy `/api/` or set headers.
+- Netlify or Vercel with a rewrite of `/api/` to the Droplet is B2 on another vendor.
+- A service worker answering every load after the first is already
+  [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md) and still
+  needs a first load served.
 
 Static hosting supplied by the platform is not open: a Droplet offers none, per
 [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md).
@@ -137,3 +261,94 @@ those headers and answers conditional requests was not observed; no file was ser
 with `git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`. That it
 serves as configured is reasoned from Caddy's documentation, not measured.*
 
+
+### First pass, 2026-10-04
+
+**Both on-machine candidates validate on modification time and size, so neither gives a 304 across
+two instances or across a deploy that rewrote identical bytes.** Caddy's `calculateEtag` is a
+strong ETag built from `mtime.UnixNano()` and `Size()`. `@fastify/send` builds
+`'W/"' + stat.size.toString(16) + '-' + stat.mtime.getTime().toString(16) + '"'`. Both are fixed by
+giving the files a fixed modification time when the release is built. Caddy can also read an ETag
+from a sidecar file through `etag_file_extensions`, which a build step could fill with a content
+hash; F would need `setHeaders` code to do the same. Property 8 therefore depends on configuration
+for both.
+
+*Sourced: `modules/caddyhttp/fileserver/staticfiles.go` at tag v2.11.7 and `lib/send.js` on
+`fastify/send` main, both opened by me on 2026-10-04. The sidecar option is a research agent's
+reading of the same file, not re-opened.*
+
+**`@fastify/static` serves dotfiles unless told not to.** Its `index.js` sets
+`opts.dotfiles ??= 'allow'`, so a `.env` inside the served directory would be served. Caddy hides
+nothing by default either beyond its own config files, and needs `hide .*`. Property 4 depends on
+configuration for both.
+
+*Sourced: `index.js` of `@fastify/static` 10.1.5, opened by me on 2026-10-04. Caddy's `hide` default
+is a research agent's reading of its docs, not re-opened.*
+
+**Each has a trap where the long cache header lands on the wrong response.** In Caddy, `try_files`
+turns a missing `/assets/x.js` into the entry document with a 200, and that response carries the
+`/assets/*` immutable header, so the HTML is cached for a year under the asset's URL. It is avoided by
+leaving `/assets/*` out of the fallback so it 404s. In `@fastify/static`, `maxAge` and `immutable` set
+at registration apply to every file under the root, `sw.js` and the fallback included, and
+`maxAge: 0` gives `max-age=0` rather than `no-cache`. Property 2 depends on configuration for both.
+
+*Sourced by a research agent on 2026-10-04 from Caddy's directive-order documentation and
+`@fastify/static`'s README and `index.js`. Not re-opened, and not observed: no server was run.*
+
+**Neither keeps the entry document and its assets consistent across a switch by itself.** Caddy
+resolves the served path with `os.Stat` and `os.Open` on every request and caches nothing, so
+swapping a symlink with `rename(2)` gives each request the old tree or the new one. But a page that
+fetched the old entry document just before the swap asks for old assets just after it, and the same
+happens with F when Caddy's `lb_policy first` sends the document and an asset to different instances
+during the overlap. So property 1 holds for either only if the served tree keeps the previous
+release's assets across the switch. That is a requirement on the deploy layout, shared with
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md), and how
+long they are kept stays with
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md).
+
+*Caddy's per-request resolution is a research agent's reading of `staticfiles.go` and its `OsFS`,
+2026-10-04, not re-opened. The F half is reasoned from Caddy's `reverse_proxy` documentation.*
+
+**Where the cache rules live separates the two.** Under F the rules are code inside the release, so a
+release is never served under another release's rules. Under C they are in the Caddyfile outside the
+release, so a release that adds a class of file is served under whatever the Caddyfile says until it
+is changed, which is property 12.
+
+*Reasoned.*
+
+**Precompressed files are served by both.** Caddy's `file_server { precompressed br zstd gzip }`
+falls back to the raw file and sets `Vary: Accept-Encoding`. `@fastify/static`'s `preCompressed`
+supports `br`, `gzip` and `deflate`, with no `zstd`. `vite-plugin-compression2` 2.5.3, published
+2026-03-21, emits the files.
+
+*Sourced: `supportedEncodings` in `@fastify/static`'s `index.js`, opened by me. The rest is a research
+agent's reading of Caddy's `caddyfile.go` and the npm registry, not re-opened.*
+
+**Cloudflare's proxy does not cache HTML or JSON by default**, so in B1 a deploy's entry document
+reaches players at once and `/api/` responses are not cached unless a path ends in a cached
+extension. Its docs: "The Cloudflare CDN does not cache HTML or JSON by default."
+
+*Sourced: `developers.cloudflare.com/cache/concepts/default-cache-behavior/`, opened by me
+2026-10-04.*
+
+**B2 on Cloudflare's free plan answers `/api/` with 429 once the daily request limit is passed.** Its
+docs: "If you exceed your free tier request limits, these requests will receive a 429 (Too Many
+Requests) response instead of falling back to static asset serving." The free limit is 100,000
+requests a day, and the paid plan that lifts it is $5 a month. A Worker also cannot `fetch()` a route
+on its own zone, so the Droplet would need a second hostname for the Worker to reach.
+
+*Sourced: `developers.cloudflare.com/workers/static-assets/billing-and-limitations/` and
+`.../workers/configuration/routing/routes/`, opened by me 2026-10-04. The limit and price are a
+research agent's reading of the Workers limits and pricing pages, not re-opened.*
+
+**Cloudflare moves free-plan traffic away from a busy data centre first**, so property 10 is weaker
+for its free plan than its city count suggests.
+
+*Sourced by a research agent from Cloudflare's "Meet Traffic Manager" post, 2026-10-04. Not
+re-opened.*
+
+**Scored in both topologies, C against F comes out the same.** No verdict on properties 1 to 15
+changes between A and B for C or F, because a proxy in front caches whatever either sends. B2 exists
+only in B. So the domain question is an input to this one only through B2.
+
+*Reasoned from the verdicts above.*

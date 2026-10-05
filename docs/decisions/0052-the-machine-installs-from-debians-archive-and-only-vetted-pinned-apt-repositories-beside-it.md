@@ -2,6 +2,7 @@
 number: 0052
 status: accepted
 date: 2026-10-03
+amended: 2026-10-05
 ---
 
 # 0052 — The machine installs from Debian's archive, and only vetted, pinned apt repositories beside it
@@ -106,7 +107,8 @@ resolved, read with `git show 75fc8a5:docs/questions/where-may-the-machines-soft
   [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md). If that puts Node
   on the host, NodeSource's repository is held to this rule, pinned to the line
   [ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) names.
-- **Litestream's source**, when the store arrives at M3. It is held to this rule there.
+- **The source of any replication process the store's backup adds**, when
+  [how is the store backed up?](../questions/how-is-the-store-backed-up.md) is answered. It is held to this rule there.
 - **Noticing a failed update run, or a pin left on a major version upstream no longer supports.**
   Both are [how is the server operated?](../questions/how-is-the-server-operated.md) at M11, and
   the second is
@@ -135,8 +137,8 @@ lacking `signed-by`, a pin or an allowed origin would, and does not exist.
   come to run daily and carry the front with them.
 - **A build from Caddy's download page, or from source.** For plugins, which nothing here needs. It
   fails property 3 the same way. **Reverses if** a needed plugin exists only that way.
-- **Case by case, with no written rule.** It fails property 12: Node and Litestream would each
-  reopen this. **Reverses if** the programs on the machine grow too varied for one rule to fit.
+- **Case by case, with no written rule.** It fails property 12: Node, and any replication process
+  the backup adds, would each reopen this. **Reverses if** the programs on the machine grow too varied for one rule to fit.
 - **Third-party repositories unpinned.** Its case is real: when a new major version ships and the
   old line stops getting fixes, an unpinned machine keeps getting them, and fails loudly if the new
   version breaks it. It fails property 5: a new major version installs on the Droplet at the update
@@ -173,7 +175,7 @@ lacking `signed-by`, a pin or an allowed origin would, and does not exist.
 - [x] questions/where-may-the-machines-software-come-from.md: mined and deleted in this change
 - [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: NodeSource is held to this rule if Node is on the
       host
-- [x] questions/how-is-the-store-backed-up.md: Litestream is held to this rule
+- [x] questions/how-is-the-store-backed-up.md: any replication process it adds is held to this rule
 - [x] questions/how-is-the-server-operated.md: noticing a stale pin and a hidden repository failure
 - [x] [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md) and
       [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md): link

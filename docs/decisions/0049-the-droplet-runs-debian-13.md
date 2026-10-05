@@ -2,7 +2,7 @@
 number: 0049
 status: accepted
 date: 2026-10-03
-amended: 2026-10-03
+amended: 2026-10-05
 ---
 
 # 0049 — The Droplet runs Debian 13
@@ -23,8 +23,8 @@ amended: 2026-10-03
 ## Scored against
 
 Derived from the moments the system touches the OS: provisioning a Droplet from cloud-init, a
-security patch arriving, a kernel fix and its reboot, installing and upgrading Node, Litestream and
-the front, the release's support ending, and the same setup run on the Mac.
+security patch arriving, a kernel fix and its reboot, installing and upgrading Node, the front and
+any replication process the store's backup adds, the release's support ending, and the same setup run on the Mac.
 
 1. Security patches, the kernel's included, are applied without a recurring manual step, and most
    kernel fixes need no reboot (property 3 of
@@ -35,7 +35,7 @@ the front, the release's support ending, and the same setup run on the Mac.
 2. The same OS image runs on the maintainer's Mac, provisioned by the same cloud-init
    ([ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md);
    property 5 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
-3. Node, Litestream and the front install from maintained packages that the automatic patching can
+3. Node, the front and any replication process install from maintained packages that the automatic patching can
    cover (property 3 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
 4. The release is supported for years without a forced major upgrade ([../problem.md](../problem.md);
    [ADR-0027](0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)).
@@ -144,8 +144,7 @@ cloud image with the same cloud-init.
   between December 2026 and mid-2027, or active support has already ended. **Reverses** only if their
   support were extended; each has a newer release scored above.
 - **Flatcar and Fedora CoreOS.** They fail property 3: they are built to run containers and have no
-  package manager for the host, so Node, Litestream and the front cannot be installed and patched as
-  packages. **Reverses if** [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) is reversed in favour of containers.
+  package manager for the host, so Node and the front cannot be installed and patched as packages. **Reverses if** [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) is reversed in favour of containers.
 - **Not yet.** Rejected because M1 slice 4 cannot create the Droplet without an image, and changing
   the OS gets more expensive once the store holds data at M3.
 

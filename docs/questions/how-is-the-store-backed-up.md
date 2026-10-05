@@ -104,7 +104,21 @@ and omitted the step that protects a player's work.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Litestream has to come from a source [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) allows.** That is Debian 13's archive or
+**Four records assumed Litestream without choosing it, and none of their verdicts depends on it.**
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md),
+[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md),
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
+and
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+were written with Litestream running in the spikes and named it as part of the machine. Read again
+on 2026-10-05: the memory figures counted it, which any lighter answer only improves, and the OS and
+package-source arguments hold for Node and the front alone. So this question's options are all open.
+What binds any answer is that a process it adds runs as a systemd service and installs from a
+source the package-source rule allows, per the first and last of those records. The records now say so.
+
+*Reasoned from the four records' properties and rejections, read 2026-10-05.*
+
+**If Litestream is chosen, it has to come from a source [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) allows.** That is Debian 13's archive or
 a signed apt repository that publishes upstream's releases within about a day for amd64 and arm64,
 keeps old versions, and is pinned to Litestream's major version. A `.deb` downloaded from its GitHub
 releases is not one, because nothing would patch it. Whether Debian or any such repository carries

@@ -2,7 +2,7 @@
 number: 0044
 status: accepted
 date: 2026-09-30
-amended: 2026-10-03
+amended: 2026-10-05
 ---
 
 # 0044 — The server runs as systemd services, without containers
@@ -20,7 +20,8 @@ amended: 2026-10-03
   and a driver with an addon would change where releases are built, not this arrangement.
 - "Hosting — a DigitalOcean Droplet starts with no swap" in [../constraints.md](../constraints.md):
   about 600 MB is free on a 1 GB Droplet once the app, Caddy and Litestream run, and running out ends
-  a process.
+  a process. Litestream ran in the spikes as one candidate for replicating the store, which is
+  [how is the store backed up?](../questions/how-is-the-store-backed-up.md) at M12.
 - [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
   the production-like run uses the production arrangement.
 - The maintainer's aims recorded in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`): "it
@@ -51,15 +52,16 @@ image, and this app gains little from one.
 
 ## Decision
 
-**The app and Litestream run as systemd services on the Droplet. No container runtime is
-installed.**
+**The app runs as a systemd service on the Droplet, and so does any process the store's backup
+adds. No container runtime is installed.** Which backup, and whether it is a process at all, is
+[how is the store backed up?](../questions/how-is-the-store-backed-up.md). Litestream, the candidate the spikes ran, would be one such service.
 
 - **A release.** A directory holding the built JavaScript and its `node_modules`, with pnpm's
   symlinked layout kept as it is ([ADR-0032](0032-the-package-manager-is-pnpm.md)'s Revisit when
   names this host).
 - **What systemd supplies.**
   - **Restarts:** `Restart=always`.
-  - **Order at boot:** Litestream first.
+  - **Order at boot:** a replication process, if the backup adds one, before the app.
   - **Memory:** `MemoryMax`, which stands in for the swap the machine lacks.
   - **Sandboxing:** `ProtectSystem=strict`, with write access limited to the store's directory.
   - **Logs:** into journald.
@@ -138,7 +140,7 @@ run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).
 - [x] questions/what-deploys-the-code.md: deploys target systemd services on the Droplet
 - [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: how Node is pinned and patched is left there
 - [x] questions/where-does-this-run.md: its open entry lists this as settled
-- [x] architecture.md: the server and Litestream run as systemd services, with no containers
+- [x] architecture.md: the server runs as a systemd service, with no containers
 - [x] ../CONTRIBUTING.md: nothing yet; the local VM rehearsal arrives with the deploy script
 - [x] guarantees/: no new promise
 - [x] glossary.md: nothing introduced

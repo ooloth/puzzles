@@ -2,6 +2,7 @@
 number: 0051
 status: accepted
 date: 2026-10-03
+amended: 2026-10-05
 ---
 
 # 0051 — Updates, and the reboots they need, are applied daily at an hour we set
@@ -54,7 +55,8 @@ updates, and the maintainer finds out what changed.
     [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) property 6).
 
 **Resources.** Memory was the one that might bind, and does not: an upgrade of libc6, OpenSSL and a
-kernel drew about 114 MB on a 1 GB VM, leaving about 470 MB beside the app, Caddy and Litestream.
+kernel drew about 114 MB on a 1 GB VM, leaving about 470 MB beside the app, Caddy and Litestream,
+which ran as one candidate for replicating the store.
 Disk is property 10. CPU and network do not bind for an occasional upgrade.
 
 **Not weighed.** How long an outage may last is

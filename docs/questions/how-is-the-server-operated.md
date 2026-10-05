@@ -16,8 +16,9 @@ hour we set and reboots then when anything needs it. What it leaves here is noti
 a run that fails is silent until something alerts on it.
 
 **Getting onto the machine is a separate question.** Access, hardening and the lockout route are
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at M2, because
-that half is needed to *check* a change and this half is needed to *survive* one. What is left here
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at slice 4 of M1,
+because the machine is on the public internet from then, and this half is needed to *survive* a
+change rather than to reach the machine at all. What is left here
 is the ongoing operation of a machine that already exists and can already be reached.
 
 None of it is covered by [ADR-0035](../decisions/0035-the-http-handler-is-fastify.md). The host is

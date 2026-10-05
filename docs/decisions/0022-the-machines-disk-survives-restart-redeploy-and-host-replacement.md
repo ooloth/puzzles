@@ -40,7 +40,7 @@ is not optional.
 **Nothing, and this is the record in the folder least able to enforce itself.** Surviving a restart
 and a redeploy is a property of the host, settled at M1 slice 4. Surviving host replacement is not:
 [../constraints.md](../constraints.md) records that a volume is not replicated, so the third event
-needs [how is the store backed up?](../questions/how-is-the-store-backed-up.md) at M3 and
+needs [how is the store backed up?](../questions/how-is-the-store-backed-up.md) at M12 and
 [how is the store recovered when the machine is lost?](../questions/how-is-the-store-recovered-when-the-machine-is-lost.md).
 Until those land, a third of this record is a claim nothing can honour.
 

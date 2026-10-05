@@ -47,9 +47,10 @@ Deciding the mechanism and, more importantly, what surrounds it. Five things any
 - **What happens if it fails halfway.** SQLite has transactional DDL, which is a genuine advantage
   here and should be relied on deliberately rather than by accident.
 
-**It is not urgent and it is not late.** The first row is written at M3, and the first schema change
-worth calling a migration arrives when the store's shape settles. Deciding the routine before there is
-data to lose is when it is cheapest.
+**It is not urgent and it is not late.** The first row is written at M3, but until players arrive at
+M12 the store holds only puzzles that can be written again, so a schema change before then is a
+rewrite rather than a migration. Deciding the routine before there is player data to lose is when it
+is cheapest, which is why it sits at M12.
 
 ## Properties the answer is scored against
 

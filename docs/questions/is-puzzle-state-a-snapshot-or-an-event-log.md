@@ -54,6 +54,12 @@ terms, that is an argument for LiveStore. The reverse is not an argument for the
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
+**Recording play at M12 is a second reader of this answer.** [../problem.md](../problem.md) says
+play is recorded from the first player onward, and questions like where players stall need the order
+of moves, which a log of moves carries and a snapshot does not. A snapshot chosen here would leave
+recording to build a second stream of moves beside it. That is a property for this question to be
+scored against, not a verdict on it.
+
 **Things 3 has run an operation log for over a decade, which is the strongest existence proof either
 option has.** Cultured Code will not describe their algorithm beyond saying its foundation is
 "inspired by operational transformations and Git's internals", but three independent

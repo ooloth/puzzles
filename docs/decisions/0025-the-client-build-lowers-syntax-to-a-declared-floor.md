@@ -130,7 +130,7 @@ population because it is the only one available.
 a browser nobody tests on is worse than claiming less, because
 [../guarantees/](../guarantees/) now carries it. What closes that gap is
 [how is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
-at M2, and until that lands the promise rests on compatibility data rather than on observation.
+at M5, and until that lands the promise rests on compatibility data rather than on observation.
 
 ## Revisit when
 

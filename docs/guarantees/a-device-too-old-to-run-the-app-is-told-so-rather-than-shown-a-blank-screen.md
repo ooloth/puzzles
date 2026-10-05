@@ -49,5 +49,5 @@ in [README.md](README.md) is built around.
 **Bearing on this** [What belongs on the landing page?](../questions/what-belongs-on-the-landing-page.md)
 is where the wording is decided, since this is the one message an unsupported visitor ever reads.
 [How is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
-at M2 is what would let anyone confirm the fallback appears, which needs a browser below the floor to
-run it on.
+at M5 is what would let anyone confirm the fallback appears, which needs a browser below the floor
+to run it on.

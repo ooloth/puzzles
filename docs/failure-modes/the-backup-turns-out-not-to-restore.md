@@ -57,7 +57,7 @@ this worth writing down rather than assuming.
 
 A rehearsed restore, on a schedule, into somewhere other than production — and a record of when it
 was last done. [Is the store's backup restorable?](../questions/is-the-stores-backup-restorable.md)
-is where that gets decided; it currently sits at M11.
+is where that gets decided; it currently sits at M12.
 
 Nothing about the arrangement removes the need for it. A managed provider changes who runs the
 storage, not who verifies the restore. Here there is no managed provider:

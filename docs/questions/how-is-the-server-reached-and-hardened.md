@@ -14,8 +14,8 @@ reaching it, is now our problem rather than a vendor's.
 
 **Access is needed to check a change, not only to survive an incident.** A restore drill, a look at a
 log, confirming what actually shipped, running an integrity check by hand — all of it needs a way
-onto the box. That is why this sits with the tooling that makes a change checkable rather than with
-the questions about surviving failure.
+onto the box. That is why this sits with creating the machine, at slice 4 of M1, rather than with
+the questions about surviving failure: the machine is on the public internet from that slice.
 
 **The hardening half is small and unskippable.** A machine on the public internet with a weak
 configuration is compromised by scanners rather than by anyone interested in this project. The

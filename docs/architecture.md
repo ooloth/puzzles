@@ -82,7 +82,7 @@ the end and are the larger half.
                              ▼
                    ┌───────────────────┐
                    │ a copy off the    │   how-is-the-store-backed-up
-                   │ machine           │   (M3, open)
+                   │ machine           │   (M12, open)
                    └───────────────────┘
 
         generator — batch, search-heavy, runs on Node.

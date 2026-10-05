@@ -8,10 +8,10 @@ resolves_into: decision
 
 ## Why it matters
 
-**The running app gets its first secret at M3 at the earliest**, when the store and its off-machine
-copy arrive. In M1 the app is a hard-coded response with nothing to inject, per
-[what deploys the code?](what-deploys-the-code.md). The deploy holds a credential from M1, the SSH key
-that reaches the Droplet, and how that key is kept is part of this question.
+**The running app gets its first secret at M12 at the earliest**, when the store's off-machine copy
+arrives with the first player's data. In M1 the app is a hard-coded response with nothing to inject,
+per [what deploys the code?](what-deploys-the-code.md). The deploy holds a credential from M1, the
+SSH key that reaches the Droplet, and how that key is kept is part of this question.
 
 **The store contributes no secret at all.**
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) makes the store a file

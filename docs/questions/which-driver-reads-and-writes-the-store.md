@@ -186,7 +186,7 @@ should delay a decision; they are here so the investigation is a choice rather t
   and what it is for a row of realistic size.
 - **The request path writes player state.** Same synchronicity. How durably it lands is
   [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
-  at M3. **Unexamined:** write latency per runtime, and how much the durability setting changes it.
+  at M12. **Unexamined:** write latency per runtime, and how much the durability setting changes it.
   [../constraints.md](../constraints.md) puts plausible load under a hundred writes per second
   against driver throughput in the tens of thousands, so this is very unlikely to bind, and that is a
   reason to check it cheaply rather than to skip it.
@@ -194,7 +194,7 @@ should delay a decision; they are here so the investigation is a choice rather t
   driver's own `backup()`, a `VACUUM INTO`, and a filesystem copy of a WAL-mode database. Under Bun
   `backup()` blocks the event loop where Node runs it on a worker thread, which is recorded above.
   **Unexamined:** how long each takes at a realistic database size, and whether the server can keep
-  answering throughout. [How is the store backed up?](how-is-the-store-backed-up.md) at M3 owns the
+  answering throughout. [How is the store backed up?](how-is-the-store-backed-up.md) at M12 owns the
   choice; what is unexamined here is the cost of each option.
 - **That backup is streamed to object storage.** All three runtimes can upload to an S3-compatible
   endpoint, which is established. **Unexamined:** memory during a multi-megabyte streamed upload. One
@@ -204,7 +204,7 @@ should delay a decision; they are here so the investigation is a choice rather t
   [how do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) at M11.
   **Unexamined:** nothing additional; that question owns it.
 - **A migration rewrites a table.** [How is the schema migrated?](how-is-the-schema-migrated.md) at
-  M3 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the
+  M12 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the
   server to need taking out of service, which decides whether a migration is a deploy step or an
   outage.
 

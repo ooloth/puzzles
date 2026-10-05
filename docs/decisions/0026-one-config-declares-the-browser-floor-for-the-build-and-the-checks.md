@@ -128,7 +128,7 @@ global, does not read dependencies, and by default ignores usage inside a featur
 So the API check will pass on code that breaks at the floor, and the shared configuration invites
 reading its silence as coverage. This is the weakness being knowingly accepted, and the residue
 belongs to [how is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
-at M2.
+at M5.
 
 **No tool checks behavioural parity at all.** Compatibility data records whether an API is present,
 not whether it behaves the same, and [../constraints.md](../constraints.md) already carries a bug

@@ -31,8 +31,8 @@ its own config.
 
 **One binding input has landed and the others have not.** The bundler is Vite, by
 [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and Vite takes an ES version or a
-browser-and-version string and does not read a browserslist configuration. The syntax check, the API
-check and the test matrix are chosen at M2, under [what runs the checks on every
+browser-and-version string and does not read a browserslist configuration. The syntax check and the
+API check are chosen at M2 and the test matrix at M5, under [what runs the checks on every
 change?](what-runs-the-checks-on-every-change.md) and [how is this tested across browsers and
 platforms?](how-is-this-tested-across-browsers-and-platforms.md). This question is answered after
 them.
@@ -47,7 +47,7 @@ requires and which a resolving query does not satisfy.
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
 names, and all of them are in scope here.** Three more may have to know the floor: the fallback in
 the entry document, if it detects a browser below the floor rather than being hidden by the bundle;
-the cross-browser test matrix at M2, which has to know which versions to run on; and TypeScript's
+the cross-browser test matrix at M5, which has to know which versions to run on; and TypeScript's
 `lib`, which decides which APIs type-check. The maintainer brought them into scope on 2026-09-23. If
 that makes this question hard to settle, that is raised when it happens rather than avoided in
 advance.

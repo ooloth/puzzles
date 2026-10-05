@@ -30,8 +30,8 @@ default.
 
 Opening the built document in a browser below the floor and seeing what it shows. That is the whole
 test. It is possible from M1 slice 2 onward, because the document exists from then, and it is worked
-at M10, because nobody is below the floor until there are players and adding the fallback later
-costs no more than adding it now.
+at M12, where players arrive, because nobody is below the floor until there are players and adding
+the fallback later costs no more than adding it now.
 
 What is open is what markup sits in that document, and how the build keeps it there without it
 appearing twice or flashing on a browser that does run the bundle. Both are properties of the build

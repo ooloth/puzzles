@@ -15,8 +15,9 @@ arrangements. It is the narrower question of how a developer gets a database to 
 where the file lives, what puts data in it, and whether the same file is reused between runs or made
 fresh.
 
-**It sits at M2 with the rest of the development loop** because it is about the daily loop rather than
-about what ships. Nothing at M1 waits on it — an M1 hello world has no store.
+**It sits at M3, where the store first exists**, because it is about the daily loop rather than
+about what ships, and there is no store for that loop to open before then. Nothing at M1 waits on
+it — an M1 hello world has no store.
 
 A store the process opens as a file needs nothing installed and nothing running: the file is there or
 it is created. A store reached over a network needs something to connect to — a container to start, a
@@ -59,11 +60,11 @@ store, so the first of these no longer applies.
 A decision record in [../decisions/](../decisions/), and content for
 [../../CONTRIBUTING.md](../../CONTRIBUTING.md) once there is something to run.
 
-**This sits at M2, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and M1
-is decided on which option keeps technical doors open — a different test, which ergonomics loses. Any
-ergonomic difference between the arrangements can be noted in
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) without
-being established first. A daily loop also needs a project to have a loop in, and slice 1 has none.
+**This sits at M3, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and
+M1 is decided on which option keeps technical doors open — a different test, which ergonomics loses.
+Any ergonomic difference between the arrangements can be noted in
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) without being
+established first. A daily loop also needs a project to have a loop in, and slice 1 has none.
 
 **Resist filing it earlier.** It reads like an input to the store decision, and being one is not the
 same as blocking it.

@@ -23,12 +23,12 @@ North America if they had to pick. That is an assumption, not a fact about the a
 host. This question still needs the fact.
 
 **M1 deploys to `tor1` without deciding this.** The maintainer agreed on 2026-09-30 that M1 slice 4's
-Droplet goes in Toronto, as a placement rather than an answer. The choice is made here, at M3,
-before the first row is written.
+Droplet goes in Toronto, as a placement rather than an answer. The choice is made here, at M12,
+before the first player's data is written.
 
-**It becomes more expensive to change from M3.** At M1 the machine holds no data, so moving it is a
-redeploy. From the first row onward, moving it means moving the store, and later a live player
-record. That is why it sits at M3, where
+**It becomes more expensive to change from M12.** Before players arrive the machine holds only
+puzzles that can be written again, so moving it is a redeploy and a reseed. From the first player's
+data onward, moving it means moving a live player record. That is why it sits at M12, where
 [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) leaves it to this question.
 
 **Environments:** production only. A local run is on the maintainer's machine by definition, and per

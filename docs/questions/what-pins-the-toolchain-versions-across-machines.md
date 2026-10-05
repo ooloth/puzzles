@@ -155,3 +155,16 @@ running Corepack shims.
 
 *Sourced — <https://mise.jdx.dev/registry.html> and an fnm issue reporting its Corepack path broken
 on Node 25+, read 2026-09-19 by a research agent. I did not open either.*
+
+**The development machine drifted from the record with nothing to notice it.**
+[ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md) names the 26 line,
+and `CONTRIBUTING.md` says so, but fnm's default on the maintainer's Mac was 24.21.0, with 26.7.0
+installed beside it. The repository has no `.node-version` and no `engines` field, so nothing told
+fnm which to use. The spikes for
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) on
+2026-10-04 ran on Node 24 as a result. Under `fnm exec --using=26.7.0`, the full test suite (88
+tests) and the typecheck passed, and `pnpm` resolved to 12.5.1 through a Corepack installed globally
+into Node 26's `node_modules`, since Node 26 ships none.
+
+*Measured, 2026-10-05, with `fnm list`, `fnm current` and the commands above on the maintainer's
+Mac.*

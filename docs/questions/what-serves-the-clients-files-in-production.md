@@ -41,10 +41,14 @@ real decision about what runs.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for every question on the path from the Droplet to the player: this one,
+Derived on 2026-10-04 for four questions on the path from the Droplet to the player:
+[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) and
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md).
+**This list is copied into each of the four, and a change to it is made in all four in the same
+edit.** Properties a question has of its own follow the copy, under **Own to this question**.
+
 The moments are a first visit, meaning the entry document, its assets and the service worker
 installing; an installed app's first launch; a first visit to a deep link such as `/puzzle/12`; a
 returning visit answered by the service worker; the browser checking the service worker script for
@@ -52,7 +56,7 @@ an update; any request under `/api/`; a deploy; the app process crashing or rest
 restarting on an upgrade; the machine rebuilt from nothing; the local production-like run; and years
 of maintenance. Each candidate is scored twice: with nothing in front of the Droplet (**A**) and with
 a proxy in front (**B**). A verdict that differs between A and B makes the domain question an input
-to this one.
+to the question being scored, through that candidate.
 
 **Safety**
 
@@ -111,6 +115,18 @@ to this one.
     [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md).
     It matters mainly for B.
 
+**Added in the second pass, 2026-10-04**
+
+16. *Safety.* While the app process is down or restarting, a first visit still receives the entry
+    document and its assets, so the client can say what is wrong rather than the player seeing the
+    front's error page. Per
+    [nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md), and the
+    waits listed in [../problem.md](../problem.md) under "Where a player waits".
+17. *Safety.* A deploy moves the client's files and the API through one gate, or the order between
+    the two moves is fixed in the deploy script and tested, per the Risk in
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) that
+    the deploy script and its bugs are ours.
+
 **Resources.** Network binds, as round trips in 6 to 8 and 10, and as first-visit bytes in 9. CPU
 does not bind: static bytes at this audience sit far below the capacity in
 [../constraints.md](../constraints.md), per the resource note in
@@ -129,6 +145,16 @@ for the document and its assets, from the nearest point; a returning visit costs
 files. Experience: one configuration, the same locally as in production, with nothing to remember at
 deploy time.
 
+**Own to this question**
+
+18. *Safety.* A cookie the API sets keeps its declared lifetime in Safari, per property 1 of
+    [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and
+    the server-set cookie entries in [../constraints.md](../constraints.md). It can separate only B2
+    from C and F, because B2 needs the hostname proxied, and whether Safari caps a cookie set there is
+    the unproven rule
+    [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) owns.
+    The seven-day observation that rule needs is an input here only if B2 would otherwise win.
+
 **Deferred, each to the question that owns it.** Whether old assets are still fetchable after a
 deploy is
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
@@ -141,6 +167,7 @@ Noticing a dead API behind a working client is
 What the precache holds is
 [how does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
 at M9.
+
 
 ## Resolves into
 
@@ -352,3 +379,99 @@ changes between A and B for C or F, because a proxy in front caches whatever eit
 only in B. So the domain question is an input to this one only through B2.
 
 *Reasoned from the verdicts above.*
+
+### Second pass, 2026-10-04
+
+**A local spike served the real client build both ways and recorded what came back.** Caddy 2.11.7
+(the release binary for macOS arm64) and `@fastify/static` 10.1.5 under Fastify 5 on Node 24.21.0,
+on the maintainer's Mac over plain HTTP on loopback, one run each. The client was this repository's
+Vite build, given a stub `sw.js`, a `.env` and a Brotli copy of its one asset, then copied to a second
+release directory a second later. Caddy served a symlinked directory with `/api/*` proxied to a port
+with nothing listening, `/assets/*` immutable with `precompressed br` and `hide .*`, and everything
+else `no-cache` through `try_files {path} /index.html`. Fastify served each release directory on its
+own port with `cacheControl: false`, `dotfiles: 'ignore'`, `preCompressed: true`, a `setHeaders`
+callback giving `/assets/` the immutable header and everything else `no-cache`, and a not-found
+handler that 404s `/api/` and `/assets/` and otherwise sends the entry document with a 200. Not
+covered: Debian, Node 26, TLS, Caddy in front of Fastify, and any real network.
+
+| Request | C: Caddy | F: Fastify |
+| --- | --- | --- |
+| `/` and `/puzzle/12` | 200, `no-cache`, ETag, `Vary: Accept-Encoding` | the same, with a weak ETag |
+| a hashed asset | 200, `immutable` | 200, `immutable` |
+| the same with `Accept-Encoding: br` | `Content-Encoding: br` | `Content-Encoding: br` |
+| `/assets/missing.js` | 404 **carrying `immutable`** | 404 with no `Cache-Control` |
+| `/sw.js` | 200, `no-cache` | 200, `no-cache` |
+| `/.env` | 404 | 200 with the entry document, not the file |
+| `/api/x` | 502 from the proxy | 404 from the handler |
+| `If-None-Match` with its own ETag | 304 | 304 |
+| the first copy's ETag sent to the second copy | 200 | 200 |
+| the app process stopped, then `/` | 200, the entry document | connection refused |
+
+*Measured, as above, 2026-10-04.*
+
+**Caddy's `header` directive reaches its own 404s.** A missing asset under `/assets/` came back 404
+with `public, max-age=31536000, immutable`. A 404 is cacheable when it carries an explicit lifetime,
+so a browser that asked during a deploy race could keep that 404 for a year under the asset's URL.
+Applying the header only to successful responses avoids it; that configuration was not run.
+
+*Measured; the consequence is reasoned from RFC 9111.*
+
+**Both validators failed across two byte-identical copies, as the source predicted.** The ETag
+changed with the copy's modification time, so a returning client revalidating against the other
+copy got a 200 and the whole document. Property 8 fails for both unless the files are given a fixed
+modification time at build, or Caddy reads a content-hash ETag from a sidecar file.
+
+*Measured.*
+
+**With the app process stopped, Caddy still served the entry document and Fastify served nothing.**
+Behind Caddy, F would answer a first visit with Caddy's 502. So F fails property 16 unless Caddy
+serves a copy of the entry document when the app is down, which is Caddy serving files, so C in part.
+
+*Measured for the two servers alone; Caddy's 502 in front of F is reasoned.*
+
+**C can meet property 12 if a deploy switches the files and their rules in one Caddy reload.** If the
+deploy writes a small Caddy snippet naming the new release's directory and its header rules, and
+reloads Caddy, the files and the rules change together at the reload rather than at a symlink swap
+followed by a config change. That makes the files one gate and the API instance a second, ordered
+by the deploy script, which is property 17. Not run.
+
+*Reasoned from Caddy's documented graceful reload.*
+
+**B2, Cloudflare Workers static assets, scored.** Opened by me on 2026-10-04: assets default to
+`Cache-Control: public, max-age=0, must-revalidate` with an ETag the docs call "a file hash value",
+which meets property 8 without configuration; `_headers` "are not applied to responses generated by
+your Worker code", including where `run_worker_first` is configured, and whether that reaches paths
+outside its array is not stated; and in `wrangler dev` "static assets are always served from your
+local disk", with no page claiming it reproduces production's headers, fallback or compression, so
+property 11 is unknown at best. Reported by a research agent and not re-opened: nothing documented
+keeps the previous release's assets after a deploy, so property 1 needs each build to carry them; a
+missing asset is reported to return the entry document with a 200 and the asset's immutable header;
+the paid plan that removes the 429 is $5 a month; whether static assets are compressed, and how an
+API call's hop from the edge to the Droplet reuses connections, is undocumented.
+
+**Where the grid stands after two passes.** Each cell is holds, fails, depends on configuration
+(dep) or unknown.
+
+| Property | C | F | B2 |
+| --- | --- | --- | --- |
+| 1 entry document and assets agree across a switch | dep: keep prior assets | dep: keep prior assets | dep: re-upload prior assets |
+| 2 per-class headers | holds, with the 404 trap | holds | dep, fallback trap reported |
+| 3 `/api/` never answered by files | holds | holds | holds |
+| 4 only the build output | holds with `hide` | holds with `dotfiles` | unknown |
+| 5 a proxy never holds an old entry document | holds | holds | holds |
+| 6 one connection, no added hop | holds | holds | API adds an edge hop |
+| 7 no request for a hashed asset | holds | holds | holds with `_headers` |
+| 8 validators agree across copies | dep: fixed mtime or sidecar | dep: fixed mtime | holds |
+| 9 compressed at build | holds | holds | unknown |
+| 10 files near the player | only with B1 | only with B1 | holds |
+| 11 local run the same | holds | holds | unknown |
+| 12 rules ship with the release | dep: snippet and reload | holds | holds, reported |
+| 13 least to configure and keep | Caddyfile only | code with traps | a second platform and hostname |
+| 14 rebuilt machine serves again | holds | holds | holds |
+| 15 cost | holds | holds | $5 a month added |
+| 16 entry document while the app is down | holds | fails | holds |
+| 17 one gate, or a tested order | dep: two gates | holds | two deploys |
+| 18 a Safari cookie keeps its lifetime | not affected | not affected | unknown |
+
+F fails property 16, measured. Nothing else fails outright, so C and B2 remain, and B2 carries five
+unknowns. The Safari observation becomes an input only if B2 survives its unknowns.

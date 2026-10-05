@@ -41,12 +41,14 @@ real decision about what runs.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for four questions on the path from the Droplet to the player:
+Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
 [what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
-[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) and
-[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md).
-**This list is copied into each of the four, and a change to it is made in all four in the same
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+and
+[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
+**This list is copied into each of the five, and a change to it is made in all five in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -475,3 +477,103 @@ API call's hop from the edge to the Droplet reuses connections, is undocumented.
 
 F fails property 16, measured. Nothing else fails outright, so C and B2 remain, and B2 carries five
 unknowns. The Safari observation becomes an input only if B2 survives its unknowns.
+
+### Third pass, 2026-10-04
+
+**F is rejected on property 16**, measured in the second pass and accepted by the maintainer on
+2026-10-04. It reverses if Caddy is given a copy of the entry document to serve when the app is
+down, which is Caddy serving files.
+
+**C's deploy was run as one Caddy reload, and with the previous assets kept it failed nothing.**
+Caddy 2.11.7 on the maintainer's Mac imported a snippet naming the live release's directory and its
+header rules. A deploy rewrote the snippet to name the next release and ran `caddy reload`. Four
+concurrent clients fetched the entry document and then the asset it named, 5 ms later, for five
+seconds, with the reload two seconds in. One run per layout:
+
+| Next release holds | Pages | Entry document failures | Asset failures | Old asset after |
+| --- | --- | --- | --- | --- |
+| its own asset and the previous one | 2,822 | 0 | 0 | 200 |
+| only its own asset | 2,788 | 0 | 4 (404) | 404 |
+
+So property 1 holds for C when each release carries the previous release's assets, and fails in
+the gap between a page and its assets when it does not. The files and their rules change together
+at the reload, so property 12 holds, and the files are one gate, leaving the order against the API
+instance to the deploy script, which is property 17.
+
+*Measured, as above. Not covered: Debian, TLS, the real Fastify app behind `/api/`, and more than
+one run.*
+
+**Caddy's 404 trap is fixed by matching on the file's presence.** With `@present file` given the
+immutable header and `@missing not file` given `no-store`, a missing asset came back 404 with
+`no-store` and a present one 200 with `immutable`. Files given one fixed modification time kept the
+same ETag across releases: `sw.js` was `"dfczklz6eww0-14"` in both, and revalidating across the
+reload returned 304.
+
+*Measured, same run.*
+
+**One fixed modification time for every release is unsafe for the entry document**, corrected on
+2026-10-04 after the run above. Caddy's ETag is the modification time and the size. Vite's hashes
+have a fixed length, so a new release's `index.html` usually differs from the last only in an asset
+name of the same length, and is the same size. With the same modification time it gets the old ETag,
+and a returning browser revalidating it receives a 304 and keeps the old entry document, which names
+assets that may be gone. The run checked only `sw.js`, which is why it did not show. So property 2
+holds for C with the 404 fix, and property 8 holds only with a validator that changes with content:
+a content-hash ETag read from a sidecar file, or a modification time set per release, which keeps
+two copies of one release in agreement but changes every file's ETag at each deploy. Caddy's default,
+fresh modification times on every copy, is safe and leaves property 8 unmet. Which to use is
+[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
+
+*Reasoned from `calculateEtag` in Caddy v2.11.7, opened in the first pass, and Vite's fixed-length
+hashes. Not observed.*
+
+**B2's unknowns, from Cloudflare's source.** Opened by me on 2026-10-04 in `cloudflare/workers-sdk`
+main: the asset worker's `handleRequest` ends with
+`return attachCustomHeaders(request, response, configuration, env);`, so `_headers` rules apply to
+every response it builds, the single-page fallback included; the default ignore list in
+`createAssetsIgnoreFunction` is only `/.assetsignore`, `/_redirects` and `/_headers`, so dotfiles in
+the build are uploaded and served unless listed; and miniflare's asset worker is
+`export { default, AssetWorkerInner, AssetWorkerOuter } from "@cloudflare/workers-shared/asset-worker"`,
+so `wrangler dev` runs the production routing and header code. A research agent's reading of the
+same repository, not re-opened: the rule matcher uses the requested path, so a missing
+`/assets/x.js` gets the entry document with a 200 and the `/assets/*` immutable header; with
+`run_worker_first` as an array, a non-API path with no file gets that fallback whatever
+`Sec-Fetch-Mode` says; nothing serves a previous version's assets after a full deploy; no
+compression happens in the asset worker, and whether the edge compresses its responses is not
+documented; edge-to-origin connection reuse is not documented.
+
+So for B2: property 11 holds, except for compression at the edge; property 4 depends on an
+`.assetsignore`; property 1 depends on each build carrying the previous assets, as for C; and
+property 2 fails as configured, since keeping a missing asset from being cached as HTML for a year
+needs `/assets/*` routed through the Worker, which bills every asset request, or no immutable
+header, which gives up property 7. Properties 6, 9 and 18 stay unknown.
+
+**The grid after three passes.**
+
+| Property | C | B2 |
+| --- | --- | --- |
+| 1 entry document and assets agree across a switch | holds, carrying prior assets | dep: re-upload prior assets |
+| 2 per-class headers | holds | fails, or trades 7 or 15 |
+| 3 `/api/` never answered by files | holds | holds |
+| 4 only the build output | holds | dep: `.assetsignore` |
+| 5 a proxy never holds an old entry document | holds | holds |
+| 6 one connection, no added hop | holds | API adds an edge hop; reuse unknown |
+| 7 no request for a hashed asset | holds | holds, unless 2 is fixed by dropping it |
+| 8 validators agree across copies | dep: a content-hash validator, deferred | holds |
+| 9 compressed at build | holds | unknown |
+| 10 files near the player | with a caching proxy in front | holds |
+| 11 local run the same | holds | holds, except edge compression |
+| 12 rules ship with the release | holds, one reload | holds |
+| 13 least to configure and keep | one Caddyfile and a snippet | a second platform, a Worker and a second hostname |
+| 14 rebuilt machine serves again | holds | holds |
+| 15 cost | holds | $5 a month added |
+| 16 entry document while the app is down | holds | holds |
+| 17 one gate, or a tested order | two gates, ordered by the deploy script | two deploys on two platforms |
+| 18 a Safari cookie keeps its lifetime | not affected | unknown, owned by the domain question |
+
+**Property 10 is the only row B2 holds that C does not, and C reaches it without B2.** A caching
+proxy in front of the Droplet, which stays open with the domain question and changes no verdict of
+C's, puts C's hashed assets near the player too, since Cloudflare caches `.js` by extension. So
+choosing B2 buys nothing that C plus that proxy could not, and it closes the domain question to
+"proxied" before the Safari rule in property 18 is observed.
+
+*Reasoned from the grid and from Cloudflare's default cache behaviour, opened in the first pass.*

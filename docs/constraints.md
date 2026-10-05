@@ -1308,6 +1308,47 @@ type-aware linter in widest use states the consequence in its own manifest:
 *Unlike the rest of this file, a claim about a tool can be overtaken by a release shipping the same
 week. Re-run the three commands above before building on it.*
 
+## Servers — a static file server's validator and defaults decide what a returning visit gets
+
+**Caddy's ETag for a file is its modification time and size, so it changes when a file is copied and
+can stay the same when its content changed.** `calculateEtag` builds
+`"<mtime.UnixNano() base 36>-<size base 36>"`. A spike on 2026-10-04 got different ETags for two
+byte-identical copies, and a revalidation against the other copy returned 200.
+
+> So copying a release costs a full response where a 304 would do, and giving every release one fixed
+> modification time is unsafe: an `index.html` differing only in a same-length hashed asset name
+> keeps the old ETag and earns a false 304. Which validator to use is
+> [what gives the client's files a validator that changes only with their content?](questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
+
+*Sourced: `modules/caddyhttp/fileserver/staticfiles.go` at v2.11.7, opened 2026-10-04; the copies
+measured the same day. The false 304 is reasoned, not observed.*
+
+**Caddy's `header` directive also reaches the 404 its file server returns.** A rule giving
+`/assets/*` an immutable header put it on a 404 for a missing asset, which a browser may then keep
+for a year. Matching on the file's presence avoids it.
+
+*Measured — Caddy 2.11.7 on macOS, 2026-10-04, one run.*
+
+**`@fastify/static` serves dotfiles unless told not to.** Its `index.js` sets
+`opts.dotfiles ??= 'allow'`.
+
+*Sourced: `index.js` of `@fastify/static` 10.1.5, opened 2026-10-04.*
+
+**Cloudflare's Workers static assets apply `_headers` rules to the single-page fallback by the
+requested path, and upload dotfiles unless they are listed.** The asset worker's `handleRequest` ends
+with `attachCustomHeaders(request, response, configuration, env)`, and the default ignore list holds
+only `/.assetsignore`, `/_redirects` and `/_headers`.
+
+> So with an immutable rule on `/assets/*`, a missing asset is answered with the entry document, a
+> 200 and a year-long cache header.
+
+*Sourced: `cloudflare/workers-sdk` main, `packages/workers-shared/asset-worker/src/handler.ts` and
+`packages/workers-shared/utils/helpers.ts`, opened 2026-10-04. That the matcher uses the requested
+path is a research agent's reading of `utils/rules-engine.ts`, not re-opened.*
+
+*Unlike the rest of this file, a claim about a tool can be overtaken by a release shipping the same
+week. Re-open the files named above before building on it.*
+
 ## Toolchain — Vite's dev server answers any path it does not proxy with the entry document
 
 **With the default `appType: 'spa'`, Vite's dev server answers a path that matches no file and no

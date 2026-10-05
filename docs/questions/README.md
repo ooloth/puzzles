@@ -76,6 +76,7 @@ closes, and the slices left keep their numbers because records cite them by numb
      - **Must answer:** [what-serves-the-clients-files-in-production](what-serves-the-clients-files-in-production.md) — or else nothing decides whether the front or the Node server serves the client's hashed files, or with what cache headers, so a returning player either revalidates every asset on the network [../problem.md](../problem.md) names as the modal case, or runs stale files after a deploy. Costs a change to the front and the serving path together
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
+     - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), at M9 — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
@@ -344,6 +345,11 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    for after deploys it never saw. It sits here because before this milestone the window is the
    milliseconds between the entry document and its assets. A dynamic import added earlier widens
    that window and brings it forward.
+7. [What gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
+   — a returning visit through the service worker revalidates the entry document and `sw.js` across
+   deploys, and Caddy's default validator changes with every copy. It sits beside question 6 because
+   both are about a returning page's requests across deploys, and before this milestone the cost is a
+   full response rather than a wrong one.
 
 ## M10 — sudoku is finished, in guest mode
 

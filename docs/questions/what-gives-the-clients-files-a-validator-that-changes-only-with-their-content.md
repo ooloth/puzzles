@@ -1,51 +1,33 @@
 ---
-opened: 2026-10-03
+opened: 2026-10-04
 status: open
 resolves_into: decision
 ---
 
-# Can a page loaded before a deploy still fetch its files after it?
+# What gives the client's files a validator that changes only with their content?
 
 ## Why it matters
 
-Vite gives every built asset a content-hashed filename, per
-[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and the entry document names the
-assets of the release that built it. A deploy replaces the release. A page holding the old entry
-document that asks for one of its assets after the switch asks for a filename the new release does
-not have. If the answer is a 404, or the entry document served in its place, the script never runs.
+A returning browser revalidates the entry document and `sw.js` with the validator it was given, and
+gets a 304 when nothing changed. Caddy serves the client's files, per the proposed
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and builds its ETag from a file's modification time and size. So the validator changes when a file
+is copied, which costs a full response where a 304 would do, and it can stay the same when the
+content changed, which serves an old entry document as current.
 
-That is the failure
-[the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
-rules out, and it would be silent: no server error, and a player who sees it simply leaves.
-
-**How often it happens depends on when the page asks.** Today the client loads its assets right
-after the entry document, so the window is the few milliseconds between them, overlapping a switch
-that took about three seconds in the spikes. It widens in three ways:
-
-- a chunk loaded later in a session, by a dynamic import, is asked for minutes after the entry
-  document;
-- the service worker [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md)
-  settles answers navigations from a document stored on the device, which can be from any earlier
-  release;
-- that service worker fetches its precache while it installs, which can straddle a deploy.
+**The unsafe case is the one that looks like the fix.** Giving every release one fixed modification
+time makes copies agree, and gives a new `index.html` that differs only in a same-length asset name
+the old ETag. A returning player then keeps an entry document naming assets that may be gone, with
+no error anywhere.
 
 **Environments:** production, and the production-like local run per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
-where a deploy is rehearsed and this failure can be produced on purpose.
-
-**What it does not cover.** Whether an old client can still talk to a new API is a contract
-question, not a file question. Which program serves the files is
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md), and
-how the deploy moves traffic is
-[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md). Both
-decide whether the previous release's files are still reachable after a switch, which is why this
-question sits beside them.
+where a deploy is rehearsed.
 
 ## What would settle it
 
-Knowing which program serves the client's files, and what a deploy does to the previous release's
-directory. Then a deploy in the local run with a page loaded from the old release, asking for an old
-asset after the switch, observing what comes back.
+A deploy in the local run with a returning client revalidating the entry document and `sw.js` across
+it, for each candidate, observing a 304 for an unchanged file and a 200 for a changed one, including
+an `index.html` whose only change is a same-length asset name.
 
 ## Properties the answer is scored against
 
@@ -157,33 +139,44 @@ deploy time.
 
 **Own to this question.** None derived yet. They are added when this question is worked.
 
-
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised on 2026-10-03 while ordering M1 slice 4's questions. Neither the file-serving question nor
-the switch question said what happens to the previous release's assets, and the maintainer agreed it
-gets its own question.
+Raised on 2026-10-04 while drafting the record that Caddy serves the client's files. A spike had
+given every release one fixed modification time to make ETags agree, and the entry document's case
+showed it was unsafe. It was deferred from M1 slice 4 because Caddy's default validator is safe and
+only costs full responses, and adding a better one later is one build step.
 
 ## Options
 
-...
+*A content-hash ETag in a sidecar file*, written by the build and read by Caddy's
+`etag_file_extensions`. Changes exactly when the content does.
+
+*A modification time set once per release* and kept on every copy. Copies of one release agree, and
+every file's validator changes at each deploy.
+
+*Caddy's default*, fresh modification times on every copy. Safe, and every copy and deploy costs a
+full response.
+
+*One fixed modification time for every release.* Rejected already: it gives a false 304 on the entry
+document, which breaks property 2.
 
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The window is real at M1 even with no service worker, and one previous release closes it.** In a
-local spike on 2026-10-04, Caddy switched releases in one reload while four clients fetched the
-entry document and then its asset 5 ms later. A release holding only its own asset failed 4 asset
-requests of 2,788 pages with 404; one also holding the previous release's asset failed none of 2,822.
-So M1 slice 4 carries at least the previous release's assets, per the proposed
-[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md).
-How many releases back is still this question's, and it widens at M9 when the service worker serves
-an entry document from any earlier release.
+**Caddy's ETag is the modification time in nanoseconds and the size.** `calculateEtag` builds
+`"<mtime.UnixNano() base 36>-<size base 36>"`, and Caddy can read an ETag from a sidecar file through
+`etag_file_extensions`.
 
-*Measured, one run per layout, on the maintainer's Mac. Not covered: Debian, TLS and a real
-network.*
+*Sourced: `modules/caddyhttp/fileserver/staticfiles.go` at v2.11.7, opened 2026-10-04. The sidecar
+option is a research agent's reading of the same file, not re-opened.*
+
+**Two byte-identical copies got different ETags, and revalidating one against the other returned
+200.** A spike on 2026-10-04 on the maintainer's Mac, recorded in
+[what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
+
+*Measured.*

@@ -50,12 +50,14 @@ reproduce in a desktop browser.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for four questions on the path from the Droplet to the player:
+Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
 [what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
-[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md) and
-[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md).
-**This list is copied into each of the four, and a change to it is made in all four in the same
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+and
+[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
+**This list is copied into each of the five, and a change to it is made in all five in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker

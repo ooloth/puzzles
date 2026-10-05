@@ -2,7 +2,7 @@
 number: 0010
 status: accepted
 date: 2026-09-01
-amended: 2026-09-26
+amended: 2026-10-04
 ---
 
 # 0010 — The store needs a host, so this system has a server
@@ -67,7 +67,8 @@ be, and M1 slice 1 is where one first answers a request.
   puzzles ship as files, progress lives on the device, and its loss is accepted. Cheapest by a wide
   margin — nothing to operate, nothing stored about anyone, no privacy obligations. Rejected not here
   but at [ADR-0009](0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md), by
-  `../problem.md`'s statement that a player's work follows them between devices. Choosing it now
+  `../problem.md`'s statement that a player never loses in-progress work, which a browser clearing
+  its storage after thirty days without interaction would break. Choosing it now
   means reopening that record, which is the honest form of disagreeing with this one.
 
 - **Rent somebody else's backend instead of having one** — a backend-as-a-service holding the store,

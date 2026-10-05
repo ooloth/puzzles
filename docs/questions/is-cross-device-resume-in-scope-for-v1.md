@@ -8,10 +8,11 @@ resolves_into: decision
 
 ## Why it matters
 
-It is the single largest fork in the app's complexity. Saying yes brings identity, a server copy,
-a sync protocol and a conflict rule; saying no removes all four and lets hosting collapse toward
-static files. It also decides whether a promise already made — that in-progress work is never
-lost — can be kept at all, for reasons that turn out to have little to do with second devices.
+It is the single largest fork in the app's complexity. Saying yes brings identity across devices, a
+sync protocol and a conflict rule; saying no removes all three. The server copy stays either way:
+[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) keeps
+one because a player never loses in-progress work and play is recorded from the first player, and
+neither reason involves a second device.
 
 ## What would settle it
 
@@ -41,15 +42,14 @@ Ported from the legacy documentation review, 2026-08-30. Analysed in depth 2026-
 
 ## Options
 
-*No — progress is per device.* **Ruled out** by
-[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md), which
-rejected keeping everything on the device and accepting the loss, and by
-[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md), which commits to
-a server holding the durable copy. Its appeal is that it would remove identity, server state, a sync
-protocol and a conflict rule at once, but the server exists regardless, so it removes none of them.
-Kept in the list because it is the option somebody would otherwise reach for, and because what it
-would cost a player — switching devices starts over, a cleared browser loses everything with no
-recovery — is the thing those records were weighed against.
+*No — progress is per device.* Still open.
+[ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md) rules
+out keeping everything on the device, and
+[ADR-0010](../decisions/0010-the-store-needs-a-host-so-this-system-has-a-server.md) gives the durable
+copy a server, but neither rests on second devices, so neither rules this out. Saying no keeps the
+server and the server copy, which recover a player's work on the same device. What it removes is
+identity across devices, the sync protocol and the conflict rule. What it costs a player is that
+switching devices starts over.
 
 *Yes, via accounts.* Email and a password or a magic link. Solves transfer and recovery together,
 and is the only option that also carries a subscription between devices. Costs a signup flow,
@@ -69,6 +69,11 @@ can claim it rather than starting from zero. Costs almost nothing now and preser
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
+
+**The maintainer has said cross-device resume comes after v1** (2026-10-04). That answers the
+product call under "What would settle it" and leaves two things open. The first is which of "No"
+and "Not in v1, but keep the door cheap" v1 ships with. The second is the decision record this
+question resolves into, which has not been written.
 
 **A "no" here makes most of the sync design vacuous.** Divergence requires two writers. With one
 device ever writing a board, the deterministic merge in

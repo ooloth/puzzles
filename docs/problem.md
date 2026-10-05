@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-10-04
 update_when: the users, the problem, or what we optimize for changes
 decays: slow
 status: active
@@ -94,6 +94,11 @@ A record of their play is theirs to keep — what they have solved, and how they
 outlives any one device.
 
 And every puzzle served has exactly one solution, reachable by logic alone.
+
+**And a record of how people play, from the first player onward.** Which puzzles get finished, where
+players stall, and whether a difficulty grade predicts anything are questions to answer later. Play
+that was never recorded cannot be analysed afterwards, so recording starts the day players arrive,
+even while the analysis waits.
 
 A small, genuinely public v1 within a few months.
 

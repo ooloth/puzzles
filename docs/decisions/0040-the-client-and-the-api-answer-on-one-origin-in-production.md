@@ -52,9 +52,8 @@ cookie is still open at
 and [is guest recovery worth building?](../questions/is-guest-recovery-worth-building.md). This record
 keeps that mechanism available and does not commit to it.
 
-**This settles the origin and nothing about how it is served.** Whether the API process also serves
-the files, a proxy routes by path, or a platform or CDN does, was the file-serving question, and
-[ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settled that Caddy serves them.
+**This settles the origin and nothing about how it is served.** What serves the files on that
+origin is [ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md): Caddy, from the release on disk.
 How API paths and client paths are kept apart on the one origin is settled by
 [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
 How the local runs join the two processes is derived from this record afterwards; the production-like

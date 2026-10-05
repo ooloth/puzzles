@@ -77,7 +77,7 @@ it uses, and reboots then if anything installed needs it.**
 - **Sources.** Debian's archive and security archive as Debian ships them, plus Caddy's repository
   (`o=cloudsmith/caddy/stable`). Which sources are allowed at all is
   [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md). Node's repository is added if
-  [what shape is the deployable?](../questions/what-shape-is-the-deployable.md) puts Node on the
+  [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md) puts Node on the
   host.
 - **The hour.** Both apt timers run at the hour, and the reboot waits for the same hour. Which hour
   is [at what hour does the machine apply updates and reboot?](../questions/at-what-hour-does-the-machine-apply-updates-and-reboot.md).
@@ -148,7 +148,7 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 - [x] questions/README.md: slice 4's Must answer moves from this question to the hour question
 - [x] questions/when-are-updates-applied-to-the-machine.md: mined and deleted
 - [x] questions/at-what-hour-does-the-machine-apply-updates-and-reboot.md: opened
-- [x] questions/what-shape-is-the-deployable.md: what this means for Node from the host
+- [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: what this means for Node from the host
 - [x] questions/how-is-the-server-operated.md, how-does-a-deploy-switch-between-versions.md and
   how-is-the-server-reached-and-hardened.md: link this record
 - [x] [ADR-0049](0049-the-droplet-runs-debian-13.md) and [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): their links to the deleted question point here

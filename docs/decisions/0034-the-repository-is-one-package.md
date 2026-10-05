@@ -49,8 +49,9 @@ cost this decision introduces.
 
 **This preserves one option deliberately.** A workspace sibling is placed under `node_modules` by
 `pnpm deploy`, which under the constraint above yields an artifact that fails at its first import.
-Choosing one package leaves [what shape is the deployable?](../questions/what-shape-is-the-deployable.md)
-unconstrained, where a workspace would have required the rules module to be compiled before shipping
+Choosing one package leaves the release's shape unconstrained, which
+[ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) later settled as a
+directory of built JavaScript and its `node_modules`, where a workspace would have required the rules module to be compiled before shipping
 or the deployable to be built by copying the tree.
 
 ## Enforced by

@@ -32,7 +32,8 @@ on letting one hostname resolve to the host's own address. Whether the domain do
 question, and the CNAME case is worth observing on a real Safari before it decides anything.
 
 The rest of it is ordinary and still has to be decided: whether the app answers on the apex or a
-subdomain, and where the certificate comes from.
+subdomain. Where the certificate comes from is settled: Caddy obtains and renews it, per
+[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md).
 
 ## What would settle it
 
@@ -51,13 +52,14 @@ reproduce in a desktop browser.
 ## Properties the answer is scored against
 
 Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
-of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and five remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
-[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md),
+[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
 and
-[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the four, and a change to it is made in all four in the same
+[which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md).
+**This list is copied into each of the five, and a change to it is made in all five in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -213,9 +215,8 @@ observed in a shipped Safari.*
 
 **Certificate ownership follows from the topology rather than being a separate choice.** A proxy
 terminates TLS with its own certificate; a DNS-only arrangement leaves issuance and renewal with the
-origin, which on a bare Droplet per
-[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) is work we run
-ourselves. That connects this to
+origin, which is Caddy issuing and renewing it automatically, per
+[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md). That connects this to
 [how is the server operated?](how-is-the-server-operated.md), where an expired certificate is an
 outage nobody is watching for.
 

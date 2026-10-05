@@ -78,20 +78,12 @@ weighed against it.
 
 ## Options
 
-*The same shape as production.* Whatever runs deployed also runs locally — a file if the store is a
-file, a container running the same engine if it is a service. Highest parity, which is what
-[how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
-exists to protect. [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md)
-rules out the service case, so here this means a file.
-
-*A different shape locally.* An embedded store for development and a network store deployed, or a
-hosted development instance rather than a local one. Cheaper to start, and it puts a difference
-between the two environments in the layer most likely to behave differently under load and failure.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a network or
-hosted store.
-
-*Not yet.* Nothing is built and no store exists, so this could wait — except that it is an input to
-the choice being made now rather than a consequence of it.
+The store is a file the server process opens in every environment, per
+[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md), so locally it is a file too, which is
+what [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md)
+asks of it. What is open is where the file lives, what puts data in it, and whether a run reuses it or
+starts fresh. No options for those are recorded yet.
 
 ## Findings
 

@@ -1146,8 +1146,7 @@ fails at run time rather than at build time.
 That is what [ADR-0005](decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)
 runs into: either the shared rules module is compiled before it ships, or the deployable keeps it
 outside `node_modules`. It is an input to
-[how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md),
-[what shape is the deployable?](questions/what-shape-is-the-deployable.md) and
+[how is the codebase laid out?](questions/how-is-the-codebase-laid-out.md) and
 [is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md).
 
 ## Runtimes — decorators do not run, and the flag that transformed them is gone

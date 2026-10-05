@@ -77,8 +77,7 @@ installed.**
 - **How a deploy switches between versions.** That is
   [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
 - **How Node itself is pinned and patched.** Either the host's package manager patches it, or each
-  release carries its own binary. That is [what shape is the
-  deployable?](../questions/what-shape-is-the-deployable.md).
+  release carries its own binary. That is [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md).
 - **What triggers a deploy.** That is [what deploys the
   code?](../questions/what-deploys-the-code.md).
 
@@ -137,7 +136,7 @@ run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).
 
 - [x] questions/README.md: a **Given** for M1 slices 4 and 6
 - [x] questions/what-deploys-the-code.md: deploys target systemd services on the Droplet
-- [x] questions/what-shape-is-the-deployable.md: how Node is pinned and patched is left there
+- [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: how Node is pinned and patched is left there
 - [x] questions/where-does-this-run.md: its open entry lists this as settled
 - [x] architecture.md: the server and Litestream run as systemd services, with no containers
 - [x] ../CONTRIBUTING.md: nothing yet; the local VM rehearsal arrives with the deploy script

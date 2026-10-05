@@ -2,6 +2,7 @@
 number: 0053
 status: accepted
 date: 2026-10-04
+amended: 2026-10-05
 ---
 
 # 0053 — Caddy serves the client's files from the release on disk
@@ -86,32 +87,41 @@ a few MB, and carrying the previous release's assets doubles a small number.
 **Caddy serves the client's files from the release's directory on the Droplet, and sends only
 `/api/` to the app.**
 
-It holds every property except 8, 10 and 17, and each of those is left to the question that owns
-it:
+It holds every property except 8, 9, 10, 12 and 17. Caddy can meet each of them, and how is left to
+the question that owns it:
 
 - **Property 8** needs a validator that changes with content. Caddy's default, built from each
   copy's modification time and size, is safe and costs a full response where a 304 would do. One
   fixed modification time for every release is not safe: a new `index.html` differing only in a
-  same-length asset name gets the old ETag and a false 304. Which validator to use is
+  same-length asset name would get the old ETag and a false 304, which is reasoned from Caddy's
+  ETag code and not observed. Which validator to use is
   [what gives the client's files a validator that changes only with their content?](../questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md),
   which waits until after players arrive.
+- **Property 9** needs the build to write compressed copies, which Caddy's `precompressed` serves.
+  Which encodings, and what writes them, is
+  [which encodings are the client's files precompressed in, and what writes them?](../questions/which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md).
 - **Property 10** is met by a caching proxy in front of the Droplet, which changes no verdict here
   and stays with
   [how does the domain reach the deployment?](../questions/how-does-the-domain-reach-the-deployment.md).
-- **Property 17**: the files switch in one Caddy reload, as measured below, and the order between
-  that and the app instance's switch is
-  [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
+- **Properties 12 and 17** hold if a deploy writes a Caddy snippet naming the new release's
+  directory and its header rules and reloads Caddy once, which was measured switching the files with
+  no failure, below. Then the rules ship with the release and the files switch through one gate.
+  Whether the deploy works that way, and the order between that gate and the app instance's switch,
+  is [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
 
-**What the configuration has to say, because each part was measured failing without it:**
+**What the configuration has to say, and the property each part answers:**
 
 - `/assets/*` files that exist get `public, max-age=31536000, immutable`, and a missing one gets
-  `no-store`. Without the match on the file's presence, Caddy's `header` directive put `immutable` on
-  its own 404.
-- Every other path gets `no-cache`, and an unknown one falls back to the entry document. `/assets/*`
-  is left out of the fallback, so a missing asset is a 404 rather than HTML.
-- `hide .*`, since Caddy hides no dotfiles by default.
-- `precompressed`, serving the build's compressed copies. Which encodings, and what writes them,
-  is settled in the M1 slice 4 issue, as the maintainer chose on 2026-10-04.
+  `no-store`, for properties 2 and 7. `/assets/` is where Vite writes the hashed files. Without the
+  match on the file's presence, Caddy's `header` directive put `immutable` on its own 404, which was
+  measured.
+- Every other path gets `no-cache`, for property 2, and an unknown one falls back to the entry
+  document, per [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
+  `/assets/*` is left out of the fallback so a missing asset is a 404 rather than HTML, which was
+  observed working, not observed failing.
+- `hide .*`, for property 4. A research agent read Caddy's documentation as hiding only its own
+  configuration files by default; that was not re-opened or measured.
+- `precompressed`, for property 9.
 
 **Each release carries at least the previous release's assets.** A local run switching releases in
 one reload under load failed 4 asset requests of 2,788 pages when the next release held only its own
@@ -140,18 +150,21 @@ enforce it, and does not exist.
   the entry document and Fastify served nothing, measured on 2026-10-04, so a first visit would get
   the front's 502. **Reverses if** Caddy is given a copy of the entry document to serve when the app
   is down, which is Caddy serving files.
-- **An edge platform hosting the files, with `/api/` routed from the edge to the Droplet**, measured
-  against Cloudflare Workers static assets. Its case: files near every player, a content-hash ETag
-  by default, and a local run that executes the production asset worker. It fails property 18: it
-  needs the hostname proxied, and whether Safari caps a cookie set there is unobserved, while
-  property 10, the only row it holds that Caddy does not, is reachable by a caching proxy in front of
-  Caddy without it. **Reverses if** Safari is observed not to cap a cookie on a proxied hostname and
+- **An edge platform hosting the files, with `/api/` routed from the edge to the Droplet**, scored
+  from Cloudflare Workers static assets' documentation and source. Its case: files near every
+  player, a content-hash ETag by default, and a local run that executes the production asset worker.
+  It fails property 18: it needs the hostname proxied, so choosing it settles the domain question's
+  topology now, while whether Safari caps a cookie on a proxied hostname is unobserved. A caching
+  proxy in front of Caddy faces the same unknown, but choosing Caddy does not choose that proxy: it
+  leaves it to the domain question, which owns the observation, and property 10, the only row the
+  edge platform holds that Caddy does not, is then the proxy's to deliver. **Reverses if** Safari is observed not to cap a cookie on a proxied hostname and
   first-visit distance binds beyond what a caching proxy delivers.
 - **Not yet.** M1 slice 4 deploys the client, so something has to serve it.
 
 A second static server beside Caddy, Node serving files without a plugin, DigitalOcean Spaces,
 GitHub Pages and Netlify or Vercel with a rewrite were set aside by the enumeration in the question,
-each for a reason recorded there.
+each for a reason recorded there and read with
+`git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.
 
 ## Risk
 
@@ -188,6 +201,8 @@ each for a reason recorded there.
       at least the previous release's assets
 - [x] questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md:
       opened, and deferred until after players arrive
+- [x] questions/which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md:
+      opened, and deferred
 - [x] [ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md),
       [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) and
       [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): link this record instead of the

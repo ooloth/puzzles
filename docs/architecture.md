@@ -57,8 +57,9 @@ the end and are the larger half.
         │  Debian 13                      ADR-0049│
         │                                         │
         │  ┌───────────────────────────────────┐  │
-        │  │ Caddy — TLS, and /api/ to the     │  │   ADR-0050
-        │  │ server                            │  │
+        │  │ Caddy — TLS, the client's files   │  │   ADR-0050
+        │  │ from the release on disk, and     │  │   the files ADR-0053
+        │  │ /api/ to the server               │  │
         │  └────────────────┬──────────────────┘  │
         │                   │                     │
         │  ┌───────────────────────────────────┐  │

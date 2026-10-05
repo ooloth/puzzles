@@ -4,7 +4,7 @@ status: open
 resolves_into: decision
 ---
 
-# What shape is the deployable?
+# Is Node installed on the host or carried in each release?
 
 ## Why it matters
 
@@ -52,6 +52,10 @@ Raised 2026-09-19, promoted out of a scratchpad note in
 where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) already covered it before writing a file; that check
 was run and it does not.
 
+It was titled "What shape is the deployable?" until
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settled the
+release's shape, and was renamed on 2026-10-05 to the part left open.
+
 ## Options
 
 *Node installed on the host, patched by its package manager.* A release is then the built JavaScript
@@ -87,25 +91,6 @@ container. So Node is either installed on the host and patched by the package ma
 an exact binary inside each release and patched only by deploying. The first keeps Node patched
 without a deploy, and changes the runtime under a running release. The second keeps every release
 exact, and needs a deploy for each Node patch.
-
-**Node ships a single-executable feature and it is not stable.** The v26 documentation page for
-Single executable applications carries "Stability: 1.1 - Active development".
-
-*Sourced — <https://nodejs.org/docs/latest-v26.x/api/single-executable-applications.html>, fetched
-and the marker grepped by me on 2026-09-19.*
-
-**Neither of the two questions that need this asks it.** Checked on 2026-09-19 by reading
-where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) and
-[what deploys the code?](what-deploys-the-code.md): the first mentions containers only as a
-platform capability, the second only inside one pipeline option. Recorded because an absence is
-invisible and this one had already been noticed once and not acted on.
-
-*Reasoned — from reading both files.*
-
-**The runtime is Node, so the shape is not an input to the runtime choice.** The scratchpad note
-that raised this question observed that Bun and Deno compile to a single executable and Node does
-not in the same way. [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md)
-settles the runtime, so this question is about how Node reaches the machine.
 
 **The spikes installed Node as the official tarball**, unpacked to `/opt/node-<version>-linux-x64`
 with `/opt/node` linked to it. The alternative the eleventh pass reasoned about installs Node from

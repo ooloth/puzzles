@@ -1,36 +1,31 @@
 ---
-opened: 2026-10-02
+opened: 2026-10-05
 status: open
 resolves_into: decision
 ---
 
-# How does a deploy switch between versions?
+# Which encodings are the client's files precompressed in, and what writes them?
 
 ## Why it matters
 
-The app runs as systemd services on one Droplet, per
-[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). A deploy has
-to move traffic from the running version to the new one. Done carelessly, it fails requests already
-in flight, which property 1 of that record forbids. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names this as the record that follows the
-choice of front, since the front is what moves traffic between instances.
+Caddy serves the client's files and sends a compressed copy where the build wrote one, per
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md). Without
+one it sends the file uncompressed. The client's one script is about 220 kB raw and about 69 kB
+gzipped in today's build, per Vite's own report on 2026-10-04, and a first visit is the wait every player meets, at a round trip of
+1.4 to 2 seconds on the `2g` tier in [../constraints.md](../constraints.md). Whatever writes the
+copies is a step in every build, and a dependency if it is a package, which
+[ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+weighs by what replacing it costs.
 
-**Environments:** production, and the production-like local run on the maintainer's Mac that
-[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
-requires, where the same switch is rehearsed before it touches the Droplet.
-
-**What it does not cover.** What the store needs during a deploy, from M3, is
-[how does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md). What
-triggers a deploy and where a release is built is
-[what deploys the code?](what-deploys-the-code.md). Noticing and undoing a bad deploy is
-[how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11.
+**Environments:** production, and the production-like local run per
+[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
+which names compression as a difference that matters.
 
 ## What would settle it
 
-The front is Caddy, per
-[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md), and its health checks can
-carry out the switch, as they did in the spikes. Then a deploy with the real
-Fastify server, observed on a Droplet under load, since the spikes ran a minimal server. How many
-records the answer resolves into is decided once it is worked.
+Which encodings the browsers at the declared floor accept, what each costs to produce at build and
+saves on the wire for this client, and what writes them, observed in the production-like run by
+requesting each asset with each `Accept-Encoding`.
 
 ## Properties the answer is scored against
 
@@ -143,18 +138,18 @@ deploy time.
 
 **Own to this question.** None derived yet. They are added when this question is worked.
 
-
 ## Resolves into
 
-One or more decision records in [../decisions/](../decisions/). How many is decided after the
-research, by the separability test in [../decisions/README.md](../decisions/README.md).
+A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Split out on 2026-10-02 from the hosting question, deleted that day and
-read with `git show ed7f54e:docs/questions/where-does-this-run.md`. Its open entry asked whether the
-switch needs a record or is an implementation detail. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) already lists it as a record that
-follows the front's, and the maintainer agreed on 2026-10-02 that it gets its own question.
+Raised on 2026-10-04 while drafting
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), whose property 9 needs compressed copies written at
+build. The maintainer first chose to settle it in the M1 slice 4 issue, then opened it as a question
+on 2026-10-05, because the project's rule is that an issue does not settle a choice others build on.
+It is deferred from slice 4 because Caddy serves an uncompressed file correctly when no compressed
+copy exists, and a first visit only costs players once they arrive at M12.
 
 ## Options
 
@@ -164,87 +159,17 @@ follows the front's, and the maintainer agreed on 2026-10-02 that it gets its ow
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**An order that drains the old instance before stopping it failed no request.** Two instances of the
-app ran on two ports behind Caddy, which checked `/api/up` on each. A deploy:
+**Caddy picks a compressed copy by `Accept-Encoding` and falls back to the raw file.** With
+`file_server { precompressed br }`, a request with `Accept-Encoding: br` got `Content-Encoding: br`
+and `Vary: Accept-Encoding`. Its documented default order for a bare `precompressed` is `br zstd
+gzip`.
 
-1. started the new instance on the idle port;
-2. waited for its `/api/up` to answer;
-3. signalled the old instance, whose `/api/up` then returned 503, and waited a second while Caddy
-   stopped routing to it;
-4. stopped the old instance, which finished what it was serving.
+*Measured for Brotli, Caddy 2.11.7 on the maintainer's Mac, 2026-10-04, read with
+`git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`. The default order
+is a research agent's reading of Caddy's `caddyfile.go`, not re-opened.*
 
-Caddy 2.11.4 ran with `lb_policy first`, `health_uri /api/up`, `health_interval 250ms`,
-`health_fails 1`, `lb_try_duration 5s` and upstream keep-alive off. In a Linux arm64 container with
-20 clients for 40 seconds through five deploys, three runs each failed 0 of about 221,000 requests,
-and none took longer than 49ms. On a real `s-1vcpu-1gb` Droplet in `tor1` running Ubuntu 24.04, one
-run of five deploys failed 0 of 20,254, the slowest took 219ms, and each deploy took 2.7 to 2.9
-seconds.
+**`vite-plugin-compression2` 2.5.3 was published on 2026-03-21**, defaults to gzip and Brotli, and its
+zstd support was not established. Node's `zlib` writes Brotli and gzip with no package.
 
-*Measured, 2026-09-30, in the eleventh and twelfth passes of the hosting question, read with
-`git show ed7f54e:docs/questions/where-does-this-run.md`, which holds the scripts. Not measured: TLS,
-the real Fastify server, amd64 in the container runs, and a deploy driven from a laptop over the
-internet.*
-
-**Stopping the old instance without draining it failed POSTs.** A first version of the same script
-failed 39 POSTs with 502 in one run. Requests queued on the old instance's socket were cut after Caddy
-had sent them, and Caddy does not retry a POST.
-
-*Measured, 2026-09-30, same source.*
-
-**How long a request is held matters more than whether one fails.** The guarantee that
-[the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
-forbids asking the player to act, not a request failing, and the client already retries silently
-through worse on a train. So a request that fails fast is retried within a second and unseen, while
-one held for seconds is a wait at the start of a session. Fly's deploys held some requests about 15
-seconds; Kamal's held none longer than 82ms.
-
-*Reasoned from the guarantee, in the ninth pass of the hosting question. The 82ms figure is the
-eighth pass's measurement; the 15-second one is reported there as observed in an earlier pass, and
-was not re-checked.*
-
-**The app's part is small.** The instance returns 503 from `/api/up` once signalled, which the spike
-did in about three lines. A real draining contract for the Fastify server has not been written or
-measured.
-
-*Reasoned, from the spike's server. The product's server has no `/api/up` yet.*
-
-**Other tools that switch versions were surveyed and set aside** on 2026-09-30, per an agent's reading
-of each project: PM2's reload waits for a process to listen or report ready, not for a health check,
-and adds a second supervisor beside systemd; Podman with Quadlet restarts the unit on update, so old
-and new never overlap; Kamal and its relatives keep Docker on the server, which [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) rules out.
-
-*Sourced by a research agent on 2026-09-30, in the eleventh pass. Not re-opened.*
-
-**[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s Risk applies to whatever script does the switch**: it enables the new instance at boot
-and disables the old, or a reboot starts the wrong one. Tests for that script are written with it,
-when slice 4 is built.
-
-*From [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).*
-
-**The front is Caddy, whose free edition has active health checks.** The settings the spikes used
-are above. Had the front been nginx or Angie, whose free editions have none, the deploy script would
-have rewritten a file naming the live instance and reloaded. A reboot of the Droplet, which takes
-about 18 seconds on Debian 13, is not a deploy and is not switched; it happens at the hour
-[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) sets for updates. That record also forbids restarting the app's unit
-for a replaced library, since the restart would bypass this switch.
-
-*From [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) and
-[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md); the working is read with
-`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md`.*
-
-
-**If Caddy serves the client's files, a deploy has two things to switch, and the files can switch in
-one Caddy reload.** Caddy 2.11.7 on the maintainer's Mac imported a snippet naming the live
-release's directory and its header rules. A deploy rewrote the snippet to name the next release and
-ran `caddy reload`. Four clients fetched the entry document and then the asset it named, 5 ms later,
-for five seconds, with the reload two seconds in. With the next release also holding the previous
-release's asset, 2,822 pages failed nothing. With only its own asset, 4 asset requests of 2,788 pages
-got 404 in the gap between a page and its asset. So the files are one gate and the app instance is
-another, and the order between them is this question's: a new entry document served before the new
-API is healthy reaches the old API, and the reverse reaches a new API from an old client, which
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) already
-requires the API to tolerate.
-
-*Measured, 2026-10-04, one run per layout, recorded in the question [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) answers, read with `git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.
-Not covered: Debian, TLS and the real app behind `/api/`. The order between the two gates is
-reasoned.*
+*Sourced by a research agent from the npm registry on 2026-10-04, not re-opened. The `zlib` claim
+was observed: the 2026-10-04 spike wrote its Brotli copy with `zlib.brotliCompressSync`.*

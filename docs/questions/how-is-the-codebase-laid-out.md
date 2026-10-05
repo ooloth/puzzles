@@ -217,8 +217,8 @@ away from being unrunnable. A single package with relative imports never meets t
 
 That does not settle the question in favour of one package. It says the comparison is between real
 boundaries plus a packaging constraint, and no boundaries plus no constraint — which is a sharper
-trade than "configuration versus none", and it is the same trade
-[what shape is the deployable?](what-shape-is-the-deployable.md) has to make.
+trade than "configuration versus none", and it is the same trade the release's shape makes, which
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) settles as a directory of built JavaScript and its `node_modules`.
 
 **Both halves of that limit reproduce here.** A `.ts` file whose real path is under `node_modules`
 throws `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`. The same package reached through a
@@ -238,7 +238,7 @@ than deciding whether it is there. So under workspaces, a rules module shipped a
 `pnpm deploy` artifact cannot both hold. Four ways out, and the layout only forecloses the last:
 compile the module before it ships, build the deployable by copying the workspace tree rather than by
 installing it, keep the module out of the package graph, or use one package. That is an input shared
-with [what shape is the deployable?](what-shape-is-the-deployable.md) and
+with the release's shape, settled by [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), and
 [is server TypeScript transpiled or stripped?](is-server-typescript-transpiled-or-stripped.md).
 
 *Sourced — [pnpm.io/cli/deploy](https://pnpm.io/cli/deploy),
@@ -392,7 +392,5 @@ or deleting three manifests and a `pnpm-workspace.yaml`, plus rewriting import s
 direction forecloses the other, so optionality between these two does not decide it.
 
 **What the spike did not settle.** Which shape is better to live in over years, which no measurement
-reaches. Whether the generator is a third deployable at all. And what a container image or a copied
-tree does with the rules module, which belongs to
-[what shape is the deployable?](what-shape-is-the-deployable.md) rather than here, and which is the
-one thing that could make the workspace hazard moot.
+reaches. Whether the generator is a third deployable at all. A container image is ruled out by
+[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), which makes a release a directory of built JavaScript and its `node_modules`.

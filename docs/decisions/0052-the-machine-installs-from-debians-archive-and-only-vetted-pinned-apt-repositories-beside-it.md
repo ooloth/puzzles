@@ -103,7 +103,7 @@ resolved, read with `git show 75fc8a5:docs/questions/where-may-the-machines-soft
 
 - **What a release carries.** The built app and its `node_modules` arrive by deploy, not by
   installation, and whether a release also carries Node is
-  [what shape is the deployable?](../questions/what-shape-is-the-deployable.md). If that puts Node
+  [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md). If that puts Node
   on the host, NodeSource's repository is held to this rule, pinned to the line
   [ADR-0031](0031-node-runs-on-the-newest-line-committed-to-lts.md) names.
 - **Litestream's source**, when the store arrives at M3. It is held to this rule there.
@@ -171,7 +171,7 @@ lacking `signed-by`, a pin or an allowed origin would, and does not exist.
 - [x] questions/README.md: slice 4 loses its **Must answer** on the software's source and gains this
       record as a **Given**
 - [x] questions/where-may-the-machines-software-come-from.md: mined and deleted in this change
-- [x] questions/what-shape-is-the-deployable.md: NodeSource is held to this rule if Node is on the
+- [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: NodeSource is held to this rule if Node is on the
       host
 - [x] questions/how-is-the-store-backed-up.md: Litestream is held to this rule
 - [x] questions/how-is-the-server-operated.md: noticing a stale pin and a hidden repository failure

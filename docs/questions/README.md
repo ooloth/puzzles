@@ -74,10 +74,11 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) — updates from Debian and Caddy's repository install daily at one hour, and the machine reboots then when anything needs it, never restarting a service for a library
    - **Given:** [0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) — software comes from Debian 13's main and security suites, plus Caddy's repository pinned to `2.*`, and any further repository meets that record's list
    - **Given:** [0053-caddy-serves-the-clients-files-from-the-release-on-disk](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) — Caddy serves the client's files from the release's directory, and each release carries at least the previous release's assets
-     - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
+     - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [how-is-the-server-reached-and-hardened](how-is-the-server-reached-and-hardened.md) — or else the Droplet is on the public internet from this slice with whatever SSH and firewall setup the provisioning script happens to have, where scanners rather than anyone interested in this project can take it, and a lockout leaves no route back onto the only machine. With no player data yet, unwinding it costs a rebuilt machine and rotated credentials
      - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), until players arrive — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
+     - **Deferred:** [which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md), until players arrive at M12 — Caddy serves an uncompressed file correctly where no compressed copy exists, so slice 4 builds without it, and writing the copies is a build step added later
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
@@ -451,6 +452,9 @@ is still open, and moving this point moves every question below that is keyed on
     latest point to decide it.
 21. [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — it becomes real the
     moment the app is shown to anyone who has not been told what it is, which is here.
+22. [Which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md)
+    — a first visit sends the client uncompressed until it is answered, which costs nobody before
+    players arrive and costs every one of them after.
 
 ## M13 — a player can sign in
 

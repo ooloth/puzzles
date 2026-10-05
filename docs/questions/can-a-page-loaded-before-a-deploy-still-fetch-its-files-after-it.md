@@ -43,20 +43,22 @@ question sits beside them.
 
 ## What would settle it
 
-Knowing which program serves the client's files, and what a deploy does to the previous release's
-directory. Then a deploy in the local run with a page loaded from the old release, asking for an old
+Knowing what a deploy does to the previous release's directory; Caddy serves the files from the
+release on disk, per
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md). Then a deploy in the local run with a page loaded from the old release, asking for an old
 asset after the switch, observing what comes back.
 
 ## Properties the answer is scored against
 
 Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
-of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and five remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
-[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
+[can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md),
+[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
 and
-[what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the four, and a change to it is made in all four in the same
+[which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md).
+**This list is copied into each of the five, and a change to it is made in all five in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker

@@ -99,7 +99,7 @@ The working is in the question this record resolved, read with
 
 - **Which front runs on it.** That is the next record.
 - **How Node is installed and patched**, by the host's package manager or inside each release. That
-  is [what shape is the deployable?](../questions/what-shape-is-the-deployable.md).
+  is [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md).
 - **When updates are applied and when the machine reboots**: as released, on a schedule we set, or
   with each deploy. That is [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 
@@ -176,7 +176,7 @@ not scored. NixOS was already rejected for the arrangement in [ADR-0044](0044-th
 - [x] questions/README.md: M1 slice 4 loses its **Must answer** on the OS and gains this record as a
       **Given**
 - [x] questions/which-os-does-the-droplet-run.md: mined and deleted in this change
-- [x] questions/what-shape-is-the-deployable.md: gains the Node install findings and the NodeSource
+- [x] questions/is-node-installed-on-the-host-or-carried-in-each-release.md: gains the Node install findings and the NodeSource
       origin trap, which matters only if Node comes from the host's package manager
 - [x] questions/when-are-updates-applied-to-the-machine.md: its links to this record's question are
       repointed to git history

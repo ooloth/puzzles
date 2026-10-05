@@ -79,7 +79,7 @@ no container, per [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md) 
 [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md). The Droplet supplies no
 Node runtime of its own, so the line is ours to choose. Whether the pinned version reaches the
 machine through its package manager or inside each release is
-[what shape is the deployable?](../questions/what-shape-is-the-deployable.md).
+[is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md).
 
 **CPU, memory, storage and network were asked and only one binds.** CPU does not: the client owns
 solving ([ADR-0004](0004-the-client-holds-and-mutates-puzzle-state.md)), so no Node version sits on

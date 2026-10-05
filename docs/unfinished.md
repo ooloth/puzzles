@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-05
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -17,9 +17,9 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
-under `src/client/` that shows its answer. The host, how the app runs on it, its OS and its front are
-settled, and nothing is deployed: the deploy switch, what serves the client's files, the hour updates are
-applied at, how Node is carried and what triggers a deploy are open.
+under `src/client/` that shows its answer. The host, how the app runs on it, its OS, its front and what
+serves the client's files are settled, and nothing is deployed: the deploy switch, the hour updates are applied at, how Node is
+carried and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 
@@ -77,15 +77,13 @@ at M2.
 
 ### The Droplet's setup is decided but has no runbook
 
-**You'll see** [ADR-0049](decisions/0049-the-droplet-runs-debian-13.md),
-[ADR-0050](decisions/0050-caddy-terminates-tls-in-front-of-the-app.md), [ADR-0051](decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) and
-[ADR-0052](decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) settling the OS, the front, how updates are applied and where software comes from, and nothing
-in [runbooks/](runbooks/) saying how to set any of them up.
+**You'll see** [ADR-0044](decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and
+[ADR-0049](decisions/0049-the-droplet-runs-debian-13.md) to
+[ADR-0053](decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settling how the
+Droplet is set up, and nothing in [runbooks/](runbooks/) saying how.
 
-**Actually** the only setup steps are spike notes in git history, written on Ubuntu 24.04 or on a
-mix of Ubuntu and Debian 13: `git show ed7f54e:docs/questions/where-does-this-run.md`,
-`git show 0b31753:docs/questions/what-sits-in-front-of-the-app-and-terminates-tls.md` and
-`git show cb8e751:docs/questions/when-are-updates-applied-to-the-machine.md`.
+**Actually** the only setup steps are spike notes those records cite from git history, written partly
+on Ubuntu.
 
 **So** do not follow them as instructions; M1 slice 4 writes the setup and its runbook.
 

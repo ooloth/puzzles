@@ -11,8 +11,8 @@ production. That run does not exist until M2, so everything here is the fast loo
 ## Setup
 
 Node on the line [ADR-0031](docs/decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
-names, which is 26 today. pnpm switches itself to the version `packageManager` in `package.json`
-names.
+names, which is 26 today. `pnpm` runs the version `packageManager` in `package.json` names; on the
+development machine that is Corepack's shim doing it, per [docs/gotchas.md](docs/gotchas.md).
 
 ```sh
 pnpm install

@@ -140,9 +140,10 @@ machine is on the public internet from then.
    [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) says is owed, and
    the rule at [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
    supplies the Node value it has to hold. The package manager is
-   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md), and pnpm reads a `packageManager`
-   field and switches itself to the declared version with no Corepack involved, which is one of the
-   mechanisms this question has to weigh.
+   [ADR-0032](../decisions/0032-the-package-manager-is-pnpm.md). On the development machine the
+   `pnpm` command is Corepack's shim, which reads `packageManager` and runs the version it names, per
+   [../gotchas.md](../gotchas.md); whether pnpm installed without Corepack switches itself the same
+   way has not been observed here, and both are mechanisms this question has to weigh.
 5. [What proves a vertical slice works end to end?](what-proves-a-vertical-slice-works-end-to-end.md)
    — every milestone here claims to be observable, and nothing says what observing one consists of.
    This decides whether the checks in [../../CONTRIBUTING.md](../../CONTRIBUTING.md) become something

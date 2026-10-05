@@ -93,8 +93,8 @@ it:
   copy's modification time and size, is safe and costs a full response where a 304 would do. One
   fixed modification time for every release is not safe: a new `index.html` differing only in a
   same-length asset name gets the old ETag and a false 304. Which validator to use is
-  [what gives the client's files a validator that changes only with their content?](../questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
-  at M9.
+  [what gives the client's files a validator that changes only with their content?](../questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md),
+  which waits until after players arrive.
 - **Property 10** is met by a caching proxy in front of the Droplet, which changes no verdict here
   and stays with
   [how does the domain reach the deployment?](../questions/how-does-the-domain-reach-the-deployment.md).
@@ -187,7 +187,7 @@ each for a reason recorded there.
 - [x] questions/can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md: slice 4 carries
       at least the previous release's assets
 - [x] questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md:
-      opened, and deferred to M9
+      opened, and deferred until after players arrive
 - [x] [ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md),
       [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) and
       [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): link this record instead of the

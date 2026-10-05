@@ -58,7 +58,7 @@ kernel drew about 114 MB on a 1 GB VM, leaving about 470 MB beside the app, Cadd
 Disk is property 10. CPU and network do not bind for an occasional upgrade.
 
 **Not weighed.** How long an outage may last is
-[how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md) at M16. The
+[how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md) at M12. The
 verdict holds for any tolerance above a few minutes a year, and one of zero fails every option.
 Alerting on a failed update is [how is the server operated?](../questions/how-is-the-server-operated.md)
 at M11.

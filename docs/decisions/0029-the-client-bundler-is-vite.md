@@ -31,7 +31,7 @@ browser-and-version string, which satisfies
 browserslist declaration, so if the shared declaration
 [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) requires is
 written in browserslist, Vite reads it through an adapter. What format carries the declaration is
-[open until M5](../questions/what-format-declares-the-browser-floor.md).
+[open until a second tool reads the floor](../questions/what-format-declares-the-browser-floor.md).
 
 ## Enforced by
 

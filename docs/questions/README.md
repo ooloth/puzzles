@@ -77,7 +77,7 @@ closes, and the slices left keep their numbers because records cite them by numb
      - **Must answer:** [what-shape-is-the-deployable](what-shape-is-the-deployable.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
      - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
      - **Must answer:** [how-is-the-server-reached-and-hardened](how-is-the-server-reached-and-hardened.md) — or else the Droplet is on the public internet from this slice with whatever SSH and firewall setup the provisioning script happens to have, where scanners rather than anyone interested in this project can take it, and a lockout leaves no route back onto the only machine. With no player data yet, unwinding it costs a rebuilt machine and rotated credentials
-     - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), at M9 — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
+     - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), until players arrive — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
 5. **The deployment answers at an address we control.**
    - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
    - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
@@ -228,14 +228,6 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
    [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
    is promised against compatibility data rather than observation until this lands, and the API half
    of the floor is only partly checkable by any tool.
-8. [What format declares the browser floor?](what-format-declares-the-browser-floor.md) — the checks
-   chosen at M2 and the matrix above are the floor's second and third readers, which is when
-   [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)'s
-   single declaration starts to matter. It comes after
-   [what runs the checks on every change?](what-runs-the-checks-on-every-change.md), which chooses
-   the linter and the syntax check, and after the cross-browser question above, which chooses the
-   test matrix, because the format has to suit the tools that read it and choosing it first would
-   choose them.
 
 ## M6 — the board survives a reload
 
@@ -271,9 +263,10 @@ Illegal moves are recognised, and a finished board is recognised as finished.
 
 Not one seeded row. Something published on a rhythm, fetched and rendered.
 
-1. [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md) — measurement, and
-   the questions below turn on it.
-2. [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
+1. [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md) — first, because
+   the cost of generation and when it runs only matter for v1 if v1 ships generated puzzles.
+2. [How expensive is puzzle generation?](how-expensive-is-puzzle-generation.md) — measurement, and
+   the questions below turn on it when the answer above is "generated".
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 4. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
    — beside the question above, which sets the rhythm, and a puzzle keyed by date alone can never
@@ -305,11 +298,6 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    for after deploys it never saw. It sits here because before this milestone the window is the
    milliseconds between the entry document and its assets. A dynamic import added earlier widens
    that window and brings it forward.
-7. [What gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
-   — a returning visit through the service worker revalidates the entry document and `sw.js` across
-   deploys, and Caddy's default validator changes with every copy. It sits beside question 6 because
-   both are about a returning page's requests across deploys, and before this milestone the cost is a
-   full response rather than a wrong one.
 
 ## M10 — sudoku is finished, in guest mode
 
@@ -330,10 +318,10 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 M2 is where checking a change before it ships is built. These report a failure after a change has
 shipped, and they are what has to be in place before anyone arrives at M12: whether the app is
-serving, whether a deploy broke it, whether a player lost progress, and whether the server has
-stopped. They sit before M12 because the whole question there is whether players are losing work,
-and nothing currently could tell us either way. What needs real traffic to mean anything, such as
-vitals, alerting and diagnosing slow requests, waits for players under "Blocking nothing yet".
+serving, whether a deploy broke it, whether a player lost progress or could, and whether the server
+has stopped. They sit before M12 because the whole question there is whether players are losing
+work, and nothing currently could tell us either way. What needs real traffic to mean anything, such
+as vitals, alerting and diagnosing slow requests, waits for players under "Blocking nothing yet".
 
 1. [How do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) — a
    static client loading from cache hides a dead API for a long time.
@@ -343,7 +331,17 @@ vitals, alerting and diagnosing slow requests, waits for players under "Blocking
    motivating case in the observability theme of
    [the guarantees README](../guarantees/README.md): it produces
    no error, no crash and no complaint.
-4. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
+4. [How would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md) —
+   backgrounding, tab kill and OS memory purge need real devices or an instrumented harness, and
+   until one exists the most consequential promise in the product is enforced by nothing. Beside the
+   question above: that one notices a loss in production, and this one shows before players arrive
+   that none happens.
+5. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
+   — the correctness theme in [the guarantees README](../guarantees/README.md) names "a partial
+   write is never observable" and "the board on screen always matches the board in storage" as
+   candidate promises. Both are ways work is lost, and neither is checkable unless something asserts
+   it where it can fail.
+6. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
    stopped. Patching moved to slice 4 of M1 and is settled by
    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
    except for alerting on a failed update, which stays here. It sits here because noticing an outage is this milestone's theme. The
@@ -376,39 +374,39 @@ is still open, and moving this point moves every question below that is keyed on
    product question that sizes everything below. A board's value decays with absence; a streak's does
    not.
 4. [How long does a guest's work last?](how-long-does-a-guests-work-last.md) — the bound itself.
-5. [Is guest recovery worth building?](is-guest-recovery-worth-building.md) — the mechanism. Its
+5. [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) — the
+   maintainer has said it comes after v1. What is left is whether v1 mints a stable identifier on
+   first visit so a later account can claim it, and that is the same token guest recovery below
+   would use, so it is answered first.
+6. [Is guest recovery worth building?](is-guest-recovery-worth-building.md) — the mechanism. Its
    feasibility depends on M1 having held same-origin open.
-6. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
+7. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
    — the only confirmed mitigation, and it cannot be required of anyone.
-7. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
+8. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
    has to end in something, and the player cannot be told, because
    [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
    forbids it. The first write off the device happens here, so this is the first sync that can give
    up. [The durable copy stops being written](../failure-modes/the-durable-copy-stops-being-written.md)
    is what happens if it is never answered.
-8. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
+9. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
    first among the store questions below, because it decides whether the first player record goes
    into the puzzles' store or a second one, and everything below assumes an answer. Before here the
    store holds only puzzles. It does not pin the generator either way: a generator can publish
    through the server's API and run anywhere under either store locality.
-9. [Which region does the machine run in?](which-region-does-the-machine-run-in.md) — every wait a
-   player has includes the round trip to the one machine
-   [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) allows, and nothing
-   says where the players are. Before here, moving the machine moves only puzzles that can be
-   written again. From here it moves players' work too.
-10. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+10. [Which region does the machine run in?](which-region-does-the-machine-run-in.md) — every wait a
+    player has includes the round trip to the one machine
+    [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) allows, and nothing
+    says where the players are. Before here, moving the machine moves only puzzles that can be
+    written again. From here it moves players' work too.
+11. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
     real secret arrives with the store's off-machine copy, which is first worth having here.
     [What deploys the code?](what-deploys-the-code.md) records that M1 needs none.
-11. [What durability settings does the store run
+12. [What durability settings does the store run
     with?](what-durability-settings-does-the-store-run-with.md) — journal mode, synchronous level and
     busy timeout decide whether a committed write survives a power cut, which
     [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left open. Answered
     here because the first player's data is the first thing that could be lost, and the question is
     framed to test whether the safest setting costs anything at all rather than to position a dial.
-12. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there
-    is player data to lose is when it is cheapest. Before here, a schema change rewrites puzzles
-    that can be written again. [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md)
-    already schedules the change that forces one.
 13. [How is the store backed up?](how-is-the-store-backed-up.md) — the first player's data exists
     here, so this is where a backup stops being hypothetical. It is set up alongside the first data
     worth keeping, and the named precedent for deferring it is an operational inventory of roughly
@@ -416,18 +414,22 @@ is still open, and moving this point moves every question below that is keyed on
     it.
 14. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief. After the backup above, which is what it rehearses.
-15. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+15. [How much downtime is acceptable?](how-much-downtime-is-acceptable.md) — while the server is
+    down nobody starts a puzzle they have not already got, per [../problem.md](../problem.md) under
+    "Where a player waits", so this is a product target. The recovery question below is the main
+    lever on how long an outage lasts and needs this target first.
+16. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
     — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
     commits to surviving host replacement and the machine cannot deliver that alone. This is the main
     lever on how long an outage lasts, and it is ours rather than a provider's.
-16. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md)
+17. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md)
     — there is no player data before here, so nothing worth keeping can be disturbed. Two processes
     on one machine can share the file while a deploy overlaps them, as measured in the eighth and
     twelfth passes of the hosting question, read with `git show
     ed7f54e:docs/questions/where-does-this-run.md`; what must stay single is the replicator. The
     rest — checkpointing on exit, replication across a restart, rolling back past a migration — is
     real from the first player's data.
-17. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
+18. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
     keeps
     [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md).
     The fallback is carried by the entry document the build already produces, per
@@ -436,11 +438,18 @@ is still open, and moving this point moves every question below that is keyed on
     floor until there are players. Its wrong answer is invisible, since every browser above the
     floor shows the app either way, so it is settled by opening the built document in a browser
     below the floor rather than by reading.
-18. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
+19. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
     — the hour only matters once someone starts a session at it, which is from here, and it must
     avoid the release hour
     [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
     may set at M8. Until then Debian's default hour harms nobody.
+20. [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
+    — React needs neither `eval` nor injected inline styles, so nothing in the build waits on it.
+    [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settles
+    that Caddy serves the client's files, so the header has a home, and a public launch is the
+    latest point to decide it.
+21. [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — it becomes real the
+    moment the app is shown to anyone who has not been told what it is, which is here.
 
 ## M13 — a player can sign in
 
@@ -454,19 +463,19 @@ is still open, and moving this point moves every question below that is keyed on
 
 ## M14 — work follows a player between devices
 
-1. [Is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md)
-2. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
-3. [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) —
-   a losing write needs two writers, so this does not arise until the two above are answered.
-4. [How does a device know its board is behind?](how-does-a-device-know-its-board-is-behind.md) — a
+1. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
+2. [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) —
+   a losing write needs two writers, so this does not arise until cross-device resume is in scope
+   and the question above is answered.
+3. [How does a device know its board is behind?](how-does-a-device-know-its-board-is-behind.md) — a
    different failure from the one above and easy to mistake for it. No write loses; both copies are
    legitimate; the player simply resumes from an older board on a device that cannot tell it is
    older. It is the standing cost of the client authority
    [ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) chose, and it becomes
    reachable the moment a second device does.
-5. [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
-6. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
-7. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
+4. [How much unsynced work is acceptable?](how-much-unsynced-work-is-acceptable.md)
+5. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
+6. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
 ## M15 — the puzzles are ours
 
@@ -476,7 +485,6 @@ is still open, and moving this point moves every question below that is keyed on
 
 1. [Is there a paid tier?](is-there-a-paid-tier.md)
 2. [What load should the server handle?](what-load-should-the-server-handle.md)
-3. [How much downtime is acceptable?](how-much-downtime-is-acceptable.md)
 
 ## Blocking nothing yet
 
@@ -500,7 +508,6 @@ would leave that file with nothing to hold.
 — research.
 
 [How long until a stalled connection surfaces as an error?](how-long-until-a-stalled-connection-surfaces-as-an-error.md),
-[how would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md),
 [what wins when correctness and latency conflict?](what-wins-when-correctness-and-latency-conflict.md),
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
 
@@ -508,17 +515,10 @@ would leave that file with nothing to hold.
 — the milestone list places players at M12 as a sketch, and no record settles it. Moving that
 point moves the questions at M12 that are keyed on players.
 
-[Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
-— nothing waits on it now that the renderer is React, which needs neither `eval` nor injected
-inline styles; it becomes real with whatever serves the client's files.
-
-[What belongs on the landing page?](what-belongs-on-the-landing-page.md) — nothing waits on it, and
-it becomes real the moment the app is shown to anyone who has not been told what it is, which is M12
-at the earliest. Placed here rather than at M12 because nothing there waits on it either.
-
 [Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) and
 [do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
-both become real at the same moment as the landing page, when a URL is first shared with someone.
+both become real when a URL is first shared with someone, which is M12 at the earliest, and nothing
+there waits on either.
 No rendering choice forecloses crawler markup: a rebuild on publish and a single runtime-rendered
 route are both additive, as
 [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
@@ -532,17 +532,30 @@ them. M11 keeps only what has to report a failure before anyone arrives.
 [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md),
 [what is worth being woken up for?](what-is-worth-being-woken-up-for.md),
 [how is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md),
-[what invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md),
 [what invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md),
 [how would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
 and [can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
 — operating the system once people are using it.
+
+[How is the schema migrated?](how-is-the-schema-migrated.md) — v1 can ship with a schema it never
+migrates. [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) schedules the change
+that forces the first migration, star battle, after launch, and that change is where this is needed.
+
+[What gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md)
+— a returning visit through the service worker revalidates the entry document and `sw.js` across
+deploys, and Caddy's default validator changes with every copy. The cost is a full response where a
+304 would do, never a wrong one, so it is a speed improvement that can follow players.
 
 [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the scans
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves are
 long reads, and a long read blocks WAL checkpointing. Nothing is worth analysing until play has been
 recorded for a while, and recording starts at M12, whose backup answer may already be the copy these
 reads should run against.
+
+[What format declares the browser floor?](what-format-declares-the-browser-floor.md) — nothing in
+v1 needs a shared format: the build names the floor in its own config, and a floor left low breaks
+no promise. It becomes real when a second tool has to read the floor, and the format has to suit the
+tools that read it, so it is chosen with them.
 
 [How do we learn the browser floor can rise?](how-do-we-learn-the-browser-floor-can-rise.md) —
 nothing waits on it, because a floor left low breaks no promise. It becomes real when Apple stops
@@ -818,7 +831,6 @@ earlier entry is replaced rather than left underneath it, which is what makes ev
 present still believed.
 
 Options and Findings take subheadings once they outgrow a flat list.
-
 
 ### A claim about a tool decays in days, not months
 

@@ -49,8 +49,10 @@ Deciding the mechanism and, more importantly, what surrounds it. Five things any
 
 **It is not urgent and it is not late.** The first row is written at M3, but until players arrive at
 M12 the store holds only puzzles that can be written again, so a schema change before then is a
-rewrite rather than a migration. Deciding the routine before there is player data to lose is when it
-is cheapest, which is why it sits at M12.
+rewrite rather than a migration. v1 can ship with a schema it never migrates: the first change that
+forces a migration is star battle, which
+[ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md) schedules after launch, so the
+routine is decided before that change.
 
 ## Properties the answer is scored against
 

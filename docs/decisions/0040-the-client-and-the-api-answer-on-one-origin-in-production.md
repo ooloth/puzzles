@@ -53,8 +53,8 @@ and [is guest recovery worth building?](../questions/is-guest-recovery-worth-bui
 keeps that mechanism available and does not commit to it.
 
 **This settles the origin and nothing about how it is served.** Whether the API process also serves
-the files, a proxy routes by path, or a platform or CDN does, is
-[what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
+the files, a proxy routes by path, or a platform or CDN does, was the file-serving question, and
+[ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settled that Caddy serves them.
 How API paths and client paths are kept apart on the one origin is settled by
 [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md).
 How the local runs join the two processes is derived from this record afterwards; the production-like

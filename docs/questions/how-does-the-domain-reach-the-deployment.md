@@ -50,14 +50,14 @@ reproduce in a desktop browser.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
 and
 [what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the five, and a change to it is made in all five in the same
+**This list is copied into each of the four, and a change to it is made in all four in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -218,3 +218,36 @@ origin, which on a bare Droplet per
 ourselves. That connects this to
 [how is the server operated?](how-is-the-server-operated.md), where an expired certificate is an
 outage nobody is watching for.
+
+**A caching proxy in front changes no verdict on what serves the files, and is this question's.**
+Scored with and without a proxy in front, Caddy and Fastify serving the files came out the same,
+because a proxy caches whatever either sends. [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md)
+chose Caddy and left a caching proxy here, as what would put the hashed assets near distant players.
+It rejected an edge platform hosting the files on the Safari cookie rule this question owns, and
+reverses if that rule is observed not to cap a cookie on a proxied hostname.
+
+*From [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md); its working is read with
+`git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.*
+
+**Cloudflare's proxy does not cache HTML or JSON by default.** Its docs: "The Cloudflare CDN does not
+cache HTML or JSON by default." So a proxied deploy's new entry document reaches players at once, and
+an `/api/` response is cached only if its path ends in an extension Cloudflare caches by default.
+
+*Sourced: `developers.cloudflare.com/cache/concepts/default-cache-behavior/`, opened 2026-10-04.*
+
+**Something in front can cache an API response or strip `Set-Cookie` when a rule written for the
+files reaches the whole origin.** Cloudflare's cache-behaviour documentation describes configurations
+that remove `Set-Cookie` and cache the response. CloudFront, once a cache behaviour forwards cookies,
+"caches the Set-Cookie headers with the object... and sends those Set-Cookie headers to viewers on all
+cache hits", fixed by an origin response carrying `Cache-Control: no-cache="Set-Cookie"`. Which way a
+proxy fails with an API response is per vendor.
+
+*Sourced by research agents on 2026-09-26 and 2026-10-04 from Cloudflare's
+`cache/concepts/cache-behavior/` and the CloudFront developer guide's cookie caching page. Not
+re-opened by me.*
+
+**Cloudflare moves free-plan traffic away from a busy data centre first**, so a free proxy puts assets
+near a player less reliably than its city count suggests.
+
+*Sourced by a research agent from Cloudflare's "Meet Traffic Manager" post, 2026-10-04. Not
+re-opened.*

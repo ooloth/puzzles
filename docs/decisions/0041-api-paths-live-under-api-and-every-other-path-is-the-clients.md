@@ -83,9 +83,12 @@ its key, which is 6 and 9. Matching the whole segment is 8.
 deleted: `git show 4e052ac:docs/questions/how-are-api-paths-kept-apart-from-client-paths-on-one-origin.md`.
 The vendor findings behind properties 5 to 9 are there with their sources, and the ones a later
 question needs have moved: the Safari and Vite facts, and the path-only routing of Cloudflare Pages
-and CloudFront, to [../constraints.md](../constraints.md), and Cloudflare Pages' fallback and
-CloudFront's `Set-Cookie` caching to
-[what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
+and CloudFront, to [../constraints.md](../constraints.md). Cloudflare Pages' fallback and
+CloudFront's `Set-Cookie` caching moved to the file-serving question, which
+[ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) answered; the
+`Set-Cookie` finding moved on to
+[how does the domain reach the deployment?](../questions/how-does-the-domain-reach-the-deployment.md),
+and both are read with `git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.
 
 **This does not decide whether the API is versioned in its path.** `/api/v1/` would be this rule with
 a versioning scheme on top, and that belongs to

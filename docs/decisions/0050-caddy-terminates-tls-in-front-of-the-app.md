@@ -48,8 +48,8 @@ setup on the Mac.
    ([ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)).
 8. It leaves most of the 1 GB machine to the app ([../constraints.md](../constraints.md), no swap).
 9. It can serve the client's files with a cache header per class of file and answers to conditional
-   requests, keeping that option open at
-   [what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
+   requests, keeping that option open for the file-serving question, which
+   [ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) answered by choosing it.
 10. Nothing it runs is reachable from the internet except HTTP and HTTPS, and nothing it writes
     fills the disk unbounded (property 4 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
 11. It is installed and patched from a maintained package on the chosen OS (property 3 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
@@ -115,8 +115,8 @@ chosen to be quiet, with Caddy's repository included.
 
 - **How a deploy switches between versions**, including whether Caddy's health checks are what
   switch it. That is [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
-- **Who serves the client's files.** Caddy can, which keeps that option open at
-  [what serves the client's files in production?](../questions/what-serves-the-clients-files-in-production.md).
+- **Who serves the client's files.** Caddy can, which kept that option open; [ADR-0053](0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) chose
+  it.
 - **What the domain resolves to**, and whether anything sits in front of the Droplet, which is
   [how does the domain reach the deployment?](../questions/how-does-the-domain-reach-the-deployment.md)
   at slice 5. Until then slice 4 is observed over HTTP on the Droplet's address.

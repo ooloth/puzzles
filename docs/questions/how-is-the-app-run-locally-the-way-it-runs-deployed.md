@@ -76,8 +76,8 @@ block is served by the dev server unchanged and emitted by the build lowered.
 **`pnpm preview` serves the built client with the API behind it on one origin, and it is still not
 the production-like run.** Vite 8.3.1's `preview.proxy` defaults to `server.proxy`, so the `/api/`
 rule `vite.config.ts` gives the dev server applies to preview too, and `vite.config.test.ts` checks
-it. What it cannot show is how production serves the files and routes `/api/`, which is open in
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+it. What it cannot show is how production serves the files and routes `/api/`: Caddy serves them,
+per [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md),
 and it still points the proxy at the server's default address. It is one of the pieces such a run
 would be assembled from.
 

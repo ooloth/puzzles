@@ -1,6 +1,6 @@
 ---
 number: 0053
-status: proposed
+status: accepted
 date: 2026-10-04
 ---
 
@@ -110,7 +110,8 @@ it:
 - Every other path gets `no-cache`, and an unknown one falls back to the entry document. `/assets/*`
   is left out of the fallback, so a missing asset is a 404 rather than HTML.
 - `hide .*`, since Caddy hides no dotfiles by default.
-- `precompressed`, serving the build's compressed copies.
+- `precompressed`, serving the build's compressed copies. Which encodings, and what writes them,
+  is settled in the M1 slice 4 issue, as the maintainer chose on 2026-10-04.
 
 **Each release carries at least the previous release's assets.** A local run switching releases in
 one reload under load failed 4 asset requests of 2,788 pages when the next release held only its own
@@ -120,8 +121,8 @@ at M9.
 
 **The evidence.** Two local spikes on 2026-10-04 on the maintainer's Mac, with Caddy 2.11.7, this
 repository's Vite build and plain HTTP on loopback, one run each. The method and tables are in the
-question this record answers, read with `git show <commit>^:docs/questions/what-serves-the-clients-files-in-production.md`
-against the commit that deleted it. Not covered: Debian, TLS, the real app behind `/api/` and a real
+question this record answers, read with
+`git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`. Not covered: Debian, TLS, the real app behind `/api/` and a real
 network.
 
 ## Enforced by
@@ -175,19 +176,22 @@ each for a reason recorded there.
 
 ## Also update
 
-- [ ] questions/README.md: slice 4 loses its **Must answer** on what serves the files and gains this
-      record as a **Given**, once this record is accepted
-- [ ] questions/what-serves-the-clients-files-in-production.md: commit the worked file, then mine it
-      and delete it in the change that accepts this record; the property list's other four copies
-      drop it from their member list
+- [x] questions/README.md: slice 4 loses its **Must answer** on what serves the files and gains this
+      record as a **Given**
+- [x] questions/what-serves-the-clients-files-in-production.md: worked file committed in `6debaf8`,
+      then mined and deleted in this change; the property list's four remaining copies drop it from
+      their member list, and its proxy findings moved to
+      [how does the domain reach the deployment?](../questions/how-does-the-domain-reach-the-deployment.md)
 - [x] questions/how-does-a-deploy-switch-between-versions.md: the files switch in one reload, and the
       order against the app instance is that question's
 - [x] questions/can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md: slice 4 carries
       at least the previous release's assets
 - [x] questions/what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md:
       opened, and deferred to M9
-- [ ] [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): property 9 links this record
-      instead of the question
+- [x] [ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md),
+      [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) and
+      [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): link this record instead of the
+      question, and `../CONTRIBUTING.md` and the local-run question do the same
 - [x] constraints.md: Caddy's ETag and its header on 404s, `@fastify/static`'s dotfiles default, and
       Cloudflare's `_headers` on the fallback
 - [x] architecture.md: nothing yet; no code serves files until slice 4

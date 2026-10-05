@@ -34,14 +34,14 @@ records the answer resolves into is decided once it is worked.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
 and
 [what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the five, and a change to it is made in all five in the same
+**This list is copied into each of the four, and a change to it is made in all four in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -244,7 +244,6 @@ API is healthy reaches the old API, and the reverse reaches a new API from an ol
 [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) already
 requires the API to tolerate.
 
-*Measured, 2026-10-04, one run per layout, recorded in
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
+*Measured, 2026-10-04, one run per layout, recorded in the question [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) answers, read with `git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.
 Not covered: Debian, TLS and the real app behind `/api/`. The order between the two gates is
 reasoned.*

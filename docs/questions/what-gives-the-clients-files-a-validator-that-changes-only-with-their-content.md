@@ -9,7 +9,7 @@ resolves_into: decision
 ## Why it matters
 
 A returning browser revalidates the entry document and `sw.js` with the validator it was given, and
-gets a 304 when nothing changed. Caddy serves the client's files, per the proposed
+gets a 304 when nothing changed. Caddy serves the client's files, per
 [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and builds its ETag from a file's modification time and size. So the validator changes when a file
 is copied, which costs a full response where a 304 would do, and it can stay the same when the
 content changed, which serves an old entry document as current.
@@ -31,14 +31,14 @@ an `index.html` whose only change is a same-length asset name.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
 and
 [what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the five, and a change to it is made in all five in the same
+**This list is copied into each of the four, and a change to it is made in all four in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -176,7 +176,6 @@ document, which breaks property 2.
 option is a research agent's reading of the same file, not re-opened.*
 
 **Two byte-identical copies got different ETags, and revalidating one against the other returned
-200.** A spike on 2026-10-04 on the maintainer's Mac, recorded in
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md).
+200.** A spike on 2026-10-04 on the maintainer's Mac, recorded in the question [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) answers, read with `git show 6debaf8:docs/questions/what-serves-the-clients-files-in-production.md`.
 
 *Measured.*

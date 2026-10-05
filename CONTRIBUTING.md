@@ -136,8 +136,9 @@ Then stop `pnpm start` and reload the page, and start it again with `PORT=3001` 
 - `dist/client/index.html` loads one script, `assets/index-<hash>.js`. The `grep` finds
   `` `/api/hello` `` with no scheme or host in front of it.
 
-Can't observe: how production serves the files and routes `/api/`, which is open in
-[what serves the client's files in production?](docs/questions/what-serves-the-clients-files-in-production.md);
+Can't observe: how production serves the files and routes `/api/`, which is Caddy per
+[ADR-0053](docs/decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) and arrives
+with M1 slice 4;
 `pnpm preview` is the closest mode, not the production-like run. Nor whether the built script
 parses on a browser at the floor, since nothing here runs one; that check is owed at M2.
 

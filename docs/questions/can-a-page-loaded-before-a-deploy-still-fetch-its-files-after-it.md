@@ -34,8 +34,8 @@ that took about three seconds in the spikes. It widens in three ways:
 where a deploy is rehearsed and this failure can be produced on purpose.
 
 **What it does not cover.** Whether an old client can still talk to a new API is a contract
-question, not a file question. Which program serves the files is
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md), and
+question, not a file question. Which program serves the files is settled by
+[ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and
 how the deploy moves traffic is
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md). Both
 decide whether the previous release's files are still reachable after a switch, which is why this
@@ -49,14 +49,14 @@ asset after the switch, observing what comes back.
 
 ## Properties the answer is scored against
 
-Derived on 2026-10-04 for five questions on the path from the Droplet to the player:
-[what serves the client's files in production?](what-serves-the-clients-files-in-production.md),
+Derived on 2026-10-04 for the questions on the path from the Droplet to the player. The question
+of what serves the client's files was settled from it by [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md), and four remain:
 [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
 [how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md),
 [can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
 and
 [what gives the client's files a validator that changes only with their content?](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md).
-**This list is copied into each of the five, and a change to it is made in all five in the same
+**This list is copied into each of the four, and a change to it is made in all four in the same
 edit.** Properties a question has of its own follow the copy, under **Own to this question**.
 
 The moments are a first visit, meaning the entry document, its assets and the service worker
@@ -180,7 +180,7 @@ gets its own question.
 local spike on 2026-10-04, Caddy switched releases in one reload while four clients fetched the
 entry document and then its asset 5 ms later. A release holding only its own asset failed 4 asset
 requests of 2,788 pages with 404; one also holding the previous release's asset failed none of 2,822.
-So M1 slice 4 carries at least the previous release's assets, per the proposed
+So M1 slice 4 carries at least the previous release's assets, per
 [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md).
 How many releases back is still this question's, and it widens at M9 when the service worker serves
 an entry document from any earlier release.

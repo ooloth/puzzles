@@ -89,6 +89,10 @@ directs you to proceed anyway after hearing the above.
 1. **Ask what the records have made stale.** For each question in the current and next milestone,
    check its premise against `docs/decisions/`. A question whose conditional a record has answered
    sends a reader to re-open a settled argument.
+1. **Look for one option listed in two question files.** It means two questions share moments and
+   each is set to score that option against its own list. Found on 2026-10-04: a proxy in front of
+   the Droplet was an option in both the file-serving and the domain question. Raise it, and work
+   the two as a group per "Name the group" at the start of section 4 below.
 1. Confirm the question that would be most impactful to answer next
 
 ### 2. Verify what the question files already claim, before relaying any of it
@@ -162,6 +166,15 @@ are named is the options' own list, and it reads as complete because it was writ
 Written first, it aims the research, turns the comparison into a grid, and gives every rejection
 the one property it fails.
 
+1. **Name the group before naming the moments.** List the open questions that share moments with
+   this one: the same slice, the next slice, any question that names the same option, and any
+   question whose answer changes what happens at a moment this one's answer also changes, such as
+   the same request or the same deploy. Mentioning a deploy is not enough; changing what it does
+   is. Step 6 of "Building a milestone's list" in `docs/questions/README.md` says why.
+   The sub-steps below then derive one list for the group rather than for this question alone, and
+   step 5 scores every candidate under every answer an unsettled member of the group could give. A
+   candidate whose verdict changes with that answer makes the member an input: stop and raise it as
+   a prerequisite. Where the group is this question alone, say so and why.
 1. **List the moments the system touches the thing being chosen.** Each request, write, read,
    deploy, failure and wait it takes part in, named concretely from `docs/problem.md`,
    `docs/guarantees/` and the records. "The network" returns nothing to reason about. "A returning

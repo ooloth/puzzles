@@ -587,6 +587,18 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
 6. **Order the questions within a slice** by what has to be answered first. Where two constrain each
    other in both directions they are answered together, and each question file says so under **What
    would settle it**. That is the only place a dependency between questions is written down.
+
+   **Questions that share moments are worked together even where neither constrains the other.** A
+   request one serves and another routes, or a deploy one shapes and another carries out, is a
+   moment both draw properties from, and worked one at a time each derives only what its own topic
+   brings to mind. So the moments are listed once for the group and the property list is derived
+   once, and each question's **Properties the answer is scored against** carries a copy of it,
+   adding only what is its own. Each still settles in its own record. A candidate is scored under
+   every answer an unsettled member could give, and one whose verdict changes makes that member an
+   input to be settled first. The tell that a group was missed is one option listed in two question
+   files. Until 2026-10-04 a proxy in front of the Droplet was an option in both the file-serving
+   question and the domain question, and each was set to score it against its own list. The two
+   are now worked as one group, and both still list it.
 7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
    slices. A slice that reads like the milestone restated is bundling. A question written as a given
    is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask

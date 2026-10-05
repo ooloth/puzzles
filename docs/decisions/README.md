@@ -73,6 +73,11 @@ _could a reasonable person have decided the headline one way and the second thin
 yes, that is a second decision and it needs its own record. If no, it follows necessarily — and it is
 still recorded, see below.
 
+**Separate records do not mean separate working.** Questions that touch the same moments are worked
+from one property list and still settle in records of their own, per the portable decision-making
+standard and step 6 of "Building a milestone's list" in
+[../questions/README.md](../questions/README.md).
+
 Two failures this prevents, both of which have happened here:
 
 - **A decision settled inside a record about something else.** [ADR-0003](0003-this-is-delivered-over-the-web.md) mandated a storage interface

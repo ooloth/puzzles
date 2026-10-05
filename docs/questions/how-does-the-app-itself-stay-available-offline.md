@@ -87,9 +87,10 @@ eagerly reintroduces the network dependency it was meant to remove. The update s
 hard half, not the caching.
 
 The previous design's asset thinking assumed the browser would ask a server each time. Without
-content-hashed filenames a browser revalidates cached assets with conditional requests rather
-than skipping them (see [../constraints.md](../constraints.md)) — cheap on a desk, expensive on
-a weak mobile link, and useless with no link at all.
+content-hashed filenames and an explicit expiry, a browser either revalidates cached assets with
+conditional requests or guesses a freshness lifetime and may run stale files (see
+[../constraints.md](../constraints.md)). Revalidating is cheap on a desk, expensive on a weak
+mobile link, and useless with no link at all.
 
 Two constraints already recorded bear directly on this. Browser storage is evictable, and
 Safari clears all script-writable storage after thirty days without interaction — which reaches

@@ -286,9 +286,10 @@ is read, because a line that moves on its own cannot be the scope of a promise. 
 it is [open](what-format-declares-the-browser-floor.md), and so is how much adapting each consumer
 needs.
 
-**Emit content-hashed filenames.** [../constraints.md](../constraints.md) records that without them a
-browser revalidates every cached asset, which costs a round trip per load on the link
-[../problem.md](../problem.md) names as the modal case.
+**Emit content-hashed filenames.** [../constraints.md](../constraints.md) records that they are what
+make a long explicit `max-age` safe. Without them a browser either revalidates each asset, a round
+trip per load on the link [../problem.md](../problem.md) names as the modal case, or guesses a
+freshness lifetime and may run stale files after a deploy.
 
 **Emit a manifest naming the document and every asset it needs, so they can be installed together.**
 [../constraints.md](../constraints.md) records that cache entries evict independently of one another,

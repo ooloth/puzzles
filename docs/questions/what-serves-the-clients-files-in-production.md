@@ -27,9 +27,10 @@ and they differ in who owns caching, and in whether something in front can cache
 strip `Set-Cookie`, per the findings below.
 
 It also decides who owns cache headers.
-[../constraints.md](../constraints.md) records that without content-hashed filenames a browser
-revalidates every cached asset with a conditional request — cheap on a desktop, a round trip per
-asset on a weak mobile link, which is the link this app is designed for.
+[../constraints.md](../constraints.md) records that a cached asset is used without a request only
+while it is fresh, and that with no explicit expiry the browser may guess one. So without
+content-hashed filenames and explicit headers, a browser either revalidates each asset, a round trip
+per asset on the weak mobile link this app is designed for, or runs stale files after a deploy.
 
 ## What would settle it
 

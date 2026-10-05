@@ -774,13 +774,18 @@ all instant.
 
 *Measured — observed directly while debugging, with the alternatives eliminated one at a time.*
 
-**Without content-hashed filenames, browsers revalidate cached assets** with conditional
-requests instead of skipping them.
+**A cached asset is used without a request only while it is fresh, and with no explicit expiry the
+browser may guess one.** Per RFC 9111 §4.2.2, a cache may assign heuristic freshness when no
+explicit expiration is sent, typically a fraction (10% is the example) of the time since
+`Last-Modified`.
 
-> So every asset costs a round trip per load unless content-hashed and cached immutably. Cheap
-> on desktop, expensive on a weak mobile link.
+> So with no `Cache-Control`, an asset may be served stale after a deploy, or revalidated, at the
+> browser's discretion. Content-hashed filenames are what make a long explicit `max-age` safe,
+> because a changed file gets a new name. Without them the choice is between a round trip per asset
+> per load, cheap on desktop and expensive on a weak mobile link, and the risk of running stale
+> files.
 
-*Reasoned — HTTP caching semantics.*
+*Sourced — RFC 9111 §4.2.2, read 2026-10-04.*
 
 **Proxies buffer a response before compressing it, which breaks streaming**, and they terminate
 connections they judge idle.

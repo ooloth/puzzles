@@ -16,19 +16,22 @@ content behind a runtime that can decide whether to serve it. They have almost n
 the catalogue is written rarely by the generator and read by everyone, and the player record is
 written constantly by one player and read by that player.
 
-**This does not block M1, and it sits at M3.** It was filed at M1 on the strength of one claim — that
-a store the process opens as a file pins the generator to the server's machine — and that claim is
-false as stated. A generator publishes either by writing the store directly or by sending puzzles
-through the server's own API, and the second runs anywhere under a file store exactly as under a
-network one. The Findings below carry the derivation.
+**This does not block M1 or M3, and it sits at M12.** It was filed at M1 on the strength of one
+claim — that a store the process opens as a file pins the generator to the server's machine — and
+that claim is false as stated. A generator publishes either by writing the store directly or by
+sending puzzles through the server's own API, and the second runs anywhere under a file store
+exactly as under a network one. The Findings below carry the derivation.
 
 **What it still does is decide where a join happens**, and that is the part most likely to be
 discovered late. It also decides whether a hybrid arrangement exists that nothing has enumerated — a
 local file for one body of data and a network service for the other — which is a question about the
 execution shape field's shape rather than about M1.
 
-**It cannot be deferred past M3**, because that is where the first row is written and a row has to be
-written somewhere.
+**It cannot be deferred past M12**, because that is where the first player record is written, and a
+player record has to be written somewhere. M3's seeded puzzle does not wait on it: the puzzle goes
+into the store [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) already settle, and this question is
+whether player records join it.
 
 ## What would settle it
 
@@ -122,8 +125,8 @@ argued would be resting on an inference.
 
 **This question's urgency was borrowed and has been given back.** It was raised at M1 on the pinning
 claim, and that claim is false in every branch rather than merely absent from one — see below. So
-nothing at M1 waits on this, and it sits at M3, where the first row is written and where the
-catalogue's shape is argued.
+nothing at M1 waits on this, and it sits at M12, where the first player record is written. The
+catalogue's shape is argued before then, at M3 and M7.
 
 > So the two questions are not circular, though they looked it. This one is downstream, and it was
 > promoted on the strength of a consequence that does not hold at all.

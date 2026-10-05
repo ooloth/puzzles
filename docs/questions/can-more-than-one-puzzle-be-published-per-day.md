@@ -12,8 +12,9 @@ A puzzle keyed by date alone can never have a sibling. Two difficulties for the 
 alongside a full one — the commonest shape in this category — need two rows for one day, and a date
 key cannot hold them. Changing the key later means migrating every stored puzzle and every player's
 record that references a date. Keying by id instead, with a publication date carried as a field,
-costs nothing now. This closes at M3, when the first row is written: whatever key that row uses is
-the key every later row inherits.
+costs nothing now. Until players arrive at M12 every stored puzzle can be written again, so the key
+M3's seeded row uses can still change. This is answered at M8, where publishing on a rhythm begins,
+and closes at M12 at the latest, when the first player record refers to a puzzle by its key.
 
 ## What would settle it
 

@@ -48,7 +48,7 @@ will not be the reason they cannot be answered.
 **Nothing, deliberately.** The record preserves an option and schedules no work, which it says itself.
 What would violate it is a store shape that makes scanning across players impossible, so it is
 honoured by [how do analysis and play share one store?](../questions/how-do-analysis-and-play-share-one-store.md)
-at M11 and by the schema at M3 rather than by anything built for it.
+once players arrive and by the schema from M3 onward rather than by anything built for it.
 
 ## Rejected
 

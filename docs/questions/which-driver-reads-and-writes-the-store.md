@@ -201,7 +201,8 @@ should delay a decision; they are here so the investigation is a choice rather t
   open Bun issue reports an out-of-memory failure on streamed chunks above 500KB, which is a hint
   rather than a finding and has not been reproduced here.
 - **WAL checkpointing.** Blocked by a long read, which is
-  [how do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) at M11.
+  [how do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md), which waits
+  for players.
   **Unexamined:** nothing additional; that question owns it.
 - **A migration rewrites a table.** [How is the schema migrated?](how-is-the-schema-migrated.md) at
   M12 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the

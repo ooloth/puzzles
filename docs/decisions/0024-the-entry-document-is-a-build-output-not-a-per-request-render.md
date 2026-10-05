@@ -58,7 +58,7 @@ configuration flags rather than stable properties.*
 **The option preserved is per-route rendering, added later.** Astro's server islands and Next's partial
 prerendering are additive to a prerendered page, and
 [does any page need markup a crawler can read?](../questions/does-any-page-need-markup-a-crawler-can-read.md)
-at M8 is where that gets asked. Nothing here forecloses it.
+is where that gets asked, once a URL is first shared with someone. Nothing here forecloses it.
 
 ## Enforced by
 

@@ -167,30 +167,24 @@ board for six milestones and meeting the store for the first time with a finishe
 **Operating the store waits for M12.** Until players arrive the store holds only puzzles, which can
 be written again, so losing a row costs nothing. Backups, durability settings, migrations, recovery
 from a lost machine, deploys that leave the store alone, secrets and the machine's region all become
-real with the first player's data, and they sit at M12, where players arrive.
+real with the first player's data, and they sit at M12, where players arrive. So does whether
+puzzles and player records share one store, since player records first arrive there.
 
-1. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
-   first, because it decides whether the first row goes into one store or two, and everything below
-   assumes an answer. It does not block M1: a store opened as a file does not pin the generator to
-   the server's machine, because a generator can publish through the server's API and run anywhere
-   under either store locality.
-2. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
+1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
    to write one row and read it back. The full answer is not needed until M7.
-3. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
-   — this is when the first row is keyed, and a puzzle keyed by date alone can never have a sibling.
-4. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
+2. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
    response with content in it is the first contract, so this is where the format is set.
-5. [How does the client load data from the server?](how-does-the-client-load-data-from-the-server.md)
+3. [How does the client load data from the server?](how-does-the-client-load-data-from-the-server.md)
    — after the boundary above, which is its first input. This is the first fetch of content that
    becomes the board, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
    keeps out of the renderer, so M1's fetch of "Hello!" inside a view is not the pattern to copy. What
    implements the client's state is answered at M5 and prefetching at M9, so this may need to settle
    only where fetched content enters the client and leave when it is fetched to M9.
-6. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — the
+4. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — the
    first row is here. Its *openness* is a caveat on M1: the argument that the store does not narrow
    the runtime runs entirely through `node:sqlite`, which no record has chosen. The durability
    settings applied through it wait for M12.
-7. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+5. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
    — the store first exists here, so this is the first milestone whose daily loop opens it. What M1
    needed was only the comparison of what each store shape would cost in the daily loop, and that is
    a finding recorded against
@@ -281,17 +275,11 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
    the questions below turn on it.
 2. [Does v1 ship generated or seeded puzzles?](does-v1-ship-generated-or-seeded-puzzles.md)
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
-4. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
-5. [Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) —
-   the first URL worth sharing or indexing exists here. It sits at this milestone rather than at M1
-   because no rendering choice forecloses it: a rebuild on publish and a single runtime-rendered
-   route are both additive, as
-   [ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
-   records.
-6. [Do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
-   the assumption in play is one host with everything under paths, and it is an assumption rather
-   than a decision. The client and the API share one origin, per
-   [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so what is open here is only whether a third kind of route joins it.
+4. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
+   — beside the question above, which sets the rhythm, and a puzzle keyed by date alone can never
+   have a sibling. M3 keys its seeded row before this is answered, and until players arrive at M12
+   re-keying rewrites only puzzles that can be written again.
+5. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
 
 ## M9 — it works with no network
 
@@ -340,60 +328,30 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
 ## M11 — the running system reports its own failures
 
-M2 is where checking a change before it ships is built. These are for after it has shipped, and they
-need what M2 does not have: a store with rows in it, a deployed thing with traffic, and a product somebody could
-be using. They sit before the guest durability work below because the whole question there is whether
-players are losing work, and nothing currently could tell us either way.
+M2 is where checking a change before it ships is built. These report a failure after a change has
+shipped, and they are what has to be in place before anyone arrives at M12: whether the app is
+serving, whether a deploy broke it, whether a player lost progress, and whether the server has
+stopped. They sit before M12 because the whole question there is whether players are losing work,
+and nothing currently could tell us either way. What needs real traffic to mean anything, such as
+vitals, alerting and diagnosing slow requests, waits for players under "Blocking nothing yet".
 
 1. [How do we know the deployed app is serving?](how-do-we-know-the-deployed-app-is-serving.md) — a
    static client loading from cache hides a dead API for a long time.
 2. [How is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) — the deploy
    is the moment a working system becomes a broken one.
-3. [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md)
-   — the ordinary ones, decided rather than inherited from whatever the platform happens to show.
-4. [What is worth being woken up for?](what-is-worth-being-woken-up-for.md) — an alert nobody acts on
-   trains everyone to ignore all of them, and a solo maintainer has no rotation.
-5. [How is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md)
-   — [../constraints.md](../constraints.md) records that a stalled connection throws no error, so
-   something slow is invisible unless it was instrumented before it happened.
-6. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
+3. [How would we learn a player lost progress?](how-would-we-learn-a-player-lost-progress.md) — the
    motivating case in the observability theme of
    [the guarantees README](../guarantees/README.md): it produces
    no error, no crash and no complaint.
-7. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
-   — the correctness theme in [the guarantees README](../guarantees/README.md) names "a partial write is never
-   observable" and "the board on screen always matches the board in storage" as candidate promises,
-   and neither is checkable unless something asserts it where it can fail.
-8. [What invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md)
-   — a different question: not what one write asserts, but what stays true across every row. A
-   request path only ever sees its own rows.
-9. [How would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
-   — everything above tests a failure someone imagined.
-10. [Can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
-    — write failures that misidentify their own cause, IndexedDB absent under Lockdown Mode, a
-    connection that stalls while reporting as connected. Every one is a code path that never executes
-    unless it is forced to.
-11. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
-    stopped. Patching moved to slice 4 of M1 and is settled by
-    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
-    except for alerting on a failed update, which stays here. It sits here because noticing an outage is this milestone's theme. The
-    server runs on a bare Droplet as systemd services, per
-    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
-    systemd restarts it and the rest is ours. Its access-and-hardening half is
-    [a separate question](how-is-the-server-reached-and-hardened.md) at slice 4 of M1, because the
-    machine is on the public internet from then.
-12. [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the
-    scans [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)
-    preserves are long reads, and a long read blocks WAL checkpointing. It sits here rather than at M3
-    because there is nothing worth analysing until there is play to analyse, and because whatever the
-    backup answer produces may already be the copy these reads should run against.
-13. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
-    has to end in something, and the player cannot be told, because
-    [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
-    forbids it. So a failed write exists only inside the client where nothing is watching, which is
-    this milestone's theme reached from the client side.
-    [The durable copy stops being written](../failure-modes/the-durable-copy-stops-being-written.md)
-    is what happens if it is never answered.
+4. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
+   stopped. Patching moved to slice 4 of M1 and is settled by
+   [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
+   except for alerting on a failed update, which stays here. It sits here because noticing an outage is this milestone's theme. The
+   server runs on a bare Droplet as systemd services, per
+   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
+   systemd restarts it and the rest is ours. Its access-and-hardening half is
+   [a separate question](how-is-the-server-reached-and-hardened.md) at slice 4 of M1, because the
+   machine is on the public internet from then.
 
 ## M12 — players arrive, and a guest's work and play are kept off the device
 
@@ -422,43 +380,54 @@ is still open, and moving this point moves every question below that is keyed on
    feasibility depends on M1 having held same-origin open.
 6. [Is home-screen install required for durability?](is-home-screen-install-required-for-durability.md)
    — the only confirmed mitigation, and it cannot be required of anyone.
-7. [Which region does the machine run in?](which-region-does-the-machine-run-in.md) — every wait a
+7. [What happens after a sync gives up?](what-happens-after-a-sync-gives-up.md) — a wait that ends
+   has to end in something, and the player cannot be told, because
+   [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)
+   forbids it. The first write off the device happens here, so this is the first sync that can give
+   up. [The durable copy stops being written](../failure-modes/the-durable-copy-stops-being-written.md)
+   is what happens if it is never answered.
+8. [Are puzzles and player records in one store?](are-puzzles-and-player-records-in-one-store.md) —
+   first among the store questions below, because it decides whether the first player record goes
+   into the puzzles' store or a second one, and everything below assumes an answer. Before here the
+   store holds only puzzles. It does not pin the generator either way: a generator can publish
+   through the server's API and run anywhere under either store locality.
+9. [Which region does the machine run in?](which-region-does-the-machine-run-in.md) — every wait a
    player has includes the round trip to the one machine
    [ADR-0021](../decisions/0021-the-server-and-its-store-share-a-machine.md) allows, and nothing
    says where the players are. Before here, moving the machine moves only puzzles that can be
    written again. From here it moves players' work too.
-8. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
-   real secret arrives with the store's off-machine copy, which is first worth having here.
-   [What deploys the code?](what-deploys-the-code.md) records that M1 needs none.
-9. [What durability settings does the store run
-   with?](what-durability-settings-does-the-store-run-with.md) — journal mode, synchronous level and
-   busy timeout decide whether a committed write survives a power cut, which
-   [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left open. Answered
-   here because the first player's data is the first thing that could be lost, and the question is
-   framed to test whether the safest setting costs anything at all rather than to position a dial.
-10. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there
+10. [How do secrets reach the running system?](how-do-secrets-reach-the-running-system.md) — the first
+    real secret arrives with the store's off-machine copy, which is first worth having here.
+    [What deploys the code?](what-deploys-the-code.md) records that M1 needs none.
+11. [What durability settings does the store run
+    with?](what-durability-settings-does-the-store-run-with.md) — journal mode, synchronous level and
+    busy timeout decide whether a committed write survives a power cut, which
+    [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) deliberately left open. Answered
+    here because the first player's data is the first thing that could be lost, and the question is
+    framed to test whether the safest setting costs anything at all rather than to position a dial.
+12. [How is the schema migrated?](how-is-the-schema-migrated.md) — deciding the routine before there
     is player data to lose is when it is cheapest. Before here, a schema change rewrites puzzles
     that can be written again. [ADR-0002](../decisions/0002-launch-with-sudoku-then-star-battle.md)
     already schedules the change that forces one.
-11. [How is the store backed up?](how-is-the-store-backed-up.md) — the first player's data exists
+13. [How is the store backed up?](how-is-the-store-backed-up.md) — the first player's data exists
     here, so this is where a backup stops being hypothetical. It is set up alongside the first data
     worth keeping, and the named precedent for deferring it is an operational inventory of roughly
     twenty-five tasks written for exactly this architecture with no backup or restore procedure in
     it.
-12. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
+14. [Is the store's backup restorable?](is-the-stores-backup-restorable.md) — an untested restore is
     a belief. After the backup above, which is what it rehearses.
-13. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
+15. [How is the store recovered when the machine is lost?](how-is-the-store-recovered-when-the-machine-is-lost.md)
     — [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
     commits to surviving host replacement and the machine cannot deliver that alone. This is the main
     lever on how long an outage lasts, and it is ours rather than a provider's.
-14. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md)
+16. [How does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md)
     — there is no player data before here, so nothing worth keeping can be disturbed. Two processes
     on one machine can share the file while a deploy overlaps them, as measured in the eighth and
     twelfth passes of the hosting question, read with `git show
     ed7f54e:docs/questions/where-does-this-run.md`; what must stay single is the replicator. The
     rest — checkpointing on exit, replication across a restart, rolling back past a migration — is
     real from the first player's data.
-15. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
+17. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
     keeps
     [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md).
     The fallback is carried by the entry document the build already produces, per
@@ -467,7 +436,7 @@ is still open, and moving this point moves every question below that is keyed on
     floor until there are players. Its wrong answer is invisible, since every browser above the
     floor shows the app either way, so it is settled by opening the built document in a browser
     below the floor rather than by reading.
-16. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
+18. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
     — the hour only matters once someone starts a session at it, which is from here, and it must
     avoid the release hour
     [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
@@ -544,8 +513,36 @@ point moves the questions at M12 that are keyed on players.
 inline styles; it becomes real with whatever serves the client's files.
 
 [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — nothing waits on it, and
-it becomes real the moment the app is shown to anyone who has not been told what it is. Placed here
-rather than at a milestone because no milestone in this list is the one where somebody arrives.
+it becomes real the moment the app is shown to anyone who has not been told what it is, which is M12
+at the earliest. Placed here rather than at M12 because nothing there waits on it either.
+
+[Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) and
+[do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
+both become real at the same moment as the landing page, when a URL is first shared with someone.
+No rendering choice forecloses crawler markup: a rebuild on publish and a single runtime-rendered
+route are both additive, as
+[ADR-0024](../decisions/0024-the-entry-document-is-a-build-output-not-a-per-request-render.md)
+records. The client and the API share one origin, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so what
+is open on routes is only whether a third kind joins them.
+
+**After players arrive.** These need real traffic to mean anything, and nothing before M12 waits on
+them. M11 keeps only what has to report a failure before anyone arrives.
+
+[What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md),
+[what is worth being woken up for?](what-is-worth-being-woken-up-for.md),
+[how is a slow request diagnosed after the fact?](how-is-a-slow-request-diagnosed-after-the-fact.md),
+[what invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md),
+[what invariants hold over stored data, and how are they audited?](what-invariants-hold-over-stored-data-and-how-are-they-audited.md),
+[how would we notice a problem nobody predicted?](how-would-we-notice-a-problem-nobody-predicted.md)
+and [can failure conditions be injected deliberately?](can-failure-conditions-be-injected-deliberately.md)
+— operating the system once people are using it.
+
+[How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the scans
+[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves are
+long reads, and a long read blocks WAL checkpointing. Nothing is worth analysing until play has been
+recorded for a while, and recording starts at M12, whose backup answer may already be the copy these
+reads should run against.
 
 [How do we learn the browser floor can rise?](how-do-we-learn-the-browser-floor-can-rise.md) —
 nothing waits on it, because a floor left low breaks no promise. It becomes real when Apple stops

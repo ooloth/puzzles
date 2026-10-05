@@ -1123,7 +1123,7 @@ allocation leak is invisible on every runtime and has to be caught by watching t
 outside rather than by configuring it. That is an input to
 [what are the server's vitals, and who watches them?](questions/what-are-the-servers-vitals-and-who-watches-them.md)
 and to [how would we notice a problem nobody predicted?](questions/how-would-we-notice-a-problem-nobody-predicted.md),
-both at M11.
+both of which wait for players.
 
 ## Runtimes — type stripping stops at `node_modules`
 

@@ -68,27 +68,6 @@ is toward few, batched crossings rather than small ones.
 allows the interface to show that something is pending, and forbids asking the player to act on it.
 A failed send is retried later or dropped; it is never surfaced as an error the player must act on.
 
-**A server answering in HTML fragments narrows [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md)'s
-native recovery path to a webview wrapper.** [ADR-0003](../decisions/0003-this-is-delivered-over-the-web.md) names wrapping this web client in a native
-shell as what keeps the web choice reversible. A server that returns markup for the client to insert
-can only be consumed by something that renders HTML, which forecloses every non-webview native
-client.
-
-**The client state layer exists regardless of what crosses this boundary.**
-[ADR-0004](../decisions/0004-the-client-holds-and-mutates-puzzle-state.md) already puts authoritative
-state on the client for latency and offline reasons. A hypermedia-style crossing would add a second
-rendering path on top of that layer rather than remove the one that already exists.
-
-**[The board in play continues through a loss of connectivity](../guarantees/the-board-in-play-continues-through-a-loss-of-connectivity.md)
-requires the client to render a board it already holds.** A server that returns markup for the
-client to insert is a server the client cannot do without, which that guarantee rules out
-regardless of what shape this boundary settles on.
-
-**Deciding this now would bind with no server, no schema and no endpoint in existence.** Nothing
-here has been designed yet, so an early answer constrains a thing that does not exist. That gap is
-exactly why the previous attempt to settle this — naming JSON specifically — was withdrawn rather
-than kept.
-
 **Naming one serialisation format specifically would also rule out formats the same reasoning
 allows.** A binary or schema-first format would satisfy client-authoritative, offline-first
 reasoning as well as JSON does; picking JSON by name would foreclose them on convenience rather than

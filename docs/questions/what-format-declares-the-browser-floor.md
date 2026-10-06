@@ -80,7 +80,7 @@ Findings below.
 
 ## Options
 
-*Rebuilt from the readers on 2026-09-23; the evidence for each line is under Findings.*
+*The evidence for each line is under Findings.*
 
 **Out: an ES year alone.** It cannot state a Safari 15 floor. The measured case is under Findings:
 ES2022 admits static blocks, which Safari 15 cannot parse, and ES2021 rejects class fields, which it
@@ -105,37 +105,25 @@ feed it without a lossy mapping from versions to a year.
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md).
 **Not yet** is the current state rather than an option. The first build needs a floor, and at M1
 it is the only reader, so it names the versions in its own config until the checks arrive.
+
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The three consumers do not agree on a format, and the disagreement is inside the bundler role.**
-Reading a browserslist config natively, per their own documentation: webpack (`target: "browserslist"`),
-Rspack (the same option), Rsbuild (its primary mechanism), Parcel (the `browserslist` field in
-`package.json`), Next.js and the Angular CLI. Not reading one: Vite core, esbuild, Rollup, Rolldown,
-Oxc, Bun and Farm, all of
-which take an environment-name-plus-version string such as `chrome58` or an ES-year string such as
-`es2020`. The split tracks tool generation rather than quality: the browserslist-native set is the
-webpack lineage and the other set is the esbuild and Oxc lineage.
+**Vite does not read a browserslist config.** Its `build.target` takes `string | string[]`, an ES
+version such as `es2015` or a browser with version such as `chrome58`, and transforms with Oxc. Oxc's
+lowering takes the same strings. Vite is the bundler under
+[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), so a browserslist file reaches the build
+only through an adapter.
 
-*Sourced — each tool's own documentation, read 2026-09-16. Vite's `build.target` page and Oxc's
-lowering page I opened myself and confirmed the word browserslist appears on neither. The webpack,
-Rspack, Rsbuild, Parcel, Next and Angular claims are a research agent's and I did not open them.*
+*Sourced — Vite's `build.target` page and Oxc's lowering page, read 2026-09-16 by me. Neither
+contains the word browserslist.*
 
-**Bun's bundler is not in that comparison at all.** Its `target` selects a runtime category —
-`browser`, `bun` or `node` — and resolves export conditions. It is not a syntax level, so there is
-nothing for a floor to convert into.
-[ADR-0025](../decisions/0025-the-client-build-lowers-syntax-to-a-declared-floor.md) already excludes it
-for the separate reason that it does not down-convert syntax at all.
-
-*Sourced — [bun.com/docs/bundler](https://bun.com/docs/bundler), read 2026-09-16 by me.*
-
-**Both checks read a browserslist config, so the format question is really a bundler question.**
-`es-check` parses built output against an `ecmaVersion` and, since v9, reads a browserslist config
-via `--checkBrowser`. `eslint-plugin-compat` reads browserslist exclusively and offers no other
-format. So neither of these two check tools narrows the field; the bundler is the only consumer
-that does. **This holds for these two tools only**: a Baseline-native API check exists, per the
-finding below dated 2026-09-23, and it takes no browserslist.
+**The two older check tools read browserslist.** `es-check` parses built output against an
+`ecmaVersion` and, since v9, reads a browserslist config via `--checkBrowser`.
+`eslint-plugin-compat` reads browserslist exclusively and offers no other format. A Baseline-native
+API check exists and takes no browserslist, per the finding below dated 2026-09-23, so which format
+the checks read depends on which API check is chosen.
 
 *Sourced — each project's README, read 2026-09-16 by a research agent. I did not open them.*
 
@@ -163,8 +151,7 @@ queries and differ only on the tier. Nothing was installed into this repository.
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
 names is the Safari shipping with iOS 15. `baseline 2021` reaches Safari 15.2-15.3, which is inside
 that major version but is not the launch build; `baseline widely available` is six major versions
-above it. The demoted record rejected Baseline on the tier alone and did not consider the year
-targets.
+above it.
 
 **A resolving query cannot carry this declaration, and the evidence is a live discrepancy.** Vite
 documents its `'baseline-widely-available'` default as resolving to
@@ -201,25 +188,20 @@ exactly this kind of listing. `esbuild-plugin-browserslist`'s 4.0.0 published 20
 repository has commits after that. Neither figure changes what the adapter costs, which is what this
 finding is for.*
 
-**Every tool in the split above holds its classification against its own documentation.** Four
-details that the split alone does not carry:
+**Details on Vite's toolchain and the check tools:**
 
 - **Oxc's omission is deliberate rather than pending.** `oxc-browserslist` removed
   configuration-file support in v3.0.0 "to reduce binary size", so `.browserslistrc` and the
   `package.json` field are unsupported by design and aligned with Vite's approach. That is a
   stronger claim than "does not read one" and it makes the split unlikely to close from this side.
-- **Rolldown's omission is pending rather than deliberate.** rolldown/rolldown issue 9152 is an open
-  request for browserslist support, recording that Rolldown "currently expects explicit targets such
-  as es2020, chrome61, or node18".
-- **Next.js reads a browserslist config when one exists but does not default to one**, falling back
-  to a fixed `["chrome 111", "edge 111", "firefox 111", "safari 16.4"]`. Angular CLI behaves the
-  same way with its own internal default. Neither changes which group they are in.
-- **browserslist is now at 4.29.0**, published 2026-09-15, which is the version the measurements
+- **Rolldown's omission is pending rather than deliberate.** Vite 8 builds on Rolldown, and
+  rolldown/rolldown issue 9152 is an open request for browserslist support, recording that Rolldown
+  "currently expects explicit targets such as es2020, chrome61, or node18".
+- **browserslist 4.29.0**, published 2026-09-15, which is the version the measurements
   below were run against. Baseline query support landed in 4.26.0 on 2025-09-12, confirmed against
   the changelog entry "Added Baseline queries" and the registry's release timestamp.
-- **es-check was at 9.7.2 on 2026-09-17 and is at 9.8.1 on 2026-09-23**, and `--checkBrowser` is
-  documented as "Use browserslist configuration to determine ES version (default: false)",
-  introduced in v9. `eslint-plugin-compat`'s README still documents browserslist as its only
+- **es-check 9.8.1**, read 2026-09-23, documents `--checkBrowser` as "Use browserslist configuration
+  to determine ES version (default: false)", introduced in v9. `eslint-plugin-compat`'s README still documents browserslist as its only
   configuration format.
 
 *Sourced — each tool's own documentation, README or changelog, plus npm registry metadata and
@@ -245,8 +227,7 @@ and the source of [vite.dev/config/build-options.html](https://vite.dev/config/b
 on `main`, both opened by me on 2026-09-23. Version from npm, read by a research agent on the same
 date.*
 
-**Lint tools exist that take Baseline vocabulary directly and do not take browserslist.** So the
-earlier finding that both checks read browserslist holds only for the tools it named.
+**Lint tools exist that take Baseline vocabulary directly and do not take browserslist.**
 `eslint-plugin-baseline-js` (0.7.2, published 2026-09-21, pre-1.0) has a `use-baseline` rule taking
 `"widely"`, `"newly"` or a year such as `{ available: 2020 }`. `@eslint/css` (2.0.0) has a
 `use-baseline` rule taking the same vocabulary, for CSS. Both are built on the `web-features`
@@ -263,21 +244,12 @@ environment libraries such as `DOM`. Neither accepts a browser version.
 *Sourced — [typescriptlang.org/tsconfig](https://www.typescriptlang.org/tsconfig/#target), read
 2026-09-23 by a research agent. I did not open it.*
 
-**Mined from the demoted record, and still standing.** The version data behind browserslist is a
-third-party dataset with its own release cadence, and naming versions explicitly limits the exposure
-to how a named version is interpreted rather than to which versions a query resolves to. Choosing a
-format narrows the tool field before the tools are chosen, and the demoted record named that as a risk
-reaching the two check roles. It reaches the bundler role as well, which is what this question exists
-to stop.
+**The version data behind browserslist is a third-party dataset with its own release cadence.**
+Naming versions explicitly limits the exposure to how a named version is interpreted rather than to
+which versions a query resolves to. Choosing a format narrows the tool field before the tools are
+chosen, which reaches the two check roles still open.
 
-**Mined from the demoted record, and now false.** It held that browserslist "is the format the build
-tools and both classes of check read without an adapter". It also held that Baseline "cannot express
-this floor" because its vocabulary is "a tier or a year evaluated against a fixed core browser set, so
-the only floors it can name are the ones its own promotion rule produces". Both are contradicted by
-the findings above: half the bundler field reads no browserslist config, and a Baseline year target
-reaches Safari 15.
-
-### The field rebuilt from the readers, 2026-09-23
+### The readers of the declaration
 
 **The declaration has at least seven readers, and they take four native formats.** Each reader is
 listed with what it reads without an adapter.
@@ -355,21 +327,12 @@ a research agent.*
 None of this depends on the format. It is recorded because it limits what any declaration can
 deliver through this build.
 
-**The format does not narrow the renderer field.** Every candidate's Vite plugin leaves lowering to
-`build.target` and none reads browserslist: `@vitejs/plugin-react` 6.1.1, `@preact/preset-vite`
-2.10.6, `@vitejs/plugin-vue` 6.0.9, `@sveltejs/vite-plugin-svelte` 7.3.1 and `vite-plugin-solid`
-2.11.14. Lit and direct DOM have no plugin. Nuxt 4.5.2 runs on Vite 8, and its own docs say to
-"simply tell vite your desired target which nuxt will respect". Two things reach past
-`build.target`, and both concern the renderer rather than the format:
+**The format does not narrow the renderer.** The renderer is React, per
+[ADR-0038](../decisions/0038-the-renderer-is-react.md), and `@vitejs/plugin-react` 6.1.1 leaves
+lowering to `build.target` and does not read browserslist.
 
-- **Lit with standard decorators needs a Babel pass**, because Oxc does not lower standard
-  decorators (oxc-project/oxc issue 9170, open). Babel's `@babel/preset-env` takes browserslist or
-  an engine-to-version object, so that pass becomes one more reader.
-- **Svelte 5's `$state.snapshot` needs Safari 15.4**, per Svelte's browser-support page. That is an
-  API above a 15.0 floor, and a question for the renderer rather than for this file.
-
-*Sourced — plugin READMEs, framework docs and the npm registry, read 2026-09-23 by a research agent.
-I did not open them.*
+*Sourced — the plugin's README and the npm registry, read 2026-09-23 by a research agent. I did not
+open them.*
 
 **Converters exist in both directions, so no candidate is stranded.** From browserslist to Vite's
 strings: `esbuild-plugin-browserslist` 4.0.0 and `browserslist-to-esbuild` 2.1.1, as above. From

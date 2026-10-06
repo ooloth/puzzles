@@ -28,7 +28,7 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Raised while migrating legacy ADR-19, whose central argument no longer holds — see Findings.
+Raised while migrating legacy ADR-19, which chose a utility framework.
 
 ## Options
 
@@ -45,17 +45,16 @@ least equipped to do well.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The previous decision's load-bearing argument has evaporated.** It chose a utility framework
-substantially because a standalone binary meant no Node.js dependency anywhere, consistent with a
-project that had no JavaScript toolchain at all. A local-first client has a JavaScript toolchain
-by construction, so that reason is simply gone and the choice has to be re-argued on what remains.
+**A utility framework adds no Node.js dependency here.** The client has a JavaScript toolchain by
+construction, so the choice rests on the two arguments below and on what the framework costs to
+change, not on avoiding a toolchain.
 
-**One claim in that argument is load-bearing and unevidenced.** It held that a utility framework
-"wins for AI-assisted development specifically, since structured utility classes are more
-predictable for an LLM to generate and edit than free-form CSS". Nothing supports this, and
-[../problem.md](../problem.md) names the solo maintainer as a stakeholder for whom that working
-mode matters — so it is one of the two reasons given, not a footnote. It is testable: make the
-same interface change both ways and see which succeeds more reliably.
+**Whether a utility framework suits AI-assisted development is unevidenced.** The legacy decision
+held that a utility framework "wins for AI-assisted development specifically, since structured
+utility classes are more predictable for an LLM to generate and edit than free-form CSS". Nothing
+supports this, and [../problem.md](../problem.md) names the solo maintainer as a stakeholder for
+whom that working mode matters. It is testable: make the same interface change both ways and see
+which succeeds more reliably.
 
 **A real trap, if a utility framework is chosen.** Scanners detect literal class-name strings by
 reading source as text. A class built by concatenation or assembled from a variable is not

@@ -9,8 +9,12 @@ resolves_into: decision
 ## Why it matters
 
 "Other grid logic games" is the stated scope. How different the second and third games are
-determines how much shared abstraction is worth building — and the honest default is none until
-a second game actually exists to generalise from.
+determines how much shared abstraction is worth building. The stored puzzle's shape is already
+settled to assume nothing about sudoku, by
+[ADR-0008](../decisions/0008-a-stored-puzzle-describes-its-own-size-regions-and-values.md), and
+which model fills that shape is
+[what is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md). Beyond that, the
+honest default is no shared abstraction until a second game actually exists to generalise from.
 
 ## What would settle it
 

@@ -19,17 +19,9 @@ fresh.
 about what ships, and there is no store for that loop to open before then. Nothing at M1 waits on
 it — an M1 hello world has no store.
 
-A store the process opens as a file needs nothing installed and nothing running: the file is there or
-it is created. A store reached over a network needs something to connect to — a container to start, a
-hosted development instance to reach, or a second copy of the data somewhere.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a network
-store.
-
-That difference is felt every day rather than once, and it is one of the few places where the two
-candidate arrangements differ in something the maintainer touches constantly. It belongs in the
-argument, and [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records the embedded side of it — "local
-development with nothing to install or start" — without the network side having been described at
-all.
+A store the process opens as a file needs nothing installed and nothing running: the file is there
+or it is created. [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records this as "local
+development with nothing to install or start".
 
 It also bears on whether a check can run anywhere.
 [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 inherits
@@ -39,17 +31,15 @@ that does not.
 ## What would settle it
 
 Describing what a maintainer and an agent each have to do to get a working store, from a clean
-checkout, under each candidate arrangement — and what happens when that step fails with no network.
+checkout, for each way of placing and filling the file.
 
 Note that [../problem.md](../problem.md)'s description of work "in gaps and transit" is about
 **players**. Nothing records where or how the maintainer works, so the offline case here rests on
 nothing yet and is worth covering rather than assuming.
 
-Worth checking rather than assuming: whether a development instance of a managed store can be free
-and always-on, whether the local and deployed stores can be the same engine and version, and whether
-anything about the arrangement makes it possible to run against production data by accident.
-[ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) rules out a managed
-store, so the first of these no longer applies.
+Worth checking rather than assuming: whether the local and deployed stores can be the same engine
+and version, and whether anything about the arrangement makes it possible to run against production
+data by accident.
 
 ## Properties the answer is scored against
 
@@ -72,9 +62,8 @@ same as blocking it.
 ## Source
 
 Raised 2026-09-02. An adversarial audit of the execution-shape analysis found that local development
-under a network-attached store is discussed nowhere, while the embedded option's zero-install
-property is recorded in [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) as a benefit with nothing
-weighed against it.
+was discussed nowhere, while the embedded option's zero-install property is recorded in
+[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) as a benefit.
 
 ## Options
 
@@ -88,14 +77,6 @@ starts fresh. No options for those are recorded yet.
 ## Findings
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
-
-**The embedded side of this comparison is already written down and the network side is not.**
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) records "no database process to run, patch or monitor,
-and local development with nothing to install or start" as a property of SQLite as a file. Nothing
-anywhere describes what the network-attached equivalent costs, which makes the existing comparison
-one-sided rather than settled.
-
-*Reasoned — from reading that file, 2026-09-02.*
 
 *Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 

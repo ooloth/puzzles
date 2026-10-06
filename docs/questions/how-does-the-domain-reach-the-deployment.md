@@ -17,8 +17,10 @@ carries an identifier across Safari's storage wipe without the player being aske
 which makes it the whole basis of the recovery mechanism
 [is guest recovery worth building?](is-guest-recovery-worth-building.md) turns on.
 
-A reverse proxy in front of the origin is exactly the topology that rule describes. So how the domain
-resolves is not cosmetic: it can cap the cookie at seven days, and the failure produces no error and
+A third-party host or proxy in front of the origin, or a hostname that is a CNAME to a provider's
+domain, is the topology that rule describes. Caddy, which
+[ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) puts on the Droplet itself,
+is not: it answers at the machine's own address. So how the domain resolves is not cosmetic: it can cap the cookie at seven days, and the failure produces no error and
 no log line — the cookie simply expires alongside the storage it was meant to outlive.
 
 The system serves both halves from one origin, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md). This question

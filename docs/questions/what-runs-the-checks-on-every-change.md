@@ -62,14 +62,13 @@ alternative.
 
 **One check already exists and nothing runs it.** `scripts/check-docs.py` verifies that every link
 under `docs/` resolves and that every question is referenced from the milestone list. It is plain Python
-with no dependencies, so it presupposes nothing about the runtime and could be wired up before that
-is settled — as a commit hook, as a CI step, or both.
+with no dependencies and can be wired up as a commit hook, as a CI step, or both. Because
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) runs every repo script
+on Node, it is to be rewritten in TypeScript, which is issue #2.
 
 That it is not wired up is the point rather than an oversight: a check nobody runs is a check that
 does not exist, and this question is where that gets fixed. It is also a useful concrete case for
-answering it, since it needs to run on documentation rather than on code and therefore has to work
-before anything is installed.
-
+answering it, since it runs on documentation rather than on code.
 
 **Two of the checks this has to run are already specified, and they are unequal.**
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
@@ -95,20 +94,6 @@ whatever answers this question has to accommodate a check whose input is an arti
 repo's documentation work caught a dangling pointer to a deleted file, an index that had drifted
 from its folder, and a rewrite that produced a three-hundred-character line. All three would have
 been caught by a script that takes seconds to run.
-
-**If the checker stays Python, a PEP 723 header would pin its interpreter.** `uv run` fetches and
-manages the interpreter itself, so the check runs identically on a machine with no Python or the
-wrong Python. The header is a comment block, so `python3 scripts/check-docs.py` keeps working
-unchanged — it is additive rather than a switch, which is what makes it cheap.
-
-**Its value only lands once something automated runs the check**, which is what this question decides.
-A pinned interpreter buys nothing while the only caller is a person typing the command on the machine
-where it already works. So this is worth adopting alongside an answer here rather than ahead of one.
-
-**A record forecloses it.**
-[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) runs every repo script on
-Node, so the checker is rewritten in TypeScript, which is issue #2, and a `uv` script is not an
-option rather than a rejected one.
 
 **`actions/setup-node` caches all three package managers, and pnpm has an ordering requirement.**
 Its supported `cache` values are npm, yarn and pnpm. For pnpm the setup action that installs it has

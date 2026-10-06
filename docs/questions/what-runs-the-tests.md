@@ -37,18 +37,9 @@ Raised 2026-08-31, filling in the stack decisions that had no question of their 
 
 ## Options
 
-**Two of the three inputs this question was waiting on have landed.**
-[ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) chose Vite, and [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) chose Node. What that changes is below.
-
 *Vitest.* Shares configuration and transforms with the bundler [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md) chose, has watch mode,
 branch coverage and a real-browser mode, and would cover the client and the server with one runner
-and one idiom. That last point is new: it was worth little while the runtime was open, because the
-runner had to work on whatever was chosen, and it is worth a lot now that both halves run on tools
-that already share a config.
-
-*`bun test`.* **Out**, by [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md), which did not choose its runtime. The findings below are
-kept because they are the evidence that it would have lost here anyway, on branch coverage and on
-DOM-shaped snapshots, and because a future reader should not have to re-establish that.
+and one idiom. Both halves run on tools that already share a config.
 
 *Node's built-in test runner.* No extra dependency, and stronger than this list assumed: the runner
 has been stable since v20 and gained snapshot testing in v23.4.0. Still the weakest for driving a
@@ -91,47 +82,3 @@ it here:
   into an `unreachable` outcome rather than a rejection (M1's third slice).
 
 *Reasoned — from the design comment on issue #7 and `src/client/`, 2026-09-27.*
-
-**Nothing about `bun test` has been measured here.** Bun is not installed, and the one view,
-`src/client/app.tsx`, renders a single paragraph, which is too little to show the DOM-shaped
-behaviour below. What follows is established from Bun's documentation and issue tracker instead.
-
-**`bun test` has a watch mode.** `bun test --watch` is documented and works. It reruns the whole suite
-on any change rather than only affected tests (issues 4825 and 7546) and does not pick up newly added
-test files (issue 8342). That is a real weakness and a small one.
-
-*Sourced — [bun.com/docs/cli/test](https://bun.com/docs/cli/test), read 2026-09-04 by a research
-agent. I did not open it.*
-
-**It reports no branch coverage.** The reporter emits "% Funcs" and "% Lines" only, in `text` and
-`lcov`; it accepts a `statements` key and does not enforce it. Issue 7100, requesting statement and
-branch coverage, is open and was last active 2026-08-29. Branch coverage is what a pure rules module
-most wants measured, so this is the gap that bears hardest on
-[ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md)'s
-shared module.
-
-*Sourced — [bun.com/docs/test/coverage](https://bun.com/docs/test/coverage) and oven-sh/bun issue
-7100, read 2026-09-04 by a research agent. I did not open them. Any claim about what it reports for
-this app's own code needs Bun installed first, for the reason above.*
-
-**Its snapshot serialisation fails catastrophically on DOM-shaped values.** Issue 39768, filed
-2026-08-20, records a JSDOM fragment containing one `<button>` producing a 146,955-line, 7.5 MB
-snapshot against Jest 30.3.0's 9 lines and 4 KB. Issue 40077, open, filed 2026-08-22, records
-`toMatchSnapshot()` on a live DOM node attempting a ~30 GB allocation. An 81-cell grid is exactly that
-shape, so the conclusion rests on the two issues above rather than on the anecdote that circulates
-about this defect, which matches nothing in the tracker.
-
-*Sourced — oven-sh/bun issues 39768 and 40077, read 2026-09-17 by a research agent which quoted
-39768's comparison table verbatim. I did not open them.*
-
-*Two things about those issues that a reader will otherwise get wrong. Issue 39768 is closed as a duplicate of issue 5540, which moves where the defect is tracked rather
-than fixing it, so 5540 is the issue to watch. Issue 40077 is an omnibus report bundling four
-findings, of which the ~30 GB allocation is one, so its state says nothing about snapshots alone. The
-quantified reports cover single nodes: any figure for what a whole suite costs is unsourced wherever
-it turns up.*
-
-**Vitest under Bun is not a hedge.** It is not covered by Vitest's own test matrix, and was broken
-under Bun when last checked.
-
-*Sourced — Vitest's own test matrix, read 2026-09-04. Its currency is unknown, and claims about this
-field go stale in days, so re-check it before it decides anything.*

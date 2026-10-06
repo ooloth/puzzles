@@ -91,20 +91,21 @@ state, and there are three candidates for what holds it:
   wipe, and asks the player for something, which makes it an account.
 
 The list is exhaustive, which is what makes the cookie load-bearing: it is the only mechanism
-that protects a lapsed guest for free, and it is the one the demoted draft rejected.
+that protects a lapsed guest for free.
 
 *Sourced — the wipe covers non-cookie website data only, and server-set cookies follow their declared
 lifetime to a 400-day ceiling, per [../constraints.md](../constraints.md).*
 
-**None of that draft's three rejection reasons stands unconditionally.** It listed orphan rows,
-undeletable data about unidentifiable people, and silent degradation to seven days when the API is
-not judged first-party. The seven-day degradation was contingent on the hosting
-topology. [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) has since put the API on the app's own origin,
-which the constraint exempts, so what remains open is whether anything in front of the Droplet changes
-what the hostname resolves to, which is
-[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md). The undeletable-data problem is contingent on
-[do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. The
-orphan-rows cost is overstated: a TTL or a cleanup job on unclaimed rows handles it.
+**Three costs bear on the cookie, and each is bounded or depends on something else.** They are
+orphan rows, undeletable data about unidentifiable people, and silent degradation to seven days when
+the API is not judged first-party. The seven-day degradation depends on the hosting topology.
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) puts the
+API on the app's own origin, which the constraint exempts, so what remains open is whether anything
+in front of the Droplet changes what the hostname resolves to, which is
+[how does the domain reach the deployment?](how-does-the-domain-reach-the-deployment.md). The
+undeletable-data problem depends on
+[do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. Orphan rows
+are bounded by a TTL or a cleanup job on unclaimed rows.
 
 **Home-screen install is the only confirmed mitigation and it is not a substitute.** An installed web
 app is exempt from the clearing mechanism entirely. Three things stop it being an answer: install
@@ -130,10 +131,10 @@ does not.
 
 **Signing in does not have to depend on a locally-minted identifier surviving the wipe.** A
 locally-minted identifier is script-writable, so the browser's eviction takes it along with
-everything else — and takes it from exactly the lapsed players who would need it. The leading option
+everything else — and takes it from exactly the lapsed players who would need it. The "same shape" option
 in
 [is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
-closes that gap a different way: the guest record and the account record are one shape, so signing in
-promotes what is already there instead of needing an identifier to have carried over. That is
-separate from the middle row of the table above: the cookie recovers the same browser after a wipe,
-and an account promotes the same record from any browser at all.
+would close that gap a different way: the guest record and the account record are one shape, so
+signing in promotes what is already there instead of needing an identifier to have carried over.
+That is separate from the server-set cookie: the cookie recovers the same browser after a wipe, and
+an account promotes the same record from any browser at all.

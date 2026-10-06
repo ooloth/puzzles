@@ -15,13 +15,12 @@ bounds what can ever be promised — and a promise kept only sometimes is worse 
 
 ## What would settle it
 
-Whether a server copy exists. If
-[cross-device resume](is-cross-device-resume-in-scope-for-v1.md) brings one, install stops being
-load-bearing for durability and becomes an optimisation — worth encouraging, never required. If
-it does not, install is one of only two ways any durability bound could be kept at all, and the
-question becomes whether a bound may be conditioned on an action most players will not take.
-No such bound is promised yet — see
-[how long does a guest's work last?](how-long-does-a-guests-work-last.md).
+Whether a guest has a server copy. [ADR-0009](../decisions/0009-the-durable-copy-of-a-players-state-is-not-on-their-device.md)
+puts the durable copy of a player's state off their device, so for a player who has one, install is
+an optimisation: worth encouraging, never required. It does not say what a guest gets. For a guest
+with no server copy, install is the only way any durability bound could be kept, and the question
+becomes whether a bound may be conditioned on an action most players will not take. No such bound
+is promised yet. See [how long does a guest's work last?](how-long-does-a-guests-work-last.md).
 
 ## Properties the answer is scored against
 
@@ -46,8 +45,8 @@ tiers of durability. This is what most apps do, and it means any bound has to be
 weaker tier.
 
 *Irrelevant.* A server copy makes local eviction survivable, so install is a performance and
-convenience feature with no durability role. Costs whatever
-[cross-device resume](is-cross-device-resume-in-scope-for-v1.md) costs.
+convenience feature with no durability role. For a guest this costs whatever the anonymous server
+copy costs, as set out in [how long does a guest's work last?](how-long-does-a-guests-work-last.md).
 
 ## Findings
 
@@ -87,7 +86,7 @@ Home-screen and tab storage are separate. A player who solves in Safari and then
 prompt finds nothing there — we would have taken their progress away at the exact moment they did
 what we asked. So "require install" is not a policy we can adopt at any point after first run
 without also building a migration, and the migration needs somewhere to put the data, which is
-the server copy this option existed to avoid.
+a server copy that a guest may not have.
 
 **Safari 26 made install easier to reach and less safe to assume.** Any site can now be
 installed with no manifest, but the Add to Home Screen sheet lets the player decline the isolated

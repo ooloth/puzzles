@@ -64,13 +64,6 @@ at M3.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**The host constrains the set of regions available.** Hetzner Cloud offers Falkenstein, Nuremberg,
-Helsinki, Ashburn, Hillsboro and Singapore. Google's free e2-micro exists only in `us-west1`,
-`us-central1` and `us-east1`.
-
-*Sourced — per the 2026-09-27 pass in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`), read by
-research agents.*
-
 **DigitalOcean's North American datacenters are NYC1, NYC2, NYC3, SFO2, SFO3, TOR1, ATL1, RIC1,
 MKC1 and MEM1, and not all of them offer every Basic Droplet.** The page marks Basic Droplets as
 fully available in NYC1, NYC2, NYC3, SFO3 and TOR1. SFO2 lacks Premium AMD CPUs, ATL1 has only

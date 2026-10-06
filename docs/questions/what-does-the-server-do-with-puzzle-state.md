@@ -19,8 +19,7 @@ versions. Both are already forbidden.
 
 ## What would settle it
 
-The scope question above, then choosing between the options below against the two guarantees.
-Most of the argument is already made.
+Choosing between the options below against the two guarantees. Most of the argument is already made.
 
 ## Properties the answer is scored against
 

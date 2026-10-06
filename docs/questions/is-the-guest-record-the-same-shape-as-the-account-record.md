@@ -24,13 +24,12 @@ decision half is answered "same shape" or "different shape" determines whether t
 cheap to keep or something a conversion step has to get right, every time, for every player, with
 no dry run against real data before it matters.
 
-the durability record demoted on 2026-09-01 called the decision half "the load-bearing half of this decision — the bounds could be
-revised later at ordinary cost, and this could not." It did not spell out why revising a bound is
-cheap and revising a shape is not, but the reasoning it used elsewhere for a related choice — which
-client storage mechanism a guest's work lives in — makes the same point: changing a shape after real
-players' data already exists in it means migrating that data with code that runs once, in the field,
-correctly, with nothing to retry from if it fails. Revising how long a bound lasts changes no stored
-byte. Revising the shape those bytes are in touches every one of them.
+**The decision half is the one that cannot be revised cheaply.** The bounds can be revised later at
+ordinary cost, and the shape cannot. Revising how long a bound lasts changes no stored byte.
+Revising the shape those bytes are in touches every one of them. Changing a shape after real
+players' data already exists in it means migrating that data with code that runs once, in the
+field, correctly, with nothing to retry from if it fails. The same reasoning applies to which client
+storage mechanism holds a guest's work.
 
 ## What would settle it
 
@@ -51,18 +50,17 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Opened 2026-09-01 by demoting the durability record, "What a player's work survives" (the decision record itself
-is deleted; this question, its two siblings —
-[how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
-[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) — and
-the Findings below carry forward everything in it). the durability record's own reasoning on this half is not what
-made it fail — the demotion is because its guest-bound reasoning rested on a rejection that does not
-hold up, which is a different half of the same record. Its reasoning on shape is preserved below as
-an option rather than a settled answer.
+Opened 2026-09-01 by demoting the durability record, "What a player's work survives", which is
+deleted. This question, its two siblings
+([how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
+[how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md)) and
+the Findings below carry forward everything in it. The demotion was for its guest-bound reasoning, a
+different half of that record. Its reasoning on shape is kept below as an option rather than a
+settled answer.
 
 ## Options
 
-*Same shape. Signing in promotes rather than converts.* What the durability record chose. A guest's storage holds
+*Same shape. Signing in promotes rather than converts.* A guest's storage holds
 *a player's record that currently contains one board*, not *a board* — the same shape a signed-in
 player's record has, just without an identity attached to it yet. Signing in attaches the identity;
 nothing about the record's contents is transformed. The case for this is the promise half above: no
@@ -87,8 +85,8 @@ which does not make it cheaper, it makes the failure recur.
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**Answering this "same shape" does not answer either bound question.** the durability record kept the two
-separable on purpose: one shape underneath, two different bounds on top. A shared shape says nothing
+**Answering this "same shape" does not answer either bound question.** The two are separable by
+design: one shape underneath, two different bounds on top. A shared shape says nothing
 about how long a guest's copy of it survives, or how long a signed-in player's does — those are
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md), and

@@ -65,31 +65,27 @@ A decision record in [../decisions/](../decisions/).
 
 ## Source
 
-Opened 2026-09-01 by demoting the durability record, "What a player's work survives" (that record is
-deleted; this question, its two siblings, and the Findings below carry forward everything in it). Its
-guest bound was argued from a rejection that does not hold up: it rejected an anonymous server copy
-for guests on three costs. An audit found two of the three are not settled facts at all —
-they were exactly what the hosting question, read with
-`git show ed7f54e:docs/questions/where-does-this-run.md`, and
-[do privacy regulations apply?](do-privacy-regulations-apply.md) were then still working out — and the
-third was overstated. See Findings. A decision reasoned from two contingent premises and one
-overstated one is not a decision; it is a placeholder wearing one's clothes. The hosting half has since been settled, by
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). Everything the durability record argued
-about the guest bound is preserved below, as options and findings rather than as a settled answer.
+Opened 2026-09-01 by demoting the durability record, "What a player's work survives" (deleted; this
+question, its two siblings, and the Findings below carry forward everything in it). Its guest bound
+rested on rejecting an anonymous server copy for guests on three costs, and those costs do not all
+hold. See Findings. The hosting costs are settled by
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) and
+[ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md). Everything the record
+argued about the guest bound is kept below as options and findings rather than as a settled answer.
 
 ## Options
 
-*Browser-only, no recovery, kept until finished.* What the durability record chose. A guest's work survives in the
+*Browser-only, no recovery, kept until finished.* A guest's work survives in the
 browser that made it, for as long as that browser keeps it — no second device, no recovery once it is
 gone. Today that means the board a guest is working on is kept until they finish it, rather than
 discarded when the day changes. Cheapest to build: nothing to operate, nothing stored about anyone,
 no endpoint to abuse. The cost falls entirely on a guest who lapses past the eviction window.
 
 *One bound for everyone.* Give a guest the same durability a signed-in player gets, or give a
-signed-in player only what a guest gets. the durability record rejected this: the signed-in bound cannot be kept
-for a player with nothing to attach work to, and the guest bound abandons what
-[../problem.md](../problem.md) asks for. It called this the shape the question had before it was
-rescoped into two personas, and the reason a single bound looked either dishonest or expensive. If
+signed-in player only what a guest gets. Against it: the signed-in bound cannot be kept for a
+player with nothing to attach work to, and the guest bound abandons what
+[../problem.md](../problem.md) asks for. A single bound therefore looks either dishonest or
+expensive, which is why the question is split into two personas. If
 this question and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) are
 ever answered the same way, the two questions collapse into one.
@@ -97,7 +93,7 @@ ever answered the same way, the two questions collapse into one.
 *Guests keep only the current day; an unfinished board is discarded.* A board stale after twenty-four
 hours makes eviction irrelevant to guests entirely — the thirty-day figure stops being load-bearing
 for this tier at all. It is also what circle9puzzle and inkwellgames do, so it is a known pattern
-rather than a strawman. the durability record rejected it because it contradicts the two things
+rather than a strawman. Against it: it contradicts the two things
 [../problem.md](../problem.md) lists first — work is never lost however the session is interrupted,
 and reopening finds the exact board a player left — and because being unable to finish yesterday's
 puzzle is a known annoyance in the products that do it. Keeping one unfinished board past midnight
@@ -106,12 +102,12 @@ costs almost nothing.
 *An anonymous server copy, recovered through a server-set cookie.* The cheapest recovery available
 and invisible to the player: local data is wiped, an `HttpOnly` cookie set by the server survives
 (cookies are exempt from the non-cookie storage wipe, per [../constraints.md](../constraints.md)),
-the server hands the state back, and nothing is ever said. the durability record rejected this on three costs. See
-Findings for what an audit found when those costs were checked against what is actually settled.
+the server hands the state back, and nothing is ever said. Three costs count against it. See Findings for which of them are
+settled.
 
 *Answer only what a guest-only first release needs.* The intended sequence ships guests first, so
-answering only what that phase needs would be the cheapest thing to do today. the durability record rejected this
-because [which client storage mechanism](which-client-storage-mechanism.md) holds a guest's work is
+answering only what that phase needs would be the cheapest thing to do today. Against it:
+[which client storage mechanism](which-client-storage-mechanism.md) holds a guest's work is
 the one stack choice with no clean migration path: changing it later means moving every existing
 player's data with code that runs once, in their browser, correctly, with no server to retry from.
 The end state has to be decided regardless of which phase decides what gets built first.
@@ -120,19 +116,19 @@ The end state has to be decided regardless of which phase decides what gets buil
 
 *Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
 
-**the durability record rejected the anonymous-server-copy option on three costs, and an audit found two of them
-are not settled facts.** It cited: rows keyed to tokens nobody will present again accumulating
-indefinitely; data about people who cannot be identified also not being deletable on request; and the
-mechanism silently degrading to a seven-day cookie lifetime if the API is not judged first-party by
-Safari. The third of those is a property of hosting topology. One origin, per
-[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), removes it, except where the hostname is a CNAME to a provider's
-domain and a service worker answered the navigation, which [../constraints.md](../constraints.md)
-records as reasoned from source and unobserved. The second depends
-on [do privacy regulations apply?](do-privacy-regulations-apply.md), which is unresearched. Only the
-first cost — orphan rows accumulating — was a property of the mechanism itself, and even that is
-overstated as a rejection reason: a TTL on the row, or a periodic cleanup job keyed to the cookie's
-own expiry, bounds it to a known, small amount of dead data rather than an unbounded liability. None
-of this means the option should be built. It means the durability record did not establish that it should not be.
+**Three costs count against the anonymous server copy, and two of them are not settled facts.**
+They are rows keyed to tokens nobody will present again accumulating indefinitely; data about people
+who cannot be identified also not being deletable on request; and the mechanism silently degrading
+to a seven-day cookie lifetime if the API is not judged first-party by Safari. The third is a
+property of hosting topology. One origin, per
+[ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), removes
+it, except where the hostname is a CNAME to a provider's domain and a service worker answered the
+navigation, which [../constraints.md](../constraints.md) records as reasoned from source and
+unobserved. The second depends on [do privacy regulations apply?](do-privacy-regulations-apply.md),
+which is unresearched. Only the first cost, orphan rows accumulating, is a property of the mechanism
+itself, and a TTL on the row, or a periodic cleanup job keyed to the cookie's own expiry, bounds it
+to a known, small amount of dead data. None of this means the option should be built. It means the
+costs do not rule it out.
 
 **A guest can still lose work silently, and every option above except full recovery accepts that.**
 Whether a guest is ever told the limit is a separate, unanswered question. Saying nothing keeps the

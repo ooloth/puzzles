@@ -8,20 +8,17 @@ resolves_into: decision
 
 ## Why it matters
 
-It decides whether anything stored off the device has to be *queryable* or can stay opaque, and
-that is the difference between needing a database and needing a place to put bytes. A key and a
-blob is satisfied by almost anything. "How many players finished today's puzzle", "how many lost
-progress last week", "where do people abandon a grid" are questions a blob store cannot answer at
-all.
+It decides what, if anything, is collected about how the app is used. Stored play data is analysable
+whatever the answer ([ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)),
+so what is open is which questions the system is built to answer: "how many players finished
+today's puzzle", "how many lost progress last week", "where do people abandon a grid".
 
 There is a second reader here besides the running system: the maintainer. Wanting to look at
-historical play — which puzzles people finish, where they stall, whether a difficulty grade
-predicts anything — is a reason for both a server and a queryable store that has nothing to do
-with durability, and it holds regardless of how
+historical play, such as which puzzles people finish, where they stall and whether a difficulty
+grade predicts anything, holds regardless of how
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md) and
 [how long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md) are
-eventually answered. It is the one input that can make
-[ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) a real decision rather than a formality.
+eventually answered.
 
 It also decides whether several promises are checkable.
 [Reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
@@ -66,7 +63,7 @@ else. Compatible with opaque storage.
 write, a lost board, a slow input. Still mostly opaque storage, plus a small stream of events.
 
 *Product analytics.* Completion, abandonment, difficulty response. The only option that needs
-queryable per-player data, and the only one that materially changes the database question.
+per-player data beyond what play itself stores.
 
 *Historical play, kept for the maintainer to look at.* Distinct from the above: not a dashboard
 that has to answer questions quickly, but a record complete enough to interrogate later. Cheaper
@@ -88,9 +85,6 @@ not.
 "we wouldn't."** See [../failure-modes/](../failure-modes/). That is the strongest argument that
 the answer here is not "nothing", independent of any appetite for product analytics.
 
-**[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles that whatever is stored is analysable, not whether anything about usage is
-collected at all.**
-[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles the
-shape of [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) — that stored data can be queried
-rather than only retrieved. Whether anything about usage is collected in the first place is this
-question, and it is a different one.
+**[ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) settles that
+stored data can be queried rather than only retrieved, not whether anything about usage is
+collected at all.** Whether it is collected in the first place is this question.

@@ -508,9 +508,10 @@ person is as bad as one exported. 1b holds for the Secure Enclave and FIDO keys 
 - *A Secure Enclave key* fails 13 on a moment the first pass did not split out: on a new Mac it does
   not work, and getting in again goes through the way back in part C before a new key can be added.
   1Password's key is on the new Mac once the account is signed in.
-- *A FIDO key* ties with 1Password on every row. It would cost $29 or more, a second `ssh` ahead of
-  Apple's in `PATH`, and a device to carry, which are costs rather than properties. The maintainer has
-  no hardware key, and has not said they want one, so nothing on the list is a reason to take it.
+- *A FIDO key* ties with 1Password on every technical row. It would cost $29 or more, a second
+  `ssh` ahead of Apple's in `PATH`, and a device to carry. Those are costs, so they enter only as a
+  view the maintainer states, and on 2026-10-05 the maintainer confirmed they prefer not to buy and
+  carry a hardware key. That is the row it fails.
 - *1Password's agent* remains.
 
 **Reversed if** 1Password stops holding the DigitalOcean sign-in, since 1c would then count it as a

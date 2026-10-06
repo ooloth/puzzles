@@ -1,13 +1,16 @@
 ---
 number: 0056
-status: proposed
-date: 2026-10-06
+status: accepted
+date: 2026-10-05
 ---
 
 # 0056 — The Droplet runs without DigitalOcean's Droplet agent
 
 ## Forced by
 
+- [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and
+  what DigitalOcean's image brings": the control panel cannot leave the Droplet agent out, and the
+  agent is built only for amd64 and updates itself hourly.
 - [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md): software
   on the machine changes at one daily hour.
 - DigitalOcean installs its Droplet agent by default: "You cannot currently opt out of installing the
@@ -41,7 +44,7 @@ Droplet agent is never installed, and the browser Droplet Console is not availab
 Console, which needs no agent, is the console that matters, per
 [ADR-0055](0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md).
 
-Observed on 2026-10-06: a Droplet created with `doctl compute droplet create --droplet-agent=false`
+Observed on 2026-10-05: a Droplet created with `doctl compute droplet create --droplet-agent=false`
 had no `droplet-agent.service` and no `/opt/digitalocean`.
 
 **What it commits us to:** the Droplet is created with `doctl` or the API, never from the control

@@ -15,7 +15,7 @@ someone when it stops answering.
 hour we set and reboots then when anything needs it. What it leaves here is noticing a failed update:
 a run that fails is silent until something alerts on it.
 
-**Getting onto the machine was a separate question.** Access, hardening and the lockout route are
+**Getting onto the machine is not this question.** Access, hardening and the lockout route are
 settled by [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) to [ADR-0059](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md), at slice 4 of M1,
 because the machine is on the public internet from then, and this half is needed to *survive* a
 change rather than to reach the machine at all. What is left here
@@ -57,7 +57,7 @@ operational plan for a single virtual machine and that no question in this folde
 
 N/A — this resolves into a set of arrangements rather than a choice between alternatives. What each
 covers: process supervision and restart, health checking from outside the machine, alerting to
-somewhere the maintainer actually reads, remote access that survives a broken SSH configuration, and
+somewhere the maintainer actually reads, and
 backups, and alerting when a security update fails. When updates are applied is
 [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 
@@ -140,18 +140,18 @@ something falls off it.
 
 **On Debian 13, logins are read from the journal.** Debian 13 removed `last`, `lastb` and `lastlog`:
 "The util-linux package no longer provides the last or lastb commands". On a `debian-13-x64` Droplet
-on 2026-10-06 there was no `rsyslog` and no `/var/log/auth.log`, the journal was persistent, and every
+on 2026-10-05 there was no `rsyslog` and no `/var/log/auth.log`, the journal was persistent, and every
 accepted and refused SSH login, console login and `sudo` command was in it. journald caps itself at
 10% of the disk, at most 4G, when `SystemMaxUse` is unset, per Debian's journald.conf(5).
 
 *Measured on a spike Droplet for the journal, one run; sourced from Debian's trixie release notes and
-journald.conf(5). Moved here on 2026-10-06 from
+journald.conf(5). Moved here on 2026-10-05 from
 how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*
 
 **Illegitimate traffic is shed by limiting it per client at the front**, not by cutting outbound
 traffic, which [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
 rejects because it stops the site.
 
-*Reasoned, 2026-09-30. Moved here on 2026-10-06 from the hardening question, which
+*Reasoned, 2026-09-30. Moved here on 2026-10-05 from the hardening question, which
 [ADR-0057](../decisions/0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md)
 answered without settling it.*

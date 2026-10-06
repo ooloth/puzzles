@@ -1,13 +1,16 @@
 ---
 number: 0055
-status: proposed
-date: 2026-10-06
+status: accepted
+date: 2026-10-05
 ---
 
 # 0055 — A lockout is recovered on the Recovery Console with a password kept for it
 
 ## Forced by
 
+- [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and
+  what DigitalOcean's image brings": only the Recovery Console reaches a Droplet whose network or
+  `sshd` has failed, it needs a password, and resetting the root password powers the Droplet off.
 - [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md): one bare Droplet, reached by one
   person, with nothing of the host's own to get back in. A lockout from SSH is a failure with no
   remote fix.
@@ -25,8 +28,8 @@ network route; a lost key; the app still serving throughout; the maintainer comi
 and needing in; and the machine from first boot onward, since a kept password exists from then.
 
 1. A lockout from every network route has a way back that does not need a network route
-   ([ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)'s property 5,
-   [ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)).
+   ([ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md): one machine reached by one person;
+   [nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md)).
 2. Getting back in does not stop the app ([nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md)).
 3. No route in can be opened by guessing a password, at any instant from first boot
    ([ADR-0047](0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md): illegitimate
@@ -52,7 +55,7 @@ it, so the password is the way back and the ISO is the fallback.
 that purpose, and repairs the machine there. Where that cannot work, the recovery ISO is the
 fallback.**
 
-Observed on a Droplet on 2026-10-06: with `sshd` stopped and SSH refused, the maintainer logged in on
+Observed on a Droplet on 2026-10-05: with `sshd` stopped and SSH refused, the maintainer logged in on
 the Recovery Console with a named user's password and ran `sudo systemctl start ssh`, and key login
 worked again 38 seconds after the lockout, with the stand-in app answering every second throughout.
 The recovery ISO accepted the key attached at creation with no password on the Droplet, and mounted
@@ -64,8 +67,10 @@ its disk, but only after the Droplet was powered off.
   reaches the machine as a hash in cloud-init user-data, which every process on the machine can read
   from `169.254.169.254`. So the password has to resist an offline attack on its hash. That a
   generated one does is reasoned, not measured.
-- **The app's unit blocks link-local addresses**, with systemd's `IPAddressDeny=link-local`, so the
-  app cannot read that hash. Documented in systemd.resource-control(5), not yet run.
+- **The app's unit and Caddy's unit block link-local addresses**, with systemd's
+  `IPAddressDeny=link-local`, so neither the app nor the process facing the internet can read that
+  hash. Documented in systemd.resource-control(5), not yet run. The maintainer approved extending it
+  to Caddy on 2026-10-05.
 - **SSH refuses passwords before the password exists.** cloud-init writes its own
   `PasswordAuthentication no` only after it has set passwords and `sshd` has started: on the spike
   Droplet, a first `sshd` listened about 80 ms before that file existed was read. Our user-data
@@ -87,7 +92,7 @@ its disk, but only after the Droplet was powered off.
 
 ## Enforced by
 
-**Nothing in the repository.** The procedure was run once, on a spike Droplet on 2026-10-06. M1
+**Nothing in the repository.** The procedure was run once, on a spike Droplet on 2026-10-05. M1
 slice 4 writes the user-data drop-in, the unit setting and the runbook. Nothing checks that the
 password in 1Password still matches the machine, or that the procedure still works.
 
@@ -103,8 +108,9 @@ password in 1Password still matches the machine, or that the procedure still wor
 - **Rebuilding the machine** fails property 2: it replaces the machine. A rebuild did rerun the
   original user-data on the spike Droplet, which makes it a way to replace a machine, not to recover
   one. **Reverses if** the machine holds nothing a rebuild loses and an outage stops mattering.
-- **A second network route kept for emergencies**, such as a tunnel, fails property 5: the tunnel's
-  account can grant a shell. **Reverses if** that account is accepted as part of the root of trust.
+- **A second network route kept for emergencies**, such as a tunnel, fails property 1: it is itself a
+  network route, so a lockout that cuts the network cuts it too. **Reverses if** DigitalOcean offers
+  a way onto a Droplet that is independent of the Droplet's own network.
 - **Not yet** — the Droplet is reached by one person from slice 4, and a lockout then has no fix.
 
 ## Risk
@@ -114,6 +120,10 @@ password in 1Password still matches the machine, or that the procedure still wor
 - **The console depends on the DigitalOcean account and a browser.** The spike's console took no
   input until a keystroke-capturing extension was turned off.
 - **The fallback costs an outage**, for as long as the repair takes.
+- **The local run rehearses our settings, not DigitalOcean's.** It boots Debian's own cloud image,
+  per [ADR-0049](0049-the-droplet-runs-debian-13.md), which has none of DigitalOcean's vendor-data, so it
+  shows that what we write works, not that it overrides what DigitalOcean's image adds, per
+  [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and what DigitalOcean's image brings".
 - **The procedure decays unused.** It was run once, and DigitalOcean's panel can change under it.
 
 ## Revisit when

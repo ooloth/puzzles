@@ -1,7 +1,7 @@
 ---
 number: 0054
-status: proposed
-date: 2026-10-06
+status: accepted
+date: 2026-10-05
 ---
 
 # 0054 — The maintainer's SSH key is held in 1Password's agent
@@ -32,8 +32,8 @@ account that holds the credential being taken over, and years of keeping it.
    ([ADR-0019](0019-the-store-is-a-file-the-server-process-opens.md); the portable security
    standard's authentication rule).
 2. Losing or replacing the Mac does not take the way in with it, short of the way back after a
-   lockout ([ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)'s property 5, and the
-   maintainer's one machine).
+   lockout (the maintainer works from one machine, stated 2026-10-05, and the portable
+   decision-making standard's maximum safety).
 3. One command from the Mac reaches the machine, knowing nothing beyond its name (the maintainer's
    "it just works" and "it's so easy" in
    [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)).
@@ -64,7 +64,7 @@ public half is on the machine.**
 - **The agent's approval setting stays at 1Password's default**, "For each new application". Asking
   for every request is the only setting that stops a process started from an already approved
   terminal from using the key, at the cost of a Touch ID prompt on every SSH connection and every
-  `git` operation over SSH. The maintainer chose the default on 2026-10-06: a script running in that
+  `git` operation over SSH. The maintainer chose the default on 2026-10-05: a script running in that
   terminal can also change the code the next deploy ships, so the prompt closes one route of several.
 
 The working, including a spike on a Droplet, is in

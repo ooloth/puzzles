@@ -1,5 +1,5 @@
 ---
-opened: 2026-10-06
+opened: 2026-10-05
 status: open
 resolves_into: decision
 ---
@@ -50,7 +50,7 @@ is installed changes.
 
 ## Source
 
-Raised 2026-10-06 while working
+Raised 2026-10-05 while working
 how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`). The maintainer
 asked whether rejecting DigitalOcean's Droplet agent there also removed the metrics agent. It did
 not, since they are separate programs, but reading the metrics agent's install script showed the
@@ -71,12 +71,12 @@ browser Droplet Console. `doctl compute droplet create` has a flag for each: `--
 and `--droplet-agent`.
 
 *Sourced: the [do-agent README](https://github.com/digitalocean/do-agent), read from its raw text,
-and `doctl compute droplet create --help` on doctl 1.177.0, 2026-10-06.*
+and `doctl compute droplet create --help` on doctl 1.177.0, 2026-10-05.*
 
 **The install script adds DigitalOcean's own apt repository.** It sets
 `REPO_HOST=https://repos.insights.digitalocean.com` and writes
 `/etc/apt/sources.list.d/digitalocean-agent.list` with a `signed-by` key.
 
 *Sourced: [install.sh](https://repos.insights.digitalocean.com/install.sh), read from its raw text,
-2026-10-06. Whether `--enable-monitoring` at creation installs it this way is not known: the spike
-on 2026-10-06 created its Droplet without monitoring, so the agent was absent there.*
+2026-10-05. Whether `--enable-monitoring` at creation installs it this way is not known: the spike
+on 2026-10-05 created its Droplet without monitoring, so the agent was absent there.*

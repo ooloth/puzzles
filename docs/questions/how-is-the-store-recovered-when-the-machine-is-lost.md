@@ -157,10 +157,10 @@ that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-t
 rejected.*
 
 **A rebuild from the control panel runs the original user-data again.** On a spike Droplet on
-2026-10-06, a rebuild onto `debian-13-x64` booted on the same address, and within about 20 seconds
+2026-10-05, a rebuild onto `debian-13-x64` booted on the same address, and within about 20 seconds
 the user and files from the original user-data were back with new timestamps, while everything
 written since was gone. The host key changed. So a rebuild reproduces what cloud-init configures and
 nothing else, which is the half of recovery this question does not have to supply.
 
-*Measured, one run. Moved here on 2026-10-06 from
+*Measured, one run. Moved here on 2026-10-05 from
 how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*

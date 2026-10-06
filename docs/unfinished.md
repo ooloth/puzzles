@@ -17,9 +17,9 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 `docs/architecture.md` with boxes on both sides of the network. It reads as a chosen stack.
 
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
-under `src/client/` that shows its answer. The host, how the app runs on it, its OS, its front and what
-serves the client's files are settled, and nothing is deployed: the deploy switch, the hour updates are applied at, how Node is
-carried and what triggers a deploy are open.
+under `src/client/` that shows its answer. The host, how the app runs on it, its OS, its front, what
+serves the client's files and how the machine is reached and hardened are settled, and nothing is deployed: the deploy switch, the hour updates are applied at, how Node is
+carried, how the metrics agent is installed and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 
@@ -79,11 +79,10 @@ at M2.
 
 **You'll see** [ADR-0044](decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and
 [ADR-0049](decisions/0049-the-droplet-runs-debian-13.md) to
-[ADR-0053](decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settling how the
+[ADR-0059](decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md) settling how the
 Droplet is set up, and nothing in [runbooks/](runbooks/) saying how.
 
-**Actually** the only setup steps are spike notes those records cite from git history, written partly
-on Ubuntu.
+**Actually** the only setup steps are spike notes those records cite from git history.
 
 **So** do not follow them as instructions; M1 slice 4 writes the setup and its runbook.
 

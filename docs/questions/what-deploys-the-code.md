@@ -39,11 +39,16 @@ run the app with, per
 
 ## Properties the answer is scored against
 
-Copied on 2026-10-06 from how is the server reached and hardened?, deleted that day and read with
+Copied on 2026-10-05 from how is the server reached and hardened?, read with
 `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`, which derived it for
-this question as well. Its parts A to E are settled by [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) to [ADR-0059](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md); what is left for
-this question is the deploy's credential, and property 18 on host keys. The list follows as it stood,
-with the properties later passes added.
+reaching and hardening the machine and was deleted once
+[ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) to
+[ADR-0059](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md) settled
+the maintainer's access. **What still binds here is a deploy logging in:** properties 1, 5 and 10 for
+what the deploy's credential can do and hold, 7 for its logins being recorded, 8 and 15 for the
+credential and its configuration being the same on a rebuilt machine and in the local run, and 18
+for host keys. The other rows are settled for the maintainer's access by those records and are kept
+because a deploy has to satisfy them too, not because they are open.
 
 Derived on 2026-10-05, before any option was researched. Two other questions share moments with
 this list and score against it as well as their own:
@@ -135,7 +140,8 @@ places that drift.
     "it's so easy".
 14. The way back after a lockout is written down where the maintainer will look, and has been run
     at least once, so it can be followed after months away. Per [../problem.md](../problem.md),
-    which expects years of active attention, and this question's own **Resolves into**.
+    which expects years of active attention. Settled by
+    [ADR-0055](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md).
 15. The access configuration lives in one place in the repository, and changing it is one edit that
     the local run rehearses before it reaches the Droplet. Per
     [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
@@ -177,12 +183,12 @@ machines, a way back that has been rehearsed, and nothing to do on a schedule.
 Property 1 is split into the conditions it stands for, because the credential candidates all pass it
 as first written:
 
-- **1a.** Something running as the maintainer on the Mac cannot take the credential off it. Reworded
-  on 2026-10-05 from "a copy of any file on the Mac's disk does not give a shell", which a key file
-  with a strong passphrase kept nowhere passes, while the setup people actually run, with the
-  passphrase in the Keychain or an agent, does not.
+- **1a.** Something running as the maintainer on the Mac cannot take the credential off it. A key
+  file with a strong passphrase kept nowhere would survive a copy of the file alone, but not
+  something running as the maintainer while the Keychain or an agent holds the passphrase.
 - **1b.** Whoever holds an unlocked session or the account a credential lives in cannot export it.
-  Found on 2026-10-05 to separate no candidate, in the third pass below.
+  Found on 2026-10-05 to separate no candidate, per
+  [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md).
 - **1c.** No account beyond the DigitalOcean account can grant a shell when it is taken over. The
   DigitalOcean account can already do so through the recovery ISO, so it adds nothing.
 
@@ -196,10 +202,9 @@ And two properties from moments the first list did not cover:
 18. *Safety.* The machine's host key is known to the person or deploy connecting before they trust
     it, including after a rebuild, which gives the machine a new host key. From the portable security
     standard's authentication rule, applied in the other direction. A research agent raised it on
-    2026-10-05. It bears mostly on deploys, and is scored with
-    [what deploys the code?](what-deploys-the-code.md).
+    2026-10-05. It bears mostly on deploys, and is open here.
 
-**Added in later passes, 2026-10-06**
+**Added in later passes, 2026-10-05**
 
 *19. Safety.* Nothing added to the path that authorises root is a package
 nobody actively maintains. Per [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
@@ -286,10 +291,11 @@ where releases are built, which this question answers. The likeliest source of a
 driver, at [which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md).
 The check is drafted as an issue once the build location is known.
 
-**Whether the deploy script is written in shell or in TypeScript is also left here.** The spike's
-script was shell.
+**A deploy script kept in the repository is TypeScript run on Node**, because
+[ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md) runs "every repo script"
+on Node. The spike's script was shell.
 
-*Moved here 2026-10-02 from the hosting question's open entry, read with
+*From [ADR-0030](../decisions/0030-typescript-outside-the-browser-runs-on-node.md). The spike is read with
 `git show ed7f54e:docs/questions/where-does-this-run.md`.*
 
 **What a deploy can be given to log in with, if it is not the maintainer's own login.** A key in
@@ -299,17 +305,17 @@ disabling PTY allocation and execution of ~/.ssh/rc", and `command=`, which runs
 `sudo` can be limited to named `systemctl` commands, where wildcards in arguments are a known hazard,
 and polkit can allow one user to manage named units through `org.freedesktop.systemd1.manage-units`,
 whose rules see the unit and the verb. A non-root user that controls the services is still close to
-root. Kamal defaults to SSH as `root`, which is moot with no Kamal.
+root.
 
 *Sourced by research agents on 2026-09-30 and 2026-10-05 from sshd(8), the systemd policy file and a
-systemd mailing-list answer; not run. Moved here on 2026-10-06 from
+systemd mailing-list answer; not run. Moved here on 2026-10-05 from
 how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`), which left the
 deploy's credential to this question. Whether `root` can log in at all is
-[ADR-0058](../decisions/0058-root-does-not-log-in-over-ssh.md), and it decides whether a deploy logging in
-as `root` behind a forced command stays a candidate.*
+[ADR-0058](../decisions/0058-root-does-not-log-in-over-ssh.md), which removes a deploy logging in as
+`root` behind a forced command; reopening it is one line, `PermitRootLogin forced-commands-only`.*
 
 **A rebuilt machine has a new host key, and so does the recovery ISO.** On a spike Droplet on
-2026-10-06, the rebuild gave the machine a new host key, and the recovery ISO's rescue system
+2026-10-05, the rebuild gave the machine a new host key, and the recovery ISO's rescue system
 answered with a host key of its own, so SSH warned "REMOTE HOST IDENTIFICATION HAS CHANGED". A deploy
 that trusts whatever key it meets first can be pointed at the wrong machine, and one that pins the
 key breaks on every rebuild. A CA that signs the machine's host key would let the Mac and a deploy
@@ -317,6 +323,6 @@ trust a rebuilt machine without a warning, but the CA's key, or the host's own p
 have to reach the machine somehow, and anything in cloud-init user-data is readable by every process
 there.
 
-*Measured for the host keys, one run; reasoned for the rest. Moved here on 2026-10-06 from the
+*Measured for the host keys, one run; reasoned for the rest. Moved here on 2026-10-05 from the
 hardening question, where it was property 18: "the machine's host key is known to the person or
 deploy connecting before they trust it, including after a rebuild".*

@@ -1,7 +1,7 @@
 ---
 number: 0059
-status: proposed
-date: 2026-10-06
+status: accepted
+date: 2026-10-05
 ---
 
 # 0059 — The maintainer logs in as a named user whose sudo asks for no password
@@ -15,7 +15,7 @@ date: 2026-10-06
 - [ADR-0054](0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md): the maintainer's key is in
   1Password, and 1Password already holds the DigitalOcean sign-in, which reaches a root shell through
   the recovery ISO.
-- The maintainer, 2026-10-06: Touch ID would be welcome where a second check is asked, and a typed
+- The maintainer, 2026-10-05: Touch ID would be welcome where a second check is asked, and a typed
   password would mean looking up which 1Password item holds it.
 
 ## Scored against
@@ -54,7 +54,7 @@ for the Recovery Console, which is needed only there.**
 - **Which password to look up, and when.** One 1Password item holds it, named for the Droplet and the
   user, and the lockout runbook names it. It is looked up only on the Recovery Console.
 - **`sudo` commands are recorded** in the journal by user, terminal and command line, as observed on
-  a Droplet on 2026-10-06.
+  a Droplet on 2026-10-05.
 
 The working is in how is the server reached and hardened?, part D, read with
 `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`.
@@ -80,7 +80,8 @@ name is the implementer's.
 - **`sudo` fed from `op read`**, the 1Password CLI, fails property 3 for the same reason: a step on
   every use, against something that can call `op read` in the same terminal. **Reverses if** the same.
 - **`sudo` authorised through 1Password's agent by `pam_ssh_agent_auth`** fails property 4:
-  `libpam-ssh-agent-auth` 0.10.3-11 in Debian 13 is maintained by the "Debian QA Group", and it would
+  `libpam-ssh-agent-auth` 0.10.3-11 in Debian 13 is maintained by the "Debian QA Group", per
+  [packages.debian.org](https://packages.debian.org/trixie/libpam-ssh-agent-auth), and it would
   prompt only with 1Password set to ask for every request, which the maintainer declined in
   [ADR-0054](0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md). **Reverses if** a
   maintained module, such as the Rust `pam-ssh-agent`, reaches Debian's archive.

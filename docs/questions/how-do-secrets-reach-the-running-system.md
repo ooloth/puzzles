@@ -10,8 +10,9 @@ resolves_into: decision
 
 **The running app gets its first secret at M12 at the earliest**, when the store's off-machine copy
 arrives with the first player's data. In M1 the app is a hard-coded response with nothing to inject,
-per [what deploys the code?](what-deploys-the-code.md). The deploy holds a credential from M1, the
-SSH key that reaches the Droplet, and how that key is kept is part of this question.
+per [what deploys the code?](what-deploys-the-code.md). The maintainer's own SSH key is held in
+1Password's agent, per [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md).
+What a separate deploy would log in with is [what deploys the code?](what-deploys-the-code.md).
 
 **The store contributes no secret at all.**
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) makes the store a file
@@ -82,7 +83,7 @@ store shape makes.
 
 **Anything in cloud-init user-data is readable by every process on the Droplet.** DigitalOcean's
 metadata service at `169.254.169.254` serves `user-data` with no authentication described. On a
-spike Droplet on 2026-10-06 its index listed `id`, `hostname`, `user-data`, `vendor-data`,
+spike Droplet on 2026-10-05 its index listed `id`, `hostname`, `user-data`, `vendor-data`,
 `public-keys`, `region`, `interfaces/`, `dns/`, `floating_ip/`, `reserved_ip/`, `tags/`, `features/`
 and `virtual_ips/`, none of them a token. systemd's `IPAddressDeny=link-local` on a unit is documented
 to block a unit from reaching it, and
@@ -92,5 +93,5 @@ cloud-init must not read.
 
 *Measured for the index, one run; the rest is a research agent's reading of DigitalOcean's metadata
 docs and systemd.resource-control(5). That no endpoint below the index holds a token was not checked.
-Moved here on 2026-10-06 from
+Moved here on 2026-10-05 from
 how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*

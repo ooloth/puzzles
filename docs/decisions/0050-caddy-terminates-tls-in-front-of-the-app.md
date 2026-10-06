@@ -2,7 +2,7 @@
 number: 0050
 status: accepted
 date: 2026-10-03
-amended: 2026-10-03
+amended: 2026-10-05
 ---
 
 # 0050 — Caddy terminates TLS in front of the app
@@ -161,8 +161,9 @@ when it is written, because the defaults are wrong here:
   **Reverses when** either ships it.
 - **freenginx, H2O, River, NGINX Unit and Varnish.** They fail property 11: no Linux packages, no
   release in years, or archived. **Reverses** if one returns to maintained packages.
-- **Not yet.** Rejected because M1 slice 4 cannot deploy two instances without something choosing
-  between them, and TLS is needed at slice 5.
+- **Not yet.** Rejected because M1 slice 4 serves the client and the API from one machine, so
+  something has to answer HTTP and send `/api/` to the app, and TLS is needed at slice 5. Choosing
+  between two instances during a deploy is needed from slice 6.
 
 Fronts off the machine, such as Cloudflare's proxy or tunnel and DigitalOcean's load balancer, were
 not scored here; whether anything sits in front of the Droplet is the domain question's at slice 5.

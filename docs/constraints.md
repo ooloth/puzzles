@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-05
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -942,6 +942,63 @@ script. Caddy 2 has no graceful binary upgrade.
 *Sourced: `scripts/postinstall.sh` in `caddyserver/dist`, opened 2026-10-03. Debian's copy and the
 lack of a graceful upgrade are a research agent's reading of Debian's `debian/rules` and Caddy's
 forum, not re-opened.*
+
+## Hosting — getting back onto a Droplet when SSH fails, and what DigitalOcean's image brings
+
+**Only the Recovery Console reaches a Droplet whose network or `sshd` has failed, and it needs a
+password.** DigitalOcean has two browser consoles. The Droplet Console "connects to Droplets using the
+network, like other SSH-based clients", needs DigitalOcean's Droplet agent, and fetches keys from
+`169.254.169.254`. The Recovery Console "is available even if a Droplet has lost network access or the
+sshd process has failed", but "it requires password authentication on the Droplet". A keystroke
+capturing browser extension, SurfingKeys, stopped it taking input until it was turned off.
+
+**Resetting the root password from the control panel powers the Droplet off.** It emails a temporary
+password that must be changed at first login. On a `debian-13-x64` Droplet, the journal showed a clean
+`systemd-poweroff` within a minute of the click and the machine booted again 24 seconds later. It also
+left `root`'s password expired, after which key login as `root` failed with "Password change required
+but no TTY available" until the password was changed on the console. It does not turn on password
+login over SSH.
+
+**The recovery ISO needs no password on the Droplet, and needs it powered off.** It boots an Ubuntu
+24.04 rescue system with "Root Password has randomly been set to:" on the console, mounts the disk
+under `/mnt`, and imports "any SSH keys added to the Droplet at the time it was created", which
+logged in over SSH. Its host key differs from the Droplet's.
+
+**A rebuild reruns the original user-data and keeps the address**, with a new host key.
+
+**DigitalOcean's `debian-13-x64` image** reads user-data through the ConfigDrive datasource with
+cloud-init 25.1.4, and its vendor-data makes `root` the default user with `disable_root: false` and
+`ssh_pwauth: false`. Its `sshd_config` sets `PermitRootLogin yes` on line 33, after `Include
+/etc/ssh/sshd_config.d/*.conf` on line 12. cloud-init writes `50-cloud-init.conf` with
+`PasswordAuthentication no` only after it has set passwords and `sshd` has started, so a first `sshd`
+listened about 80 ms before that file existed. `write_files` ran before users were created. The image
+has no `rsyslog` and no `/var/log/auth.log`, and the journal is persistent. Debian's own cloud image,
+which the production-like local run boots per
+[ADR-0049](decisions/0049-the-droplet-runs-debian-13.md), has none of DigitalOcean's vendor-data.
+
+**DigitalOcean's Droplet agent is installed by default, and only the API can leave it out.** "You
+cannot currently opt out of installing the Droplet agent when creating a Droplet using the control
+panel"; the API takes `"with_droplet_agent":false`, and a Droplet created with `doctl ...
+--droplet-agent=false` had no agent. Its README: "The only supported GOARCH is `amd64`", and "Hourly
+package update checks are handled by `droplet-agent-update.timer`". The metrics agent, `do-agent`,
+is a separate program, installed with monitoring enabled.
+
+**DigitalOcean's network.** "SMTP ports 25, 465, and 587 are blocked on all Droplets", and a non-GPU
+Droplet's outbound throughput is limited to 2 Gbps. A Cloud Firewall "is a separate firewall from any
+firewall software running on a Droplet", and with no outbound rules "no outbound traffic is
+permitted".
+
+*Measured on one `s-1vcpu-1gb` Droplet in `tor1` from `debian-13-x64`, created 2026-10-05 and
+destroyed the same evening, one run of each step, with the maintainer doing the control-panel steps.
+Sourced from DigitalOcean's pages on
+[the consoles](https://docs.digitalocean.com/products/droplets/how-to/connect-with-console/),
+[the Recovery Console](https://docs.digitalocean.com/products/droplets/how-to/recovery/recovery-console/),
+[the recovery ISO](https://docs.digitalocean.com/products/droplets/how-to/recovery/recovery-iso/),
+[the Droplet agent](https://docs.digitalocean.com/products/droplets/how-to/manage-agent/),
+[Droplet limits](https://docs.digitalocean.com/products/droplets/details/limits/) and
+[firewall rules](https://docs.digitalocean.com/products/networking/firewalls/how-to/configure-rules/),
+and the [agent's README](https://github.com/digitalocean/droplet-agent), each read from the raw page on
+2026-10-05.*
 
 ## Hosting — providers raise prices, and differ in whether existing machines are spared
 

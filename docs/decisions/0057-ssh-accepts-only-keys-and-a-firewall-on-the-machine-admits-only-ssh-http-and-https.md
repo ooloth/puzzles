@@ -1,13 +1,16 @@
 ---
 number: 0057
-status: proposed
-date: 2026-10-06
+status: accepted
+date: 2026-10-05
 ---
 
 # 0057 — SSH accepts only keys, and a firewall on the machine admits only SSH, HTTP and HTTPS
 
 ## Forced by
 
+- [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and
+  what DigitalOcean's image brings": DigitalOcean blocks mail ports on every Droplet, limits
+  outbound to 2 Gbps, and keeps its Cloud Firewall separate from any firewall on the machine.
 - [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md): a bare Droplet on the public
   internet from M1 slice 4, scanned by everyone rather than by anyone interested in this project.
 - [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md): Caddy answers HTTP and HTTPS,
@@ -61,7 +64,7 @@ ruleset written by cloud-init admits, from the internet, TCP 22, 80 and 443 and 
 and ICMPv6, and drops everything else. Outbound traffic is not filtered. DigitalOcean's Cloud
 Firewall is not used.**
 
-Observed on a Droplet on 2026-10-06: `sshd` offered only `publickey` from the first moment it
+Observed on a Droplet on 2026-10-05: `sshd` offered only `publickey` from the first moment it
 answered, a password login was refused with `Permission denied (publickey)`, and
 `PerSourcePenalties` dropped a probe that kept connecting without authenticating.
 
@@ -114,7 +117,8 @@ those ports open. It does not exist.
   tunnel's account can grant a shell. **Reverses if** that account is accepted as part of the root of
   trust.
 - **fail2ban or sshguard** fails property 4: a resident process doing what `sshd`'s own throttling
-  already does, as observed. **Reverses if** `sshd`'s throttling proves insufficient in the journal.
+  already does. That `sshd` throttles was observed once; that fail2ban's memory would matter is
+  reasoned, since it was not measured. **Reverses if** `sshd`'s throttling proves insufficient in the journal.
 - **SSH on a non-standard port** fails property 8: one more setting that changes no other row.
   **Reverses if** scanner noise in the journal starts to matter.
 - **Outbound limited to the ports the machine uses** fails property 5. **Reverses if** outbound abuse
@@ -128,6 +132,10 @@ those ports open. It does not exist.
 - **`sshd` is exposed to the whole internet.** A flaw that needs no login is reachable until the daily
   update applies its fix, per
   [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
+- **The local run rehearses our settings, not DigitalOcean's.** It boots Debian's own cloud image,
+  per [ADR-0049](0049-the-droplet-runs-debian-13.md), which has none of DigitalOcean's vendor-data, so it
+  shows that what we write works, not that it overrides what DigitalOcean's image adds, per
+  [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and what DigitalOcean's image brings".
 - **Root, once taken, can rewrite the rules.** Accepted, since nothing outside the machine would be
   protecting anything by then.
 

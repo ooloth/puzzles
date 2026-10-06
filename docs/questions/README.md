@@ -75,13 +75,12 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) — software comes from Debian 13's main and security suites, plus Caddy's repository pinned to `2.*`, and any further repository meets that record's list
    - **Given:** [0053-caddy-serves-the-clients-files-from-the-release-on-disk](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) — Caddy serves the client's files from the release's directory, and each release carries at least the previous release's assets
    - **Given:** [0054-the-maintainers-ssh-key-is-held-in-1passwords-agent](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) — the maintainer's key is generated in 1Password and used through its agent, with only its public half on the machine
-   - **Given:** [0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md) — a generated password kept for the Recovery Console, SSH refusing passwords before it exists, the key attached at creation, the app's unit blocking link-local addresses, and the recovery ISO as the fallback
+   - **Given:** [0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md) — a generated password kept for the Recovery Console, SSH refusing passwords before it exists, the key attached at creation, the app's and Caddy's units blocking link-local addresses, and the recovery ISO as the fallback
    - **Given:** [0056-the-droplet-runs-without-digitaloceans-droplet-agent](../decisions/0056-the-droplet-runs-without-digitaloceans-droplet-agent.md) — the Droplet is created through the API with `--droplet-agent=false`
    - **Given:** [0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https](../decisions/0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md) — `sshd` takes keys only, and an `nftables` ruleset from cloud-init admits TCP 22, 80 and 443, UDP 443 and ICMP, with outbound open and no Cloud Firewall
    - **Given:** [0058-root-does-not-log-in-over-ssh](../decisions/0058-root-does-not-log-in-over-ssh.md) — `sshd` refuses `root` with `PermitRootLogin no` in the drop-in that refuses passwords
    - **Given:** [0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md) — the maintainer logs in as a named user in `sudo` with no password asked, and that user holds the Recovery Console password
-     - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else how Node is pinned and patched on the Droplet, by the host's package manager or as a binary inside each release, is left to whatever the setup script does, and the runtime can change under a running release with no deploy
-     - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the first deploy stops the old instance however the setup script happens to, and requests in flight on it fail, which the spikes observed as 39 POSTs failing with 502
+     - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else slice 4's setup installs Node one way by default, which fixes what a release contains before slice 6's pipeline is designed to build it, and what a rollback at M11 restores: with Node on the host, a rollback keeps today's runtime under yesterday's code
      - **Must answer:** [how-is-digitaloceans-metrics-agent-installed-and-kept-updated](how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md) — or else creating the Droplet with monitoring on adds DigitalOcean's own apt repository, which [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) has not vetted, and leaving it off leaves [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)'s traffic alert with nothing to read. Either failure is silent
      - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), until players arrive — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
      - **Deferred:** [which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md), until players arrive at M12 — Caddy serves an uncompressed file correctly where no compressed copy exists, so slice 4 builds without it, and writing the copies is a build step added later
@@ -96,6 +95,7 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0044-the-server-runs-as-systemd-services-without-containers](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) — a release is a directory of built JavaScript and its `node_modules`, run by systemd
    - **Given:** [0046-no-standing-digitalocean-token-can-create-billed-resources](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) — the pipeline holds no DigitalOcean token that can create anything
    - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the pipeline builds every deployable from one install with no publish step between the rules module and its consumers, which is what [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) requires of it
+   - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the pipeline [what deploys the code?](what-deploys-the-code.md) chooses is built around whatever stop-and-start its first script happens to do, and requests in flight on the old instance fail, which the spikes observed as 39 POSTs failing with 502. Slice 4 deploys once, so nothing switches before this slice
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
 ### Working notes — temporary, and deleted as its content finds permanent homes
@@ -343,7 +343,9 @@ as vitals, alerting and diagnosing slow requests, waits for players under "Block
    no error, no crash and no complaint.
 4. [How would we verify progress is never lost?](how-would-we-verify-progress-is-never-lost.md) —
    backgrounding, tab kill and OS memory purge need real devices or an instrumented harness, and
-   until one exists the most consequential promise in the product is enforced by nothing. Beside the
+   until one exists, nothing checks that
+   [reopening restores the board in progress with notes and selection](../guarantees/reopening-restores-the-board-in-progress-with-notes-and-selection.md)
+   holds through them. Beside the
    question above: that one notices a loss in production, and this one shows before players arrive
    that none happens.
 5. [What invariants hold at runtime, and what checks them?](what-invariants-hold-at-runtime-and-what-checks-them.md)
@@ -351,16 +353,11 @@ as vitals, alerting and diagnosing slow requests, waits for players under "Block
    write is never observable" and "the board on screen always matches the board in storage" as
    candidate promises. Both are ways work is lost, and neither is checkable unless something asserts
    it where it can fail.
-6. [How is the server operated?](how-is-the-server-operated.md) — restarting it and noticing it has
-   stopped. Patching moved to slice 4 of M1 and is settled by
-   [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
-   except for alerting on a failed update, which stays here. It sits here because noticing an outage is this milestone's theme. The
-   server runs on a bare Droplet as systemd services, per
-   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), so
-   systemd restarts it and the rest is ours. Its access-and-hardening half is
-   settled at slice 4 of M1 by [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) to
-   [ADR-0059](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md),
-   because the machine is on the public internet from then.
+6. [How is the server operated?](how-is-the-server-operated.md) — noticing the server has stopped,
+   and alerting on a failed update. It sits here because noticing an outage is this milestone's
+   theme. systemd restarts the app, per
+   [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), and the
+   rest is ours.
 
 ## M12 — players arrive, and a guest's work and play are kept off the device
 

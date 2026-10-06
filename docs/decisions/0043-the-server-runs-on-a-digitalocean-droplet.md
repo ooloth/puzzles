@@ -2,6 +2,7 @@
 number: 0043
 status: accepted
 date: 2026-09-30
+amended: 2026-10-05
 ---
 
 # 0043 — The server runs on a DigitalOcean Droplet
@@ -48,6 +49,8 @@ Each line names that question's row.
     [ADR-0027](0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)).
 11. The host offers a North American region (row 19, the maintainer's working assumption about
     where the first players are).
+12. Where a lower price and a replacement ordered by hand conflict, the replacement wins: the
+    maintainer's weighing, 2026-09-30.
 
 **Maximums.** Maximum safety is a store that survives any host event without a person. Maximum
 performance is a request that crosses nothing it could avoid. Maximum experience is nothing to
@@ -84,7 +87,12 @@ inside it, in a North American region.
 
 ## Enforced by
 
-**Nothing yet.** It is true once M1 slice 4 deploys to a Droplet.
+**Nothing yet.** It is true once M1 slice 4 deploys to a Droplet. Property 6 is a capability of the
+host, not something configured: DigitalOcean's alerts read its metrics agent, whose installation is
+[how is DigitalOcean's metrics agent installed and kept updated?](../questions/how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md),
+and [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md) sets only
+the outbound-traffic alert. Which alerts on memory, disk and reachability to set is
+[what are the server's vitals and who watches them?](../questions/what-are-the-servers-vitals-and-who-watches-them.md).
 
 ## Rejected
 
@@ -122,7 +130,7 @@ inside it, in a North American region.
 - **RackNerd, $21.99 a year.** Its case is price, about a third of DigitalOcean's. It fails property 5:
   its API manages only servers that already exist, so a replacement is ordered by hand. The
   maintainer ruled on 2026-09-30 that this does not disqualify it alone, and weighed it against the
-  price. So RackNerd lost on that weighing, not on one property. Its terms also say it "is not
+  price, so it fails property 12, that weighing. Its terms also say it "is not
   responsible for data integrity, regardless of circumstance".
   **Reverses if** RackNerd offers an API to create a machine.
 - **Not yet.** Rejected because M1 slice 4 cannot deploy without a host.

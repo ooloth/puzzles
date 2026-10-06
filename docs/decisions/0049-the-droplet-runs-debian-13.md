@@ -46,6 +46,8 @@ any replication process the store's backup adds, the release's support ending, a
 7. It just works: a long record of rare bugs and regressions in the OS and its updates, so keeping
    it running needs no troubleshooting (the maintainer on 2026-10-02, above what the OS bundles; "it
    just works" in [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)).
+8. Memory, reboot length and regressions shipped outweigh a longer support window: the maintainer's
+   weighing, 2026-10-03.
 
 **Resources.** Memory binds, as property 5. CPU and network do not: every candidate used under 1% of
 the one vCPU and under 60 KB of traffic in ten idle minutes. Disk does not: the largest image used
@@ -119,8 +121,8 @@ cloud image with the same cloud-init.
 ## Rejected
 
 - **Ubuntu 24.04 LTS.** Its case is real: security support to May 2034 through Ubuntu Pro's free
-  tier, Livepatch for critical and high kernel fixes, and the largest community. No single property
-  disqualifies it. It is behind on property 5, 45 to 80 MB less memory and reboots half again as long,
+  tier, Livepatch for critical and high kernel fixes, and the largest community. No single technical
+  property disqualifies it, and it fails property 8, the maintainer's weighing. It is behind on property 5, 45 to 80 MB less memory and reboots half again as long,
   and on property 7, at least 13 regressions shipped including a snapd update that broke
   installation. Its `needrestart`, which restarts services after updates applied while the app
   serves, weighs only if updates are applied that way, and [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) forbids
@@ -133,7 +135,7 @@ cloud image with the same cloud-init.
   regressions in its first 5.3 months, while its only gain over 24.04 is two more years of support.
   **Reverses once** it has a record comparable to 24.04's.
 - **Rocky Linux and AlmaLinux 9 and 10.** They fail property 1: AlmaLinux 9 issued 62 kernel
-  advisories in the year to 2026-10-02 against Debian 13's 16, so staying patched takes about three
+  advisories in the year to 2026-10-02 against Debian 13's 16, so staying patched takes about four
   times the reboots. They also run SELinux enforcing, ship with automatic updates off, and Rocky
   reserves 192 MB for a crash kernel. **Reverses if** their kernel advisories fell to the Debian
   family's rate.
@@ -155,8 +157,8 @@ not scored. NixOS was already rejected for the arrangement in [ADR-0044](0044-th
 
 - **Kernel fixes wait for a reboot.** Without live patching, a critical kernel fix either takes an
   unscheduled reboot of about 18 seconds or waits for the next planned one unpatched. Under
-  [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) the reboot comes at the chosen hour on the day a kernel fix installs, about 20 a
-  year; what Debian gives up against Ubuntu is patching the worst kernel bugs without one.
+  [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) the reboot comes at the chosen hour on the day a kernel fix installs: 16 for kernel advisories in
+  the year to 2026-10-02, plus one for each C library update, whose number was not counted; what Debian gives up against Ubuntu is patching the worst kernel bugs without one.
 - **A shorter support window.** Long-term support ends June 2030, against 2034 for Ubuntu 24.04 under
   Ubuntu Pro, so the move to Debian 14 comes sooner.
 - **The evidence is one run per measurement.** Memory, reboot time and idle load were each read on one

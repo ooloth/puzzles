@@ -43,8 +43,10 @@ rebuild; and the local run.
    [../constraints.md](../constraints.md)).
 5. A program that later needs to reach something new is not silently refused
    ([a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md)).
-6. No account beyond DigitalOcean's can grant a shell when taken over (the portable security
-   standard's authentication rule).
+6. No account beyond those that already reach the DigitalOcean account can grant a shell when taken
+   over: today GitHub, whose sign-in admits to DigitalOcean, and 1Password, which holds GitHub's
+   passkey, per [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md);
+   and the portable security standard's authentication rule.
 7. The maintainer reaches the machine without knowing or updating anything about where they are
    (the maintainer's "it just works" in [ADR-0043](0043-the-server-runs-on-a-digitalocean-droplet.md)).
 8. The least to configure and keep working

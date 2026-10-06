@@ -91,6 +91,9 @@ name is the implementer's.
 
 - **The maintainer's key is root.** Anything that can use the key, including a process started from a
   terminal 1Password has approved, has root on the machine.
+- **This rests on a runbook step not yet taken.** [../unfinished.md](../unfinished.md) records that
+  the GitHub passkey does not exist yet, so until it does, 1Password does not yet hold the
+  DigitalOcean sign-in this record's argument relies on.
 - **A password exists on the machine.** It is refused over SSH, per
   [ADR-0057](0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md),
   and its hash is readable by any process the link-local block does not cover, per

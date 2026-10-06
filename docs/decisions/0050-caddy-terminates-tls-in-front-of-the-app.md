@@ -58,6 +58,8 @@ setup on the Mac.
     of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
 14. Hosting stays near $10 a month and under $20
     ([ADR-0045](0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md)).
+15. Property 13 outweighs the rows nginx leads on, help available, CPU per request and in-place
+    upgrades: the maintainer's weighing, 2026-10-03.
 
 **Resources.** Memory binds as property 8 and does not separate the candidates: Caddy used 47 to 51
 MB on a Droplet with about 780 MB available. Network binds as round trips, property 6. CPU does not
@@ -139,8 +141,9 @@ when it is written, because the defaults are wrong here:
 
 - **nginx with certbot.** Its case is strong: both are long established, nginx upgrades its binary in
   place, uses a few megabytes and about half Caddy's CPU per request, and has by far the most help,
-  with 54,455 Stack Overflow questions against Caddy's 367. No single property disqualifies it. It
-  is behind on property 13, the one the maintainer weighs most: two programs joined by a deploy hook,
+  with 54,455 Stack Overflow questions against Caddy's 367, a research agent's count on
+  2026-10-03. No single technical property disqualifies
+  it, and it fails property 15, the maintainer's weighing. It is behind on property 13: two programs joined by a deploy hook,
   set up in a particular order, with a longer configuration, a deploy switch written into the deploy
   script because the free edition has no active health checks, no local certificate, and, in Debian
   13's certbot 4.0.0, no second authority and no renewal information. The maintainer chose against
@@ -149,18 +152,21 @@ when it is written, because the defaults are wrong here:
   the modelled peak.
 - **nginx with its own ACME module.** It fails property 1: the module first released on 2025-08-12,
   is at 0.4.1, documents no retry or fallback, and has an open "Segfault after module setup and nginx
-  reload" (issue #140) in a design that reloads on every deploy. **Reverses when** the module reaches
+  reload" (issue #140) in a design that reloads on every deploy. *A research agent's reading on
+  2026-10-03.* **Reverses when** the module reaches
   1.0 with that fixed and a documented retry.
 - **Angie.** It fails property 13: no Stack Exchange tag, no new forum topics since June 2026, a team
-  of about ten, and no renewal information. **Reverses if** its community and ACME support grow to
+  of about ten, and no renewal information, per a research agent on 2026-10-03. **Reverses if** its community and ACME support grow to
   nginx's.
 - **HAProxy, Traefik and Envoy.** They fail property 9: none serves static files, so choosing one
   closes the front's option for the client's files. **Reverses if** the Node server is chosen to serve
   them.
 - **Apache httpd, and Node terminating TLS itself.** They fail property 6: neither has stable HTTP/3.
   **Reverses when** either ships it.
-- **freenginx, H2O, River, NGINX Unit and Varnish.** They fail property 11: no Linux packages, no
-  release in years, or archived. **Reverses** if one returns to maintained packages.
+- **freenginx, H2O, River, NGINX Unit and Varnish.** Each fails property 11, per a research agent on
+  2026-10-03: freenginx publishes no Linux packages, H2O has no tagged release since 2019, River's
+  last release is from August 2024 and says "no expectation of stability", and NGINX Unit and
+  Varnish's open-source edition are archived. **Reverses** if one returns to maintained packages.
 - **Not yet.** Rejected because M1 slice 4 serves the client and the API from one machine, so
   something has to answer HTTP and send `/api/` to the app, and TLS is needed at slice 5. Choosing
   between two instances during a deploy is needed from slice 6.

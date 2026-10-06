@@ -2,6 +2,7 @@
 number: 0046
 status: accepted
 date: 2026-09-30
+amended: 2026-10-05
 ---
 
 # 0046 — No standing DigitalOcean token can create billed resources
@@ -101,6 +102,10 @@ Asserted only.
   unlikely, not impossible.
 - **Hands-on work holds a token for its expiry period**, and a leak during it can cost what that
   token's scopes allow at the team's tier.
+- **An alert has one channel.** Property 12 asks that an alert reach the maintainer when one channel
+  fails, and [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md)
+  sends every alert to one address, by the maintainer's choice of 2026-09-30, since their mail
+  client gathers every inbox in one place. A failure of that address or that client goes unnoticed.
 - **The tier rises by itself**, so what the remaining routes can cost grows over months.
 
 ## Revisit when

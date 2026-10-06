@@ -116,6 +116,9 @@ docs as read by a research agent. Nothing checks that the key on the machine is 
 
 - **1Password is one root of trust for both the DigitalOcean account and the machine.** That was
   accepted on 2026-09-30, in the runbook, and this record leans on it.
+- **This rests on a runbook step not yet taken.** [../unfinished.md](../unfinished.md) records that
+  the GitHub passkey does not exist yet, so until it does, 1Password does not yet hold the
+  DigitalOcean sign-in this record's argument relies on.
 - **A process started from an approved terminal can use the key** until 1Password locks or the
   terminal quits, under the default approval setting.
 - **If 1Password is unavailable, so is the way in.** The way back after a lockout keeps its password

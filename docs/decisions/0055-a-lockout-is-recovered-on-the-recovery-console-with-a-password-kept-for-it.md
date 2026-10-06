@@ -36,8 +36,10 @@ and needing in; and the machine from first boot onward, since a kept password ex
    spending is prevented, not stopped).
 4. It needs no standing DigitalOcean token
    ([ADR-0046](0046-no-standing-digitalocean-token-can-create-billed-resources.md)).
-5. No account beyond DigitalOcean's can grant a shell when taken over (the portable security
-   standard's authentication rule).
+5. No account beyond those that already reach the DigitalOcean account can grant a shell when taken
+   over: today GitHub, whose sign-in admits to DigitalOcean, and 1Password, which holds GitHub's
+   passkey, per [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md);
+   and the portable security standard's authentication rule.
 6. It is written down where the maintainer will look and has been run at least once
    ([../problem.md](../problem.md)).
 

@@ -103,7 +103,7 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 
 ## Rejected
 
-- **A weekly or monthly window.** Its case is real: at most 12 reboots a year instead of about 20,
+- **A weekly or monthly window.** Its case is real: at most 12 reboots a year instead of 16 or more,
   and one predictable moment of change. It fails property 1: a critical kernel fix waits up to 7
   days under a weekly window and up to 30 under a monthly one, against about a day, or is applied by
   hand between windows. **Reverses if** an update applied as released takes
@@ -129,7 +129,8 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 - **A regression lands unrehearsed.** An update installs on the Droplet the day it is released,
   with no run in the local VM first. Undo is a downgrade from the package cache or
   `snapshot.debian.org`, by hand.
-- **About 20 reboots a year**, each about 18 seconds, at the chosen hour.
+- **16 or more reboots a year**, each about 18 seconds, at the chosen hour: 16 kernel advisories in
+  the year to 2026-10-02, plus C library updates, which were not counted.
 - **Up to a day exposed** between a fix's release and the hour.
 - **A failed run is silent** until [how is the server operated?](../questions/how-is-the-server-operated.md)
   at M11 adds alerting.

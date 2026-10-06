@@ -44,6 +44,8 @@ row in the question.
    [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)).
 6. The least for the maintainer to build, understand and keep working, weighed across years (E1 to
    E3).
+7. Where a complete deploy tool costs both memory (property 2) and a layer between the maintainer
+   and every process (property 6), those costs outweigh it: the maintainer's weighing, 2026-09-30.
 
 **Maximums.** Maximum safety is a machine with nothing on it that is not needed. Maximum performance
 is a deploy the player never notices and a machine left to the app. Maximum experience is one
@@ -96,10 +98,10 @@ time, and neither exists:
 
 - **Kamal: Docker, kamal-proxy and an image per release.** Its case is strong. It is the most
   complete tool of its kind, it supplies the deploy, the proxy and TLS, and it was observed dropping
-  nothing on the same Droplet. No single property disqualifies it. It fails property 2, using about
-  100 MB more at its peak on a machine with no swap. It also fails property 6, putting Docker and a
-  container between the maintainer and every process they debug. The maintainer chose against it on
-  those two together on 2026-09-30. **Reverses if** the server moves to a platform that runs images.
+  nothing on the same Droplet. No single technical property disqualifies it. It is behind on property 2,
+  using about 100 MB more at its peak on a machine with no swap, and on property 6, putting Docker and
+  a container between the maintainer and every process they debug, and so fails property 7, the
+  maintainer's weighing of those two together. **Reverses if** the server moves to a platform that runs images.
 - **Dokku.** It fails property 2: it builds on the server and states "1GB of system memory, or add
   swap" as its minimum, which is the whole machine. **Reverses if** the machine grows well past 1
   GB.

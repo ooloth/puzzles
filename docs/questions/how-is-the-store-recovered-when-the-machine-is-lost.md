@@ -163,4 +163,4 @@ written since was gone. The host key changed. So a rebuild reproduces what cloud
 nothing else, which is the half of recovery this question does not have to supply.
 
 *Measured, one run. Moved here on 2026-10-06 from
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*

@@ -93,4 +93,4 @@ cloud-init must not read.
 *Measured for the index, one run; the rest is a research agent's reading of DigitalOcean's metadata
 docs and systemd.resource-control(5). That no endpoint below the index holds a token was not checked.
 Moved here on 2026-10-06 from
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*

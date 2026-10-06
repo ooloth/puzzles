@@ -51,7 +51,7 @@ is installed changes.
 ## Source
 
 Raised 2026-10-06 while working
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md). The maintainer
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`). The maintainer
 asked whether rejecting DigitalOcean's Droplet agent there also removed the metrics agent. It did
 not, since they are separate programs, but reading the metrics agent's install script showed the
 conflict above.

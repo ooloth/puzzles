@@ -41,6 +41,10 @@ usually quoted.
 
 ...
 
+**Shared with the access questions.** The list in
+[what deploys the code?](what-deploys-the-code.md), derived on 2026-10-05 for reaching and
+hardening the machine, also applies here: software is installed and patched on the machine.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/) on how Node is pinned and patched.

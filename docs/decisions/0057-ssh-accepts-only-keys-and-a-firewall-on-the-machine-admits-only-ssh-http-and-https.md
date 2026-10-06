@@ -78,7 +78,7 @@ answered, a password login was refused with `Permission denied (publickey)`, and
   Droplet has an IPv6 address, depend on them. *Reasoned.*
 
 The working is in
-[how is the server reached and hardened?](../questions/how-is-the-server-reached-and-hardened.md).
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).
 
 **What it commits us to:** `nftables` installed from Debian's archive, which
 [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
@@ -90,7 +90,7 @@ drop-in.
 **What this does not settle:**
 
 - **Whether `root` can log in over SSH.** That is
-  [can root log in over SSH?](../questions/can-root-log-in-over-ssh.md).
+  [ADR-0058](0058-root-does-not-log-in-over-ssh.md).
 - **Limiting requests per client at the front**, which belongs to Caddy's configuration and to
   [how is the server operated?](../questions/how-is-the-server-operated.md).
 

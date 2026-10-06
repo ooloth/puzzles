@@ -15,8 +15,8 @@ someone when it stops answering.
 hour we set and reboots then when anything needs it. What it leaves here is noticing a failed update:
 a run that fails is silent until something alerts on it.
 
-**Getting onto the machine is a separate question.** Access, hardening and the lockout route are
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), at slice 4 of M1,
+**Getting onto the machine was a separate question.** Access, hardening and the lockout route are
+settled by [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) to [ADR-0059](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md), at slice 4 of M1,
 because the machine is on the public internet from then, and this half is needed to *survive* a
 change rather than to reach the machine at all. What is left here
 is the ongoing operation of a machine that already exists and can already be reached.
@@ -146,7 +146,7 @@ accepted and refused SSH login, console login and `sudo` command was in it. jour
 
 *Measured on a spike Droplet for the journal, one run; sourced from Debian's trixie release notes and
 journald.conf(5). Moved here on 2026-10-06 from
-[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).*
 
 **Illegitimate traffic is shed by limiting it per client at the front**, not by cutting outbound
 traffic, which [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)

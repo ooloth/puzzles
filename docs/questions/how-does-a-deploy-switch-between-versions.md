@@ -143,6 +143,10 @@ deploy time.
 
 **Own to this question.** None derived yet. They are added when this question is worked.
 
+**Shared with the access questions.** The list in
+[what deploys the code?](what-deploys-the-code.md), derived on 2026-10-05 for reaching and
+hardening the machine, also applies here: a deploy logs in and starts and stops units.
+
 
 ## Resolves into
 

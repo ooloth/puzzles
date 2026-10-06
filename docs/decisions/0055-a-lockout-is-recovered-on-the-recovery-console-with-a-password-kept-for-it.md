@@ -81,10 +81,9 @@ its disk, but only after the Droplet was powered off.
 **What this does not settle:**
 
 - **Which account holds the password, and whether `sudo` asks for it.** That is
-  [how is the server reached and hardened?](../questions/how-is-the-server-reached-and-hardened.md),
-  part D.
-- **What the firewall admits**, which a mistaken rule could lock out. That is part B of the same
-  question.
+  [ADR-0059](0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md).
+- **What the firewall admits**, which a mistaken rule could lock out. That is
+  [ADR-0057](0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md).
 
 ## Enforced by
 
@@ -127,8 +126,8 @@ password in 1Password still matches the machine, or that the procedure still wor
 ## Also update
 
 - [x] questions/README.md: slice 4 gains this record as a **Given**
-- [x] questions/how-is-the-server-reached-and-hardened.md: part C is settled here, and the working
-      stays in that file until the rest of it is settled
+- [x] questions/how-is-the-server-reached-and-hardened.md: part C is settled here; the question
+      was deleted when its last part was recorded, in [ADR-0059](0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md)'s change
 - [x] architecture.md: nothing; no code exists for it yet
 - [x] constraints.md: nothing; DigitalOcean's console and ISO behaviour is cited from the question
 - [x] guarantees/: no new promise

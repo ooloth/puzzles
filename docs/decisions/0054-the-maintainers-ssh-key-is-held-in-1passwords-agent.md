@@ -68,14 +68,13 @@ public half is on the machine.**
   terminal can also change the code the next deploy ships, so the prompt closes one route of several.
 
 The working, including a spike on a Droplet, is in
-[how is the server reached and hardened?](../questions/how-is-the-server-reached-and-hardened.md).
+how is the server reached and hardened? (read with `git show 5dc67af:docs/questions/how-is-the-server-reached-and-hardened.md`).
 
 **What this does not settle:**
 
 - **Which account the maintainer logs in as, and whether `sudo` asks for a password.** That is
-  [how is the server reached and hardened?](../questions/how-is-the-server-reached-and-hardened.md),
-  part D, and whether `root` also accepts the key is
-  [can root log in over SSH?](../questions/can-root-log-in-over-ssh.md).
+  [ADR-0059](0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md), and `root` does not log in over SSH, per
+  [ADR-0058](0058-root-does-not-log-in-over-ssh.md).
 - **The deploy's credential.** That is [what deploys the code?](../questions/what-deploys-the-code.md).
 
 ## Enforced by
@@ -132,8 +131,8 @@ docs as read by a research agent. Nothing checks that the key on the machine is 
 
 - [x] questions/README.md: slice 4 gains this record as a **Given**; its **Must answer** on access
       and hardening stays until parts B and D land
-- [x] questions/how-is-the-server-reached-and-hardened.md: part A is settled here, and the working
-      stays in that file until the rest of it is settled
+- [x] questions/how-is-the-server-reached-and-hardened.md: part A is settled here; the question
+      was deleted when its last part was recorded, in [ADR-0059](0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md)'s change
 - [x] architecture.md: nothing; no code reaches the machine yet
 - [x] constraints.md: nothing new
 - [x] guarantees/: no new promise

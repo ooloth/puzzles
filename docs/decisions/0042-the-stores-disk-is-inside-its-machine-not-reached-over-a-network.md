@@ -2,6 +2,7 @@
 number: 0042
 status: accepted
 date: 2026-09-28
+amended: 2026-10-05
 ---
 
 # 0042 — The store's disk is inside its machine, not reached over a network
@@ -94,11 +95,11 @@ two kinds of disk again.
 ## Risk
 
 **A disk inside the machine dies with it.** Fly: "Volumes are pinned to physical hosts, so when
-there's a host outage the volume is unreachable." Until the off-machine copy exists at M3, a machine
+there's a host outage the volume is unreachable." Until the off-machine copy exists at M12, a machine
 failure loses the store outright. *Sourced — Fly's
 [host unavailable](https://docs.fly.io/apps/trouble-host-unavailable/), opened 2026-09-28.* [ADR-0022](0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) already names that gap.
 
-**The argument rests on a later question.** If the M3 copy is not continuous, the balance shifts,
+**The argument rests on a later question.** If the M12 copy is not continuous, the balance shifts,
 and this record should be revisited rather than kept by default.
 
 ## Revisit when

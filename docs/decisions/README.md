@@ -353,7 +353,7 @@ only." where nothing does>
   empty exactly when people skip it.
 - **The `questions/README.md` box is the one that stops the milestone list going stale.** A record
   almost always changes what some question is asking, or which milestone needs it, or whether it
-  still needs asking at all — and nobody notices from inside the record. Two examples left over
+  still needs asking at all — and nobody notices from inside the record.
   A question whose title carries a conditional — "if there is one", "if anything" — is the clearest
   case, because the record that answers the conditional leaves the question asking something settled.
   A filename in plain prose, neither linked nor in backticks, is invisible to

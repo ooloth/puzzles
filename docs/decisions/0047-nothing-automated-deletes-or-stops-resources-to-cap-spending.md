@@ -2,6 +2,7 @@
 number: 0047
 status: accepted
 date: 2026-09-30
+amended: 2026-10-05
 ---
 
 # 0047 — Nothing automated deletes or stops resources to cap spending
@@ -49,9 +50,10 @@ Each property's source is listed in [ADR-0046](0046-no-standing-digitalocean-tok
 - Everything else, popularity included, is reported to the maintainer by the alerts in the same
   runbook, and the maintainer decides what to do.
 
-**Why reporting is enough for traffic.** Outbound transfer beyond the pool costs $0.01 per GiB. At a
-sustained 1 Gbps, which is an assumption about the Droplet's network and not a measured figure, that
-is about 10,000 GiB, or $100, a day, so $1,000 takes about ten days of ignored alerts. The traffic
+**Why reporting is enough for traffic.** Outbound transfer beyond the pool costs $0.01 per GiB. At
+DigitalOcean's documented outbound limit of 2 Gbps for a non-GPU Droplet, per
+[../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and what DigitalOcean's image brings",
+that is about 20,000 GiB, or $200, a day, so $1,000 takes about five days of ignored alerts. The traffic
 alert in the runbook fires once a high rate has lasted an hour. How soon DigitalOcean Monitoring
 delivers it after that is not documented.
 

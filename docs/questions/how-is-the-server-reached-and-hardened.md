@@ -184,8 +184,12 @@ machines, a way back that has been rehearsed, and nothing to do on a schedule.
 Property 1 is split into the conditions it stands for, because the credential candidates all pass it
 as first written:
 
-- **1a.** A copy of any file on the Mac's disk does not give a shell.
+- **1a.** Something running as the maintainer on the Mac cannot take the credential off it. Reworded
+  on 2026-10-05 from "a copy of any file on the Mac's disk does not give a shell", which a key file
+  with a strong passphrase kept nowhere passes, while the setup people actually run, with the
+  passphrase in the Keychain or an agent, does not.
 - **1b.** Whoever holds an unlocked session or the account a credential lives in cannot export it.
+  Found on 2026-10-05 to separate no candidate, in the third pass below.
 - **1c.** No account beyond the DigitalOcean account can grant a shell when it is taken over. The
   DigitalOcean account can already do so through the recovery ISO, so it adds nothing.
 
@@ -418,11 +422,18 @@ holds. Reported figures for `tailscaled` range from about 40 to 117 MB and for f
 
 **Scores.** One property named per rejection.
 
-- **A.** *Key file on disk* fails 1a. *SSH certificate* fails 13: a certificate short-lived enough to
-  matter needs a signing step before logging in, and one long-lived enough to skip it is a key.
-  *Tailscale SSH* fails 8: a rebuilt machine joins with an auth key that has expired within 90 days,
-  so a rebuild needs a new key made by hand. *1Password's agent*, *a Secure Enclave key* and *a FIDO
-  key* survive. 1Password fails 1b, where the other two pass, but the Secure Enclave and FIDO rows
+- **A.** *Key file on disk* fails 1a: anything running as the maintainer reads the file, and uses
+  the passphrase wherever the Keychain or an agent holds it. *A user certificate* is not an
+  alternative to the others but a layer on one of them, since the CA's private key has to be held
+  as a file, in 1Password or in the Secure Enclave and takes that option's verdicts. With one person
+  and one machine it adds nothing any property rewards, and fails 15 on the configuration it adds.
+  *Host* certificates are a different thing and stay open: a CA that signs the machine's host key
+  lets a rebuilt machine be trusted without a changed-key warning, which is property 18.
+  *Tailscale SSH* fails 1c: taking over the Tailscale account, or the identity provider behind it,
+  grants a shell. It was first rejected on 8, because a rebuild needs a new auth key made by hand,
+  but creating a Droplet already needs a token made by hand under
+  [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md), so
+  that step adds little. *1Password's agent*, *a Secure Enclave key* and *a FIDO key* survive. 1Password fails 1b, where the other two pass, but the Secure Enclave and FIDO rows
   are unverified for 13 and for property 4 on losing the Mac, so this part cannot finish yet.
 - **B.** *fail2ban or sshguard* fails 11: it adds a resident process for throttling `sshd` already
   does. *A non-standard port* fails 15: it is one more setting and changes no other row. *Port 22
@@ -476,3 +487,32 @@ device to carry. Property 16 covers monthly hosting, not a one-off purchase, so 
 yet weighs that cost. **Two candidates remain.** What would separate them is the maintainer's view of
 buying and carrying a key, which enters as a cited row once stated. Holding both, one as the backup,
 is a third arrangement that passes every row at the FIDO key's cost.
+
+### Third pass on part A, 2026-10-05
+
+**The maintainer objected to 1Password's rejection**: someone with access to their 1Password has
+bigger problems than this machine. The repository bears that out.
+[../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md) signs into
+DigitalOcean through GitHub, whose passkey and recovery codes are both held in 1Password, a choice
+the maintainer made on 2026-09-30. Whoever has the 1Password account therefore has the DigitalOcean
+account, and through the recovery ISO a root shell. So 1Password is already part of this machine's
+root of trust, and a key held there adds no account to 1c.
+
+**1b separates nothing, for a second reason.** One use of any credential that opens a shell can add
+a key to `authorized_keys`. So a credential that cannot be exported but is used once by the wrong
+person is as bad as one exported. 1b holds for the Secure Enclave and FIDO keys and fails for
+1Password, and the difference it records is not one the machine can feel. *Reasoned.*
+
+**Scores.** All three pass 1a, 1c and 4.
+
+- *A Secure Enclave key* fails 13 on a moment the first pass did not split out: on a new Mac it does
+  not work, and getting in again goes through the way back in part C before a new key can be added.
+  1Password's key is on the new Mac once the account is signed in.
+- *A FIDO key* ties with 1Password on every row. It would cost $29 or more, a second `ssh` ahead of
+  Apple's in `PATH`, and a device to carry, which are costs rather than properties. The maintainer has
+  no hardware key, and has not said they want one, so nothing on the list is a reason to take it.
+- *1Password's agent* remains.
+
+**Reversed if** 1Password stops holding the DigitalOcean sign-in, since 1c would then count it as a
+second account that can grant a shell; or if the maintainer decides to buy and carry a FIDO key,
+which would enter as a stated row.

@@ -598,3 +598,70 @@ gone. The host key changed.
   run.
 - **D.** The kept console password has to sit on an account: `root` itself, or a named user. If it
   is a named user, `sudo` either asks for it or does not. Scored next.
+
+### Part D, 2026-10-06
+
+**The candidates**, now that the way back is a password kept for the Recovery Console:
+
+- *D1.* `root` holds the console password, and the maintainer logs in over SSH as `root`.
+- *D2.* A named user holds it, and its `sudo` asks for nothing.
+- *D3.* A named user holds it, and its `sudo` asks for it, typed from the 1Password item that holds
+  it.
+- *D3a.* As D3, but `sudo` is authorised through the 1Password agent by `pam_ssh_agent_auth`, so the
+  second check is a Touch ID prompt.
+- *D3b.* As D3, but the password is fed to `sudo -S` from `op read`, the 1Password CLI, which asks
+  for Touch ID.
+
+**What the sources establish.** *Opened:*
+
+- A signature through a forwarded agent rides on the approval given at login: "any new connection
+  made within the remote environment using the same key is also authorized"
+  ([1Password, agent forwarding](https://developer.1password.com/docs/ssh/agent/forwarding/)).
+  Only the setting "For each new request" asks every time, and it is offered beside the default as
+  the agent's approval setting
+  ([authorization](https://developer.1password.com/docs/ssh/agent/authorization/)), so it would
+  apply to every SSH and Git request on the Mac. That it cannot be set for one key is an agent's
+  reading.
+- `libpam-ssh-agent-auth` in Debian 13 is version 0.10.3-11, maintained by the "Debian QA Group"
+  ([packages.debian.org](https://packages.debian.org/trixie/libpam-ssh-agent-auth)). An agent read
+  upstream's last release as 0.10.4 in July 2020, and found the Rust rewrite, `pam-ssh-agent`, not
+  packaged by Debian.
+- Debian builds `sudo` with `--with-timeout=15`, so it asks again after 15 minutes, per terminal
+  ([debian/rules](https://sources.debian.org/data/main/s/sudo/1.9.16p2-3+deb13u2/debian/rules)).
+- *Agent's reading, not opened:* `op read` asks for Touch ID once per terminal tab and then keeps a
+  10-minute session that refreshes on use, and `sudo -S` over `ssh -t` with a pipe is untested.
+
+**What a second check would guard against.** The third pass found 1Password already holds the
+DigitalOcean sign-in, so a second check adds nothing against someone who has the 1Password account.
+What is left is something running as the maintainer on the Mac that uses an SSH session 1Password
+has already approved. D3 and D3b do not stop it: it can read a typed password as it is typed or
+pasted, and can call `op read` inside a tab already authorised. D3a with "For each new request"
+does stop it, since its `sudo` would raise a Touch ID prompt the maintainer did not expect. So the
+same setting, used without D3a, already stops it at login: every SSH connection asks for Touch ID,
+and a session that was never approved has nothing to ride on.
+
+**Added in this pass.** *19. Safety.* Nothing added to the path that authorises root is a package
+nobody actively maintains. Per [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)
+and the portable security standard's Should that dependencies are well maintained. A flaw in a
+module that authorises `sudo` is a route to root.
+
+**Scores.**
+
+- *D3a* fails 19: its module is maintained only by Debian's QA group, with upstream's last release in
+  2020.
+- *D3* and *D3b* fail 13: each `sudo`, or each 15 minutes of them, needs a password found in
+  1Password, and neither stops the one case a second check is for, as above.
+- *D1* fails 4 on a moment the spike observed: resetting the root password, which DigitalOcean's own
+  docs offer for a lockout, expired `root`'s password, and every key login as `root` then failed
+  until the password was changed on the console. Under D2 that click leaves the normal login alone.
+- *D2* survives. Its `sudo` commands are also recorded in the journal by user and terminal, as
+  observed. Its password reaches the machine as a hash in cloud-init user-data, which every process
+  there can read from `169.254.169.254`, per the first pass, so property 6 asks that the password be
+  long and random, as 1Password generates it, and that the app's unit block link-local addresses.
+  That a generated password's hash resists cracking is reasoned, not measured.
+
+**One choice this leaves to the maintainer**, and it is about the Mac rather than the server: whether
+1Password's agent asks "For each new request". It is the only arrangement found that stops something
+running as the maintainer from riding an approved session, and its cost is a Touch ID prompt for
+every SSH connection and every `git` push or pull over SSH. That is a stated preference, not a
+property this list can settle.

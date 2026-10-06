@@ -50,7 +50,157 @@ four items above are ours, and the question is fully scoped.
 
 ## Properties the answer is scored against
 
-...
+Derived on 2026-10-05, before any option was researched. Three other questions share moments with
+this one, and score against this list as well as their own when they are worked:
+[what deploys the code?](what-deploys-the-code.md) shares a deploy logging in;
+[how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md) shares a
+deploy starting and stopping units; and
+[is Node installed on the host or carried in each release?](is-node-installed-on-the-host-or-carried-in-each-release.md)
+shares software being installed and patched. Whether any of them is an input to this one is read off
+the scored grid, not from this list.
+
+The moments are: the Droplet created from `debian-13-x64` with cloud-init by the maintainer holding
+a short-lived token, on the public internet from its first boot; scanners probing every port of its
+address from then on; the maintainer opening a shell from their Mac to read a log, confirm what
+shipped or run a check by hand; the maintainer needing in from another machine, or after the Mac is
+lost or replaced; a deploy logging in, writing a release and starting and stopping units; a change
+to SSH or the firewall that locks every network route out; the daily update installing a new OpenSSH
+or kernel and the machine rebooting at the hour; the app compromised through a request and running
+code as its own user; a credential leaking; the machine rebuilt from nothing, including the move to
+Debian 14 before mid-2030; the production-like local run booting the same image and cloud-init; the
+maintainer coming back after months away and needing in during an incident; and logs accumulating.
+
+**Ways a bad answer fails.** *Safety:* someone else gets a shell; the machine is exposed with a
+default or weaker configuration for some window after it boots; a lockout leaves no way back; a
+leaked credential keeps working and nobody knows; a compromised app reaches root, other units or a
+secret; a rebuilt or local machine is silently less hardened than the live one; the disk fills; a
+compromised machine sends traffic that bills. *Performance:* a defence holds memory the app needs on
+a machine with no swap; the reboot that every kernel fix needs gets longer. *Experience:* getting in
+takes steps or knowledge the maintainer has to remember; the way back after a lockout is unknown or
+untried when it is needed; access works only from one device; the configuration is spread across
+places that drift.
+
+**Safety**
+
+1. Nobody but the maintainer, and a deploy acting for them, can open a shell or run a command on the
+   machine. It holds the last copy of a player's work, per
+   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and
+   [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md),
+   and the portable security standard requires authentication at every protected boundary.
+2. No route in can be opened by guessing a password or using a default, at any instant from first
+   boot onward, including before cloud-init has finished. A compromised machine's traffic bills at
+   $0.01 per GiB, and [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+   prevents illegitimate spending rather than stopping it.
+3. From the internet, only the ports the system needs accept connections: 80 and 443 for Caddy,
+   which fronts the app per [ADR-0050](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md),
+   and whatever route in the answer keeps. The app's own port is not reachable from outside.
+4. A lockout from every network route has a way back that does not need the network route. Either
+   it recovers the machine in place, or it rebuilds it without losing the store, which
+   [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md)'s property 5 and
+   [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)
+   require of a lost machine anyway.
+5. A credential that leaks reaches only what its holder needs, and can be revoked without revoking
+   the others. A deploy's credential cannot do everything the maintainer's can. From least privilege
+   in the portable security standard, and what a credential reaches is every player's work, per
+   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
+6. Code running as the app's user reaches neither root, nor another unit, nor a secret on the
+   machine. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)
+   already sandboxes the unit with `ProtectSystem=strict` and write access only to the store's
+   directory, so this row scores only what the answer adds or removes.
+7. Every login, successful or refused, leaves a record on the machine that the maintainer can read
+   afterwards. From the portable decision-making standard's maximum safety, a system that cannot go
+   wrong without noticing. Being *told* of a login is deferred, below.
+8. A rebuilt machine and the production-like local run carry the same access configuration as the
+   live machine, from the same cloud-init, with no step by hand. Per
+   [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md), which boots the same cloud-init
+   locally,
+   [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
+   and [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
+   whose configuration the local run also carries.
+9. Nothing this answer configures can fill the disk. A full disk fails the store's writes, per
+   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
+10. Nothing this answer adds needs a standing DigitalOcean token that can create resources, per
+    [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md). A
+    recovery route that needs one fails this row.
+
+**Performance**
+
+11. Nothing added for defence holds memory the app needs. The machine has 961 MB and no swap, and
+    the app peaked at 373 MB, per
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and
+    [../constraints.md](../constraints.md).
+12. Nothing added lengthens the reboot after a kernel fix by more than seconds. Each such reboot is
+    an outage, and [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md) chose Debian 13 partly
+    for its 18-second reboot.
+
+**Experience**
+
+13. The maintainer reaches the machine with one command from any machine they work on, knowing
+    nothing beyond its name. From the portable decision-making standard's maximum experience, and the
+    maintainer's stated aims for hosting in
+    [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md): "it just works" and
+    "it's so easy".
+14. The way back after a lockout is written down where the maintainer will look, and has been run
+    at least once, so it can be followed after months away. Per [../problem.md](../problem.md),
+    which expects years of active attention, and this question's own **Resolves into**.
+15. The access configuration lives in one place in the repository, and changing it is one edit that
+    the local run rehearses before it reaches the Droplet. Per
+    [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
+    and [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).
+16. Hosting stays near $10 a month and under $20, per
+    [ADR-0045](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md).
+    Anything paid for here counts against it.
+
+**Checked and already owed elsewhere.** The DigitalOcean account can reset, rebuild, open a console
+on or destroy the machine, so its sign-in is a route onto the machine. That it resists takeover is
+property 3 of [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md),
+kept by [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md). No
+candidate here buys it, so it separates none.
+
+**Deferred.** Being alerted to a login, a refused login or a failed check belongs to
+[how is the server operated?](how-is-the-server-operated.md) at M11, where alerting on a failed update
+is already placed by
+[a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
+Property 7 keeps the record that alerting would read. Secrets the running app holds arrive at M12
+with [how do secrets reach the running system?](how-do-secrets-reach-the-running-system.md); M1 has
+none.
+
+**Resources.** Memory binds, in property 11. Storage binds through logs, in property 9. CPU does not
+bind: refusing or rejecting scanners' connections is small work next to serving the app's own
+requests. That is reasoned, not measured. Network does not bind as
+a cost: a login is one connection. A deploy driven from the Mac over the internet has not been
+measured, per [how does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md),
+and is measured when this is worked, not used as a property.
+
+**Maximums.** *Safety:* only the maintainer and a weaker deploy credential can get in. No credential
+works if it is copied off the device that holds it. Every login is recorded. Losing any one device or
+credential still leaves a way in, and the lost one is revoked in one step. There is no instant when
+the machine runs a weaker configuration than the one in the repository. *Performance:* defence costs
+the app no memory and the reboot no time. *Experience:* one command from any of the maintainer's
+machines, a way back that has been rehearsed, and nothing to do on a schedule.
+
+**Added in the first pass, 2026-10-05**
+
+Property 1 is split into the conditions it stands for, because the credential candidates all pass it
+as first written:
+
+- **1a.** A copy of any file on the Mac's disk does not give a shell.
+- **1b.** Whoever holds an unlocked session or the account a credential lives in cannot export it.
+- **1c.** No account beyond the DigitalOcean account can grant a shell when it is taken over. The
+  DigitalOcean account can already do so through the recovery ISO, so it adds nothing.
+
+And two properties from moments the first list did not cover:
+
+17. *Safety.* Getting back in after a lockout does not stop the app. While the machine is down nobody
+    starts a puzzle they have not already got, per
+    [nobody can start today's puzzle](../failure-modes/nobody-can-start-todays-puzzle.md) and "Where
+    a player waits" in [../problem.md](../problem.md). A lockout from SSH leaves the app serving, so
+    only the way back can take it down.
+18. *Safety.* The machine's host key is known to the person or deploy connecting before they trust
+    it, including after a rebuild, which gives the machine a new host key. From the portable security
+    standard's authentication rule, applied in the other direction. A research agent raised it on
+    2026-10-05. It bears mostly on deploys, and is scored with
+    [what deploys the code?](what-deploys-the-code.md).
 
 ## Resolves into
 
@@ -70,7 +220,38 @@ and stays where it was.
 
 ## Options
 
-...
+Enumerated on 2026-10-05 by a research agent asked for the whole field, plus the candidates already
+here. The question splits into parts a reasonable person could answer differently, so each part
+lists its own options. How many records the answer becomes is decided once it is scored.
+
+**A. What the maintainer's credential is.** A key file in `~/.ssh` on the Mac. A key held by
+1Password's SSH agent. An SSH certificate from a CA the maintainer holds. A key bound to the Mac's
+Secure Enclave, for example through the Secretive app. A FIDO key (`ed25519-sk`) on a hardware
+authenticator the maintainer would have to buy. Tailscale SSH, where Tailscale's identity provider
+login replaces the key.
+
+**B. What the internet can reach.** `sshd` on port 22 open to everyone, with key-only login and
+DigitalOcean's Cloud Firewall admitting only 22, 80 and 443. The same, with fail2ban or sshguard
+added. Port 22 admitted only from the maintainer's current address. Port 22 closed to the internet,
+with SSH reached through a tunnel: Tailscale, plain WireGuard, or Cloudflare Tunnel with Access. A
+non-standard port.
+
+**C. The way back after a lockout.** Boot the recovery ISO from the control panel. Reset the root
+password from the control panel and log in on the Recovery Console. Keep a local password, held in
+1Password, for the Recovery Console. Rebuild the machine from cloud-init. Keep a second, independent
+network route. A snapshot taken in advance.
+
+**D. Which account the maintainer logs in as.** `root` directly. A named user with `sudo` and no
+password. A named user whose `sudo` asks for a password.
+
+**E. Whether DigitalOcean's Droplet agent stays on the machine.** Kept, which gives the Droplet
+Console. Removed, or never installed.
+
+**F. The deploy's credential.** The maintainer's own login while deploys are by hand, or a separate
+key restricted with `authorized_keys` options and limited `sudo` or polkit rules. This part is
+shared with [what deploys the code?](what-deploys-the-code.md).
+
+*Not yet* is not an option for A to D: the Droplet is on the internet from slice 4.
 
 ## Findings
 
@@ -155,6 +336,12 @@ chose, running the systemd services of
 
 *The three entries above moved here 2026-09-30 from the hosting-account question.*
 
+**The maintainer works from one machine, a MacBook Air, uses 1Password, and has no hardware security
+key.** So "any machine they work on" in property 13 is one machine today, and losing it is the case
+property 4 has to survive.
+
+*Stated by the maintainer, 2026-10-05.*
+
 **DigitalOcean has two browser consoles, and only one of them works when SSH does not.** The Droplet
 Console "connects to Droplets using the network, like other SSH-based clients", and it fetches keys
 from `169.254.169.254`, so it fails where SSH or outbound traffic to that address is blocked. The
@@ -165,3 +352,127 @@ set for any user has no console route back after a lockout.
 *Sourced: read from the raw HTML of
 [connect with console](https://docs.digitalocean.com/products/droplets/how-to/connect-with-console/),
 2026-10-05.*
+
+### First pass, 2026-10-05
+
+Five research agents worked the field and the properties on 2026-10-05. Quotes marked *opened* were
+read from the raw page by me; the rest are an agent's reading. Nothing below was run on a Droplet.
+
+**What the sources establish**
+
+- **The recovery ISO needs no password set on the Droplet.** It boots a rescue system, mounts the
+  disk under `/mnt` and offers a shell and a chroot. "Root Password has randomly been set to:" is
+  shown on the console, and "Any SSH keys added to the Droplet at the time it was created are
+  automatically imported into the recovery ISO." It is started from the control panel by powering
+  the Droplet down. *Opened:
+  [recovery ISO](https://docs.digitalocean.com/products/droplets/how-to/recovery/recovery-iso/).*
+- **Resetting the root password from the control panel emails a temporary password**, which must be
+  changed at first login: "You will receive an email containing the Droplet's temporary password."
+  It does not turn on password login over SSH. Whether it power-cycles the Droplet is not documented.
+  *Opened:
+  [Recovery Console](https://docs.digitalocean.com/products/droplets/how-to/recovery/recovery-console/);
+  the SSH point is an agent's reading of
+  [lost SSH key](https://docs.digitalocean.com/support/i-lost-the-ssh-key-for-my-droplet/).*
+- **The Droplet Console is not a way back.** It needs `sshd` running and reachable through every
+  firewall. *Agent's reading of
+  [connect with console](https://docs.digitalocean.com/products/droplets/how-to/connect-with-console/).*
+- **The Droplet agent is installed by default, runs as root, edits `authorized_keys` from the
+  account's keys, and is built only for amd64.** "You cannot currently opt out of installing the
+  Droplet agent when creating a Droplet using the control panel"; the API takes
+  `"with_droplet_agent":false`. Its README: "The only supported GOARCH is `amd64`", so the arm64
+  local run cannot carry it. *Opened:
+  [manage agent](https://docs.digitalocean.com/products/droplets/how-to/manage-agent/) and the
+  [agent README](https://github.com/digitalocean/droplet-agent). That it runs as root and edits
+  `authorized_keys` is an agent's reading of its unit file and changelog.*
+- **1Password's agent keeps the key off disk, and the key can still be exported.** "Your private
+  keys never leave 1Password, are never stored locally, and are never used without your consent",
+  and "You can export a private SSH key from 1Password at any time." *Opened:
+  [agent security](https://developer.1password.com/docs/ssh/agent/security/) and
+  [manage keys](https://developer.1password.com/docs/ssh/manage-keys/).*
+- **OpenSSH on Debian 13 throttles failed logins by itself.** "Penalties are enabled by default"
+  (`PerSourcePenalties`), refusing a source for a period after repeated failures. *Opened: Debian
+  trixie's [sshd_config(5)](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html).*
+- **Debian 13 removed `last`, `lastb` and `lastlog`.** "The util-linux package no longer provides
+  the last or lastb commands." Logins are recorded in the journal; an agent read Debian's systemd
+  package as making the journal persistent on new installs, not checked on DigitalOcean's image.
+  *Opened: [trixie release notes, 5.1.9](https://www.debian.org/releases/trixie/release-notes/issues.html).*
+- **Tailscale SSH leaves `sshd` alone, and an auth key expires within 90 days.** "Your SSH
+  configuration … will not be modified, which means that other SSH connections to the same host,
+  not made over Tailscale, will still work." "You can choose the number of days, between 1 and 90
+  inclusive." *Opened: [Tailscale SSH](https://tailscale.com/kb/1193/tailscale-ssh) and
+  [auth keys](https://tailscale.com/kb/1085/auth-keys).*
+- **Anything in cloud-init user-data is readable by every process on the machine**, from
+  `169.254.169.254`, with no authentication described. systemd's `IPAddressDeny=link-local` on a
+  unit is documented to block that. *Agent's reading of DigitalOcean's metadata reference and
+  systemd.resource-control(5); not run.*
+- **A stock Debian 13 `sshd` allows password login**; DigitalOcean's image turns it off through a
+  cloud-init drop-in, `50-cloud-init.conf`. *Agent's reading of Debian's `sshd_config` and
+  DigitalOcean's lost-key page.*
+
+**Unknowns that only a Droplet can settle:** whether `sshd` listens before cloud-init writes its
+drop-in, and whether any account has a password at that moment; whether a rebuild re-runs the
+original user-data, which only a 2019 community comment says; which datasource and vendor-data
+`debian-13-x64` uses; whether the journal is persistent there; and the memory any added daemon
+holds. Reported figures for `tailscaled` range from about 40 to 117 MB and for fail2ban up to
+400 MB, none with a method.
+
+**Scores.** One property named per rejection.
+
+- **A.** *Key file on disk* fails 1a. *SSH certificate* fails 13: a certificate short-lived enough to
+  matter needs a signing step before logging in, and one long-lived enough to skip it is a key.
+  *Tailscale SSH* fails 8: a rebuilt machine joins with an auth key that has expired within 90 days,
+  so a rebuild needs a new key made by hand. *1Password's agent*, *a Secure Enclave key* and *a FIDO
+  key* survive. 1Password fails 1b, where the other two pass, but the Secure Enclave and FIDO rows
+  are unverified for 13 and for property 4 on losing the Mac, so this part cannot finish yet.
+- **B.** *fail2ban or sshguard* fails 11: it adds a resident process for throttling `sshd` already
+  does. *A non-standard port* fails 15: it is one more setting and changes no other row. *Port 22
+  from the maintainer's address only* fails 13: each change of address is an edit in the control
+  panel before logging in. *A tunnel* fails 1c: the tunnel's own account, Tailscale's identity
+  provider or Cloudflare, can grant a shell. *Port 22 open, key-only, behind the Cloud Firewall*
+  survives.
+- **C.** *Rebuilding* fails 17: it replaces the machine. *A second network route* fails 1c for the
+  same reason as a tunnel. The recovery ISO fails 17 as well, since it powers the machine down, but
+  it is the only route that works when the disk is full or PAM is broken, so it stays as the
+  fallback rather than the route. *Resetting the root password* and *a kept console password*
+  survive. If the reset does not power-cycle the machine, the reset needs no secret kept anywhere.
+  That is the spike.
+- **D.** Not scored yet. A password asked by `sudo` would also be the console password in C.
+- **E.** *Kept* fails 8: the local run is arm64 and cannot carry it. *Removed* survives.
+- **F.** Not scored here. While the maintainer deploys by hand there is no second credential, and
+  [what deploys the code?](what-deploys-the-code.md) scores the rest.
+
+**No unsettled question changes any verdict above**, on this reading: a deploy from a hosted runner
+reaches port 22 with a restricted key, whatever F decides, so F is not an input to A to E.
+
+### Second pass on part A, 2026-10-05
+
+A research agent read the three surviving credentials' sources and the man pages on the maintainer's
+Mac, which runs macOS 26.6.2 with Apple's OpenSSH 10.3p1.
+
+- **A Secure Enclave key cannot be exported or backed up.** Secretive's README: "If you protect your
+  keys with the Secure Enclave, it's impossible to export them, by design", and "they are not able to
+  be backed up, and you will not be able to transfer them to a new machine." Its keys are
+  `ecdsa-sha2-nistp256`, which `sshd` accepts as shipped. It can require Touch ID or the login
+  password for each use. It is free, maintained by one person, last released 2026-09-21, and runs its
+  own agent. *Opened: the [README](https://github.com/maxgoedjen/secretive). The rest is the agent's
+  reading of its source and releases.* Apple also ships an `sc_auth` command that creates
+  non-exportable Secure Enclave identities and an `ssh-keychain.dylib` that may expose them to `ssh`,
+  but no Apple document describes that use and it was not tried.
+- **1Password's agent supports only Ed25519 and RSA keys**, and has no non-exportable option.
+  *Opened: [1Password SSH agent](https://developer.1password.com/docs/ssh/agent/).* Restoring it on
+  a new Mac needs the account password and the Secret Key. *An agent's reading of 1Password support.*
+- **A FIDO key needs hardware and a second `ssh`.** Apple's `ssh` has no built-in USB support for
+  FIDO: `ssh-keygen -t ed25519-sk` printed `No FIDO SecurityKeyProvider specified` on the Mac, so it
+  needs Homebrew's OpenSSH ahead of Apple's in `PATH`. Yubico lists its FIDO-only Security Key
+  "From $29 USD". Each use needs a touch. *Observed on the Mac and read from yubico.com by the agent.*
+- **Two credentials in two agents** need `IdentityFile` and `IdentitiesOnly` per host, since `sshd`
+  allows six attempts by default. *Agent's reading of `ssh_config(5)` and 1Password's docs.*
+
+**Scores.** *1Password's agent* fails 1b. *A Secure Enclave key* and *a FIDO key* both pass 1a, 1b,
+1c and 4. They differ on two moments, and neither difference fails a property outright. A Secure
+Enclave key is lost with the Mac, so replacing the Mac goes through the way back in part C before a
+new key can be added. A FIDO key survives the Mac, and costs $29 or more, a second `ssh`, and a
+device to carry. Property 16 covers monthly hosting, not a one-off purchase, so nothing on the list
+yet weighs that cost. **Two candidates remain.** What would separate them is the maintainer's view of
+buying and carrying a key, which enters as a cited row once stated. Holding both, one as the backup,
+is a third arrangement that passes every row at the FIDO key's cost.

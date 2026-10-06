@@ -449,6 +449,15 @@ holds. Reported figures for `tailscaled` range from about 40 to 117 MB and for f
   That is the spike.
 - **D.** Not scored yet. A password asked by `sudo` would also be the console password in C.
 - **E.** *Kept* fails 8: the local run is arm64 and cannot carry it. *Removed* survives.
+  *Re-filed on 2026-10-06:* 8 cannot be the reason, because DigitalOcean's metrics agent cannot run
+  in the local run either and is kept, per
+  [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md). The
+  reason that holds is
+  [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md):
+  the agent's README says "Hourly package update checks are handled by `droplet-agent-update.timer`",
+  so its software changes outside the one daily hour. That timer is read from the README, not
+  observed, since the spike created its Droplet without the agent. Its one benefit, the Droplet
+  Console, needs a working `sshd`, so it is no way back after a lockout.
 - **F.** Not scored here. While the maintainer deploys by hand there is no second credential, and
   [what deploys the code?](what-deploys-the-code.md) scores the rest.
 
@@ -665,3 +674,58 @@ module that authorises `sudo` is a route to root.
 running as the maintainer from riding an approved session, and its cost is a Touch ID prompt for
 every SSH connection and every `git` push or pull over SSH. That is a stated preference, not a
 property this list can settle.
+
+### Second pass on part B, with outbound traffic, 2026-10-06
+
+The first pass scored only DigitalOcean's Cloud Firewall and never a firewall on the machine itself,
+though the field listed one. This pass scores both, and adds outbound traffic, which no pass had
+covered.
+
+**What the sources establish.** *Opened, from DigitalOcean's docs:*
+
+- "If no outbound rules are configured, no outbound traffic is permitted." A firewall created in the
+  control panel starts with rules that permit all outbound traffic
+  ([configure rules](https://docs.digitalocean.com/products/networking/firewalls/how-to/configure-rules/),
+  [create](https://docs.digitalocean.com/products/networking/firewalls/how-to/create/)).
+- "SMTP ports 25, 465, and 587 are blocked on all Droplets", and a non-GPU Droplet's outbound
+  throughput is limited to 2 Gbps
+  ([Droplet limits](https://docs.digitalocean.com/products/droplets/details/limits/)).
+- The Cloud Firewall "is a separate firewall from any firewall software running on a Droplet …
+  ensure that the rules between the two firewalls do not conflict" (configure rules, read by a
+  research agent on 2026-10-05).
+
+**Added in this pass.**
+
+20. *Safety.* A filtering rule holds even when root on the machine is taken over. Root can rewrite
+    a firewall on the machine and cannot touch one outside it. From the portable decision-making
+    standard's maximum safety, and what a compromised machine costs under
+    [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md).
+21. *Safety.* A program that later needs to reach something new is not silently refused. A refused
+    download is the case
+    [a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md)
+    describes: Debian's daily run logs it at debug level and carries on.
+
+**Outbound.** *Left open* passes 21 and 15. *Limited to the ports the machine uses*, DNS, time, and
+HTTP and HTTPS for apt, certificates and the metrics agent, fails 21: anything added later on
+another port is refused with nothing reporting it. Its benefit, weighed net of what the system
+already owes, is small: DigitalOcean already blocks mail, and HTTPS has to stay open, so a
+compromised machine could still send at the full 2 Gbps that
+[ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)'s
+alert exists to report. *Reasoned.* So outbound stays open, and 20 has nothing left to separate for
+outbound traffic.
+
+**Inbound.** With outbound open, 20 bears only on inbound, where whoever has root already has
+everything, so it separates nothing there either.
+
+- *The Cloud Firewall alone* fails 15: its rules live in DigitalOcean rather than in the repository's
+  setup, and the production-like local run cannot rehearse them, so a mistaken rule, one that closes
+  443 say, first shows up on the live machine.
+- *Both* fails 15 too: the rules live in two places, which DigitalOcean's own docs warn can conflict.
+- *A firewall on the machine*, an `nftables` ruleset written by cloud-init, passes 3, 8 and 15: the
+  same file runs on the rebuilt machine and in the local run. A mistaken rule that locks SSH out is
+  recovered on the Recovery Console, which the spike rehearsed. It holds no resident process, so 11
+  holds. *Reasoned; `nftables` is Debian's packet filter, and whether the image ships it installed
+  was not checked.* It survives.
+
+**Not checked:** whether `ufw`, a front end over the same filter, would differ on any row. It adds a
+Python tool to configure the same rules, so it is not expected to.

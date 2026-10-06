@@ -79,3 +79,18 @@ credential and removed nothing else. What a secret is and how it travels is a se
 store shape makes.
 
 *Reasoned — 2026-09-02.*
+
+**Anything in cloud-init user-data is readable by every process on the Droplet.** DigitalOcean's
+metadata service at `169.254.169.254` serves `user-data` with no authentication described. On a
+spike Droplet on 2026-10-06 its index listed `id`, `hostname`, `user-data`, `vendor-data`,
+`public-keys`, `region`, `interfaces/`, `dns/`, `floating_ip/`, `reserved_ip/`, `tags/`, `features/`
+and `virtual_ips/`, none of them a token. systemd's `IPAddressDeny=link-local` on a unit is documented
+to block a unit from reaching it, and
+[ADR-0055](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md)
+sets it on the app's unit. So user-data is not a place for a secret that a process other than
+cloud-init must not read.
+
+*Measured for the index, one run; the rest is a research agent's reading of DigitalOcean's metadata
+docs and systemd.resource-control(5). That no endpoint below the index holds a token was not checked.
+Moved here on 2026-10-06 from
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*

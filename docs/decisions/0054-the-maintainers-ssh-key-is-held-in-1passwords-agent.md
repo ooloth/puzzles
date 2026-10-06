@@ -82,8 +82,11 @@ The working, including a spike on a Droplet, is in
 
 **Nothing yet.** It is true once M1 slice 4 creates the Droplet with this key's public half attached.
 [../../CONTRIBUTING.md](../../CONTRIBUTING.md) gains the `IdentityAgent` line that points `ssh` at
-1Password's agent when slice 4 adds the section on reaching the machine. Nothing checks that the key
-on the machine is the one in 1Password.
+1Password's agent when slice 4 adds the section on reaching the machine, with `IdentityFile` naming
+the key's public half and `IdentitiesOnly yes`: `sshd` allows six attempts by default, and an agent
+offering more keys than that is refused with "Too many authentication failures", per 1Password's
+docs as read by a research agent. Nothing checks that the key on the machine is the one in
+1Password.
 
 ## Rejected
 

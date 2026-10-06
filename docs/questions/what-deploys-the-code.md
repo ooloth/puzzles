@@ -116,3 +116,32 @@ script was shell.
 
 *Moved here 2026-10-02 from the hosting question's open entry, read with
 `git show ed7f54e:docs/questions/where-does-this-run.md`.*
+
+**What a deploy can be given to log in with, if it is not the maintainer's own login.** A key in
+`authorized_keys` can carry `restrict`, which disables "port, agent and X11 forwarding, as well as
+disabling PTY allocation and execution of ~/.ssh/rc", and `command=`, which runs a fixed command
+"whenever this key is used for authentication", with the requested one in `SSH_ORIGINAL_COMMAND`.
+`sudo` can be limited to named `systemctl` commands, where wildcards in arguments are a known hazard,
+and polkit can allow one user to manage named units through `org.freedesktop.systemd1.manage-units`,
+whose rules see the unit and the verb. A non-root user that controls the services is still close to
+root. Kamal defaults to SSH as `root`, which is moot with no Kamal.
+
+*Sourced by research agents on 2026-09-30 and 2026-10-05 from sshd(8), the systemd policy file and a
+systemd mailing-list answer; not run. Moved here on 2026-10-06 from
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md), which left the
+deploy's credential to this question. Whether `root` can log in at all is
+[can root log in over SSH?](can-root-log-in-over-ssh.md), and it decides whether a deploy logging in
+as `root` behind a forced command stays a candidate.*
+
+**A rebuilt machine has a new host key, and so does the recovery ISO.** On a spike Droplet on
+2026-10-06, the rebuild gave the machine a new host key, and the recovery ISO's rescue system
+answered with a host key of its own, so SSH warned "REMOTE HOST IDENTIFICATION HAS CHANGED". A deploy
+that trusts whatever key it meets first can be pointed at the wrong machine, and one that pins the
+key breaks on every rebuild. A CA that signs the machine's host key would let the Mac and a deploy
+trust a rebuilt machine without a warning, but the CA's key, or the host's own private key, would
+have to reach the machine somehow, and anything in cloud-init user-data is readable by every process
+there.
+
+*Measured for the host keys, one run; reasoned for the rest. Moved here on 2026-10-06 from the
+hardening question, where it was property 18: "the machine's host key is known to the person or
+deploy connecting before they trust it, including after a rebuild".*

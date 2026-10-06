@@ -155,3 +155,12 @@ with "a maximum of 3 triggers" and no charge "during private preview but this is
 *Moved here 2026-09-30 from the hosting-account question, where they were weighed for a kill switch
 that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
 rejected.*
+
+**A rebuild from the control panel runs the original user-data again.** On a spike Droplet on
+2026-10-06, a rebuild onto `debian-13-x64` booted on the same address, and within about 20 seconds
+the user and files from the original user-data were back with new timestamps, while everything
+written since was gone. The host key changed. So a rebuild reproduces what cloud-init configures and
+nothing else, which is the half of recovery this question does not have to supply.
+
+*Measured, one run. Moved here on 2026-10-06 from
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*

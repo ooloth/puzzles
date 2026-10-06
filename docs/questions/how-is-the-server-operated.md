@@ -137,3 +137,21 @@ architecture, contained no backup or restore procedure.** Somebody described cra
 survival and three separate SSH-lockout recovery routes and omitted the step protecting a player's
 work. That is the shape of the risk here: no single task is hard, and the list is long enough that
 something falls off it.
+
+**On Debian 13, logins are read from the journal.** Debian 13 removed `last`, `lastb` and `lastlog`:
+"The util-linux package no longer provides the last or lastb commands". On a `debian-13-x64` Droplet
+on 2026-10-06 there was no `rsyslog` and no `/var/log/auth.log`, the journal was persistent, and every
+accepted and refused SSH login, console login and `sudo` command was in it. journald caps itself at
+10% of the disk, at most 4G, when `SystemMaxUse` is unset, per Debian's journald.conf(5).
+
+*Measured on a spike Droplet for the journal, one run; sourced from Debian's trixie release notes and
+journald.conf(5). Moved here on 2026-10-06 from
+[how is the server reached and hardened?](how-is-the-server-reached-and-hardened.md).*
+
+**Illegitimate traffic is shed by limiting it per client at the front**, not by cutting outbound
+traffic, which [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+rejects because it stops the site.
+
+*Reasoned, 2026-09-30. Moved here on 2026-10-06 from the hardening question, which
+[ADR-0057](../decisions/0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md)
+answered without settling it.*

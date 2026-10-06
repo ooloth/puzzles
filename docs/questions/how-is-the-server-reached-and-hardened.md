@@ -517,3 +517,84 @@ person is as bad as one exported. 1b holds for the Secure Enclave and FIDO keys 
 **Reversed if** 1Password stops holding the DigitalOcean sign-in, since 1c would then count it as a
 second account that can grant a shell; or if the maintainer decides to buy and carry a FIDO key,
 which would enter as a stated row.
+
+### Spike on a Droplet, 2026-10-06
+
+**Method.** One `s-1vcpu-1gb` Droplet, `spike-access-1`, in `tor1` in the `puzzles-experiments`
+team, created at 00:28:51 UTC from `debian-13-x64` with `doctl compute droplet create
+--droplet-agent=false`, a throwaway ed25519 key attached at creation, and user-data that created a
+user `spike` in the `sudo` group with a password, wrote a marker file and started `python3 -m
+http.server 80` as a transient unit standing in for the app. From the maintainer's Mac, one probe
+asked `sshd` every half second which login methods it offered, without offering a key, and another
+fetched port 80 every second. The maintainer did the control-panel steps by hand. The Droplet and
+the key were destroyed at 01:07. One run of each step.
+
+**At first boot.**
+
+- Debian 13.7, kernel 6.12.111, cloud-init 25.1.4, datasource ConfigDrive. DigitalOcean's
+  vendor-data sets `disable_root: false`, `ssh_pwauth: false` and `root` as the default user. The
+  image's `sshd_config` sets `PermitRootLogin yes`.
+- `sshd` offered only `publickey` from the first probe it answered, at 00:29:26. A password login
+  as `spike`, who had a password, got `Permission denied (publickey)`. `root`'s password was locked.
+- **Ordering, to the millisecond, from the journal and `/var/log/cloud-init.log`:** `write_files`
+  ran at 00:29:25.284, `spike`'s password was set at 25.437, `ssh.service` started at 25.937,
+  cloud-init wrote `/etc/ssh/sshd_config.d/50-cloud-init.conf` (`PasswordAuthentication no`) at
+  26.194, the first `sshd` was listening at 26.273, and cloud-init restarted it at 26.356. The file
+  does not ship in the image. So whether that first `sshd`, alive for about 80 ms, read the file is
+  not settled by this run. It matters only when an account has a password. `write_files` runs before
+  users are created and before `ssh` starts, so a drop-in written by our own user-data would be in
+  place first. *Measured, one run; the conclusion about the first `sshd` is reasoned.*
+- No Droplet agent: `droplet-agent.service` did not exist and `/opt/digitalocean` was absent.
+- The journal was persistent (`/var/log/journal`). There was no `rsyslog` and no `auth.log`. Every
+  accepted login appeared as `Accepted publickey for <user> … ED25519 SHA256:…`, refused ones as
+  `Connection closed by authenticating user … [preauth]`, console logins as `login[…]: … session
+  opened for user spike`, and every `sudo` command with its user, TTY and command line.
+- `PerSourcePenalties` dropped the probe at 00:30:03 with "penalty: connections without attempting
+  authentication", which is the default throttling observed rather than read.
+- 256 MB of 967 MB in use with nothing but the stand-in app, and no swap. The journal used 16 MB.
+- The metadata index at `169.254.169.254/metadata/v1/` listed `id`, `hostname`, `user-data`,
+  `vendor-data`, `public-keys`, `region`, `interfaces/`, `dns/`, `floating_ip/`, `reserved_ip/`,
+  `tags/`, `features/` and `virtual_ips/`. None of them is a token.
+
+**Resetting the root password from the control panel powers the machine off.** Clicked at 00:38.
+The journal shows a clean `systemd-poweroff` at 00:39:03, and the machine booted again at 00:39:27.
+Port 80 stopped answering at 00:39. The reset also left `root`'s password expired, after which SSH
+as `root` with the key failed: "Password change required but no TTY available." So a key login as
+`root`, by a person or a deploy, stays broken until someone changes the password interactively.
+
+**A password on a named user gets in through the Recovery Console without stopping the app.** The
+maintainer logged in as `spike` on the console at 00:46:21 and ran a `sudo` command. Port 80
+answered every second throughout.
+
+**A full lockout was recovered from the console in 38 seconds, with the app serving throughout.**
+`sshd` was stopped at 00:48:04, after which SSH got `Connection refused`. The maintainer ran `sudo
+systemctl start ssh` on the console at 00:48:42, and a key login worked at 00:49:02. Port 80 answered
+every second from 00:44 to 00:49. A browser extension that captures keystrokes, SurfingKeys,
+stopped the console taking input until it was turned off.
+
+**The recovery ISO works with no password set on the Droplet.** After powering off from inside at
+00:50:57 and switching recovery mode in the control panel, the rescue system, Ubuntu 24.04.4,
+accepted the key attached at creation. `/dev/vda1` mounted under `/mnt` with the Droplet's files
+readable. The rescue system has its own host key, so SSH warned that the host identification had
+changed. Switching back to the hard drive booted Debian from its own disk at 01:02:55 with the
+original host key.
+
+**A rebuild runs the original user-data again.** Rebuilt from the control panel onto `debian-13-x64`
+at about 01:05. The machine booted at 01:05:56 on the same address, and by 01:06:17 `spike` existed
+again, both marker files had new timestamps, `root` was locked again and the earlier files were
+gone. The host key changed.
+
+**Scores after the spike.**
+
+- **C.** *Resetting the root password* fails 17: it powered the machine off. *A password kept on a
+  named user for the Recovery Console* passes 4, 10 and 17, as observed, and 14, since it has now
+  been run once. It survives. *The recovery ISO* fails 17 too, since it needs the machine off, and
+  stays the fallback for when no password works. *Rebuilding* fails 17 and is not a way back, but
+  the run shows it reproduces everything that came from cloud-init, which is property 8 for every
+  arrangement here.
+- **2, for the surviving C.** A password on an account is safe from SSH only once `sshd` has read
+  `PasswordAuthentication no`. Our user-data writes that setting itself with `write_files`, in a
+  file that sorts ahead of `50-cloud-init.conf`, so it is in place before the account exists. Not yet
+  run.
+- **D.** The kept console password has to sit on an account: `root` itself, or a named user. If it
+  is a named user, `sudo` either asks for it or does not. Scored next.

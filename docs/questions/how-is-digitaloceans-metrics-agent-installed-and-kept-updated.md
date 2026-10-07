@@ -167,6 +167,17 @@ hour, and can read nothing but counters. *Performance:* it takes none of the app
 *Experience:* nothing on the machine for the maintainer to install or remember beyond what is already
 there, and one place to see it.
 
+**Added in the first pass, 2026-10-06**
+
+Property 1 is split into the two cases its moment names, because the candidates that report from the
+machine itself and the ones that read it from outside pass the first and differ on the second:
+
+- **1a.** The alert fires when the machine is honest and the traffic is popularity or a fault.
+- **1b.** The alert fires when someone else holds root on the machine. A compromised machine sending
+  traffic is the case [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
+  leaves to an alert, and "Why it matters" above names it. Root can stop, rewrite or impersonate
+  anything running on the machine, and cannot touch figures collected outside it.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and a change to step 9 of
@@ -183,7 +194,25 @@ conflict above.
 
 ## Options
 
-...
+**The question as titled assumes the agent.** Stated without a solution, it is: what reports the
+production Droplet's sustained outbound traffic to the maintainer, with nobody looking? The field
+below was enumerated on 2026-10-06 by a research agent asked for every way to do that, and scored in
+the first pass under **Findings**.
+
+- **A. DigitalOcean's metrics agent from DigitalOcean's apt repository**, with an alert policy on
+  Public Outbound Bandwidth. What runbook step 9 does today.
+- **B. The same agent from a downloaded `.deb`.**
+- **C. A counter on the machine from Debian's archive**, such as `vnstat` 2.13 or the interface's
+  `tx_bytes`, mailing the maintainer through an SMTP relay when a threshold is crossed.
+- **D. A counter on the machine, as in C, reporting to an outside heartbeat service** such as
+  Healthchecks.io, which emails when a ping says the threshold was crossed and when pings stop.
+- **E. Prometheus's node exporter with an alerting stack**, from Debian's archive.
+- **F. Something off the machine reads DigitalOcean's own bandwidth figures** through
+  `GET /v2/monitoring/metrics/droplet/bandwidth`, holding a token with `monitoring:read` only, on a
+  schedule, and emails when the rate is high or when it cannot read them. Nothing is installed on the
+  machine.
+- **G. DigitalOcean's default bandwidth graph, with nobody alerted.**
+- **H. Not yet.**
 
 ## Findings
 
@@ -205,3 +234,93 @@ and `doctl compute droplet create --help` on doctl 1.177.0, 2026-10-05.*
 *Sourced: [install.sh](https://repos.insights.digitalocean.com/install.sh), read from its raw text,
 2026-10-05. Whether `--enable-monitoring` at creation installs it this way is not known: the spike
 on 2026-10-05 created its Droplet without monitoring, so the agent was absent there.*
+
+**DigitalOcean's agent repository publishes for amd64 and i386 only.** Its `Release` file reads
+`Architectures: amd64 i386` and `Origin: . main`, and `dists/main/main/binary-arm64/Packages` returns
+404. The amd64 index holds 48 versions, so earlier versions are kept. No GitHub release of `do-agent`
+carries an arm64 asset either.
+
+*Sourced: the repository's `Release` and `Packages` files, fetched 2026-10-06 by a research agent and
+again by me. The GitHub assets were read by the agent and not re-opened.*
+
+**The agent's package updates itself on its own clock.** `do-agent` 3.18.14's `postinst` writes
+`/etc/cron.daily/do-agent`, which runs `scripts/update.sh`: it sleeps up to 900 seconds, refreshes only
+`digitalocean-agent.list`, and runs `apt-get install --only-upgrade do-agent`. The same `postinst`
+runs `systemctl restart do-agent`, so every upgrade restarts it, and rewrites the cron file on every
+install.
+
+*Sourced: the `.deb` from the repository's pool, unpacked 2026-10-06 by a research agent and again by
+me.*
+
+**The install script refuses any machine that is not DigitalOcean's.** `check_do` reads
+`/sys/devices/virtual/dmi/id/bios_vendor` and exits with "The DigitalOcean Agent is only supported on
+DigitalOcean machines" unless it reads `DigitalOcean`.
+
+*Sourced: [install.sh](https://repos.insights.digitalocean.com/install.sh), opened 2026-10-06.*
+
+**The agent's unit runs it as its own user with some sandboxing.** `User=do-agent`,
+`ProtectSystem=full`, `ProtectHome=yes`, `NoNewPrivileges=yes`, `PrivateTmp=yes`, `Restart=always`
+and `OOMScoreAdjust=-900`, the last of which makes the kernel prefer ending the app over the agent
+when memory runs out. Whether it listens on `127.0.0.1:9100` was inferred from strings in the binary
+and not observed.
+
+*Sourced: the unit in the 3.18.14 `.deb`, read by a research agent 2026-10-06. Not re-opened.*
+
+**DigitalOcean's default bandwidth graph needs no agent.** "The default Droplet graphs use metrics
+collected by external tools; they require no additional services on the Droplet itself", and "three
+graphs are available for any Droplet", one of them "Bandwidth public", in megabits per second. Alert
+policies still need the agent.
+
+*Sourced: [track performance](https://docs.digitalocean.com/products/droplets/how-to/track-performance/),
+opened 2026-10-06.*
+
+**The API serves bandwidth figures to a read-only token.**
+`GET /v2/monitoring/metrics/droplet/bandwidth`, with `interface=public` and `direction=outbound`,
+answers in megabits per second under the `monitoring:read` scope, which DigitalOcean lists as "View
+Monitoring metrics and alert policies". Whether it returns figures for a Droplet without the agent is
+**not known**, and it is what decides option F.
+
+*Sourced: DigitalOcean's [scopes list](https://docs.digitalocean.com/reference/api/scopes/), opened
+2026-10-06; the endpoint and its unit from DigitalOcean's OpenAPI specification, read by a research
+agent and not re-opened.*
+
+**A standing read-only token is allowed.** [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md):
+"A token something needs to keep holds read scopes only."
+
+**Nothing documents what an alert policy does when the agent stops reporting.** The alert types are
+thresholds on CPU, memory, disk and bandwidth, with no type for an agent that has gone quiet. A
+threshold that is never crossed because no figures arrive most plausibly stays silent. That is
+inferred, not observed.
+
+*A research agent's reading of DigitalOcean's alert docs and OpenAPI specification, 2026-10-06. Not
+re-opened.*
+
+**GitHub turns off a public repository's scheduled workflows after 60 days with no activity**, and
+sends a scheduled run's notifications "to the user who last modified the cron syntax". This
+repository is public.
+
+*Sourced: GitHub's [events that trigger
+workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows),
+opened 2026-10-06, and the repository's API answering without authentication.*
+
+**Debian 13 carries the counters a machine-side candidate would use.** `vnstat` 2.13-1,
+`prometheus-node-exporter` 1.9.0-1, `prometheus-alertmanager` 0.28.1, `collectd` 5.12.0, `sysstat`
+12.7.5 and `msmtp-mta` 1.8.28. `do-agent` is not in Debian.
+
+*A research agent's reading of packages.debian.org, 2026-10-06. Not re-opened.*
+
+### First pass, 2026-10-06
+
+| | Disqualified by | Why |
+|---|---|---|
+| A. Agent from DigitalOcean's repository | 11 | No arm64 build, so the local run cannot install it, and its repository fails [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)'s amd64-and-arm64 rule. It would also fail 7, through its own daily cron job. **Reverses if** DigitalOcean publishes arm64 builds and the package stops installing its own updater. |
+| B. Agent from a `.deb` | 6 | Nothing patches it, which [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) rules out by name. |
+| C. Machine-side counter, mailing | 2 | When the counter or the mail relay stops, nothing says so. |
+| D. Machine-side counter, outside heartbeat | 1b | Passes 2, since a stopped ping is reported. Root on the machine can keep sending pings that say all is well. |
+| E. Node exporter with alerting | 2 | The alerting stack runs on the machine it watches, so it goes quiet with it. |
+| F. Off the machine, reading DigitalOcean's figures | none yet | 1 is **unknown**: whether the endpoint has figures for an agentless Droplet. 2 depends on what runs the schedule, since GitHub's would stop silently after 60 quiet days unless something reports its silence. |
+| G. Default graph only | 1 | Nobody is alerted. |
+| H. Not yet | 1 | Slice 4 puts a billable machine on the internet. |
+
+D survives every row but 1b. F survives every row it can be scored on so far. 1b is the strongest
+reading of property 1: it assumes an attacker who knows the heartbeat exists and forges it.

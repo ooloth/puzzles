@@ -45,6 +45,12 @@ usually quoted.
 [what deploys the code?](what-deploys-the-code.md), derived on 2026-10-05 for reaching and
 hardening the machine, also applies here: software is installed and patched on the machine.
 
+**Shared with the metrics agent.** Properties 4 to 12 in
+[how is DigitalOcean's metrics agent installed and kept updated?](how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md),
+derived on 2026-10-06, cover a program installed onto the machine from an apt repository and patched
+by the daily run. They apply to Node if it comes from the host. The moments only this question has,
+such as a deploy, a rollback and a Node security release, are derived when it is worked.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/) on how Node is pinned and patched.

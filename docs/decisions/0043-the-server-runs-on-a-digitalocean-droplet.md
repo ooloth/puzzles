@@ -2,7 +2,7 @@
 number: 0043
 status: accepted
 date: 2026-09-30
-amended: 2026-10-05
+amended: 2026-10-07
 ---
 
 # 0043 — The server runs on a DigitalOcean Droplet
@@ -88,8 +88,9 @@ inside it, in a North American region.
 ## Enforced by
 
 **Nothing yet.** It is true once M1 slice 4 deploys to a Droplet. Property 6 is a capability of the
-host, not something configured: DigitalOcean's alerts read its metrics agent, whose installation is
-[how is DigitalOcean's metrics agent installed and kept updated?](../questions/how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md),
+host, not something configured: DigitalOcean's outbound-traffic alert reads figures collected outside
+the machine and is attached without the metrics agent, per
+[ADR-0060](0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md),
 and [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md) sets only
 the outbound-traffic alert. Which alerts on memory, disk and reachability to set is
 [what are the server's vitals and who watches them?](../questions/what-are-the-servers-vitals-and-who-watches-them.md).

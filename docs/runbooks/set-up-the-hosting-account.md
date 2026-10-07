@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-07
 update_when: a DigitalOcean account setting is added, changed or removed, or a record it carries out changes
 decays: slow
 status: active
@@ -52,16 +52,26 @@ question that worked it, read with
 8. **Add PayPal as a backup payment method.** DigitalOcean tries other payment methods on file when
    the default fails, and a failed payment can end in suspension, per
    [../constraints.md](../constraints.md).
-9. **Create the production Droplet with monitoring enabled**, so DigitalOcean's metrics agent is
-   installed. Only Droplets with the agent can carry an alert policy, per
-   [../questions/what-are-the-servers-vitals-and-who-watches-them.md](../questions/what-are-the-servers-vitals-and-who-watches-them.md).
-10. **Add an alert policy on the production Droplet's Public Outbound Bandwidth, by email**, for a
-    rate sustained over one hour that would use the 1,000 GiB monthly pool within a month: about 3 Mbps,
-    per [../constraints.md](../constraints.md).
-    Spend alerts do not see transfer until it is invoiced, per
-    [../constraints.md](../constraints.md), so this is what reports traffic, per
+9. **Create the production Droplet without monitoring, and with the tag `production`**: no
+   `--enable-monitoring`, and `--tag-name production`, so the token that creates it also holds
+   `tag:create`. DigitalOcean's metrics agent is not installed, per
+   [ADR-0060](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md).
+10. **Add an alert policy on Public Outbound Bandwidth for the tag `production`, by email, with
+    `doctl`**, for a rate sustained over one hour that would use the 1,000 GiB monthly pool within a
+    month: about 3 Mbps, per [../constraints.md](../constraints.md). The figure is in megabits per
+    second.
+
+    ```sh
+    doctl monitoring alert create --type v1/insights/droplet/public_outbound_bandwidth \
+      --compare GreaterThan --value 3 --window 1h --tags production \
+      --emails <the maintainer's address> --description "production outbound traffic"
+    ```
+
+    Use a short-lived token holding `monitoring:create`. The control panel cannot create this policy,
+    because it lists only Droplets with the agent. Spend alerts do not see transfer until it is
+    invoiced, per [../constraints.md](../constraints.md), so this is what reports traffic, per
     [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md).
-    Check the metric's unit in the control panel when setting it; the docs do not state it.
+    Confirm it with `doctl monitoring alert list`.
 
 ## The `puzzles-experiments` team
 

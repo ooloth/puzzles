@@ -2,6 +2,7 @@
 number: 0056
 status: accepted
 date: 2026-10-05
+amended: 2026-10-07
 ---
 
 # 0056 — The Droplet runs without DigitalOcean's Droplet agent
@@ -18,10 +19,10 @@ date: 2026-10-05
   `"with_droplet_agent":false`, per
   [manage the agent](https://docs.digitalocean.com/products/droplets/how-to/manage-agent/).
 - It is not the metrics agent, which
-  [ADR-0047](0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)'s traffic alert
-  needs and
-  [how is DigitalOcean's metrics agent installed and kept updated?](../questions/how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md)
-  is about. `doctl` has a flag for each.
+  [ADR-0060](0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md)
+  also leaves off, since the traffic alert of
+  [ADR-0047](0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) reads figures
+  collected outside the machine. `doctl` has a flag for each.
 
 ## Scored against
 

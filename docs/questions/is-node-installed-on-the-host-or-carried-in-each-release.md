@@ -45,11 +45,35 @@ usually quoted.
 [what deploys the code?](what-deploys-the-code.md), derived on 2026-10-05 for reaching and
 hardening the machine, also applies here: software is installed and patched on the machine.
 
-**Shared with the metrics agent.** Properties 4 to 12 in
-[how is DigitalOcean's metrics agent installed and kept updated?](how-is-digitaloceans-metrics-agent-installed-and-kept-updated.md),
-derived on 2026-10-06, cover a program installed onto the machine from an apt repository and patched
-by the daily run. They apply to Node if it comes from the host. The moments only this question has,
-such as a deploy, a rollback and a Node security release, are derived when it is worked.
+**Shared with the metrics agent question.** These rows were derived on 2026-10-06 for a program
+installed onto the machine from an apt repository and patched by the daily run, and apply to Node if
+it comes from the host. They moved here when that question was resolved by
+[ADR-0060](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md),
+which carries them as its properties 7 to 17. The moments only this question has, such as a deploy, a
+rollback and a Node security release, are derived when it is worked.
+
+- Every package's origin is checked before it is installed, including at creation (property 1 of
+  [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)).
+- The machine trusts the fewest publishers its software needs (property 2 of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)).
+- A security fix reaches the machine within about a day, with no step by hand (property 3 of
+  [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md), property 1 of
+  [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)).
+- No restart a player notices happens outside the chosen hour (property 6 of [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)).
+- An update run, with its memory and its lock on the package system, happens only at the chosen
+  hour ("Hosting — Debian 13 updates itself on its own clock" in
+  [../constraints.md](../constraints.md)).
+- One update policy covers every source (property 3 of [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)).
+- The daily run does not cross a major version, and the previous version stays installable
+  (properties 5 and 6 of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)).
+- Its publisher is maintained (property 9 of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md),
+  [ADR-0027](../decisions/0027-a-dependencys-stewardship-matters-in-proportion-to-what-replacing-it-costs.md)).
+- A rebuilt machine has the same arrangement with no step by hand (property 7 of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md),
+  [ADR-0022](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md)).
+- The production-like local run installs and updates it the same way, on arm64 as on amd64
+  ([ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
+  property 4 of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)).
+- Nothing it adds opens an inbound port, bypasses the firewall, or fills the disk (property 4 of
+  [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)).
 
 ## Resolves into
 

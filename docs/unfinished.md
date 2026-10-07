@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-05
+updated: 2026-10-07
 update_when: the codebase enters or leaves a state that would mislead someone reading it
 decays: fast
 status: active
@@ -19,7 +19,7 @@ Entries are deleted the moment they stop being true. Stale guidance here is wors
 **Actually** the only code is a server under `src/server/` that answers `/api/hello` and a client
 under `src/client/` that shows its answer. The host, how the app runs on it, its OS, its front, what
 serves the client's files and how the machine is reached and hardened are settled, and nothing is deployed: the deploy switch, the hour updates are applied at, how Node is
-carried, how the metrics agent is installed and what triggers a deploy are open.
+carried, and what triggers a deploy are open.
 Most of what [decisions/](decisions/) settles has no code behind it yet, so read a record as a
 constraint on what gets built, not as a description of what exists.
 
@@ -30,7 +30,7 @@ constraint on what gets built, not as a description of what exists.
 **You'll see** [runbooks/set-up-the-hosting-account.md](runbooks/set-up-the-hosting-account.md), with
 every setting the account is meant to have, written as steps with no status.
 
-**Actually** the GitHub passkey, the production Droplet's metrics agent and its traffic alert do not
+**Actually** the GitHub passkey, the production Droplet's tag and its traffic alert do not
 exist yet, and nobody has confirmed the mail rule.
 
 **So** don't read the runbook as the account's current state. Delete this entry once those four are

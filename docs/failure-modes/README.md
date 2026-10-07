@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-07
 update_when: a way this system can fail is identified, or one actually happens
 decays: slow
 status: active
@@ -90,7 +90,10 @@ it usually matters more than the failure itself.>
 - [A pinned package outlives its supported major version](a-pinned-package-outlives-its-supported-major-version.md)
   — every daily run succeeds, because the pin has removed the only update that would carry the fix.
 
+
 ### Threatening availability and cost
 
 - [The write endpoint becomes free storage for strangers](the-write-endpoint-becomes-free-storage.md)
   — open by construction, because there is no account to check.
+- [The traffic alert stops being evaluated and nobody knows](the-traffic-alert-stops-being-evaluated-and-nobody-knows.md)
+  — an alert that cannot fire and one with nothing to report send the same silence.

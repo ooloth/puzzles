@@ -71,12 +71,15 @@ obvious.
   alone left 769 to 784 MB available, against 701 to 726 MB on Ubuntu 24.04, so the stack has more room.
   *Measured on Droplets, 2026-10-03, in the fourth pass of the OS question, read with
   `git show 6bf04f6:docs/questions/which-os-does-the-droplet-run.md`.*
-- **The production Droplet runs DigitalOcean's metrics agent**, because the outbound-traffic alert
-  that [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)
-  relies on needs it: "Only Droplets with the DigitalOcean metrics agent installed are available to
-  select." Monitoring is "a free, opt-in service", alerting by email or Slack over windows of 5, 10, 30
-  or 60 minutes. The same agent serves memory and disk alerts. Its memory use on the 1 GB Droplet is
-  unmeasured. *Sourced —
+- **The production Droplet runs without DigitalOcean's metrics agent**, per
+  [ADR-0060](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md):
+  the outbound-traffic alert reads figures collected outside the machine and was observed firing on a
+  Droplet with no agent. DigitalOcean's docs say "Only Droplets with the DigitalOcean metrics agent
+  installed are available to select." Monitoring is "a free, opt-in service", alerting by email or
+  Slack over windows of 5, 10, 30 or 60 minutes. Memory and disk alerts are documented as needing the
+  agent; whether they work without it was not tested. The agent used about 16 MB on a 1 GB Droplet and
+  brought a running mail server with it, per "Hosting — DigitalOcean's metrics agent" in
+  [../constraints.md](../constraints.md). *Sourced —
   [set up alerts](https://docs.digitalocean.com/products/monitoring/how-to/set-up-alerts/), opened
   2026-09-30. The alert itself is step 10 of
   [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md).*

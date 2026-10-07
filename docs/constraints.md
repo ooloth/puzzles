@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-05
+updated: 2026-10-07
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -999,6 +999,78 @@ Sourced from DigitalOcean's pages on
 [firewall rules](https://docs.digitalocean.com/products/networking/firewalls/how-to/configure-rules/),
 and the [agent's README](https://github.com/digitalocean/droplet-agent), each read from the raw page on
 2026-10-05.*
+
+## Hosting — DigitalOcean's metrics agent
+
+**DigitalOcean's bandwidth figures for a Droplet are collected outside it, and its bandwidth alert
+reads them.** "The default Droplet graphs use metrics collected by external tools; they require no
+additional services on the Droplet itself", and "Bandwidth public" is one of the "three graphs ...
+available for any Droplet". `GET /v2/monitoring/metrics/droplet/bandwidth`, with `interface=public`
+and `direction=outbound`, returns them in megabits per second to a token holding only
+`monitoring:read`, for a Droplet that never had the agent, and kept returning them for one whose
+agent had been stopped. They come in points two minutes apart and take about ten minutes to reach the
+true rate.
+
+**An alert policy on a Droplet without the agent fires, whether it names the Droplet or a tag.** The
+control panel lists "Only Droplets with the DigitalOcean metrics agent installed", but `doctl
+monitoring alert create --type v1/insights/droplet/public_outbound_bandwidth` accepted a Droplet with
+no agent by `--entities` and by `--tags`, and each emailed. Measured times, all UTC, with about 10
+Mbps sent:
+
+- A policy for over 1 Mbps on a Droplet whose agent was stopped at 00:57:50 emailed at 01:02, at
+  10.66 Mbps.
+- A policy for over 2 Mbps created at 01:09:20 on the same Droplet, its agent stopped 11 minutes
+  earlier, emailed at 01:09, at 9.95 Mbps, the outside figure for 01:08.
+- A policy for over 2 Mbps on a Droplet that never had the agent, by ID, emailed at 01:28, at 9.97
+  Mbps, six minutes after its figure crossed 2 Mbps at 01:22.
+- A policy for over 2 Mbps by tag on a Droplet that never had the agent emailed at 02:50, at 9.68
+  Mbps, its figure having crossed at 02:44.
+- Each "resolved" email came 24 to 28 minutes after its traffic stopped.
+
+That the API accepts and evaluates such a policy is observed, not documented: DigitalOcean's docs say
+alerts need the agent.
+
+**The metrics agent, `do-agent`, is not in Debian, and its repository publishes for amd64 and i386
+only.** `repos.insights.digitalocean.com/apt/do-agent` has `Origin: . main`, `Architectures: amd64
+i386`, no arm64 index, and 48 versions in its amd64 index. Its install script exits on any machine
+whose BIOS vendor is not `DigitalOcean`.
+
+**The agent's package updates itself.** `do-agent` 3.18.14's `postinst` writes
+`/etc/cron.daily/do-agent`, which sleeps up to 900 seconds and runs `apt-get install --only-upgrade
+do-agent`, and runs `systemctl restart do-agent`. Its unit runs as `do-agent` with
+`OOMScoreAdjust=-900`, so the kernel prefers ending other processes to ending it.
+
+**Creating a Droplet with monitoring runs the install script as root on first boot, and brings a
+mail server.** DigitalOcean's vendor-data carries a cloud-init part, `install-do-agent`, that fetches
+`https://repos.insights.digitalocean.com/install.sh` and runs it. On `debian-13-x64` it installed
+`cron`, `perl`, `gnupg`, `bsd-mailx` and `exim4-daemon-light` beside the agent, and `exim4` then
+listened on `127.0.0.1:25` and `[::1]:25`. The agent's resident memory was 15,856 KB a few minutes
+after boot. Which dependency pulled in `exim4` was not traced.
+
+**A Droplet created through the API with no SSH key gets an expired root password.** Key login as
+`root` then fails with "Password change required but no TTY available". A user created by cloud-init
+with the key logs in normally.
+
+**Applying a tag at creation needs `tag:create`.** Creating a Droplet with `--tag-name` was refused
+with "You are missing the required permission tag:create".
+
+*Measured on 2026-10-07 on four `s-1vcpu-1gb` Droplets from `debian-13-x64` in `tor1`, in the
+`puzzles-experiments` team, each destroyed after its run: one with `--enable-monitoring`, three
+without, traffic sent between pairs of them at about 10 Mbps from a Python loop. One run of each step.
+The emails were read by the maintainer. Sourced: [track
+performance](https://docs.digitalocean.com/products/droplets/how-to/track-performance/), [set up
+alerts](https://docs.digitalocean.com/products/monitoring/how-to/set-up-alerts/), [install.sh](https://repos.insights.digitalocean.com/install.sh)
+and the repository's `Release`, `Packages` and `.deb`, opened 2026-10-06.*
+
+## Hosting — GitHub turns off a public repository's scheduled workflows after 60 quiet days
+
+"In a public repository, scheduled workflows are automatically disabled when no repository activity
+has occurred in 60 days", and a scheduled run's notifications go "to the user who last modified the
+cron syntax". This repository is public.
+
+*Sourced: GitHub's [events that trigger
+workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows),
+opened 2026-10-06.*
 
 ## Hosting — providers raise prices, and differ in whether existing machines are spared
 

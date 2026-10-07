@@ -2,7 +2,7 @@
 number: 0047
 status: accepted
 date: 2026-09-30
-amended: 2026-10-05
+amended: 2026-10-07
 ---
 
 # 0047 — Nothing automated deletes or stops resources to cap spending
@@ -54,8 +54,10 @@ Each property's source is listed in [ADR-0046](0046-no-standing-digitalocean-tok
 DigitalOcean's documented outbound limit of 2 Gbps for a non-GPU Droplet, per
 [../constraints.md](../constraints.md), "Hosting — getting back onto a Droplet when SSH fails, and what DigitalOcean's image brings",
 that is about 20,000 GiB, or $200, a day, so $1,000 takes about five days of ignored alerts. The traffic
-alert in the runbook fires once a high rate has lasted an hour. How soon DigitalOcean Monitoring
-delivers it after that is not documented.
+alert in the runbook fires once a high rate has lasted an hour. It is not documented how soon
+DigitalOcean delivers it after that. Measured, an email came about 6 minutes after the figure crossed
+its threshold, and the figure itself takes about 10 minutes to reach the true rate, per "Hosting —
+DigitalOcean's metrics agent" in [../constraints.md](../constraints.md).
 
 ## Enforced by
 

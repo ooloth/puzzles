@@ -75,6 +75,14 @@ The maintainer wants a mechanism for noticing the second, whenever this question
 
 *Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) and the constraint above.*
 
+**The outbound-traffic alert can stop being evaluated with nothing saying so.** It is attached to a
+Droplet without DigitalOcean's metrics agent, which DigitalOcean's docs say alerts need, per
+[ADR-0060](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md).
+A check that the alert still fires belongs here:
+[the traffic alert stops being evaluated and nobody knows](../failure-modes/the-traffic-alert-stops-being-evaluated-and-nobody-knows.md).
+
+*Reasoned from [ADR-0060](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md), 2026-10-07.*
+
 **What a failed update leaves to find it by, on Debian 13.** `/var/log/apt/history.log` and
 `/var/log/dpkg.log` rotate monthly and keep 12; `/var/log/unattended-upgrades/` keeps 6 and records
 each run's errors. Syslog output from `unattended-upgrades` is off by default. Nothing is sent

@@ -353,16 +353,14 @@ opened 2026-10-06, and the repository's API answering without authentication.*
 
 ### First pass, 2026-10-06
 
-| | Disqualified by | Why |
-|---|---|---|
-| A. Agent from DigitalOcean's repository | 11 | No arm64 build, so the local run cannot install it, and its repository fails [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)'s amd64-and-arm64 rule. It would also fail 7, through its own daily cron job. **Reverses if** DigitalOcean publishes arm64 builds and the package stops installing its own updater. |
-| B. Agent from a `.deb` | 6 | Nothing patches it, which [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) rules out by name. |
-| C. Machine-side counter, mailing | 2 | When the counter or the mail relay stops, nothing says so. |
-| D. Machine-side counter, outside heartbeat | 1b | Passes 2, since a stopped ping is reported. Root on the machine can keep sending pings that say all is well. |
-| E. Node exporter with alerting | 2 | The alerting stack runs on the machine it watches, so it goes quiet with it. |
-| F. Off the machine, reading DigitalOcean's figures | none yet | 1 is **unknown**: whether the endpoint has figures for an agentless Droplet. 2 depends on what runs the schedule, since GitHub's would stop silently after 60 quiet days unless something reports its silence. |
-| G. Default graph only | 1 | Nobody is alerted. |
-| H. Not yet | 1 | Slice 4 puts a billable machine on the internet. |
+- **A. Agent from DigitalOcean's repository.** Disqualified by: 11; Why: No arm64 build, so the local run cannot install it, and its repository fails [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)'s amd64-and-arm64 rule. It would also fail 7, through its own daily cron job. **Reverses if** DigitalOcean publishes arm64 builds and the package stops installing its own updater.
+- **B. Agent from a `.deb`.** Disqualified by: 6; Why: Nothing patches it, which [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) rules out by name.
+- **C. Machine-side counter, mailing.** Disqualified by: 2; Why: When the counter or the mail relay stops, nothing says so.
+- **D. Machine-side counter, outside heartbeat.** Disqualified by: 1b; Why: Passes 2, since a stopped ping is reported. Root on the machine can keep sending pings that say all is well.
+- **E. Node exporter with alerting.** Disqualified by: 2; Why: The alerting stack runs on the machine it watches, so it goes quiet with it.
+- **F. Off the machine, reading DigitalOcean's figures.** Disqualified by: none yet; Why: 1 is **unknown**: whether the endpoint has figures for an agentless Droplet. 2 depends on what runs the schedule, since GitHub's would stop silently after 60 quiet days unless something reports its silence.
+- **G. Default graph only.** Disqualified by: 1; Why: Nobody is alerted.
+- **H. Not yet.** Disqualified by: 1; Why: Slice 4 puts a billable machine on the internet.
 
 D survives every row but 1b. F survives every row it can be scored on so far. 1b is the strongest
 reading of property 1: it assumes an attacker who knows the heartbeat exists and forges it.
@@ -374,11 +372,108 @@ second pass** under the properties. The row is kept so the error stays visible.
 
 1b is weighed rather than disqualifying, so D returns. A2 is added.
 
-| | 1a | 2 | 1b | 7b | 7c | 13 | Open |
-|---|---|---|---|---|---|---|---|
-| A2. Agent, records amended | pass | **unknown**: no documented alert when the agent goes quiet | fail | pass once its updater is removed | pass once its updater is removed | **unknown**: unmeasured | what `--enable-monitoring` installs; whether its updater can be removed so it stays removed |
-| D. Machine-side counter, outside heartbeat | pass | pass | fail | pass | pass | pass: a timer and `curl` | which heartbeat service, and an account there |
-| F. Off the machine | **unknown**: figures for an agentless Droplet | depends on what runs the schedule | pass | pass: nothing on the machine | pass | pass | what runs the schedule and holds the token |
+- **A2. Agent, records amended.** 1a: pass; 2: **unknown**: no documented alert when the agent goes quiet; 1b: fail; 7b: pass once its updater is removed; 7c: pass once its updater is removed; 13: **unknown**: unmeasured; Open: what `--enable-monitoring` installs; whether its updater can be removed so it stays removed.
+- **D. Machine-side counter, outside heartbeat.** 1a: pass; 2: pass; 1b: fail; 7b: pass; 7c: pass; 13: pass: a timer and `curl`; Open: which heartbeat service, and an account there.
+- **F. Off the machine.** 1a: **unknown**: figures for an agentless Droplet; 2: depends on what runs the schedule; 1b: pass; 7b: pass: nothing on the machine; 7c: pass; 13: pass; Open: what runs the schedule and holds the token.
 
 Each survivor has one cell that decides it, and a spike can read two of them: whether DigitalOcean's
 figures exist for an agentless Droplet, and what an alert policy does when the agent stops.
+
+### Spike, 2026-10-07
+
+**Method.** Two `s-1vcpu-1gb` Droplets from `debian-13-x64` in `tor1`, in the `puzzles-experiments`
+team, created 00:47 UTC and destroyed after the run: `mon-spike-agent` with `--enable-monitoring`
+and `mon-spike-noagent` without, both with `--droplet-agent=false`. Each sent about 10 Mbps to the
+other's public address from a Python loop, from 00:50 UTC, which `tx_bytes` confirmed at 12.85 MB in
+10 seconds. The bandwidth figures were read with a token holding only `monitoring:read`. One run of
+each step.
+
+**Monitoring at creation runs `install.sh` from DigitalOcean's vendor-data**, as a cloud-init part
+named `install-do-agent` that fetches `https://repos.insights.digitalocean.com/install.sh` and runs
+it as root on first boot. It installed `do-agent` 3.18.14 from `digitalocean-agent.list` and wrote
+`/etc/cron.daily/do-agent`.
+
+**It also installed a mail server that then ran.** `dpkg.log` lists `cron`, `perl`, `gnupg`,
+`bsd-mailx` and `exim4-daemon-light` installed with the agent, and `exim4` was listening on
+`127.0.0.1:25` and `[::1]:25`. `do-agent` depends on `cron`, and the rest arrived with it; which
+dependency pulled `exim4` in was not traced. The agentless Droplet had none of them.
+
+**The agent used about 16 MB.** `ps` showed an RSS of 15,856 KB, once, a few minutes after boot.
+
+**DigitalOcean's bandwidth figures exist for a Droplet without the agent, and come from outside the
+machine.** `GET /v2/monitoring/metrics/droplet/bandwidth` answered for both Droplets with points two
+minutes apart, rising from about 1.3 Mbps at 00:52 to 10.0 and 10.2 Mbps at 01:02 against a true rate
+of about 10 Mbps, so a figure takes about ten minutes to reach the true rate. The agent Droplet's
+figures kept arriving after its agent was stopped at 00:57:50. A token with `monitoring:read` alone
+was enough.
+
+**DigitalOcean's bandwidth alert reads the outside figures, and works on a Droplet that never had
+the agent.** Three policies on Public Outbound Bandwidth, 5-minute window, emailing the maintainer:
+
+- **over 1 Mbps.** Droplet: `mon-spike-agent`; Agent at the time: running, then stopped at 00:57:50; Created: 00:49:49; Triggered: 01:02, at 10.66 Mbps; Resolved: 02:02.
+- **over 2 Mbps.** Droplet: `mon-spike-agent`; Agent at the time: stopped 11 minutes earlier; Created: 01:09:20; Triggered: 01:09, at 9.95 Mbps; Resolved: 01:59.
+- **over 2 Mbps.** Droplet: `mon-spike-noagent`; Agent at the time: never installed; Created: 01:19:04; Triggered: 01:28, at 9.97 Mbps; Resolved: 02:08.
+
+The second policy reported 9.95 Mbps, the API's outside figure for 01:08, while no agent had run for
+eleven minutes. The third was created through the API with `doctl monitoring alert create
+--entities <id>`, which accepted a Droplet with no agent, although the control panel offers only
+Droplets with one. Its outside figure crossed 2 Mbps at 01:22 and the email came at 01:28. Each
+"resolved" came 24 to 28 minutes after its traffic stopped. Times are UTC, converted from the email
+client's Toronto times at UTC−4.
+
+*Measured, as in **Method** above. The emails were read by the maintainer and shown as screenshots.
+That the control panel offers only Droplets with the agent is DigitalOcean's statement, quoted in
+the second finding of this file and not re-checked in the panel.*
+
+**A policy that targets a tag works on an agentless Droplet too.** A second run on 2026-10-07:
+`mon-spike-tagged`, created with `--tag-name mon-spike-tag` and without the agent, sent about 10 Mbps
+to an untagged Droplet from 02:40:50 UTC. A policy created at 02:40:56 with `--tags mon-spike-tag`
+and no entities, for more than 2 Mbps over 5 minutes, emailed "Public Outbound Bandwidth at 9.68
+Mbps" at 02:50. The outside figure crossed 2 Mbps at 02:44. Creating a Droplet with a tag needs a
+token holding `tag:create`, which the first run found when creation was refused without it.
+
+*Measured, one run, in the same team and region. The email was read by the maintainer and shown as a
+screenshot.*
+
+**So the agent supplies nothing the traffic alert reads.** It gates only the control panel's list of
+Droplets.
+
+### Third pass, 2026-10-07
+
+The spike adds a candidate nobody had listed:
+
+- **A3. DigitalOcean's alert policy, attached through the API to a Droplet without the agent.**
+  Created by hand with a short-lived token holding `monitoring:create`, written down as a runbook
+  step. Nothing is installed on the machine.
+
+And property 2 is split into the ways a report can go quiet, since no candidate left has a reporter
+on the machine:
+
+- **2a.** A reporter on the machine stops.
+- **2b.** DigitalOcean stops collecting figures, or stops evaluating a policy, with nothing saying so.
+- **2c.** Whatever runs the check off the machine stops, with nothing saying so.
+
+Two properties come from moments the list had not covered, the alert path's own life over years:
+
+16. *Safety.* The fewest separate services sit on the path from traffic to email, since each is a
+    place it can go quiet (property 2,
+    [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)).
+17. *Safety.* Nothing new holds a standing credential to the DigitalOcean account. A read-only one is
+    allowed by [ADR-0046](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md),
+    and the portable security standard's least privilege prefers none.
+
+- **A2. Agent, records amended.** 1a: pass, observed; 1b: pass: the alert reads outside figures; 2a: pass; 2b: fail; 2c: n/a; 4–13: **5 fails**: adds a publisher with root, which runs an unverified script at first boot and brings in `exim4`, for nothing the alert reads; 16: DigitalOcean only; 17: pass; Documented by DigitalOcean: yes.
+- **A3. Alert through the API, no agent.** 1a: pass, observed; 1b: pass; 2a: pass: nothing on the machine; 2b: fail; 2c: n/a; 4–13: pass: nothing installed; 16: DigitalOcean only; 17: pass; Documented by DigitalOcean: **no**: the API accepts it and the panel does not offer it.
+- **D. Machine-side counter, outside heartbeat.** 1a: pass; 1b: fail; 2a: pass; 2b: pass; 2c: n/a; 4–13: pass: Debian packages; 16: the machine, a heartbeat service; 17: pass; Documented by DigitalOcean: yes.
+- **F. Off the machine, reading the API.** 1a: pass, observed; 1b: pass; 2a: pass; 2b: pass: an empty series can be reported; 2c: fails unless a further service reports the scheduler's silence; 4–13: pass; 16: DigitalOcean, a scheduler, and a heartbeat service for 2c; 17: **fail**; Documented by DigitalOcean: yes.
+
+**A2 is out on property 5.** The alert reads nothing the agent provides, so the publisher it adds
+buys nothing, per the portable decision-making standard's rule that a benefit counts only net of what
+the system already has.
+
+**A3 and F differ on 2b, 16, 17 and documentation.** F detects DigitalOcean's figures stopping, and
+A3 does not. F does it by adding a scheduler and a standing token, and needs a third service to
+report the scheduler's own silence, so it puts three services on the path where A3 has one, and each
+is a place the alert can go quiet. A3's weakness is that it rests on behaviour DigitalOcean does not
+document: it could start refusing a policy on an agentless Droplet, which would be loud at creation,
+or stop evaluating one, which would be silent.

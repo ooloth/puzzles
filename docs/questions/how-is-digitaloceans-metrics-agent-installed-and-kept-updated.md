@@ -178,6 +178,41 @@ machine itself and the ones that read it from outside pass the first and differ 
   leaves to an alert, and "Why it matters" above names it. Root can stop, rewrite or impersonate
   anything running on the machine, and cannot touch figures collected outside it.
 
+**Changed in the second pass, 2026-10-06**
+
+**Property 7 overstated its sources, and is split.** As written it forbade anything updating or
+restarting outside the daily run. [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)'s
+property 6 concerns restarts players notice, and a reporter restarting does not touch the app. The
+maintainer asked why the record applied at all. Split into what each source actually supports:
+
+- **7a.** No restart a player notices happens outside the chosen hour (property 6 of
+  [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)).
+- **7b.** An update run, with its memory and its lock on the package system, happens only at the
+  chosen hour. An upgrade run drew about 114 MB on a 1 GB machine with no swap, per "Hosting — Debian
+  13 updates itself on its own clock" in [../constraints.md](../constraints.md), and a run that
+  collides with another fails silently, per
+  [a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
+- **7c.** One update policy covers every source (property 3 of
+  [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)).
+  An experience row: two update paths are two things to know about.
+
+**Property 11 was misapplied to A in the first pass.** It lets the local run differ "where reaching
+DigitalOcean is impossible", and the agent's only job is reaching DigitalOcean, so the local run
+lacking it is the difference the property allows. What the local run cannot do is rehearse the
+agent's effects on the machine: its memory, its cron job and its `OOMScoreAdjust=-900`. A breaks the
+letter of [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)'s
+arm64 rule, which is why A2 exists, and not its purpose.
+
+**How 1b is weighed.** The maintainer asked for judgement rather than a hard cut, with the whole
+path in view. The path is: traffic starts, a figure is collected, a threshold is checked, an email
+is sent, the maintainer reads it and acts, and every hour before that costs up to about $8 at the
+2 Gbps limit, per [ADR-0047](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md).
+Most compromises of a small server are automated, such as miners and botnets, and do not look for a
+heartbeat to forge. That is reasoned, not sourced. So 1b is weighed below 1a and 2: it decides
+between candidates that tie on those, and does not remove a candidate that wins them. It counts for
+more where a candidate gets it for nothing, because what it guards against is the one case where the
+alert is the only defence.
+
 ## Resolves into
 
 A decision record in [../decisions/](../decisions/), and a change to step 9 of
@@ -201,6 +236,13 @@ the first pass under **Findings**.
 
 - **A. DigitalOcean's metrics agent from DigitalOcean's apt repository**, with an alert policy on
   Public Outbound Bandwidth. What runbook step 9 does today.
+- **A2. The agent as in A, with the records amended to allow it.**
+  [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+  gains an exception for a program that only does anything on DigitalOcean, so the local run lacks it
+  and says so. The package's own updater is removed and the daily run of
+  [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
+  updates it instead, pinned to its major version. Added in the second pass at the maintainer's
+  request, as the option a competent person would weigh against the rest.
 - **B. The same agent from a downloaded `.deb`.**
 - **C. A counter on the machine from Debian's archive**, such as `vnstat` 2.13 or the interface's
   `tx_bytes`, mailing the maintainer through an SMTP relay when a threshold is crossed.
@@ -324,3 +366,19 @@ opened 2026-10-06, and the repository's API answering without authentication.*
 
 D survives every row but 1b. F survives every row it can be scored on so far. 1b is the strongest
 reading of property 1: it assumes an attacker who knows the heartbeat exists and forges it.
+
+**A's row above is wrong on property 11**, and the second pass corrects it; see **Changed in the
+second pass** under the properties. The row is kept so the error stays visible.
+
+### Second pass, 2026-10-06
+
+1b is weighed rather than disqualifying, so D returns. A2 is added.
+
+| | 1a | 2 | 1b | 7b | 7c | 13 | Open |
+|---|---|---|---|---|---|---|---|
+| A2. Agent, records amended | pass | **unknown**: no documented alert when the agent goes quiet | fail | pass once its updater is removed | pass once its updater is removed | **unknown**: unmeasured | what `--enable-monitoring` installs; whether its updater can be removed so it stays removed |
+| D. Machine-side counter, outside heartbeat | pass | pass | fail | pass | pass | pass: a timer and `curl` | which heartbeat service, and an account there |
+| F. Off the machine | **unknown**: figures for an agentless Droplet | depends on what runs the schedule | pass | pass: nothing on the machine | pass | pass | what runs the schedule and holds the token |
+
+Each survivor has one cell that decides it, and a spike can read two of them: whether DigitalOcean's
+figures exist for an agentless Droplet, and what an alert policy does when the agent stops.

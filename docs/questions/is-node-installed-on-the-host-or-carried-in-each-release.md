@@ -92,13 +92,23 @@ release's shape, and was renamed on 2026-10-05 to the part left open.
 
 ## Options
 
-*Node installed on the host, patched by its package manager.* A release is then the built JavaScript
-and its `node_modules`, and the runtime version is a property of the machine. Two machines can run
-the same release on different Node versions, and a patch reaches the app with no deploy.
+*Node installed on the host, patched by its package manager.* Debian 13's own Node is past its end
+of life, so this means NodeSource's apt repository, held to every item of
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)'s
+list; see **Findings**. A release is then the built JavaScript and its `node_modules`, and the
+runtime version is a property of the machine. Two machines can run the same release on different
+Node versions. A patch installs with no deploy, but the running app keeps the old binary until it
+restarts, and whether anything restarts it is not established: see **Findings**.
 
 *Node carried as an exact binary inside each release.* The runtime travels with the code, so a
 release runs the same everywhere and rolls back with its runtime. Each Node patch needs a deploy, and
 each release is larger by the size of the binary.
+
+*Node unpacked from the official tarball onto the host*, as the spikes did, into
+`/opt/node-<version>` with `/opt/node` linked to it. Exact and checksummed once.
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+rules out a downloaded binary because nothing patches it after install, which this option has to
+answer or fall to.
 
 *Not yet.* Slice 4 installs Node on the Droplet, so it has to be carried one way or the other.
 
@@ -155,11 +165,41 @@ release's codename misses. None of this applies if Node is carried inside each r
 **Node from the host would be patched daily at the chosen hour.** If Node comes from NodeSource's
 repository, [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
 adds that repository to the daily updates at the chosen hour. An upgrade replaces Node on disk and
-leaves the running app on the old binary until the machine reboots at that hour, because that record
-forbids restarting the app's unit outside a deploy. A pattern on NodeSource's origin, `. nodistro`,
+leaves the running app on the old binary until it restarts, because that record forbids restarting
+the app's unit outside a deploy. That record reboots the machine for a kernel install or "any process
+left running on a replaced library". Whether a replaced Node binary counts, and what would detect it,
+is not established: "Debian 13 updates itself on its own clock" in
+[../constraints.md](../constraints.md) says only a kernel install marks the machine for a reboot, and
+nothing restarts processes on a replaced library unless something like `needrestart` is installed. A pattern on NodeSource's origin, `. nodistro`,
 matches every major line it publishes, since all share that codename. Carried inside each release,
 Node is untouched by the daily updates and changes only by deploying.
 
 *Reasoned from [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md), 2026-10-03. That NodeSource's package does not depend on `libssl`, so an
 OpenSSL update does not reach Node, was read from its `Packages` index by a research agent and is
 in `git show cb8e751:docs/questions/when-are-updates-applied-to-the-machine.md`.*
+
+**Node carried inside each release changes only when something deploys, so whether it meets the
+one-day bound may turn on what deploys the code.** Properties 3 of
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+and 1 of
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
+ask for a security fix within about a day with no step by hand. A Node release reaches a carried
+runtime only through a deploy, and [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) rejected "applying updates with each deploy" because "the
+window is unbounded while nothing is deployed", reversing "if deploys run on a daily schedule
+regardless of changes". So that candidate's verdict may change with the answer to
+[what deploys the code?](what-deploys-the-code.md) at slice 6, which would make that question an
+input to this one. Not yet tested against scored candidates.
+
+*Reasoned, 2026-10-07, while working the metrics agent question.*
+
+**Node from an apt repository would be pinned by apt, beside whatever pins it on the other
+machines.** [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
+at M2 exists to prevent "two mechanisms nobody compared", and counts the Droplet among its machines.
+An apt preferences pin on the Droplet and a version file read by the Mac and CI would be two, and
+the apt pin holds a major line, not an exact version, so the Mac and the Droplet could run different
+patch releases. Whether this changes any candidate's verdict, or only that question's field, is not
+yet tested.
+
+*Reasoned, 2026-10-07, from [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md),
+[ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+and that question's "Why it matters".*

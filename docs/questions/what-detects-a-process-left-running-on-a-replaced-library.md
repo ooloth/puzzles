@@ -447,14 +447,21 @@ finding on its source above.
 |---|---|---|---|---|---|
 | Script and hook | about 33 | **no**: nothing reboots, nothing says so, until M11's alerting | stays until the next detected update, up to 56 days observed (2025-11-15 to 2026-01-10) | at the next detected update, up to 56 days | best |
 | Daily reboot | 365 | yes: it does not depend on one | gone within a day | within a day | worst: about 332 more |
-| Detector and a cap of N days | about 33, plus at most one per N days without one | within N days | within N days | within N days | close to the script for N of a week or more |
+| Detector and a cap of N days | about 33, plus at most one per N days without one | within N days | within N days | within N days | depends on N: see the replay below |
 
 **Maximums.** Maximum safety is replaced code never running and every failure seen. Maximum
 performance is no reboot a player meets. Maximum experience is nothing to configure. The daily reboot
 comes closest to the first and furthest from the second; the script alone the reverse. The cap
-bounds properties 15 to 17 at N days while adding few reboots, because a detected update already
-arrives about every five days for most of the year. What the cap cannot reach is a day: a broken
-detector or unrecognised code within a day needs a daily reboot.
+bounds properties 15 to 17 at N days, at a cost in reboots that the replay below measures. What the
+cap cannot reach is a day: a broken detector or unrecognised code within a day needs a daily reboot.
+
+**Replayed against the 33 detected-update days of 2025-10-12 to 2026-10-12**, starting from a boot on
+2025-10-12 and counting a cap reboot on any day the machine had been up N days with nothing detected:
+N of 3 adds 101 reboots, 7 adds 33, 14 adds 10, 30 adds 2, and 60 adds none. So a cap of a week
+doubles the reboots, and the cost falls steeply above two weeks. The maintainer chose 14 on
+2026-10-12.
+
+*Measured, 2026-10-12, by me, with a short Python replay over the dates in the count above.*
 
 The choice of N is a weighing between properties 15 to 17 and property 18, and no record sets it.
 

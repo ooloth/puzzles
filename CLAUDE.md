@@ -42,15 +42,22 @@ because finding one needs research, is a question. Otherwise it is a question he
 tests holds:
 
 1. If that option is wrong, the failure is silent and causes harm at the current milestone that the
-   system does not already allow by other means. Harm that would only begin at a later milestone,
-   such as once players or their data exist, does not hold this test now. The choice takes its
-   option, and the question is listed as **Deferred** in `docs/questions/README.md` under the
-   milestone where the harm would begin, so it is weighed again before then.
+   system does not already allow by other means. Harm includes compromise of the machine or the
+   maintainer's accounts, not only harm to players and their data. Harm that would only begin at a
+   later milestone, such as once players or their data exist, does not hold this test now. The
+   choice takes its option, and the question is listed as **Deferred** in
+   `docs/questions/README.md` under the milestone where the harm would begin, so it is weighed
+   again before then.
 2. Changing it gets more expensive as the system grows, because players, their data, or code built
    on it accumulate.
 3. It closes an option open to a question that needs the full process, whether or not that question
    has been asked yet, and reopening that option later would cost more than changing this choice
    back.
+
+Where an accepted record rules out the option the triage would take, the record stands until it is
+amended, and the conflict is raised with the maintainer. What is raised is whether the record set
+its requirement at the right milestone. If it did not, the record is amended and the triage applies
+to the choice. If it did, the choice gets the full derivation.
 
 A test held "to be safe" names the specific harm or later work it guards against, and one that can
 name neither does not hold. A choice that holds none of the three is decided on the spot by whoever

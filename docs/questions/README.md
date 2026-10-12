@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-12
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -613,7 +613,11 @@ Seven steps. Each one exists because skipping it produced a list that had to be 
    **Every entry carries an "or else" clause: which later decision in this slice comes out wrong, and
    what unwinding it costs.** Two costs exist here. A **re-scaffold** is a day. A **migration of live
    player data** is not, and it is the only irreversible thing M1 can create. A question whose wrong
-   answer costs a re-scaffold does little work at the front of a slice.
+   answer costs a re-scaffold does little work at the front of a slice. A choice whose clause can
+   name no silent harm at the current milestone, no cost that grows with the system, and no option
+   of an open question that would cost more to reopen than this choice costs to change is not an
+   entry at all. It is decided on the spot, per the triage in "When a choice surfaces
+   mid-work" in [../../CLAUDE.md](../../CLAUDE.md).
 
    Three things read as clauses and are not: that work cannot start, that the choice might be made
    carelessly, and a restatement of the topic. Each is true of every open question, so none

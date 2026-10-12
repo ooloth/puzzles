@@ -16,10 +16,13 @@ description: Load relevant project-level decisions, guarantees and standards and
 4. **List every choice your task will make, and name the record or Given that settles each one.**
    Include choices that look small and choices about local runs: a wiring detail, a default
    behaviour, what a page shows when something fails. For an issue, check each Ideal-state bullet,
-   and each verification step once implementation writes the plan. A choice you cannot trace to a
-   record is an open question, however conventional its usual answer. **Stop and follow "When a choice surfaces mid-work" in
-   `CLAUDE.md`** rather than recommending an answer and carrying on. An untraced choice presented
-   as a recommendation reads as reasoned whether or not anything was reasoned.
+   and each verification step once implementation writes the plan. Triage each choice you cannot
+   trace to a record, per "When a choice surfaces mid-work" in `CLAUDE.md`. One that holds none of
+   its three tests is decided on the spot, with the reason each test fails stated in the status
+   report and the commit message. One that holds any test is an open question, however
+   conventional its usual answer: **stop and follow that section** rather than recommending an
+   answer and carrying on. An untraced choice presented as a recommendation reads as reasoned
+   whether or not anything was reasoned.
 5. If you notice a gap in the decisions, guarantees or standards guidance that would help you with
    your task, feel free to mention what should be added (if no gap, say nothing)
 6. Proactively uphold all prior decisions and current guarantees and proactively apply the standards

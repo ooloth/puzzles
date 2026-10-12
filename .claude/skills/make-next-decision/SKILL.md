@@ -50,10 +50,29 @@ that instead. Three reasons to give them (if needed):
 
 Deferring is not deciding provisionally. A deferred question stays open with nothing built on it.
 Say that too if needed, since the usual counter-offer is a placeholder answer, and a placeholder is
-the thing this is protecting against.
+the thing this is protecting against. The one exception is the triage below: a choice whose only
+harm begins at a later milestone takes its option meanwhile, deferred to that milestone by name.
 
-Only continue past this step if the answer genuinely blocks the next milestone, or if the user
-directs you to proceed anyway after hearing the above.
+**Then triage it, per the first Must of the portable decision-making standard and "When a choice
+surfaces mid-work" in `CLAUDE.md`.** Name the option that would be taken on the spot, then apply
+that section's three tests to it: silent harm at the current milestone, a cost to change that grows
+with the system, and an option of an open question that would cost more to reopen than this choice
+costs to change back. A test held "to be safe" names the specific harm or later work it guards
+against; one that can name neither does not hold. Where the only harm begins at a later milestone,
+the question is listed as **Deferred** under that milestone and its option is taken meanwhile. Where
+none holds, the rest of this skill does not apply:
+
+- Say which option you would take and why each test fails, and let the user confirm or overrule.
+- Once confirmed, the choice is made in the change that needs it, and that commit message records
+  the choice and the three verdicts. No decision record is written.
+- If a question file exists for it, delete the file and its entry in `docs/questions/README.md` in
+  the same change, and name both in the commit message so the deletion can be found.
+
+Where test 3 is the only one that holds, the choice is worked as part of the question it narrows,
+from that question's property list, and is not decided ahead of it.
+
+Only continue past this step if the answer genuinely blocks the next milestone and holds at least
+one test, or if the user directs you to proceed anyway after hearing the above.
 
 ### 1. Identify the next most important question to answer
 
@@ -196,11 +215,12 @@ the one property it fails.
 2. **Turn each moment's consequence into a property a candidate either has or lacks**, and cite the
    record, guarantee, constraint, failure mode or `docs/problem.md` passage it rests on. An open
    question's reasoning is not a citation. A property that can cite nothing settled rests on an
-   input that is not settled. Where the question owning that input belongs to this milestone, stop
-   and raise it with the user as a prerequisite, which the portable standard says is settled before
-   the decision that surfaced it. Where it belongs to a later milestone, step 0 says not to settle
-   it now: leave the property out, and name it under the list as deferred, with the question that
-   owns it, so the record can say what it did not weigh.
+   input that is not settled. Where the question owning that input belongs to this milestone,
+   triage it as in step 0. If it holds none of the tests, settle it there and continue. Otherwise
+   stop and raise it with the user as a prerequisite, which the portable standard says is settled
+   before the decision that surfaced it. Where it belongs to a later milestone, step 0 says not to
+   settle it now: leave the property out, and name it under the list as deferred, with the
+   question that owns it, so the record can say what it did not weigh.
    What reversing each option would cost is not a property here. It is weighed in step 5, by what
    each option forecloses.
 3. **Ask the resource questions**: which of CPU, memory, storage and network bind, and why the rest

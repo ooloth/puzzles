@@ -35,20 +35,39 @@ downstream is derived from them, and a sequence argued without them is argued fr
 Most choices are found while drafting an issue, writing code or editing docs, not while planning a
 milestone. The planning pass misses some, and nothing downstream assumes it caught them all.
 
-**A choice is a question here if something else will be built on it, or if an open question could
-force it to be reversed, in any environment, local runs included.** Looking small or easy to undo
-does not exempt it. Choices that meet neither test, such as a local variable name or a log line's
-wording, are the implementer's.
+**A choice is triaged before it becomes a question, in any environment, local runs included.** The
+tests are judged against the option that would be taken on the spot: the default an "or else"
+clause names, or the one whoever found the choice would reach for. A choice with no such option,
+because finding one needs research, is a question. Otherwise it is a question here if any of three
+tests holds:
 
-**This repo has no obvious defaults.** A choice that no **Given** and no record settles is open,
-however conventional the usual answer. Recommending one and carrying on is the failure this section
-exists to stop, and it happens because the choice looks too minor to raise.
+1. If that option is wrong, the failure is silent and causes harm at the current milestone that the
+   system does not already allow by other means. Harm that would only begin at a later milestone,
+   such as once players or their data exist, does not hold this test now. The choice takes its
+   option, and the question is listed as **Deferred** in `docs/questions/README.md` under the
+   milestone where the harm would begin, so it is weighed again before then.
+2. Changing it gets more expensive as the system grows, because players, their data, or code built
+   on it accumulate.
+3. It closes an option open to a question that needs the full process, whether or not that question
+   has been asked yet, and reopening that option later would cost more than changing this choice
+   back.
+
+A test held "to be safe" names the specific harm or later work it guards against, and one that can
+name neither does not hold. A choice that holds none of the three is decided on the spot by whoever
+found it. The status report says why each test fails, so the maintainer can check the verdict before
+approving the commit, and the commit message carries the same reasons as the choice's only record.
+It is not provisional; it is expected to stay. A choice that holds test 3 is worked together with
+the question it narrows, not decided ahead of it. The rule is the first Must of the portable
+decision-making standard.
+
+**A choice that holds a test is open until a Given or a record settles it**, however conventional
+the usual answer. Recommending one and carrying on is the failure the next steps exist to stop.
 
 **Before asking the user anything, check whether `docs/` already answers it.** Where a fact belongs
 is answered by "Where a new fact goes" in [docs/README.md](docs/README.md). What is settled is the
 listing of `docs/decisions/`. What is promised is the listing of `docs/guarantees/`.
 
-**When one is found, stop the work that surfaced it and do this:**
+**When a choice holds a test, stop the work that surfaced it and do this:**
 
 1. Find the question file that covers it, or write one, and say which environments it covers.
 2. Add it to the slice in `docs/questions/README.md` as a **Must answer** with its "or else" clause.

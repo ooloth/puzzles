@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-30
+updated: 2026-10-12
 update_when: this file's own content changes — a row is added to or removed from the table below
 decays: slow
 status: active
@@ -55,7 +55,9 @@ and hope.
 line is the question that sorts a fact into it:
 
 - Can't change it → [constraints](constraints.md)
-- Chose it, could choose otherwise → [decisions/](decisions/)
+- Chose it, could choose otherwise → [decisions/](decisions/), unless it holds none of the three
+  tests in "When a choice surfaces mid-work" in the root `CLAUDE.md`, in which case its
+  commit message is its record
 - Not chosen yet, and something will be built on the answer → [questions/](questions/)
 - Promised it, and breaking it is our bug → [guarantees/](guarantees/)
 - Always true, and a player would never see it break → [invariants/](invariants/)

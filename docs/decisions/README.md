@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-28
+updated: 2026-10-12
 update_when: never — this describes the format, not the decisions
 decays: never
 ---
@@ -189,11 +189,13 @@ writing to it is bound to this moment rather than to somebody remembering.
 A template captures a decision; it doesn't improve one. A coin toss written up in this
 format is worse than a scrappy one — the format lends it authority it didn't earn.
 
-**How expensive a decision is to reverse sets when it is taken, not how carefully it is
-derived.** A cheap one can be taken early, before evidence that only later work would produce, per
-the portable decision-making standard. It still gets its properties derived and scored, and it
-still follows every step below. A choice picked quickly because reversing it looked cheap is the
-failure this folder exists to prevent: once recorded, it reads exactly like one that was reasoned.
+**What a wrong answer would cost sets both when a decision is taken and how carefully it is
+derived**, per the first Must of the portable decision-making standard and "When a choice
+surfaces mid-work" in the root `CLAUDE.md`. A choice that holds none of its three tests is decided
+on the spot and recorded in its commit message, not here.
+Every record in this folder holds at least one test, and follows every step below. A record whose
+own comparison found that no property separated the options is the sign that one was put here that
+did not need to be.
 
 **Where the first comparison leaves several options standing, the property list is not finished.**
 Zoom into each property every survivor passes, and extend the list to moments not yet covered,

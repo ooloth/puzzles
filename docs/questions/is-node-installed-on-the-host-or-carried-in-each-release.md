@@ -129,15 +129,20 @@ each release arrives by deploy, and that record does not govern it.
 
 *Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).*
 
-**NodeSource meets two items of that list, and three are unchecked.** Its `node_26.x` repository
+**NodeSource meets three items of that list, and two are unchecked.** Its `node_26.x` repository
 publishes the same versions for amd64 and arm64, 26.0.0 to 26.11.1, and keeps every earlier 26.x
 version in its index. Each major line is a separate repository path, such as
 `deb.nodesource.com/node_26.x`, so the sources entry already selects the line. All of them share the
 origin `. nodistro`, so the origin pattern still matches every line and the apt pin still holds the
 major. The package depends on `libatomic1`, `libc6`, `libgcc1`, `libstdc++6`, `python3` and
 `ca-certificates`, and not on `libssl`, so it adds `python3` to the machine. Not yet checked: whether
-its key can be scoped by `signed-by`, how long after upstream's release a version appears, and how
-NodeSource is maintained.
+how long after upstream's release a version appears, and how NodeSource is maintained. Its key
+worked scoped by `signed-by`: a spike on 2026-10-12 installed `nodejs` from
+`deb [signed-by=/usr/share/keyrings/nodesource.gpg]`, with the key from
+`deb.nodesource.com/gpgkey/nodesource-repo.gpg.key`, and `unattended-upgrades` upgraded it from that
+origin, per the spike in
+[what detects a process left running on a replaced library?](what-detects-a-process-left-running-on-a-replaced-library.md).
+The running app's process was named `node-MainThread` on 26.10.0.
 
 *Sourced: the `Release` file and both `Packages` indexes of
 `deb.nodesource.com/node_26.x/dists/nodistro`, fetched 2026-10-12.*

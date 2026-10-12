@@ -147,6 +147,18 @@ The running app's process was named `node-MainThread` on 26.10.0.
 *Sourced: the `Release` file and both `Packages` indexes of
 `deb.nodesource.com/node_26.x/dists/nodistro`, fetched 2026-10-12.*
 
+**Node from NodeSource would add about 40 reboots a year.** Under
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
+a replaced `/usr/bin/node` under the running app is a process on replaced code, and its only fix is
+a reboot at the hour. `node_26.x` published 17 versions from 2026-05-05 to 2026-10-08. A detector
+on its own reboots on about 33 days a year, per
+[what detects a process left running on a replaced library?](what-detects-a-process-left-running-on-a-replaced-library.md),
+so Node on the host roughly doubles that. Carried in each release, a Node patch arrives by deploy
+and costs no reboot.
+
+*Reasoned, 2026-10-12, from NodeSource's `Packages` index; the rate is an extrapolation from five
+months of one line.*
+
 **How Node is pinned and patched is left here.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app as systemd services with no
 container. So Node is either installed on the host and patched by the package manager, or carried as
 an exact binary inside each release and patched only by deploying. The first keeps Node patched

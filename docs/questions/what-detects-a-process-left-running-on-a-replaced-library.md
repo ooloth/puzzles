@@ -88,10 +88,12 @@ VM, or is lost on a rebuild; it stops working at the move to Debian 14 and nobod
 
 **Performance**
 
-7. The machine reboots only when a running process is on replaced code. Property 7 of
+7. The machine reboots as few times a year as possible. Property 7 of
    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md),
-   as few interruptions a year as possible, each about 18 seconds per
-   [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).
+   each reboot about 18 seconds per [ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).
+   Weighed by count, not passed or failed: the first pass wrote it as "only when a running process
+   is on replaced code" and failed the daily reboot on that wording, which turned a gradient into a
+   threshold the record does not set. Corrected in the third pass, 2026-10-12.
 8. The reboot it triggers lands at the chosen hour. Property 6 of
    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
 9. Nothing it runs holds memory the app needs. The machine has no swap, per "Hosting — a
@@ -119,6 +121,26 @@ VM, or is lost on a rebuild; it stops working at the move to Debian 14 and nobod
     [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) and
     property 2 of
     [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).
+
+15. A detector that stops working is noticed, rather than leaving replaced code running with
+    nothing said. Added in the third pass, 2026-10-12, from the maximum safety in the portable
+    decision-making standard, a system that cannot go wrong without noticing, and
+    [a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
+16. Replaced code that no detector recognises still leaves memory. Added in the third pass, from
+    property 2 of
+    [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md).
+17. A change that stops the machine booting is found soon after it lands, not at the next reboot
+    weeks later mixed in with other changes. Added in the third pass, from the same maximum safety
+    and the recovery route
+    [ADR-0055](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md)
+    keeps for a machine that does not come back.
+18. Extra reboots are a cost the maintainer weighs as negative: "it's negative for sure", stated
+    2026-10-12, of about 345 more 18-second reboots a year at the chosen hour.
+
+**Deferred.** Whether anything on the machine needs to run longer than a day, which a daily reboot
+would forbid, turns on where puzzle generation runs, per
+[are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
+and "The interactive path over batch throughput" in [../problem.md](../problem.md). Not weighed here.
 
 **Resources.** Memory binds, in property 9, and is measured rather than assumed when candidates are
 run. CPU does not bind: a scan of a few dozen processes once a day is small beside serving requests,
@@ -382,4 +404,57 @@ One candidate passes property 14. Its cost is 6b: the detection rule is ours to 
 it honest is the same rehearsal in the local VM that
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
 already requires, run against a replaced package as this spike did.
+
+### How often a detector would reboot the machine, 2025-10-12 to 2026-10-12
+
+**On 33 days a year: 22 with a kernel update and 11 with only a library update.** A research agent
+read every message to `debian-security-announce` in 2025 and 2026 that names trixie, and the
+announcements of Debian 13.2 to 13.7, and counted the distinct days on which a kernel or a package
+shipping a library loaded by this machine's long-running processes was updated: glibc, openssl,
+openssh, systemd, libcap2, xz-utils, expat, util-linux, libgcrypt20, pcre2, python3.13, sqlite3,
+krb5, gnutls28 and audit. Dropping the two it judged doubtful, gnutls28 and audit, leaves 32. The
+longest stretch without one ran from 2025-10-12 to 2026-01-09, broken only by 13.2 on 2025-11-15;
+from February 2026 one came about every five days. Debian's own `nodejs` DSAs were excluded, since
+Node comes from NodeSource or a release. Not checked: uploads outside DSAs and point releases.
+
+[ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)'s
+Risk counts "16 or more reboots a year" from kernel advisories and says C library updates "were not
+counted". This count is that number with them counted.
+
+*Sourced by a research agent from `lists.debian.org/debian-security-announce/{2025,2026}/` and
+`www.debian.org/News/{2025,2026}/`, 2026-10-12. Checked by me: DSA 6113 (openssl), 6126 (linux),
+6442 (util-linux) and 6549 (xz-utils) in the 2026 thread index, and 13.4's announcement on
+2026-03-14.*
+
+**If Node came from NodeSource, each Node release would add a reboot.** The `node_26.x` repository
+published 17 versions from 26.0.0, released 2026-05-05, to 26.11.1 by 2026-10-08, so about 40 a year
+at that rate, most on days the count above does not already reboot. That is an extrapolation from
+five months of one line. It bears on
+[is Node installed on the host or carried in each release?](is-node-installed-on-the-host-or-carried-in-each-release.md),
+not on the choice of detector.
+
+*Reasoned from the `Packages` index fetched 2026-10-12 and Node's `schedule.json`.*
+
+### Scoring, third pass, 2026-10-12
+
+Property 7 is weighed by count, properties 15 to 18 are added, and one candidate is added from the
+maximums. **Detector and a cap** is the script and hook, plus one line run before each daily update
+that writes the marker when the machine has been up longer than N days, so the cap reboots on a day
+nothing else did. `unattended-upgrades` honours a marker on a day it upgrades nothing, per the
+finding on its source above.
+
+| | 7 reboots a year | 15 a broken detector is noticed | 16 unrecognised replaced code | 17 a boot failure found | 18 maintainer's weighing |
+|---|---|---|---|---|---|
+| Script and hook | about 33 | **no**: nothing reboots, nothing says so, until M11's alerting | stays until the next detected update, up to 56 days observed (2025-11-15 to 2026-01-10) | at the next detected update, up to 56 days | best |
+| Daily reboot | 365 | yes: it does not depend on one | gone within a day | within a day | worst: about 332 more |
+| Detector and a cap of N days | about 33, plus at most one per N days without one | within N days | within N days | within N days | close to the script for N of a week or more |
+
+**Maximums.** Maximum safety is replaced code never running and every failure seen. Maximum
+performance is no reboot a player meets. Maximum experience is nothing to configure. The daily reboot
+comes closest to the first and furthest from the second; the script alone the reverse. The cap
+bounds properties 15 to 17 at N days while adding few reboots, because a detected update already
+arrives about every five days for most of the year. What the cap cannot reach is a day: a broken
+detector or unrecognised code within a day needs a daily reboot.
+
+The choice of N is a weighing between properties 15 to 17 and property 18, and no record sets it.
 

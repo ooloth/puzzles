@@ -124,11 +124,23 @@ runtime, so neither is open.
 **If Node is installed on the host, NodeSource's repository is held to [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).** It
 would need a key scoped by `signed-by`, the same versions for amd64 and arm64, old versions kept,
 and an apt pin to the major line [ADR-0031](../decisions/0031-node-runs-on-the-newest-line-committed-to-lts.md)
-names, which also answers the risk that its origin pattern matches every line. Whether NodeSource
-meets each has not been checked. Node carried inside each release arrives by deploy, and that record
-does not govern it.
+names, which also answers the risk that its origin pattern matches every line. Node carried inside
+each release arrives by deploy, and that record does not govern it.
 
 *Reasoned from [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).*
+
+**NodeSource meets two items of that list, and three are unchecked.** Its `node_26.x` repository
+publishes the same versions for amd64 and arm64, 26.0.0 to 26.11.1, and keeps every earlier 26.x
+version in its index. Each major line is a separate repository path, such as
+`deb.nodesource.com/node_26.x`, so the sources entry already selects the line. All of them share the
+origin `. nodistro`, so the origin pattern still matches every line and the apt pin still holds the
+major. The package depends on `libatomic1`, `libc6`, `libgcc1`, `libstdc++6`, `python3` and
+`ca-certificates`, and not on `libssl`, so it adds `python3` to the machine. Not yet checked: whether
+its key can be scoped by `signed-by`, how long after upstream's release a version appears, and how
+NodeSource is maintained.
+
+*Sourced: the `Release` file and both `Packages` indexes of
+`deb.nodesource.com/node_26.x/dists/nodistro`, fetched 2026-10-12.*
 
 **How Node is pinned and patched is left here.** [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) runs the app as systemd services with no
 container. So Node is either installed on the host and patched by the package manager, or carried as
@@ -159,7 +171,9 @@ release's codename misses. None of this applies if Node is carried inside each r
 
 *Sourced by research agents on 2026-10-02, in the first pass of the OS question, read with
 `git show 6bf04f6:docs/questions/which-os-does-the-droplet-run.md`. The host is Debian 13, per
-[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md).*
+[ADR-0049](../decisions/0049-the-droplet-runs-debian-13.md). Re-checked 2026-10-12: trixie carries
+`20.19.2+dfsg-1+deb13u2` per the `sources.debian.org` API, Node's `schedule.json` ends v20 on
+2026-04-30, and NodeSource's `Release` file names the origin `. nodistro`.*
 
 
 **Node from the host would be patched daily at the chosen hour.** If Node comes from NodeSource's

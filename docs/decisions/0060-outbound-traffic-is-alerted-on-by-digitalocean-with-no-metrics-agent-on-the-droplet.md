@@ -2,6 +2,7 @@
 number: 0060
 status: accepted
 date: 2026-10-07
+amended: 2026-10-12
 ---
 
 # 0060 — Outbound traffic is alerted on by DigitalOcean, with no metrics agent on the Droplet
@@ -91,8 +92,8 @@ and the maintainer, months later, wants to know what is on the machine.
     security standard's least privilege).
 
 **Resources.** None binds on the chosen option, which installs nothing on the machine: no memory, CPU,
-disk or network of the machine's is spent. The agent it avoids used about 16 MB and brought a running
-mail server with it.
+disk or network of the machine's is spent. The agent it avoids used about 16 MB, and its install brought in a
+running mail server.
 
 **Maximums.** *Safety:* every abnormal outbound rate reaches the maintainer from figures nothing on
 the machine can touch, and every stop in reporting is noticed. *Performance:* the machine spends
@@ -113,8 +114,8 @@ policy on its Public Outbound Bandwidth is attached to it through the API, by ta
   v1/insights/droplet/public_outbound_bandwidth --compare GreaterThan --tags production`, with the
   rate and one-hour window of step 10 of
   [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosting-account.md) and the
-  maintainer's address, created by a short-lived token holding `monitoring:create`. The control panel
-  cannot create it, since it lists only Droplets with the agent.
+  maintainer's address, created by a short-lived token holding `monitoring:create`. DigitalOcean's docs
+  say the control panel lists only Droplets with the agent; that was not tried in the panel.
 - **By tag, not by ID.** A rebuild keeps the Droplet's ID, but a replacement Droplet gets a new one.
   A policy on the tag reaches any Droplet created with it, so a replacement is covered by the
   creation command it is made with rather than a second step carrying a new value.
@@ -145,9 +146,12 @@ fires, which is
   and [ADR-0051](0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md)
   amended to allow it.** Its case: it keeps to DigitalOcean's documented path, and the local run
   lacking it is a difference property 16 allows. It fails property 8: it adds a publisher with root,
-  whose install script runs unverified at first boot and brings in a running `exim4`, for nothing the
+  whose install script runs unverified at first boot, and whose install brings in a running `exim4`, for nothing the
   alert reads. **Reverses if** DigitalOcean's alerts come to need data only the agent provides.
-- **The agent from a downloaded `.deb`.** It fails property 9: nothing patches it.
+- **The agent from a downloaded `.deb`.** It fails property 9: nothing patches it, which
+  [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)
+  rules out for any downloaded binary. **Reverses if** the agent option itself is chosen and a
+  repository is unavailable.
 - **A counter on the machine from Debian's archive, mailing the maintainer.** It fails property 3:
   when the counter or its mail relay stops, nothing says so. **Reverses if** DigitalOcean stops
   offering bandwidth alerts.
@@ -157,7 +161,8 @@ fires, which is
   all is well, where nothing on the machine can touch DigitalOcean's figures. **Reverses if**
   DigitalOcean's alert on an agentless Droplet is found not to fire.
 - **Prometheus's node exporter with an alerting stack on the machine.** It fails property 3: the
-  alerting runs on the machine it watches.
+  alerting runs on the machine it watches. **Reverses if** its alerting runs on a second machine that
+  something else already requires.
 - **A scheduled job off the machine reading DigitalOcean's bandwidth API.** Its case is the strongest:
   it would notice DigitalOcean's figures stopping, which the chosen option cannot. It fails property
   21: it puts DigitalOcean, a scheduler and a third service to report the scheduler's silence on the
@@ -176,7 +181,8 @@ fires, which is
   starts refusing such a policy, the setup step fails, loudly. If it stops evaluating one, nothing
   says so until M11's check exists.
 - **An email arrives over an hour after traffic starts.** The figure takes about 10 minutes to reach
-  the true rate, the window is one hour and delivery took about 6 minutes, so about 76 minutes at
+  the true rate, the window is one hour and delivery took about 6 minutes on 5-minute windows, so
+  an estimated 76 minutes, since delivery on a one-hour window was not measured, at
   roughly $8 an hour at the 2 Gbps limit, inside
   [ADR-0047](0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md)'s reasoning.
 - **One provider detects and bills.** An outage in DigitalOcean's monitoring is an outage in the only

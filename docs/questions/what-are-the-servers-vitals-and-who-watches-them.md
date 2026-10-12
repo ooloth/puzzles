@@ -45,9 +45,10 @@ obvious.
 
 *Mined 2026-09-30 from where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`) as it was at commit `11ac964`. These are observations for this question to weigh, not answers.*
 
-- **DigitalOcean Monitoring is free and opt-in.** It needs its agent on the Droplet, and alerts on
-  CPU, load, memory, disk use, disk I/O and bandwidth by email or Slack. Read by an agent from
-  [monitoring](https://docs.digitalocean.com/products/monitoring/).
+- **DigitalOcean Monitoring is free and opt-in.** It alerts on CPU, load, memory, disk use, disk I/O
+  and bandwidth by email or Slack, and its docs say every alert needs the metrics agent. Read by an
+  agent from [monitoring](https://docs.digitalocean.com/products/monitoring/). The bandwidth alert
+  was observed working without the agent, per the last finding below; the others were not tried.
 - **DigitalOcean's uptime checks run from outside the machine.** "Each Uptime check costs $1.00 per
   month", and one a month is credited free. *Sourced —
   [uptime pricing](https://docs.digitalocean.com/products/uptime/details/pricing/), opened

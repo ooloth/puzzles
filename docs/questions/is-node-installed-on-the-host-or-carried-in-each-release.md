@@ -140,8 +140,9 @@ how long after upstream's release a version appears, and how NodeSource is maint
 worked scoped by `signed-by`: a spike on 2026-10-12 installed `nodejs` from
 `deb [signed-by=/usr/share/keyrings/nodesource.gpg]`, with the key from
 `deb.nodesource.com/gpgkey/nodesource-repo.gpg.key`, and `unattended-upgrades` upgraded it from that
-origin, per the spike in
-[what detects a process left running on a replaced library?](what-detects-a-process-left-running-on-a-replaced-library.md).
+origin, per the spike recorded in
+[ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md), read with
+`git show 9de5746:docs/questions/what-detects-a-process-left-running-on-a-replaced-library.md`.
 The running app's process was named `node-MainThread` on 26.10.0.
 
 *Sourced: the `Release` file and both `Packages` indexes of
@@ -152,7 +153,7 @@ The running app's process was named `node-MainThread` on 26.10.0.
 a replaced `/usr/bin/node` under the running app is a process on replaced code, and its only fix is
 a reboot at the hour. `node_26.x` published 17 versions from 2026-05-05 to 2026-10-08. A detector
 on its own reboots on about 33 days a year, per
-[what detects a process left running on a replaced library?](what-detects-a-process-left-running-on-a-replaced-library.md),
+[ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md),
 so Node on the host roughly doubles that. Carried in each release, a Node patch arrives by deploy
 and costs no reboot.
 

@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-07
+updated: 2026-10-12
 update_when: a platform, vendor, or regulator is adopted, changed, or dropped
 decays: slow
 status: active
@@ -898,6 +898,36 @@ versions with nothing outside the journal saying so.
 
 *Sourced: `debian/apt.systemd.daily` on apt's main branch, opened 2026-10-03. That apt 3.0.3 in
 Debian 13 has the same flow is assumed from the branch, not checked against its tag.*
+
+**A file dpkg replaces shows as deleted to a process still using it.** dpkg extracts the new file
+beside the old as `.dpkg-new` and renames it over the final name, so the old file loses its last
+link. Per `proc_pid_exe(5)` and `proc_pid_maps(5)`, the kernel then appends ` (deleted)` to its path
+in `/proc/PID/exe` and `/proc/PID/maps` for any process that still has it open or mapped.
+
+*Sourced: dpkg 1.22.22's `src/main/archives.c`, read by a research agent, and the two man7.org pages,
+2026-10-12. Measured on a local Debian 13 arm64 VM, 2026-10-12: after `unattended-upgrade` replaced
+`nodejs`, the running app's `/proc/PID/exe` read `/usr/bin/node (deleted)`.*
+
+**`unattended-upgrades` checks for the reboot marker after dpkg's hooks, and on days it upgrades
+nothing.** In 2.12, `main()` calls `reboot_if_requested_and_needed()` after the upgrade, which runs
+apt's `DPkg::Post-Invoke` hooks, and also on a run that found nothing to upgrade. That function returns
+unless `/var/run/reboot-required` exists, then runs `/sbin/shutdown -r` with
+`Unattended-Upgrade::Automatic-Reboot-Time`. So a marker written by a dpkg hook, or before the run,
+becomes a reboot at that time.
+
+*Sourced: `unattended-upgrade` 2.12 at `sources.debian.org`, opened 2026-10-12. Measured on a local
+Debian 13 arm64 VM, 2026-10-12: a hook's marker produced "Reboot scheduled for ... 23:59:00 UTC" in
+the same run.*
+
+**Debian 13 updated a kernel or a library its servers keep loaded on 33 days in a year.** From
+2025-10-12 to 2026-10-12, 22 days carried a kernel update and 11 more an update to glibc, openssl,
+openssh, systemd, libcap2, xz-utils, expat, util-linux, libgcrypt20, pcre2, python3.13, sqlite3,
+krb5, gnutls28 or audit. The longest gap was 56 days, from 13.2 on 2025-11-15 to 13.3 on 2026-01-10;
+from February 2026 one came about every five days.
+
+*Sourced by a research agent from every trixie message to `debian-security-announce` in 2025 and
+2026 and the announcements of 13.2 to 13.7, 2026-10-12. Five items checked by me. Uploads outside
+DSAs and point releases were not counted.*
 
 ## Hosting — Debian 13's Caddy trails upstream's security fixes by months, and only Caddy's own repository keeps pace on both architectures
 

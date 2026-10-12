@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-12
 update_when: alerting on the machine lands, or how updates are applied changes
 decays: slow
 status: active
@@ -26,6 +26,11 @@ a security fix reaches the running system within a day.
 4. Each later run meets the same failure, or skips the packages held back by it. The machine keeps
    serving, on fixes that are days, then weeks, old.
 
+A fix can also install and never reach memory. The detector of
+[ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md) decides whether a process still runs replaced code, and if it stops
+working while exiting cleanly, or the way dpkg or the kernel marks a replaced file changes, it
+reports nothing and the machine does not reboot.
+
 ## Why here specifically
 
 **One machine, updated by nobody watching.** [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) chose to apply updates with no step by hand,
@@ -48,3 +53,8 @@ configuration**, per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
 catches a failure caused by configuration but not one caused by a package published later. Nothing
 yet.
+
+For the detector, [ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md)'s hook writes the reboot marker when the script fails,
+so an error causes a reboot rather than silence, and [ADR-0062](../decisions/0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md) reboots a machine up
+14 days whatever was detected, which bounds a detector that is wrong without failing at 14 days.
+Neither exists yet.

@@ -2,7 +2,7 @@
 number: 0051
 status: accepted
 date: 2026-10-03
-amended: 2026-10-05
+amended: 2026-10-12
 ---
 
 # 0051 — Updates, and the reboots they need, are applied daily at an hour we set
@@ -88,7 +88,8 @@ it uses, and reboots then if anything installed needs it.**
   restarted for a library; the machine reboots instead.** A restart of the app's unit bypasses the
   drain-then-switch deploy that property 1 of
   [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) rests on, which a spike
-  observed with `needrestart` set to restart.
+  observed with `needrestart` set to restart. What detects a process left on a replaced library is
+  [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md), and a machine up 14 days reboots regardless, per [ADR-0062](0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md).
 - **A new machine** applies every update before it serves.
 - **The production-like local run** carries the same configuration.
 
@@ -103,7 +104,7 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 
 ## Rejected
 
-- **A weekly or monthly window.** Its case is real: at most 12 reboots a year instead of 16 or more,
+- **A weekly or monthly window.** Its case is real: at most 12 reboots a year instead of about 33,
   and one predictable moment of change. It fails property 1: a critical kernel fix waits up to 7
   days under a weekly window and up to 30 under a monthly one, against about a day, or is applied by
   hand between windows. **Reverses if** an update applied as released takes
@@ -129,8 +130,9 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
 - **A regression lands unrehearsed.** An update installs on the Droplet the day it is released,
   with no run in the local VM first. Undo is a downgrade from the package cache or
   `snapshot.debian.org`, by hand.
-- **16 or more reboots a year**, each about 18 seconds, at the chosen hour: 16 kernel advisories in
-  the year to 2026-10-02, plus C library updates, which were not counted.
+- **About 33 reboots a year**, each about 18 seconds, at the chosen hour: from 2025-10-12 to
+  2026-10-12, Debian 13 updated a kernel on 22 days and a library its long-running processes load on
+  11 more, per [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md). [ADR-0062](0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md)'s cap adds about 10.
 - **Up to a day exposed** between a fix's release and the hour.
 - **A failed run is silent** until [how is the server operated?](../questions/how-is-the-server-operated.md)
   at M11 adds alerting.

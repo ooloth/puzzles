@@ -2,7 +2,7 @@
 number: 0044
 status: accepted
 date: 2026-09-30
-amended: 2026-10-05
+amended: 2026-10-12
 ---
 
 # 0044 — The server runs as systemd services, without containers
@@ -34,7 +34,10 @@ patch, a failure being investigated, and the same arrangement run on the Mac. Ea
 row in the question.
 
 1. A deploy fails no request (row 30 and J1, [the player is never asked to retry or
-   reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)).
+   reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)). This binds from
+   M12, where players arrive. Before then a failed request reaches only the maintainer, so a deploy
+   may restart the app: the maintainer's ruling, 2026-10-12. The arrangement chosen here still
+   meets it, as observed below.
 2. The arrangement leaves the app and what runs beside it the most of the 1 GB machine
    ([../constraints.md](../constraints.md), no swap).
 3. Everything beneath the app is patched without a recurring manual step (rows 14 and 23).
@@ -78,8 +81,9 @@ adds. No container runtime is installed.** Which backup, and whether it is a pro
 - **What OS the Droplet runs, and what sits in front of the app and terminates TLS.** Settled since by
   [ADR-0049](0049-the-droplet-runs-debian-13.md) and
   [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md).
-- **How a deploy switches between versions.** That is
-  [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md).
+- **How a deploy switches between versions without failing a request.** That is
+  [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md),
+  answered at M12 with property 1. Until then a deploy restarts the app.
 - **How Node itself is pinned and patched.** Either the host's package manager patches it, or each
   release carries its own binary. That is [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md).
 - **What triggers a deploy.** That is [what deploys the

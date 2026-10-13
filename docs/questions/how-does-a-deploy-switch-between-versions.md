@@ -11,7 +11,9 @@ resolves_into: decision
 The app runs as systemd services on one Droplet, per
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). A deploy has
 to move traffic from the running version to the new one. Done carelessly, it fails requests already
-in flight, which property 1 of that record forbids. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names this as the record that follows the
+in flight, which property 1 of that record forbids from M12, where players arrive. Until then a
+deploy restarts the app and a request in flight may fail, which reaches only the maintainer, so
+this question is answered at M12. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names this as the record that follows the
 choice of front, since the front is what moves traffic between instances.
 
 **Environments:** production, and the production-like local run on the maintainer's Mac that

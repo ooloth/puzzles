@@ -97,7 +97,6 @@ closes, and the slices left keep their numbers because records cite them by numb
    - **Given:** [0044-the-server-runs-as-systemd-services-without-containers](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) — a release is a directory of built JavaScript and its `node_modules`, run by systemd
    - **Given:** [0046-no-standing-digitalocean-token-can-create-billed-resources](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) — the pipeline holds no DigitalOcean token that can create anything
    - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the pipeline builds every deployable from one install with no publish step between the rules module and its consumers, which is what [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) requires of it
-   - **Must answer:** [how-does-a-deploy-switch-between-versions](how-does-a-deploy-switch-between-versions.md) — or else the pipeline [what deploys the code?](what-deploys-the-code.md) chooses is built around whatever stop-and-start its first script happens to do, and requests in flight on the old instance fail, which the spikes observed as 39 POSTs failing with 502. Slice 4 deploys once, so nothing switches before this slice
    - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
 
 ### Working notes — temporary, and deleted as its content finds permanent homes
@@ -439,7 +438,12 @@ is still open, and moving this point moves every question below that is keyed on
     ed7f54e:docs/questions/where-does-this-run.md`; what must stay single is the replicator. The
     rest — checkpointing on exit, replication across a restart, rolling back past a migration — is
     real from the first player's data.
-18. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
+18. [How does a deploy switch between versions?](how-does-a-deploy-switch-between-versions.md) —
+    without failing a request in flight, which
+    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s
+    property 1 requires from here. Until then a deploy restarts the app, and a request that fails
+    reaches only the maintainer. The spikes observed 39 POSTs failing with 502 across a restart.
+19. [What does a browser below the floor see?](what-does-a-browser-below-the-floor-see.md) — what
     keeps
     [a device too old to run the app is told so rather than shown a blank screen](../guarantees/a-device-too-old-to-run-the-app-is-told-so-rather-than-shown-a-blank-screen.md).
     The fallback is carried by the entry document the build already produces, per
@@ -448,19 +452,19 @@ is still open, and moving this point moves every question below that is keyed on
     floor until there are players. Its wrong answer is invisible, since every browser above the
     floor shows the app either way, so it is settled by opening the built document in a browser
     below the floor rather than by reading.
-19. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
+20. [At what hour does the machine apply updates and reboot?](at-what-hour-does-the-machine-apply-updates-and-reboot.md)
     — the hour only matters once someone starts a session at it, which is from here, and it must
     avoid the release hour
     [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
     may set at M8. Until then Debian's default hour harms nobody.
-20. [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
+21. [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
     — React needs neither `eval` nor injected inline styles, so nothing in the build waits on it.
     [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settles
     that Caddy serves the client's files, so the header has a home, and a public launch is the
     latest point to decide it.
-21. [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — it becomes real the
+22. [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — it becomes real the
     moment the app is shown to anyone who has not been told what it is, which is here.
-22. [Which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md)
+23. [Which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md)
     — a first visit sends the client uncompressed until it is answered, which costs nobody before
     players arrive and costs every one of them after.
 

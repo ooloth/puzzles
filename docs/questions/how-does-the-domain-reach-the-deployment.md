@@ -200,6 +200,15 @@ Cloudflare's registrar creates no obligation to use their proxy.
 
 *Sourced — stated by the maintainer, 2026-09-02.*
 
+**The domain is `pencilpuzzles.app`, and M1 serves from its apex.** Whether players use the apex or a
+subdomain stays open until M11: a player's local boards are tied to the origin, so changing the
+hostname strands them once players exist, and costs nothing before. `.app` is on browsers' HSTS
+preload list, so nothing loads over plain HTTP and the site shows nothing until Caddy holds a
+certificate.
+
+*Sourced — the domain and that it is owned, stated by the maintainer, 2026-10-12. The HSTS preload
+of `.app` is Reasoned from general knowledge and was not checked against the preload list.*
+
 **The rule this question turns on is the weakest-sourced entry in
 [../constraints.md](../constraints.md).** That file records the IP-matching clause as described by
 third parties rather than by Apple, and notes the behaviour was widely reported in 2023 and is absent

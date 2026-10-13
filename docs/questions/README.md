@@ -46,6 +46,12 @@ How a milestone's list is built and kept, and how a question file is written, ar
 A deployed skeleton: a client, an endpoint answering one route with a hard-coded response, and
 nothing else. No database, no puzzle, no features.
 
+**What a visitor sees until players arrive.** From slice 5 the deployment serves
+`pencilpuzzles.app`. Its page is a holding page, worded by the maintainer when slice 4 is built, with
+the endpoint's answer in small type so a deploy can still be checked by looking. Every response
+carries `X-Robots-Tag: noindex`, and `robots.txt` disallows everything. Both go when the landing page
+at M11 replaces them.
+
 4. **Both halves are deployed on a host.**
    - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else slice 4's setup installs Node one way by default, which fixes what a release contains before slice 6's pipeline is designed to build it, and what a rollback at M10 restores: with Node on the host, a rollback keeps today's runtime under yesterday's code
 5. **The deployment answers at an address we control.**
@@ -399,7 +405,9 @@ is still open, and moving this point moves every question below that is keyed on
     that Caddy serves the client's files, so the header has a home, and a public launch is the
     latest point to decide it.
 22. [What belongs on the landing page?](what-belongs-on-the-landing-page.md) — it becomes real the
-    moment the app is shown to anyone who has not been told what it is, which is here.
+    moment the app is shown to anyone who has not been told what it is, which is here. It replaces
+    M1's holding page, and launch removes the `noindex` header and the `robots.txt` that blocks
+    crawlers.
 23. [Which encodings are the client's files precompressed in, and what writes them?](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md)
     — a first visit sends the client uncompressed until it is answered, which costs nobody before
     players arrive and costs every one of them after.

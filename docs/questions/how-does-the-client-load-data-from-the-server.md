@@ -19,7 +19,7 @@ no promise covers. That fetch is not the pattern M4 copies. This question is lis
 answers it instead.
 
 Its inputs arrive at different milestones: what crosses the boundary at M4, what implements the
-client's state at M2, and whether a puzzle is fetched before it is needed at M8. So M4 may settle
+client's state at M5, and whether a puzzle is fetched before it is needed at M8. So M4 may settle
 only where fetched content enters the client, and leave when it is fetched to M8.
 
 This is client code, so it is the same in every environment. Where the request goes is the client's

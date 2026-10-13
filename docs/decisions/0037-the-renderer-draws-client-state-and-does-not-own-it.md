@@ -49,7 +49,8 @@ the client's state only to make a view easier to write.
 **This record does not choose how the client's state is built.** Hand-written, or on a library such
 as Zustand's framework-agnostic store, TanStack Store, nanostores, Redux Toolkit or a signals
 library, is open at [what implements the client's
-state?](../questions/what-implements-the-clients-state.md), which M2 needs and M1 does not.
+state?](../questions/what-implements-the-clients-state.md), at M5. Until then M2 holds the board in a
+small hand-written module.
 
 **What it keeps open:** the renderer can be replaced at the cost of rewriting the view code, and the
 client's state can run where no renderer does: under a test runner without a browser, in a worker,
@@ -106,7 +107,7 @@ architecture spike did the second: its store carries `remoteChanged` and `remote
 view can animate.
 
 **The client's state is invisible to renderer devtools.** Inspecting it needs hooks of its own, such
-as a log of actions, unless the library chosen at M2 supplies them. Each renderer also needs a small
+as a log of actions, unless the library chosen at M5 supplies them. Each renderer also needs a small
 adapter to subscribe: one hook call in React and about ten lines in Vue and Svelte in the spike.
 
 ## Revisit when
@@ -120,7 +121,7 @@ adapter to subscribe: one hook call in React and about ten lines in Vue and Svel
 
 - [x] questions/README.md — the renderer question takes this as a given rather than a must-answer,
   and [what implements the client's state?](../questions/what-implements-the-clients-state.md) opens
-  at M2.
+  at M5.
 - [x] architecture.md — the client box shows the client's state held apart from the renderer.
 - [x] constraints.md — nothing imported.
 - [x] glossary.md — adds puzzle state, its three copies and where each lives, and view state.

@@ -62,7 +62,10 @@ at M11 replaces them.
 ## M2 — a grid you can fill in
 
 A puzzle hard-coded in the client, rendered as a grid. Select a cell, enter a digit, see it. In
-memory only; nothing survives a reload. Deployed the way M1 deploys.
+memory only; nothing survives a reload. Deployed the way M1 deploys. The board is held in a small
+hand-written module outside the renderer, per
+[ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md), until M5
+chooses what implements the client's state.
 
 1. [How is the app styled?](how-is-the-app-styled.md) — with the renderer settled at
    [ADR-0038](../decisions/0038-the-renderer-is-react.md), which ships no styling of its own, so the
@@ -72,10 +75,6 @@ memory only; nothing survives a reload. Deployed the way M1 deploys.
    gesture with no keyboard form.
 3. [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
    — after the above, since the budget covers the input path and what an input is comes first.
-4. [What implements the client's state?](what-implements-the-clients-state.md) — the first puzzle
-   state held in memory arrives here. How much a library could supply depends on the storage
-   mechanism, undo depth and state shape at M5, so this is answered with those in view rather than
-   ahead of them.
 
 ## M3 — a change can be checked before it ships
 
@@ -170,7 +169,7 @@ puzzles and player records share one store, since player records first arrive th
    — after the boundary above, which is its first input. This is the first fetch of content that
    becomes the board, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
    keeps out of the renderer, so M1's fetch of "Hello!" inside a view is not the pattern to copy. What
-   implements the client's state is answered at M2 and prefetching at M8, so this may need to settle
+   implements the client's state is answered at M5 and prefetching at M8, so this may need to settle
    only where fetched content enters the client and leave when it is fetched to M8.
 4. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — the
    first row is here. Its *openness* is a caveat on M1: the argument that the store does not narrow
@@ -198,6 +197,9 @@ The first durability promise anything actually keeps.
    may use the APIs Safari added at 15.2 and 15.4.
 5. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
    one stack choice with no clean migration path.
+6. [What implements the client's state?](what-implements-the-clients-state.md) — how much a library
+   could supply depends on the storage mechanism, undo depth and state shape above, so it is answered
+   with them in view. M2's hand-written module holds the board until then.
 
 ## M6 — the rules run
 

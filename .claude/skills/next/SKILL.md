@@ -17,10 +17,8 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
 
 ## Your task
 
-1. **Grep the rule, do not read the file to find it.** `grep -n "issue is filed once"
-   docs/questions/README.md` and read the section around the hit. That README is over 60KB and
-   a single read exhausts its token budget partway through, so reading top-down leaves whether you
-   see the rule to chance. The rule is the repo's own and it decides everything below.
+1. **Read "Start here" in `docs/questions/README.md`.** It holds the rule for when a slice gets an
+   issue and which milestone is current, and both decide everything below.
 2. **Read the tracker with `--state all`.** Open issues alone cannot tell you which milestone is
    finished. Invoke `use-gh` first, as the user's global `CLAUDE.md` requires before any `gh` call.
 3. **Rank what the tracker holds** by the order in `CLAUDE.md`: bugs first, then the current
@@ -28,7 +26,7 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
    milestones say. Each issue's kind label, `bug`, `feature` or `maintenance`, says which rank it
    has. An issue with no kind label is reported as needing one rather than guessed at.
 4. **Identify the current milestone**, then read that milestone's section of the README — its
-   slices, their **Given** bullets and their **Must answer** bullets. In that order: which milestone
+   slices and their **Must answer** bullets. In that order: which milestone
    is current depends on the tracker, so reading a section first risks reading the wrong one.
    Maintenance comes after the current milestone's route, so name it only when that milestone has
    nothing workable, or as a second line in the report.
@@ -43,17 +41,19 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
 
 **The prose list above the slices is numbered like the slices and is not them.** A milestone's
 narrative can end with its own numbered list of what remains to decide. The slices are the numbered
-list whose entries carry **Given** and **Must answer** bullets. Count only those.
+list of bold slice titles, each with any **Must answer** bullets under it. Count only those.
 
 **Which milestone is current cannot be read off either source alone.** The docs record no status,
 deliberately, and the tracker is shorter than the slice list because issues are filed just-in-time.
-Join them on the slice title, which the README names as the join key. A slice's entry is deleted
-when its issue closes and the rest keep their numbers, so a milestone is finished when its list is
-empty, and the current one is the lowest with a slice still listed. A listed slice whose issue is
+Join them on the slice title, which `.claude/skills/make-next-decision/milestone-lists.md` names as
+the join key. A slice's entry is deleted when its issue closes and the rest keep their numbers, so a
+milestone is finished when its list is empty, and the current one is the lowest-numbered with
+anything still listed. If that milestone lists only questions, it has not been broken into slices
+yet, and the route is to plan it, per that file. A listed slice whose issue is
 closed means the deletion was missed: offer to delete it, then keep looking.
 
-**Most slices have no issue, and that is the intended state rather than drift.** The README's "read
-a missing issue as not workable yet" describes a slice that still has **Must answer** bullets. The
+**Most slices have no issue, and that is the intended state rather than drift.** A missing issue
+means "not workable yet" for a slice that still has **Must answer** bullets. The
 drift case is narrower and is the one to raise: a slice with **no** remaining Must answer and no
 issue means one should have been filed and was not. Offer `write-ticket-description`.
 
@@ -66,7 +66,7 @@ issue means one should have been filed and was not. Offer `write-ticket-descript
 - **A workable slice with no issue** — offer to file it, and say that "workable" is only as good as
   the entry. A slice with no **Must answer** listed may still hide a choice the planning pass
   missed, often about local runs. Drafting the issue is the last check: every Ideal-state bullet
-  traces to a **Given** or a record, per step 4 of `uphold-project-requirements`. One that
+  traces to a record or constraint, per step 4 of `uphold-project-requirements`. One that
   does not means the slice was not workable, and the route becomes "a question" by way of "When a
   choice surfaces mid-work" in `CLAUDE.md`.
 - **Anything ambiguous** — two slices both workable, a milestone that looks finished but has an

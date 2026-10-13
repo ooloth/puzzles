@@ -22,7 +22,7 @@ there is an archive is not.
 
 It also sets storage volume by orders of magnitude, which is why
 [what can a player do with no network?](what-can-a-player-do-with-no-network.md) asks the offline
-half of the same thing at M6.
+half of the same thing at M5.
 
 ## What would settle it
 

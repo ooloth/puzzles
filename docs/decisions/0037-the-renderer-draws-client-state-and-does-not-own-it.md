@@ -49,7 +49,7 @@ the client's state only to make a view easier to write.
 **This record does not choose how the client's state is built.** Hand-written, or on a library such
 as Zustand's framework-agnostic store, TanStack Store, nanostores, Redux Toolkit or a signals
 library, is open at [what implements the client's
-state?](../questions/what-implements-the-clients-state.md), which M5 needs and M1 does not.
+state?](../questions/what-implements-the-clients-state.md), which M2 needs and M1 does not.
 
 **What it keeps open:** the renderer can be replaced at the cost of rewriting the view code, and the
 client's state can run where no renderer does: under a test runner without a browser, in a worker,
@@ -62,13 +62,13 @@ unmeasured. Memory does not bind: each change allocates a new
 board of tens of kilobytes, inside the device bound in [../constraints.md](../constraints.md).
 Storage and network are where this earns its place rather than where it costs: the client's state
 owns the write on every change and the merge from sync, so no renderer's scheduling sits between an
-input and its write. The storage mechanism is open at M6.
+input and its write. The storage mechanism is open at M5.
 
 ## Enforced by
 
 **Nothing. Asserted only.** No client state exists yet. It is satisfied when `src/client/state/` exists,
 and view code reaches it only through its snapshot, subscription and actions. An import boundary
-check could enforce the second half once M2 chooses the checks.
+check could enforce the second half once M3 chooses the checks.
 
 ## Rejected
 
@@ -81,9 +81,9 @@ check could enforce the second half once M2 chooses the checks.
   fast drag because a handler read state from its last render while React deferred the next one.
   **Reverses if** a renderer is chosen whose state tools apply every change synchronously and the
   renderer is accepted as permanent, so that keeping it replaceable buys nothing.
-- **Not yet** — leave where state lives until real state lands at M5. It is rejected because the
+- **Not yet** — leave where state lives until real state lands at M2. It is rejected because the
   renderer is chosen at M1, and whether that choice costs a view rewrite or a client rewrite to
-  reverse is this answer. **Reverses if** the renderer question is moved past M5.
+  reverse is this answer. **Reverses if** the renderer question is moved past M2.
 
 A third option, the client's state built on a framework-agnostic signals library, is not rejected.
 It is a way of building it and moves to [what implements the client's
@@ -106,7 +106,7 @@ architecture spike did the second: its store carries `remoteChanged` and `remote
 view can animate.
 
 **The client's state is invisible to renderer devtools.** Inspecting it needs hooks of its own, such
-as a log of actions, unless the library chosen at M5 supplies them. Each renderer also needs a small
+as a log of actions, unless the library chosen at M2 supplies them. Each renderer also needs a small
 adapter to subscribe: one hook call in React and about ten lines in Vue and Svelte in the spike.
 
 ## Revisit when
@@ -120,7 +120,7 @@ adapter to subscribe: one hook call in React and about ten lines in Vue and Svel
 
 - [x] questions/README.md — the renderer question takes this as a given rather than a must-answer,
   and [what implements the client's state?](../questions/what-implements-the-clients-state.md) opens
-  at M5.
+  at M2.
 - [x] architecture.md — the client box shows the client's state held apart from the renderer.
 - [x] constraints.md — nothing imported.
 - [x] glossary.md — adds puzzle state, its three copies and where each lives, and view state.

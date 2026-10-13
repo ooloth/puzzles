@@ -55,7 +55,7 @@ either alone would miss.
 Neither exists yet, because the rules module does not. Whichever slice first creates the rules module is where
 these checks belong, and
 [what proves a vertical slice works end to end?](../questions/what-proves-a-vertical-slice-works-end-to-end.md)
-at M2 is where the runner for them gets decided.
+at M3 is where the runner for them gets decided.
 
 **Both checks are part of that slice's definition of done, and this file is what says so.** They
 were briefly filed as their own issue and it was closed as mis-scoped: its QA plan required adding

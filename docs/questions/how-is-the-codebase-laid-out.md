@@ -27,9 +27,9 @@ a relative path — is decided the first time anything imports it. Measured belo
 so the cost of waiting is nil and the cost of choosing early is a door closed for nothing.
 
 **What lives inside `src/rules/`** — one module for every game or one per game, named by domain or
-by technical layer — is decided when there are rules to organise, at M7.
+by technical layer — is decided when there are rules to organise, at M6.
 
-**Whether the generator is a third deployable** is decided at M8 when it exists.
+**Whether the generator is a third deployable** is decided at M7 when it exists.
 
 [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) and
 [ADR-0007](../decisions/0007-that-language-is-typescript.md) together set the one hard
@@ -44,8 +44,8 @@ specifier and no manifest entry. It is settled by writing that import rather tha
 research.
 
 **For what lives inside `src/rules/`:** having more than one game's rules written, so the question
-is whether a second game wants its own module rather than whether it might. M7 is where the first
-game's rules run and M15 is where the second arrives.
+is whether a second game wants its own module rather than whether it might. M6 is where the first
+game's rules run and M14 is where the second arrives.
 
 **For whether the generator is a third deployable:** knowing whether it writes the catalogue
 directly or through the server's API, which
@@ -120,7 +120,7 @@ consumers, which
 *A task orchestrator over the top* — Nx, Turborepo, Moon, Rush, Wireit, Bazel. Not a layout, and
 scored separately: each adds task caching, affected-package detection and a task graph over whatever
 layout is chosen, and `pnpm -r` with `--filter` already covers ordered recursive execution without
-one. Nothing in M1 or M2 has named a problem any of them solves.
+one. Nothing in M1 or M3 has named a problem any of them solves.
 
 Within any of those, a second axis. **By domain concept:** folders named for what the code is about
 — a player and their progress, one game's rules, storage — so a name answers "where would I find X"
@@ -292,7 +292,7 @@ them.
 did not open it.*
 
 **The TypeScript version the measurements below ran against is 7.0.2, and what that implies for
-tooling is in [../constraints.md](../constraints.md)** rather than here, because it binds the M2
+tooling is in [../constraints.md](../constraints.md)** rather than here, because it binds the M3
 check questions rather than this one.
 
 **The workspace shapes carry a failure the single-package shapes cannot have.** A sibling reached
@@ -363,7 +363,7 @@ imports `node:http`, in both shapes:
 So the single package is not unguarded, it is guarded by the type check alone, and the build will
 ship a broken bundle past a warning if nothing runs that check. Nothing runs any check in this
 repository today, which is
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2.
+[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M3.
 
 *Measured — 2026-09-20, both shapes, the same offending import.*
 

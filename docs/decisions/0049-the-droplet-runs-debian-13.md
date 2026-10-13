@@ -148,7 +148,7 @@ cloud image with the same cloud-init.
 - **Flatcar and Fedora CoreOS.** They fail property 3: they are built to run containers and have no
   package manager for the host, so Node and the front cannot be installed and patched as packages. **Reverses if** [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) is reversed in favour of containers.
 - **Not yet.** Rejected because M1 slice 4 cannot create the Droplet without an image, and changing
-  the OS gets more expensive once the store holds data at M3.
+  the OS gets more expensive once the store holds data at M4.
 
 Custom images DigitalOcean can boot, such as NixOS, Arch, openSUSE Leap and Gentoo, were found but
 not scored. NixOS was already rejected for the arrangement in [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) on what it takes to learn.
@@ -185,6 +185,6 @@ not scored. NixOS was already rejected for the arrangement in [ADR-0044](0044-th
       reboot schedule to the question on update timing
 - [x] architecture.md: the Droplet runs Debian 13
 - [x] constraints.md: nothing new; the measurements are this record's
-- [x] ../CONTRIBUTING.md: nothing yet; the local run's VM arrives at M2
+- [x] ../CONTRIBUTING.md: nothing yet; the local run's VM arrives at M3
 - [x] guarantees/: no new promise
 - [x] glossary.md: nothing introduced

@@ -92,11 +92,11 @@ later items are not built yet.
   `forceCloseConnections`. **M1 slice 1.** Without it a deploy stalls for 72 seconds per shutdown,
   which is visible rather than silent but is long enough to overlap two processes on one store —
   the thing [how does a deploy avoid disturbing the
-  store?](../questions/how-does-a-deploy-avoid-disturbing-the-store.md) at M12 exists to prevent.
+  store?](../questions/how-does-a-deploy-avoid-disturbing-the-store.md) at M11 exists to prevent.
   `closeGracefully` in `src/server/shutdown.ts`; `src/server/shutdown.test.ts` fails without the reaping.
 - The server is constructed with `logger: true`. **M1 slice 1.** `buildServer` in `src/server/app.ts`;
   tests may redirect where lines go and cannot turn the logger off.
-- Routes declare a body schema and a response schema. **M3**, where the first response with content
+- Routes declare a body schema and a response schema. **M4**, where the first response with content
   in it exists — see [what crosses the client/server
   boundary?](../questions/what-crosses-the-client-server-boundary.md). Until then there is no contract
   to declare, so this half of the record is deliberately unbuilt rather than overlooked.

@@ -22,7 +22,7 @@ after the dev server has changed. Safari did; Chrome did not. Deleting the site 
 fixes it: in Safari, Settings → Privacy → Manage Website Data; in Chrome, DevTools → Application →
 Clear site data.
 Bites you when: `pnpm dev` seems to serve something other than `src/client/`. `curl` shows what the
-server actually sends. From M9 the app registers its own service worker on this address, which
+server actually sends. From M8 the app registers its own service worker on this address, which
 makes this more likely.
 
 ### `pnpm dev` serves `/hello` as JavaScript

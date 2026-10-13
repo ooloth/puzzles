@@ -181,7 +181,7 @@ Not a cost of this record, since it is equally true of the rejected options, but
 the repo's standing argument that the store does not narrow the runtime passes through that module
 and no record had noted it sits below stable.
 [Which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
-at M3 is where that is owed.
+at M4 is where that is owed.
 
 ## Revisit when
 

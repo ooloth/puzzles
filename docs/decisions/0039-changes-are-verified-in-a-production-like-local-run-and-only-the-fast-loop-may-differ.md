@@ -64,7 +64,7 @@ recorded here and belongs to
 **Nothing yet. Asserted only.** The production-like run does not exist. Which differences it closes,
 how, and what command runs it are
 [how is the app run locally the way it runs deployed?](../questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
-at M2, which builds it.
+at M3, which builds it.
 
 **Until then each slice is verified in the closest mode that exists**, and
 [../../CONTRIBUTING.md](../../CONTRIBUTING.md) records under **Can't observe** what that mode cannot
@@ -73,7 +73,7 @@ loop's result stand in for production's.
 
 Once the production-like run exists, what enforces this is a check that runs a slice's end-to-end
 path in it, which [what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md)
-at M2 would carry.
+at M3 would carry.
 
 ## Rejected
 
@@ -111,7 +111,7 @@ run, verifying in it depends on someone choosing to. The fast loop giving the ri
 the time is exactly what makes skipping it tempting.
 
 **Slices 3 to 6 of M1 ship before the production-like run exists.** Each is verified in the closest
-mode available, so each carries a recorded gap until M2.
+mode available, so each carries a recorded gap until M3.
 
 ## Revisit when
 
@@ -120,7 +120,7 @@ build does. Either removes the reason for two modes.
 
 ## Also update
 
-- [x] questions/README.md — M1's third slice gains this record as a **Given**; M2's entry for the
+- [x] questions/README.md — M1's third slice gains this record as a **Given**; M3's entry for the
       local-parity question is narrowed to what is still open
 - [x] questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md — narrowed to which
       differences the production-like run closes, how, and what command runs it

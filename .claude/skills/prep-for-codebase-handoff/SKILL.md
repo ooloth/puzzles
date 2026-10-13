@@ -168,7 +168,7 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
 - **A record committing to something no record settled.** For each record in `docs/decisions/`,
   list the commitments its Decision, "What it commits us to" and Enforced by sections make beyond
   the headline: a policy, a schedule, a package source, a mechanism, a default kept. Name the record
-  or Given behind each. A commitment that traces to nothing is a choice made without anyone deciding
+  or constraint behind each. A commitment that traces to nothing is a choice made without anyone deciding
   it, and it reads as settled because it sits in a record. It occurred in the drafts of ADR-0049 and
   ADR-0050 on 2026-10-03, as "updates applied as released" and "Node from NodeSource"; the
   maintainer caught it by asking why automatic updates were being built in. The fix moves the
@@ -213,7 +213,8 @@ docs/guarantees/` is the backlog and it is only as good as that agreement.
   finished, or a pattern that no longer exists, trains readers to skim the one file whose whole
   value is being read carefully — and an honestly empty `unfinished.md` is better than a padded one.
 - **Milestone prose recounting what was settled.** `docs/questions/README.md` holds only what each
-  milestone's remaining slices need, per its own rule under "Building a milestone's list". Read each
+  milestone's remaining slices need, per "Building a milestone's list" in
+  `.claude/skills/make-next-decision/milestone-lists.md`. Read each
   milestone's prose above its list and flag paragraphs that report a question as answered, name a
   record as having settled something, or explain how a past choice was reached. The record already
   holds that. Before deleting one, check it is not the only place the index links a question file,

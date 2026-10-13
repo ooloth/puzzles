@@ -42,12 +42,12 @@ is still the current line.
 
 **Nothing would tell us, today.** No check compares a pinned version against the versions its
 repository publishes. [How is the server operated?](../questions/how-is-the-server-operated.md) at
-M11 is where that check is decided, beside alerting on failed update runs. Until then this is found
+M10 is where that check is decided, beside alerting on failed update runs. Until then this is found
 only by reading upstream's release announcements, or by noticing the "Revisit when" in [ADR-0052](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md).
 
 ## What reduces it
 
 **A check that reports when a pinned package's repository publishes a higher major version than the
-pin allows**, which M11 decides. `apt-cache policy` shows a package's version table, which should
+pin allows**, which M10 decides. `apt-cache policy` shows a package's version table, which should
 include versions the pin excludes, so the check may need no outside service. That is reasoned from
 apt's version table and not tried. Nothing yet.

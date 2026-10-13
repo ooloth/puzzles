@@ -43,12 +43,12 @@ can observe.
 ## How we'd notice
 
 **Nothing would tell us, today.** No alerting exists.
-[How is the server operated?](../questions/how-is-the-server-operated.md) at M11 is where alerting on
+[How is the server operated?](../questions/how-is-the-server-operated.md) at M10 is where alerting on
 a failed update is decided. Until then this is found only by reading the log on the machine.
 
 ## What reduces it
 
-**Alerting on the outcome of each run**, which is M11's. **A local rehearsal of the same
+**Alerting on the outcome of each run**, which is M10's. **A local rehearsal of the same
 configuration**, per
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
 catches a failure caused by configuration but not one caused by a package published later. Nothing

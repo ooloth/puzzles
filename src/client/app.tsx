@@ -22,7 +22,7 @@ export function App() {
   switch (outcome.kind) {
     case "answered":
       return <p>{outcome.text}</p>;
-    // What the page shows before an answer, and when there is none, is deferred to M9 and M2 in
+    // What the page shows before an answer, and when there is none, is deferred to M8 and M3 in
     // docs/questions/README.md, so it shows nothing.
     case "error-status":
     case "not-plain-text":

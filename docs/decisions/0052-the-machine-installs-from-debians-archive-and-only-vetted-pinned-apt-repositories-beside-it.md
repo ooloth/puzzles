@@ -110,7 +110,7 @@ resolved, read with `git show 75fc8a5:docs/questions/where-may-the-machines-soft
 - **The source of any replication process the store's backup adds**, when
   [how is the store backed up?](../questions/how-is-the-store-backed-up.md) is answered. It is held to this rule there.
 - **Noticing a failed update run, or a pin left on a major version upstream no longer supports.**
-  Both are [how is the server operated?](../questions/how-is-the-server-operated.md) at M11, and
+  Both are [how is the server operated?](../questions/how-is-the-server-operated.md) at M10, and
   the second is
   [a pinned package outlives its supported major version](../failure-modes/a-pinned-package-outlives-its-supported-major-version.md).
 
@@ -149,13 +149,13 @@ lacking `signed-by`, a pin or an allowed origin would, and does not exist.
 ## Risk
 
 - **A pinned line stops receiving fixes, silently.** Caddy supports only its latest 2.x, so after a
-  Caddy 3 ships the pinned machine eventually gets no fixes, and nothing reports it until M11's
+  Caddy 3 ships the pinned machine eventually gets no fixes, and nothing reports it until M10's
   mechanism exists. That is
   [a pinned package outlives its supported major version](../failure-modes/a-pinned-package-outlives-its-supported-major-version.md).
 - **One more publisher with root.** Caddy's project and Cloudsmith, whose open-source hosting can be
   withdrawn. Moving off it is a change of source for one package.
 - **A broken repository is hidden by the daily run**, per [../constraints.md](../constraints.md),
-  until M11 alerts on it.
+  until M10 alerts on it.
 - **Old versions are kept by Cloudsmith's choice.** Its indexes hold 39 versions today, and no
   retention policy was found. If it prunes them, undoing a regression needs a `.deb` kept elsewhere.
 - **Patch releases still change behaviour.** The pin stops major versions only; Caddy's 2.11.6

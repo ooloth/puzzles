@@ -91,7 +91,7 @@ and Cloudflare Pages' fallback is read with
 **This does not decide whether the API is versioned in its path.** `/api/v1/` would be this rule with
 a versioning scheme on top, and that belongs to
 [what crosses the client/server boundary?](../questions/what-crosses-the-client-server-boundary.md)
-at M3.
+at M4.
 
 **Resources.** None binds. Network: no request or round trip is added, and the prefix adds four bytes
 to a URL. CPU: one string comparison per request, far below the capacity in "Servers — framework
@@ -115,7 +115,7 @@ keeps older clients running.
   the entry document.
 - Nothing yet sends `/api/` to the server in production. M1's fourth slice does, through whatever
   serves production.
-- M9's service worker lists `^/api/` in the denylist of its fallback to the entry document, per
+- M8's service worker lists `^/api/` in the denylist of its fallback to the entry document, per
   [how does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md).
 
 The part that lands last is the service worker's, and nothing breaks without it until an API URL is
@@ -153,7 +153,7 @@ opened as a navigation.
   fallback to the entry document, because every client URL is a real file.
 - **Not yet** — because M1's third slice needs a proxy rule for the client's first call, and the
   Vite dev server already answers any path it does not proxy with the entry document and a 200, per
-  [../constraints.md](../constraints.md). Leaving `/hello` at the root makes it the pattern M3 copies.
+  [../constraints.md](../constraints.md). Leaving `/hello` at the root makes it the pattern M4 copies.
 
 ## Risk
 
@@ -176,7 +176,7 @@ paths loud. What a mistyped client URL shows is the client's routing, which is o
 
 - [x] questions/README.md — the path question becomes a **Given** for M1's third slice, which then
       has no **Must answer** left; the fourth slice gains a **Given** that the host sends `/api/` to
-      the server; M9's offline question notes the denylist
+      the server; M8's offline question notes the denylist
 - [x] architecture.md — the path rule, on the line that already cites
       [ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md)
 - [x] constraints.md — Safari before 16.4 sends no fetch metadata headers, and Vite's dev server falls

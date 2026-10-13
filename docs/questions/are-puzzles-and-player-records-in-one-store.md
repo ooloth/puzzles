@@ -16,7 +16,7 @@ content behind a runtime that can decide whether to serve it. They have almost n
 the catalogue is written rarely by the generator and read by everyone, and the player record is
 written constantly by one player and read by that player.
 
-**This does not block M1 or M3, and it sits at M12.** It was filed at M1 on the strength of one
+**This does not block M1 or M4, and it sits at M11.** It was filed at M1 on the strength of one
 claim — that a store the process opens as a file pins the generator to the server's machine — and
 that claim is false as stated. A generator publishes either by writing the store directly or by
 sending puzzles through the server's own API, and the second runs anywhere under a file store
@@ -27,8 +27,8 @@ discovered late. It also decides whether a hybrid arrangement exists that nothin
 local file for one body of data and a network service for the other — which is a question about the
 execution shape field's shape rather than about M1.
 
-**It cannot be deferred past M12**, because that is where the first player record is written, and a
-player record has to be written somewhere. M3's seeded puzzle does not wait on it: the puzzle goes
+**It cannot be deferred past M11**, because that is where the first player record is written, and a
+player record has to be written somewhere. M4's seeded puzzle does not wait on it: the puzzle goes
 into the store [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) and
 [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) already settle, and this question is
 whether player records join it.
@@ -59,7 +59,7 @@ Raised 2026-09-02, during the foreclosure analysis on
 claim that an embedded store pins the generator to the server's machine appeared to rest on this,
 and nothing had asked it.
 
-Worked 2026-09-03, which found the pinning claim false and moved this question from M1 to M3. The
+Worked 2026-09-03, which found the pinning claim false and moved this question from M1 to M4. The
 investigation is kept because it settled two things — that the queryability requirement covers the
 catalogue, and that the generator is never pinned by store locality alone — even though it did not
 produce a decision.
@@ -119,14 +119,14 @@ cost it exists to avoid, which is a different cost from either of these.
 ### What is not yet known
 
 **Nothing has established what the catalogue actually holds**, and
-[what is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) is open until M3 for
-the minimum and M7 for the whole answer. A store decision that assumes a shape which has not been
+[what is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) is open until M4 for
+the minimum and M6 for the whole answer. A store decision that assumes a shape which has not been
 argued would be resting on an inference.
 
 **This question's urgency was borrowed and has been given back.** It was raised at M1 on the pinning
 claim, and that claim is false in every branch rather than merely absent from one — see below. So
-nothing at M1 waits on this, and it sits at M12, where the first player record is written. The
-catalogue's shape is argued before then, at M3 and M7.
+nothing at M1 waits on this, and it sits at M11, where the first player record is written. The
+catalogue's shape is argued before then, at M4 and M6.
 
 > So the two questions are not circular, though they looked it. This one is downstream, and it was
 > promoted on the strength of a consequence that does not hold at all.
@@ -214,7 +214,7 @@ are needed only in this branch.
 ### What the unknowns would and would not change
 
 **The two things nothing has established do not plausibly flip one-versus-two.** The catalogue's
-schema is open until M3, and its write frequency depends on
+schema is open until M4, and its write frequency depends on
 [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) and
 [are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md).
 Neither bears on co-location: a daily puzzle for a deliberately small audience is small under every

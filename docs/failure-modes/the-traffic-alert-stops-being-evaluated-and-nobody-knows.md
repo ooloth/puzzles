@@ -38,12 +38,12 @@ without notice.
 ## How we'd notice
 
 **Nothing would tell us, today.** The policy is listed by `doctl monitoring alert list` whether or not
-it is evaluated. [How is the server operated?](../questions/how-is-the-server-operated.md) at M11 is
+it is evaluated. [How is the server operated?](../questions/how-is-the-server-operated.md) at M10 is
 where a check that the alert still fires is decided.
 
 ## What reduces it
 
 **A check that makes the alert fire on purpose**, such as a policy with a threshold the machine's
 normal traffic crosses, kept alongside the real one, or a periodic burst of traffic. Either would be
-decided at M11. Creating the Droplet with its tag in the same command as the rest of its setup keeps
+decided at M10. Creating the Droplet with its tag in the same command as the rest of its setup keeps
 step 3's replacement case from depending on a second step. Nothing yet.

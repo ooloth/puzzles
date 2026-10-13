@@ -100,4 +100,4 @@ obvious, and invisible failures are the ones that need writing down.
 **Nothing before multi-device makes this reachable.** One device cannot be behind itself. This
 becomes real when cross-device resume is in scope, which
 [is cross-device resume in scope for v1?](is-cross-device-resume-in-scope-for-v1.md) places after
-v1, and not before, which is why it sits at M14.
+v1, and not before, which is why it sits at M13.

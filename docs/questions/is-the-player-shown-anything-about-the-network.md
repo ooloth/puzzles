@@ -75,7 +75,7 @@ already says the interface owes them.
 **Until this is answered, the client shows nothing while a request is in flight or after one fails.**
 M1's third slice fetches the page's only text from `/api/hello`, and renders nothing before the
 answer arrives and nothing when the call fails, logging the failure to the console instead. That is
-a placeholder with nothing built on it, not an answer to this question; M3's first fetched content
+a placeholder with nothing built on it, not an answer to this question; M4's first fetched content
 is where it starts to matter to a player.
 
 *Reasoned — from `src/client/app.tsx`, 2026-09-27.*
@@ -102,9 +102,9 @@ opening a puzzle whose content has never reached the device — happens to every
 daily. That changes the scale of this question: it is not only about an offline glyph on an unusual
 day, it is about the ordinary daily entry into the app.
 
-**Whether this milestone is still the right one is worth re-checking.** It sits at M9, where offline
-behaviour is the point. The waits above become real at M8, when puzzles are fetched on a rhythm and a
-player could sit in front of one. Nothing forces the move — M8 can complete with nothing shown — but
+**Whether this milestone is still the right one is worth re-checking.** It sits at M8, where offline
+behaviour is the point. The waits above become real at M7, when puzzles are fetched on a rhythm and a
+player could sit in front of one. Nothing forces the move — M7 can complete with nothing shown — but
 "nothing shown" would then be the answer by default, which is the failure this file exists to prevent.
 
 *Reasoned — 2026-09-03, from the enumeration named.*

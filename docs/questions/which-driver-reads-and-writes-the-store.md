@@ -15,11 +15,11 @@ None of them says what opens the file.
 
 **`node:sqlite` has been treated as the answer without being chosen.** It is built into Node, so
 it is the convenient assumption, and it is a release candidate rather than stable. The first row
-is written at M3, so the choice is needed by then and should be made on the driver's merits.
+is written at M4, so the choice is needed by then and should be made on the driver's merits.
 
 ## What would settle it
 
-The driver itself is not needed until M3, when the first row exists.
+The driver itself is not needed until M4, when the first row exists.
 
 What to weigh, in the order it matters here: whether the API supports what
 [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
@@ -123,14 +123,14 @@ Enumerated 2026-09-19. Most of these are cheap to investigate and none should de
   realistic size.
 - **The request path writes player state.** Same synchronicity. How durably it lands is
   [what durability settings does the store run with?](what-durability-settings-does-the-store-run-with.md)
-  at M12. **Unexamined:** write latency, and how much the durability setting changes it.
+  at M11. **Unexamined:** write latency, and how much the durability setting changes it.
   [../constraints.md](../constraints.md) puts plausible load under a hundred writes per second
   against driver throughput in the tens of thousands, so this is very unlikely to bind, and that is a
   reason to check it cheaply rather than to skip it.
 - **A backup is copied off the machine.** Three mechanisms exist and nobody has compared them: the
   driver's own `backup()`, a `VACUUM INTO`, and a filesystem copy of a WAL-mode database.
   **Unexamined:** how long each takes at a realistic database size, and whether the server can keep
-  answering throughout. [How is the store backed up?](how-is-the-store-backed-up.md) at M12 owns the
+  answering throughout. [How is the store backed up?](how-is-the-store-backed-up.md) at M11 owns the
   choice; what is unexamined here is the cost of each option.
 - **That backup is streamed to object storage.** **Unexamined:** memory during a multi-megabyte
   streamed upload from Node.
@@ -139,7 +139,7 @@ Enumerated 2026-09-19. Most of these are cheap to investigate and none should de
   for players.
   **Unexamined:** nothing additional; that question owns it.
 - **A migration rewrites a table.** [How is the schema migrated?](how-is-the-schema-migrated.md) at
-  M12 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the
+  M11 owns the mechanism. **Unexamined:** whether a migration holds a write lock long enough for the
   server to need taking out of service, which decides whether a migration is a deploy step or an
   outage.
 

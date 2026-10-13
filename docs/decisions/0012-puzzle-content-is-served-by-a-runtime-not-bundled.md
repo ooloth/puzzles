@@ -52,7 +52,7 @@ rather than to delivery — an archive that might ever be gated cannot be static
 ## Enforced by
 
 **Nothing. Asserted only, and nothing is served.** What would make it true is puzzle content behind a
-route that can decline to answer, rather than files in the client bundle. It arrives at M8, and
+route that can decline to answer, rather than files in the client bundle. It arrives at M7, and
 [../constraints.md](../constraints.md) records why it cannot be retrofitted: anything already
 delivered cannot be withdrawn.
 

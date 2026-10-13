@@ -8,7 +8,7 @@ resolves_into: decision
 
 ## Why it matters
 
-**The running app gets its first secret at M12 at the earliest**, when the store's off-machine copy
+**The running app gets its first secret at M11 at the earliest**, when the store's off-machine copy
 arrives with the first player's data. In M1 the app is a hard-coded response with nothing to inject,
 per [what deploys the code?](what-deploys-the-code.md). The maintainer's own SSH key is held in
 1Password's agent, per [ADR-0054](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md).

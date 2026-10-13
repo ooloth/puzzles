@@ -1327,7 +1327,7 @@ frameworks as a class rather than scoring them, and it reaches any later choice 
 is decorator-driven — an ORM as readily as a router. The condition that would lift it is a
 transpilation step ahead of Node, which is
 [is server TypeScript transpiled or stripped?](questions/is-server-typescript-transpiled-or-stripped.md)
-at M2.
+at M3.
 
 ## Dependencies — Fastify's default listen hides a second listener from `close()`
 
@@ -1461,7 +1461,7 @@ type-aware linter in widest use states the consequence in its own manifest:
 > So this binds checking and not running. Node strips types without consulting TypeScript and Vite
 > transforms them with esbuild, so no execution path touches it. What it reaches is the step that
 > lints with type information, and what to do about that is
-> [what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M2.
+> [what runs the checks on every change?](questions/what-runs-the-checks-on-every-change.md) at M3.
 
 *Unlike the rest of this file, a claim about a tool can be overtaken by a release shipping the same
 week. Re-run the three commands above before building on it.*

@@ -56,7 +56,7 @@ because `scripts/check-docs.test.ts` runs it. Its rewrite is issue #2.
 **Actually** both were put in place so M1's first slice could be installed and tested. They are
 interim, and they come ahead of [what runs the tests?](questions/what-runs-the-tests.md) and
 [what pins the toolchain versions across machines?](questions/what-pins-the-toolchain-versions-across-machines.md)
-at M2, each of which may replace them.
+at M3, each of which may replace them.
 
 **So** follow them for now, and don't cite either one as settled.
 
@@ -69,7 +69,7 @@ at M2, each of which may replace them.
 the built client with the API behind it on one origin, but not the way production will: behind a
 front on a Droplet, under systemd. Building the production-like run is
 [how is the app run locally the way it runs deployed?](questions/how-is-the-app-run-locally-the-way-it-runs-deployed.md)
-at M2.
+at M3.
 
 **So** verify in the closest mode that exists, which for anything the browser sees is
 `pnpm build && pnpm preview` with the server running, and record in

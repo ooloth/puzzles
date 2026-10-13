@@ -127,7 +127,7 @@ the question that owns it:
 one reload under load failed 4 asset requests of 2,788 pages when the next release held only its own
 asset, and none of 2,822 when it also held the previous one. How many releases back is
 [can a page loaded before a deploy still fetch its files after it?](../questions/can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
-at M9.
+at M8.
 
 **The evidence.** Two local spikes on 2026-10-04 on the maintainer's Mac, with Caddy 2.11.7, this
 repository's Vite build and plain HTTP on loopback, one run each. The method and tables are in the

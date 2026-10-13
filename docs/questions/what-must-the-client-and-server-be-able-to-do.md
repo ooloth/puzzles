@@ -367,7 +367,7 @@ candidate on one is measuring what does not decide anything.
 **How fast a renderer updates one cell.** [../constraints.md](../constraints.md) names a single-cell
 update on an 81-cell grid as its worked example of measuring what does not bind. It does not settle
 the worst-case paths, such as cold launch, high-frequency input and bulk updates, which are open on
-a floor device in that file's device section and were measured on an M2 for
+a floor device in that file's device section and were measured on an M3 for
 [ADR-0038](../decisions/0038-the-renderer-is-react.md).
 
 **How fast generation runs.** [../problem.md](../problem.md) ranks the interactive path above batch

@@ -11,20 +11,20 @@ resolves_into: decision
 The app runs as systemd services on one Droplet, per
 [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md). A deploy has
 to move traffic from the running version to the new one. Done carelessly, it fails requests already
-in flight, which property 1 of that record forbids from M12, where players arrive. Until then a
+in flight, which property 1 of that record forbids from M11, where players arrive. Until then a
 deploy restarts the app and a request in flight may fail, which reaches only the maintainer, so
-this question is answered at M12. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names this as the record that follows the
+this question is answered at M11. [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) names this as the record that follows the
 choice of front, since the front is what moves traffic between instances.
 
 **Environments:** production, and the production-like local run on the maintainer's Mac that
 [ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
 requires, where the same switch is rehearsed before it touches the Droplet.
 
-**What it does not cover.** What the store needs during a deploy, from M3, is
+**What it does not cover.** What the store needs during a deploy, from M4, is
 [how does a deploy avoid disturbing the store?](how-does-a-deploy-avoid-disturbing-the-store.md). What
 triggers a deploy and where a release is built is
 [what deploys the code?](what-deploys-the-code.md). Noticing and undoing a bad deploy is
-[how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11.
+[how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M10.
 
 ## What would settle it
 

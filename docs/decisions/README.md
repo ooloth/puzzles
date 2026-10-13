@@ -75,8 +75,8 @@ still recorded, see below.
 
 **Separate records do not mean separate working.** Questions that touch the same moments are worked
 from one property list and still settle in records of their own, per the portable decision-making
-standard and step 6 of "Building a milestone's list" in
-[../questions/README.md](../questions/README.md).
+standard and step 5 of "Building a milestone's list" in
+[milestone-lists.md](../../.claude/skills/make-next-decision/milestone-lists.md).
 
 Two failures this prevents, both of which have happened here:
 

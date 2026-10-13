@@ -11,7 +11,7 @@ date: 2026-10-12
 - [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md):
   the detector can be wrong in silence, and misses code it does not recognise.
 - Nothing alerts on either until
-  [how is the server operated?](../questions/how-is-the-server-operated.md) at M11.
+  [how is the server operated?](../questions/how-is-the-server-operated.md) at M10.
 
 ## Scored against
 
@@ -47,12 +47,12 @@ with a month's silent window). The replay is read with
 
 ## Rejected
 
-- **No cap.** It fails property 1: a broken detector stays silent until M11's alerting. **Reverses
+- **No cap.** It fails property 1: a broken detector stays silent until M10's alerting. **Reverses
   if** that alerting exists and also covers properties 2 and 3.
 - **7 days.** It fails property 5: 33 more reboots a year, twice the detector's own. **Reverses if**
   reboots at the hour stop costing anything.
 - **30 days.** It fails property 1 as the maintainer weighs it: a month of silence for 8 fewer
-  reboots. **Reverses if** M11's alerting makes property 1 hold without the cap.
+  reboots. **Reverses if** M10's alerting makes property 1 hold without the cap.
 - **Not yet.**
   [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md)
   is built in slice 4, and so is its silence.
@@ -63,7 +63,7 @@ About 10 reboots a year on quiet days. A broken detector still goes unnoticed fo
 
 ## Revisit when
 
-M11 alerts on a failed detector run; M12 sets a downtime tolerance.
+M10 alerts on a failed detector run; M11 sets a downtime tolerance.
 
 ## Also update
 

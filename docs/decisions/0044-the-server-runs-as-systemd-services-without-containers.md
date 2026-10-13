@@ -21,7 +21,7 @@ amended: 2026-10-12
 - "Hosting — a DigitalOcean Droplet starts with no swap" in [../constraints.md](../constraints.md):
   about 600 MB is free on a 1 GB Droplet once the app, Caddy and Litestream run, and running out ends
   a process. Litestream ran in the spikes as one candidate for replicating the store, which is
-  [how is the store backed up?](../questions/how-is-the-store-backed-up.md) at M12.
+  [how is the store backed up?](../questions/how-is-the-store-backed-up.md) at M11.
 - [ADR-0039](0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md):
   the production-like run uses the production arrangement.
 - The maintainer's aims recorded in where does this run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`): "it
@@ -35,7 +35,7 @@ row in the question.
 
 1. A deploy fails no request (row 30 and J1, [the player is never asked to retry or
    reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)). This binds from
-   M12, where players arrive. Before then a failed request reaches only the maintainer, so a deploy
+   M11, where players arrive. Before then a failed request reaches only the maintainer, so a deploy
    may restart the app: the maintainer's ruling, 2026-10-12. The arrangement chosen here still
    meets it, as observed below.
 2. The arrangement leaves the app and what runs beside it the most of the 1 GB machine
@@ -83,7 +83,7 @@ adds. No container runtime is installed.** Which backup, and whether it is a pro
   [ADR-0050](0050-caddy-terminates-tls-in-front-of-the-app.md).
 - **How a deploy switches between versions without failing a request.** That is
   [how does a deploy switch between versions?](../questions/how-does-a-deploy-switch-between-versions.md),
-  answered at M12 with property 1. Until then a deploy restarts the app.
+  answered at M11 with property 1. Until then a deploy restarts the app.
 - **How Node itself is pinned and patched.** Either the host's package manager patches it, or each
   release carries its own binary. That is [is Node installed on the host or carried in each release?](../questions/is-node-installed-on-the-host-or-carried-in-each-release.md).
 - **What triggers a deploy.** That is [what deploys the

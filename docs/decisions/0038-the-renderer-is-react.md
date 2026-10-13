@@ -98,7 +98,7 @@ in `package.json`, and `src/client/main.tsx` mounts a React root.
 transit connection the first visit takes roughly a second longer than with Vue or Svelte, which is
 arithmetic rather than a measurement.
 
-**Floor-device speed is unmeasured.** A 15 by 15 drag step costs 2 to 3ms on an M2, and a device
+**Floor-device speed is unmeasured.** A 15 by 15 drag step costs 2 to 3ms on an M3, and a device
 five to ten times slower would sit near a 60Hz frame for the largest grids.
 
 **The concrete instance of the first weight rests on a pin nothing has chosen.** `vue-tsc` fails

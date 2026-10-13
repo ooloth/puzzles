@@ -62,7 +62,7 @@ The compilers are wired; no route declares a body yet. What must be true:
   Without the second, a declared response schema is documentation. **M1 slice 1**, so that no route is
   ever written against an unwired serializer. Done in `buildServer` in `src/server/app.ts`, and
   `src/server/app.test.ts` checks that a mismatched response is not sent.
-- Every route that accepts or returns a body declares the corresponding schema. **M3 onward**, where
+- Every route that accepts or returns a body declares the corresponding schema. **M4 onward**, where
   the first response with content exists. A route declaring no response schema is not checked, and
   nothing reports that, so this is the half most likely to be half-built and read as finished.
 
@@ -124,9 +124,9 @@ told about, and nothing reports a route that declared nothing.
 ## Also update
 
 - [x] questions/README.md — noted against [what crosses the client/server
-      boundary?](../questions/what-crosses-the-client-server-boundary.md) at M3, which inherits the
+      boundary?](../questions/what-crosses-the-client-server-boundary.md) at M4, which inherits the
       shape this record describes rather than choosing one
-- [x] architecture.md — no boundary or relationship changes; the shape crossing the boundary is M3's
+- [x] architecture.md — no boundary or relationship changes; the shape crossing the boundary is M4's
 - [x] constraints.md — nothing added. It carries the total-throughput headroom this record reasons
       from, and deliberately not a serialisation measurement, because none was taken
 - [x] glossary.md — no new domain terminology

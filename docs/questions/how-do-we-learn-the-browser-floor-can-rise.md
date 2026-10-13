@@ -52,7 +52,7 @@ somebody remembers.
 branch with a recent release, compares it with the floor in the build config, and opens an issue
 when they differ. Needs the threshold above and something to run it.
 
-*Player browser data.* Once the running system reports on itself at M11, the browsers that actually
+*Player browser data.* Once the running system reports on itself at M10, the browsers that actually
 load the app are known. That says who a higher floor would strand, not what is still patched, so it
 informs a raise rather than triggering one.
 

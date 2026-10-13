@@ -157,10 +157,10 @@ kept by [../runbooks/set-up-the-hosting-account.md](../runbooks/set-up-the-hosti
 candidate here buys it, so it separates none.
 
 **Deferred.** Being alerted to a login, a refused login or a failed check belongs to
-[how is the server operated?](how-is-the-server-operated.md) at M11, where alerting on a failed update
+[how is the server operated?](how-is-the-server-operated.md) at M10, where alerting on a failed update
 is already placed by
 [a security update fails and nobody knows](../failure-modes/a-security-update-fails-and-nobody-knows.md).
-Property 7 keeps the record that alerting would read. Secrets the running app holds arrive at M12
+Property 7 keeps the record that alerting would read. Secrets the running app holds arrive at M11
 with [how do secrets reach the running system?](how-do-secrets-reach-the-running-system.md); M1 has
 none.
 
@@ -269,7 +269,7 @@ its vendor's runner image gives a pipeline with weak parity. See
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
 
 **The app needs no secrets in M1.** The milestone is a hard-coded response with no database, so
-there is nothing to inject into the running app. That becomes real at M3 and should not be built
+there is nothing to inject into the running app. That becomes real at M4 and should not be built
 before then. The deploy itself does hold one credential, the SSH key below.
 
 *Reasoned — from M1's definition in [README.md](README.md).*

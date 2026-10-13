@@ -60,10 +60,10 @@ which ran as one candidate for replicating the store.
 Disk is property 10. CPU and network do not bind for an occasional upgrade.
 
 **Not weighed.** How long an outage may last is
-[how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md) at M12. The
+[how much downtime is acceptable?](../questions/how-much-downtime-is-acceptable.md) at M11. The
 verdict holds for any tolerance above a few minutes a year, and one of zero fails every option.
 Alerting on a failed update is [how is the server operated?](../questions/how-is-the-server-operated.md)
-at M11.
+at M10.
 
 **Maximums.** Maximum safety is every fix in force the moment it is published. Maximum performance
 is no reboot a player ever meets. Maximum experience is nothing to do by hand. Applying fixes daily
@@ -135,7 +135,7 @@ Nothing checks that the Droplet still carries them. A rehearsal in the local VM 
   11 more, per [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md). [ADR-0062](0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md)'s cap adds about 10.
 - **Up to a day exposed** between a fix's release and the hour.
 - **A failed run is silent** until [how is the server operated?](../questions/how-is-the-server-operated.md)
-  at M11 adds alerting.
+  at M10 adds alerting.
 - **A NodeSource origin pattern matches every major line**, since all share the codename `nodistro`.
   The major-version pin
   [ADR-0052](0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md)

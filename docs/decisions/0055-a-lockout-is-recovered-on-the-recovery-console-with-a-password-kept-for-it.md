@@ -133,7 +133,7 @@ password in 1Password still matches the machine, or that the procedure still wor
 - DigitalOcean's Recovery Console accepts keys or single sign-on, or the root password reset stops
   powering the machine off.
 - A lockout recovery fails in practice.
-- The machine holds players' work, from M12, which makes the fallback's outage cost more.
+- The machine holds players' work, from M11, which makes the fallback's outage cost more.
 
 ## Also update
 

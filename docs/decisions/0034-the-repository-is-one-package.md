@@ -65,7 +65,7 @@ what this record gives up rather than an incidental gap. A client module importi
 is refused by `tsc`, because the client's configuration carries no Node types, and is accepted by
 `vite build` with a warning that the Node built-in "has been externalized for browser
 compatibility". So the guard is the type check, and nothing in this repository runs any check today.
-[What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M2
+[What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M3
 is what closes that, and until it lands the guard exists without running.
 
 ## Rejected
@@ -113,12 +113,12 @@ one.
 **The guard that replaces the workspace boundary does not run yet.** A cross-boundary import is
 caught by `tsc` and waved through by the bundler with a warning, and nothing invokes `tsc`. The
 window is M1, where the tree is a handful of files and the warning is visible in a build nobody is
-ignoring. It closes at M2. Naming it is what stops the window being extended by inattention.
+ignoring. It closes at M3. Naming it is what stops the window being extended by inattention.
 
 **The boundary that will matter most is the one deferred furthest.** The client cannot run server
 code, so physics punishes that mistake whatever the layout. The server and the generator both run on
 Node, so nothing punishes entanglement between them, and that is the pairing a package boundary
-would genuinely protect. The generator does not exist until M8, so this record is made without the
+would genuinely protect. The generator does not exist until M7, so this record is made without the
 case that would most test it.
 
 **Reversal is cheap in both directions and was measured, not assumed.** Going either way is adding

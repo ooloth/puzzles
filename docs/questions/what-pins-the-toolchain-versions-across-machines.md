@@ -45,7 +45,7 @@ whole point of asking this separately; whether the mechanism has to be installed
 pins *that*; whether it is advisory or enforced, because a field nothing reads is documentation
 rather than a pin; and whether
 the Droplet, per [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md), and
-[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 can both
+[what runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M3 can both
 consume whatever is chosen, since they are two of the three machines that have to agree.
 
 ## Properties the answer is scored against

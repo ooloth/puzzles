@@ -77,7 +77,7 @@ and some read by agents. Read with `git show ed7f54e:docs/questions/where-does-t
 ## Enforced by
 
 **Nothing. Asserted only, and no store exists.** What would make it true is a server process opening a
-database file on its own filesystem. It arrives at M3 with the first row, alongside
+database file on its own filesystem. It arrives at M4 with the first row, alongside
 [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)
 and [what durability settings does the store run with?](../questions/what-durability-settings-does-the-store-run-with.md),
 which decide how that file is opened.

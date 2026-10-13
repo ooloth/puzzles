@@ -87,7 +87,7 @@ be, and M1 slice 1 is where one first answers a request.
 
 **It reads as bigger than it is.** "There is a server" invites building one, and nothing here
 schedules that or says what it does. The milestone sequence puts an endpoint answering one
-route at M1 and a store behind it at M3, and neither is a server in the sense this record might be
+route at M1 and a store behind it at M4, and neither is a server in the sense this record might be
 read to authorise.
 
 **It arrives before the rest of what the server holds is worked.** The danger is that a server

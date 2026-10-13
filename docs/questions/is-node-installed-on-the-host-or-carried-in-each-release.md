@@ -25,7 +25,7 @@ the part that reaches
 
 **It bears on rollback.** Rolling back a release whose Node is inside it restores the old runtime too;
 rolling back one that uses the host's Node does not, and
-[how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 inherits
+[how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M10 inherits
 whichever is chosen.
 
 ## What would settle it
@@ -226,7 +226,7 @@ input to this one. Not yet tested against scored candidates.
 
 **Node from an apt repository would be pinned by apt, beside whatever pins it on the other
 machines.** [What pins the toolchain versions across machines?](what-pins-the-toolchain-versions-across-machines.md)
-at M2 exists to prevent "two mechanisms nobody compared", and counts the Droplet among its machines.
+at M3 exists to prevent "two mechanisms nobody compared", and counts the Droplet among its machines.
 An apt preferences pin on the Droplet and a version file read by the Mac and CI would be two, and
 the apt pin holds a major line, not an exact version, so the Mac and the Droplet could run different
 patch releases. Whether this changes any candidate's verdict, or only that question's field, is not

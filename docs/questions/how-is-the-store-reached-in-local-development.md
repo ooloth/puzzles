@@ -15,7 +15,7 @@ arrangements. It is the narrower question of how a developer gets a database to 
 where the file lives, what puts data in it, and whether the same file is reused between runs or made
 fresh.
 
-**It sits at M3, where the store first exists**, because it is about the daily loop rather than
+**It sits at M4, where the store first exists**, because it is about the daily loop rather than
 about what ships, and there is no store for that loop to open before then. Nothing at M1 waits on
 it — an M1 hello world has no store.
 
@@ -24,7 +24,7 @@ or it is created. [ADR-0020](../decisions/0020-the-stores-engine-is-sqlite.md) r
 development with nothing to install or start".
 
 It also bears on whether a check can run anywhere.
-[What runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M2 inherits
+[What runs the checks on every change?](what-runs-the-checks-on-every-change.md) at M3 inherits
 whatever is decided here: a test suite that needs a live database is a different proposition from one
 that does not.
 
@@ -50,7 +50,7 @@ data by accident.
 A decision record in [../decisions/](../decisions/), and content for
 [../../CONTRIBUTING.md](../../CONTRIBUTING.md) once there is something to run.
 
-**This sits at M3, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and
+**This sits at M4, and M1 needs nothing from it.** Developer ergonomics is a comfort property, and
 M1 is decided on which option keeps technical doors open — a different test, which ergonomics loses.
 Any ergonomic difference between the arrangements can be noted in
 [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) without being

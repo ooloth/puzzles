@@ -76,7 +76,7 @@ older clients either way, and nothing recorded asks for separate schedules.
 `vite.config.test.ts` fails if the built client contains an absolute API URL. Nothing runs that
 test on every change until
 [what runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) is
-answered at M2. The other half, both halves answering behind one hostname, becomes true when M1's
+answered at M3. The other half, both halves answering behind one hostname, becomes true when M1's
 fourth slice deploys them.
 
 ## Rejected

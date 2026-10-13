@@ -23,7 +23,7 @@ things to maintain than the shape needs.
 split on which formats they read, so a format chosen first eliminates tools by consequence rather
 than on their merits. The bundler is now chosen. The two checks are not: the API check could be
 `eslint-plugin-compat`, which reads only browserslist, or `eslint-plugin-baseline-js`, which reads
-only a Baseline year, and the linter that hosts either is open at M2. So this question is answered
+only a Baseline year, and the linter that hosts either is open at M3. So this question is answered
 once those are chosen, and until then the build, as the only reader, names the floor's versions in
 its own config.
 
@@ -32,7 +32,7 @@ its own config.
 **One binding input has landed and the others have not.** The bundler is Vite, by
 [ADR-0029](../decisions/0029-the-client-bundler-is-vite.md), and Vite takes an ES version or a
 browser-and-version string and does not read a browserslist configuration. The syntax check and the
-API check are chosen at M2 and the test matrix at M5, under [what runs the checks on every
+API check are chosen at M3 and the test matrix at M3, under [what runs the checks on every
 change?](what-runs-the-checks-on-every-change.md) and [how is this tested across browsers and
 platforms?](how-is-this-tested-across-browsers-and-platforms.md). This question is answered after
 them.
@@ -47,7 +47,7 @@ requires and which a resolving query does not satisfy.
 [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md)
 names, and all of them are in scope here.** Three more may have to know the floor: the fallback in
 the entry document, if it detects a browser below the floor rather than being hidden by the bundle;
-the cross-browser test matrix at M5, which has to know which versions to run on; and TypeScript's
+the cross-browser test matrix at M3, which has to know which versions to run on; and TypeScript's
 `lib`, which decides which APIs type-check. The maintainer brought them into scope on 2026-09-23. If
 that makes this question hard to settle, that is raised when it happens rather than avoided in
 advance.

@@ -2,7 +2,7 @@ import { defineConfig, type ProxyOptions } from "vite";
 
 /**
  * An IP literal rather than `localhost`, which can resolve to `::1` while the server listens on IPv4
- * only. How the two processes learn each other's address is M2's question; until then the dev server
+ * only. How the two processes learn each other's address is M3's question; until then the dev server
  * assumes the server's default address.
  */
 export type LoopbackOrigin = `http://127.0.0.1:${number}`;

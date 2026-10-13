@@ -44,14 +44,14 @@ app works offline, which toolchain generates the precache manifest, and what cac
 other than the navigation uses. Those are
 [how does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md)
 and [what can a player do with no network?](../questions/what-can-a-player-do-with-no-network.md) at
-M9. What this record settles is only what answers a navigation, because
+M8. What this record settles is only what answers a navigation, because
 [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) rests on it and
 would otherwise be argued from an inference.
 
 ## Enforced by
 
 **Nothing. Asserted only, and no service worker exists.** What would make it true is a registered
-service worker answering navigations from a precached document. It arrives at M9 under
+service worker answering navigations from a precached document. It arrives at M8 under
 [how does the app itself stay available offline?](../questions/how-does-the-app-itself-stay-available-offline.md),
 and the precache manifest it needs is a build output, so M1's build choice constrains it.
 [The app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md)
@@ -66,7 +66,7 @@ rests on it.
   it cannot carry a promise. **Reverses if** a specification gives pages a way to place a navigable
   document in the HTTP cache and test for its presence.
 
-- **Leave the whole mechanism to M9 with the rest of the offline story.** The honest "not yet", and
+- **Leave the whole mechanism to M8 with the rest of the offline story.** The honest "not yet", and
   correct for everything this record deliberately excludes. Rejected only for the narrow claim above,
   because [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md) is needed
   at M1 and depends on it. Deferring would leave that record resting on an unrecorded assumption about
@@ -80,7 +80,7 @@ rests on it.
   facts in [../constraints.md](../constraints.md), and neither mentions
   [ADR-0024](0024-the-entry-document-is-a-build-output-not-a-per-request-render.md). So this record
   stands whether or not that one does. What that record supplies is only the reason this was worth
-  settling now rather than at M9 — remove it and the decision is unchanged, while the schedule is not.
+  settling now rather than at M8 — remove it and the decision is unchanged, while the schedule is not.
 
 - **Make no offline promise for the document.** Reversing
   [the app never opens to a blank screen after the first visit](../guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md) rather
@@ -103,7 +103,7 @@ crash the page; it serves an old application indefinitely to people who have no 
 one, and the maintainer has no signal that it is happening. That is a worse failure than the blank
 screen this record is preventing, and nothing here mitigates it. It belongs with
 [how do we know the deployed app is serving?](../questions/how-do-we-know-the-deployed-app-is-serving.md)
-at M11, which already names a static client loading from cache hiding a dead API.
+at M10, which already names a static client loading from cache hiding a dead API.
 
 **Nothing enforces any of this yet**, and will not until there is an application. This record fixes
 what the mechanism is, not that it exists.
@@ -123,7 +123,7 @@ what the mechanism is, not that it exists.
 - [x] `guarantees/the-app-never-opens-to-a-blank-screen-after-the-first-visit.md` — the 30-day Safari
       boundary is written into the promise, per the folder's own rule that limits are stated rather
       than discovered
-- [x] `questions/README.md` — the M9 mechanism question is narrowed to what it still decides, and the
+- [x] `questions/README.md` — the M8 mechanism question is narrowed to what it still decides, and the
       question this record resolves is retired
 - [x] `architecture.md` — a service worker now sits in the browser box, between a navigation and the
       network

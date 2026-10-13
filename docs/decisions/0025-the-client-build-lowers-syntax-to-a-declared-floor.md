@@ -60,13 +60,13 @@ only.
 
 ## Enforced by
 
-**The build's target and one test, until M2.** `vite.config.ts` names the floor's versions in
+**The build's target and one test, until M3.** `vite.config.ts` names the floor's versions in
 `browserFloor`, whose type rejects a keyword such as `esnext`, and `vite.config.test.ts` checks that
 a class static block, which the floor cannot parse, comes out of the build lowered. That test fails
 under Vite's default target.
 
 What would make it fully true is a check over the emitted bundle confirming it parses at the floor,
-which arrives at M2. At M1 the build is the floor's only reader and names the versions in its
+which arrives at M3. At M1 the build is the floor's only reader and names the versions in its
 own config; the shared declaration in
 [ADR-0026](0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md) takes over
 when the check arrives.
@@ -130,7 +130,7 @@ population because it is the only one available.
 a browser nobody tests on is worse than claiming less, because
 [../guarantees/](../guarantees/) now carries it. What closes that gap is
 [how is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
-at M5, and until that lands the promise rests on compatibility data rather than on observation.
+at M3, and until that lands the promise rests on compatibility data rather than on observation.
 
 ## Revisit when
 

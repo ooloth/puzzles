@@ -12,8 +12,10 @@ description: Load relevant project-level decisions, guarantees and standards and
    `rg -l 'kind: non-promise' docs/guarantees/` too: those files exist to stop a promise being
    inferred where none was made, and they are invisible if you only read the ones that promise
    something
-3. Read (or re-read) all files with a theme that may be relevant to the current task
-4. **List every choice your task will make, and name the record or Given that settles each one.**
+3. Read (or re-read) all files with a theme that may be relevant to the current task, including the
+   sections of `docs/constraints.md` that bear on it. A slice in `docs/questions/README.md` no longer
+   lists the records and constraints it rests on, so finding them is this step's job
+4. **List every choice your task will make, and name the record or constraint that settles each one.**
    Include choices that look small and choices about local runs: a wiring detail, a default
    behaviour, what a page shows when something fails. For an issue, check each Ideal-state bullet,
    and each verification step once implementation writes the plan. Triage each choice you cannot

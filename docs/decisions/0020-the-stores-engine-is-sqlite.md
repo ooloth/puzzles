@@ -48,7 +48,7 @@ configuration details.
 
 ## Enforced by
 
-**Nothing. Asserted only, and no database exists.** What would make it true is a SQLite file at M3.
+**Nothing. Asserted only, and no database exists.** What would make it true is a SQLite file at M4.
 The record notes that its own reasoning runs through `node:sqlite`, which no record has chosen, so
 what it owes is tracked as
 [which driver reads and writes the store?](../questions/which-driver-reads-and-writes-the-store.md)

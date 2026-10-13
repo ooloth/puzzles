@@ -8,19 +8,19 @@ resolves_into: decision
 
 ## Why it matters
 
-M3 is the first time the client fetches content that becomes the board. A puzzle, once on the
+M4 is the first time the client fetches content that becomes the board. A puzzle, once on the
 board, is state a guarantee covers, which
 [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) keeps out of
 the renderer. So whatever loads it has to hand it to the state code rather than hold it in a view.
 
 M1's third slice fetches "Hello!" before this is answered, and does it inside a view, which
 [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md) allows for state
-no promise covers. That fetch is not the pattern M3 copies. This question is listed at M3 so that M3
+no promise covers. That fetch is not the pattern M4 copies. This question is listed at M4 so that M4
 answers it instead.
 
-Its inputs arrive at different milestones: what crosses the boundary at M3, what implements the
-client's state at M5, and whether a puzzle is fetched before it is needed at M9. So M3 may settle
-only where fetched content enters the client, and leave when it is fetched to M9.
+Its inputs arrive at different milestones: what crosses the boundary at M4, what implements the
+client's state at M2, and whether a puzzle is fetched before it is needed at M8. So M4 may settle
+only where fetched content enters the client, and leave when it is fetched to M8.
 
 This is client code, so it is the same in every environment. Where the request goes is the client's
 own origin, per [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md).
@@ -31,7 +31,7 @@ Knowing what loading has to do across the milestones that use it: fetch a puzzle
 ([is a puzzle fetched before it is needed?](is-a-puzzle-fetched-before-it-is-needed.md)), hand content
 to the state code under `src/client/state/`, and never make a player wait during normal play, per
 [../problem.md](../problem.md). Then which way of loading meets that without being replaced when
-M3 arrives.
+M4 arrives.
 
 ## Properties the answer is scored against
 

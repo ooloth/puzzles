@@ -40,7 +40,7 @@ the end and are the larger half.
         │  └───────────────────────────────────┘  │
         │  ┌───────────────────────────────────┐  │
         │  │ client storage — the board in     │  │   mechanism open
-        │  │ progress, notes, selection        │  │   (M6)
+        │  │ progress, notes, selection        │  │   (M5)
         │  └───────────────────────────────────┘  │
         └────────────────────┬────────────────────┘
                              │  only at the edges of a session:
@@ -73,7 +73,7 @@ the end and are the larger half.
         │  │ SQLite — the durable copy of a    │  │   queryable across
         │  │ player's state, and the catalogue │  │   players       ADR-0011
         │  └───────────────────────────────────┘  │   (co-location of the two
-        │                   │                     │    is open, M3)
+        │                   │                     │    is open, M4)
         │  ┌────────────────▼──────────────────┐  │
         │  │ local disk — survives restart and │  │   ADR-0022
         │  │ redeploy, not the machine         │  │
@@ -83,7 +83,7 @@ the end and are the larger half.
                              ▼
                    ┌───────────────────┐
                    │ a copy off the    │   how-is-the-store-backed-up
-                   │ machine           │   (M12, open)
+                   │ machine           │   (M11, open)
                    └───────────────────┘
 
         generator — batch, search-heavy, runs on Node.
@@ -104,13 +104,13 @@ vite.config.ts      the client build and its browser floor    ADR-0029
 src/rules/          shared by the client and the generator   lib esnext   types none; not built yet
 src/client/         bundled by Vite                 ADR-0029  lib esnext + dom   jsx
 src/server/         run by Node                     ADR-0030  lib esnext   types node
-src/generator/      run by Node; not built yet, nothing here until M8
+src/generator/      run by Node; not built yet, nothing here until M7
 ```
 
 Each directory carries a short `tsconfig.json` differing in `lib` and `types`, which is what
 keeps DOM globals out of the server and Node globals out of the client. Nothing else enforces the
 boundary between these four: a cross-boundary import is refused by the type check and waved through
-by the bundler with a warning, and nothing runs the type check until M2.
+by the bundler with a warning, and nothing runs the type check until M3.
 
 How the rules module is reached, what is inside `src/rules/`, and whether the generator is a
 deployable of its own are open at

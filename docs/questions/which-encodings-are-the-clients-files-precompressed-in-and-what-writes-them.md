@@ -149,7 +149,7 @@ Raised on 2026-10-04 while drafting
 build. The maintainer first chose to settle it in the M1 slice 4 issue, then opened it as a question
 on 2026-10-05, because the project's rule is that an issue does not settle a choice others build on.
 It is deferred from slice 4 because Caddy serves an uncompressed file correctly when no compressed
-copy exists, and a first visit only costs players once they arrive at M12.
+copy exists, and a first visit only costs players once they arrive at M11.
 
 ## Options
 

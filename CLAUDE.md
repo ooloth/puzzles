@@ -8,9 +8,9 @@ The product code is a server under `src/server/` that answers `/api/hello` and a
 `src/client/` that shows its answer, the finished early slices of M1. Beside it are the docs checker in
 `scripts/` and the client build's tests in `vite.config.test.ts`. Much of the stack is settled
 on paper — see `docs/decisions/` for the language, the store engine, the client bundler and the
-runtime — and what remains open in the toolchain is listed under M2 in `docs/questions/README.md`.
+runtime — and what remains open in the toolchain is listed under M3 in `docs/questions/README.md`.
 The repository is one package ([ADR-0034](docs/decisions/0034-the-repository-is-one-package.md));
-what remains of the codebase layout is what lives inside `src/`, and that waits for M7.
+what remains of the codebase layout is what lives inside `src/`, and that waits for M6.
 
 The commands for running the server and client, testing, and checking a change are in
 [CONTRIBUTING.md](CONTRIBUTING.md). Read it before running anything.
@@ -45,9 +45,8 @@ tests holds:
    system does not already allow by other means. Harm includes compromise of the machine or the
    maintainer's accounts, not only harm to players and their data. Harm that would only begin at a
    later milestone, such as once players or their data exist, does not hold this test now. The
-   choice takes its option, and the question is listed as **Deferred** in
-   `docs/questions/README.md` under the milestone where the harm would begin, so it is weighed
-   again before then.
+   choice takes its option, and the question is moved in `docs/questions/README.md` to the
+   milestone where the harm would begin, so it is weighed again before then.
 2. Changing it gets more expensive as the system grows, because players, their data, or code built
    on it accumulate.
 3. It closes an option open to a question that needs the full process, whether or not that question
@@ -67,7 +66,7 @@ It is not provisional; it is expected to stay. A choice that holds test 3 is wor
 the question it narrows, not decided ahead of it. The rule is the first Must of the portable
 decision-making standard.
 
-**A choice that holds a test is open until a Given or a record settles it**, however conventional
+**A choice that holds a test is open until a record settles it**, however conventional
 the usual answer. Recommending one and carrying on is the failure the next steps exist to stop.
 
 **Before asking the user anything, check whether `docs/` already answers it.** Where a fact belongs
@@ -78,7 +77,7 @@ listing of `docs/decisions/`. What is promised is the listing of `docs/guarantee
 
 1. Find the question file that covers it, or write one, and say which environments it covers.
 2. Add it to the slice in `docs/questions/README.md` as a **Must answer** with its "or else" clause.
-   Where it can wait, record it under the slice as **Deferred**, naming the question that owns it.
+   Where it can wait, list it under the milestone that must answer it instead.
 3. Hand it to `make-next-decision`. Once settled, route what it commits us to through "Where a new
    fact goes", which usually names more than one home.
 
@@ -101,7 +100,7 @@ its milestone.
 
 **"Observable" does not mean "a player can see it".** A check that fails on a bad import, a script
 that reproduces a bug, a pin that makes two machines agree — each changes what the system does, and
-each can be demonstrated before and after. M2 is an entire milestone of them. Nothing here is
+each can be demonstrated before and after. M3 is an entire milestone of them. Nothing here is
 excluded for being infrastructure, and there is no second category of work that issues do not cover.
 
 **The scoping test is whether you can name what you would run and what you would expect to see.**
@@ -116,7 +115,7 @@ issue body carries the observable Ideal state, not a verification plan, per the
 run**, not the fast loop, per
 [ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md).
 It is the sections of [CONTRIBUTING.md](CONTRIBUTING.md) the change touches, plus any section it
-adds, and the status report records what was run and what came back. Until M2 builds that run, the
+adds, and the status report records what was run and what came back. Until M3 builds that run, the
 plan names the closest mode and says what it cannot show.
 
 **Decisions and derivations are `docs/`.** `docs/questions/README.md` holds why each slice exists,

@@ -6,7 +6,7 @@ that adds a way to run or observe something, or breaks one.
 Each section says which mode it is observed in and what that mode cannot show. Per
 [ADR-0039](docs/decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md),
 a change is verified in a production-like local run and only the fast loop may differ from
-production. That run does not exist until M2, so everything here is the fast loop for now.
+production. That run does not exist until M3, so everything here is the fast loop for now.
 
 ## Setup
 
@@ -51,7 +51,7 @@ python3 scripts/check-docs.py    # docs/: links, indexes, frontmatter, record st
 
 Expect all three to pass. Nothing runs them automatically yet; that is
 [what runs the checks on every change?](docs/questions/what-runs-the-checks-on-every-change.md) at
-M2. The server's tests bind a local port, and the docs checker's tests need `python3`.
+M3. The server's tests bind a local port, and the docs checker's tests need `python3`.
 
 Then run the sections below for the part you changed. Tests passing is not evidence that it works. A
 change that adds a way to run or observe something adds its section here.
@@ -140,7 +140,7 @@ Can't observe: how production serves the files and routes `/api/`, which is Cadd
 [ADR-0053](docs/decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) and arrives
 with M1 slice 4;
 `pnpm preview` is the closest mode, not the production-like run. Nor whether the built script
-parses on a browser at the floor, since nothing here runs one; that check is owed at M2.
+parses on a browser at the floor, since nothing here runs one; that check is owed at M3.
 
 ## In the Claude Code sandbox
 

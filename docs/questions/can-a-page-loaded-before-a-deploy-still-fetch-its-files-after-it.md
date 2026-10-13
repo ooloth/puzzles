@@ -184,7 +184,7 @@ entry document and then its asset 5 ms later. A release holding only its own ass
 requests of 2,788 pages with 404; one also holding the previous release's asset failed none of 2,822.
 So M1 slice 4 carries at least the previous release's assets, per
 [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md).
-How many releases back is still this question's, and it widens at M9 when the service worker serves
+How many releases back is still this question's, and it widens at M8 when the service worker serves
 an entry document from any earlier release.
 
 *Measured, one run per layout, on the maintainer's Mac. Not covered: Debian, TLS and a real

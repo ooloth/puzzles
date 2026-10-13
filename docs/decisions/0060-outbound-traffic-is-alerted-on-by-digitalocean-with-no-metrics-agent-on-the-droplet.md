@@ -133,7 +133,7 @@ time are in "Hosting — DigitalOcean's metrics agent" in [../constraints.md](..
 checks would hold it, and neither exists: a setup check that `doctl monitoring alert list` shows a
 bandwidth policy on the tag and that the Droplet carries the tag; and a check that the alert still
 fires, which is
-[how is the server operated?](../questions/how-is-the-server-operated.md) at M11.
+[how is the server operated?](../questions/how-is-the-server-operated.md) at M10.
 
 ## Rejected
 
@@ -179,7 +179,7 @@ fires, which is
 - **It rests on behaviour DigitalOcean does not document.** The API accepts a policy on a Droplet
   without the agent, and the policy fires, but DigitalOcean's docs say alerts need the agent. If it
   starts refusing such a policy, the setup step fails, loudly. If it stops evaluating one, nothing
-  says so until M11's check exists.
+  says so until M10's check exists.
 - **An email arrives over an hour after traffic starts.** The figure takes about 10 minutes to reach
   the true rate, the window is one hour and delivery took about 6 minutes on 5-minute windows, so
   an estimated 76 minutes, since delivery on a one-hour window was not measured, at

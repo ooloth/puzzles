@@ -59,7 +59,7 @@ that section's three tests to it: silent harm at the current milestone, a cost t
 with the system, and an option of an open question that would cost more to reopen than this choice
 costs to change back. A test held "to be safe" names the specific harm or later work it guards
 against; one that can name neither does not hold. Where the only harm begins at a later milestone,
-the question is listed as **Deferred** under that milestone and its option is taken meanwhile. Where
+the question is moved to that milestone's list and its option is taken meanwhile. Where
 none holds, the rest of this skill does not apply:
 
 - Say which option you would take and why each test fails, and let the user confirm or overrule.
@@ -199,8 +199,8 @@ the one property it fails.
    deploy is not enough; changing what it does is. **Splitting, merging, moving or reordering
    questions** is a decision, and nothing yet is evidence for one: candidates have not been scored.
    So name the group, derive one list for it in the sub-steps below, and propose no change to how
-   the questions are arranged until "Read the coupling off the grid" in section 5. Step 6 of
-   "Building a milestone's list" in `docs/questions/README.md` says why. Where the group is this
+   the questions are arranged until "Read the coupling off the grid" in section 5. Step 5 of
+   "Building a milestone's list" in [milestone-lists.md](milestone-lists.md) says why. Where the group is this
    question alone, say so and why.
 1. **List the moments the system touches the thing being chosen.** Each request, write, read,
    deploy, failure and wait it takes part in, named concretely from `docs/problem.md`,
@@ -397,7 +397,7 @@ record what you find.
 1. **List every commitment the draft makes beyond its headline, and name the record that settled
    each.** Read its Decision, its "What it commits us to" and its Enforced by, and write down each
    policy, schedule, package source, mechanism or default it keeps. Each must trace to the headline
-   itself, to an earlier record, or to a Given. One that traces to nothing is a choice no one made.
+   itself, to an earlier record, or to a constraint. One that traces to nothing is a choice no one made.
    Stop and follow "When a choice surfaces mid-work" in `CLAUDE.md`: move it to the question that
    owns it, or open one. Do not keep it because it reads as a description of the default. This
    happened on 2026-10-03, when drafts of ADR-0049 and ADR-0050 committed to applying updates as

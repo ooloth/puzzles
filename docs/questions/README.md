@@ -7,117 +7,75 @@ status: active
 
 # Questions
 
-The sibling of [../decisions/](../decisions/): the decisions not yet made, arranged by what they
-stop us building.
+The sibling of [../decisions/](../decisions/): the decisions not yet made, arranged by the milestone
+that first needs them.
 
-A directory listing of this folder is the full inventory — every filename asks its question plainly,
-so there is no index here. What this file holds is **what has to be shipped, what is already
-established, and which questions stand between the two**. That is the part a listing cannot show, and
-the part every session was otherwise reconstructing from scratch.
+A directory listing of this folder is the full inventory, since every filename asks its question
+plainly. What this file adds is **what has to be shipped next and which questions stand in the way**.
+It is meant to get shorter as questions are answered and slices ship.
 
 ## Start here
 
 **Read [../problem.md](../problem.md) and [../guarantees/](../guarantees/) in full before deciding
-what to work on.** Everything below is downstream of them, and a sequence argued without them is
-argued from the wrong end. This is the path most readers arrive by, which is why it says so here as
-well as in [../README.md](../README.md).
+what to work on.** Everything below is downstream of them.
 
-**Then work M1 from the top.** Its slices are things you can run and look at, in the order you would
-build them, each with the questions that block it. Only the current milestone is laid out that way —
-the rest are bare question lists on purpose, for the reason given under
-**Milestones below the current one stay unplanned**.
+**Then work the current milestone**, the lowest-numbered one with anything still listed. Milestones
+are numbered in the order they are built. Only the current milestone is broken into slices; the rest
+are lists of the questions each first needs. When a milestone's list empties, the next one becomes
+current and is broken into slices before work on it starts.
 
-**The milestones come first here, and the conventions follow them**, because deciding what to work
-on is the daily reason to open this file and the conventions are read when maintaining it. Below the
-lists: how a milestone's list is built, why lower milestones stay unplanned, how this file relates to
-the issue tracker, and what goes in a question file.
+**How to read a slice.** Each is something you can run and look at. Under it, each **Must answer**
+names a question that blocks it, with an "or else" clause saying what goes wrong in that slice
+without the answer. What is already settled is the listing of [../decisions/](../decisions/), with
+the facts in [../constraints.md](../constraints.md), and neither is repeated here.
+
+**A question appears once**, under the milestone that must answer it. A slice that takes a default
+meanwhile says so in its commit, not here.
+
+**An issue is filed once nothing in its entry is still a Must answer.** A slice with no issue is
+normal, and nothing here records status. A slice's entry is deleted once its issue closes, and the
+slices left keep their numbers, so a list that does not start at 1 is not missing anything. A
+milestone is finished when its list is empty.
+
+How a milestone's list is built and kept, and how a question file is written, are in
+[milestone-lists.md](../../.claude/skills/make-next-decision/milestone-lists.md) and
+[question-files.md](../../.claude/skills/make-next-decision/question-files.md).
 
 ## M1 — "Hello!" is live
 
 A deployed skeleton: a client, an endpoint answering one route with a hard-coded response, and
 nothing else. No database, no puzzle, no features.
 
-**M1 is a vertical slice through the whole system, not a front end with a stub behind it.** Both
-halves ship, onto a host that has to satisfy the server and whatever its store turns out to need. The
-client runs almost anywhere, so it is the half least able to discriminate between hosts and must not
-be what selects one — which is why hosting is the fourth slice and not the first. The only throwaway
-thing in M1 is the string the endpoint returns.
-
-**Nothing in M1 turns on the maintainer's appetite for operating infrastructure.** That is a
-short-term guess against a long-lived choice. These are decided on which option keeps the most
-technical properties reachable — performance, safety, portability, and the ones not yet known to
-matter. A question that cannot be settled without a preference says so rather than inventing a
-derivation.
-
-A list that does not start at 1 is not missing anything: a slice's entry is deleted once its issue
-closes, and the slices left keep their numbers because records cite them by number.
-
 4. **Both halves are deployed on a host.**
-   - **Given:** [../constraints.md](../constraints.md) — of the mechanisms it records, a server-set cookie is the only one carrying an identifier across Safari's storage wipe with nothing asked of the player
-   - **Given:** [../constraints.md](../constraints.md) — that exemption is capped to seven days when the API answers on a *second hostname* resolving to a different provider, and an API path-routed on the app's own hostname passes by being compared with itself, unless that hostname is a CNAME and a service worker answered the navigation, which is reasoned from source and unobserved
-   - **Given:** [../constraints.md](../constraints.md) — a genuinely cross-origin API is blocked outright rather than capped, so it is worse and not exempt
-   - **Given:** [../constraints.md](../constraints.md) — a cached asset is used without a request only while it is fresh, and with no explicit expiry the browser may guess one, so content-hashed filenames are what make a long `max-age` safe
-   - **Given:** [0021-the-server-and-its-store-share-a-machine](../decisions/0021-the-server-and-its-store-share-a-machine.md) — the host must run an ordinary process with a local disk beside it
-   - **Given:** [0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network](../decisions/0042-the-stores-disk-is-inside-its-machine-not-reached-over-a-network.md) — and that disk is inside the machine, not network block storage
-   - **Given:** [0022-the-machines-disk-survives-restart-redeploy-and-host-replacement](../decisions/0022-the-machines-disk-survives-restart-redeploy-and-host-replacement.md) — and that disk must survive a redeploy, which platforms vary on
-   - **Given:** [0040-the-client-and-the-api-answer-on-one-origin-in-production](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md) — so the host must present both halves on one hostname
-   - **Given:** [0041-api-paths-live-under-api-and-every-other-path-is-the-clients](../decisions/0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md) — so whatever serves the origin sends every path under `/api/` to the server, and no cache or cookie rule written for the files reaches it
-   - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the server runs on a Droplet in a North American region, with no swap by default and live migration for host maintenance
-   - **Given:** [0044-the-server-runs-as-systemd-services-without-containers](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) — the app, and any process the store's backup adds, run as systemd services, with no container runtime
-   - **Given:** [0019-the-store-is-a-file-the-server-process-opens](../decisions/0019-the-store-is-a-file-the-server-process-opens.md) — the store is a file on the machine
-   - **Given:** [0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling](../decisions/0045-hosting-costs-about-10-dollars-a-month-with-20-as-the-ceiling.md) — hosting costs about $10 a month as a preference, and $20 as a ceiling
-   - **Given:** [0046-no-standing-digitalocean-token-can-create-billed-resources](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) — a token that creates the Droplet is held by hand, expires soon and is deleted afterwards
-   - **Given:** [0047-nothing-automated-deletes-or-stops-resources-to-cap-spending](../decisions/0047-nothing-automated-deletes-or-stops-resources-to-cap-spending.md) — spending is reported by alerts, including an alert on the Droplet's outbound traffic
-   - **Given:** [0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments](../decisions/0048-production-runs-in-its-own-digitalocean-team-apart-from-experiments.md) — the Droplet is created in the `puzzles` team, and spikes stay in `puzzles-experiments`
-   - **Given:** [0049-the-droplet-runs-debian-13](../decisions/0049-the-droplet-runs-debian-13.md) — the Droplet runs Debian 13 from `debian-13-x64`
-   - **Given:** [0050-caddy-terminates-tls-in-front-of-the-app](../decisions/0050-caddy-terminates-tls-in-front-of-the-app.md) — Caddy, from its own repository, terminates TLS and sends `/api/` to the app, with `0rtt off` and its certificate state restored with the machine
-   - **Given:** [0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set](../decisions/0051-updates-and-the-reboots-they-need-are-applied-daily-at-an-hour-we-set.md) — updates from Debian and Caddy's repository install daily at one hour, and the machine reboots then when anything needs it, never restarting a service for a library
-   - **Given:** [0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it](../decisions/0052-the-machine-installs-from-debians-archive-and-only-vetted-pinned-apt-repositories-beside-it.md) — software comes from Debian 13's main and security suites, plus Caddy's repository pinned to `2.*`, and any further repository meets that record's list
-   - **Given:** [0053-caddy-serves-the-clients-files-from-the-release-on-disk](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) — Caddy serves the client's files from the release's directory, and each release carries at least the previous release's assets
-   - **Given:** [0054-the-maintainers-ssh-key-is-held-in-1passwords-agent](../decisions/0054-the-maintainers-ssh-key-is-held-in-1passwords-agent.md) — the maintainer's key is generated in 1Password and used through its agent, with only its public half on the machine
-   - **Given:** [0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it](../decisions/0055-a-lockout-is-recovered-on-the-recovery-console-with-a-password-kept-for-it.md) — a generated password kept for the Recovery Console, SSH refusing passwords before it exists, the key attached at creation, the app's and Caddy's units blocking link-local addresses, and the recovery ISO as the fallback
-   - **Given:** [0056-the-droplet-runs-without-digitaloceans-droplet-agent](../decisions/0056-the-droplet-runs-without-digitaloceans-droplet-agent.md) — the Droplet is created through the API with `--droplet-agent=false`
-   - **Given:** [0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https](../decisions/0057-ssh-accepts-only-keys-and-a-firewall-on-the-machine-admits-only-ssh-http-and-https.md) — `sshd` takes keys only, and an `nftables` ruleset from cloud-init admits TCP 22, 80 and 443, UDP 443 and ICMP, with outbound open and no Cloud Firewall
-   - **Given:** [0058-root-does-not-log-in-over-ssh](../decisions/0058-root-does-not-log-in-over-ssh.md) — `sshd` refuses `root` with `PermitRootLogin no` in the drop-in that refuses passwords
-   - **Given:** [0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password](../decisions/0059-the-maintainer-logs-in-as-a-named-user-whose-sudo-asks-for-no-password.md) — the maintainer logs in as a named user in `sudo` with no password asked, and that user holds the Recovery Console password
-   - **Given:** [0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet](../decisions/0060-outbound-traffic-is-alerted-on-by-digitalocean-with-no-metrics-agent-on-the-droplet.md) — the Droplet is created without the metrics agent and tagged `production`, and the outbound-traffic alert is attached to the tag with `doctl`
-   - **Given:** [0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md) — a script in a `DPkg::Post-Invoke` hook writes the reboot marker when a process runs replaced code, and writes it too when the script fails
-   - **Given:** [0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days](../decisions/0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md) — a line before each daily update writes the marker once the machine has been up 14 days
-     - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else slice 4's setup installs Node one way by default, which fixes what a release contains before slice 6's pipeline is designed to build it, and what a rollback at M11 restores: with Node on the host, a rollback keeps today's runtime under yesterday's code
-     - **Deferred:** [what-gives-the-clients-files-a-validator-that-changes-only-with-their-content](what-gives-the-clients-files-a-validator-that-changes-only-with-their-content.md), until players arrive — Caddy's default validator is safe and costs only full responses where a 304 would do, and a better one is one build step added later
-     - **Deferred:** [which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them](which-encodings-are-the-clients-files-precompressed-in-and-what-writes-them.md), until players arrive at M12 — Caddy serves an uncompressed file correctly where no compressed copy exists, so slice 4 builds without it, and writing the copies is a build step added later
-     - **Deferred:** [which-region-does-the-machine-run-in](which-region-does-the-machine-run-in.md), until players arrive at M12 — slice 4 creates the Droplet in any North American region [ADR-0043](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) allows, and until the store holds players' work, moving the machine moves only puzzles that can be written again
-     - **Deferred:** [at-what-hour-does-the-machine-apply-updates-and-reboot](at-what-hour-does-the-machine-apply-updates-and-reboot.md), until players arrive at M12 — slice 4 keeps Debian's default of 06:00 to 07:00 machine time, which harms nobody until someone starts a session then
+   - **Must answer:** [is-node-installed-on-the-host-or-carried-in-each-release](is-node-installed-on-the-host-or-carried-in-each-release.md) — or else slice 4's setup installs Node one way by default, which fixes what a release contains before slice 6's pipeline is designed to build it, and what a rollback at M10 restores: with Node on the host, a rollback keeps today's runtime under yesterday's code
 5. **The deployment answers at an address we control.**
-   - **Given:** [../constraints.md](../constraints.md) — the first-party test turns on what the domain resolves to, and fails silently
-   - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the Droplet serves from its own address, so nothing requires a CNAME to a provider's domain
-     - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md) — or else a proxy or CDN in front changes what the browser treats as the origin, which is the same silent Safari failure reached by a different route. Costs a redeploy plus whatever sits in front
+   - **Must answer:** [how-does-the-domain-reach-the-deployment](how-does-the-domain-reach-the-deployment.md) — or else a proxy or CDN in front changes what the browser treats as the origin, which is the same silent Safari failure reached by a different route. Costs a redeploy plus whatever sits in front
 6. **A change made locally reaches the deployment.**
-   - **Given:** [0043-the-server-runs-on-a-digitalocean-droplet](../decisions/0043-the-server-runs-on-a-digitalocean-droplet.md) — the pipeline targets one Droplet, which brings no pipeline of its own
-   - **Given:** [0044-the-server-runs-as-systemd-services-without-containers](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md) — a release is a directory of built JavaScript and its `node_modules`, run by systemd
-   - **Given:** [0046-no-standing-digitalocean-token-can-create-billed-resources](../decisions/0046-no-standing-digitalocean-token-can-create-billed-resources.md) — the pipeline holds no DigitalOcean token that can create anything
-   - **Given:** [0034-the-repository-is-one-package](../decisions/0034-the-repository-is-one-package.md) — so the pipeline builds every deployable from one install with no publish step between the rules module and its consumers, which is what [ADR-0005](../decisions/0005-the-puzzle-rules-are-defined-once-and-shared-not-reimplemented.md) requires of it
-   - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M11 builds on
+   - **Must answer:** [what-deploys-the-code](what-deploys-the-code.md) — or else the first deploy is done by hand and stays that way, and every later milestone verifies against something nobody can reproduce. Costs a re-scaffold, and it is what [how is a bad deploy noticed and undone?](how-is-a-bad-deploy-noticed-and-undone.md) at M10 builds on
 
-### Working notes — temporary, and deleted as its content finds permanent homes
+## M2 — a grid you can fill in
 
-**This section is a scratchpad, and the only one.** M1's hardest questions constrain each other across
-several files, and a thought that spans three question files has nowhere else to live: a question file
-holds one question's working, [../constraints.md](../constraints.md) holds facts about the world, and
-neither holds "here is how these four fit together". That is what this is for. Everything here is
-provisional and moves out to a record, a constraint or a question file as soon as it has earned a
-permanent home. Delete what has moved rather than leaving a second copy.
+A puzzle hard-coded in the client, rendered as a grid. Select a cell, enter a digit, see it. In
+memory only; nothing survives a reload. Deployed the way M1 deploys.
 
-**Open, and spanning more than one question file.**
+1. [How is the app styled?](how-is-the-app-styled.md) — with the renderer settled at
+   [ADR-0038](../decisions/0038-the-renderer-is-react.md), which ships no styling of its own, so the
+   styling toolchain is a choice here rather than something React brings.
+2. [How does a player enter a digit?](how-does-a-player-enter-a-digit.md) — bounded by
+   [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md), which rules out a
+   gesture with no keyboard form.
+3. [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
+   — after the above, since the budget covers the input path and what an input is comes first.
+4. [What implements the client's state?](what-implements-the-clients-state.md) — the first puzzle
+   state held in memory arrives here. How much a library could supply depends on the storage
+   mechanism, undo depth and state shape at M5, so this is answered with those in view rather than
+   ahead of them.
 
-- **Nothing currently spans more than one question file.** The section stays because the next
-  cross-cutting thought needs somewhere to go.
+## M3 — a change can be checked before it ships
 
-## M2 — a change can be checked before it ships
-
-M1 is the first thing that exists and the first thing that can be wrong without anyone noticing.
-Everything after this is verified using whatever gets built here, so building it once now — while the
-stack is chosen and little is built on it — is when it is cheapest and when it pays back most.
+By here the app deploys and a player can fill in a grid, and either can break without anyone
+noticing. Everything after this is verified using whatever gets built here, so building it now,
+while little is built on the stack, is when it is cheapest and when it pays back most.
 
 Each entry is a maintainer's problem rather than a thing a project ought to have, and each is the
 difference between checking a change in a minute and checking it in an afternoon. They are used many
@@ -125,10 +83,10 @@ times a day, by the maintainer and by an agent working without them. This milest
 a player can see, which is why it has to be a milestone rather than a habit.
 
 **Tooling that checks something a later milestone creates waits for that milestone.** Reaching the
-store in local development sits at M3, where the store first exists. Resetting state, loading an
-arbitrary board, driving a real device and the cross-browser matrix sit at M5, where the first board
-a player can touch exists. Reaching and hardening the server sits at slice 4 of M1, because the
-machine is on the public internet from then.
+store in local development sits at M4, where the store first exists. Resetting state, loading an
+arbitrary board, driving a real device and the cross-browser matrix are here, because the board a
+player can touch exists from M2. Reaching and hardening the server sits at slice 4 of M1, because
+the machine is on the public internet from then.
 
 1. [What runs the tests?](what-runs-the-tests.md) — `node --test` runs them today as a stopgap.
 2. [What runs the checks on every change?](what-runs-the-checks-on-every-change.md) — `check-docs.py`
@@ -164,75 +122,17 @@ machine is on the public internet from then.
    settled that verification happens in a production-like local run and only the fast loop may
    differ. What is left is building that run: which differences it closes, how, and what command
    runs it.
-
-## M3 — a puzzle comes from the store
-
-One seeded puzzle, written to the store by hand, read back by the endpoint, and displayed however
-crudely. No grid, no interaction, no generator. This is where connection handling becomes real, and
-where [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s
-queryability stops being a promise about a store nobody has built.
-
-It sits here rather than at M8 because the alternative is building the client against a hard-coded
-board for six milestones and meeting the store for the first time with a finished game attached.
-
-**Operating the store waits for M12.** Until players arrive the store holds only puzzles, which can
-be written again, so losing a row costs nothing. Backups, durability settings, migrations, recovery
-from a lost machine, deploys that leave the store alone, secrets and the machine's region all become
-real with the first player's data, and they sit at M12, where players arrive. So does whether
-puzzles and player records share one store, since player records first arrive there.
-
-1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
-   to write one row and read it back. The full answer is not needed until M7.
-2. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
-   response with content in it is the first contract, so this is where the format is set.
-3. [How does the client load data from the server?](how-does-the-client-load-data-from-the-server.md)
-   — after the boundary above, which is its first input. This is the first fetch of content that
-   becomes the board, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
-   keeps out of the renderer, so M1's fetch of "Hello!" inside a view is not the pattern to copy. What
-   implements the client's state is answered at M5 and prefetching at M9, so this may need to settle
-   only where fetched content enters the client and leave when it is fetched to M9.
-4. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — the
-   first row is here. Its *openness* is a caveat on M1: the argument that the store does not narrow
-   the runtime runs entirely through `node:sqlite`, which no record has chosen. The durability
-   settings applied through it wait for M12.
-5. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
-   — the store first exists here, so this is the first milestone whose daily loop opens it. What M1
-   needed was only the comparison of what each store shape would cost in the daily loop, and that is
-   a finding recorded against
-   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
-
-## M4 — a grid is on the screen
-
-The M3 puzzle, rendered as a grid. Static, no interaction.
-
-- [How is the app styled?](how-is-the-app-styled.md) — with the renderer settled at
-  [ADR-0038](../decisions/0038-the-renderer-is-react.md), which ships no styling of its own, so the
-  styling toolchain is a choice here rather than something React brings.
-
-## M5 — a player can fill it in
-
-Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
-
-1. [How does a player enter a digit?](how-does-a-player-enter-a-digit.md) — bounded by
-   [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md), which rules out a
-   gesture with no keyboard form.
-2. [What latency budget makes a move feel immediate?](what-latency-budget-makes-immediately-checkable.md)
-   — after the above, since the budget covers the input path and what an input is comes first.
-3. [What implements the client's state?](what-implements-the-clients-state.md) — the first puzzle
-   state held in memory arrives here. How much a library could supply depends on the storage
-   mechanism, undo depth and state shape at M6, so this is answered with those in view rather than
-   ahead of them.
-4. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
+7. [How is the system reset to a known state?](how-is-the-system-reset-to-a-known-state.md) — two runs
    of a check are only comparable if they start from the same place, and the first state worth
-   resetting is the board this milestone creates.
-5. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
+   resetting is the board M2 creates.
+8. [How does anyone load an arbitrary board state?](how-does-anyone-load-an-arbitrary-board-state.md)
    — reaching a nearly-finished grid or a specific violation by playing to it is the main thing
    standing between someone and checking whether a change works.
-6. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
-   platform is a phone, this is the first milestone with input worth checking on one, and
+9. [How is the app driven on a real device?](how-is-the-app-driven-on-a-real-device.md) — the primary
+   platform is a phone, M2 is the first milestone with input worth checking on one, and
    [../constraints.md](../constraints.md) records a streaming bug that reproduced only on real iOS
    Safari over a real network.
-7. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
+10. [How is this tested across browsers and platforms?](how-is-this-tested-across-browsers-and-platforms.md)
    — how many devices and which, and what runs where. The matrix itself is settled by
    [ADR-0026](../decisions/0026-one-config-declares-the-browser-floor-for-the-build-and-the-checks.md);
    this question is the other half, which is what to run it on. It carries more weight than it looks:
@@ -240,16 +140,52 @@ Select a cell, enter a digit, see it. In memory only; nothing survives a reload.
    is promised against compatibility data rather than observation until this lands, and the API half
    of the floor is only partly checkable by any tool.
 
-## M6 — the board survives a reload
+## M4 — a puzzle comes from the store
+
+One seeded puzzle, written to the store by hand, read back by the endpoint, and shown in M2's grid
+in place of the hard-coded puzzle. No generator. This is where connection handling becomes real, and
+where [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md)'s
+queryability stops being a promise about a store nobody has built.
+
+It comes after the grid, so the client is built against a hard-coded puzzle for two milestones. Later
+than this, the store would be met for the first time with a finished game attached.
+
+**Operating the store waits for M11.** Until players arrive the store holds only puzzles, which can
+be written again, so losing a row costs nothing. Backups, durability settings, migrations, recovery
+from a lost machine, deploys that leave the store alone, secrets and the machine's region all become
+real with the first player's data, and they sit at M11, where players arrive. So does whether
+puzzles and player records share one store, since player records first arrive there.
+
+1. [What is a puzzle, across game types?](what-is-a-puzzle-across-game-types.md) — only enough of it
+   to write one row and read it back. The full answer is not needed until M6.
+2. [What crosses the client/server boundary?](what-crosses-the-client-server-boundary.md) — the first
+   response with content in it is the first contract, so this is where the format is set.
+3. [How does the client load data from the server?](how-does-the-client-load-data-from-the-server.md)
+   — after the boundary above, which is its first input. This is the first fetch of content that
+   becomes the board, which [ADR-0037](../decisions/0037-the-renderer-draws-client-state-and-does-not-own-it.md)
+   keeps out of the renderer, so M1's fetch of "Hello!" inside a view is not the pattern to copy. What
+   implements the client's state is answered at M2 and prefetching at M8, so this may need to settle
+   only where fetched content enters the client and leave when it is fetched to M8.
+4. [Which driver reads and writes the store?](which-driver-reads-and-writes-the-store.md) — the
+   first row is here. Its *openness* is a caveat on M1: the argument that the store does not narrow
+   the runtime runs entirely through `node:sqlite`, which no record has chosen. The durability
+   settings applied through it wait for M11.
+5. [How is the store reached in local development?](how-is-the-store-reached-in-local-development.md)
+   — the store first exists here, so this is the first milestone whose daily loop opens it. What M1
+   needed was only the comparison of what each store shape would cost in the daily loop, and that is
+   a finding recorded against
+   [ADR-0019](../decisions/0019-the-store-is-a-file-the-server-process-opens.md).
+
+## M5 — the board survives a reload
 
 The first durability promise anything actually keeps.
 
 1. [Is undo in scope, and how far back?](is-undo-in-scope-and-how-far-back.md) — depth is what
-   decides the shape below, so it comes first even though undo itself is an M10 feature.
+   decides the shape below, so it comes first even though undo itself is an M9 feature.
 2. [What can a player do with no network?](what-can-a-player-do-with-no-network.md) — one board or a
    browsable archive, which sets storage volume by orders of magnitude.
 3. [Is puzzle state a snapshot or an event log?](is-puzzle-state-a-snapshot-or-an-event-log.md) — a
-   log of moves is also the raw material for recording play at M12, so this is answered with that
+   log of moves is also the raw material for recording play at M11, so this is answered with that
    use in view.
 4. [Does the floor cover iOS 15 devices that never installed their updates?](does-the-floor-cover-ios-15-devices-that-never-installed-their-updates.md)
    — whether the floor is Safari 15.0 or 15.6, which decides whether a storage or cross-tab design
@@ -257,7 +193,7 @@ The first durability promise anything actually keeps.
 5. [Which client storage mechanism holds a player's work?](which-client-storage-mechanism.md) — the
    one stack choice with no clean migration path.
 
-## M7 — the rules run
+## M6 — the rules run
 
 Illegal moves are recognised, and a finished board is recognised as finished.
 
@@ -267,10 +203,10 @@ Illegal moves are recognised, and a finished board is recognised as finished.
    [ADR-0034](../decisions/0034-the-repository-is-one-package.md) settled the package count. Two
    parts land here: how the rules module is reached, decided by the first import of it, which is
    this milestone; and what lives inside `src/rules/`, decided once there are rules to organise.
-   Its third part, whether the generator is a third deployable, waits for M8. Nothing before this
+   Its third part, whether the generator is a third deployable, waits for M7. Nothing before this
    milestone imports the rules module, which is why none of it blocks M1.
 
-## M8 — the puzzles are real
+## M7 — the puzzles are real
 
 Not one seeded row. Something published on a rhythm, fetched and rendered.
 
@@ -281,11 +217,11 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 3. [Is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
 4. [Can more than one puzzle be published per day?](can-more-than-one-puzzle-be-published-per-day.md)
    — beside the question above, which sets the rhythm, and a puzzle keyed by date alone can never
-   have a sibling. M3 keys its seeded row before this is answered, and until players arrive at M12
+   have a sibling. M4 keys its seeded row before this is answered, and until players arrive at M11
    re-keying rewrites only puzzles that can be written again.
 5. [Are puzzles generated ahead of time or on demand?](are-puzzles-generated-ahead-of-time-or-on-demand.md)
 
-## M9 — it works with no network
+## M8 — it works with no network
 
 1. [How does the app itself stay available offline?](how-does-the-app-itself-stay-available-offline.md)
    — narrowed by [ADR-0023](../decisions/0023-a-service-worker-answers-every-navigation-after-the-first.md),
@@ -299,18 +235,18 @@ Not one seeded row. Something published on a rhythm, fetched and rendered.
 4. [How do we exercise offline, throttled and backgrounded conditions?](how-do-we-exercise-offline-throttled-and-backgrounded-conditions.md)
    — [../constraints.md](../constraints.md) records that the storage failures do not reproduce in a
    desktop browser, so the conditions this milestone is about are the hardest ones to create on
-   purpose. It sits here rather than at M2 because there is nothing offline to exercise until now.
+   purpose. It sits here rather than at M3 because there is nothing offline to exercise until now.
 5. [Is a puzzle fetched before it is needed?](is-a-puzzle-fetched-before-it-is-needed.md) — the only
    answer that removes the most common wait in the product rather than dressing it, per
-   [../problem.md](../problem.md) under "Where a player waits". It sits here rather than at M8 because
-   prefetching is an offline capability and needs a rhythm to fetch ahead of, which M8 establishes.
+   [../problem.md](../problem.md) under "Where a player waits". It sits here rather than at M7 because
+   prefetching is an offline capability and needs a rhythm to fetch ahead of, which M7 establishes.
 6. [Can a page loaded before a deploy still fetch its files after it?](can-a-page-loaded-before-a-deploy-still-fetch-its-files-after-it.md)
    — the service worker serves an entry document from an earlier release, so its assets are asked
    for after deploys it never saw. It sits here because before this milestone the window is the
    milliseconds between the entry document and its assets. A dynamic import added earlier widens
    that window and brings it forward.
 
-## M10 — sudoku is finished, in guest mode
+## M9 — sudoku is finished, in guest mode
 
 Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
 
@@ -325,12 +261,12 @@ Everything a guest gets: notes, undo, completion, whatever hints turn out to be.
    [ADR-0014](../decisions/0014-all-play-is-reachable-from-the-keyboard-alone.md); what is left is
    what a cell announces.
 
-## M11 — the running system reports its own failures
+## M10 — the running system reports its own failures
 
-M2 is where checking a change before it ships is built. These report a failure after a change has
-shipped, and they are what has to be in place before anyone arrives at M12: whether the app is
+M3 is where checking a change before it ships is built. These report a failure after a change has
+shipped, and they are what has to be in place before anyone arrives at M11: whether the app is
 serving, whether a deploy broke it, whether a player lost progress or could, and whether the server
-has stopped. They sit before M12 because the whole question there is whether players are losing
+has stopped. They sit before M11 because the whole question there is whether players are losing
 work, and nothing currently could tell us either way. What needs real traffic to mean anything, such
 as vitals, alerting and diagnosing slow requests, waits for players under "Blocking nothing yet".
 
@@ -360,13 +296,13 @@ as vitals, alerting and diagnosing slow requests, waits for players under "Block
    [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md), and the
    rest is ours.
 
-## M12 — players arrive, and a guest's work and play are kept off the device
+## M11 — players arrive, and a guest's work and play are kept off the device
 
 The point at which the app is offered to players, and so the point at which everything owed to a
 player's data has to hold. A guest has something worth keeping, the browser is the only thing
 keeping it, and play is recorded from the first player onward, per [../problem.md](../problem.md).
-It sits after M10 because the size of the problem is set by how much a guest has accumulated, and
-after M11 because nothing before that could tell us whether work is being lost. It sits before
+It sits after M9 because the size of the problem is set by how much a guest has accumulated, and
+after M10 because nothing before that could tell us whether work is being lost. It sits before
 signing in because the whole question is what a guest gets _without_ an account.
 
 **Players arriving here is a sketch, not a record.**
@@ -456,7 +392,7 @@ is still open, and moving this point moves every question below that is keyed on
     — the hour only matters once someone starts a session at it, which is from here, and it must
     avoid the release hour
     [is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md)
-    may set at M8. Until then Debian's default hour harms nobody.
+    may set at M7. Until then Debian's default hour harms nobody.
 21. [Does the app send a Content Security Policy, and how strict is it?](does-the-app-send-a-content-security-policy-and-how-strict.md)
     — React needs neither `eval` nor injected inline styles, so nothing in the build waits on it.
     [ADR-0053](../decisions/0053-caddy-serves-the-clients-files-from-the-release-on-disk.md) settles
@@ -468,17 +404,17 @@ is still open, and moving this point moves every question below that is keyed on
     — a first visit sends the client uncompressed until it is answered, which costs nobody before
     players arrive and costs every one of them after.
 
-## M13 — a player can sign in
+## M12 — a player can sign in
 
 1. [Are there user accounts?](are-there-user-accounts.md)
 2. [How does a second device recognise the same person?](how-does-a-second-device-recognise-the-same-person.md)
    — likely the same question as the one above; resolve whether they merge before answering either.
 3. [How long does a signed-in player's work last?](how-long-does-a-signed-in-players-work-last.md)
 4. [Is the guest record the same shape as the account record?](is-the-guest-record-the-same-shape-as-the-account-record.md)
-   — decided here rather than at M12, because it is a claim about both records at once.
+   — decided here rather than at M11, because it is a claim about both records at once.
 5. [Does the server understand puzzle content?](does-the-server-understand-puzzle-content.md)
 
-## M14 — work follows a player between devices
+## M13 — work follows a player between devices
 
 1. [Can two devices edit the same board at once?](can-two-devices-edit-the-same-board-at-once.md)
 2. [What happens to a losing write when syncing?](what-happens-to-a-losing-write-when-syncing.md) —
@@ -494,11 +430,11 @@ is still open, and moving this point moves every question below that is keyed on
 5. [What wins when battery and durability conflict?](what-wins-when-battery-and-durability-conflict.md)
 6. [What does the server do with puzzle state?](what-does-the-server-do-with-puzzle-state.md)
 
-## M15 — the puzzles are ours
+## M14 — the puzzles are ours
 
-- [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
+1. [Which games come after sudoku and star battle?](which-games-come-after-sudoku-and-star-battle.md)
 
-## M16 — something is paid for
+## M15 — something is paid for
 
 1. [Is there a paid tier?](is-there-a-paid-tier.md)
 2. [What load should the server handle?](what-load-should-the-server-handle.md)
@@ -512,7 +448,8 @@ Real, and nothing is waiting on them. Several are research rather than choices.
 left open is which `resolves_into` value its shape deserves.
 
 [How is the questions index kept readable in one pass?](how-is-the-questions-index-kept-readable-in-one-pass.md)
-— this file is past what an agent can read at once, and nothing stops it growing.
+— this file fits in one read again (about 39KB on 2026-10-12) since its conventions moved to the
+`make-next-decision` skill, and nothing yet stops it growing back.
 
 [Can the gotchas be prevented rather than documented?](can-the-gotchas-be-prevented-rather-than-documented.md)
 — each trap in [../gotchas.md](../gotchas.md) might become a command in the contributing guide, which
@@ -529,12 +466,12 @@ would leave that file with nothing to hold.
 [does craft enjoyment ever outrank user experience?](does-craft-enjoyment-ever-outrank-user-experience.md).
 
 [At which milestone do players first use the app?](at-which-milestone-do-players-first-use-the-app.md)
-— the milestone list places players at M12 as a sketch, and no record settles it. Moving that
-point moves the questions at M12 that are keyed on players.
+— the milestone list places players at M11 as a sketch, and no record settles it. Moving that
+point moves the questions at M11 that are keyed on players.
 
 [Does any page need markup a crawler can read?](does-any-page-need-markup-a-crawler-can-read.md) and
 [do content and puzzle routes share an origin?](do-content-and-puzzle-routes-share-an-origin.md) —
-both become real when a URL is first shared with someone, which is M12 at the earliest, and nothing
+both become real when a URL is first shared with someone, which is M11 at the earliest, and nothing
 there waits on either.
 No rendering choice forecloses crawler markup: a rebuild on publish and a single runtime-rendered
 route are both additive, as
@@ -543,8 +480,8 @@ records. The client and the API share one origin, per
 [ADR-0040](../decisions/0040-the-client-and-the-api-answer-on-one-origin-in-production.md), so what
 is open on routes is only whether a third kind joins them.
 
-**After players arrive.** These need real traffic to mean anything, and nothing before M12 waits on
-them. M11 keeps only what has to report a failure before anyone arrives.
+**After players arrive.** These need real traffic to mean anything, and nothing before M11 waits on
+them. M10 keeps only what has to report a failure before anyone arrives.
 
 [What are the server's vitals, and who watches them?](what-are-the-servers-vitals-and-who-watches-them.md),
 [what is worth being woken up for?](what-is-worth-being-woken-up-for.md),
@@ -566,7 +503,7 @@ deploys, and Caddy's default validator changes with every copy. The cost is a fu
 [How do analysis and play share one store?](how-do-analysis-and-play-share-one-store.md) — the scans
 [ADR-0011](../decisions/0011-stored-play-data-can-be-analysed-not-just-retrieved.md) preserves are
 long reads, and a long read blocks WAL checkpointing. Nothing is worth analysing until play has been
-recorded for a while, and recording starts at M12, whose backup answer may already be the copy these
+recorded for a while, and recording starts at M11, whose backup answer may already be the copy these
 reads should run against.
 
 [What format declares the browser floor?](what-format-declares-the-browser-floor.md) — nothing in
@@ -584,369 +521,7 @@ patching iOS 15, which nothing currently notices.
 and how they are doing", and a puzzle from any past day. They are here rather than at a milestone
 because nothing waits on either, and because both are tracked to stop an infrastructure decision
 foreclosing them without noticing. The archive question is the nearer of the two — it meets
-[is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) at M8
-and [what can a player do with no network?](what-can-a-player-do-with-no-network.md) at M6, and
+[is there one puzzle a day, or unlimited play?](is-there-one-puzzle-a-day-or-unlimited-play.md) at M7
+and [what can a player do with no network?](what-can-a-player-do-with-no-network.md) at M5, and
 [ADR-0012](../decisions/0012-puzzle-content-is-served-by-a-runtime-not-bundled.md) has already
 constrained how an archive would be delivered.
-
-## Building a milestone's list
-
-Seven steps. Each one exists because skipping it produced a list that had to be rebuilt.
-
-1. **Write the milestone's end state in one sentence.**
-2. **List the observable slices between nothing and that end state.** Each is one change you can run
-   and look at — something true of the system afterwards that was not true before. **Observable does
-   not mean a player can see it**: a check that fails on a bad import and a script that reproduces a
-   bug are both observable, and M2 is an entire milestone of them. The test is whether you can name
-   what you would run and what you would expect to see. Build order, not risk order — the thing that
-   renders before the thing that is served, the thing that is served before the thing that is
-   deployed. Deploying is the last slice: a hosting choice made before anything exists to host is
-   made against an imagined system.
-3. **Under each slice, list the givens** — the records, promises and constraints already established
-   that bear on *that* slice. Link each one. Where the link is to a large file, name the single
-   invariant being relied on, one bullet per invariant.
-4. **Under the givens, list the questions that must be worked.** A question blocks a slice if
-   building without it would be **reversed**, not only if the work is impossible. Choosing a package
-   manager before the runtime is settled is possible today and wrong tomorrow. The literal blockers
-   are few; the reversal risks are what decide the order.
-
-   **One label: Must answer**, whether the answer is a choice or a fact to go and find. A research
-   question earns its own entry only where nothing else tracks it — where the question it informs
-   records it under **Findings**, that is where it lives.
-
-   **Every entry carries an "or else" clause: which later decision in this slice comes out wrong, and
-   what unwinding it costs.** Two costs exist here. A **re-scaffold** is a day. A **migration of live
-   player data** is not, and it is the only irreversible thing M1 can create. A question whose wrong
-   answer costs a re-scaffold does little work at the front of a slice. A choice whose clause can
-   name no silent harm at the current milestone, no cost that grows with the system, and no option
-   of an open question that would cost more to reopen than this choice costs to change is not an
-   entry at all. It is decided on the spot, per the triage in "When a choice surfaces
-   mid-work" in [../../CLAUDE.md](../../CLAUDE.md).
-
-   Three things read as clauses and are not: that work cannot start, that the choice might be made
-   carelessly, and a restatement of the topic. Each is true of every open question, so none
-   distinguishes anything. Where a clause names a mechanism rather than a cost — "whichever is built
-   first fixes the other two" — ask "so what?" until it reaches one.
-
-   **If you cannot complete "slice N cannot be built without this because ___", it does not block
-   slice N.**
-
-   **Defer.** Every sequencing error in this file has moved a question earlier than it belonged, never
-   later. An open question keeps its options and costs nothing. Where it is unclear whether something
-   blocks a slice, it does not.
-
-5. **Repeat givens and questions across slices.** Never cross-reference — no "as in slice 1". The
-   repetition is what makes step 7 possible and what lets a reader audit one slice without holding
-   the others in their head.
-6. **Order the questions within a slice** by what has to be answered first. Where two constrain each
-   other in both directions they are answered together, and each question file says so under **What
-   would settle it**. That is the only place a dependency between questions is written down.
-
-   **Questions that share moments are worked together even where neither constrains the other.** A
-   request one serves and another routes, or a deploy one shapes and another carries out, is a
-   moment both draw properties from, and worked one at a time each derives only what its own topic
-   brings to mind. So the moments are listed once for the group and the property list is derived
-   once, and each question's **Properties the answer is scored against** carries a copy of it,
-   adding only what is its own. Each still settles in its own record. A candidate is scored under
-   every answer an unsettled member could give, and one whose verdict changes makes that member an
-   input to be settled first.
-
-   **Grouping is generous and ordering needs evidence.** Including a question in a group that turns
-   out not to matter costs nothing. Moving, splitting or reordering questions is a decision, made
-   only from scored candidates: a question is coupled to another through a named candidate whose
-   verdict changes with its answer, never through a shared topic. The tell that a group was missed
-   is one option listed in two question files, and the first move is to split that option into the
-   arrangements it covers. On 2026-10-04 "something in front of the Droplet" sat in both the
-   file-serving and the domain question. Split, it was a caching proxy, which changed no
-   file-serving verdict and stayed with the domain question, and an edge platform hosting the files,
-   which was a file-serving candidate. Three rearrangements proposed from topic before that split
-   were each withdrawn.
-7. **Audit, and expect to move things.** A slice with several unrelated groups of givens is several
-   slices. A slice that reads like the milestone restated is bundling. A question written as a given
-   is a question — never a **Given**, whatever it is blocking. Read every "or else" clause and ask
-   whether it names a consequence for *this slice* or merely describes the question; the second is
-   the failure this audit is most likely to find, because it reads as a reason. Then read the
-   cross-references: a choice that several files each defer to the others is a question, and it is
-   usually wider than any of them. Then count how many slices each question blocks: that orders the
-   slices, and says nothing about the order inside one.
-
-**Everything a milestone installs is permanent.** A tracer bullet is the real stack doing the
-smallest thing it can do — not scaffolding to be replaced two milestones later. Provisional is not a
-category: if a choice would be redone shortly after the milestone, it is missing an input or the
-milestone is drawn in the wrong place. Placeholder *values* are fine; placeholder *choices* are not.
-
-**Deferring is the default, and it is the point.** An unanswered question is optionality retained,
-and everything learned before it must be answered is information the answer would otherwise be made
-without. The skill this list is trying to capture is spotting the moment a question can no longer be
-put off, and making it as narrow as possible when that moment arrives. Closing a door is clarifying
-and irreversible, so the record that closes one says which one.
-
-**A milestone's prose holds only what its remaining slices need.** When a question is answered, what
-it settled goes in the record and the milestone gains no paragraph saying so. The slice entry goes
-when its issue closes, and so does any prose that only that slice needed. A milestone that reads as
-an account of what was decided is carrying history the records already hold, and it pushes the
-slices still to be built further down a file that is already past what one reading can cover.
-
-## Milestones below the current one stay unplanned
-
-They are a list of questions grouped by the milestone that first needs them, and nothing more.
-**Expanding one into slices and givens before it is next is planning against a system that does not
-exist yet** — the slices are only knowable once the preceding milestone's decisions have landed, and
-a plan built earlier gets rewritten rather than followed. It is the same argument as deferring a
-decision: plan it when you know the most, which is as late as possible.
-
-**Adding a question to a future milestone is not expanding it**, and is always welcome. A question
-discovered now and parked where it belongs is what this file is for.
-
-When a milestone becomes the next one, run the seven steps on it. Not before.
-
-## This file and the issue tracker
-
-**Each slice above becomes one GitHub issue when it becomes workable**, not in advance, per
-[../decisions/0015-the-issue-tracker-is-github-issues.md](../decisions/0015-the-issue-tracker-is-github-issues.md)
-and
-[../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md](../decisions/0016-a-delivery-slice-is-an-issue-and-its-derivation-stays-in-docs.md).
-The tracker holds what work exists and what state it is in. This file holds why — what each slice
-rests on, what blocks it, and why they are in this order. Why a slice is built the way it is sits in
-its issue's comments.
-
-**So the tracker is deliberately shorter than this list, and a slice with no issue is normal.** An
-issue is filed once nothing in its entry is still a **Must answer**, because an issue written
-earlier would carry a definition of done that the unanswered question is about to change. Read a
-missing issue as "not workable yet", not as "not planned" — this file is the plan and the tracker is
-the work.
-
-**So nothing here records status.** No checkboxes, no "done", no "in progress". Those change daily,
-this file is already the fastest-decaying document in `docs/`, and a stale checkbox in a file whose
-value is being trusted is worse than no checkbox.
-
-**The slice title is the join key.** It appears here and in the issue, and nothing checks that the two
-still match — `scripts/check-docs.py` cannot see the tracker. If they disagree, the tracker is right
-about what work exists and this file is right about why.
-
-**A slice's entry is deleted once its issue closes.** What it rested on is in the records it cited,
-and its definition of done is in the issue, so what would be left here is history. The slices that
-remain keep their numbers, because records cite slices by number, so a gap at the front of a list
-means those slices are finished rather than missing. A milestone is finished when its list is empty.
-
-## Housekeeping
-
-**A question resolves into as many records as it contains decisions** — the separability test in
-[../decisions/README.md](../decisions/README.md). It is deleted once nothing is left in it that a
-record has not settled; mine it first, since findings graduate to
-[../constraints.md](../constraints.md) and reasoning belongs in whichever record it argues for.
-**Mining happens in the change that lands the record, never later.** A finding a still-open question
-will use moves into that question's file then, so no answered file is kept waiting for a later
-record to take what it needs.
-**Mining moves a claim's tier and source with it**, or the record inherits a bare assertion and the
-evidence dies with the file. Where the working is too long to move, cite the commit that deleted it —
-`git show <commit>^:<path>` still reads it.
-**Promises are written as they fall out of records**, on the decision template's checklist, rather
-than committed to in advance.
-
-`scripts/check-docs.py` checks what is fact rather than judgement: links resolve, every question
-is referenced at least once from the lists above, no link points at a heading, no question file has
-grown a sequencing section. A question deliberately appears under more than one milestone where it is
-needed twice, so nothing checks for a single appearance.
-It does not check the ordering, because a check that passed it would only make a wrong order look
-verified.
-
-**[../decisions/](../decisions/) is the list of what is settled, and it is not repeated here.** Every
-record is titled by what it settled, so the listing is the checklist of constraints in force.
-
-<!-- Template for a milestone. Links are shown as backticked pseudo-syntax so the checker does not
-     try to resolve them; write them as real markdown links.
-
-## M<N> — <the end state, in a few words>
-
-<One sentence: what exists when this is done, and what deliberately does not.>
-
-1. **<A slice you can run and look at.>**
-   - **Given:** `[<record-promise-or-constraint>](<its-path>)`
-   - **Given:** `[../constraints.md](../constraints.md)` — <the single invariant relied on>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-     - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-2. **<The next slice.>**
-   - **Must answer:** `[<question-filename>](<question-filename>.md)` — or else <what breaks in this slice>
-
-Questions are always "Must answer", never "Given", whether the answer is a choice or a fact somebody
-has to find. Every one carries an "or else" clause naming what breaks in *this slice* without it —
-not what the question is about. Where a slice rests on no given, its questions sit at
-the top level. Link text is the filename, so the list reads without opening anything.
--->
-
-## What goes in a question file
-
-Seven sections, in a fixed order. **Every section stays**, with `...` where nothing has been
-recorded yet — the empty ones are the reminder of what hasn't been thought about.
-
-`...` and `N/A` mean different things. `...` means nobody has looked. `N/A` means someone
-looked and there is nothing — no blockers, or no options because the question resolves into a
-fact rather than a choice.
-
-Frontmatter carries `opened`, `status`, and `resolves_into` — `decision`, `constraint`, `problem`, or
-`unsettled`. `status` is `open`. A question whose record lands is mined and deleted in that change, so a file
-carrying `answered` is one nobody finished. That last field partitions the folder: `rg -l 'resolves_into: constraint'` is the
-research backlog, and everything resolving into a decision is a choice waiting to be made.
-
-**`unsettled` means where the answer lands has not been argued**, not that the question is unanswered
-— `status` already says that. It exists because a value picked to satisfy the checker would be a wrong
-answer to a question nobody asked, and because a file given the wrong value silently drops out of both
-queries above, which is how a file goes missing from a list nobody knows to check. It is a real value
-rather than a placeholder, so a file carrying it says under **Resolves into** what the ways out are.
-It is also the one value that should be rare: exactly one file carries it today.
-
-`scripts/check-docs.py` rejects any other value, so a typo and an invented category both fail rather
-than passing quietly.
-
-**Why it matters**, **What would settle it**, **Resolves into** and **Source** are stable and
-short. **Why it matters** is what's blocked or what gets
-expensive if we're wrong. It also names which environments the choice shows up in: production,
-local runs, or both. A question framed only for production leaves its local half to be wired for
-convenience, and per
-[ADR-0039](../decisions/0039-changes-are-verified-in-a-production-like-local-run-and-only-the-fast-loop-may-differ.md)
-the production-like local run has to match whatever production gets. **There are no Blocked by,
-Blocks, or What this decides beyond itself sections.** A per-file dependency list is one graph held
-in sixty-odd places, each of which sees a sliver of it. It goes stale invisibly — noticing requires
-re-reading everything around it — and it is trusted precisely because it reads as a fact rather than as the judgement it is. The milestone
-grouping above holds the same information where every sequencing claim sits beside the others and
-one file can be checked against itself. `scripts/check-docs.py` fails on the two lead sentences
-that carried this before, "What this decides beyond itself" and "Not blockers, and worth saying so",
-because they spread by being copied. A paraphrase gets past it.
-
-A question that genuinely cannot be worked until another is answered says so under **What would
-settle it**, in prose, as part of describing what an answer requires.
-**What would settle it** is the evidence, measurement, or event that would end the question — not
-another question. **Resolves into** names where the answer lands. **Source** records where the
-question came from, so provenance survives the deletion of whatever raised it. It is the one
-section here that is history by design, and the forward-only rule in the portable documentation
-standard does not reach it. That covers where the question came from and nothing else: a **Source**
-that grows into an account of how the work went has left its purpose rather than extended it.
-
-**Properties the answer is scored against** is a numbered list of what an answer must deliver,
-derived from the moments the system touches the thing being chosen. Each property cites the record,
-guarantee, constraint, failure mode or passage of [../problem.md](../problem.md) it rests on, and the list ends
-with the properties checked and found binding on nothing. It is written before any option is named,
-which is why it sits above **Options**: a list written after them is the options' own list. Step 4
-of the `make-next-decision` skill is how it is derived. `scripts/check-docs.py` requires the section
-in every file, above **Options**, and fails a question opened on or after 2026-09-27 whose Options
-are recorded while its properties are still `...`. Questions opened earlier keep the Options they
-recorded first until they are worked.
-
-The last two grow. **Options** holds each candidate answer with its strongest case and its cost.
-
-### While a question is being worked, its file is where the work goes
-
-Findings are written in as they are established, not gathered at the end. Research left in a
-conversation gets redone next session from a summary, and a summary is the part that has already
-lost its sources.
-
-Results that changed nothing count. A candidate checked and dropped, a claim checked and confirmed,
-and a claim checked and found unsupported are all findings, and an option written down nowhere is
-indistinguishable from one nobody thought of.
-
-**Findings accumulate in passes, and each carries its own date.** A file worked more than once holds
-more than one pass, so an older entry sitting below a newer one is what was known then rather than a
-contradiction of what is known now. Read the dates. Where a later pass overturns an earlier one the
-earlier entry is replaced rather than left underneath it, which is what makes everything still
-present still believed.
-
-Options and Findings take subheadings once they outgrow a flat list.
-
-### A claim about a tool decays in days, not months
-
-A toolchain claim can be overtaken by a release that ships the same week, and the rate of change is
-high enough that most of a batch can fall in one re-check. So a finding about a tool carries the
-date it was checked, a candidate list is re-checked rather than trusted, and **an undated claim
-about a tool is treated as unverified whatever it says**.
-
-Where a claim decays on a known date rather than gradually — a support window ending, a version
-reaching end of life — the finding says so and names the date, because that is cheaper to act on
-than a general warning.
-
-Nothing enforces any of this. `scripts/check-docs.py` checks that a tier, where one is given, is a
-recognised word. It does not check that a finding has one, and it cannot check whether the claim
-behind it is still true.
-
-### Findings are evidence, not fact
-
-**Findings** holds what we've learned so far. Nothing in it is established, and nothing in it may be
-cited as though it were. A finding becomes binding by graduating to [../constraints.md](../constraints.md)
-or by being reasoned through in a decision record — never by sitting in a question file long enough
-to look settled. Every Findings section opens with that sentence, so a reader who arrives at one file
-without reading this one still knows what they are holding.
-
-**A finding that asserts a fact about the world carries the tier it was established at**, using the
-same three words [../constraints.md](../constraints.md) uses — _Measured_, _Sourced_, _Reasoned_ —
-plus a fourth this folder needs and that file does not:
-
-- **_Unverified — no source recorded._** Somebody wrote it down and nobody can say why it is true.
-  This is the most useful tag in the set, because an unsourced number reads exactly like a sourced
-  one and this is what tells them apart. Several arrived here from legacy documents and none of them
-  should decide anything.
-
-A finding that is a judgement, a product opinion, or an implication for the options here carries no
-tier, because there is nothing to have established.
-
-A finding may record what a standard _implies for these options_; it may not restate the standard
-itself. The first shifts a decision and belongs here. The second is a weaker local copy of a rule
-already in force, competing with the real one for whoever finds it first.
-
-**Findings should say when a decision would close a door**, and that is the one forward-looking claim
-they are for. It is not sequencing — it does not say what to answer first — it says what stops being
-reachable. There is no register of open doors: a future worth keeping reachable is kept reachable by
-a record in [../decisions/](../decisions/) that says what is now binding, and a list of them
-elsewhere would be a second copy nobody updates.
-
-**One question per file**, and the filename asks the question as plainly as it can, so a directory
-listing reads as the list of what is open.
-
-**A question is split when only part of it blocks an early milestone.** The blocking part becomes
-its own file and the rest stays where it belongs. Both halves keep the format below, and the
-question that was split says what it no longer covers so a reader does not go looking for it here.
-
-<!-- Template:
-
----
-opened: YYYY-MM-DD
-status: open
-resolves_into: decision | constraint | problem | unsettled
----
-
-# <The question, asked in plain words?>
-
-## Why it matters
-
-...
-
-## What would settle it
-
-...
-
-## Properties the answer is scored against
-
-...
-
-## Resolves into
-
-...
-
-## Source
-
-...
-
-## Options
-
-...
-
-## Findings
-
-*Findings are working evidence, not settled fact. Nothing here binds a decision until it graduates to [../constraints.md](../constraints.md) or into a decision record.*
-
-**<A claim about the world.>** <What it means for the options here.>
-
-*Sourced | Measured | Reasoned | Unverified — <how we know, or that we do not>.*
-
-**<A judgement or an implication for the options.>** <No tier: there is nothing to have established.>
-
--->

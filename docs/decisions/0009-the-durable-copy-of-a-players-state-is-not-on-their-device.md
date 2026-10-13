@@ -61,7 +61,7 @@ it and on what terms.
 ## Enforced by
 
 **Nothing. Asserted only, and no durable copy exists.** What would make it true is state written
-somewhere other than the player's device and readable back from it. It needs the store at M3 and a
+somewhere other than the player's device and readable back from it. It needs the store at M4 and a
 path that writes a player's state to it after that, and until then every durability promise in
 [../guarantees/](../guarantees/) rests on a device this record says is not authoritative.
 

@@ -43,7 +43,7 @@ bug report otherwise.
 **What format that configuration takes is
 [open](../questions/what-format-declares-the-browser-floor.md)**, and is separable from this record:
 the shape here is one declaration with three readers, and more than one format could carry it. It is
-answered at M2, alongside the tools that run the two checks, because the format has to suit every
+answered at M3, alongside the tools that run the two checks, because the format has to suit every
 reader and the checks are the readers not yet chosen.
 
 ### The value is not settled here
@@ -82,7 +82,7 @@ than reading a separate declaration: one reader cannot disagree with itself, whi
 this record exists to prevent. The value moves into the shared declaration when the second reader
 arrives, and it must never fall through to the bundler's own default, which
 [ADR-0025](0025-the-client-build-lowers-syntax-to-a-declared-floor.md) rejects. The two checks
-arrive at M2, under [what runs the checks on every
+arrive at M3, under [what runs the checks on every
 change?](../questions/what-runs-the-checks-on-every-change.md), and neither is self-enforcing:
 nothing breaks if they are never built.
 
@@ -128,7 +128,7 @@ global, does not read dependencies, and by default ignores usage inside a featur
 So the API check will pass on code that breaks at the floor, and the shared configuration invites
 reading its silence as coverage. This is the weakness being knowingly accepted, and the residue
 belongs to [how is this tested across browsers and platforms?](../questions/how-is-this-tested-across-browsers-and-platforms.md)
-at M5.
+at M3.
 
 **No tool checks behavioural parity at all.** Compatibility data records whether an API is present,
 not whether it behaves the same, and [../constraints.md](../constraints.md) already carries a bug
@@ -136,7 +136,7 @@ that reproduced only on real iOS Safari over a real network. A green check is no
 works on the floor browser.
 
 **Nothing yet exists to run these checks.** [What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md)
-is open at M2, and `scripts/check-docs.py` already exists with nothing running it. Until that is
+is open at M3, and `scripts/check-docs.py` already exists with nothing running it. Until that is
 answered, this record describes checks that are configured and not executed, which is a weaker
 position than it reads as.
 
@@ -154,7 +154,7 @@ position than it reads as.
 ## Also update
 
 - [x] `questions/README.md` — [which browsers and versions must this support?](../questions/README.md)
-      is resolved, and M2's cross-browser testing entry states what it now rests on
+      is resolved, and M3's cross-browser testing entry states what it now rests on
 - [x] `guarantees/` — the floor named here is the scope
       [the app runs on any device still receiving security updates](../guarantees/the-app-runs-on-any-device-still-receiving-security-updates.md)
       states

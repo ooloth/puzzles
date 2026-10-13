@@ -55,7 +55,7 @@ that has not declared it. The second is better, because it tests the property ra
 setting that currently provides it, and so survives a change of package manager.
 
 Neither exists yet.
-[What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M2
+[What runs the checks on every change?](../questions/what-runs-the-checks-on-every-change.md) at M3
 is where the runner gets decided, and this check is part of that slice's definition of done. This
 file is what says so.
 

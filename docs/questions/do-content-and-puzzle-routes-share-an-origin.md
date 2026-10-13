@@ -22,7 +22,7 @@ if the content wants a rendering model the game does not.
 **Whether the browser treats them as one site.** This is the sharp one.
 [../constraints.md](../constraints.md) records that Safari's first-party exemption for a server-set
 cookie turns on what the domain resolves to, and that exemption is the whole basis of the recovery
-mechanism at M12. Separating hosts adds a second arrangement that has to pass that test, or has to be
+mechanism at M11. Separating hosts adds a second arrangement that has to pass that test, or has to be
 established as not needing to.
 
 ## What would settle it

@@ -37,7 +37,7 @@ written in browserslist, Vite reads it through an adapter. What format carries t
 
 `vite.config.ts` sets `build.target` to the floor's named versions, typed so that a keyword does not
 compile, and `vite.config.test.ts` fails if the build stops lowering syntax the floor cannot parse.
-Two conditions are unmet: the target coming from the shared declaration once M2 adds the checks that
+Two conditions are unmet: the target coming from the shared declaration once M3 adds the checks that
 also read it, and the build emitting a precache manifest that contains the entry document. The
 second is the one worth checking directly,
 because [ADR-0028](0028-the-client-build-and-the-http-server-are-separate-tools.md) rejects three

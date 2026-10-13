@@ -122,7 +122,7 @@ chosen to be quiet, with Caddy's repository included.
   at slice 5. Until then slice 4 is observed over HTTP on the Droplet's address.
 - **Noticing a failed renewal.** Caddy raises no alert of its own;
   [how do we know the deployed app is serving?](../questions/how-do-we-know-the-deployed-app-is-serving.md)
-  at M11 owns that.
+  at M10 owns that.
 
 ## Enforced by
 

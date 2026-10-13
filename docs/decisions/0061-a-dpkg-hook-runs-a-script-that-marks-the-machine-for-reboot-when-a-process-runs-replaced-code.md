@@ -83,7 +83,7 @@ bind: one pass over `/proc` took 0.02 seconds. Storage binds only through the jo
 journald bounds. Network does not bind.
 
 **Checked and binding on nothing:** cost and the firewall. **Deferred:** being alerted when the
-detector fails, to [how is the server operated?](../questions/how-is-the-server-operated.md) at M11;
+detector fails, to [how is the server operated?](../questions/how-is-the-server-operated.md) at M10;
 whether anything may run longer than a day, to where puzzle generation runs.
 
 ## Decision
@@ -175,8 +175,8 @@ are not candidates; the question's Options say why.
 - dpkg or the kernel changes how a replaced file appears in `/proc`.
 - A process running replaced code is found on the machine that the script did not list.
 - The machine gains Perl for another reason.
-- A reboot at the hour stops costing anything players see, through a downtime tolerance at M12 or
-  puzzles fetched ahead at M9.
+- A reboot at the hour stops costing anything players see, through a downtime tolerance at M11 or
+  puzzles fetched ahead at M8.
 
 ## Also update
 

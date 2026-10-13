@@ -2,7 +2,7 @@
 number: 0050
 status: accepted
 date: 2026-10-03
-amended: 2026-10-05
+amended: 2026-10-12
 ---
 
 # 0050 — Caddy terminates TLS in front of the app
@@ -38,7 +38,7 @@ setup on the Mac.
    one hostname ([ADR-0040](0040-the-client-and-the-api-answer-on-one-origin-in-production.md), [ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md)).
 3. Nothing caches an API response or strips `Set-Cookie` unless configured to ([ADR-0041](0041-api-paths-live-under-api-and-every-other-path-is-the-clients.md);
    [../constraints.md](../constraints.md) on server-set cookies and Safari).
-4. A deploy fails no request (property 1 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md);
+4. A deploy fails no request, from M11 (property 1 of [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md);
    [the player is never asked to retry or reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)).
 5. Patching or reconfiguring the front fails no request in flight (the same, and property 3 of
    [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md)).
@@ -169,7 +169,9 @@ when it is written, because the defaults are wrong here:
   Varnish's open-source edition are archived. **Reverses** if one returns to maintained packages.
 - **Not yet.** Rejected because M1 slice 4 serves the client and the API from one machine, so
   something has to answer HTTP and send `/api/` to the app, and TLS is needed at slice 5. Choosing
-  between two instances during a deploy is needed from slice 6.
+  between two instances during a deploy is needed from M11, when property 1 of
+  [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) binds; until
+  then a deploy restarts the app.
 
 Fronts off the machine, such as Cloudflare's proxy or tunnel and DigitalOcean's load balancer, were
 not scored here; whether anything sits in front of the Droplet is the domain question's at slice 5.

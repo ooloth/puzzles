@@ -170,8 +170,8 @@ and a rejected one never does.
 
 **Find this decision in [../questions/README.md](../questions/README.md) and check the milestone it
 sits in.** That file is this one's sibling: the same decisions, before they are made, grouped by
-what they block. A question is ready when everything its milestone entry names as an input is
-answered. If anything is not, the record you are about to write will be arbitrary — and it will not
+what they block. A question is ready when everything listed before it in its slice is answered. If
+anything is not, the record you are about to write will be arbitrary — and it will not
 read as arbitrary, which is the whole cost. Write the missing question instead, and work that.
 
 Sequencing lives in that file and nowhere else. Question files do not state what they depend on, so

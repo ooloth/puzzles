@@ -87,7 +87,7 @@ it uses, and reboots then if anything installed needs it.**
   `/var/run/reboot-required`, or any process left running on a replaced library. **Services are never
   restarted for a library; the machine reboots instead.** A restart of the app's unit bypasses the
   drain-then-switch deploy that property 1 of
-  [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) rests on, which a spike
+  [ADR-0044](0044-the-server-runs-as-systemd-services-without-containers.md) rests on from M11, which a spike
   observed with `needrestart` set to restart. What detects a process left on a replaced library is
   [ADR-0061](0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md), and a machine up 14 days reboots regardless, per [ADR-0062](0062-the-machine-reboots-at-the-hour-once-it-has-been-up-14-days.md).
 - **A new machine** applies every update before it serves.

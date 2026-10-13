@@ -21,8 +21,8 @@ settled when the delivery mechanism is chosen rather than when gating is wanted.
 
 **The portable decision-making standard says decisions are deferred until leaving
 one open would close a door unnoticed.** This is one of those. The milestone sequence in
-[../questions/README.md](../questions/README.md) now puts a puzzle on the screen from a store at the
-second milestone, which makes puzzle delivery something that gets *built* long before anyone asks
+[../questions/README.md](../questions/README.md) now puts a puzzle on the screen from a store at
+M4, which makes puzzle delivery something that gets *built* long before anyone asks
 whether it can gate. Built as static files, it forecloses the paid tier silently, and nothing about
 shipping a JSON file announces that.
 

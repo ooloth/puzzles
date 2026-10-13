@@ -80,9 +80,8 @@ question can be answered is to store everything, which is how privacy obligation
 anyone deciding to take them on. Nothing here licenses that — the option preserved is about the
 store's shape, not about what goes into it.
 
-**It pre-empts part of a question that is still open.**
-[ADR-0020](0020-the-stores-engine-is-sqlite.md) was describable as a possible
-non-decision only while an opaque store was live. It is now a real choice, and this record is why.
+**It is why [ADR-0020](0020-the-stores-engine-is-sqlite.md) was a real choice.** The store's engine
+was describable as a possible non-decision only while an opaque store was live.
 
 ## Revisit when
 

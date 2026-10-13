@@ -1,6 +1,6 @@
 ---
 name: make-next-decision
-description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER whenever the user asks about prioritizing unresolved questions or unmade decisions, or wants to make a technical decision, and whenever you find a choice your current work would make that no Given or record settles (see "When a choice surfaces mid-work" in CLAUDE.md).
+description: Identify the highest-priority outstanding decision that needs to be made, and make it using a rigorous decision-making process starting from first principles and building from foundational prerequisite decisions (if any) to the final call. TRIGGER whenever the user asks about prioritizing unresolved questions or unmade decisions, or wants to make a technical decision, and whenever you find a choice your current work would make that no record settles (see "When a choice surfaces mid-work" in CLAUDE.md).
 ---
 
 ## Context
@@ -296,7 +296,7 @@ afterwards; the observation is the artifact.
 1. Verify the subagents' claims, especially where evidence is lacking. A claim with a citation that
    nobody opened is not verified, and a number with no method behind it is not a measurement.
 1. **Write what you have established into the question file before going further**, per "While a
-   question is being worked, its file is where the work goes" in `docs/questions/README.md`. Do it
+   question is being worked, its file is where the work goes" in [question-files.md](question-files.md). Do it
    at each point the picture changes rather than once at the end — research held only in the
    conversation is lost to a context window, and what gets reconstructed later is the summary rather
    than the sourcing. Record the eliminations and the confirmations too, not just the surprises.
@@ -409,7 +409,7 @@ record what you find.
    file with its tier and source, rather than the resolved file being kept until a later record can
    take it.
 
-   **Commit the worked question file before deleting it.** `docs/questions/README.md` says that where
+   **Commit the worked question file before deleting it.** [milestone-lists.md](milestone-lists.md) says that where
    the working is too long to move, you cite the commit that deleted it and `git show <commit>^:<path>`
    still reads it. That recovery path exists only if the content was committed. A question worked and
    resolved in one session has no such commit, so deleting it in the same uncommitted batch destroys

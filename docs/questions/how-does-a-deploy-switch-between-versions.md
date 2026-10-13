@@ -223,7 +223,7 @@ and new never overlap; Kamal and its relatives keep Docker on the server, which 
 
 **[ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md)'s Risk applies to whatever script does the switch**: it enables the new instance at boot
 and disables the old, or a reboot starts the wrong one. Tests for that script are written with it,
-when slice 6 is built.
+when this is answered at M11.
 
 *From [ADR-0044](../decisions/0044-the-server-runs-as-systemd-services-without-containers.md).*
 

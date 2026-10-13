@@ -36,8 +36,9 @@ row in the question.
 1. A deploy fails no request (row 30 and J1, [the player is never asked to retry or
    reconnect](../guarantees/the-player-is-never-asked-to-retry-or-reconnect.md)). This binds from
    M11, where players arrive. Before then a failed request reaches only the maintainer, so a deploy
-   may restart the app: the maintainer's ruling, 2026-10-12. The arrangement chosen here still
-   meets it, as observed below.
+   may restart the app: the maintainer's ruling, 2026-10-12. The arrangement chosen here can meet
+   it once a deploy switches between two instances, as observed below, and that switch is built at
+   M11.
 2. The arrangement leaves the app and what runs beside it the most of the 1 GB machine
    ([../constraints.md](../constraints.md), no swap).
 3. Everything beneath the app is patched without a recurring manual step (rows 14 and 23).
@@ -126,8 +127,9 @@ run? (read with `git show ed7f54e:docs/questions/where-does-this-run.md`).
 
 ## Risk
 
-- **The deploy script is ours.** It is small, and its bugs are ours too. It must enable the new
-  instance at boot and disable the old, or a reboot brings back whichever was enabled first. It needs
+- **The deploy script is ours.** It is small, and its bugs are ours too. Once it switches between
+  two instances, from M11, it must enable the new instance at boot and disable the old, or a reboot
+  brings back whichever was enabled first. It needs
   tests and a rehearsal in a local VM before each change.
 - **No frozen image.** The operating system's packages beneath the app change as they are patched. Pinned
   versions and release directories narrow that without removing it.

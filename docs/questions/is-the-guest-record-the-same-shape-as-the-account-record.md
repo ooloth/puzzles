@@ -69,8 +69,8 @@ free — if a play record, streaks or stats are ever shown to a guest, they alre
 exists for a signed-in player, and the only open question is which bound covers them (see
 [how long does a guest's work last?](how-long-does-a-guests-work-last.md)), not whether the shape can
 hold them. The cost is that guest storage has to be designed as if it might always become an account
-record, even while only guests exist, which is more shape to carry at M1 than a guest-only build
-strictly needs.
+record, even while only guests exist, which is more shape to carry at M5, where guest storage
+first appears, than a guest-only build strictly needs.
 
 *Different shapes, converted on sign-in.* Guest storage is designed for exactly what a guest needs
 today, independently of what an account record needs. Signing in runs a conversion step that reads

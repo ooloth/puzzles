@@ -269,7 +269,7 @@ its vendor's runner image gives a pipeline with weak parity. See
 [how is the app run locally the way it runs deployed?](how-is-the-app-run-locally-the-way-it-runs-deployed.md).
 
 **The app needs no secrets in M1.** The milestone is a hard-coded response with no database, so
-there is nothing to inject into the running app. That becomes real at M4 and should not be built
+there is nothing to inject into the running app. That becomes real at M11 and should not be built
 before then. The deploy itself does hold one credential, the SSH key below.
 
 *Reasoned — from M1's definition in [README.md](README.md).*

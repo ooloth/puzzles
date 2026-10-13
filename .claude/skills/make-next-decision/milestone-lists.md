@@ -33,7 +33,7 @@ Six steps. Each one exists because skipping it produced a list that had to be re
    name no silent harm at the current milestone, no cost that grows with the system, and no option
    of an open question that would cost more to reopen than this choice costs to change is not an
    entry at all. It is decided on the spot, per the triage in "When a choice surfaces
-   mid-work" in [docs/CLAUDE.md](../../../CLAUDE.md).
+   mid-work" in [CLAUDE.md](../../../CLAUDE.md).
 
    Three things read as clauses and are not: that work cannot start, that the choice might be made
    carelessly, and a restatement of the topic. Each is true of every open question, so none

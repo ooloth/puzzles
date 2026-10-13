@@ -73,7 +73,7 @@ the end and are the larger half.
         │  │ SQLite — the durable copy of a    │  │   queryable across
         │  │ player's state, and the catalogue │  │   players       ADR-0011
         │  └───────────────────────────────────┘  │   (co-location of the two
-        │                   │                     │    is open, M4)
+        │                   │                     │    is open, M11)
         │  ┌────────────────▼──────────────────┐  │
         │  │ local disk — survives restart and │  │   ADR-0022
         │  │ redeploy, not the machine         │  │

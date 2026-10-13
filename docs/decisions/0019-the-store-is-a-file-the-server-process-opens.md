@@ -120,7 +120,7 @@ which decide how that file is opened.
   self-hosting remains preferred — which is the same condition as the reversal above, arriving by a
   different route.
 
-- **Decide it at the third milestone instead.** Genuinely cheap, and it was the leading option until
+- **Decide it at the store's milestone, M4, instead.** Genuinely cheap, and it was the leading option until
   late in the analysis: deferring costs nothing, since the store's locality was found not to constrain
   the runtime after all. Rejected because the first milestone deploys onto a host, and
   [../questions/README.md](../questions/README.md) requires that host to satisfy "the server and

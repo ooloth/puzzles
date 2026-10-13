@@ -18,8 +18,8 @@ one open would close a door unnoticed, and names this door.** Its example list i
 that silently caps a recovery mechanism, **a data shape that assumes one puzzle type**, an absent
 identifier that turns a later feature into a migration."
 
-**[../questions/README.md](../questions/README.md) now puts a puzzle in the store at M3.** That is
-the moment the shape stops being a paper question. By M2 a player's board is in client storage too,
+**[../questions/README.md](../questions/README.md) now puts a puzzle in the store at M4.** That is
+the moment the shape stops being a paper question. By M5 a player's board is in client storage too,
 and
 [is the guest record the same shape as the account record?](../questions/is-the-guest-record-the-same-shape-as-the-account-record.md)
 records why that is the worst place to discover a migration: it runs once, in somebody's browser,
@@ -53,7 +53,7 @@ ever ships.
 in [what is a puzzle, across game types?](../questions/what-is-a-puzzle-across-game-types.md) — the
 sudoku-only model generalised when the second type arrives — and leaves the other two untouched. One
 generic model and per-type models behind a shared envelope both satisfy this, and choosing between
-them is that question's job at M3 and M5, informed by writing both shapes out rather than by this
+them is that question's job at M4 and M6, informed by writing both shapes out rather than by this
 record.
 
 **It commits to grid logic puzzles, not to every puzzle.** Sudoku and star battle both mark cells.
@@ -107,7 +107,7 @@ sequencing changes, this will have been a tax collected for nothing.
 existed in any form, so the four assumptions above are reasoned from how the two games differ rather
 than observed from two implementations. That is exactly what
 [what is a puzzle, across game types?](../questions/what-is-a-puzzle-across-game-types.md) says would
-settle it, and this record deliberately does not wait for it — because M3 stores a puzzle first.
+settle it, and this record deliberately does not wait for it — because M4 stores a puzzle first.
 Writing both shapes may show one of the four assumptions is wrong.
 
 **It can be satisfied on paper and broken in practice.** Nothing here stops a shape that carries a

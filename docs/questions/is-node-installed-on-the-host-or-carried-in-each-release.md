@@ -98,7 +98,10 @@ of life, so this means NodeSource's apt repository, held to every item of
 list; see **Findings**. A release is then the built JavaScript and its `node_modules`, and the
 runtime version is a property of the machine. Two machines can run the same release on different
 Node versions. A patch installs with no deploy, but the running app keeps the old binary until it
-restarts, and whether anything restarts it is not established: see **Findings**.
+restarts. The hook in
+[ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md)
+sees the replaced executable and marks the machine for a reboot at the update hour: see
+**Findings**.
 
 *Node carried as an exact binary inside each release.* The runtime travels with the code, so a
 release runs the same everywhere and rolls back with its runtime. Each Node patch needs a deploy, and
@@ -199,10 +202,9 @@ repository, [ADR-0051](../decisions/0051-updates-and-the-reboots-they-need-are-a
 adds that repository to the daily updates at the chosen hour. An upgrade replaces Node on disk and
 leaves the running app on the old binary until it restarts, because that record forbids restarting
 the app's unit outside a deploy. That record reboots the machine for a kernel install or "any process
-left running on a replaced library". Whether a replaced Node binary counts, and what would detect it,
-is not established: "Debian 13 updates itself on its own clock" in
-[../constraints.md](../constraints.md) says only a kernel install marks the machine for a reboot, and
-nothing restarts processes on a replaced library unless something like `needrestart` is installed. A pattern on NodeSource's origin, `. nodistro`,
+left running on a replaced library". A replaced Node binary counts: the hook in
+[ADR-0061](../decisions/0061-a-dpkg-hook-runs-a-script-that-marks-the-machine-for-reboot-when-a-process-runs-replaced-code.md)
+lists any process whose executable has been replaced, and marks the machine for that reboot. A pattern on NodeSource's origin, `. nodistro`,
 matches every major line it publishes, since all share that codename. Carried inside each release,
 Node is untouched by the daily updates and changes only by deploying.
 

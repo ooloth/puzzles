@@ -44,8 +44,8 @@ Whether someone has paid cannot be held by the device it would be charging.
 offline reasons, and this does not reopen it. The device holds the copy a player interacts with; the
 off-device copy is the one that survives the device.
 
-**It settles that such a copy exists, not what is in it or what it is stored in.** Which fields,
-which shape, and which database remain open, including
+**It settles that such a copy exists, not what is in it or what it is stored in.** Which fields
+and which shape remain open. The engine is SQLite, per
 [ADR-0020](0020-the-stores-engine-is-sqlite.md).
 [ADR-0011](0011-stored-play-data-can-be-analysed-not-just-retrieved.md) constrains what the store has
 to be capable of; this establishes that there is one to constrain.

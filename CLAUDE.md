@@ -27,8 +27,10 @@ Before making any technical decisions or deciding which decisions to prioritize,
 `make-next-decision` skill. Re-invoke the skill repeatedly each time it applies (not just
 once per session). Do not merely refer to your memory of the skill.
 
-Before prioritising anything, read `docs/problem.md` and `docs/guarantees/` in full. Everything
+Before deciding what to work on, read `docs/problem.md` and `docs/guarantees/` in full. Everything
 downstream is derived from them, and a sequence argued without them is argued from the wrong end.
+Naming the next item without deciding it is the exception, set out in "Start here" in
+[docs/questions/README.md](docs/questions/README.md).
 
 ### When a choice surfaces mid-work
 

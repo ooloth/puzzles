@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-12
+updated: 2026-10-29
 update_when: a decision is made, a milestone changes, a question is split, or a requirement changes
 decays: fast
 status: active
@@ -17,25 +17,42 @@ It is meant to get shorter as questions are answered and slices ship.
 ## Start here
 
 **Read [../problem.md](../problem.md) and [../guarantees/](../guarantees/) in full before deciding
-what to work on.** Everything below is downstream of them.
+what to work on.** Everything below is downstream of them. Naming what comes next, without deciding
+it, needs only this file and the tracker, so a session that only names the next item skips that
+reading and says so.
 
 **Then work the current milestone**, the lowest-numbered one with anything still listed. Milestones
 are numbered in the order they are built. Only the current milestone is broken into slices; the rest
 are lists of the questions each first needs. When a milestone's list empties, the next one becomes
 current and is broken into slices before work on it starts.
 
+**Which milestone is current takes this file and the tracker together.** This file records no
+status, and the tracker is shorter than the slice lists because issues are filed only once a slice
+is ready. Read the tracker with `--state all`, since open issues alone cannot show that a slice
+shipped, and join the two on the slice title, which
+[milestone-lists.md](../../.claude/skills/make-next-decision/milestone-lists.md) names as the join
+key. A listed slice whose issue is closed is an entry nobody deleted: delete it, then keep looking.
+A current milestone that lists only questions has not been broken into slices yet, so the next step
+is to break it down, per that file.
+
 **How to read a slice.** Each is something you can run and look at. Under it, each **Must answer**
 names a question that blocks it, with an "or else" clause saying what goes wrong in that slice
 without the answer. What is already settled is the listing of [../decisions/](../decisions/), with
-the facts in [../constraints.md](../constraints.md), and neither is repeated here.
+the facts in [../constraints.md](../constraints.md), and neither is repeated here. The slices are
+the numbered list of bold slice titles. A milestone's introduction can end with a numbered list of
+its own, and that list is not slices.
 
 **A question appears once**, under the milestone that must answer it. A slice that takes a default
 meanwhile says so in its commit, not here.
 
 **An issue is filed once nothing in its entry is still a Must answer.** A slice with no issue is
-normal, and nothing here records status. A slice's entry is deleted once its issue closes, and the
-slices left keep their numbers, so a list that does not start at 1 is not missing anything. A
-milestone is finished when its list is empty.
+normal, and nothing here records status. A slice with no Must answer left and no issue is the one
+case to raise, because its issue should exist. Its entry is only as complete as the planning that
+wrote it, so drafting the issue is the last check: each Ideal-state bullet traces to a record or
+constraint, per step 4 of `uphold-project-requirements`, and a bullet that does not turns the slice
+back into a question. A slice's entry is deleted once its issue closes, and the slices left keep
+their numbers, so a list that does not start at 1 is not missing anything. A milestone is finished
+when its list is empty.
 
 How a milestone's list is built and kept, and how a question file is written, are in
 [milestone-lists.md](../../.claude/skills/make-next-decision/milestone-lists.md) and

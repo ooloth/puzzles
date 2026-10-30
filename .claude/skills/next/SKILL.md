@@ -11,14 +11,11 @@ slice is already unblocked spends a whole skill discovering it should have been 
 
 **This skill routes and stops.** It names the next thing and waits for the user.
 
-It also skips something on purpose: `CLAUDE.md` and the README both say to read `docs/problem.md`
-and `docs/guarantees/` in full before deciding what to work on, and that is for deciding rather than
-routing. Say in your report that you skipped them, so it reads as deliberate.
-
 ## Your task
 
 1. **Read "Start here" in `docs/questions/README.md`.** It holds the rule for when a slice gets an
-   issue and which milestone is current, and both decide everything below.
+   issue and which milestone is current, the traps in reading both, and what reading routing can
+   skip. All of it decides everything below.
 2. **Read the tracker with `--state all`.** Open issues alone cannot tell you which milestone is
    finished. Invoke `use-gh` first, as the user's global `CLAUDE.md` requires before any `gh` call.
 3. **Rank what the tracker holds** by the order in `CLAUDE.md`: bugs first, then the current
@@ -37,38 +34,14 @@ routing. Say in your report that you skipped them, so it reads as deliberate.
 6. **Report.** Three or four lines: the milestone, the slice, the route, and the sentence of
    evidence that decided it.
 
-## Three things a first reading gets wrong
-
-**The prose list above the slices is numbered like the slices and is not them.** A milestone's
-narrative can end with its own numbered list of what remains to decide. The slices are the numbered
-list of bold slice titles, each with any **Must answer** bullets under it. Count only those.
-
-**Which milestone is current cannot be read off either source alone.** The docs record no status,
-deliberately, and the tracker is shorter than the slice list because issues are filed just-in-time.
-Join them on the slice title, which `.claude/skills/make-next-decision/milestone-lists.md` names as
-the join key. A slice's entry is deleted when its issue closes and the rest keep their numbers, so a
-milestone is finished when its list is empty, and the current one is the lowest-numbered with
-anything still listed. If that milestone lists only questions, it has not been broken into slices
-yet, and the route is to plan it, per that file. A listed slice whose issue is
-closed means the deletion was missed: offer to delete it, then keep looking.
-
-**Most slices have no issue, and that is the intended state rather than drift.** A missing issue
-means "not workable yet" for a slice that still has **Must answer** bullets. The
-drift case is narrower and is the one to raise: a slice with **no** remaining Must answer and no
-issue means one should have been filed and was not. Offer `write-ticket-description`.
-
 ## Where each route goes
 
 - **A question** — name the slice's open questions and hand off to `make-next-decision`, which
   picks among them and does the `problem.md` and `guarantees/` reading this skill skipped.
 - **An issue that exists** — name its number and title. The user decides whether this session
   starts it.
-- **A workable slice with no issue** — offer to file it, and say that "workable" is only as good as
-  the entry. A slice with no **Must answer** listed may still hide a choice the planning pass
-  missed, often about local runs. Drafting the issue is the last check: every Ideal-state bullet
-  traces to a record or constraint, per step 4 of `uphold-project-requirements`. One that
-  does not means the slice was not workable, and the route becomes "a question" by way of "When a
-  choice surfaces mid-work" in `CLAUDE.md`.
+- **A workable slice with no issue** — offer to file it with `write-ticket-description`, and say
+  that drafting it is the last check described in "Start here".
 - **Anything ambiguous** — two slices both workable, a milestone that looks finished but has an
   unfiled slice — say what is ambiguous rather than picking. Guessing points a whole session at
   the wrong thing, which costs more than asking.
